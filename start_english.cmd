@@ -1,1 +1,0 @@
-java -version:1.7+ -Duser.language=en -Duser.country=US -jar bpmnsimulator.jar

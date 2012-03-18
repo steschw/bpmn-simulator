@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<project default="javadoc">
-    <target name="javadoc">
-        <javadoc access="public" author="false" classpath="." destdir="doc" nodeprecated="false" nodeprecatedlist="false" noindex="false" nonavbar="false" notree="false" packagenames="bpmn,bpmn.element" source="1.7" sourcefiles="src/SpeedSpinner.java,src/PBMNSimulatorFrame.java" sourcepath="src" splitindex="true" use="true" version="false">
-            <link href="http://download.oracle.com/javase/7/docs/api/"/>
-        </javadoc>
-    </target>
-</project>

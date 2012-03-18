@@ -1,0 +1,1 @@
+java -version:1.7+ -jar bpmnsimulator.jar

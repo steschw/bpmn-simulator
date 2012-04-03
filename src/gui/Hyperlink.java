@@ -18,27 +18,60 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package bpmn.element;
+package gui;
 
-import java.util.Vector;
+import java.awt.Color;
+import java.awt.Desktop;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.net.URI;
 
-public class LaneSet extends FlowElement {
+import javax.swing.JButton;
+
+public class Hyperlink extends JButton implements ActionListener {
 
 	private static final long serialVersionUID = 1L;
 
-	private Vector<Lane> lanes = new Vector<Lane>(); 
+	private URI uri;
 
-	public LaneSet(final String id) {
-		super(id, null);
+	public Hyperlink(final URI uri) {
+		this(uri.toString(), uri);
 	}
 
-	public void addLane(final Lane lane) {
-		assert(lane != null);
-		lanes.add(lane);
+	public Hyperlink(final String text, final URI uri) {
+		super(text);
+		setURI(uri);
+
+		setOpaque(false);
+		setBorderPainted(false);
+		setForeground(Color.BLUE);
+
+		addActionListener(this);
+	}
+
+	public void setURI(final URI uri) {
+		this.uri = uri;
+		setToolTipText(uri.toString());
+	}
+
+	public URI getURI() {
+		return uri;
+	}
+
+	protected void openURI() {
+		if (Desktop.isDesktopSupported()) {
+			try {
+				Desktop.getDesktop().browse(getURI());
+			} catch (IOException e) {
+				System.err.println(e);
+			}
+		}
 	}
 
 	@Override
-	protected void paintElement(Graphics g) {
+	public void actionPerformed(ActionEvent e) {
+		openURI();
 	}
 
 }

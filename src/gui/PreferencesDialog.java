@@ -1,3 +1,23 @@
+/*
+ * Copyright (C) 2012 Stefan Schweitzer
+ *
+ * This software was created by Stefan Schweitzer as a student's project at
+ * Fachhochschule Kaiserslautern (University of Applied Sciences).
+ * Supervisor: Professor Dr. Thomas Allweyer. For more information please see
+ * http://www.fh-kl.de/~allweyer
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this Software except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package gui;
 
 import java.awt.BorderLayout;
@@ -6,6 +26,7 @@ import java.awt.Frame;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -26,8 +47,8 @@ public class PreferencesDialog extends JDialog {
 		super((Frame)null, Messages.getString("Preferences.preferences"), true); //$NON-NLS-1$
 
 		getContentPane().setLayout(new BorderLayout());
-		getContentPane().add(createButtonPanel(), BorderLayout.PAGE_END);
 		getContentPane().add(createOptionsPanel(), BorderLayout.CENTER);
+		getContentPane().add(createButtonPanel(), BorderLayout.PAGE_END);
 
 		setResizable(false);
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
@@ -66,6 +87,7 @@ public class PreferencesDialog extends JDialog {
 
 		JButton buttonCancel = new JButton(Messages.getString("Preferences.cancel")); //$NON-NLS-1$
 		setButtonWidth(buttonCancel, BUTTON_WIDTH);
+		buttonCancel.setMnemonic(KeyEvent.VK_C);
 		buttonCancel.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -78,6 +100,7 @@ public class PreferencesDialog extends JDialog {
 
 		JButton buttonOk = new JButton(Messages.getString("Preferences.ok"));  //$NON-NLS-1$
 		setButtonWidth(buttonOk, BUTTON_WIDTH);
+		buttonOk.setMnemonic(KeyEvent.VK_O);
 		buttonOk.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {

@@ -1,4 +1,25 @@
+/*
+ * Copyright (C) 2012 Stefan Schweitzer
+ *
+ * This software was created by Stefan Schweitzer as a student's project at
+ * Fachhochschule Kaiserslautern (University of Applied Sciences).
+ * Supervisor: Professor Dr. Thomas Allweyer. For more information please see
+ * http://www.fh-kl.de/~allweyer
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this Software except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package gui;
+
 import java.awt.BorderLayout;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
@@ -18,7 +39,6 @@ import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import bpmn.Model;
-
 
 public class BPMNSimulatorFrame extends JFrame {
 
@@ -96,10 +116,10 @@ public class BPMNSimulatorFrame extends JFrame {
 
 		menuFile.addSeparator();
 
-		JMenuItem menuFileConfig = new JMenuItem(Messages.getString("Menu.preferences")); //$NON-NLS-1$
-		menuFileConfig.setMnemonic(KeyEvent.VK_C);
-		menuFileConfig.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, KeyEvent.ALT_MASK));
-		menuFileConfig.addActionListener(new ActionListener() {
+		JMenuItem menuFilePreferences = new JMenuItem(Messages.getString("Menu.preferences")); //$NON-NLS-1$
+		menuFilePreferences.setMnemonic(KeyEvent.VK_P);
+		menuFilePreferences.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P, KeyEvent.ALT_MASK));
+		menuFilePreferences.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				PreferencesDialog frame = new PreferencesDialog();
@@ -107,7 +127,7 @@ public class BPMNSimulatorFrame extends JFrame {
 				frame.setVisible(true);
 			}
 		});
-		menuFile.add(menuFileConfig);
+		menuFile.add(menuFilePreferences);
 
 		menuFile.addSeparator();
 
@@ -129,6 +149,23 @@ public class BPMNSimulatorFrame extends JFrame {
 		menubar.add(menuFile);
 
 		menubar.add(menuWindow);
+
+		JMenu menuHelp = new JMenu(Messages.getString("Menu.help")); //$NON-NLS-1$
+
+		JMenuItem menuHelpAbout = new JMenuItem(Messages.getString("Menu.about")); //$NON-NLS-1$
+		menuHelpAbout.setMnemonic(KeyEvent.VK_A);
+		menuHelpAbout.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A, KeyEvent.ALT_MASK));
+		menuHelpAbout.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				AboutDialog frame = new AboutDialog();
+				frame.setLocationRelativeTo(BPMNSimulatorFrame.this);
+				frame.setVisible(true);
+			}
+		});
+		menuHelp.add(menuHelpAbout);
+
+		menubar.add(menuHelp); 
 
 		return menubar;
 	}

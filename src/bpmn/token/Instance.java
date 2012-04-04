@@ -32,9 +32,9 @@ public class Instance {
 
 	private Instance parent = null;
 
-	private Vector<Instance> childs = new Vector<Instance>();
+	private final Vector<Instance> childs = new Vector<Instance>();
 
-	private TokenCollection tokens = new TokenCollection();
+	private final TokenCollection tokens = new TokenCollection();
 
 	private Color color = null;
 
@@ -117,7 +117,7 @@ public class Instance {
 		return childInstance;
 	}
 
-	protected void addChildInstance(Instance instance) {
+	protected void addChildInstance(final Instance instance) {
 		assert(instance != null);
 		childs.add(instance);
 	}
@@ -137,7 +137,7 @@ public class Instance {
 	}
 
 	public void removeAllChildInstances() {
-		Vector<Instance> instanceSnapshot = new Vector<Instance>(getChildInstances()); 
+		final Vector<Instance> instanceSnapshot = new Vector<Instance>(getChildInstances()); 
 		for (Instance childInstance : instanceSnapshot) {
 			childInstance.remove();
 		}
@@ -196,24 +196,24 @@ public class Instance {
 	}
 
 	public void removeAllOtherTokens(final Token token) {
-		TokenCollection snapshotTokens = new TokenCollection(tokens);
+		final TokenCollection snapshotTokens = new TokenCollection(tokens);
 		for (final Token snapshotToken : snapshotTokens) {
 			if (!snapshotToken.equals(token)) {
 				snapshotToken.remove();
 			}
 		}
-		Vector<Instance> instanceSnapshot = new Vector<Instance>(getChildInstances()); 
+		final Vector<Instance> instanceSnapshot = new Vector<Instance>(getChildInstances()); 
 		for (final Instance childInstance : instanceSnapshot) {
 			childInstance.removeAllOtherTokens(token);
 		}
 	}
 
 	public void removeAllTokens() {
-		TokenCollection tokenSnapshot = new TokenCollection(tokens);
+		final TokenCollection tokenSnapshot = new TokenCollection(tokens);
 		for (final Token token : tokenSnapshot) {
 			token.remove();
 		}
-		Vector<Instance> instanceSnapshot = new Vector<Instance>(getChildInstances()); 
+		final Vector<Instance> instanceSnapshot = new Vector<Instance>(getChildInstances()); 
 		for (final Instance childInstance : instanceSnapshot) {
 			childInstance.removeAllTokens();
 		}
@@ -224,7 +224,7 @@ public class Instance {
 		/*
 		 * Möglicherweise wurden einige token beim Durchlaufen bereits gelöscht (z.B. durch merge)
 		 */
-		TokenCollection tokenSnapshot = new TokenCollection(tokens);
+		final TokenCollection tokenSnapshot = new TokenCollection(tokens);
 		for (Token token : tokenSnapshot) {
 			boolean exists = false;
 			synchronized (tokens) {
@@ -234,7 +234,7 @@ public class Instance {
 				token.step(count);
 			}
 		}
-		Vector<Instance> childSnapshot = new Vector<Instance>(getChildInstances());
+		final Vector<Instance> childSnapshot = new Vector<Instance>(getChildInstances());
 		for (Instance childInstance : childSnapshot) {
 			childInstance.stepAllTokens(count);
 		}
@@ -244,7 +244,7 @@ public class Instance {
 		return new Rectangle(center.x - radius, center.y - radius, radius * 2, radius * 2);
 	}
 
-	public void paint(Graphics g, final Point center) {
+	public void paint(final Graphics g, final Point center) {
 		if (center != null) {
 
 			final Color color = getColor();
@@ -260,7 +260,7 @@ public class Instance {
 		}
 	}
 
-	public void paint(Graphics g, final Point center, final int count) {
+	public void paint(final Graphics g, final Point center, final int count) {
 		paint(g, center);
 
 		if (count > 1) {

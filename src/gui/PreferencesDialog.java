@@ -40,8 +40,8 @@ public class PreferencesDialog extends JDialog {
 
 	private static final long serialVersionUID = 1L;
 
-	private JCheckBox checkShowExclusiveSymbol = new JCheckBox(Messages.getString("Preferences.showSymbolInExclusiveGateway"));  //$NON-NLS-1$
-	private JCheckBox checkAntialiasing = new JCheckBox(Messages.getString("Preferences.enableAntialiasing"));  //$NON-NLS-1$
+	private final JCheckBox checkShowExclusiveSymbol = new JCheckBox(Messages.getString("Preferences.showSymbolInExclusiveGateway"));  //$NON-NLS-1$
+	private final JCheckBox checkAntialiasing = new JCheckBox(Messages.getString("Preferences.enableAntialiasing"));  //$NON-NLS-1$
 
 	public PreferencesDialog() {
 		super((Frame)null, Messages.getString("Preferences.preferences"), true); //$NON-NLS-1$
@@ -58,14 +58,18 @@ public class PreferencesDialog extends JDialog {
 		pack();
 	}
 
-	private static void setButtonWidth(JButton button, final int width) {
-		Dimension dimension = button.getPreferredSize();
+	private static void setButtonWidth(final JButton button) {
+		setButtonWidth(button, 100);
+	}
+
+	private static void setButtonWidth(final JButton button, final int width) {
+		final Dimension dimension = button.getPreferredSize();
 		dimension.width = width;
 		button.setPreferredSize(dimension);
 	}
 
 	protected JPanel createOptionsPanel() {
-		JPanel panel = new JPanel();
+		final JPanel panel = new JPanel();
 
 		panel.setLayout(new GridLayout(0, 1));
 
@@ -76,21 +80,18 @@ public class PreferencesDialog extends JDialog {
 	}
 
 	protected JPanel createButtonPanel() {
-		final int MARGIN = 10;
-		final int BUTTON_WIDTH = 100;
-
-		JPanel panel = new JPanel();
+		final JPanel panel = new JPanel();
 		panel.setLayout(new BoxLayout(panel, BoxLayout.LINE_AXIS));
-		panel.setBorder(BorderFactory.createEmptyBorder(MARGIN, MARGIN, MARGIN, MARGIN));
+		panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
 		panel.add(Box.createHorizontalGlue());
 
-		JButton buttonCancel = new JButton(Messages.getString("Preferences.cancel")); //$NON-NLS-1$
-		setButtonWidth(buttonCancel, BUTTON_WIDTH);
+		final JButton buttonCancel = new JButton(Messages.getString("Preferences.cancel")); //$NON-NLS-1$
+		setButtonWidth(buttonCancel);
 		buttonCancel.setMnemonic(KeyEvent.VK_C);
 		buttonCancel.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent e) {
+			public void actionPerformed(final ActionEvent e) {
 				PreferencesDialog.this.dispose();
 			}
 		});
@@ -98,12 +99,12 @@ public class PreferencesDialog extends JDialog {
 
 		panel.add(Box.createHorizontalStrut(10));
 
-		JButton buttonOk = new JButton(Messages.getString("Preferences.ok"));  //$NON-NLS-1$
-		setButtonWidth(buttonOk, BUTTON_WIDTH);
+		final JButton buttonOk = new JButton(Messages.getString("Preferences.ok"));  //$NON-NLS-1$
+		setButtonWidth(buttonOk);
 		buttonOk.setMnemonic(KeyEvent.VK_O);
 		buttonOk.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent e) {
+			public void actionPerformed(final ActionEvent e) {
 				updateToConfig();
 				PreferencesDialog.this.dispose();
 			}
@@ -116,13 +117,13 @@ public class PreferencesDialog extends JDialog {
 	}
 
 	protected void updateFromConfig() {
-		Config config = Config.getInstance();
-		checkShowExclusiveSymbol.setSelected(config.getShowExclusiveGatewaySymbol());
-		checkAntialiasing.setSelected(config.getAntialiasing());
+		final Config config = Config.getInstance();
+		checkShowExclusiveSymbol.setSelected(config.isShowExclusiveGatewaySymbol());
+		checkAntialiasing.setSelected(config.isAntialiasing());
 	}
 
 	protected void updateToConfig() {
-		Config config = Config.getInstance();
+		final Config config = Config.getInstance();
 		config.setShowExclusiveGatewaySymbol(checkShowExclusiveSymbol.isSelected());
 		config.setAntialiasing(checkAntialiasing.isSelected());
 		config.store();

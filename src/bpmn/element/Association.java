@@ -27,8 +27,9 @@ public class Association extends ConnectingElement {
 
 	private static final long serialVersionUID = 1L;
 
-	public Association(final String id, final String name, ElementRef<FlowElement> source,
-			ElementRef<FlowElement> target) {
+	public Association(final String id, final String name,
+			final ElementRef<FlowElement> source,
+			final ElementRef<FlowElement> target) {
 		super(id, name, source, target);
 	}
 

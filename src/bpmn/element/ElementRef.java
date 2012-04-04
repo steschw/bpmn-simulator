@@ -45,7 +45,7 @@ public class ElementRef<E extends BaseElement> {
 		return (element != null);
 	}
 
-	private boolean equalsElement(BaseElement element) {
+	private boolean equalsElement(final BaseElement element) {
 		final BaseElement e = getElement();
 		if ((e == null) || (element == null)) {
 			return false;
@@ -54,9 +54,9 @@ public class ElementRef<E extends BaseElement> {
 	}
 
 	@Override
-	public boolean equals(Object object) {
+	public boolean equals(final Object object) {
 		if (object instanceof ElementRef<?>) {
-			ElementRef<?> elementRef = (ElementRef<?>)object;
+			final ElementRef<?> elementRef = (ElementRef<?>)object;
 			return equalsElement(elementRef.getElement());
 		} else if (object instanceof BaseElement) {
 			return equalsElement((BaseElement)object);

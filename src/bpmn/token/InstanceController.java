@@ -21,16 +21,13 @@
 package bpmn.token;
 
 import java.util.HashSet;
+import java.util.Set;
 
 public class InstanceController {
 
-	private ColorGenerator colorGenerator = new ColorGenerator(); 
+	private final ColorGenerator colorGenerator = new ColorGenerator(); 
 
-	private HashSet<Instance> instances = new HashSet<Instance>(); 
-
-	public InstanceController() {
-		super();
-	}
+	private final Set<Instance> instances = new HashSet<Instance>(); 
 
 	public synchronized Instance newInstance() {
 		final Instance instance = new Instance(null, colorGenerator.next());

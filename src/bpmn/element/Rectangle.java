@@ -47,6 +47,10 @@ public class Rectangle extends java.awt.Rectangle {
 		this(p1.x, p1.y, p2.x - p1.x, p2.y - p1.y);
 	}
 
+	public int min() {
+		return Math.min(width, height);		
+	}
+
 	public Point getRightTop() {
 		return new Point((int)getMaxX(), (int)getMinY());
 	}

@@ -48,7 +48,9 @@ public class Graphics {
 	private Paint storedPaint = null;
 	private Font storedFont = null;
 
-	private static RenderingHints QUALITY = new RenderingHints(null);
+	private static final double CONNECTING_SYMBOL_LENGTH = 12.;
+
+	private static final RenderingHints QUALITY = new RenderingHints(null);
 
 	static {
 		QUALITY.put(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
@@ -106,12 +108,13 @@ public class Graphics {
 
 	protected final int getMultilineTextHeight(final Rectangle bounds, final String text) {
 		int height = 0;
-		AttributedString attributetString = new AttributedString(text);
-		AttributedCharacterIterator characterIterator = attributetString.getIterator();
+		final AttributedString attributetString = new AttributedString(text);
+		final AttributedCharacterIterator characterIterator = attributetString.getIterator();
 		final FontRenderContext fontRenderContext = graphics.getFontRenderContext();
-		LineBreakMeasurer measurer = new LineBreakMeasurer(characterIterator, fontRenderContext);
+		final LineBreakMeasurer measurer = new LineBreakMeasurer(characterIterator, fontRenderContext);
+		TextLayout textLayout;
 		while (measurer.getPosition() < characterIterator.getEndIndex()) {
-			TextLayout textLayout = measurer.nextLayout(bounds.width);
+			textLayout = measurer.nextLayout(bounds.width);
 			height += textLayout.getAscent();
 		}
 		return height;
@@ -129,12 +132,13 @@ public class Graphics {
 				y = bounds.y + (int)((bounds.height - getMultilineTextHeight(bounds, text)) / 2.);
 			}
 
-			AttributedString attributetString = new AttributedString(text);
-			AttributedCharacterIterator characterIterator = attributetString.getIterator();
+			final AttributedString attributetString = new AttributedString(text);
+			final AttributedCharacterIterator characterIterator = attributetString.getIterator();
 			final FontRenderContext fontRenderContext = graphics.getFontRenderContext();
-			LineBreakMeasurer measurer = new LineBreakMeasurer(characterIterator, fontRenderContext);
+			final LineBreakMeasurer measurer = new LineBreakMeasurer(characterIterator, fontRenderContext);
+			TextLayout textLayout;
 			while (measurer.getPosition() < characterIterator.getEndIndex()) {
-				TextLayout textLayout = measurer.nextLayout(bounds.width);
+				textLayout = measurer.nextLayout(bounds.width);
 				y += textLayout.getAscent();
 				if (alignCenter) {
 					x = bounds.x + (int)((bounds.getWidth() - textLayout.getBounds().getWidth()) /2.);
@@ -172,11 +176,11 @@ public class Graphics {
 		graphics.fill(shape);
 	}
 
-	public void drawRoundRect(final Rectangle rect, int arcWidth, int arcHeight) {
+	public void drawRoundRect(final Rectangle rect, final int arcWidth, final int arcHeight) {
 		graphics.drawRoundRect(rect.x, rect.y, rect.width, rect.height, arcWidth, arcHeight);
 	}
 
-	public void fillRoundRect(final Rectangle rect, int arcWidth, int arcHeight) {
+	public void fillRoundRect(final Rectangle rect, final int arcWidth, final int arcHeight) {
 		graphics.fillRoundRect(rect.x, rect.y, rect.width, rect.height, arcWidth, arcHeight);
 	}
 
@@ -197,7 +201,7 @@ public class Graphics {
 	}
 
 	protected static Polygon createDiamond(final Rectangle size) {
-		Polygon polygon = new Polygon();
+		final Polygon polygon = new Polygon();
 		polygon.addPoint((int)size.getMinX(), (int)size.getCenterY());
 		polygon.addPoint((int)size.getCenterX(), (int)size.getMinY());
 		polygon.addPoint((int)size.getMaxX(), (int)size.getCenterY());
@@ -231,9 +235,10 @@ public class Graphics {
 		return Math.atan2(to.x - from.x, to.y - from.y);
 	}
 
-	public static Point polarToCartesian(final Point orgin, final double r, final double a) {
-		final int x = (int)Math.round(r * Math.sin(a));
-		final int y = (int)Math.round(r * Math.cos(a));
+	public static Point polarToCartesian(final Point orgin,
+			final double radius, final double angle) {
+		final int x = (int)Math.round(radius * Math.sin(angle));
+		final int y = (int)Math.round(radius * Math.cos(angle));
 		return new Point(orgin.x + x, orgin.y + y);
 	}
 
@@ -241,8 +246,9 @@ public class Graphics {
 		return createArrowPath(from, to, (Math.PI / 6.), 10.);
 	}
 
-	public static GeneralPath createArrowPath(final Point from, final Point to, final double d, final double length) {
-		GeneralPath path = new GeneralPath();
+	public static GeneralPath createArrowPath(final Point from, final Point to,
+			final double d, final double length) {
+		final GeneralPath path = new GeneralPath();
 		final double a = getAngle(to, from);
 		final Point point1 = polarToCartesian(to, length, a - d);
 		path.moveTo(point1.x, point1.y);
@@ -264,7 +270,7 @@ public class Graphics {
 	}
 
 	protected static Polygon createStar(final Rectangle size, final int corners) {
-		Polygon polygon = new Polygon();
+		final Polygon polygon = new Polygon();
 		final Point center = new Point(size.x + size.width / 2, size.y + size.height / 2);
 		final double r = (size.width / 2.);
 		final double FULL_RAD = (2. * Math.PI);
@@ -288,15 +294,14 @@ public class Graphics {
 
 	protected static Polygon createConditionalSymbol(final Point orgin, final double a) {
 		final double angle = (Math.PI / 6.);
-		final double length = 12.;
 
-		Polygon polygon = new Polygon();
+		final Polygon polygon = new Polygon();
 		polygon.addPoint(orgin.x, orgin.y);
-		Point to = polarToCartesian(orgin, length, a - angle);
+		Point to = polarToCartesian(orgin, CONNECTING_SYMBOL_LENGTH, a - angle);
 		polygon.addPoint(to.x, to.y);
-		to = polarToCartesian(to, length, a + angle);
+		to = polarToCartesian(to, CONNECTING_SYMBOL_LENGTH, a + angle);
 		polygon.addPoint(to.x, to.y);
-		to = polarToCartesian(orgin, length, a + angle);
+		to = polarToCartesian(orgin, CONNECTING_SYMBOL_LENGTH, a + angle);
 		polygon.addPoint(to.x, to.y);
 
 		return polygon;
@@ -316,19 +321,17 @@ public class Graphics {
 		final Point orgin = polarToCartesian(from, 6., a);
 
 		final double angle = (Math.PI / 1.5);
-		final double length = 12.;
-		final Point symbolFrom = polarToCartesian(orgin, length / 2., a - angle);
-		final Point symbolTo = polarToCartesian(symbolFrom, length, a - angle - Math.PI);
+		final Point symbolFrom = polarToCartesian(orgin, CONNECTING_SYMBOL_LENGTH / 2., a - angle);
+		final Point symbolTo = polarToCartesian(symbolFrom, CONNECTING_SYMBOL_LENGTH, a - angle - Math.PI);
 
 		drawLine(symbolFrom, symbolTo);
 	}
 
 	public void drawInfoArrow(final Point point, final Color color) {
 		final Point from = new Point(point.x, point.y - 20);
-		GeneralPath path = createArrowPath(from, point, Math.PI / 5., 16);
 		final Paint paint = graphics.getPaint();
 		graphics.setPaint(color);
-		graphics.fill(path);
+		graphics.fill(createArrowPath(from, point, Math.PI / 5., 16));
 		fillRect(new Rectangle(point.x - 4, point.y - 20, 8, 10));
 		graphics.setPaint(paint);
 	}

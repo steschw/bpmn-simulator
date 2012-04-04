@@ -33,7 +33,7 @@ public class LogFrame extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 
-	private LogList listLog = new LogList();
+	private final LogList listLog = new LogList();
 
 	private int warningCount = 0; 
 	private int errorCount = 0;
@@ -51,11 +51,11 @@ public class LogFrame extends JFrame {
 
 		getContentPane().add(listLog, BorderLayout.CENTER);
 
-		JPanel panel = new JPanel();
-		JButton buttonClose = new JButton(Messages.getString("Protocol.close")); //$NON-NLS-1$
+		final JPanel panel = new JPanel();
+		final JButton buttonClose = new JButton(Messages.getString("Protocol.close")); //$NON-NLS-1$
 		buttonClose.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent arg0) {
+			public void actionPerformed(final ActionEvent event) {
 				setVisible(false);
 			}
 		});
@@ -76,8 +76,8 @@ public class LogFrame extends JFrame {
 		++errorCount;
 	}
 
-	public void addException(final Exception e) {
-		listLog.addError(e.toString());
+	public void addException(final Exception exception) {
+		listLog.addError(exception.toString());
 		++errorCount;
 	}
 

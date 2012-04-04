@@ -58,14 +58,14 @@ public class SequenceFlow extends TokenConnectingElement {
 
 			addItemListener(new ItemListener() {
 				@Override
-				public void itemStateChanged(ItemEvent event) {
+				public void itemStateChanged(final ItemEvent event) {
 					setValue(event.getStateChange() == ItemEvent.SELECTED);
 				}
 			});
 		}
 
 		protected void setValue(final boolean value) {
-			Label label = getElementLabel();
+			final Label label = getElementLabel();
 			if (label != null) {
 				label.setForeground(value ? COLOR_TRUE : COLOR_FALSE);
 			}
@@ -83,8 +83,8 @@ public class SequenceFlow extends TokenConnectingElement {
 	private ConditionExpression conditionExpression = null;
 	private String expression = null;
 
-	public SequenceFlow(String id, String name, ElementRef<FlowElement> source,
-			ElementRef<FlowElement> target) {
+	public SequenceFlow(final String id, final String name,
+			final ElementRef<FlowElement> source, final ElementRef<FlowElement> target) {
 		super(id, name, source, target);
 	}
 
@@ -153,24 +153,13 @@ public class SequenceFlow extends TokenConnectingElement {
 		}
 	}
 
-	protected void drawDefaultSymbol(Graphics g, final Point orgin, final double a) {
-		final double angle = (Math.PI / 1.5);
-		final double length = 12.;
-
-		Point x = waypointToRelative(getPosition(5));
-		Point from = Graphics.polarToCartesian(x, length / 2., a + angle);
-		Point to = Graphics.polarToCartesian(from, length, a + angle + Math.PI);
-
-		g.drawLine(from, to);
-	}
-
 	public boolean isDefault() {
 		final ElementRef<FlowElement> sourceRef = getSourceRef();
 		if ((sourceRef != null) && sourceRef.hasElement()) {
 			final FlowElement flowElement = sourceRef.getElement();
 			if (flowElement instanceof ElementWithDefaultSequenceFlow) {
-				ElementWithDefaultSequenceFlow element = (ElementWithDefaultSequenceFlow)flowElement;
-				ElementRef<SequenceFlow> defaultElementFlowRef = element.getDefaultElementFlowRef();
+				final ElementWithDefaultSequenceFlow element = (ElementWithDefaultSequenceFlow)flowElement;
+				final ElementRef<SequenceFlow> defaultElementFlowRef = element.getDefaultElementFlowRef();
 				if (defaultElementFlowRef != null) {
 					return defaultElementFlowRef.equals(this);
 				}
@@ -193,10 +182,10 @@ public class SequenceFlow extends TokenConnectingElement {
 	}
 
 	@Override
-	protected void paintElement(Graphics g) {
+	protected void paintElement(final Graphics g) {
 		super.paintElement(g);
 
-		Iterator<Point> waypoints = getWaypoints().iterator();
+		final Iterator<Point> waypoints = getWaypoints().iterator();
 		if (waypoints.hasNext()) {
 			Point prevPoint = waypointToRelative(waypoints.next());
 			if (waypoints.hasNext()) {
@@ -204,7 +193,8 @@ public class SequenceFlow extends TokenConnectingElement {
 				Point curPoint = waypointToRelative(waypoints.next());
 				if (isDefault()) {
 					g.drawDefaultSymbol(prevPoint, curPoint);
-				} else if (!isSourceElementInclusiveOrExclusiveGatewayAndHasMoreThanOnceOutgoing() && isConditional()) {
+				} else if (!isSourceElementInclusiveOrExclusiveGatewayAndHasMoreThanOnceOutgoing()
+						&& isConditional()) {
 					g.drawConditionalSymbol(prevPoint, curPoint);
 				}
 				// Endepfeil

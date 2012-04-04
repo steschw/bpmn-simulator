@@ -38,7 +38,7 @@ public class Group extends Artifact {
 	}
 
 	@Override
-	protected void paintElement(Graphics g) {
+	protected void paintElement(final Graphics g) {
 
 		g.drawRoundRect(getElementInnerBounds(), 20, 20);
 	}

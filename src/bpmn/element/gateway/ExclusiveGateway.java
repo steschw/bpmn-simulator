@@ -38,7 +38,7 @@ public class ExclusiveGateway extends Gateway {
 	}
 
 	@Override
-	protected void paintElement(Graphics g) {
+	protected void paintElement(final Graphics g) {
 		super.paintElement(g);
 
 		if (showSymbol) {
@@ -47,7 +47,7 @@ public class ExclusiveGateway extends Gateway {
 	}
 
 	@Override
-	protected void tokenForward(Token token) {
+	protected void tokenForward(final Token token) {
 		if (forwardTokenToFirstOutgoing(token)) {
 			token.remove();
 			setException(false);

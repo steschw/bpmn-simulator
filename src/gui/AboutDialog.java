@@ -78,7 +78,7 @@ public class AboutDialog extends JDialog {
 	}
 
 	protected JPanel createTabInfo() {
-		JPanel panel = new JPanel();
+		final JPanel panel = new JPanel();
 		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 
 		panel.add(Box.createVerticalStrut(20));
@@ -86,7 +86,7 @@ public class AboutDialog extends JDialog {
 		final StringBuffer applicationInfo = new StringBuffer(NAME);
 		final String version = getClass().getPackage().getImplementationVersion();
 		if (version != null) {
-			applicationInfo.append(" ");
+			applicationInfo.append(' ');
 			applicationInfo.append(version);
 		}
 		final JLabel labelInfo = new JLabel(applicationInfo.toString());
@@ -97,7 +97,7 @@ public class AboutDialog extends JDialog {
 		panel.add(Box.createVerticalStrut(20));
 
 		try {
-			Hyperlink hyperlink = new Hyperlink(new URI(URL)); //$NON-NLS-1$
+			final Hyperlink hyperlink = new Hyperlink(new URI(URL)); //$NON-NLS-1$
 			hyperlink.setAlignmentX(CENTER_ALIGNMENT);
 			panel.add(hyperlink);
 		} catch (URISyntaxException e) {
@@ -108,12 +108,12 @@ public class AboutDialog extends JDialog {
 
 		final StringBuffer javaInfo = new StringBuffer("Java: "); //$NON-NLS-1$
 		javaInfo.append(System.getProperty("java.vendor")); //$NON-NLS-1$
-		javaInfo.append(" "); //$NON-NLS-1$
+		javaInfo.append(' '); //$NON-NLS-1$
 		javaInfo.append(System.getProperty("java.version")); //$NON-NLS-1$
 		javaInfo.append(" ("); //$NON-NLS-1$
 		javaInfo.append(System.getProperty("java.home")); //$NON-NLS-1$
-		javaInfo.append(")"); //$NON-NLS-1$
-		JLabel labelJava = new JLabel(javaInfo.toString()); 
+		javaInfo.append(')'); //$NON-NLS-1$
+		final JLabel labelJava = new JLabel(javaInfo.toString()); 
 		labelJava.setAlignmentX(CENTER_ALIGNMENT);
 		panel.add(labelJava);
 
@@ -121,11 +121,11 @@ public class AboutDialog extends JDialog {
 
 		final StringBuffer systemInfo = new StringBuffer("System: "); //$NON-NLS-1$
 		systemInfo.append(System.getProperty("os.name")); //$NON-NLS-1$
-		systemInfo.append(" "); //$NON-NLS-1$
+		systemInfo.append(' '); //$NON-NLS-1$
 		systemInfo.append(System.getProperty("os.version")); //$NON-NLS-1$
-		systemInfo.append(" "); //$NON-NLS-1$
+		systemInfo.append(' '); //$NON-NLS-1$
 		systemInfo.append(System.getProperty("os.arch")); //$NON-NLS-1$
-		JLabel labelSystem = new JLabel(systemInfo.toString()); 
+		final JLabel labelSystem = new JLabel(systemInfo.toString()); 
 		labelSystem.setAlignmentX(CENTER_ALIGNMENT);
 		panel.add(labelSystem);
 
@@ -133,7 +133,7 @@ public class AboutDialog extends JDialog {
 	}
 
 	protected JPanel createTabLicence() {
-		JPanel panel = new JPanel(new BorderLayout());
+		final JPanel panel = new JPanel(new BorderLayout());
 		final JTextArea textArea = new JTextArea(LICENSE);
 		textArea.setEditable(false);
 		textArea.setFont(new Font("Courier New", Font.PLAIN, 11)); //$NON-NLS-1$
@@ -157,7 +157,7 @@ public class AboutDialog extends JDialog {
 		buttonClose.setMnemonic(KeyEvent.VK_C);
 		buttonClose.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent e) {
+			public void actionPerformed(final ActionEvent e) {
 				AboutDialog.this.dispose();
 			}
 		});

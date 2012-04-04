@@ -43,14 +43,14 @@ public abstract class TokenFlowElement extends FlowElement implements TokenFlow 
 	}
 
 	@Override
-	public void tokenEnter(Token token) {
+	public void tokenEnter(final Token token) {
 		addToken(token);
 		tokenDispatch(token);
 	}
 
 	@Override
-	public void tokenDispatch(Token token) {
-		assert(getTokens().contains(token));
+	public void tokenDispatch(final Token token) {
+		assert getTokens().contains(token);
 		if (canForwardToken(token)) {
 			tokenForward(token);
 		}
@@ -58,7 +58,7 @@ public abstract class TokenFlowElement extends FlowElement implements TokenFlow 
 	}
 
 	@Override
-	public void tokenExit(Token token) {
+	public void tokenExit(final Token token) {
 		removeToken(token);
 	}
 
@@ -66,21 +66,21 @@ public abstract class TokenFlowElement extends FlowElement implements TokenFlow 
 		return 0;
 	}
 
-	protected boolean canForwardToken(Token token) {
+	protected boolean canForwardToken(final Token token) {
 		return (token.getSteps() >= getStepCount());
 	}
 
-	protected void addToken(Token token) {
+	protected void addToken(final Token token) {
 		getTokens().add(token);
 		repaint();
 	}
 
-	protected void removeToken(Token token) {
+	protected void removeToken(final Token token) {
 		getTokens().remove(token);
 		repaint();
 	}
 
-	protected void tokenForward(Token token) {
+	protected void tokenForward(final Token token) {
 		if (forwardTokenToAllOutgoing(token)) {
 			setException(false);
 			token.remove();
@@ -90,7 +90,7 @@ public abstract class TokenFlowElement extends FlowElement implements TokenFlow 
 	}
 
 	@Override
-	public boolean hasIncomingPathWithActiveToken(Instance instance) {
+	public boolean hasIncomingPathWithActiveToken(final Instance instance) {
 		if (getTokens().byInstance(instance).getCount() > 0) {
 			// Entweder das Element selbst hat noch Token dieser Instanz
 			return true;
@@ -151,7 +151,7 @@ public abstract class TokenFlowElement extends FlowElement implements TokenFlow 
 	private final boolean forwardTokenToFirstSequenceFlow(final Token token, final Instance instance) {
 		for (ElementRef<SequenceFlow> outgoingRef : getOutgoing()) {
 			if ((outgoingRef != null) && outgoingRef.hasElement()) {
-				SequenceFlow sequenceFlow = outgoingRef.getElement();
+				final SequenceFlow sequenceFlow = outgoingRef.getElement();
 				if (sequenceFlow != null) {
 					if (sequenceFlow.acceptsToken() && !sequenceFlow.isDefault()) {
 						token.passTo(sequenceFlow, instance);
@@ -198,9 +198,9 @@ public abstract class TokenFlowElement extends FlowElement implements TokenFlow 
 	}
 
 	@Override
-	protected void paintTokens(Graphics g) {
-		Rectangle bounds = getElementInnerBounds();
-		Point point = new Point((int)bounds.getMaxX(), (int)bounds.getMinY());
+	protected void paintTokens(final Graphics g) {
+		final Rectangle bounds = getElementInnerBounds();
+		final Point point = new Point((int)bounds.getMaxX(), (int)bounds.getMinY());
 		for (Instance instance : getTokens().getInstances()) {
 			instance.paint(g, point, getTokens().byInstance(instance).byCurrentFlow(this).getCount());
 			point.translate(-5, 0);

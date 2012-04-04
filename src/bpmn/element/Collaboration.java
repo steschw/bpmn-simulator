@@ -22,7 +22,8 @@ package bpmn.element;
 
 import java.awt.Dimension;
 import java.awt.Rectangle;
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.Collection;
 
 import javax.swing.Scrollable;
 
@@ -30,14 +31,14 @@ public class Collaboration extends FlowElement implements Scrollable {
 
 	private static final long serialVersionUID = 1L;
 
-	private Vector<BaseElement> elements = new Vector<BaseElement>(); 
+	private Collection<BaseElement> elements = new ArrayList<BaseElement>(); 
 
 	public Collaboration(final String id) {
 		super(id, null);
 	}
 
-	public void addElement(BaseElement element) {
-		assert(element != null);
+	public void addElement(final BaseElement element) {
+		assert (element != null);
 		elements.add(element);
 	}
 
@@ -52,7 +53,8 @@ public class Collaboration extends FlowElement implements Scrollable {
 	}
 
 	@Override
-	public int getScrollableBlockIncrement(Rectangle arg0, int arg1, int arg2) {
+	public int getScrollableBlockIncrement(final Rectangle arg0,
+			final int arg1, final int arg2) {
 		return 0;
 	}
 
@@ -67,14 +69,13 @@ public class Collaboration extends FlowElement implements Scrollable {
 	}
 
 	@Override
-	public int getScrollableUnitIncrement(Rectangle arg0, int arg1, int arg2) {
+	public int getScrollableUnitIncrement(final Rectangle arg0,
+			final int arg1, final int arg2) {
 		return 0;
 	}
 
 	@Override
-	protected void paintElement(Graphics g) {
-		// TODO Auto-generated method stub
-		
+	protected void paintElement(final Graphics g) {
 	}
 
 }

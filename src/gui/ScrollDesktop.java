@@ -41,7 +41,7 @@ public class ScrollDesktop extends JScrollPane {
 
 			private static final long serialVersionUID = 1L;
 
-			private ScrollDesktopPane desktopPane = null;
+			private final ScrollDesktopPane desktopPane;
 
 			public ScrollDesktopManager(final ScrollDesktopPane desktopPane) {
 				super();
@@ -53,19 +53,19 @@ public class ScrollDesktop extends JScrollPane {
 			}
 
 			@Override
-			public void dragFrame(JComponent f, int newX, int newY) {
+			public void dragFrame(final JComponent f, final int newX, final int newY) {
 				super.dragFrame(f, newX, newY);
 			}
 
 			@Override
-			public void resizeFrame(JComponent f, int newX, int newY,
-					int newWidth, int newHeight) {
+			public void resizeFrame(final JComponent f, final int newX, final int newY,
+					final int newWidth, final int newHeight) {
 				super.resizeFrame(f, newX, newY, newWidth, newHeight);
 			}
 
 		}
 
-		private ScrollDesktop scrollDesktop = null;
+		private final ScrollDesktop scrollDesktop;
 
 		public ScrollDesktopPane(final ScrollDesktop scrollDesktop) {
 			super();
@@ -107,7 +107,7 @@ public class ScrollDesktop extends JScrollPane {
 
 	}
 
-	private ScrollDesktopPane desktopPane = new ScrollDesktopPane(this); 
+	private final ScrollDesktopPane desktopPane = new ScrollDesktopPane(this); 
 
 	public ScrollDesktop() {
 		super();

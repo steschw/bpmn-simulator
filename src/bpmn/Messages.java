@@ -23,7 +23,8 @@ package bpmn;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
-public class Messages {
+public final class Messages {
+
 	private static final String BUNDLE_NAME = "bpmn.messages"; //$NON-NLS-1$
 
 	private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle
@@ -32,11 +33,12 @@ public class Messages {
 	private Messages() {
 	}
 
-	public static String getString(String key) {
+	public static String getString(final String key) {
 		try {
 			return RESOURCE_BUNDLE.getString(key);
 		} catch (MissingResourceException e) {
 			return '!' + key + '!';
 		}
 	}
+
 }

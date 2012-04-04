@@ -29,8 +29,8 @@ public class MessageFlow extends ConnectingElement {
 
 	private static final long serialVersionUID = 1L;
 
-	public MessageFlow(final String id, ElementRef<FlowElement> source,
-			ElementRef<FlowElement> target) {
+	public MessageFlow(final String id, final ElementRef<FlowElement> source,
+			final ElementRef<FlowElement> target) {
 		super(id, null, source, target);
 	}
 
@@ -41,11 +41,11 @@ public class MessageFlow extends ConnectingElement {
 	}
 
 	@Override
-	protected void paintElement(Graphics g) {
+	protected void paintElement(final Graphics g) {
 		super.paintElement(g);
 
 		g.setStroke(new BasicStroke(1));
-		Iterator<Point> waypoints = getWaypoints().iterator();
+		final Iterator<Point> waypoints = getWaypoints().iterator();
 		if (waypoints.hasNext()) {
 			Point prevPoint = waypointToRelative(waypoints.next());
 			if (waypoints.hasNext()) {

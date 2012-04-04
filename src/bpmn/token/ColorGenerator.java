@@ -24,7 +24,7 @@ import java.awt.Color;
 
 public class ColorGenerator {
 
-	private Color[] colors = new Color[] {
+	private static final Color[] COLORS = new Color[] {
 			new Color(0xff5c26),
 			new Color(0x2626ff),
 			new Color(0xffff26),
@@ -35,17 +35,13 @@ public class ColorGenerator {
 			new Color(0x26c9ff)
 		};
 
-	int index = 0;
-
-	public ColorGenerator() {
-		super();
-	}
+	private int index = 0;
 
 	public Color next() {
-		if (index >= colors.length) {
+		if (index >= COLORS.length) {
 			index = 0;
 		}
-		return colors[index++];
+		return COLORS[index++];
 	}
 
 }

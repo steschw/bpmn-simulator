@@ -24,6 +24,8 @@ import java.awt.Dimension;
 import java.awt.Paint;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Vector;
 
 import javax.swing.Scrollable;
@@ -38,7 +40,7 @@ public class ExpandedProcess extends Activity implements Scrollable {
 
 	private static final long serialVersionUID = 1L;
 
-	private Vector<BaseElement> elements = new Vector<BaseElement>();
+	private Collection<BaseElement> elements = new ArrayList<BaseElement>();
 
 	private CollapsedProcess collapsedProcess = null; 
 
@@ -65,11 +67,11 @@ public class ExpandedProcess extends Activity implements Scrollable {
 	}
 
 	public CollapsedProcess createCollapsed() {
-		assert(collapsedProcess == null);
+		assert (collapsedProcess == null);
 		collapsedProcess = new CollapsedProcess(this);
 		collapsedProcess.setBackground(getBackground());
 		collapsedProcess.setForeground(getForeground());
-		ExpandedProcess parentProcess = getParentProcess();
+		final ExpandedProcess parentProcess = getParentProcess();
 		if (parentProcess != null) {
 			parentProcess.addElement(collapsedProcess);
 		}
@@ -77,7 +79,7 @@ public class ExpandedProcess extends Activity implements Scrollable {
 	}
 
 	@Override
-	public void tokenEnter(Token token) {
+	public void tokenEnter(final Token token) {
 		final TokenFlow from = token.getPreviousFlow();
 		if (from.equals(this) || containsTokenFlow(from)) {
 			// Token kommt von einem Prozesselement und soll aus dem Prozess austreten
@@ -94,12 +96,7 @@ public class ExpandedProcess extends Activity implements Scrollable {
 	}
 
 	@Override
-	public void tokenExit(Token token) {
-		super.tokenExit(token);
-	}
-
-	@Override
-	protected boolean canForwardToken(Token token) {
+	protected boolean canForwardToken(final Token token) {
 		final int exitTokenCount = getTokens().byInstance(token.getInstance()).getCount();
 		final int instanceTokenCount = token.getInstance().getTokenCount();
 		return (super.canForwardToken(token) && (exitTokenCount == instanceTokenCount));
@@ -125,18 +122,18 @@ public class ExpandedProcess extends Activity implements Scrollable {
 		if (collapsedProcess != null) {
 			collapsedProcess.addInstance(subInstance);
 		}
-		Event startEvent = getStartEvent();
-		if (startEvent != null) {
-			token.passTo(startEvent, subInstance);
-		} else {
-			Vector<Activity> activities = getStartActivities();
-			if (!activities.isEmpty()) {
+		final Event startEvent = getStartEvent();
+		if (startEvent == null) {
+			final Collection<Activity> activities = getStartActivities();
+			if (activities.isEmpty()) {
+				token.passTo(this, subInstance);
+			} else {
 				for (Activity startActivity : activities) {
 					token.passTo(startActivity, subInstance);
 				}
-			} else {
-				token.passTo(this, subInstance);
 			}
+		} else {
+			token.passTo(startEvent, subInstance);
 		}
 	}
 
@@ -149,11 +146,11 @@ public class ExpandedProcess extends Activity implements Scrollable {
 		return calcSizeByComponents();
 	}
 
-	public Vector<Activity> getStartActivities() {
-		Vector<Activity> activities = new Vector<Activity>();
+	public Collection<Activity> getStartActivities() {
+		final Collection<Activity> activities = new ArrayList<Activity>();
 		for (BaseElement element : elements) {
 			if (element instanceof Activity) {
-				Activity activity = (Activity)element;
+				final Activity activity = (Activity)element;
 				if (!activity.hasIncoming()) {
 					activities.add(activity);
 				}
@@ -166,8 +163,8 @@ public class ExpandedProcess extends Activity implements Scrollable {
 		StartEvent start = null;
 		for (BaseElement element : elements) {
 			if (element instanceof StartEvent) {
-				StartEvent event = (StartEvent)element;
-				assert(start == null);
+				final StartEvent event = (StartEvent)element;
+				assert (start == null);
 				start = event;
 			}
 		}
@@ -180,7 +177,8 @@ public class ExpandedProcess extends Activity implements Scrollable {
 	}
 
 	@Override
-	public int getScrollableBlockIncrement(Rectangle arg0, int arg1, int arg2) {
+	public int getScrollableBlockIncrement(final Rectangle arg0,
+			final int arg1, final int arg2) {
 		return 0;
 	}
 
@@ -195,15 +193,16 @@ public class ExpandedProcess extends Activity implements Scrollable {
 	}
 
 	@Override
-	public int getScrollableUnitIncrement(Rectangle arg0, int arg1, int arg2) {
+	public int getScrollableUnitIncrement(final Rectangle arg0,
+			final int arg1, final int arg2) {
 		return 0;
 	}
 
 	@Override
-	protected void paintBackground(Graphics g) {
+	protected void paintBackground(final Graphics g) {
 		super.paintBackground(g);
 
-		Paint paint = getBackgroundPaint();
+		final Paint paint = getBackgroundPaint();
 		if (paint != null) {
 			g.setPaint(paint);
 			g.fillRoundRect(getElementInnerBounds(), 20, 20);
@@ -211,14 +210,14 @@ public class ExpandedProcess extends Activity implements Scrollable {
 	}
 
 	@Override
-	protected void paintElement(Graphics g) {
+	protected void paintElement(final Graphics g) {
 		g.drawRoundRect(getElementInnerBounds(), 20, 20);
 	}
 
 	@Override
-	protected void initLabel(Label label) {
+	protected void initLabel(final Label label) {
 		label.setAlignCenter(false);
-		Point position = getElementLeftTop();
+		final Point position = getElementLeftTop();
 		position.translate(4, 4);
 		label.setLeftTopPosition(position);
 	}

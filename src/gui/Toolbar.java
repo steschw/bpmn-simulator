@@ -91,10 +91,7 @@ public class Toolbar extends JToolBar implements AnimationListener {
 	}
 
 	protected Animator getAnimator() {
-		if (model != null) {
-			return model.getAnimator();
-		}
-		return null;
+		return (model == null) ? null : model.getAnimator();
 	}
 
 	public JButton getOpenButton() {
@@ -115,7 +112,7 @@ public class Toolbar extends JToolBar implements AnimationListener {
 		buttonStart.setToolTipText(Messages.getString("Toolbar.start")); //$NON-NLS-1$
 		buttonStart.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent event) {
+			public void actionPerformed(final ActionEvent event) {
 			}
 		});
 		add(buttonStart);
@@ -124,7 +121,7 @@ public class Toolbar extends JToolBar implements AnimationListener {
 		buttonReset.setToolTipText(Messages.getString("Toolbar.reset")); //$NON-NLS-1$
 		buttonReset.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent event) {
+			public void actionPerformed(final ActionEvent event) {
 				getAnimator().reset();
 			}
 		});
@@ -135,7 +132,7 @@ public class Toolbar extends JToolBar implements AnimationListener {
 		buttonPauseContinue = new JButton();
 		buttonPauseContinue.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent event) {
+			public void actionPerformed(final ActionEvent event) {
 				final Animator animator = getAnimator();
 				if (animator.isPaused()) {
 					animator.play();
@@ -150,7 +147,7 @@ public class Toolbar extends JToolBar implements AnimationListener {
 		buttonStep.setToolTipText(Messages.getString("Toolbar.step")); //$NON-NLS-1$
 		buttonStep.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent event) {
+			public void actionPerformed(final ActionEvent event) {
 				getAnimator().step(3);
 			}
 		});
@@ -165,7 +162,7 @@ public class Toolbar extends JToolBar implements AnimationListener {
 		add(Box.createHorizontalStrut(6));
 		spinnerSpeed.addChangeListener(new ChangeListener() {
 			@Override
-			public void stateChanged(ChangeEvent event) {
+			public void stateChanged(final ChangeEvent event) {
 				getAnimator().setSpeed(((SpeedSpinner)event.getSource()).getSpeedFactor());
 			}
 		});
@@ -179,7 +176,7 @@ public class Toolbar extends JToolBar implements AnimationListener {
 		buttonMessages.setFocusable(false);
 		buttonMessages.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent arg0) {
+			public void actionPerformed(final ActionEvent event) {
 				model.showMessages();
 			}
 		});
@@ -204,7 +201,10 @@ public class Toolbar extends JToolBar implements AnimationListener {
 	}
 
 	protected void updateMessages() {
-		if (model != null) {
+		if (model == null) {
+			buttonMessages.setVisible(false);
+			buttonMessages.setToolTipText(null);
+		} else {
 			buttonMessages.setVisible(model.hasMessages());
 			if (model.hasErrorMessages()) {
 				buttonMessages.setIcon(iconMessagesError);
@@ -213,9 +213,6 @@ public class Toolbar extends JToolBar implements AnimationListener {
 				buttonMessages.setIcon(iconMessages);
 				buttonMessages.setToolTipText(Messages.getString("Toolbar.hintMessages")); //$NON-NLS-1$
 			}
-		} else {
-			buttonMessages.setVisible(false);
-			buttonMessages.setToolTipText(null);
 		}
 	}
 

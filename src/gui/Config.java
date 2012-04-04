@@ -33,7 +33,7 @@ public class Config {
 
 	private static final String FILENAME = "config";
 
-	private Properties properties = new Properties();
+	private final Properties properties = new Properties();
 
 	private static final String SHOW_EXCLUSIVEGATEWAYSYMBOL = "showExclusiveGatewaySymbol";
 	private static final String ANTIALIASING = "antialiasing";
@@ -60,7 +60,7 @@ public class Config {
 
 	public void load() {
 		try {
-			FileInputStream input = new FileInputStream(FILENAME);
+			final FileInputStream input = new FileInputStream(FILENAME);
 			properties.load(input);
 			input.close();
 			update();
@@ -73,7 +73,7 @@ public class Config {
 
 	public void store() {
 		try {
-			FileOutputStream output = new FileOutputStream(FILENAME);
+			final FileOutputStream output = new FileOutputStream(FILENAME);
 			properties.store(output, "");
 			output.close();
 		} catch (IOException e) {
@@ -82,14 +82,13 @@ public class Config {
 	}
 
 	protected void update() {
-		setShowExclusiveGatewaySymbol(getShowExclusiveGatewaySymbol());
-		setAntialiasing(getAntialiasing());
+		setShowExclusiveGatewaySymbol(isShowExclusiveGatewaySymbol());
+		setAntialiasing(isAntialiasing());
 	}
 
 	protected boolean getPropertyBoolean(final String name) {
 		final String value = properties.getProperty(name);
-		boolean b = Boolean.parseBoolean(value);
-		return b;
+		return Boolean.parseBoolean(value);
 	}
 
 	public void setAntialiasing(final boolean antialiasing) {
@@ -97,7 +96,7 @@ public class Config {
 		Graphics.setAntialiasing(antialiasing);
 	}
 
-	public boolean getAntialiasing() {
+	public boolean isAntialiasing() {
 		return getPropertyBoolean(ANTIALIASING);
 	}
 
@@ -106,7 +105,7 @@ public class Config {
 		ExclusiveGateway.setShowSymbol(show);
 	}
 
-	public boolean getShowExclusiveGatewaySymbol() {
+	public boolean isShowExclusiveGatewaySymbol() {
 		return getPropertyBoolean(SHOW_EXCLUSIVEGATEWAYSYMBOL);
 	}
 
@@ -116,10 +115,7 @@ public class Config {
 
 	public String getLastDirectory() {
 		final String directory = properties.getProperty(LAST_DIRECTORY);
-		if (directory != null) {
-			return directory;
-		}
-		return "";
+		return (directory == null) ? "" : directory;
 	}
 
 }

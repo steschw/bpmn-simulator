@@ -32,7 +32,7 @@ public class TokenCollection extends Vector<Token> {
 		super();
 	}
 
-	public TokenCollection(Collection<? extends Token> c) {
+	public TokenCollection(final Collection<? extends Token> c) {
 		super(c);
 	}
 
@@ -52,9 +52,9 @@ public class TokenCollection extends Vector<Token> {
 	}
 
 	public synchronized Token merge() {
-		Iterator<Token> i = iterator();
+		final Iterator<Token> i = iterator();
 		if (i.hasNext()) {
-			Token mergedToken = i.next();
+			final Token mergedToken = i.next();
 			while (i.hasNext()) {
 				mergedToken.merge(i.next());
 			}
@@ -64,7 +64,7 @@ public class TokenCollection extends Vector<Token> {
 	}
 
 	public synchronized Collection<Instance> getInstances() {
-		Vector<Instance> instances = new Vector<Instance>();
+		final Vector<Instance> instances = new Vector<Instance>();
 		for (Token token : this) {
 			final Instance instance = token.getInstance(); 
 			if (!instances.contains(instance)) {

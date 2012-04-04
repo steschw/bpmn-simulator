@@ -70,7 +70,7 @@ public class SpeedSpinner extends JSpinner {
 
 	@Override
 	public Dimension getPreferredSize() {
-		Dimension preferredSize = super.getPreferredSize(); 
+		final Dimension preferredSize = super.getPreferredSize(); 
 		preferredSize.width = 50;
 		preferredSize.height = 24;
 		return preferredSize;

@@ -35,7 +35,7 @@ public abstract class TokenConnectingElement extends ConnectingElement
 	private TokenCollection tokens = new TokenCollection();
 
 	public TokenConnectingElement(final String id, final String name,
-			ElementRef<FlowElement> source, ElementRef<FlowElement> target) {
+			final ElementRef<FlowElement> source, final ElementRef<FlowElement> target) {
 		super(id, name, source, target);
 	}
 
@@ -44,14 +44,14 @@ public abstract class TokenConnectingElement extends ConnectingElement
 	}
 
 	@Override
-	public void tokenEnter(Token token) {
+	public void tokenEnter(final Token token) {
 		addToken(token);
 		tokenDispatch(token);
 	}
 
 	@Override
-	public void tokenDispatch(Token token) {
-		assert(getTokens().contains(token));
+	public void tokenDispatch(final Token token) {
+		assert getTokens().contains(token);
 		if (canForwardToken(token)) {
 			forwardToken(token);
 		}
@@ -59,26 +59,26 @@ public abstract class TokenConnectingElement extends ConnectingElement
 	}
 
 	@Override
-	public void tokenExit(Token token) {
+	public void tokenExit(final Token token) {
 		removeToken(token);
 	}
 
-	protected boolean canForwardToken(Token token) {
+	protected boolean canForwardToken(final Token token) {
 		return (token.getSteps() >= getLength());
 	}
 
-	protected void addToken(Token token) {
+	protected void addToken(final Token token) {
 		getTokens().add(token);
 		repaint();
 	}
 
-	protected void removeToken(Token token) {
+	protected void removeToken(final Token token) {
 		getTokens().remove(token);
 		repaint();
 	}
 
-	protected void forwardToken(Token token) {
-		ElementRef<FlowElement> targetRef = getTargetRef();
+	protected void forwardToken(final Token token) {
+		final ElementRef<FlowElement> targetRef = getTargetRef();
 		if ((targetRef != null) && targetRef.hasElement()) {
 			final FlowElement flowElement = targetRef.getElement();
 			if (flowElement instanceof TokenFlow) {
@@ -86,11 +86,11 @@ public abstract class TokenConnectingElement extends ConnectingElement
 				token.remove();
 			}
 		} else {
-			assert(false);
+			assert false;
 		}
 	}
 
-	public boolean hasIncomingPathWithActiveToken(Instance instance) {
+	public boolean hasIncomingPathWithActiveToken(final Instance instance) {
 		if (getTokens().byInstance(instance).getCount() > 0) {
 			// Entweder das Element selbst hat noch Token dieser Instanz
 			return true;
@@ -98,7 +98,7 @@ public abstract class TokenConnectingElement extends ConnectingElement
 			// oder eines der eingehenden
 			final ElementRef<FlowElement> sourceRef = getSourceRef();
 			if ((sourceRef != null) && sourceRef.hasElement()) {
-				FlowElement flowElement = sourceRef.getElement();
+				final FlowElement flowElement = sourceRef.getElement();
 				if (flowElement instanceof TokenFlow) {
 					return ((TokenFlow)flowElement).hasIncomingPathWithActiveToken(instance);
 				}
@@ -117,7 +117,7 @@ public abstract class TokenConnectingElement extends ConnectingElement
 	}
 
 	@Override
-	protected void paintTokens(Graphics g) {
+	protected void paintTokens(final Graphics g) {
 		final TokenCollection tokens = getTokens();
 		synchronized (tokens) {
 			for (Token token : tokens) {

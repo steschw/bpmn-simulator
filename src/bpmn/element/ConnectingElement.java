@@ -22,6 +22,7 @@ package bpmn.element;
 
 import java.awt.Point;
 import java.util.Collection;
+import java.util.Deque;
 import java.util.Iterator;
 import java.util.LinkedList;
 
@@ -31,19 +32,20 @@ public abstract class ConnectingElement extends BaseElement {
 
 	private static final long serialVersionUID = 1L;
 
-	private LinkedList<Point> waypoints = new LinkedList<Point>();
+	private Deque<Point> waypoints = new LinkedList<Point>();
 
 	private ElementRef<FlowElement> sourceRef = null;
 	private ElementRef<FlowElement> targetRef = null;
 
-	public ConnectingElement(final String id, final String name, ElementRef<FlowElement> source, ElementRef<FlowElement> target) {
+	public ConnectingElement(final String id, final String name,
+			final ElementRef<FlowElement> source, final ElementRef<FlowElement> target) {
 		super(id, name);
 		setSourceRef(source);
 		setTarget(target);
 	}
 
 	protected void setSourceRef(final ElementRef<FlowElement> elementRef) {
-		assert(elementRef != null);
+		assert (elementRef != null);
 		this.sourceRef = elementRef;
 	}
 
@@ -51,7 +53,8 @@ public abstract class ConnectingElement extends BaseElement {
 		return sourceRef;
 	}
 
-	protected static final <E extends BaseElement> E getElementFromElementRef(ElementRef<E> elementRef) {
+	protected static final <E extends BaseElement> E getElementFromElementRef(
+			final ElementRef<E> elementRef) {
 		if ((elementRef != null) && elementRef.hasElement()) {
 			return elementRef.getElement();
 		}
@@ -63,7 +66,7 @@ public abstract class ConnectingElement extends BaseElement {
 	}
 
 	protected void setTarget(final ElementRef<FlowElement> elementRef) {
-		assert(elementRef != null);
+		assert (elementRef != null);
 		this.targetRef = elementRef;
 	}
 
@@ -75,7 +78,7 @@ public abstract class ConnectingElement extends BaseElement {
 		return getElementFromElementRef(getTargetRef());
 	}
 
-	public void addWaypoint(Point point) {
+	public void addWaypoint(final Point point) {
 		waypoints.add(point);
 		updateBounds();
 	}
@@ -86,7 +89,7 @@ public abstract class ConnectingElement extends BaseElement {
 
 	protected void updateBounds() {
 		if (waypoints.isEmpty()) {
-			assert(false);
+			assert false;
 			return;
 		}
 		int minX = waypoints.getFirst().x;
@@ -117,14 +120,14 @@ public abstract class ConnectingElement extends BaseElement {
 		return 2;
 	}
 
-	protected Point waypointToRelative(Point point) {
+	protected Point waypointToRelative(final Point point) {
 		return SwingUtilities.convertPoint(getParent(), point, this);
 	}
 
 	@Override
-	protected void paintElement(Graphics g) {
+	protected void paintElement(final Graphics g) {
 		Point lastPoint = null;
-		Iterator<Point> i = getWaypoints().iterator();
+		final Iterator<Point> i = getWaypoints().iterator();
 		Point currentPoint = null;
 		while (i.hasNext()) {
 			currentPoint = i.next();
@@ -156,9 +159,10 @@ public abstract class ConnectingElement extends BaseElement {
 			if (last != null) {
 				final int distance = (int)last.distance(current); 
 				if ((position + distance) >= length) {
-					final double a = Graphics.getAngle(current, last);
-					final Point p = Graphics.polarToCartesian(last, position - length, a);
-					return p;
+					return Graphics.polarToCartesian(
+							last,
+							position - length,
+							Graphics.getAngle(current, last));
 				}
 				position += distance;
 			}
@@ -173,7 +177,7 @@ public abstract class ConnectingElement extends BaseElement {
 	}
 
 	@Override
-	protected void initLabel(Label label) {
+	protected void initLabel(final Label label) {
 		label.setCenterTopPosition(getElementCenter());
 	}
 

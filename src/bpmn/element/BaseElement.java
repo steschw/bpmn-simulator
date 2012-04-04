@@ -52,7 +52,7 @@ public abstract class BaseElement extends JComponent {
 
 	private boolean exception = false;
 
-	private static final ImageIcon exceptionIcon = loadElementPNG("exception.png"); 
+	private static final ImageIcon EXCEPTION_ICON = loadElementPNG("exception.png"); 
 
 	protected static ImageIcon loadElementPNG(final String filename) {
 		final URL url = BaseElement.class.getResource(filename);
@@ -115,7 +115,7 @@ public abstract class BaseElement extends JComponent {
 	}
 */
 
-	public void setInnerBounds(Rectangle bounds) {
+	public void setInnerBounds(final Rectangle bounds) {
 		bounds.grow(MARGIN, MARGIN);
 		setBounds(bounds);
 	}
@@ -136,8 +136,8 @@ public abstract class BaseElement extends JComponent {
 	}
 
 	@Override
-	public final void paint(java.awt.Graphics g) {
-		Graphics graphics = new Graphics((Graphics2D)g);
+	public final void paint(final java.awt.Graphics g) {
+		final Graphics graphics = new Graphics((Graphics2D)g);
 
 		synchronized (this) {
 
@@ -168,7 +168,7 @@ public abstract class BaseElement extends JComponent {
 		final Color backgroundColor = getBackground();
 		if (backgroundColor != null) {
 			final Rectangle size = new Rectangle(getBounds());
-			return new RadialGradientPaint(0.f, 0.f, Math.min(size.width, size.height), new float[] { 0.f, 1.f }, new Color[] { Color.WHITE, backgroundColor });
+			return new RadialGradientPaint(0.f, 0.f, size.min(), new float[] { 0.f, 1.f }, new Color[] { Color.WHITE, backgroundColor });
 		}
 		return null;
 	}
@@ -182,19 +182,19 @@ public abstract class BaseElement extends JComponent {
 				BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER, 1.f); 
 	}
 
-	protected void paintBackground(Graphics g) {
+	protected void paintBackground(final Graphics g) {
 	}
 
-	protected abstract void paintElement(Graphics g);
+	protected abstract void paintElement(final Graphics g);
 
-	protected void paintException(Graphics g) {
-		g.drawIcon(exceptionIcon, new Point(0, 0));
+	protected void paintException(final Graphics g) {
+		g.drawIcon(EXCEPTION_ICON, new Point(0, 0));
 	}
 
-	protected void paintText(Graphics g) {
+	protected void paintText(final Graphics g) {
 	}
 
-	protected void paintTokens(Graphics g) {		
+	protected void paintTokens(final Graphics g) {		
 	}
 
 	protected Point getElementLeftTop() {
@@ -233,7 +233,7 @@ public abstract class BaseElement extends JComponent {
 		return null;
 	}
 
-	protected void initLabel(Label label) {
+	protected void initLabel(final Label label) {
 		label.setCenterPosition(getElementCenter());
 	}
 
@@ -280,27 +280,27 @@ public abstract class BaseElement extends JComponent {
 			}
 
 			@Override
-			public void mouseReleased(MouseEvent event) {
+			public void mouseReleased(final MouseEvent event) {
 				dispatchEventToUnderlyingComponent(event);
 			}
 			
 			@Override
-			public void mousePressed(MouseEvent event) {
+			public void mousePressed(final MouseEvent event) {
 				dispatchEventToUnderlyingComponent(event);
 			}
 			
 			@Override
-			public void mouseExited(MouseEvent event) {
+			public void mouseExited(final MouseEvent event) {
 				//dispatchEventToUnderlyingComponent(event);
 			}
 			
 			@Override
-			public void mouseEntered(MouseEvent event) {
+			public void mouseEntered(final MouseEvent event) {
 				//dispatchEventToUnderlyingComponent(event);
 			}
 			
 			@Override
-			public void mouseClicked(MouseEvent event) {
+			public void mouseClicked(final MouseEvent event) {
 				dispatchEventToUnderlyingComponent(event);
 			}
 		});

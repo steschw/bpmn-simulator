@@ -41,7 +41,7 @@ public class Label extends JLabel {
 	}
 
 	@Override
-	public void setText(String text) {
+	public void setText(final String text) {
 		/*
 		 * Scheinbar wird keine Aktualisierung durchgeführt,
 		 * wenn der neu zu setzende Text dem alten entspricht.
@@ -56,14 +56,14 @@ public class Label extends JLabel {
 		setText(super.getText());
 	}
 
-	public final boolean getAlignCenter() {
+	public final boolean isAlignCenter() {
 		return alignCenter;
 	}
 
 	@Override
 	public String getText() {
-		StringBuffer text = new StringBuffer("<html>");
-		final boolean center = getAlignCenter();
+		final StringBuffer text = new StringBuffer("<html>");
+		final boolean center = isAlignCenter();
 		if (center) {
 			text.append("<center>");
 		}

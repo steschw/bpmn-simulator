@@ -58,11 +58,11 @@ public class Task extends Activity {
 	}
 
 	@Override
-	protected void paintBackground(Graphics g) {
+	protected void paintBackground(final Graphics g) {
 		g.fillRoundRect(getElementInnerBounds(), 10, 10);
 	}
 
-	public void paintTypeIcon(Graphics g) {
+	public void paintTypeIcon(final Graphics g) {
 		if (typeIcon != null) {
 			final Rectangle innerBounds = getElementInnerBounds();
 			final Point position = innerBounds.getLeftTop();
@@ -72,7 +72,7 @@ public class Task extends Activity {
 	}
 
 	@Override
-	protected void paintElement(Graphics g) {
+	protected void paintElement(final Graphics g) {
 		g.drawRoundRect(getElementInnerBounds(), 10, 10);
 		paintTypeIcon(g);
 	}

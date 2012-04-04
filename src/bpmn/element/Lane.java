@@ -20,20 +20,21 @@
  */
 package bpmn.element;
 
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.Collection;
 
 public class Lane extends TitledFlowElement {
 
 	private static final long serialVersionUID = 1L;
 
-	private Vector<LaneSet> laneSets = new Vector<LaneSet>(); 
+	private Collection<LaneSet> laneSets = new ArrayList<LaneSet>(); 
 
 	public Lane(final String id, final String name) {
 		super(id, name);
 	}
 
-	public void addLaneSet(LaneSet laneSet) {
-		assert(laneSet != null);
+	public void addLaneSet(final LaneSet laneSet) {
+		assert (laneSet != null);
 		laneSets.add(laneSet);
 	}
 

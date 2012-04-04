@@ -42,12 +42,12 @@ public class TitledFlowElement extends FlowElement {
 	}
 
 	@Override
-	protected void paintBackground(Graphics g) {
+	protected void paintBackground(final Graphics g) {
 		g.fillRect(getElementInnerBounds());
 	}
 
 	@Override
-	protected void paintElement(Graphics g) {
+	protected void paintElement(final Graphics g) {
 		g.drawRect(getElementInnerBounds());
 	}
 
@@ -63,7 +63,7 @@ public class TitledFlowElement extends FlowElement {
 	}
 
 	@Override
-	protected void paintText(Graphics g) {
+	protected void paintText(final Graphics g) {
 		final Rectangle bounds = getTitleBounds();
 		bounds.grow(-4, -4);
 		if (isHorizontal()) {

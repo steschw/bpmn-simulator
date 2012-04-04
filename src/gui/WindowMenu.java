@@ -46,7 +46,7 @@ public class WindowMenu extends JMenu implements MenuListener {
 
 		private static final long serialVersionUID = 1L;
 
-		private JInternalFrame frame = null; 
+		private final JInternalFrame frame; 
 
 		public WindowMenuItem(final JInternalFrame frame) {
 			super(frame.getTitle(), frame.isSelected());
@@ -56,7 +56,7 @@ public class WindowMenu extends JMenu implements MenuListener {
 		}
 
 		@Override
-		public void actionPerformed(ActionEvent event) {
+		public void actionPerformed(final ActionEvent event) {
 			frame.moveToFront();
 			try {
 				frame.setSelected(true);
@@ -81,25 +81,25 @@ public class WindowMenu extends JMenu implements MenuListener {
 	}
 
 	@Override
-	public void menuCanceled(MenuEvent event) {
+	public void menuCanceled(final MenuEvent event) {
 	}
 
 	@Override
-	public void menuDeselected(MenuEvent event) {
+	public void menuDeselected(final MenuEvent event) {
 		removeAll();
 	}
 
 	@Override
-	public void menuSelected(MenuEvent event) {
+	public void menuSelected(final MenuEvent event) {
 		createWindowMenuItems();
 	}
 
 	protected List<JInternalFrame> getFrames() {
-		ArrayList<JInternalFrame> frames =
+		final ArrayList<JInternalFrame> frames =
 				new ArrayList<JInternalFrame>(Arrays.asList(getDesktopPane().getAllFrames())); 
 		Collections.sort(frames, new Comparator<JInternalFrame>() {
 			@Override
-			public int compare(JInternalFrame frame1, JInternalFrame frame2) {
+			public int compare(final JInternalFrame frame1, final JInternalFrame frame2) {
 				return frame1.getTitle().compareTo(frame2.getTitle());
 			}
 		});

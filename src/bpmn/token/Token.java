@@ -89,13 +89,13 @@ public class Token implements Cloneable {
 
 	@Override
 	protected Object clone() throws CloneNotSupportedException {
-		Token token = new Token(getInstance());
+		final Token token = new Token(getInstance());
 		token.previousFlow = previousFlow;
 		token.currentFlow = currentFlow;
 		return token;
 	}
 
-	public Token copyTo(Instance instance) {
+	public Token copyTo(final Instance instance) {
 		final Token token = instance.cloneToken(this);
 		token.setInstance(instance);
 		return token;
@@ -118,7 +118,7 @@ public class Token implements Cloneable {
 
 	public synchronized void remove() {
 		getInstance().removeToken(this);
-		TokenFlow tokenFlow = getCurrentFlow();
+		final TokenFlow tokenFlow = getCurrentFlow();
 		assert(tokenFlow != null);
 		if (tokenFlow != null) {
 			tokenFlow.tokenExit(this);

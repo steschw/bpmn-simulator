@@ -32,20 +32,23 @@ public class CollapsedProcess extends FlowElement {
 
 	private static final long serialVersionUID = 1L;
 
+	private static final int SYMBOL_WIDTH = 20;
+	private static final int SYMBOL_HEIGHT = 20;
+
 	private Vector<Instance> instances = new Vector<Instance>(); 
 
-	public CollapsedProcess(ExpandedProcess expandedProcess) {
+	public CollapsedProcess(final ExpandedProcess expandedProcess) {
 		super(expandedProcess.getId(), expandedProcess.getName());
 	}
 
 	public void addInstance(final Instance instance) {
-		assert(!instances.contains(instance));
+		assert !instances.contains(instance);
 		instances.add(instance);
 		repaint();
 	}
 
 	public void removeInstance(final Instance instance) {
-		assert(instances.contains(instance));
+		assert instances.contains(instance);
 		instances.remove(instance);
 		repaint();
 	}
@@ -57,36 +60,38 @@ public class CollapsedProcess extends FlowElement {
 	@Override
 	public Color getForeground() {
 		final Collection<Instance> instances = getInstances();
-		if ((instances != null) && (instances.size() > 0)) {
+		if ((instances != null) && !instances.isEmpty()) {
 			return Token.HIGHLIGHT_COLOR;
 		}
 		return super.getForeground();
 	}
 
 	@Override
-	protected void paintBackground(Graphics g) {
+	protected void paintBackground(final Graphics g) {
 		g.fillRoundRect(getElementInnerBounds(), 10, 10);
 	}
 
 	@Override
-	protected void paintElement(Graphics g) {
+	protected void paintElement(final Graphics g) {
 		final Rectangle bounds = getElementInnerBounds();
 		g.drawRoundRect(bounds, 10, 10);
 
-		final int WIDTH = 20;
-		final int HEIGHT = 20;
-		final Rectangle symbolBounds = new Rectangle(bounds.x + (bounds.width - WIDTH) / 2, bounds.y + bounds.height - HEIGHT, WIDTH, HEIGHT);
-		drawSymbol(g, symbolBounds);
+		drawSymbol(g,
+				new Rectangle(
+						bounds.x + (bounds.width - SYMBOL_WIDTH) / 2,
+						bounds.y + bounds.height - SYMBOL_HEIGHT,
+						SYMBOL_WIDTH,
+						SYMBOL_HEIGHT));
 	}
 
-	protected void drawSymbol(Graphics g, final Rectangle bounds) {
+	protected void drawSymbol(final Graphics g, final Rectangle bounds) {
 		g.drawRect(bounds);
 		bounds.grow(-4, -4);
 		g.drawCross(bounds, false);
 	}
 
 	@Override
-	protected void paintTokens(Graphics g) {
+	protected void paintTokens(final Graphics g) {
 		super.paintTokens(g);
 
 		final Rectangle bounds = getElementInnerBounds();

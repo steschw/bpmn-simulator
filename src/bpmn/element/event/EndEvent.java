@@ -50,7 +50,7 @@ public class EndEvent extends Event {
 	}
 
 	@Override
-	protected void paintElement(Graphics g) {
+	protected void paintElement(final Graphics g) {
 		super.paintElement(g);
 
 		if (isTermination()) {
@@ -61,7 +61,7 @@ public class EndEvent extends Event {
 	}
 
 	@Override
-	protected void tokenForward(Token token) {
+	protected void tokenForward(final Token token) {
 		if (isTermination()) {
 			token.getInstance().removeAllOtherTokens(token);
 		}

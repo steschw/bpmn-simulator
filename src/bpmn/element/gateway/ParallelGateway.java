@@ -39,14 +39,14 @@ public class ParallelGateway extends Gateway {
 	}
 
 	@Override
-	protected void paintElement(Graphics g) {
+	protected void paintElement(final Graphics g) {
 		super.paintElement(g);
 
 		g.drawCross(getSymbolBounds(), false);
 	}
 
-	protected synchronized void forwardTokenParallel(Instance instance) {
-		TokenCollection popTokens = new TokenCollection();
+	protected synchronized void forwardTokenParallel(final Instance instance) {
+		final TokenCollection popTokens = new TokenCollection();
 		for (ElementRef<SequenceFlow> incoming : getIncoming()) {
 			if (incoming.hasElement()) {
 				final Token incomingToken = getFirstTokenForIncoming(incoming.getElement(), instance);
@@ -65,7 +65,7 @@ public class ParallelGateway extends Gateway {
 	}
 
 	@Override
-	protected void tokenForward(Token token) {
+	protected void tokenForward(final Token token) {
 		if (isForMerging()) {
 			forwardTokenParallel(token.getInstance());
 		} else {
@@ -74,7 +74,7 @@ public class ParallelGateway extends Gateway {
 	}
 
 	@Override
-	protected void paintTokens(Graphics g) {
+	protected void paintTokens(final Graphics g) {
 		if (isForMerging()) {
 			final Rectangle bounds = getElementInnerBounds();
 			int y = bounds.y;

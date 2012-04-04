@@ -20,15 +20,15 @@
  */
 package bpmn.element;
 
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Vector;
 
 public abstract class FlowElement extends BaseElement {
 
 	private static final long serialVersionUID = 1L;
 
-	private Vector<ElementRef<SequenceFlow>> incoming = new Vector<ElementRef<SequenceFlow>>(); 
-	private Vector<ElementRef<SequenceFlow>> outgoing = new Vector<ElementRef<SequenceFlow>>(); 
+	private Collection<ElementRef<SequenceFlow>> incoming = new ArrayList<ElementRef<SequenceFlow>>(); 
+	private Collection<ElementRef<SequenceFlow>> outgoing = new ArrayList<ElementRef<SequenceFlow>>(); 
 
 	public FlowElement(final String id, final String name) {
 		super(id, name);
@@ -51,20 +51,18 @@ public abstract class FlowElement extends BaseElement {
 	}
 
 	public void addIncoming(final ElementRef<SequenceFlow> element) {
-		assert(element != null);
+		assert (element != null);
+		assert !incoming.contains(element);
 		if (!incoming.contains(element)) {
 			incoming.add(element);
-		} else {
-			assert(false);
 		}
 	}
 
 	public void addOutgoing(final ElementRef<SequenceFlow> element) {
-		assert(element != null);
+		assert (element != null);
+		assert !outgoing.contains(element);
 		if (!outgoing.contains(element)) {
 			outgoing.add(element);
-		} else {
-			assert(false);
 		}
 	}
 

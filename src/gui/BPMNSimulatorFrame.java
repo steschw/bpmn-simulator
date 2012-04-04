@@ -46,11 +46,11 @@ public class BPMNSimulatorFrame extends JFrame {
 
 	private ScrollDesktop desktop = null;
 
-	private WindowMenu menuWindow = new WindowMenu();
+	private final WindowMenu menuWindow = new WindowMenu();
 
-	private Toolbar toolbar = new Toolbar();
+	private final Toolbar toolbar = new Toolbar();
 
-	private JFileChooser fileChoser = new JFileChooser();
+	private final JFileChooser fileChoser = new JFileChooser();
 
 	private Model model = null;
 
@@ -88,27 +88,27 @@ public class BPMNSimulatorFrame extends JFrame {
 	}
 
 	private JMenuBar createMenuBar() {
-		JMenuBar menubar = new JMenuBar();
+		final JMenuBar menubar = new JMenuBar();
 
-		JMenu menuFile = new JMenu(Messages.getString("Menu.file")); //$NON-NLS-1$
+		final JMenu menuFile = new JMenu(Messages.getString("Menu.file")); //$NON-NLS-1$
 
-		JMenuItem menuFileOpen = new JMenuItem(Messages.getString("Menu.open")); //$NON-NLS-1$
+		final JMenuItem menuFileOpen = new JMenuItem(Messages.getString("Menu.open")); //$NON-NLS-1$
 		menuFileOpen.setMnemonic(KeyEvent.VK_O);
 		menuFileOpen.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, KeyEvent.ALT_MASK));
 		menuFileOpen.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent e) {
+			public void actionPerformed(final ActionEvent e) {
 				openFile();
 			}
 		});
 		menuFile.add(menuFileOpen);
 
-		JMenuItem menuFileClose = new JMenuItem(Messages.getString("Menu.close")); //$NON-NLS-1$
+		final JMenuItem menuFileClose = new JMenuItem(Messages.getString("Menu.close")); //$NON-NLS-1$
 		menuFileClose.setMnemonic(KeyEvent.VK_C);
 		menuFileClose.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, KeyEvent.ALT_MASK));
 		menuFileClose.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent e) {
+			public void actionPerformed(final ActionEvent e) {
 				closeFile();
 			}
 		});
@@ -116,13 +116,13 @@ public class BPMNSimulatorFrame extends JFrame {
 
 		menuFile.addSeparator();
 
-		JMenuItem menuFilePreferences = new JMenuItem(Messages.getString("Menu.preferences")); //$NON-NLS-1$
+		final JMenuItem menuFilePreferences = new JMenuItem(Messages.getString("Menu.preferences")); //$NON-NLS-1$
 		menuFilePreferences.setMnemonic(KeyEvent.VK_P);
 		menuFilePreferences.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P, KeyEvent.ALT_MASK));
 		menuFilePreferences.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent e) {
-				PreferencesDialog frame = new PreferencesDialog();
+			public void actionPerformed(final ActionEvent e) {
+				final PreferencesDialog frame = new PreferencesDialog();
 				frame.setLocationRelativeTo(BPMNSimulatorFrame.this);
 				frame.setVisible(true);
 			}
@@ -131,12 +131,12 @@ public class BPMNSimulatorFrame extends JFrame {
 
 		menuFile.addSeparator();
 
-		JMenuItem menuFileExit = new JMenuItem(Messages.getString("Menu.exit"));  //$NON-NLS-1$
+		final JMenuItem menuFileExit = new JMenuItem(Messages.getString("Menu.exit"));  //$NON-NLS-1$
 		menuFileExit.setMnemonic(KeyEvent.VK_E);
 		menuFileExit.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_E, KeyEvent.ALT_MASK));
 		menuFileExit.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent e) {
+			public void actionPerformed(final ActionEvent e) {
 				for (Frame frame : getFrames()) {
 					if (frame.isActive()) {
 						frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
@@ -150,15 +150,15 @@ public class BPMNSimulatorFrame extends JFrame {
 
 		menubar.add(menuWindow);
 
-		JMenu menuHelp = new JMenu(Messages.getString("Menu.help")); //$NON-NLS-1$
+		final JMenu menuHelp = new JMenu(Messages.getString("Menu.help")); //$NON-NLS-1$
 
-		JMenuItem menuHelpAbout = new JMenuItem(Messages.getString("Menu.about")); //$NON-NLS-1$
+		final JMenuItem menuHelpAbout = new JMenuItem(Messages.getString("Menu.about")); //$NON-NLS-1$
 		menuHelpAbout.setMnemonic(KeyEvent.VK_A);
 		menuHelpAbout.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A, KeyEvent.ALT_MASK));
 		menuHelpAbout.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent e) {
-				AboutDialog frame = new AboutDialog();
+			public void actionPerformed(final ActionEvent e) {
+				final AboutDialog frame = new AboutDialog();
 				frame.setLocationRelativeTo(BPMNSimulatorFrame.this);
 				frame.setVisible(true);
 			}
@@ -173,7 +173,7 @@ public class BPMNSimulatorFrame extends JFrame {
 	public Toolbar createToolbar() {
 		toolbar.getOpenButton().addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent event) {
+			public void actionPerformed(final ActionEvent event) {
 				openFile();
 			}
 		});
@@ -189,7 +189,7 @@ public class BPMNSimulatorFrame extends JFrame {
 			config.store();
 			closeFile();
 			model = new Model(desktop.getDesktopPane());
-			File file = fileChoser.getSelectedFile();
+			final File file = fileChoser.getSelectedFile();
 			model.load(file);
 			menuWindow.setDesktopPane(desktop.getDesktopPane());
 			toolbar.setModel(model);
@@ -226,7 +226,7 @@ public class BPMNSimulatorFrame extends JFrame {
 		//JFrame.setDefaultLookAndFeelDecorated(true);
 	}
 
-	public static void main(String[] args) {
+	public static void main(final String[] args) {
 		initLookAndFeel();
 		new BPMNSimulatorFrame();
 	}

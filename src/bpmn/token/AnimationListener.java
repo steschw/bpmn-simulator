@@ -22,10 +22,10 @@ package bpmn.token;
 
 public interface AnimationListener {
 
-	public void animationPlay();
+	void animationPlay();
 
-	public void animationPause();
+	void animationPause();
 
-	public void animationReset();
+	void animationReset();
 
 }

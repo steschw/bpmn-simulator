@@ -22,7 +22,7 @@ package bpmn.token;
 
 public class TokenAnimator extends Animator {
 
-	private InstanceController instanceController = new InstanceController();
+	private final InstanceController instanceController = new InstanceController();
 
 	public TokenAnimator() {
 		super();
@@ -34,7 +34,7 @@ public class TokenAnimator extends Animator {
 	}
 
 	@Override
-	public synchronized void step(int count) {
+	public synchronized void step(final int count) {
 		getInstanceController().stepAll(count);
 	}
 

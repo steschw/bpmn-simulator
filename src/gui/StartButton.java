@@ -39,7 +39,7 @@ public class StartButton extends JButton implements ActionListener {
 
 	private Model model = null;
 
-	public StartButton(Icon icon) {
+	public StartButton(final Icon icon) {
 		super(icon);
 		addActionListener(this);
 	}
@@ -50,20 +50,20 @@ public class StartButton extends JButton implements ActionListener {
 	}
 
 	@Override
-	public void actionPerformed(ActionEvent e) {
+	public void actionPerformed(final ActionEvent e) {
 		if (model != null) {
-			Collection<StartEvent> startEvents = model.getManuallStartEvents();
-			Iterator<StartEvent> iterator = startEvents.iterator();
+			final Collection<StartEvent> startEvents = model.getManuallStartEvents();
+			final Iterator<StartEvent> iterator = startEvents.iterator();
 			if (startEvents.size() == 1) {
 				iterator.next().start();
 			} else {
-				JPopupMenu menu = new JPopupMenu();
+				final JPopupMenu menu = new JPopupMenu();
 				while (iterator.hasNext()) {
 					final StartEvent startEvent = iterator.next();
-					JMenuItem menuItem = new JMenuItem(startEvent.getElementName());
+					final JMenuItem menuItem = new JMenuItem(startEvent.getElementName());
 					menuItem.addActionListener(new ActionListener() {
 						@Override
-						public void actionPerformed(ActionEvent e) {
+						public void actionPerformed(final ActionEvent e) {
 							startEvent.start();
 						}
 					});

@@ -50,7 +50,7 @@ public class LogList extends JScrollPane {
 
 			private static final long serialVersionUID = 1L;
 
-			public void setValue(Object value) {
+			public void setValue(final Object value) {
 				if (value instanceof Icon) {
 					setIcon((Icon)value);
 					setText("");
@@ -76,7 +76,7 @@ public class LogList extends JScrollPane {
 		}
 
 		protected void initColumns() {
-			DefaultTableModel model = (DefaultTableModel)getModel();
+			final DefaultTableModel model = (DefaultTableModel)getModel();
 			model.addColumn(COLUMN_TYPE);
 			model.addColumn(COLUMN_MESSAGE);
 
@@ -95,7 +95,7 @@ public class LogList extends JScrollPane {
 		}
 
 		@Override
-		public boolean isCellEditable(int row, int column) {
+		public boolean isCellEditable(final int row, final int column) {
 			return false;
 		}
 
@@ -112,23 +112,23 @@ public class LogList extends JScrollPane {
 
 		private class LogMessage implements Runnable {
 
-			private Icon icon = null;
-			private String message = null;
+			private final Icon icon;
+			private final String message;
 
-			public LogMessage(Icon icon, String message) {
+			public LogMessage(final Icon icon, final String message) {
 				this.icon = icon;
 				this.message = message;
 			}
 
 			@Override
 			public void run() {
-				DefaultTableModel model = (DefaultTableModel)getModel();
+				final DefaultTableModel model = (DefaultTableModel)getModel();
 				model.addRow(new Object[] {icon, message});
 			}
 
 		}
 
-		protected void addMessage(Icon icon, final String message) {
+		protected void addMessage(final Icon icon, final String message) {
 			// swing componenten sind nicht thread-safe
 			// deshalb muss SwingUtilities.invokeLater verwenden werden
 			SwingUtilities.invokeLater(new LogMessage(icon, message));
@@ -136,12 +136,12 @@ public class LogList extends JScrollPane {
 
 	}
 
-	private static final Icon iconError = loadResizedIcon(UIManager.getIcon("OptionPane.errorIcon"));
-	private static final Icon iconWarning = loadResizedIcon(UIManager.getIcon("OptionPane.warningIcon")); 
+	private static final Icon ICON_ERROR = loadResizedIcon(UIManager.getIcon("OptionPane.errorIcon"));
+	private static final Icon ICON_WARNING = loadResizedIcon(UIManager.getIcon("OptionPane.warningIcon")); 
 
 	protected static final Icon loadResizedIcon(final Icon icon) {
 		if ((icon != null) && (icon instanceof ImageIcon)) {
-			Image image = ((ImageIcon)icon).getImage().getScaledInstance(16, 16, java.awt.Image.SCALE_SMOOTH);
+			final Image image = ((ImageIcon)icon).getImage().getScaledInstance(16, 16, java.awt.Image.SCALE_SMOOTH);
 			if (image != null) {
 				return new ImageIcon(image);
 			}
@@ -160,11 +160,11 @@ public class LogList extends JScrollPane {
 	}
 
 	public void addError(final String message) {
-		getContent().addMessage(iconError, message);
+		getContent().addMessage(ICON_ERROR, message);
 	}
 
 	public void addWarning(final String message) {
-		getContent().addMessage(iconWarning, message);
+		getContent().addMessage(ICON_WARNING, message);
 	}
 
 }

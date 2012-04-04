@@ -37,6 +37,8 @@ public abstract class Gateway extends TokenFlowElement implements ElementWithDef
 
 	private static final long serialVersionUID = 1L;
 
+	private static final int SYMBOL_MARGIN = 14;
+
 	private ElementRef<SequenceFlow> defaultSequenceFlowRef = null;
 
 	public Gateway(final String id, final String name) {
@@ -57,14 +59,14 @@ public abstract class Gateway extends TokenFlowElement implements ElementWithDef
 	}
 
 	@Override
-	protected void paintBackground(Graphics g) {
+	protected void paintBackground(final Graphics g) {
 		super.paintBackground(g);
 
 		g.fillDiamond(getElementInnerBounds());
 	}
 
 	@Override
-	protected void paintElement(Graphics g) {
+	protected void paintElement(final Graphics g) {
 		g.drawDiamond(getElementInnerBounds());
 
 		g.setStroke(new BasicStroke(3));
@@ -72,8 +74,7 @@ public abstract class Gateway extends TokenFlowElement implements ElementWithDef
 
 	protected Rectangle getSymbolBounds() {
 		final Rectangle bounds = getElementInnerBounds();
-		final int margin = 14;
-		bounds.grow(-margin, -margin);
+		bounds.grow(-SYMBOL_MARGIN, -SYMBOL_MARGIN);
 		return bounds;
 	}
 
@@ -85,7 +86,8 @@ public abstract class Gateway extends TokenFlowElement implements ElementWithDef
 		}
 	}
 
-	protected Token getFirstTokenForIncoming(SequenceFlow sequenceFlow, Instance instance) {
+	protected Token getFirstTokenForIncoming(final SequenceFlow sequenceFlow,
+			final Instance instance) {
 		for (Token token : getTokens().byInstance(instance)) {
 			if (sequenceFlow.equals(token.getPreviousFlow())) {
 				return token;
@@ -95,7 +97,7 @@ public abstract class Gateway extends TokenFlowElement implements ElementWithDef
 	}
 
 	@Override
-	protected void initLabel(Label label) {
+	protected void initLabel(final Label label) {
 		label.setAlignCenter(false);
 		label.setLeftTopPosition(getElementRightBottom());
 	}

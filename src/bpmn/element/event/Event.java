@@ -32,7 +32,7 @@ public abstract class Event extends TokenFlowElement {
 	private InstanceController instanceController = null;
 
 	public Event(final String id, final String name,
-			InstanceController tockenController) {
+			final InstanceController tockenController) {
 		super(id, name);
 
 		setTokenController(tockenController);
@@ -52,19 +52,19 @@ public abstract class Event extends TokenFlowElement {
 	}
 
 	@Override
-	protected void paintBackground(Graphics g) {
+	protected void paintBackground(final Graphics g) {
 		super.paintBackground(g);
 
 		g.fillOval(getElementInnerBounds());
 	}
 
 	@Override
-	protected void paintElement(Graphics g) {
+	protected void paintElement(final Graphics g) {
 		g.drawOval(getElementInnerBounds());
 	}
 
 	@Override
-	protected void initLabel(Label label) {
+	protected void initLabel(final Label label) {
 		label.setCenterTopPosition(getElementBottomCenter());
 	}
 

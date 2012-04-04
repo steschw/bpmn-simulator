@@ -64,13 +64,13 @@ public class Hyperlink extends JButton implements ActionListener {
 			try {
 				Desktop.getDesktop().browse(getURI());
 			} catch (IOException e) {
-				System.err.println(e);
+				e.printStackTrace();
 			}
 		}
 	}
 
 	@Override
-	public void actionPerformed(ActionEvent e) {
+	public void actionPerformed(final ActionEvent e) {
 		openURI();
 	}
 

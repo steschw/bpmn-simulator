@@ -36,19 +36,19 @@ public class InclusiveGateway extends Gateway {
 	}
 
 	@Override
-	protected void paintElement(Graphics g) {
+	protected void paintElement(final Graphics g) {
 		super.paintElement(g);
 
 		g.drawOval(getSymbolBounds());
 	}
 
 	@Override
-	public boolean hasIncomingPathWithActiveToken(Instance instance) {
+	public boolean hasIncomingPathWithActiveToken(final Instance instance) {
 		return false;
 	}
 
-	protected synchronized void forwardTokenParallel(Instance instance) {
-		TokenCollection popTokens = new TokenCollection();
+	protected synchronized void forwardTokenParallel(final Instance instance) {
+		final TokenCollection popTokens = new TokenCollection();
 		for (ElementRef<SequenceFlow> incoming : getIncoming()) {
 			if (incoming.hasElement()) {
 				final SequenceFlow incomingSequenceFlow = (SequenceFlow)incoming.getElement();
@@ -72,7 +72,7 @@ public class InclusiveGateway extends Gateway {
 	}
 
 	@Override
-	protected void tokenForward(Token token) {
+	protected void tokenForward(final Token token) {
 		if (isForMerging()) {
 			forwardTokenParallel(token.getInstance());
 		} else {

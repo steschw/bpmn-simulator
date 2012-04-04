@@ -26,6 +26,8 @@ public class TextAnnotation extends Artifact {
 
 	private static final long serialVersionUID = 1L;
 
+	private static final int MARGIN = 10;
+
 	private String text = null;
 
 	public TextAnnotation(final String id, final String text) {
@@ -45,7 +47,7 @@ public class TextAnnotation extends Artifact {
 	public Label createElementLabel() {
 		final String text = getText();
 		if ((text != null) && !text.isEmpty()) {
-			Label label = new Label(text);
+			final Label label = new Label(text);
 			initLabel(label);
 			return label;
 		}
@@ -53,22 +55,21 @@ public class TextAnnotation extends Artifact {
 	}
 
 	@Override
-	protected void initLabel(Label label) {
+	protected void initLabel(final Label label) {
 		label.setAlignCenter(false);
-		Rectangle innerBounds = getInnerBounds();
+		final Rectangle innerBounds = getInnerBounds();
 		innerBounds.shrinkLeft(4);
 		label.setBounds(innerBounds);
 	}
 
 	@Override
-	protected void paintElement(Graphics g) {
+	protected void paintElement(final Graphics g) {
 		final Rectangle bounds = getElementInnerBounds();
 		final int x = (int)bounds.getMinX();
 		final int y = (int)bounds.getMinY();
-		final int SIZE = 10;
-		g.drawLine(new Point(x, y), new Point(x + SIZE, y));
+		g.drawLine(new Point(x, y), new Point(x + MARGIN, y));
 		g.drawLine(new Point(x, y), new Point(x, y + bounds.height));
-		g.drawLine(new Point(x, y + bounds.height), new Point(x + SIZE, y + bounds.height));
+		g.drawLine(new Point(x, y + bounds.height), new Point(x + MARGIN, y + bounds.height));
 	}
 
 }

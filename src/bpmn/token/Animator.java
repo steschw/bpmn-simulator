@@ -24,25 +24,21 @@ import java.util.Vector;
 
 public abstract class Animator implements Runnable {
 
-	private Vector<AnimationListener> animationListeners = new Vector<AnimationListener>();
+	private final Vector<AnimationListener> animationListeners = new Vector<AnimationListener>();
 
 	private Thread thread = null;
 
-	private boolean pause = false;
+	private boolean paused = false;
 
 	private float speedFactor = 1.0f;
 
-	public Animator() {
-		super();
-	}
-
-	public void addAnimationListener(AnimationListener listener) {
+	public void addAnimationListener(final AnimationListener listener) {
 		synchronized (animationListeners) {
 			animationListeners.add(listener);
 		}
 	}
 
-	public void removeAnimationListener(AnimationListener listener) {
+	public void removeAnimationListener(final AnimationListener listener) {
 		synchronized (animationListeners) {
 			animationListeners.remove(listener);
 		}
@@ -73,7 +69,7 @@ public abstract class Animator implements Runnable {
 	}
 
 	public synchronized void setSpeed(final float factor) {
-		assert(factor > 0.0f);
+		assert (factor > 0.0f);
 		speedFactor = factor;
 	}
 
@@ -99,17 +95,17 @@ public abstract class Animator implements Runnable {
 	public abstract void step(int count);
 
 	public void play() {
-		pause = false;
+		paused = false;
 		notifyAnimationPlay();
 	}
 
 	public void pause() {
-		pause = true;
+		paused = true;
 		notifyAnimationPause();
 	}
 
 	public boolean isPaused() {
-		return pause;
+		return paused;
 	}
 
 	public void reset() {
@@ -117,7 +113,7 @@ public abstract class Animator implements Runnable {
 	}
 
 	protected synchronized void start() {
-		assert(thread == null);
+		assert (thread == null);
 		if (thread == null) {
 			thread = new Thread(this);
 			thread.setName("Animation");
@@ -126,6 +122,7 @@ public abstract class Animator implements Runnable {
 	}
 
 	public void end() {
+		assert (thread != null);
 		if (thread != null) {
 			synchronized (thread) {
 				thread.interrupt();
@@ -136,10 +133,8 @@ public abstract class Animator implements Runnable {
 				}
 				thread = null;
 			}
-		} else {
-			assert false;
 		}
-		pause = false;
+		paused = false;
 	}
 
 }

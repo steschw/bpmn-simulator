@@ -27,7 +27,7 @@ public class LaneSet extends FlowElement {
 
 	private static final long serialVersionUID = 1L;
 
-	private Collection<Lane> lanes = new ArrayList<Lane>(); 
+	private final Collection<Lane> lanes = new ArrayList<Lane>(); 
 
 	public LaneSet(final String id) {
 		super(id, null);

@@ -24,6 +24,7 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.util.Collection;
 import java.util.Vector;
 
 import bpmn.element.Graphics;
@@ -32,7 +33,7 @@ public class Instance {
 
 	private Instance parent = null;
 
-	private final Vector<Instance> childs = new Vector<Instance>();
+	private final Collection<Instance> childs = new Vector<Instance>();
 
 	private final TokenCollection tokens = new TokenCollection();
 
@@ -65,7 +66,7 @@ public class Instance {
 		}
 	}
 
-	protected Vector<Instance> getChildInstances() {
+	protected Collection<Instance> getChildInstances() {
 		return childs;
 	}
 
@@ -118,7 +119,7 @@ public class Instance {
 	}
 
 	protected void addChildInstance(final Instance instance) {
-		assert(instance != null);
+		assert (instance != null);
 		childs.add(instance);
 	}
 
@@ -137,7 +138,7 @@ public class Instance {
 	}
 
 	public void removeAllChildInstances() {
-		final Vector<Instance> instanceSnapshot = new Vector<Instance>(getChildInstances()); 
+		final Collection<Instance> instanceSnapshot = new Vector<Instance>(getChildInstances()); 
 		for (Instance childInstance : instanceSnapshot) {
 			childInstance.remove();
 		}
@@ -202,7 +203,7 @@ public class Instance {
 				snapshotToken.remove();
 			}
 		}
-		final Vector<Instance> instanceSnapshot = new Vector<Instance>(getChildInstances()); 
+		final Collection<Instance> instanceSnapshot = new Vector<Instance>(getChildInstances()); 
 		for (final Instance childInstance : instanceSnapshot) {
 			childInstance.removeAllOtherTokens(token);
 		}
@@ -213,7 +214,7 @@ public class Instance {
 		for (final Token token : tokenSnapshot) {
 			token.remove();
 		}
-		final Vector<Instance> instanceSnapshot = new Vector<Instance>(getChildInstances()); 
+		final Collection<Instance> instanceSnapshot = new Vector<Instance>(getChildInstances()); 
 		for (final Instance childInstance : instanceSnapshot) {
 			childInstance.removeAllTokens();
 		}
@@ -234,7 +235,7 @@ public class Instance {
 				token.step(count);
 			}
 		}
-		final Vector<Instance> childSnapshot = new Vector<Instance>(getChildInstances());
+		final Collection<Instance> childSnapshot = new Vector<Instance>(getChildInstances());
 		for (Instance childInstance : childSnapshot) {
 			childInstance.stepAllTokens(count);
 		}

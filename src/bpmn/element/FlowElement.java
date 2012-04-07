@@ -27,8 +27,8 @@ public abstract class FlowElement extends BaseElement {
 
 	private static final long serialVersionUID = 1L;
 
-	private Collection<ElementRef<SequenceFlow>> incoming = new ArrayList<ElementRef<SequenceFlow>>(); 
-	private Collection<ElementRef<SequenceFlow>> outgoing = new ArrayList<ElementRef<SequenceFlow>>(); 
+	private final Collection<ElementRef<SequenceFlow>> incoming = new ArrayList<ElementRef<SequenceFlow>>(); 
+	private final Collection<ElementRef<SequenceFlow>> outgoing = new ArrayList<ElementRef<SequenceFlow>>(); 
 
 	public FlowElement(final String id, final String name) {
 		super(id, name);
@@ -43,11 +43,11 @@ public abstract class FlowElement extends BaseElement {
 	}
 
 	public boolean hasIncoming() {
-		return (getIncoming().size() > 0);
+		return !getIncoming().isEmpty();
 	}
 
 	public boolean hasOutgoing() {
-		return (getOutgoing().size() > 0);
+		return !getOutgoing().isEmpty();
 	}
 
 	public void addIncoming(final ElementRef<SequenceFlow> element) {

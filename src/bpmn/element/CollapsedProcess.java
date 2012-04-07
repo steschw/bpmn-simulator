@@ -22,8 +22,8 @@ package bpmn.element;
 
 import java.awt.Color;
 import java.awt.Point;
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Vector;
 
 import bpmn.token.Instance;
 import bpmn.token.Token;
@@ -35,7 +35,7 @@ public class CollapsedProcess extends FlowElement {
 	private static final int SYMBOL_WIDTH = 20;
 	private static final int SYMBOL_HEIGHT = 20;
 
-	private Vector<Instance> instances = new Vector<Instance>(); 
+	private final Collection<Instance> instances = new ArrayList<Instance>(); 
 
 	public CollapsedProcess(final ExpandedProcess expandedProcess) {
 		super(expandedProcess.getId(), expandedProcess.getName());

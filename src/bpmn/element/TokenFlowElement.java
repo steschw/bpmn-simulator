@@ -32,7 +32,7 @@ public abstract class TokenFlowElement extends FlowElement implements TokenFlow 
 
 	private static final long serialVersionUID = 1L;
 
-	private TokenCollection tokens = new TokenCollection();
+	private final TokenCollection tokens = new TokenCollection();
 
 	public TokenFlowElement(final String id, final String name) {
 		super(id, name);
@@ -91,11 +91,8 @@ public abstract class TokenFlowElement extends FlowElement implements TokenFlow 
 
 	@Override
 	public boolean hasIncomingPathWithActiveToken(final Instance instance) {
-		if (getTokens().byInstance(instance).getCount() > 0) {
-			// Entweder das Element selbst hat noch Token dieser Instanz
-			return true;
-		} else {
-			// oder eines der eingehenden
+		if (getTokens().byInstance(instance).isEmpty()) {
+			// Entweder eines der eingehenden Elemente hat noch Token der Instanz
 			for (ElementRef<SequenceFlow> incoming : getIncoming()) {
 				if ((incoming != null) && incoming.hasElement()) {
 					if (incoming.getElement().hasIncomingPathWithActiveToken(instance)) {
@@ -104,6 +101,9 @@ public abstract class TokenFlowElement extends FlowElement implements TokenFlow 
 				}
 			}
 			return false;
+		} else {
+			// oder dieses selbst
+			return true;
 		}
 	}
 
@@ -191,7 +191,7 @@ public abstract class TokenFlowElement extends FlowElement implements TokenFlow 
 	@Override
 	public Color getForeground() {
 		final TokenCollection tokens = getTokens();
-		if ((tokens != null) && (tokens.getCount() > 0)) {
+		if ((tokens != null) && !tokens.isEmpty()) {
 			return Token.HIGHLIGHT_COLOR;
 		}
 		return super.getForeground();

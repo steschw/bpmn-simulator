@@ -31,7 +31,7 @@ public class Collaboration extends FlowElement implements Scrollable {
 
 	private static final long serialVersionUID = 1L;
 
-	private Collection<BaseElement> elements = new ArrayList<BaseElement>(); 
+	private final Collection<BaseElement> elements = new ArrayList<BaseElement>(); 
 
 	public Collaboration(final String id) {
 		super(id, null);

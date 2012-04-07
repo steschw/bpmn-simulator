@@ -106,10 +106,14 @@ public class SequenceFlow extends TokenConnectingElement {
 		return name;
 	}
 
-	public boolean isConditional() {
+	protected boolean hasExpression() {
 		final String expression = getConditionExpression();
-		final boolean hasExpression = ((expression != null) && !expression.isEmpty());
-		return ((hasExpression || isSourceElementInclusiveOrExclusiveGatewayAndHasMoreThanOnceOutgoing()) && !isDefault());
+		return ((expression != null) && !expression.isEmpty());
+	}
+
+	public boolean isConditional() {
+		return ((hasExpression() || isSourceElementInclusiveOrExclusiveGatewayAndHasMoreThanOnceOutgoing())
+				&& !isDefault());
 	}
 
 	public boolean acceptsToken() {

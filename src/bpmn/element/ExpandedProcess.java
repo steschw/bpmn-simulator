@@ -26,7 +26,6 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Vector;
 
 import javax.swing.Scrollable;
 
@@ -40,7 +39,7 @@ public class ExpandedProcess extends Activity implements Scrollable {
 
 	private static final long serialVersionUID = 1L;
 
-	private Collection<BaseElement> elements = new ArrayList<BaseElement>();
+	private final Collection<BaseElement> elements = new ArrayList<BaseElement>();
 
 	private CollapsedProcess collapsedProcess = null; 
 

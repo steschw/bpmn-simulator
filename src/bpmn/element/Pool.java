@@ -23,7 +23,6 @@ package bpmn.element;
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Vector;
 
 /**
  * A Pool is the graphical representation of a Participant in a Collaboration
@@ -32,7 +31,7 @@ public class Pool extends TitledFlowElement {
 
 	private static final long serialVersionUID = 1L;
 
-	private Collection<LaneSet> laneSets = new ArrayList<LaneSet>(); 
+	private final Collection<LaneSet> laneSets = new ArrayList<LaneSet>(); 
 
 	public Pool(final String id, final String name,
 			final ElementRef<ExpandedProcess> processRef) {

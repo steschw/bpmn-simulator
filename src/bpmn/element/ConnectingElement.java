@@ -32,7 +32,7 @@ public abstract class ConnectingElement extends BaseElement {
 
 	private static final long serialVersionUID = 1L;
 
-	private Deque<Point> waypoints = new LinkedList<Point>();
+	private final Deque<Point> waypoints = new LinkedList<Point>();
 
 	private ElementRef<FlowElement> sourceRef = null;
 	private ElementRef<FlowElement> targetRef = null;

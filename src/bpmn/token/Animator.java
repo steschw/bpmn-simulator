@@ -20,11 +20,12 @@
  */
 package bpmn.token;
 
+import java.util.Collection;
 import java.util.Vector;
 
 public abstract class Animator implements Runnable {
 
-	private final Vector<AnimationListener> animationListeners = new Vector<AnimationListener>();
+	private final Collection<AnimationListener> animationListeners = new Vector<AnimationListener>();
 
 	private Thread thread = null;
 

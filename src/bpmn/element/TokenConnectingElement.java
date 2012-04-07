@@ -32,7 +32,7 @@ public abstract class TokenConnectingElement extends ConnectingElement
 
 	private static final long serialVersionUID = 1L;
 
-	private TokenCollection tokens = new TokenCollection();
+	private final TokenCollection tokens = new TokenCollection();
 
 	public TokenConnectingElement(final String id, final String name,
 			final ElementRef<FlowElement> source, final ElementRef<FlowElement> target) {
@@ -91,11 +91,8 @@ public abstract class TokenConnectingElement extends ConnectingElement
 	}
 
 	public boolean hasIncomingPathWithActiveToken(final Instance instance) {
-		if (getTokens().byInstance(instance).getCount() > 0) {
-			// Entweder das Element selbst hat noch Token dieser Instanz
-			return true;
-		} else {
-			// oder eines der eingehenden
+		if (getTokens().byInstance(instance).isEmpty()) {
+			// Entweder eines der eingehenden Elemente hat noch Token der Instanz
 			final ElementRef<FlowElement> sourceRef = getSourceRef();
 			if ((sourceRef != null) && sourceRef.hasElement()) {
 				final FlowElement flowElement = sourceRef.getElement();
@@ -103,14 +100,17 @@ public abstract class TokenConnectingElement extends ConnectingElement
 					return ((TokenFlow)flowElement).hasIncomingPathWithActiveToken(instance);
 				}
 			}
+			return false;
+		} else {
+			// oder dieses selbst
+			return true;
 		}
-		return false;
 	}
 
 	@Override
 	public Color getForeground() {
 		final TokenCollection tokens = getTokens();
-		if ((tokens != null) && (tokens.getCount() > 0)) {
+		if ((tokens != null) && !tokens.isEmpty()) {
 			return Token.HIGHLIGHT_COLOR;
 		}
 		return super.getForeground();

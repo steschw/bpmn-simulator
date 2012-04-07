@@ -38,7 +38,7 @@ public class TokenCollection extends Vector<Token> {
 
 	@Override
 	public synchronized boolean add(final Token token) {
-		assert(!contains(token));
+		assert (!contains(token));
 		return super.add(token);
 	}
 
@@ -64,7 +64,7 @@ public class TokenCollection extends Vector<Token> {
 	}
 
 	public synchronized Collection<Instance> getInstances() {
-		final Vector<Instance> instances = new Vector<Instance>();
+		final Collection<Instance> instances = new Vector<Instance>();
 		for (Token token : this) {
 			final Instance instance = token.getInstance(); 
 			if (!instances.contains(instance)) {

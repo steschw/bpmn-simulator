@@ -23,6 +23,7 @@ package gui;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.net.URL;
 
 import javax.swing.Box;
 import javax.swing.Icon;
@@ -41,17 +42,17 @@ public class Toolbar extends JToolBar implements AnimationListener {
 
 	private static final long serialVersionUID = 1L;
 
-	private Icon iconOpen = null;
+	private static Icon iconOpen = loadIcon("open.png"); //$NON-NLS-1$
 
-	private Icon iconStart = null;
-	private Icon iconReset = null;
+	private static Icon iconStart = loadIcon("start.png"); //$NON-NLS-1$;
+	private static Icon iconReset = loadIcon("stop.png"); //$NON-NLS-1$;
 
-	private Icon iconPause = null;
-	private Icon iconPlay = null;
-	private Icon iconStep = null;
-	private Icon iconSpeed = null;
-	private Icon iconMessages = null;
-	private Icon iconMessagesError = null;
+	private static Icon iconPause = loadIcon("pause.png"); //$NON-NLS-1$
+	private static Icon iconPlay = loadIcon("play.png"); //$NON-NLS-1$
+	private static Icon iconStep = loadIcon("step.png"); //$NON-NLS-1$
+	private static Icon iconSpeed = loadIcon("speed.png"); //$NON-NLS-1$
+	private static Icon iconMessages = loadIcon("messages.png"); //$NON-NLS-1$
+	private static Icon iconMessagesError = loadIcon("messagesError.png"); //$NON-NLS-1$
 
 	private JButton buttonOpen = null;
 
@@ -62,11 +63,19 @@ public class Toolbar extends JToolBar implements AnimationListener {
 	private JButton buttonStep = null;
 
 	private JLabel labelSpeed = null; 
-	private SpeedSpinner spinnerSpeed = new SpeedSpinner(); 
+	private SpeedSpinner spinnerSpeed = null; 
 
 	private JButton buttonMessages = null;
 
 	private Model model = null;
+
+	protected static ImageIcon loadIcon(final String filename) {
+		final URL url = Toolbar.class.getResource(filename);
+		if (url != null) {
+			return new ImageIcon(url);
+		}
+		return null;
+	}
 
 	public Toolbar() {
 		super();
@@ -100,8 +109,6 @@ public class Toolbar extends JToolBar implements AnimationListener {
 
 	protected void create() {
 
-		loadIcons();
-
 		buttonOpen = new JButton(iconOpen);
 		buttonOpen.setToolTipText(Messages.getString("Toolbar.open")); //$NON-NLS-1$
 		add(buttonOpen);
@@ -110,11 +117,6 @@ public class Toolbar extends JToolBar implements AnimationListener {
 
 		buttonStart = new StartButton(iconStart);
 		buttonStart.setToolTipText(Messages.getString("Toolbar.start")); //$NON-NLS-1$
-		buttonStart.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(final ActionEvent event) {
-			}
-		});
 		add(buttonStart);
 
 		buttonReset = new JButton(iconReset);
@@ -159,7 +161,10 @@ public class Toolbar extends JToolBar implements AnimationListener {
 		labelSpeed.setToolTipText(Messages.getString("Toolbar.frameRate")); //$NON-NLS-1$
 		labelSpeed.setLabelFor(spinnerSpeed);
 		add(labelSpeed);
+
 		add(Box.createHorizontalStrut(6));
+
+		spinnerSpeed = new SpeedSpinner();
 		spinnerSpeed.addChangeListener(new ChangeListener() {
 			@Override
 			public void stateChanged(final ChangeEvent event) {
@@ -184,20 +189,6 @@ public class Toolbar extends JToolBar implements AnimationListener {
 
 		updateControls();
 		updateMessages();
-	}
-
-	private void loadIcons() {
-		iconOpen = new ImageIcon(getClass().getResource("open.png")); //$NON-NLS-1$
-
-		iconStart = new ImageIcon(getClass().getResource("start.png")); //$NON-NLS-1$
-		iconReset = new ImageIcon(getClass().getResource("stop.png")); //$NON-NLS-1$
-
-		iconPause = new ImageIcon(getClass().getResource("pause.png")); //$NON-NLS-1$
-		iconPlay = new ImageIcon(getClass().getResource("play.png")); //$NON-NLS-1$
-		iconStep = new ImageIcon(getClass().getResource("step.png")); //$NON-NLS-1$
-		iconSpeed = new ImageIcon(getClass().getResource("speed.png")); //$NON-NLS-1$
-		iconMessages = new ImageIcon(getClass().getResource("messages.png")); //$NON-NLS-1$
-		iconMessagesError = new ImageIcon(getClass().getResource("messagesError.png")); //$NON-NLS-1$
 	}
 
 	protected void updateMessages() {

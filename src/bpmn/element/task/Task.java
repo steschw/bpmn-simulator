@@ -33,7 +33,9 @@ public class Task extends Activity {
 
 	private static final long serialVersionUID = 1L;
 
-	private ImageIcon typeIcon = null;
+	private final ImageIcon typeIcon;
+
+	private static final int ARC_LENGTH = 10;
 
 	protected static ImageIcon loadTypeIcon(final String filename) {
 		final URL url = Task.class.getResource(filename);
@@ -44,11 +46,11 @@ public class Task extends Activity {
 	}
 
 	public Task(final String id, final String name) {
-		super(id, name);
+		this(id, name, null);
 	}
 
 	protected Task(final String id, final String name, final ImageIcon icon) {
-		this(id, name);
+		super(id, name);
 		this.typeIcon = icon;
 	}
 
@@ -59,7 +61,7 @@ public class Task extends Activity {
 
 	@Override
 	protected void paintBackground(final Graphics g) {
-		g.fillRoundRect(getElementInnerBounds(), 10, 10);
+		g.fillRoundRect(getElementInnerBounds(), ARC_LENGTH, ARC_LENGTH);
 	}
 
 	public void paintTypeIcon(final Graphics g) {

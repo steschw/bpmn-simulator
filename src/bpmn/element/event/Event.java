@@ -29,7 +29,7 @@ public abstract class Event extends TokenFlowElement {
 
 	private static final long serialVersionUID = 1L;
 
-	private InstanceController instanceController = null;
+	private InstanceController instanceController;
 
 	public Event(final String id, final String name,
 			final InstanceController tockenController) {

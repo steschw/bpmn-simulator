@@ -22,8 +22,11 @@ package bpmn.element;
 
 import java.awt.Color;
 import java.awt.Point;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
+
+import javax.swing.ImageIcon;
 
 import bpmn.token.Instance;
 import bpmn.token.Token;
@@ -32,8 +35,17 @@ public class CollapsedProcess extends FlowElement {
 
 	private static final long serialVersionUID = 1L;
 
-	private static final int SYMBOL_WIDTH = 20;
-	private static final int SYMBOL_HEIGHT = 20;
+	private static final int ARC_LENGTH = 10;
+
+	private static final ImageIcon COLLAPSED_ICON = loadIcon("collapsed.png");
+
+	protected static ImageIcon loadIcon(final String filename) {
+		final URL url = CollapsedProcess.class.getResource(filename);
+		if (url != null) {
+			return new ImageIcon(url);
+		}
+		return null;
+	}
 
 	private final Collection<Instance> instances = new ArrayList<Instance>(); 
 
@@ -68,26 +80,22 @@ public class CollapsedProcess extends FlowElement {
 
 	@Override
 	protected void paintBackground(final Graphics g) {
-		g.fillRoundRect(getElementInnerBounds(), 10, 10);
+		g.fillRoundRect(getElementInnerBounds(), ARC_LENGTH, ARC_LENGTH);
 	}
 
 	@Override
 	protected void paintElement(final Graphics g) {
-		final Rectangle bounds = getElementInnerBounds();
-		g.drawRoundRect(bounds, 10, 10);
+		g.drawRoundRect(getElementInnerBounds(), ARC_LENGTH, ARC_LENGTH);
 
-		drawSymbol(g,
-				new Rectangle(
-						bounds.x + (bounds.width - SYMBOL_WIDTH) / 2,
-						bounds.y + bounds.height - SYMBOL_HEIGHT,
-						SYMBOL_WIDTH,
-						SYMBOL_HEIGHT));
+		drawSymbol(g);
 	}
 
-	protected void drawSymbol(final Graphics g, final Rectangle bounds) {
-		g.drawRect(bounds);
-		bounds.grow(-4, -4);
-		g.drawCross(bounds, false);
+	protected void drawSymbol(final Graphics g) {
+		if (COLLAPSED_ICON != null) {
+			final Point position = getElementInnerBounds().getCenterBottom();
+			position.translate(-(COLLAPSED_ICON.getIconWidth() / 2), -COLLAPSED_ICON.getIconHeight());
+			g.drawIcon(COLLAPSED_ICON, position);
+		}
 	}
 
 	@Override

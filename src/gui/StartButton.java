@@ -37,7 +37,7 @@ public class StartButton extends JButton implements ActionListener {
 
 	private static final long serialVersionUID = 1L;
 
-	private Model model = null;
+	private Model model;
 
 	public StartButton(final Icon icon) {
 		super(icon);

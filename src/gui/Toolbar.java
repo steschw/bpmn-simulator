@@ -54,20 +54,20 @@ public class Toolbar extends JToolBar implements AnimationListener {
 	private static Icon iconMessages = loadIcon("messages.png"); //$NON-NLS-1$
 	private static Icon iconMessagesError = loadIcon("messagesError.png"); //$NON-NLS-1$
 
-	private JButton buttonOpen = null;
+	private JButton buttonOpen;
 
-	private StartButton buttonStart = null;
-	private JButton buttonReset = null;
+	private StartButton buttonStart;
+	private JButton buttonReset;
 
-	private JButton buttonPauseContinue = null;
-	private JButton buttonStep = null;
+	private JButton buttonPauseContinue;
+	private JButton buttonStep;
 
-	private JLabel labelSpeed = null; 
-	private SpeedSpinner spinnerSpeed = null; 
+	private JLabel labelSpeed; 
+	private SpeedSpinner spinnerSpeed; 
 
-	private JButton buttonMessages = null;
+	private JButton buttonMessages;
 
-	private Model model = null;
+	private Model model;
 
 	protected static ImageIcon loadIcon(final String filename) {
 		final URL url = Toolbar.class.getResource(filename);
@@ -155,14 +155,11 @@ public class Toolbar extends JToolBar implements AnimationListener {
 		});
 		add(buttonStep);
 
-		addSeparator();
+		addSeparator(new Dimension(32, 32));
 
 		labelSpeed = new JLabel(iconSpeed);
 		labelSpeed.setToolTipText(Messages.getString("Toolbar.frameRate")); //$NON-NLS-1$
-		labelSpeed.setLabelFor(spinnerSpeed);
 		add(labelSpeed);
-
-		add(Box.createHorizontalStrut(6));
 
 		spinnerSpeed = new SpeedSpinner();
 		spinnerSpeed.addChangeListener(new ChangeListener() {
@@ -171,6 +168,7 @@ public class Toolbar extends JToolBar implements AnimationListener {
 				getAnimator().setSpeed(((SpeedSpinner)event.getSource()).getSpeedFactor());
 			}
 		});
+		labelSpeed.setLabelFor(spinnerSpeed);
 		add(spinnerSpeed);
 
 		add(Box.createHorizontalGlue());

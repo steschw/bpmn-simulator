@@ -55,8 +55,8 @@ public class StartEvent extends Event implements MouseListener {
 	}
 
 	protected void updateCursor() {
-		setCursor(canStartManuell() ?
-				new Cursor(Cursor.HAND_CURSOR)
+		setCursor(canStartManuell()
+				? new Cursor(Cursor.HAND_CURSOR)
 				: Cursor.getDefaultCursor());
 	}
 

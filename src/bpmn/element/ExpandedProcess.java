@@ -41,7 +41,7 @@ public class ExpandedProcess extends Activity implements Scrollable {
 
 	private final Collection<BaseElement> elements = new ArrayList<BaseElement>();
 
-	private CollapsedProcess collapsedProcess = null; 
+	private CollapsedProcess collapsedProcess; 
 
 	public ExpandedProcess(final String id, final String name) {
 		super(id, name);
@@ -142,7 +142,7 @@ public class ExpandedProcess extends Activity implements Scrollable {
 
 	@Override
 	public Dimension getPreferredSize() {
-		return calcSizeByComponents();
+		return calcSizeByInnerComponents();
 	}
 
 	public Collection<Activity> getStartActivities() {

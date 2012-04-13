@@ -44,7 +44,7 @@ public class BPMNSimulatorFrame extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 
-	private ScrollDesktop desktop = null;
+	private ScrollDesktop desktop;
 
 	private final WindowMenu menuWindow = new WindowMenu();
 
@@ -52,7 +52,7 @@ public class BPMNSimulatorFrame extends JFrame {
 
 	private final JFileChooser fileChoser = new JFileChooser();
 
-	private Model model = null;
+	private Model model;
 
 	public BPMNSimulatorFrame() {
 		super();

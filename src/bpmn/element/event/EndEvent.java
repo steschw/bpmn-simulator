@@ -29,7 +29,7 @@ public class EndEvent extends Event {
 
 	private static final long serialVersionUID = 1L;
 
-	private boolean termination = false;
+	private boolean termination;
 
 	public EndEvent(final String id, final String name,
 			final InstanceController tockenController) {

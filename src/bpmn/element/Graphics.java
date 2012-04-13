@@ -42,11 +42,13 @@ import javax.swing.ImageIcon;
 
 public class Graphics {
 
-	private Graphics2D graphics = null;
+	private Graphics2D graphics;
 
-	private Stroke storedStroke = null;
-	private Paint storedPaint = null;
-	private Font storedFont = null;
+	private Stroke storedStroke;
+	private Paint storedPaint;
+	private Font storedFont;
+
+	private static final double RAD_FULL = (2. * Math.PI);
 
 	private static final double CONNECTING_SYMBOL_LENGTH = 12.;
 
@@ -273,12 +275,11 @@ public class Graphics {
 		final Polygon polygon = new Polygon();
 		final Point center = new Point(size.x + size.width / 2, size.y + size.height / 2);
 		final double r = (size.width / 2.);
-		final double FULL_RAD = (2. * Math.PI);
 		Point point = null;
 		for (int i = 0; i < corners; ++i) {
-			point = polarToCartesian(center, r, (FULL_RAD / corners) * i - (FULL_RAD / corners) / 2.);
+			point = polarToCartesian(center, r, (RAD_FULL / corners) * i - (RAD_FULL / corners) / 2.);
 			polygon.addPoint(point.x, point.y);
-			point = polarToCartesian(center, r * 0.5, (FULL_RAD / corners) * i);
+			point = polarToCartesian(center, r * 0.5, (RAD_FULL / corners) * i);
 			polygon.addPoint(point.x, point.y);
 		}
 		return polygon;
@@ -325,15 +326,6 @@ public class Graphics {
 		final Point symbolTo = polarToCartesian(symbolFrom, CONNECTING_SYMBOL_LENGTH, a - angle - Math.PI);
 
 		drawLine(symbolFrom, symbolTo);
-	}
-
-	public void drawInfoArrow(final Point point, final Color color) {
-		final Point from = new Point(point.x, point.y - 20);
-		final Paint paint = graphics.getPaint();
-		graphics.setPaint(color);
-		graphics.fill(createArrowPath(from, point, Math.PI / 5., 16));
-		fillRect(new Rectangle(point.x - 4, point.y - 20, 8, 10));
-		graphics.setPaint(paint);
 	}
 
 }

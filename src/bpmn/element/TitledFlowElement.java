@@ -26,7 +26,7 @@ public class TitledFlowElement extends FlowElement {
 
 	private static final int HEADER_SIZE = 32;
 
-	private boolean horizontal = false;
+	private boolean horizontal;
 
 	public TitledFlowElement(final String id, final String name) {
 		super(id, name);

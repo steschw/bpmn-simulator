@@ -28,7 +28,7 @@ public class TextAnnotation extends Artifact {
 
 	private static final int MARGIN = 10;
 
-	private String text = null;
+	private String text;
 
 	public TextAnnotation(final String id, final String text) {
 		super(id);

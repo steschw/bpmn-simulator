@@ -22,7 +22,7 @@ package bpmn.element;
 
 public class ElementRef<E extends BaseElement> {
 
-	private E element = null;
+	private E element;
 
 	public ElementRef() {
 		super();

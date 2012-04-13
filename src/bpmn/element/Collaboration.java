@@ -44,7 +44,7 @@ public class Collaboration extends FlowElement implements Scrollable {
 
 	@Override
 	public Dimension getPreferredSize() {
-		return calcSizeByComponents();
+		return calcSizeByInnerComponents();
 	}
 
 	@Override

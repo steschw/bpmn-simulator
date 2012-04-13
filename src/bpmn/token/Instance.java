@@ -31,13 +31,13 @@ import bpmn.element.Graphics;
 
 public class Instance {
 
-	private Instance parent = null;
+	private Instance parent;
 
 	private final Collection<Instance> childs = new Vector<Instance>();
 
 	private final TokenCollection tokens = new TokenCollection();
 
-	private Color color = null;
+	private Color color;
 
 	public Instance(final Instance parent) {
 		super();
@@ -241,7 +241,7 @@ public class Instance {
 		}
 	}
 
-	private static final Rectangle getSize(final Point center, final int radius) {
+	private static Rectangle getSize(final Point center, final int radius) {
 		return new Rectangle(center.x - radius, center.y - radius, radius * 2, radius * 2);
 	}
 

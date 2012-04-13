@@ -27,9 +27,11 @@ public abstract class Animator implements Runnable {
 
 	private final Collection<AnimationListener> animationListeners = new Vector<AnimationListener>();
 
-	private Thread thread = null;
+	private Thread thread;
 
-	private boolean paused = false;
+	private boolean paused;
+
+	private static final long FPS_25 = (1000 / 25);
 
 	private float speedFactor = 1.0f;
 
@@ -75,7 +77,6 @@ public abstract class Animator implements Runnable {
 	}
 
 	protected synchronized final long getStepSleep() {
-		final long FPS_25 = (1000 / 25);
 		return (long)(FPS_25 / speedFactor);
 	}
 

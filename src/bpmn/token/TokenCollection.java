@@ -38,7 +38,7 @@ public class TokenCollection extends Vector<Token> {
 
 	@Override
 	public synchronized boolean add(final Token token) {
-		assert (!contains(token));
+		assert !contains(token);
 		return super.add(token);
 	}
 

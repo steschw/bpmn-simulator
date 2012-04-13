@@ -35,7 +35,7 @@ public class ColorGenerator {
 			new Color(0x26c9ff)
 		};
 
-	private int index = 0;
+	private int index;
 
 	public Color next() {
 		if (index >= COLORS.length) {

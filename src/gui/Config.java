@@ -39,7 +39,7 @@ public class Config {
 	private static final String ANTIALIASING = "antialiasing";
 	private static final String LAST_DIRECTORY = "lastDirectory";
 
-	private static Config instance = null;
+	private static Config instance;
 
 	public Config() {
 		super();

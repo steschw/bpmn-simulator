@@ -45,7 +45,7 @@ public class SequenceFlow extends TokenConnectingElement {
 
 		private static final long serialVersionUID = 1L;
 
-		private boolean value = false;
+		private boolean value;
 
 		public ConditionExpression(final String text) {
 			super((String)null);
@@ -80,8 +80,8 @@ public class SequenceFlow extends TokenConnectingElement {
 
 	}
 
-	private ConditionExpression conditionExpression = null;
-	private String expression = null;
+	private ConditionExpression conditionExpression;
+	private String expression;
 
 	public SequenceFlow(final String id, final String name,
 			final ElementRef<FlowElement> source, final ElementRef<FlowElement> target) {

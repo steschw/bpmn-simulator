@@ -40,7 +40,7 @@ public class WindowMenu extends JMenu implements MenuListener {
 
 	private static final long serialVersionUID = 1L;
 
-	private JDesktopPane desktop = null;
+	private JDesktopPane desktop;
 
 	private class WindowMenuItem extends JRadioButtonMenuItem implements ActionListener {
 

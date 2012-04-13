@@ -35,8 +35,8 @@ public class LogFrame extends JFrame {
 
 	private final LogList listLog = new LogList();
 
-	private int warningCount = 0; 
-	private int errorCount = 0;
+	private int warningCount; 
+	private int errorCount;
 
 	public LogFrame() {
 		super(Messages.getString("Protocol.messages")); //$NON-NLS-1$

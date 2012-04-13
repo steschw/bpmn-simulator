@@ -34,8 +34,8 @@ public abstract class ConnectingElement extends BaseElement {
 
 	private final Deque<Point> waypoints = new LinkedList<Point>();
 
-	private ElementRef<FlowElement> sourceRef = null;
-	private ElementRef<FlowElement> targetRef = null;
+	private ElementRef<FlowElement> sourceRef;
+	private ElementRef<FlowElement> targetRef;
 
 	public ConnectingElement(final String id, final String name,
 			final ElementRef<FlowElement> source, final ElementRef<FlowElement> target) {

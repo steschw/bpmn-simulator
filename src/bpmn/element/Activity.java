@@ -24,7 +24,7 @@ public abstract class Activity extends TokenFlowElement implements ElementWithDe
 
 	private static final long serialVersionUID = 1L;
 
-	private ElementRef<SequenceFlow> defaultSequenceFlowRef = null;
+	private ElementRef<SequenceFlow> defaultSequenceFlowRef;
 
 	public Activity(final String id, final String name) {
 		super(id, name);

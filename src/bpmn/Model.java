@@ -159,7 +159,7 @@ public class Model implements ErrorHandler {
 		return elementRef.getElement();
 	}
 
-	private static final void debugNode(final Node node) {
+	private static void debugNode(final Node node) {
 		/*
 		if (node == null) {
 			System.out.println("null"); //$NON-NLS-1$
@@ -633,7 +633,7 @@ public class Model implements ErrorHandler {
 							readExtensionElements(childNode, element);
 							addElementToContainer(element, process);
 						} else if (isElementNode(childNode, BPMN, "manualTask")) { //$NON-NLS-1$
-							final ManuallTask element = new ManuallTask(id, name);
+							final ManualTask element = new ManualTask(id, name);
 							readIncomingElements(childNode, element);
 							readOutgoingElements(childNode, element);
 							readDefaultSequenceFlowAttribute(childNode, element);
@@ -723,7 +723,8 @@ public class Model implements ErrorHandler {
 //							process.setComponentZOrder(sequenceFlow, 0);
 						} else if (isElementNode(childNode, BPMN, "association")) { //$NON-NLS-1$
 							final Association association = new Association(id, name,
-									getSourceRefAttribute(childNode), getTargetRefAttribute(childNode));
+									getSourceRefAttribute(childNode),
+									getTargetRefAttribute(childNode));
 							readExtensionElements(childNode, association);
 							addElementToContainer(association, process);
 						} else {

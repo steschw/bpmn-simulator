@@ -139,7 +139,7 @@ public abstract class TokenFlowElement extends FlowElement implements TokenFlow 
 		}
 	}
 
-	private final boolean forwardTokenToParent(final Token token, final Instance instance) {
+	private boolean forwardTokenToParent(final Token token, final Instance instance) {
 		final ExpandedProcess parentProcess = getParentProcess();
 		if (parentProcess != null) {
 			token.passTo(parentProcess, instance);
@@ -148,7 +148,7 @@ public abstract class TokenFlowElement extends FlowElement implements TokenFlow 
 		return false;
 	}
 
-	private final boolean forwardTokenToFirstSequenceFlow(final Token token, final Instance instance) {
+	private boolean forwardTokenToFirstSequenceFlow(final Token token, final Instance instance) {
 		for (ElementRef<SequenceFlow> outgoingRef : getOutgoing()) {
 			if ((outgoingRef != null) && outgoingRef.hasElement()) {
 				final SequenceFlow sequenceFlow = outgoingRef.getElement();
@@ -163,7 +163,7 @@ public abstract class TokenFlowElement extends FlowElement implements TokenFlow 
 		return false;
 	}
 
-	private final int forwardTokenToAllSequenceFlows(final Token token, final Instance instance) {
+	private int forwardTokenToAllSequenceFlows(final Token token, final Instance instance) {
 		int forewardCount = 0;
 		for (ElementRef<SequenceFlow> outgoingRef : getOutgoing()) {
 			if ((outgoingRef != null) && outgoingRef.hasElement()) {
@@ -177,7 +177,7 @@ public abstract class TokenFlowElement extends FlowElement implements TokenFlow 
 		return forewardCount;
 	}
 
-	private final boolean forwardTokenToDefaultSequenceFlow(final Token token, final Instance instance) {
+	private boolean forwardTokenToDefaultSequenceFlow(final Token token, final Instance instance) {
 		if (this instanceof ElementWithDefaultSequenceFlow) {
 			final ElementRef<SequenceFlow> defaultSequenceFlowRef = ((ElementWithDefaultSequenceFlow)this).getDefaultElementFlowRef();
 			if ((defaultSequenceFlowRef != null) && defaultSequenceFlowRef.hasElement()) {

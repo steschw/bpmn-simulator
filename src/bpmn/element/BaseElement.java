@@ -44,13 +44,13 @@ public abstract class BaseElement extends JComponent {
 
 	protected static final int MARGIN = 10;
 
-	private ExpandedProcess parentProcess = null;
+	private ExpandedProcess parentProcess;
 
-	private String id = null;
+	private String id;
 
-	private Label label = null;
+	private Label label;
 
-	private boolean exception = false;
+	private boolean exception;
 
 	private static final ImageIcon EXCEPTION_ICON = loadElementPNG("exception.png"); 
 
@@ -237,9 +237,9 @@ public abstract class BaseElement extends JComponent {
 		label.setCenterPosition(getElementCenter());
 	}
 
-	protected Dimension calcSizeByComponents() {
-		int width = 10;
-		int height = 10;
+	protected Dimension calcSizeByInnerComponents() {
+		int width = MARGIN;
+		int height = MARGIN;
 		java.awt.Rectangle rectangle;
 		for (Component component : getComponents()) {
 			rectangle = component.getBounds();
@@ -250,13 +250,13 @@ public abstract class BaseElement extends JComponent {
 				height = (int)rectangle.getMaxY();
 			}
 		}
-		return new Dimension(width + 10, height + 10);
+		return new Dimension(MARGIN + width + MARGIN, MARGIN + height + MARGIN);
 	}
 
 	public void enableClickThrough() {
 		addMouseListener(new MouseListener() {
 
-			private final void dispatchEventToUnderlyingComponent(final MouseEvent event) {
+			private void dispatchEventToUnderlyingComponent(final MouseEvent event) {
 				final Component sourceComponent = event.getComponent();
 				Component targetComponent = null;
 				final Container parent = getParent();

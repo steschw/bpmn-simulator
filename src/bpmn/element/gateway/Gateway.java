@@ -39,7 +39,7 @@ public abstract class Gateway extends TokenFlowElement implements ElementWithDef
 
 	private static final int SYMBOL_MARGIN = 14;
 
-	private ElementRef<SequenceFlow> defaultSequenceFlowRef = null;
+	private ElementRef<SequenceFlow> defaultSequenceFlowRef;
 
 	public Gateway(final String id, final String name) {
 		super(id, name);

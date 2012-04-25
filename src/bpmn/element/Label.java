@@ -30,14 +30,18 @@ public class Label extends JLabel {
 
 	private static final long serialVersionUID = 1L;
 
-	private boolean alignCenter = true;
+	private static final String FONT_NAME = "Tahoma";
+	private static final int FONT_SIZE = 12;
 
-	private static final Font FONT = new Font("Tahoma", Font.PLAIN, 12); 
+	private static final Font FONT = new Font(FONT_NAME, Font.PLAIN, FONT_SIZE); 
+
+	private boolean alignCenter = true;
 
 	public Label(final String text) {
 		super(text, JLabel.LEADING);
 		setFont(FONT);
 		//setFont(getFont().deriveFont(Font.PLAIN));
+		addMouseListener(new ClickThroughMouseListener());
 	}
 
 	@Override
@@ -52,7 +56,7 @@ public class Label extends JLabel {
 	}
 
 	public final void setAlignCenter(final boolean center) {
-		this.alignCenter = center;
+		alignCenter = center;
 		setText(super.getText());
 	}
 

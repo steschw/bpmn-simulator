@@ -24,6 +24,8 @@ import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import bpmn.element.activity.ExpandedProcess;
+
 /**
  * A Pool is the graphical representation of a Participant in a Collaboration
  */
@@ -39,7 +41,7 @@ public class Pool extends TitledFlowElement {
 	}
 
 	public void addLaneSet(final LaneSet laneSet) {
-		assert(laneSet != null);
+		assert laneSet != null;
 		laneSets.add(laneSet);
 	}
 

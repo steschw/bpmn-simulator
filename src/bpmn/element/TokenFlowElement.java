@@ -23,6 +23,7 @@ package bpmn.element;
 import java.awt.Color;
 import java.awt.Point;
 
+import bpmn.element.activity.ExpandedProcess;
 import bpmn.token.Instance;
 import bpmn.token.Token;
 import bpmn.token.TokenCollection;
@@ -32,25 +33,28 @@ public abstract class TokenFlowElement extends FlowElement implements TokenFlow 
 
 	private static final long serialVersionUID = 1L;
 
-	private final TokenCollection tokens = new TokenCollection();
+	protected static final int TOKEN_MARGIN = 5;
+
+	private final TokenCollection innerTokens = new TokenCollection();
 
 	public TokenFlowElement(final String id, final String name) {
 		super(id, name);
 	}
 
-	protected TokenCollection getTokens() {
-		return tokens;
+	protected TokenCollection getInnerTokens() {
+		return innerTokens;
 	}
 
 	@Override
 	public void tokenEnter(final Token token) {
 		addToken(token);
-		tokenDispatch(token);
+		repaint();
+		//tokenDispatch(token);
 	}
 
 	@Override
 	public void tokenDispatch(final Token token) {
-		assert getTokens().contains(token);
+//		assert getInnerTokens().contains(token);
 		if (canForwardToken(token)) {
 			tokenForward(token);
 		}
@@ -60,6 +64,7 @@ public abstract class TokenFlowElement extends FlowElement implements TokenFlow 
 	@Override
 	public void tokenExit(final Token token) {
 		removeToken(token);
+		repaint();
 	}
 
 	protected int getStepCount() {
@@ -67,21 +72,19 @@ public abstract class TokenFlowElement extends FlowElement implements TokenFlow 
 	}
 
 	protected boolean canForwardToken(final Token token) {
-		return (token.getSteps() >= getStepCount());
+		return token.getSteps() >= getStepCount();
 	}
 
 	protected void addToken(final Token token) {
-		getTokens().add(token);
-		repaint();
+		getInnerTokens().add(token);
 	}
 
 	protected void removeToken(final Token token) {
-		getTokens().remove(token);
-		repaint();
+		getInnerTokens().remove(token);
 	}
 
 	protected void tokenForward(final Token token) {
-		if (forwardTokenToAllOutgoing(token)) {
+		if (passTokenToAllOutgoing(token)) {
 			setException(false);
 			token.remove();
 		} else {
@@ -89,57 +92,64 @@ public abstract class TokenFlowElement extends FlowElement implements TokenFlow 
 		}
 	}
 
+	protected boolean hasToken() {
+		final TokenCollection token = getInnerTokens();
+		return (token != null) && !token.isEmpty(); 
+	}
+
+	protected boolean hasElementActiveToken(final Instance instance) {
+		return !getInnerTokens().byInstance(instance).isEmpty(); 
+	}
+
 	@Override
 	public boolean hasIncomingPathWithActiveToken(final Instance instance) {
-		if (getTokens().byInstance(instance).isEmpty()) {
-			// Entweder eines der eingehenden Elemente hat noch Token der Instanz
+		if (hasElementActiveToken(instance)) {
+			return true;
+		} else {
+			// Oder eines der eingehenden Elemente hat noch Token dieser Instanz
 			for (ElementRef<SequenceFlow> incoming : getIncoming()) {
-				if ((incoming != null) && incoming.hasElement()) {
-					if (incoming.getElement().hasIncomingPathWithActiveToken(instance)) {
-						return true;
-					}
+				if (incoming.hasElement()
+						&& incoming.getElement().hasIncomingPathWithActiveToken(instance)) {
+					return true;
 				}
 			}
 			return false;
-		} else {
-			// oder dieses selbst
-			return true;
 		}
 	}
 
-	protected final boolean forwardTokenToFirstOutgoing(final Token token) {
-		return forwardTokenToFirstOutgoing(token, token.getInstance());
+	protected final boolean passTokenToFirstOutgoing(final Token token) {
+		return passTokenToFirstOutgoing(token, token.getInstance());
 	}
 
-	protected final boolean forwardTokenToFirstOutgoing(final Token token, final Instance instance) {
+	protected final boolean passTokenToFirstOutgoing(final Token token, final Instance instance) {
 		if (hasOutgoing()) {
-			if (forwardTokenToFirstSequenceFlow(token, instance)) {
+			if (passTokenToFirstSequenceFlow(token, instance)) {
 				return true;
 			} else {
-				return forwardTokenToDefaultSequenceFlow(token, instance);
+				return passTokenToDefaultSequenceFlow(token, instance);
 			}
 		} else {
-			return forwardTokenToParent(token, instance);
+			return passTokenToParent(token, instance);
 		}
 	}
 
-	protected boolean forwardTokenToAllOutgoing(final Token token) {
-		return forwardTokenToAllOutgoing(token, token.getInstance());
+	protected boolean passTokenToAllOutgoing(final Token token) {
+		return passTokenToAllOutgoing(token, token.getInstance());
 	}
 
-	protected boolean forwardTokenToAllOutgoing(final Token token, final Instance instance) {
+	protected boolean passTokenToAllOutgoing(final Token token, final Instance instance) {
 		if (hasOutgoing()) {
-			if (forwardTokenToAllSequenceFlows(token, instance) == 0) {
-				return forwardTokenToDefaultSequenceFlow(token, instance);
+			if (passTokenToAllSequenceFlows(token, instance) == 0) {
+				return passTokenToDefaultSequenceFlow(token, instance);
 			} else {
 				return true;
 			}
 		} else {
-			return forwardTokenToParent(token, instance);
+			return passTokenToParent(token, instance);
 		}
 	}
 
-	private boolean forwardTokenToParent(final Token token, final Instance instance) {
+	private boolean passTokenToParent(final Token token, final Instance instance) {
 		final ExpandedProcess parentProcess = getParentProcess();
 		if (parentProcess != null) {
 			token.passTo(parentProcess, instance);
@@ -148,9 +158,9 @@ public abstract class TokenFlowElement extends FlowElement implements TokenFlow 
 		return false;
 	}
 
-	private boolean forwardTokenToFirstSequenceFlow(final Token token, final Instance instance) {
+	private boolean passTokenToFirstSequenceFlow(final Token token, final Instance instance) {
 		for (ElementRef<SequenceFlow> outgoingRef : getOutgoing()) {
-			if ((outgoingRef != null) && outgoingRef.hasElement()) {
+			if (outgoingRef.hasElement()) {
 				final SequenceFlow sequenceFlow = outgoingRef.getElement();
 				if (sequenceFlow != null) {
 					if (sequenceFlow.acceptsToken() && !sequenceFlow.isDefault()) {
@@ -163,10 +173,10 @@ public abstract class TokenFlowElement extends FlowElement implements TokenFlow 
 		return false;
 	}
 
-	private int forwardTokenToAllSequenceFlows(final Token token, final Instance instance) {
+	private int passTokenToAllSequenceFlows(final Token token, final Instance instance) {
 		int forewardCount = 0;
 		for (ElementRef<SequenceFlow> outgoingRef : getOutgoing()) {
-			if ((outgoingRef != null) && outgoingRef.hasElement()) {
+			if (outgoingRef.hasElement()) {
 				final SequenceFlow sequenceFlow = outgoingRef.getElement();
 				if (sequenceFlow.acceptsToken() && !sequenceFlow.isDefault()) {
 					token.passTo(sequenceFlow, instance);
@@ -177,7 +187,7 @@ public abstract class TokenFlowElement extends FlowElement implements TokenFlow 
 		return forewardCount;
 	}
 
-	private boolean forwardTokenToDefaultSequenceFlow(final Token token, final Instance instance) {
+	private boolean passTokenToDefaultSequenceFlow(final Token token, final Instance instance) {
 		if (this instanceof ElementWithDefaultSequenceFlow) {
 			final ElementRef<SequenceFlow> defaultSequenceFlowRef = ((ElementWithDefaultSequenceFlow)this).getDefaultElementFlowRef();
 			if ((defaultSequenceFlowRef != null) && defaultSequenceFlowRef.hasElement()) {
@@ -190,8 +200,7 @@ public abstract class TokenFlowElement extends FlowElement implements TokenFlow 
 
 	@Override
 	public Color getForeground() {
-		final TokenCollection tokens = getTokens();
-		if ((tokens != null) && !tokens.isEmpty()) {
+		if (!hasToken()) {
 			return Token.HIGHLIGHT_COLOR;
 		}
 		return super.getForeground();
@@ -201,9 +210,9 @@ public abstract class TokenFlowElement extends FlowElement implements TokenFlow 
 	protected void paintTokens(final Graphics g) {
 		final Rectangle bounds = getElementInnerBounds();
 		final Point point = new Point((int)bounds.getMaxX(), (int)bounds.getMinY());
-		for (Instance instance : getTokens().getInstances()) {
-			instance.paint(g, point, getTokens().byInstance(instance).byCurrentFlow(this).getCount());
-			point.translate(-5, 0);
+		for (Instance instance : getInnerTokens().getInstances()) {
+			instance.paint(g, point, getInnerTokens().byInstance(instance).byCurrentFlow(this).getCount());
+			point.translate(-TOKEN_MARGIN, 0);
 		}
 	}
 

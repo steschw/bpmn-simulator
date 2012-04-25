@@ -29,7 +29,7 @@ public abstract class Artifact extends FlowElement {
 	public Artifact(final String id) {
 		super(id, null);
 		setForeground(Color.DARK_GRAY);
-		enableClickThrough();
+		addMouseListener(new ClickThroughMouseListener());
 	}
 
 	@Override

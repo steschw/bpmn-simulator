@@ -18,7 +18,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package bpmn.element;
+package bpmn.element.activity;
 
 import java.awt.Color;
 import java.awt.Point;
@@ -28,6 +28,9 @@ import java.util.Collection;
 
 import javax.swing.ImageIcon;
 
+import bpmn.element.FlowElement;
+import bpmn.element.Graphics;
+import bpmn.element.Rectangle;
 import bpmn.token.Instance;
 import bpmn.token.Token;
 
@@ -39,6 +42,8 @@ public class CollapsedProcess extends FlowElement {
 
 	private static final ImageIcon COLLAPSED_ICON = loadIcon("collapsed.png");
 
+	private final Collection<Instance> instances = new ArrayList<Instance>(); 
+
 	protected static ImageIcon loadIcon(final String filename) {
 		final URL url = CollapsedProcess.class.getResource(filename);
 		if (url != null) {
@@ -46,8 +51,6 @@ public class CollapsedProcess extends FlowElement {
 		}
 		return null;
 	}
-
-	private final Collection<Instance> instances = new ArrayList<Instance>(); 
 
 	public CollapsedProcess(final ExpandedProcess expandedProcess) {
 		super(expandedProcess.getId(), expandedProcess.getName());
@@ -106,7 +109,7 @@ public class CollapsedProcess extends FlowElement {
 		final Point point = bounds.getRightTop();
 		for (Instance instance : getInstances()) {
 			instance.paint(g, point);
-			point.translate(-5, 0);
+			point.translate(-TOKEN_MARGIN, 0);
 		}
 	}
 

@@ -48,7 +48,7 @@ public class ExclusiveGateway extends Gateway {
 
 	@Override
 	protected void tokenForward(final Token token) {
-		if (forwardTokenToFirstOutgoing(token)) {
+		if (passTokenToFirstOutgoing(token)) {
 			token.remove();
 			setException(false);
 		} else {

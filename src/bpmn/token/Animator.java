@@ -25,13 +25,14 @@ import java.util.Vector;
 
 public abstract class Animator implements Runnable {
 
+	private static final long FPS_25 = 1000 / 25;
+
 	private final Collection<AnimationListener> animationListeners = new Vector<AnimationListener>();
 
 	private Thread thread;
 
 	private boolean paused;
 
-	private static final long FPS_25 = (1000 / 25);
 
 	private float speedFactor = 1.0f;
 
@@ -72,11 +73,11 @@ public abstract class Animator implements Runnable {
 	}
 
 	public synchronized void setSpeed(final float factor) {
-		assert (factor > 0.0f);
+		assert factor > 0.0f;
 		speedFactor = factor;
 	}
 
-	protected synchronized final long getStepSleep() {
+	protected final synchronized long getStepSleep() {
 		return (long)(FPS_25 / speedFactor);
 	}
 
@@ -115,16 +116,15 @@ public abstract class Animator implements Runnable {
 	}
 
 	protected synchronized void start() {
-		assert (thread == null);
+		assert thread == null;
 		if (thread == null) {
-			thread = new Thread(this);
-			thread.setName("Animation");
+			thread = new Thread(this, "Animation");
 			thread.start();
 		}
 	}
 
 	public void end() {
-		assert (thread != null);
+		assert thread != null;
 		if (thread != null) {
 			synchronized (thread) {
 				thread.interrupt();

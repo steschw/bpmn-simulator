@@ -18,17 +18,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package bpmn.element.task;
+package bpmn.element.activity.task;
 
 import javax.swing.ImageIcon;
 
-public final class ReceiveTask extends Task {
+public final class UserTask extends Task {
 
 	private static final long serialVersionUID = 1L;
 
-	private static final ImageIcon TYPE_ICON = Task.loadTypeIcon("receive.png"); 
+	private static final ImageIcon TYPE_ICON = Task.loadTypeIcon("user.png"); 
 
-	public ReceiveTask(final String id, final String name) {
+	public UserTask(final String id, final String name) {
 		super(id, name, TYPE_ICON);
 	}
 

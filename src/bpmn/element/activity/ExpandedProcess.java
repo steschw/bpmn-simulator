@@ -18,7 +18,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package bpmn.element;
+package bpmn.element.activity;
 
 import java.awt.Dimension;
 import java.awt.Paint;
@@ -29,6 +29,9 @@ import java.util.Collection;
 
 import javax.swing.Scrollable;
 
+import bpmn.element.BaseElement;
+import bpmn.element.Graphics;
+import bpmn.element.Label;
 import bpmn.element.event.Event;
 import bpmn.element.event.StartEvent;
 import bpmn.token.Instance;
@@ -38,6 +41,8 @@ import bpmn.token.TokenFlow;
 public class ExpandedProcess extends Activity implements Scrollable {
 
 	private static final long serialVersionUID = 1L;
+
+	private static final int ARC_LENGTH = 20;
 
 	private final Collection<BaseElement> elements = new ArrayList<BaseElement>();
 
@@ -49,7 +54,7 @@ public class ExpandedProcess extends Activity implements Scrollable {
 	}
 
 	public void addElement(final BaseElement element) {
-		assert(!elements.contains(element));
+		assert !elements.contains(element);
 		elements.add(element);
 		element.setParentProcess(this);
 	}
@@ -66,7 +71,7 @@ public class ExpandedProcess extends Activity implements Scrollable {
 	}
 
 	public CollapsedProcess createCollapsed() {
-		assert (collapsedProcess == null);
+		assert collapsedProcess == null;
 		collapsedProcess = new CollapsedProcess(this);
 		collapsedProcess.setBackground(getBackground());
 		collapsedProcess.setForeground(getForeground());
@@ -78,45 +83,66 @@ public class ExpandedProcess extends Activity implements Scrollable {
 	}
 
 	@Override
-	public void tokenEnter(final Token token) {
-		final TokenFlow from = token.getPreviousFlow();
-		if (from.equals(this) || containsTokenFlow(from)) {
-			// Token kommt von einem Prozesselement und soll aus dem Prozess austreten
-			// Es wird zuerst in die Tokenliste des Prozesses hinzugefügt
-			// und erst wenn alle Token dieser Instanz am Ende des Prozesses angekommen sind
-			// mit diesen vereint und weitergeleitet
-			super.tokenEnter(token);
-		} else {
-			// Token tritt in den Prozess ein
-			// Es wird direkt an die Elemente innerhalb des Prozesses weitergeleitet
-			forwardTokenToInner(token);
-			token.remove();
+	protected void forwardTokenFromIncoming(final Token token) {
+		passTokenToInner(token);
+		token.remove();
+		repaint();
+	}
+
+	@Override
+	protected void forwardTokenFromInner(final Token token) {
+		getOutgoingTokens().add(token);
+	}
+
+	@Override
+	protected void forwardTokenFromOutgoing(final Token token) {
+		final Instance tokenInstance = token.getInstance();
+		super.forwardTokenFromOutgoing(token);
+		if (tokenInstance != null) {
+			tokenInstance.removeIfHasNoTokens();
 		}
+	}
+
+	protected boolean isTokenFromInnerElement(final Token token) {
+		final TokenFlow from = token.getPreviousFlow();
+		return from.equals(this) || containsTokenFlow(from);
+	}
+
+	@Override
+	public void tokenEnter(final Token token) {
+		if (isTokenFromInnerElement(token)) {
+			forwardTokenFromInner(token);		
+			repaint();
+		} else {
+			super.tokenEnter(token);
+		}
+	}
+
+	protected boolean areAllTokenAtEnd(final Instance instance) {
+		final int exitTokenCount = getOutgoingTokens().byInstance(instance).getCount();
+		return exitTokenCount == instance.getTokenCount();
 	}
 
 	@Override
 	protected boolean canForwardToken(final Token token) {
-		final int exitTokenCount = getTokens().byInstance(token.getInstance()).getCount();
-		final int instanceTokenCount = token.getInstance().getTokenCount();
-		return (super.canForwardToken(token) && (exitTokenCount == instanceTokenCount));
+		return super.canForwardToken(token) && areAllTokenAtEnd(token.getInstance());
 	}
 
 	@Override
-	protected boolean forwardTokenToAllOutgoing(final Token token) {
+	protected boolean passTokenToAllOutgoing(final Token token) {
 		final Instance subInstance = token.getInstance(); 
 		final Instance parentInstance = subInstance.getParentInstance();
 		boolean forwarded = true; // der hauptprozess hat keine ausgehenden sequence flows
 		if (parentInstance != null) {
-			forwarded = super.forwardTokenToAllOutgoing(token, parentInstance);
+			forwarded = super.passTokenToAllOutgoing(token, parentInstance);
 		}
 		if (collapsedProcess != null) {
 			collapsedProcess.removeInstance(subInstance);
 		}
-		subInstance.remove();
 		return forwarded;
 	}
 
-	protected void forwardTokenToInner(final Token token) {
+	protected void passTokenToInner(final Token token) {
 		final Instance subInstance = token.getInstance().newChildInstance();
 		if (collapsedProcess != null) {
 			collapsedProcess.addInstance(subInstance);
@@ -163,7 +189,7 @@ public class ExpandedProcess extends Activity implements Scrollable {
 		for (BaseElement element : elements) {
 			if (element instanceof StartEvent) {
 				final StartEvent event = (StartEvent)element;
-				assert (start == null);
+				assert start == null;
 				start = event;
 			}
 		}
@@ -204,21 +230,29 @@ public class ExpandedProcess extends Activity implements Scrollable {
 		final Paint paint = getBackgroundPaint();
 		if (paint != null) {
 			g.setPaint(paint);
-			g.fillRoundRect(getElementInnerBounds(), 20, 20);
+			g.fillRoundRect(getElementInnerBounds(), ARC_LENGTH, ARC_LENGTH);
 		}
 	}
 
 	@Override
 	protected void paintElement(final Graphics g) {
-		g.drawRoundRect(getElementInnerBounds(), 20, 20);
+		g.drawRoundRect(getElementInnerBounds(), ARC_LENGTH, ARC_LENGTH);
 	}
 
 	@Override
-	protected void initLabel(final Label label) {
-		label.setAlignCenter(false);
+	public void createElementLabel() {
+		super.createElementLabel();
+		final Label label = getElementLabel(); 
+		if (label != null) {
+			label.setAlignCenter(false);
+		}
+	}
+
+	@Override
+	public void setElementLabelDefaultPosition() {
 		final Point position = getElementLeftTop();
 		position.translate(4, 4);
-		label.setLeftTopPosition(position);
+		getElementLabel().setLeftTopPosition(position);
 	}
 
 }

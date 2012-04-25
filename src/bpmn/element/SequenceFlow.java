@@ -89,7 +89,7 @@ public class SequenceFlow extends TokenConnectingElement {
 	}
 
 	public void setConditionExpression(final String expression) {
-		assert(expression != null);
+		assert expression != null;
 		this.expression = expression;
 	}
 
@@ -108,22 +108,22 @@ public class SequenceFlow extends TokenConnectingElement {
 
 	protected boolean hasExpression() {
 		final String expression = getConditionExpression();
-		return ((expression != null) && !expression.isEmpty());
+		return (expression != null) && !expression.isEmpty();
 	}
 
 	public boolean isConditional() {
-		return ((hasExpression() || isSourceElementInclusiveOrExclusiveGatewayAndHasMoreThanOnceOutgoing())
-				&& !isDefault());
+		return (hasExpression() || isSourceElementInclusiveOrExclusiveGatewayAndHasMoreThanOnceOutgoing())
+				&& !isDefault();
 	}
 
 	public boolean acceptsToken() {
-		return (!isConditional() || conditionExpression.getValue());
+		return !isConditional() || conditionExpression.getValue();
 	}
 
 	@Override
-	public Label createElementLabel() {
+	public void createElementLabel() {
 		createExpressionControl();
-		return super.createElementLabel();
+		super.createElementLabel();
 	}
 
 	protected void createExpressionControl() {
@@ -135,7 +135,7 @@ public class SequenceFlow extends TokenConnectingElement {
 	}
 
 	private void repositionConditionExpression() {
-		assert(conditionExpression != null);
+		assert conditionExpression != null;
 		if (getParent() != null) {
 			final Point center = getElementCenter();
 			if (center != null) {
@@ -158,29 +158,23 @@ public class SequenceFlow extends TokenConnectingElement {
 	}
 
 	public boolean isDefault() {
-		final ElementRef<FlowElement> sourceRef = getSourceRef();
-		if ((sourceRef != null) && sourceRef.hasElement()) {
-			final FlowElement flowElement = sourceRef.getElement();
-			if (flowElement instanceof ElementWithDefaultSequenceFlow) {
-				final ElementWithDefaultSequenceFlow element = (ElementWithDefaultSequenceFlow)flowElement;
-				final ElementRef<SequenceFlow> defaultElementFlowRef = element.getDefaultElementFlowRef();
-				if (defaultElementFlowRef != null) {
-					return defaultElementFlowRef.equals(this);
-				}
+		final FlowElement flowElement = getSource();
+		if (flowElement instanceof ElementWithDefaultSequenceFlow) {
+			final ElementWithDefaultSequenceFlow element = (ElementWithDefaultSequenceFlow)flowElement;
+			final ElementRef<SequenceFlow> defaultElementFlowRef = element.getDefaultElementFlowRef();
+			if (defaultElementFlowRef != null) {
+				return defaultElementFlowRef.equalsElement(this);
 			}
 		}
 		return false;  
 	}
 
 	protected boolean isSourceElementInclusiveOrExclusiveGatewayAndHasMoreThanOnceOutgoing() {
-		final ElementRef<FlowElement> sourceRef = getSourceRef();
-		if ((sourceRef != null) && sourceRef.hasElement()) {
-			final FlowElement sourceElement = sourceRef.getElement();
-			if ((sourceElement instanceof InclusiveGateway)
-					|| (sourceElement instanceof ExclusiveGateway)) {
-				final Gateway gateway = (Gateway)sourceElement;
-				return (gateway.getOutgoing().size() > 1);
-			}
+		final FlowElement sourceElement = getSource();
+		if ((sourceElement instanceof InclusiveGateway)
+				|| (sourceElement instanceof ExclusiveGateway)) {
+			final Gateway gateway = (Gateway)sourceElement;
+			return gateway.getOutgoing().size() > 1;
 		}
 		return false;
 	}

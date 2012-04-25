@@ -47,6 +47,12 @@ public class TokenCollection extends Vector<Token> {
 		return super.remove(token);
 	}
 
+	public synchronized void moveTo(final TokenCollection collection,
+			final Token token) {
+		remove(token);
+		collection.add(token);
+	}
+
 	public int getCount() {
 		return size();
 	}

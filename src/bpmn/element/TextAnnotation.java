@@ -44,22 +44,20 @@ public class TextAnnotation extends Artifact {
 	}
 
 	@Override
-	public Label createElementLabel() {
+	public void createElementLabel() {
 		final String text = getText();
 		if ((text != null) && !text.isEmpty()) {
 			final Label label = new Label(text);
-			initLabel(label);
-			return label;
+			label.setAlignCenter(false);
+			setLabel(label);
 		}
-		return null;
 	}
 
 	@Override
-	protected void initLabel(final Label label) {
-		label.setAlignCenter(false);
+	public void setElementLabelDefaultPosition() {
 		final Rectangle innerBounds = getInnerBounds();
 		innerBounds.shrinkLeft(4);
-		label.setBounds(innerBounds);
+		getElementLabel().setBounds(innerBounds);
 	}
 
 	@Override

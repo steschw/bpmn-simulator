@@ -82,11 +82,11 @@ public class LogFrame extends JFrame {
 	}
 
 	public boolean hasMessages() {
-		return ((warningCount + errorCount) > 0); 
+		return (warningCount + errorCount) > 0; 
 	}
 
 	public boolean hasErrors() {
-		return (errorCount > 0);
+		return errorCount > 0;
 	}
 
 }

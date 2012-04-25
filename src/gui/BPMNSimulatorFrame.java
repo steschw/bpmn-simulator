@@ -69,11 +69,12 @@ public class BPMNSimulatorFrame extends JFrame {
 	}
 
 	protected void updateFrameTitle(final String filename) {
-		String title = "BPMN Simulator"; //$NON-NLS-1$
+		final StringBuffer title = new StringBuffer(AboutDialog.NAME);
 		if ((filename != null) && !filename.isEmpty()) {
-			title += " - " + filename; //$NON-NLS-1$
+			title.append(" - "); //$NON-NLS-1$
+			title.append(filename);
 		}
-		setTitle(title);
+		setTitle(title.toString());
 	}
 
 	private void create() {
@@ -87,9 +88,7 @@ public class BPMNSimulatorFrame extends JFrame {
 		add(desktop, BorderLayout.CENTER);
 	}
 
-	private JMenuBar createMenuBar() {
-		final JMenuBar menubar = new JMenuBar();
-
+	protected JMenu createMenuFile() {
 		final JMenu menuFile = new JMenu(Messages.getString("Menu.file")); //$NON-NLS-1$
 
 		final JMenuItem menuFileOpen = new JMenuItem(Messages.getString("Menu.open")); //$NON-NLS-1$
@@ -146,10 +145,10 @@ public class BPMNSimulatorFrame extends JFrame {
 		});
 		menuFile.add(menuFileExit);
 
-		menubar.add(menuFile);
+		return menuFile;
+	}
 
-		menubar.add(menuWindow);
-
+	protected JMenu createMenuHelp() {
 		final JMenu menuHelp = new JMenu(Messages.getString("Menu.help")); //$NON-NLS-1$
 
 		final JMenuItem menuHelpAbout = new JMenuItem(Messages.getString("Menu.about")); //$NON-NLS-1$
@@ -165,7 +164,17 @@ public class BPMNSimulatorFrame extends JFrame {
 		});
 		menuHelp.add(menuHelpAbout);
 
-		menubar.add(menuHelp); 
+		return menuHelp;
+	}
+
+	protected JMenuBar createMenuBar() {
+		final JMenuBar menubar = new JMenuBar();
+
+		menubar.add(createMenuFile());
+
+		menubar.add(menuWindow);
+
+		menubar.add(createMenuHelp()); 
 
 		return menubar;
 	}

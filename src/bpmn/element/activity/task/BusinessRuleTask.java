@@ -18,17 +18,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package bpmn.element.task;
+package bpmn.element.activity.task;
 
 import javax.swing.ImageIcon;
 
-public final class ServiceTask extends Task {
+public final class BusinessRuleTask extends Task {
 
 	private static final long serialVersionUID = 1L;
 
-	private static final ImageIcon TYPE_ICON = Task.loadTypeIcon("service.png"); 
+	private static final ImageIcon TYPE_ICON = Task.loadTypeIcon("businessRule.png"); 
 
-	public ServiceTask(final String id, final String name) {
+	public BusinessRuleTask(final String id, final String name) {
 		super(id, name, TYPE_ICON);
 	}
 

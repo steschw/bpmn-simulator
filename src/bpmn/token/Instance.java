@@ -31,6 +31,10 @@ import bpmn.element.Graphics;
 
 public class Instance {
 
+	private static final int STAR_SIZE = 10; 
+
+	private static final int STAR_CORNERS = 5; 
+
 	private Instance parent;
 
 	private final Collection<Instance> childs = new Vector<Instance>();
@@ -50,7 +54,7 @@ public class Instance {
 	}
 
 	protected final void setParentInstance(final Instance instance) {
-		this.parent = instance;
+		parent = instance;
 	}
 
 	public final Instance getParentInstance() {
@@ -100,14 +104,6 @@ public class Instance {
 		}
 	}
 
-/*
-	protected void removeIfNoTokens() {
-		if (tokens.isEmpty()) {
-			remove();
-		}
-	}
-*/
-
 	/*
 	 * child instances
 	 */
@@ -119,7 +115,7 @@ public class Instance {
 	}
 
 	protected void addChildInstance(final Instance instance) {
-		assert (instance != null);
+		assert instance != null;
 		childs.add(instance);
 	}
 
@@ -132,7 +128,7 @@ public class Instance {
 	}
 
 	protected void removeChildInstance(final Instance childInstance) {
-		assert(childInstance != null);
+		assert childInstance != null;
 //		assert(childs.contains(childInstance));
 		childs.remove(childInstance);
 	}
@@ -142,7 +138,7 @@ public class Instance {
 		for (Instance childInstance : instanceSnapshot) {
 			childInstance.remove();
 		}
-		assert(getChildInstanceCount() == 0);
+		assert getChildInstanceCount() == 0;
 	}
 
 	/*
@@ -176,7 +172,7 @@ public class Instance {
 
 	protected void addToken(final Token token) {
 		synchronized (tokens) {
-			assert(!tokens.contains(token));
+			assert !tokens.contains(token);
 			tokens.add(token);
 		}
 	}
@@ -218,7 +214,7 @@ public class Instance {
 		for (final Instance childInstance : instanceSnapshot) {
 			childInstance.removeAllTokens();
 		}
-		assert(getTokenCount() == 0);
+		assert getTokenCount() == 0;
 	}
 
 	public void stepAllTokens(final int count) {
@@ -241,33 +237,72 @@ public class Instance {
 		}
 	}
 
-	private static Rectangle getSize(final Point center, final int radius) {
-		return new Rectangle(center.x - radius, center.y - radius, radius * 2, radius * 2);
+	public boolean hasTokens() {
+		if (tokens.isEmpty()) {
+			for (Instance childInstance : getChildInstances()) {
+				if (childInstance.hasTokens()) {
+					return true;
+				}
+			}
+			return false;
+		} else {
+			return true;
+		}
+	}
+
+	public void removeIfHasNoTokens() {
+		if (hasTokens()) {
+			remove();
+		}
+	}
+
+	private static Rectangle getBounds(final Point center, final int radius) {
+		return new Rectangle(center.x - radius, center.y - radius,
+				radius * 2, radius * 2);
 	}
 
 	public void paint(final Graphics g, final Point center) {
 		if (center != null) {
+			final Rectangle size = getBounds(center, STAR_SIZE); 
 
 			final Color color = getColor();
 			if (color != null) {
 				g.setStroke(new BasicStroke(0.f));
 				g.setPaint(color);
-				g.fillStar(getSize(center, 10), 5);
+				g.fillStar(size, STAR_CORNERS);
 			}
 
 			g.setStroke(new BasicStroke(1.f));
 			g.setPaint(Token.HIGHLIGHT_COLOR);
-			g.drawStar(getSize(center, 10), 5);
+			g.drawStar(size, STAR_CORNERS);
 		}
 	}
 
 	public void paint(final Graphics g, final Point center, final int count) {
 		paint(g, center);
 
+		assert count > 0;
 		if (count > 1) {
 			g.setPaint(Color.BLACK);
-			g.drawMultilineText(getSize(center, 10), Integer.toString(count), true, true);
+			g.drawMultilineText(getBounds(center, STAR_SIZE), Integer.toString(count), true, true);
 		}
+	}
+
+	@Override
+	public String toString() {
+		final StringBuffer buffer = new StringBuffer();
+		final Instance parentInstance = getParentInstance();
+		if (parentInstance != null) {
+			buffer.append(parentInstance.toString()); 
+		}
+		buffer.append('[');
+		buffer.append("instances:");
+		buffer.append(getChildInstanceCount());
+		buffer.append(',');
+		buffer.append("tokens:");
+		buffer.append(getTokenCount());
+		buffer.append(']');
+		return buffer.toString();
 	}
 
 }

@@ -61,7 +61,7 @@ public class ParallelGateway extends Gateway {
 	}
 
 	public final boolean isForMerging() {
-		return (getIncoming().size() > 1);
+		return getIncoming().size() > 1;
 	}
 
 	@Override
@@ -78,18 +78,18 @@ public class ParallelGateway extends Gateway {
 		if (isForMerging()) {
 			final Rectangle bounds = getElementInnerBounds();
 			int y = bounds.y;
-			for (Instance tokenInstance : getTokens().getInstances()) {
+			for (Instance tokenInstance : getInnerTokens().getInstances()) {
 				int x = bounds.x + (int)bounds.getWidth();
 				for (ElementRef<SequenceFlow> incoming : getIncoming()) {
 					if (incoming.hasElement()) {
-						final int count = getTokens().byInstance(tokenInstance).byPreviousFlow(incoming.getElement()).getCount();
+						final int count = getInnerTokens().byInstance(tokenInstance).byPreviousFlow(incoming.getElement()).getCount();
 						if (count > 0) {
 							tokenInstance.paint(g, new Point(x, y), count);
 						}
 					}
-					x -= 5;
+					x -= TOKEN_MARGIN;
 				}
-				y += 5;
+				y += TOKEN_MARGIN;
 			}
 		} else {
 			super.paintTokens(g);

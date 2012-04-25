@@ -63,8 +63,8 @@ public class AboutDialog extends JDialog {
 			+ "See the License for the specific language governing permissions and\n" //$NON-NLS-1$
 			+ "limitations under the License."; //$NON-NLS-1$
 
-	private static final String NAME = "BPMN Simulator"; 
-	private static final String URL = "http://code.google.com/p/bpmn-simulator/"; 
+	public static final String NAME = "BPMN Simulator";  //$NON-NLS-1$
+	public static final String URL = "http://code.google.com/p/bpmn-simulator/"; //$NON-NLS-1$
 
 	public AboutDialog() {
 		super((Frame)null, Messages.getString("About.about"), true); //$NON-NLS-1$

@@ -21,7 +21,6 @@
 package bpmn.element.event;
 
 import bpmn.element.Graphics;
-import bpmn.element.Label;
 import bpmn.element.TokenFlowElement;
 import bpmn.token.InstanceController;
 
@@ -64,8 +63,8 @@ public abstract class Event extends TokenFlowElement {
 	}
 
 	@Override
-	protected void initLabel(final Label label) {
-		label.setCenterTopPosition(getElementBottomCenter());
+	public void setElementLabelDefaultPosition() {
+		getElementLabel().setCenterTopPosition(getInnerBounds().getCenterBottom());
 	}
 
 }

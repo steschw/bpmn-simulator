@@ -42,14 +42,15 @@ public abstract class ConnectingElement extends BaseElement {
 		super(id, name);
 		setSourceRef(source);
 		setTarget(target);
+		addMouseListener(new ClickThroughMouseListener());
 	}
 
 	protected void setSourceRef(final ElementRef<FlowElement> elementRef) {
-		assert (elementRef != null);
-		this.sourceRef = elementRef;
+		assert elementRef != null;
+		sourceRef = elementRef;
 	}
 
-	protected ElementRef<FlowElement> getSourceRef() {
+	private ElementRef<FlowElement> getSourceRef() {
 		return sourceRef;
 	}
 
@@ -66,11 +67,11 @@ public abstract class ConnectingElement extends BaseElement {
 	}
 
 	protected void setTarget(final ElementRef<FlowElement> elementRef) {
-		assert (elementRef != null);
-		this.targetRef = elementRef;
+		assert elementRef != null;
+		targetRef = elementRef;
 	}
 
-	protected ElementRef<FlowElement> getTargetRef() {
+	private ElementRef<FlowElement> getTargetRef() {
 		return targetRef;
 	}
 
@@ -177,8 +178,8 @@ public abstract class ConnectingElement extends BaseElement {
 	}
 
 	@Override
-	protected void initLabel(final Label label) {
-		label.setCenterTopPosition(getElementCenter());
+	public void setElementLabelDefaultPosition() {
+		getElementLabel().setCenterTopPosition(getElementCenter());
 	}
 
 }

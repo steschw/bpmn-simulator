@@ -50,9 +50,10 @@ import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 
 import bpmn.element.*;
+import bpmn.element.activity.ExpandedProcess;
+import bpmn.element.activity.task.*;
 import bpmn.element.event.*;
 import bpmn.element.gateway.*;
-import bpmn.element.task.*;
 import bpmn.token.TokenAnimator;
 
 /*
@@ -135,27 +136,26 @@ public class Model implements ErrorHandler {
 			final BaseElement element) {
 		if (elements.containsKey(id)) {
 			final ElementRef<BaseElement> elementRef = elements.get(id);
-			if (elementRef.getElement() == null) {
+			if (!elementRef.hasElement()) {
 				elementRef.setElement(element);
 			} else {
-				assert(elementRef.getElement() == element);
+				assert elementRef.getElement() == element;
 			}
 		} else {
 			elements.put(id, new ElementRef<BaseElement>(element));
 		}
 	}
 
-	protected <TYPE extends BaseElement> ElementRef<TYPE> getElementRefById(final String id) {
-		assert(id != null);
+	protected <T extends BaseElement> ElementRef<T> getElementRefById(final String id) {
+		assert id != null;
 		if (!elements.containsKey(id)) {
 			registerElementRef(id, null);
 		}
-		final ElementRef<?> elementRef = elements.get(id); 
-		return (ElementRef<TYPE>)elementRef;
+		return (ElementRef<T>)elements.get(id);
 	}
 
-	protected <TYPE extends BaseElement> TYPE getElementById(final String id) {
-		final ElementRef<TYPE> elementRef = getElementRefById(id);
+	protected <T extends BaseElement> T getElementById(final String id) {
+		final ElementRef<T> elementRef = getElementRefById(id);
 		return elementRef.getElement();
 	}
 
@@ -184,9 +184,9 @@ public class Model implements ErrorHandler {
 
 	protected static boolean isElementNode(final Node node,
 			final String namespace, final String name) {
-		return ((node.getNodeType() == Node.ELEMENT_NODE)
+		return (node.getNodeType() == Node.ELEMENT_NODE)
 				&& name.equals(node.getLocalName())
-				&& namespace.equals(node.getNamespaceURI()));
+				&& namespace.equals(node.getNamespaceURI());
 	}
 
 	/**
@@ -229,7 +229,7 @@ public class Model implements ErrorHandler {
 		float value = 0;
 		try {
 			value = Float.parseFloat(floatString);
-		} catch (Exception e) {
+		} catch (NumberFormatException e) {
 		}
 		return value;
 	}
@@ -261,10 +261,10 @@ public class Model implements ErrorHandler {
 		return element;
 	}
 
-	protected <TYPE extends BaseElement> ElementRef<TYPE> getAttributeElementRef(
+	protected <T extends BaseElement> ElementRef<T> getAttributeElementRef(
 			final Node node, final String name) {
 		final String elementId = getAttributeString(node, name, true);
-		ElementRef<TYPE> element = null;
+		ElementRef<T> element = null;
 		if (elementId != null) {
 			element = getElementRefById(elementId);
 		}
@@ -277,7 +277,7 @@ public class Model implements ErrorHandler {
 	}
 
 	protected boolean isDocumentationNode(final Node node) {
-		return isElementNode(node, BPMN, "documentation");
+		return isElementNode(node, BPMN, "documentation"); //$NON-NLS-1$
 	}
 
 	protected void readDefinitions(final Node node) {
@@ -329,30 +329,37 @@ public class Model implements ErrorHandler {
 		}
 	}
 
-	protected Point getPointAttribute(final Node node) throws NumberFormatException {
-		return new Point((int)getAttributeFloat(node, "x"), (int)getAttributeFloat(node, "y")); //$NON-NLS-1$ //$NON-NLS-2$
+	protected Point getPointAttribute(final Node node) {
+		return new Point(
+				(int)getAttributeFloat(node, "x"), //$NON-NLS-1$
+				(int)getAttributeFloat(node, "y")); //$NON-NLS-1$
 	}
 
-	protected Rectangle getRectangleAttribute(final Node node) throws NumberFormatException {
+	protected Dimension getDimensionAttribute(final Node node) {
 		final int width = (int)getAttributeFloat(node, "width"); //$NON-NLS-1$
 		final int height = (int)getAttributeFloat(node, "height"); //$NON-NLS-1$
-		return new Rectangle(getPointAttribute(node), new Dimension(width, height));
+		return new Dimension(width, height);
+	}
+
+	protected Rectangle getRectangleAttribute(final Node node) {
+		return new Rectangle(getPointAttribute(node), getDimensionAttribute(node));
 	}
 
 	protected boolean getIsExpandedAttribute(final Node node) {
 		return getAttributeBoolean(node, "isExpanded", false, true); //$NON-NLS-1$
 	}
 
+	protected Rectangle getBoundsElement(final Node node) {
+		final Node boundsNode = getSingleSubElement(node, DC, "Bounds"); //$NON-NLS-1$
+		if (boundsNode != null) {
+			return getRectangleAttribute(boundsNode);
+		}
+		return null;
+	}
+
 	protected void readDiagramPlaneElementBounds(final Node node,
 			final BaseElement element) {
-		final NodeList childNodes = node.getChildNodes();
-		for (int i = 0; i < childNodes.getLength(); ++i) {
-			final Node childNode = childNodes.item(i);
-			debugNode(childNode);
-			if (isElementNode(childNode, DC, "Bounds")) { //$NON-NLS-1$
-				element.setInnerBounds(getRectangleAttribute(childNode));
-			}
-		}
+		element.setInnerBounds(getBoundsElement(node));
 	}
 
 	protected void readDiagramPlaneElementWaypoints(final Node node,
@@ -369,8 +376,15 @@ public class Model implements ErrorHandler {
 
 	protected void readDiagramPlaneElementLabel(final Node node,
 			final JComponent planeElement, final BaseElement element) {
-		final Label label = element.createElementLabel();
+		element.createElementLabel();
+		final Label label = element.getElementLabel();
 		if (label != null) {
+			final Node labelNode = getSingleSubElement(node, BPMNDI, "BPMNLabel"); //$NON-NLS-1$
+			if (labelNode == null) {
+				element.setElementLabelDefaultPosition();
+			} else {
+				label.setBounds(getBoundsElement(labelNode));
+			}
 			planeElement.add(label, 0);
 		}
 	}
@@ -477,7 +491,7 @@ public class Model implements ErrorHandler {
 			final BaseElement element) {
 		final String keyNode = getAttributeString(node, "metaKey", true); //$NON-NLS-1$
 		final String valueNode = getAttributeString(node, "metaValue", true); //$NON-NLS-1$
-		if ("bgcolor".equals(keyNode) && ((valueNode != null) && !valueNode.isEmpty())) {
+		if ("bgcolor".equals(keyNode) && ((valueNode != null) && !valueNode.isEmpty())) { //$NON-NLS-1$
 			final Color color = convertStringToColor(valueNode);
 			if (color != null) {
 				element.setBackground(color);
@@ -604,8 +618,8 @@ public class Model implements ErrorHandler {
 			} else {
 				if (isDocumentationNode(childNode)) {
 					// ignored
-				} else if (isElementNode(childNode, BPMN, "incoming")
-						|| isElementNode(childNode, BPMN, "outgoing")) {
+				} else if (isElementNode(childNode, BPMN, "incoming") //$NON-NLS-1$
+						|| isElementNode(childNode, BPMN, "outgoing")) { //$NON-NLS-1$
 					// elemente werden ignoriert, da diese bereits zu anfang eingelesen werden
 				} else if (isElementNode(childNode, BPMN, "extensionElements")) { //$NON-NLS-1$
 					readExtensionElements(node, process);

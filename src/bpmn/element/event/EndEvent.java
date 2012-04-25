@@ -29,6 +29,8 @@ public class EndEvent extends Event {
 
 	private static final long serialVersionUID = 1L;
 
+	private static final int TERMINATION_MARGIN = 4;
+
 	private boolean termination;
 
 	public EndEvent(final String id, final String name,
@@ -55,7 +57,7 @@ public class EndEvent extends Event {
 
 		if (isTermination()) {
 			final Rectangle bounds = getElementInnerBounds();
-			bounds.grow(-4, -4);
+			bounds.grow(-TERMINATION_MARGIN, -TERMINATION_MARGIN);
 			g.fillOval(bounds);
 		}
 	}

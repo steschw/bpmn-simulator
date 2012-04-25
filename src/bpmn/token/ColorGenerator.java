@@ -32,7 +32,7 @@ public class ColorGenerator {
 			new Color(0x5cff26),
 			new Color(0x26ff93),
 			new Color(0xff2692),
-			new Color(0x26c9ff)
+			new Color(0x26c9ff),
 		};
 
 	private int index;

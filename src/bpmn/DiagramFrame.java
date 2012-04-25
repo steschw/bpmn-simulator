@@ -22,17 +22,21 @@ package bpmn;
 
 import java.net.URL;
 
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JInternalFrame;
 import javax.swing.JScrollPane;
 
 import bpmn.element.BaseElement;
 import bpmn.element.Collaboration;
-import bpmn.element.ExpandedProcess;
+import bpmn.element.activity.ExpandedProcess;
 
 public class DiagramFrame extends JInternalFrame {
 
 	private static final long serialVersionUID = 1L;
+
+	private static final Icon ICON_PROCESS = loadFrameIcon("process.png");
+	private static final Icon ICON_COLLABORATION = loadFrameIcon("collaboration.png");
 
 	public DiagramFrame(final BaseElement container) {
 		super(container.getName(), true, false, true);
@@ -40,7 +44,7 @@ public class DiagramFrame extends JInternalFrame {
 		setFrameIcon(container);
 	}
 
-	protected static ImageIcon loadFrameIcon(final String filename) {
+	private static Icon loadFrameIcon(final String filename) {
 		final URL url = DiagramFrame.class.getResource(filename);
 		if (url != null) {
 			return new ImageIcon(url);
@@ -49,11 +53,11 @@ public class DiagramFrame extends JInternalFrame {
 	}
 
 	protected void setFrameIcon(final BaseElement container) {
-		ImageIcon icon = null;
+		Icon icon = null;
 		if (container instanceof ExpandedProcess) {
-			icon = loadFrameIcon("process.png");
+			icon = ICON_PROCESS;
 		} else if (container instanceof Collaboration) {
-			icon = loadFrameIcon("collaboration.png");
+			icon = ICON_COLLABORATION;
 		}
 		setFrameIcon(icon);
 	}

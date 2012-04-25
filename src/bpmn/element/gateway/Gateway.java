@@ -81,14 +81,14 @@ public abstract class Gateway extends TokenFlowElement implements ElementWithDef
 	protected final void forwardMergedTokensToAllOutgoing(final TokenCollection tokens) {
 		final Token mergedToken = tokens.merge();
 		if (mergedToken != null) {
-			forwardTokenToAllOutgoing(mergedToken);
+			passTokenToAllOutgoing(mergedToken);
 			mergedToken.remove();
 		}
 	}
 
 	protected Token getFirstTokenForIncoming(final SequenceFlow sequenceFlow,
 			final Instance instance) {
-		for (Token token : getTokens().byInstance(instance)) {
+		for (Token token : getInnerTokens().byInstance(instance)) {
 			if (sequenceFlow.equals(token.getPreviousFlow())) {
 				return token;
 			}
@@ -97,9 +97,17 @@ public abstract class Gateway extends TokenFlowElement implements ElementWithDef
 	}
 
 	@Override
-	protected void initLabel(final Label label) {
-		label.setAlignCenter(false);
-		label.setLeftTopPosition(getElementRightBottom());
+	public void createElementLabel() {
+		super.createElementLabel();
+		final Label label = getElementLabel();
+		if (label != null) {
+			label.setAlignCenter(false);
+		}
+	}
+
+	@Override
+	public void setElementLabelDefaultPosition() {
+		getElementLabel().setLeftTopPosition(getInnerBounds().getRightBottom());
 	}
 
 }

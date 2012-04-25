@@ -24,7 +24,7 @@ import java.awt.Cursor;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
-import bpmn.element.ExpandedProcess;
+import bpmn.element.activity.ExpandedProcess;
 import bpmn.token.InstanceController;
 
 public class StartEvent extends Event implements MouseListener {
@@ -62,7 +62,7 @@ public class StartEvent extends Event implements MouseListener {
 
 	public void start() {
 		final InstanceController instanceController = getInstanceController();
-		assert (instanceController != null);
+		assert instanceController != null;
 		if (instanceController != null) {
 			instanceController.newInstance().newToken(this);
 		}

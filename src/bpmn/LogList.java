@@ -46,7 +46,7 @@ public class LogList extends JScrollPane {
 		private static final String COLUMN_TYPE = "Type";
 		private static final String COLUMN_MESSAGE = "Nachricht";
 
-		private class ProtocolTableCellRenderer extends DefaultTableCellRenderer {
+		private static class ProtocolTableCellRenderer extends DefaultTableCellRenderer {
 
 			private static final long serialVersionUID = 1L;
 

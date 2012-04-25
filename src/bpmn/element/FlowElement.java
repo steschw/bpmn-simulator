@@ -51,17 +51,15 @@ public abstract class FlowElement extends BaseElement {
 	}
 
 	public void addIncoming(final ElementRef<SequenceFlow> element) {
-		assert (element != null);
-		assert !incoming.contains(element);
-		if (!incoming.contains(element)) {
+		assert element != null;
+		if ((element != null) && !incoming.contains(element)) {
 			incoming.add(element);
 		}
 	}
 
 	public void addOutgoing(final ElementRef<SequenceFlow> element) {
-		assert (element != null);
-		assert !outgoing.contains(element);
-		if (!outgoing.contains(element)) {
+		assert element != null;
+		if ((element != null) && !outgoing.contains(element)) {
 			outgoing.add(element);
 		}
 	}

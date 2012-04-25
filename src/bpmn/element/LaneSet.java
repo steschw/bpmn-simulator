@@ -34,7 +34,7 @@ public class LaneSet extends FlowElement {
 	}
 
 	public void addLane(final Lane lane) {
-		assert (lane != null);
+		assert lane != null;
 		lanes.add(lane);
 	}
 

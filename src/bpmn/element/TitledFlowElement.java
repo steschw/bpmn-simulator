@@ -74,8 +74,8 @@ public class TitledFlowElement extends FlowElement {
 	}
 
 	@Override
-	public Label createElementLabel() {
-		return null;
+	public void createElementLabel() {
+		setLabel(null);
 	}
 
 }

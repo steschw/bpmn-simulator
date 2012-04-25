@@ -95,7 +95,7 @@ public class WindowMenu extends JMenu implements MenuListener {
 	}
 
 	protected List<JInternalFrame> getFrames() {
-		final ArrayList<JInternalFrame> frames =
+		final List<JInternalFrame> frames =
 				new ArrayList<JInternalFrame>(Arrays.asList(getDesktopPane().getAllFrames())); 
 		Collections.sort(frames, new Comparator<JInternalFrame>() {
 			@Override

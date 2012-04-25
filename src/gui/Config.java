@@ -31,17 +31,17 @@ import bpmn.element.gateway.ExclusiveGateway;
 
 public class Config {
 
-	private static final String FILENAME = "config";
+	private static final String FILENAME = "config"; //$NON-NLS-1$
 
-	private final Properties properties = new Properties();
-
-	private static final String SHOW_EXCLUSIVEGATEWAYSYMBOL = "showExclusiveGatewaySymbol";
-	private static final String ANTIALIASING = "antialiasing";
-	private static final String LAST_DIRECTORY = "lastDirectory";
+	private static final String SHOW_EXCLUSIVEGATEWAYSYMBOL = "showExclusiveGatewaySymbol"; //$NON-NLS-1$
+	private static final String ANTIALIASING = "antialiasing"; //$NON-NLS-1$
+	private static final String LAST_DIRECTORY = "lastDirectory"; //$NON-NLS-1$
 
 	private static Config instance;
 
-	public Config() {
+	private final Properties properties = new Properties();
+
+	protected Config() {
 		super();
 		defaults();
 	}

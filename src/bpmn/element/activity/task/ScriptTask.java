@@ -18,7 +18,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package bpmn.element.task;
+package bpmn.element.activity.task;
 
 import javax.swing.ImageIcon;
 

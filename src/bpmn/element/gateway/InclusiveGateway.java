@@ -51,7 +51,7 @@ public class InclusiveGateway extends Gateway {
 		final TokenCollection popTokens = new TokenCollection();
 		for (ElementRef<SequenceFlow> incoming : getIncoming()) {
 			if (incoming.hasElement()) {
-				final SequenceFlow incomingSequenceFlow = (SequenceFlow)incoming.getElement();
+				final SequenceFlow incomingSequenceFlow = incoming.getElement();
 				final Token incomingToken = getFirstTokenForIncoming(incoming.getElement(), instance);
 				if (incomingToken == null) {
 					// für diesen eingang ist noch kein token vorhanden
@@ -68,7 +68,7 @@ public class InclusiveGateway extends Gateway {
 	}
 
 	public final boolean isForMerging() {
-		return (getIncoming().size() > 1);
+		return getIncoming().size() > 1;
 	}
 
 	@Override

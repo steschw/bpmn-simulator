@@ -23,26 +23,28 @@ package bpmn.element;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Paint;
 import java.awt.Point;
 import java.awt.RadialGradientPaint;
 import java.awt.Stroke;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.net.URL;
 
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
-import javax.swing.SwingUtilities;
+
+import bpmn.element.activity.ExpandedProcess;
 
 public abstract class BaseElement extends JComponent {
 
 	private static final long serialVersionUID = 1L;
 
 	protected static final int MARGIN = 10;
+
+	protected static final int TOKEN_MARGIN = 5;
+
+	private static final ImageIcon EXCEPTION_ICON = loadElementPNG("exception.png"); 
 
 	private ExpandedProcess parentProcess;
 
@@ -51,8 +53,6 @@ public abstract class BaseElement extends JComponent {
 	private Label label;
 
 	private boolean exception;
-
-	private static final ImageIcon EXCEPTION_ICON = loadElementPNG("exception.png"); 
 
 	protected static ImageIcon loadElementPNG(final String filename) {
 		final URL url = BaseElement.class.getResource(filename);
@@ -194,7 +194,7 @@ public abstract class BaseElement extends JComponent {
 	protected void paintText(final Graphics g) {
 	}
 
-	protected void paintTokens(final Graphics g) {		
+	protected void paintTokens(final Graphics g) {
 	}
 
 	protected Point getElementLeftTop() {
@@ -203,46 +203,34 @@ public abstract class BaseElement extends JComponent {
 	}
 
 	protected Point getElementCenter() {
-		final Rectangle bounds = getInnerBounds();
-		return new Point(bounds.x + (bounds.width / 2), bounds.y + (bounds.height / 2));
-	}
-
-	protected Point getElementBottomCenter() {
-		final Rectangle bounds = getInnerBounds();
-		return new Point(bounds.x + (bounds.width / 2), bounds.y + bounds.height);
-	}
-
-	protected Point getElementRightBottom() {
-		final Rectangle bounds = getInnerBounds();
-		return new Point(bounds.x + bounds.width, bounds.y + bounds.height);
+		return getInnerBounds().getCenter();
 	}
 
 	public final Label getElementLabel() {
 		return label;
 	}
 
-	public Label createElementLabel() {
-		final String name = getName();
-		if ((name != null) && !name.isEmpty()) {
-			assert(label == null);
-			label = new Label(name);
-			initLabel(label);
-			getParent().add(label, 0);
-			return label;
-		}
-		return null;
+	protected void setLabel(final Label label) {
+		assert this.label == null;
+		this.label = label;
 	}
 
-	protected void initLabel(final Label label) {
-		label.setCenterPosition(getElementCenter());
+	public void createElementLabel() {
+		final String name = getName();
+		if ((name != null) && !name.isEmpty()) {
+			setLabel(new Label(name));
+		}
+	}
+
+	public void setElementLabelDefaultPosition() {
+		getElementLabel().setCenterPosition(getElementCenter());
 	}
 
 	protected Dimension calcSizeByInnerComponents() {
 		int width = MARGIN;
 		int height = MARGIN;
-		java.awt.Rectangle rectangle;
 		for (Component component : getComponents()) {
-			rectangle = component.getBounds();
+			final java.awt.Rectangle rectangle = component.getBounds();
 			if ((int)rectangle.getMaxX() > width) {
 				width = (int)rectangle.getMaxX();
 			}
@@ -251,59 +239,6 @@ public abstract class BaseElement extends JComponent {
 			}
 		}
 		return new Dimension(MARGIN + width + MARGIN, MARGIN + height + MARGIN);
-	}
-
-	public void enableClickThrough() {
-		addMouseListener(new MouseListener() {
-
-			private void dispatchEventToUnderlyingComponent(final MouseEvent event) {
-				final Component sourceComponent = event.getComponent();
-				Component targetComponent = null;
-				final Container parent = getParent();
-				final Point point = SwingUtilities.convertPoint(sourceComponent, event.getPoint(), parent);
-				final int sourceComponentZOrder = parent.getComponentZOrder(sourceComponent); 
-				for (Component component : parent.getComponents()) {
-					if (!component.equals(sourceComponent)
-							&& component.getBounds().contains(point)) {
-						final int componentZOrder = parent.getComponentZOrder(component); 
-						final int targetComponentZOrder = parent.getComponentZOrder(targetComponent); 
-						if ((targetComponent == null)
-								|| ((componentZOrder > sourceComponentZOrder)
-								&& (componentZOrder < targetComponentZOrder))) {
-							targetComponent = component;
-						}
-					}
-				}
-				if (targetComponent != null) {
-					targetComponent.dispatchEvent(SwingUtilities.convertMouseEvent(event.getComponent(), event, targetComponent));
-				}
-			}
-
-			@Override
-			public void mouseReleased(final MouseEvent event) {
-				dispatchEventToUnderlyingComponent(event);
-			}
-			
-			@Override
-			public void mousePressed(final MouseEvent event) {
-				dispatchEventToUnderlyingComponent(event);
-			}
-			
-			@Override
-			public void mouseExited(final MouseEvent event) {
-				//dispatchEventToUnderlyingComponent(event);
-			}
-			
-			@Override
-			public void mouseEntered(final MouseEvent event) {
-				//dispatchEventToUnderlyingComponent(event);
-			}
-			
-			@Override
-			public void mouseClicked(final MouseEvent event) {
-				dispatchEventToUnderlyingComponent(event);
-			}
-		});
 	}
 
 }

@@ -42,10 +42,10 @@ public class ElementRef<E extends BaseElement> {
 	}
 
 	public boolean hasElement() {
-		return (element != null);
+		return element != null;
 	}
 
-	private boolean equalsElement(final BaseElement element) {
+	public boolean equalsElement(final BaseElement element) {
 		final BaseElement e = getElement();
 		if ((e == null) || (element == null)) {
 			return false;
@@ -56,12 +56,16 @@ public class ElementRef<E extends BaseElement> {
 	@Override
 	public boolean equals(final Object object) {
 		if (object instanceof ElementRef<?>) {
-			final ElementRef<?> elementRef = (ElementRef<?>)object;
-			return equalsElement(elementRef.getElement());
-		} else if (object instanceof BaseElement) {
-			return equalsElement((BaseElement)object);
+			return equalsElement(((ElementRef<?>)object).getElement());
+		} else {
+			assert false;
 		}
 		return super.equals(object);
+	}
+
+	@Override
+	public int hashCode() {
+		return hasElement() ? getElement().hashCode() : super.hashCode();
 	}
 
 }

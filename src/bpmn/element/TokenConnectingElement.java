@@ -46,6 +46,7 @@ public abstract class TokenConnectingElement extends ConnectingElement
 	@Override
 	public void tokenEnter(final Token token) {
 		addToken(token);
+		repaint();
 		tokenDispatch(token);
 	}
 
@@ -61,49 +62,43 @@ public abstract class TokenConnectingElement extends ConnectingElement
 	@Override
 	public void tokenExit(final Token token) {
 		removeToken(token);
+		repaint();
 	}
 
 	protected boolean canForwardToken(final Token token) {
-		return (token.getSteps() >= getLength());
+		return token.getSteps() >= getLength();
 	}
 
 	protected void addToken(final Token token) {
 		getTokens().add(token);
-		repaint();
 	}
 
 	protected void removeToken(final Token token) {
 		getTokens().remove(token);
-		repaint();
 	}
 
 	protected void forwardToken(final Token token) {
-		final ElementRef<FlowElement> targetRef = getTargetRef();
-		if ((targetRef != null) && targetRef.hasElement()) {
-			final FlowElement flowElement = targetRef.getElement();
-			if (flowElement instanceof TokenFlow) {
-				token.passTo((TokenFlow)flowElement);
-				token.remove();
-			}
-		} else {
-			assert false;
+		final FlowElement flowElement = getTarget();
+		if (flowElement instanceof TokenFlow) {
+			token.passTo((TokenFlow)flowElement);
+			token.remove();
 		}
 	}
 
+	protected boolean hasElementActiveToken(final Instance instance) {
+		return !getTokens().byInstance(instance).isEmpty(); 
+	}
+
 	public boolean hasIncomingPathWithActiveToken(final Instance instance) {
-		if (getTokens().byInstance(instance).isEmpty()) {
-			// Entweder eines der eingehenden Elemente hat noch Token der Instanz
-			final ElementRef<FlowElement> sourceRef = getSourceRef();
-			if ((sourceRef != null) && sourceRef.hasElement()) {
-				final FlowElement flowElement = sourceRef.getElement();
-				if (flowElement instanceof TokenFlow) {
-					return ((TokenFlow)flowElement).hasIncomingPathWithActiveToken(instance);
-				}
+		if (hasElementActiveToken(instance)) {
+			return true;
+		} else {
+			// Oder eines der eingehenden Elemente hat noch Token dieser Instanz
+			final FlowElement flowElement = getSource();
+			if (flowElement instanceof TokenFlow) {
+				return ((TokenFlow)flowElement).hasIncomingPathWithActiveToken(instance);
 			}
 			return false;
-		} else {
-			// oder dieses selbst
-			return true;
 		}
 	}
 

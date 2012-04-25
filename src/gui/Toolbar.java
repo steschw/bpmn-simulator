@@ -42,17 +42,17 @@ public class Toolbar extends JToolBar implements AnimationListener {
 
 	private static final long serialVersionUID = 1L;
 
-	private static Icon iconOpen = loadIcon("open.png"); //$NON-NLS-1$
+	private static final Icon ICON_OPEN = loadIcon("open.png"); //$NON-NLS-1$
 
-	private static Icon iconStart = loadIcon("start.png"); //$NON-NLS-1$;
-	private static Icon iconReset = loadIcon("stop.png"); //$NON-NLS-1$;
+	private static final Icon ICON_START = loadIcon("start.png"); //$NON-NLS-1$;
+	private static final Icon ICON_RESET = loadIcon("stop.png"); //$NON-NLS-1$;
 
-	private static Icon iconPause = loadIcon("pause.png"); //$NON-NLS-1$
-	private static Icon iconPlay = loadIcon("play.png"); //$NON-NLS-1$
-	private static Icon iconStep = loadIcon("step.png"); //$NON-NLS-1$
-	private static Icon iconSpeed = loadIcon("speed.png"); //$NON-NLS-1$
-	private static Icon iconMessages = loadIcon("messages.png"); //$NON-NLS-1$
-	private static Icon iconMessagesError = loadIcon("messagesError.png"); //$NON-NLS-1$
+	private static final Icon ICON_PAUSE = loadIcon("pause.png"); //$NON-NLS-1$
+	private static final Icon ICON_PLAY = loadIcon("play.png"); //$NON-NLS-1$
+	private static final Icon ICON_STEP = loadIcon("step.png"); //$NON-NLS-1$
+	private static final Icon ICON_SPEED = loadIcon("speed.png"); //$NON-NLS-1$
+	private static final Icon ICON_MESSAGES = loadIcon("messages.png"); //$NON-NLS-1$
+	private static final Icon ICON_MESSAGESERROR = loadIcon("messagesError.png"); //$NON-NLS-1$
 
 	private JButton buttonOpen;
 
@@ -109,17 +109,17 @@ public class Toolbar extends JToolBar implements AnimationListener {
 
 	protected void create() {
 
-		buttonOpen = new JButton(iconOpen);
+		buttonOpen = new JButton(ICON_OPEN);
 		buttonOpen.setToolTipText(Messages.getString("Toolbar.open")); //$NON-NLS-1$
 		add(buttonOpen);
 
 		addSeparator();
 
-		buttonStart = new StartButton(iconStart);
+		buttonStart = new StartButton(ICON_START);
 		buttonStart.setToolTipText(Messages.getString("Toolbar.start")); //$NON-NLS-1$
 		add(buttonStart);
 
-		buttonReset = new JButton(iconReset);
+		buttonReset = new JButton(ICON_RESET);
 		buttonReset.setToolTipText(Messages.getString("Toolbar.reset")); //$NON-NLS-1$
 		buttonReset.addActionListener(new ActionListener() {
 			@Override
@@ -145,7 +145,7 @@ public class Toolbar extends JToolBar implements AnimationListener {
 		});
 		add(buttonPauseContinue);
 
-		buttonStep = new JButton(iconStep);
+		buttonStep = new JButton(ICON_STEP);
 		buttonStep.setToolTipText(Messages.getString("Toolbar.step")); //$NON-NLS-1$
 		buttonStep.addActionListener(new ActionListener() {
 			@Override
@@ -157,7 +157,7 @@ public class Toolbar extends JToolBar implements AnimationListener {
 
 		addSeparator(new Dimension(32, 32));
 
-		labelSpeed = new JLabel(iconSpeed);
+		labelSpeed = new JLabel(ICON_SPEED);
 		labelSpeed.setToolTipText(Messages.getString("Toolbar.frameRate")); //$NON-NLS-1$
 		add(labelSpeed);
 
@@ -196,10 +196,10 @@ public class Toolbar extends JToolBar implements AnimationListener {
 		} else {
 			buttonMessages.setVisible(model.hasMessages());
 			if (model.hasErrorMessages()) {
-				buttonMessages.setIcon(iconMessagesError);
+				buttonMessages.setIcon(ICON_MESSAGESERROR);
 				buttonMessages.setToolTipText(Messages.getString("Toolbar.hintErrors")); //$NON-NLS-1$
 			} else {
-				buttonMessages.setIcon(iconMessages);
+				buttonMessages.setIcon(ICON_MESSAGES);
 				buttonMessages.setToolTipText(Messages.getString("Toolbar.hintMessages")); //$NON-NLS-1$
 			}
 		}
@@ -208,7 +208,7 @@ public class Toolbar extends JToolBar implements AnimationListener {
 	protected void updateControls() {
 		final Animator animator = getAnimator();
 
-		final boolean isPaused = ((animator != null) && animator.isPaused());
+		final boolean isPaused = (animator != null) && animator.isPaused();
 
 		buttonStart.setEnabled(animator != null);
 		buttonReset.setEnabled(animator != null);
@@ -218,7 +218,7 @@ public class Toolbar extends JToolBar implements AnimationListener {
 		spinnerSpeed.setEnabled(animator != null);
 		labelSpeed.setEnabled(animator != null);
 
-		buttonPauseContinue.setIcon(isPaused ? iconPlay : iconPause);
+		buttonPauseContinue.setIcon(isPaused ? ICON_PLAY : ICON_PAUSE);
 		buttonPauseContinue.setToolTipText(isPaused ? Messages.getString("Toolbar.play") : Messages.getString("Toolbar.pause")); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 

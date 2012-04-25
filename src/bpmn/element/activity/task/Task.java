@@ -18,24 +18,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package bpmn.element.task;
+package bpmn.element.activity.task;
 
 import java.awt.Point;
 import java.net.URL;
 
 import javax.swing.ImageIcon;
 
-import bpmn.element.Activity;
 import bpmn.element.Graphics;
 import bpmn.element.Rectangle;
+import bpmn.element.activity.Activity;
 
 public class Task extends Activity {
 
 	private static final long serialVersionUID = 1L;
 
-	private final ImageIcon typeIcon;
+	private static final int TYPEICON_MARGIN = 6;
 
 	private static final int ARC_LENGTH = 10;
+
+	private final ImageIcon typeIcon;
 
 	protected static ImageIcon loadTypeIcon(final String filename) {
 		final URL url = Task.class.getResource(filename);
@@ -45,13 +47,13 @@ public class Task extends Activity {
 		return null;
 	}
 
-	public Task(final String id, final String name) {
-		this(id, name, null);
-	}
-
 	protected Task(final String id, final String name, final ImageIcon icon) {
 		super(id, name);
-		this.typeIcon = icon;
+		typeIcon = icon;
+	}
+
+	public Task(final String id, final String name) {
+		this(id, name, null);
 	}
 
 	@Override
@@ -68,14 +70,14 @@ public class Task extends Activity {
 		if (typeIcon != null) {
 			final Rectangle innerBounds = getElementInnerBounds();
 			final Point position = innerBounds.getLeftTop();
-			position.translate(6, 6);
+			position.translate(TYPEICON_MARGIN, TYPEICON_MARGIN);
 			g.drawIcon(typeIcon, position);
 		}
 	}
 
 	@Override
 	protected void paintElement(final Graphics g) {
-		g.drawRoundRect(getElementInnerBounds(), 10, 10);
+		g.drawRoundRect(getElementInnerBounds(), ARC_LENGTH, ARC_LENGTH);
 		paintTypeIcon(g);
 	}
 

@@ -45,17 +45,17 @@ public class Token implements Cloneable {
 	}
 
 	protected void setInstance(final Instance instance) {
-		assert (instance != null);
+		assert instance != null;
 		this.instance = instance;
 	}
 
 	public Instance getInstance() {
-		assert (instance != null);
+		assert instance != null;
 		return instance;
 	}
 
 	protected void setCurrentFlow(final TokenFlow flow) {
-		assert (flow != null);
+		assert flow != null;
 		setPreviousFlow(currentFlow);
 		currentFlow = flow;
 		reset();
@@ -75,7 +75,7 @@ public class Token implements Cloneable {
 	}
 
 	public void setSteps(final int steps) {
-		assert (steps >= 0);
+		assert steps >= 0;
 		this.steps = steps;
 	}
 
@@ -102,15 +102,15 @@ public class Token implements Cloneable {
 	}
 
 	public synchronized void merge(final Token token) {
-		assert (getInstance() == token.getInstance());
-		assert (getCurrentFlow() == token.getCurrentFlow());
+		assert getInstance() == token.getInstance();
+		assert getCurrentFlow() == token.getCurrentFlow();
 		token.remove();
 	}
 
 	public synchronized void step(final int count) {
 		setSteps(getSteps() + count);
 		final TokenFlow tokenFlow = getCurrentFlow();
-		assert (tokenFlow != null);
+		assert tokenFlow != null;
 		if (tokenFlow != null) {
 			tokenFlow.tokenDispatch(this);
 		}
@@ -119,7 +119,7 @@ public class Token implements Cloneable {
 	public synchronized void remove() {
 		getInstance().removeToken(this);
 		final TokenFlow tokenFlow = getCurrentFlow();
-		assert (tokenFlow != null);
+		assert tokenFlow != null;
 		if (tokenFlow != null) {
 			tokenFlow.tokenExit(this);
 		}
@@ -129,7 +129,7 @@ public class Token implements Cloneable {
 	 * Gibt eine Kopie des Token an ein anderes Element weiter
 	 */
 	public synchronized void passTo(final TokenFlow tokenFlow, final Instance instance) {
-		assert (tokenFlow != null);
+		assert tokenFlow != null;
 		if (tokenFlow != null) {
 			copyTo(instance).setCurrentFlow(tokenFlow);
 		}

@@ -42,17 +42,20 @@ import javax.swing.ImageIcon;
 
 public class Graphics {
 
-	private Graphics2D graphics;
-
-	private Stroke storedStroke;
-	private Paint storedPaint;
-	private Font storedFont;
-
-	private static final double RAD_FULL = (2. * Math.PI);
+	private static final double RAD_FULL = 2. * Math.PI;
+	private static final double RAD_30 = RAD_FULL / 12.;
 
 	private static final double CONNECTING_SYMBOL_LENGTH = 12.;
 
 	private static final RenderingHints QUALITY = new RenderingHints(null);
+
+	private static boolean antialiasing = true; 
+
+	private final Graphics2D graphics;
+
+	private Stroke storedStroke;
+	private Paint storedPaint;
+	private Font storedFont;
 
 	static {
 		QUALITY.put(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
@@ -62,18 +65,12 @@ public class Graphics {
 		QUALITY.put(RenderingHints.KEY_ALPHA_INTERPOLATION, RenderingHints.VALUE_ALPHA_INTERPOLATION_QUALITY);
 	}
 
-	private static boolean antialiasing = true; 
-
 	public static void setAntialiasing(final boolean antialiasing) {
 		Graphics.antialiasing = antialiasing;
 	}
 
 	public Graphics(final Graphics2D graphics) {
 		super();
-		setGraphics(graphics);
-	}
-
-	public final void setGraphics(final Graphics2D graphics) {
 		this.graphics = graphics;
 		initGraphics();
 	}
@@ -245,17 +242,17 @@ public class Graphics {
 	}
 
 	public static GeneralPath createArrowPath(final Point from, final Point to) {
-		return createArrowPath(from, to, (Math.PI / 6.), 10.);
+		return createArrowPath(from, to, RAD_30, 10.);
 	}
 
 	public static GeneralPath createArrowPath(final Point from, final Point to,
 			final double d, final double length) {
 		final GeneralPath path = new GeneralPath();
-		final double a = getAngle(to, from);
-		final Point point1 = polarToCartesian(to, length, a - d);
+		final double angle = getAngle(to, from);
+		final Point point1 = polarToCartesian(to, length, angle - d);
 		path.moveTo(point1.x, point1.y);
 		path.lineTo(to.x, to.y);
-		final Point point2 = polarToCartesian(to, length, a + d);
+		final Point point2 = polarToCartesian(to, length, angle + d);
 		path.lineTo(point2.x, point2.y);
 		return path;
 	}
@@ -265,16 +262,15 @@ public class Graphics {
 	}
 
 	public void drawArrow(final Point from, final Point to) {
-		final double a = getAngle(to, from);
-		final double d = (Math.PI / 6.);
-		drawLine(to, polarToCartesian(to, 10., a - d));
-		drawLine(to, polarToCartesian(to, 10., a + d));
+		final double angle = getAngle(to, from);
+		drawLine(to, polarToCartesian(to, 10., angle - RAD_30));
+		drawLine(to, polarToCartesian(to, 10., angle + RAD_30));
 	}
 
 	protected static Polygon createStar(final Rectangle size, final int corners) {
 		final Polygon polygon = new Polygon();
 		final Point center = new Point(size.x + size.width / 2, size.y + size.height / 2);
-		final double r = (size.width / 2.);
+		final double r = size.width / 2.;
 		Point point = null;
 		for (int i = 0; i < corners; ++i) {
 			point = polarToCartesian(center, r, (RAD_FULL / corners) * i - (RAD_FULL / corners) / 2.);
@@ -294,17 +290,14 @@ public class Graphics {
 	}
 
 	protected static Polygon createConditionalSymbol(final Point orgin, final double a) {
-		final double angle = (Math.PI / 6.);
-
 		final Polygon polygon = new Polygon();
 		polygon.addPoint(orgin.x, orgin.y);
-		Point to = polarToCartesian(orgin, CONNECTING_SYMBOL_LENGTH, a - angle);
+		Point to = polarToCartesian(orgin, CONNECTING_SYMBOL_LENGTH, a - RAD_30);
 		polygon.addPoint(to.x, to.y);
-		to = polarToCartesian(to, CONNECTING_SYMBOL_LENGTH, a + angle);
+		to = polarToCartesian(to, CONNECTING_SYMBOL_LENGTH, a + RAD_30);
 		polygon.addPoint(to.x, to.y);
-		to = polarToCartesian(orgin, CONNECTING_SYMBOL_LENGTH, a + angle);
+		to = polarToCartesian(orgin, CONNECTING_SYMBOL_LENGTH, a + RAD_30);
 		polygon.addPoint(to.x, to.y);
-
 		return polygon;
 	}
 
@@ -321,7 +314,7 @@ public class Graphics {
 		final double a = getAngle(from, to);
 		final Point orgin = polarToCartesian(from, 6., a);
 
-		final double angle = (Math.PI / 1.5);
+		final double angle = Math.PI / 1.5;
 		final Point symbolFrom = polarToCartesian(orgin, CONNECTING_SYMBOL_LENGTH / 2., a - angle);
 		final Point symbolTo = polarToCartesian(symbolFrom, CONNECTING_SYMBOL_LENGTH, a - angle - Math.PI);
 

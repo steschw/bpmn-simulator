@@ -38,7 +38,7 @@ public class Collaboration extends FlowElement implements Scrollable {
 	}
 
 	public void addElement(final BaseElement element) {
-		assert (element != null);
+		assert element != null;
 		elements.add(element);
 	}
 

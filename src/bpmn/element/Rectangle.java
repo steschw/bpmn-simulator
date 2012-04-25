@@ -51,12 +51,16 @@ public class Rectangle extends java.awt.Rectangle {
 		return Math.min(width, height);		
 	}
 
-	public Point getRightTop() {
-		return new Point((int)getMaxX(), (int)getMinY());
-	}
-
 	public Point getLeftTop() {
 		return new Point((int)getMinX(), (int)getMinY());
+	}
+
+	public Point getLeftCenter() {
+		return new Point((int)getMinX(), (int)getCenterY());
+	}
+
+	public Point getLeftBottom() {
+		return new Point((int)getMinX(), (int)getMaxY());
 	}
 
 	public Point getCenter() {
@@ -67,12 +71,16 @@ public class Rectangle extends java.awt.Rectangle {
 		return new Point((int)getCenterX(), (int)getMaxY());
 	}
 
-	public Point getLeftCenter() {
-		return new Point((int)getMinX(), (int)getCenterY());
+	public Point getRightTop() {
+		return new Point((int)getMaxX(), (int)getMinY());
 	}
 
 	public Point getRightCenter() {
 		return new Point((int)getMaxX(), (int)getCenterY());
+	}
+
+	public Point getRightBottom() {
+		return new Point((int)getMaxX(), (int)getMaxY());
 	}
 
 	public void shrinkLeft(final int n) {

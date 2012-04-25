@@ -29,9 +29,8 @@ import java.awt.Paint;
 import java.awt.Point;
 import java.awt.RadialGradientPaint;
 import java.awt.Stroke;
-import java.net.URL;
 
-import javax.swing.ImageIcon;
+import javax.swing.Icon;
 import javax.swing.JComponent;
 
 import bpmn.element.activity.ExpandedProcess;
@@ -44,7 +43,7 @@ public abstract class BaseElement extends JComponent {
 
 	protected static final int TOKEN_MARGIN = 5;
 
-	private static final ImageIcon EXCEPTION_ICON = loadElementPNG("exception.png"); 
+	private static final Icon EXCEPTION_ICON = Graphics.loadIcon("exception.png"); 
 
 	private ExpandedProcess parentProcess;
 
@@ -53,14 +52,6 @@ public abstract class BaseElement extends JComponent {
 	private Label label;
 
 	private boolean exception;
-
-	protected static ImageIcon loadElementPNG(final String filename) {
-		final URL url = BaseElement.class.getResource(filename);
-		if (url != null) {
-			return new ImageIcon(url);
-		}
-		return null;
-	}
 
 	public BaseElement(final String id, final String name) {
 		super();

@@ -20,13 +20,15 @@
  */
 package bpmn.element.activity.task;
 
-import javax.swing.ImageIcon;
+import javax.swing.Icon;
+
+import bpmn.element.Graphics;
 
 public final class ManualTask extends Task {
 
 	private static final long serialVersionUID = 1L;
 
-	private static final ImageIcon TYPE_ICON = Task.loadTypeIcon("manual.png"); 
+	private static final Icon TYPE_ICON = Graphics.loadIcon("activity/task/manual.png"); 
 
 	public ManualTask(final String id, final String name) {
 		super(id, name, TYPE_ICON);

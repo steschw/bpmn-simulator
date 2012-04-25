@@ -21,9 +21,8 @@
 package bpmn.element.activity.task;
 
 import java.awt.Point;
-import java.net.URL;
 
-import javax.swing.ImageIcon;
+import javax.swing.Icon;
 
 import bpmn.element.Graphics;
 import bpmn.element.Rectangle;
@@ -37,17 +36,9 @@ public class Task extends Activity {
 
 	private static final int ARC_LENGTH = 10;
 
-	private final ImageIcon typeIcon;
+	private final Icon typeIcon;
 
-	protected static ImageIcon loadTypeIcon(final String filename) {
-		final URL url = Task.class.getResource(filename);
-		if (url != null) {
-			return new ImageIcon(url);
-		}
-		return null;
-	}
-
-	protected Task(final String id, final String name, final ImageIcon icon) {
+	protected Task(final String id, final String name, final Icon icon) {
 		super(id, name);
 		typeIcon = icon;
 	}

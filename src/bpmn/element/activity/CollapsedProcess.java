@@ -22,11 +22,10 @@ package bpmn.element.activity;
 
 import java.awt.Color;
 import java.awt.Point;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import javax.swing.ImageIcon;
+import javax.swing.Icon;
 
 import bpmn.element.FlowElement;
 import bpmn.element.Graphics;
@@ -40,17 +39,9 @@ public class CollapsedProcess extends FlowElement {
 
 	private static final int ARC_LENGTH = 10;
 
-	private static final ImageIcon COLLAPSED_ICON = loadIcon("collapsed.png");
+	private static final Icon COLLAPSED_ICON = Graphics.loadIcon("collapsed.png");
 
 	private final Collection<Instance> instances = new ArrayList<Instance>(); 
-
-	protected static ImageIcon loadIcon(final String filename) {
-		final URL url = CollapsedProcess.class.getResource(filename);
-		if (url != null) {
-			return new ImageIcon(url);
-		}
-		return null;
-	}
 
 	public CollapsedProcess(final ExpandedProcess expandedProcess) {
 		super(expandedProcess.getId(), expandedProcess.getName());

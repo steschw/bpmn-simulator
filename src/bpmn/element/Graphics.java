@@ -35,9 +35,11 @@ import java.awt.font.LineBreakMeasurer;
 import java.awt.font.TextLayout;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.GeneralPath;
+import java.net.URL;
 import java.text.AttributedCharacterIterator;
 import java.text.AttributedString;
 
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 
 public class Graphics {
@@ -67,6 +69,11 @@ public class Graphics {
 
 	public static void setAntialiasing(final boolean antialiasing) {
 		Graphics.antialiasing = antialiasing;
+	}
+
+	public static Icon loadIcon(final String filename) {
+		final URL url = Graphics.class.getResource(filename);
+		return (url == null) ? null : new ImageIcon(url); 
 	}
 
 	public Graphics(final Graphics2D graphics) {
@@ -163,8 +170,9 @@ public class Graphics {
 		graphics.setTransform(transformation);
 	}
 
-	public void drawIcon(final ImageIcon icon, final Point position) {
-		graphics.drawImage(icon.getImage(), position.x, position.y, null);
+	public void drawIcon(final Icon icon, final Point position) {
+		icon.paintIcon(null, graphics, position.x, position.y);
+//		graphics.drawImage(icon.getImage(), position.x, position.y, null);
 	}
 
 	public void draw(final Shape shape) {

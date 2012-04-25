@@ -21,7 +21,6 @@
 package bpmn.element;
 
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.Point;
 
 import javax.swing.JLabel;
@@ -30,18 +29,12 @@ public class Label extends JLabel {
 
 	private static final long serialVersionUID = 1L;
 
-	private static final String FONT_NAME = "Tahoma";
-	private static final int FONT_SIZE = 12;
-
-	private static final Font FONT = new Font(FONT_NAME, Font.PLAIN, FONT_SIZE); 
-
 	private boolean alignCenter = true;
 
 	public Label(final String text) {
-		super(text, JLabel.LEADING);
-		setFont(FONT);
-		//setFont(getFont().deriveFont(Font.PLAIN));
+		super(text);
 		addMouseListener(new ClickThroughMouseListener());
+		updateText();
 	}
 
 	@Override
@@ -55,9 +48,13 @@ public class Label extends JLabel {
 		super.setText(text);
 	}
 
+	private void updateText() {
+		setText(super.getText());
+	}
+
 	public final void setAlignCenter(final boolean center) {
 		alignCenter = center;
-		setText(super.getText());
+		updateText();
 	}
 
 	public final boolean isAlignCenter() {
@@ -67,14 +64,16 @@ public class Label extends JLabel {
 	@Override
 	public String getText() {
 		final StringBuffer text = new StringBuffer("<html>");
-		final boolean center = isAlignCenter();
-		if (center) {
-			text.append("<center>");
+		text.append("<body>");
+		text.append("<div style=\"");
+		text.append("font-size:11;font-family:Tahoma;");
+		if (isAlignCenter()) {
+			text.append("text-align:center;");
 		}
+		text.append("\">");
 		text.append(super.getText().replaceAll("\n", "<br>"));
-		if (center) {
-			text.append("</center>");
-		}
+		text.append("</div>");
+		text.append("</body>");
 		text.append("</html>");
 		return text.toString();
 	}

@@ -41,9 +41,9 @@ public class ClickThroughMouseListener implements MouseListener {
 		final int componentZIndex = parent.getComponentZOrder(component); 
 		final int higherZIndex = parent.getComponentZOrder(higher); 
 		final int lowerZIndex = parent.getComponentZOrder(lower);
-		assert (higherZIndex < lowerZIndex) || (lowerZIndex == -1); 
+		assert (higherZIndex < lowerZIndex) || (lowerZIndex == -1);
 		return (componentZIndex > higherZIndex)
-				&& ((componentZIndex > lowerZIndex) || (lowerZIndex == -1));
+				&& ((componentZIndex < lowerZIndex) || (lowerZIndex == -1));
 	}
 
 	private void dispatchEventToUnderlyingComponent(final MouseEvent event) {
@@ -86,12 +86,10 @@ public class ClickThroughMouseListener implements MouseListener {
 	
 	@Override
 	public void mouseExited(final MouseEvent event) {
-		//dispatchEventToUnderlyingComponent(event);
 	}
 	
 	@Override
 	public void mouseEntered(final MouseEvent event) {
-		//dispatchEventToUnderlyingComponent(event);
 	}
 	
 	@Override

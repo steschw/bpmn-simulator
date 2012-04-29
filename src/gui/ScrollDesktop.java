@@ -21,6 +21,7 @@
 package gui;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 
 import javax.swing.DefaultDesktopManager;
@@ -33,7 +34,7 @@ public class ScrollDesktop extends JScrollPane {
 
 	private static final long serialVersionUID = 1L;
 
-	private class ScrollDesktopPane extends JDesktopPane {
+	public class ScrollDesktopPane extends JDesktopPane {
 
 		private static final long serialVersionUID = 1L;
 
@@ -41,41 +42,50 @@ public class ScrollDesktop extends JScrollPane {
 
 			private static final long serialVersionUID = 1L;
 
-			private final ScrollDesktopPane desktopPane;
-
-			public ScrollDesktopManager(final ScrollDesktopPane desktopPane) {
-				super();
-				this.desktopPane = desktopPane;
-			}
-
-			protected ScrollDesktopPane getPane() {
-				return desktopPane; 
-			}
-
 			@Override
 			public void dragFrame(final JComponent f, final int newX, final int newY) {
 				super.dragFrame(f, newX, newY);
+				resizeDesktop();
 			}
 
 			@Override
 			public void resizeFrame(final JComponent f, final int newX, final int newY,
 					final int newWidth, final int newHeight) {
 				super.resizeFrame(f, newX, newY, newWidth, newHeight);
+				resizeDesktop();
 			}
 
 		}
 
-		private final ScrollDesktop scrollDesktop;
-
-		public ScrollDesktopPane(final ScrollDesktop scrollDesktop) {
+		public ScrollDesktopPane() {
 			super();
-			this.scrollDesktop = scrollDesktop;
-			setDesktopManager(new ScrollDesktopManager(this));
+			setDesktopManager(new ScrollDesktopManager());
 			setBackground(Color.LIGHT_GRAY);
 		}
 
-		protected ScrollDesktop getDesktop() {
-			return scrollDesktop;
+		@Override
+		public Component add(final Component comp) {
+			final Component component = super.add(comp);
+			resizeDesktop();
+			return component;
+		}
+
+		protected ScrollDesktop getScrollDesktop() {
+			return ScrollDesktop.this;
+		}
+
+		protected Dimension getPreferredDesktopSize() {
+			int maxX = 0;
+			int maxY = 0;
+			for (JInternalFrame frame : getAllFrames()) {
+				maxX = Math.max(maxX, (int)frame.getBounds().getMaxX());
+				maxY = Math.max(maxY, (int)frame.getBounds().getMaxY());
+			}
+			return new Dimension(maxX, maxY);
+		}
+
+		protected void resizeDesktop() {
+			setFixedSize(getPreferredDesktopSize());
 		}
 
 		public void arrangeFrames() {
@@ -97,20 +107,24 @@ public class ScrollDesktop extends JScrollPane {
 					maxHeight = Math.max(maxHeight, height);
 				}
 			}
+			resizeDesktop();
 		}
 
 		public void setFixedSize(final Dimension dimension) {
 			setMinimumSize(dimension);
 			setMaximumSize(dimension);
 			setPreferredSize(dimension);
+			getScrollDesktop().invalidate();
+			getScrollDesktop().validate();
 		}
 
 	}
 
-	private final ScrollDesktopPane desktopPane = new ScrollDesktopPane(this); 
+	private final ScrollDesktopPane desktopPane = new ScrollDesktopPane(); 
 
 	public ScrollDesktop() {
-		super();
+		super(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		getViewport().add(desktopPane);
 	}
 

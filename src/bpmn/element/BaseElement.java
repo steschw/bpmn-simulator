@@ -188,32 +188,46 @@ public abstract class BaseElement extends JComponent {
 	protected void paintTokens(final Graphics g) {
 	}
 
-	protected Point getElementLeftTop() {
-		final Rectangle bounds = getInnerBounds();
-		return new Point(bounds.x, bounds.y);
-	}
-
 	protected Point getElementCenter() {
 		return getInnerBounds().getCenter();
 	}
 
-	public final Label getElementLabel() {
+	public Label getElementLabel() {
 		return label;
 	}
 
-	protected void setLabel(final Label label) {
-		assert this.label == null;
-		this.label = label;
+	public boolean hasElementLabel() {
+		return getElementLabel() != null;
 	}
 
-	public void createElementLabel() {
+	protected void setElementLabel(final Label label) {
+		assert this.label == null;
+		this.label = label;
+		getParent().add(label, 0);
+		updateElementLabelPosition();
+	}
+
+	protected Label createElementLabel() {
 		final String name = getName();
+		Label label = null;
 		if ((name != null) && !name.isEmpty()) {
-			setLabel(new Label(name));
+			label = new Label(this, name);
+		}
+		return label;
+	}
+
+	private void initElementLabel() {
+		final Label label = createElementLabel();
+		if (label != null) {
+			setElementLabel(label);
 		}
 	}
 
-	public void setElementLabelDefaultPosition() {
+	public void initSubElements() {
+		initElementLabel();
+	}
+
+	protected void updateElementLabelPosition() {
 		getElementLabel().setCenterPosition(getElementCenter());
 	}
 

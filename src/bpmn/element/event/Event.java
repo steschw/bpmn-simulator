@@ -63,7 +63,7 @@ public abstract class Event extends TokenFlowElement {
 	}
 
 	@Override
-	public void setElementLabelDefaultPosition() {
+	public void updateElementLabelPosition() {
 		getElementLabel().setCenterTopPosition(getInnerBounds().getCenterBottom());
 	}
 

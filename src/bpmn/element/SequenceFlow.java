@@ -20,15 +20,9 @@
  */
 package bpmn.element;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Point;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.util.Iterator;
-
-import javax.swing.JCheckBox;
 
 import bpmn.element.gateway.ExclusiveGateway;
 import bpmn.element.gateway.Gateway;
@@ -38,113 +32,65 @@ public class SequenceFlow extends TokenConnectingElement {
 
 	private static final long serialVersionUID = 1L;
 
-	private static final Color COLOR_TRUE = new Color(0, 196, 0);
-	private static final Color COLOR_FALSE = new Color(0, 0, 0);
-
-	private class ConditionExpression extends JCheckBox {
-
-		private static final long serialVersionUID = 1L;
-
-		private boolean value;
-
-		public ConditionExpression(final String text) {
-			super((String)null);
-
-			setToolTipText(text);
-			setVerticalAlignment(TOP);
-			setFocusable(false);
-			setOpaque(false);
-			setValue(false);
-
-			addItemListener(new ItemListener() {
-				@Override
-				public void itemStateChanged(final ItemEvent event) {
-					setValue(event.getStateChange() == ItemEvent.SELECTED);
-				}
-			});
-		}
-
-		protected void setValue(final boolean value) {
-			final Label label = getElementLabel();
-			if (label != null) {
-				label.setForeground(value ? COLOR_TRUE : COLOR_FALSE);
-			}
-			synchronized (this) {
-				this.value = value;
-			}
-		}
-
-		public synchronized boolean getValue() {
-			return value;
-		}
-
-	}
-
-	private ConditionExpression conditionExpression;
-	private String expression;
+	private Expression condition;
 
 	public SequenceFlow(final String id, final String name,
 			final ElementRef<FlowElement> source, final ElementRef<FlowElement> target) {
 		super(id, name, source, target);
 	}
 
-	public void setConditionExpression(final String expression) {
-		assert expression != null;
-		this.expression = expression;
-	}
-
-	protected String getConditionExpression() {
-		return expression;
-	}
-
-	@Override
-	public String getName() {
-		final String name = super.getName(); 
-		if ((name == null) || name.isEmpty()) {
-			return getConditionExpression();
+	public void setCondition(final Expression condition) {
+		this.condition = condition;
+		if (condition != null) {
+			add(condition);
+			updateConditionPosition();
 		}
-		return name;
 	}
 
-	protected boolean hasExpression() {
-		final String expression = getConditionExpression();
-		return (expression != null) && !expression.isEmpty();
+	protected Expression getCondition() {
+		return condition;
+	}
+
+	protected boolean hasCondition() {
+		return getCondition() != null;
 	}
 
 	public boolean isConditional() {
-		return (hasExpression() || isSourceElementInclusiveOrExclusiveGatewayAndHasMoreThanOnceOutgoing())
-				&& !isDefault();
+		return (hasCondition()
+				|| isSourceElementInclusiveOrExclusiveGatewayAndHasMoreThanOnceOutgoing())
+					&& !isDefault();
 	}
 
 	public boolean acceptsToken() {
-		return !isConditional() || conditionExpression.getValue();
+		return !isConditional() || getCondition().isTrue();
 	}
 
 	@Override
-	public void createElementLabel() {
-		createExpressionControl();
-		super.createElementLabel();
+	public void initSubElements() {
+		super.initSubElements();
+		initExpressionControl();
 	}
 
-	protected void createExpressionControl() {
+	protected void initExpressionControl() {
 		if (isConditional()) {
-			conditionExpression = new ConditionExpression(expression);
-			add(conditionExpression, BorderLayout.CENTER);
-			repositionConditionExpression();
+			if (!hasCondition()) {
+				setCondition(new Expression());
+			}
 		}
 	}
 
-	private void repositionConditionExpression() {
-		assert conditionExpression != null;
+	private void updateConditionPosition() {
+		assert hasCondition();
 		if (getParent() != null) {
 			final Point center = getElementCenter();
 			if (center != null) {
-				final Point position = waypointToRelative(center);
-				final Dimension preferredSize = conditionExpression.getPreferredSize();
-				conditionExpression.setBounds(
+				final Point position = center;//waypointToRelative(center);
+				final Dimension preferredSize = getCondition().getPreferredSize();
+				getCondition().setBounds(
 						position.x - (preferredSize.width / 2),
 						position.y - (int)((preferredSize.height / 3.) * 2.),
 						preferredSize.width, preferredSize.height);
+				getParent().setComponentZOrder(getCondition(), 0);
 			}
 		}
 	}
@@ -152,8 +98,8 @@ public class SequenceFlow extends TokenConnectingElement {
 	@Override
 	protected void updateBounds() {
 		super.updateBounds();
-		if (conditionExpression != null) {
-			repositionConditionExpression();
+		if (hasCondition()) {
+			updateConditionPosition();
 		}
 	}
 

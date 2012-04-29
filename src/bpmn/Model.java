@@ -56,11 +56,6 @@ import bpmn.element.event.*;
 import bpmn.element.gateway.*;
 import bpmn.token.TokenAnimator;
 
-/*
- * Ids von Elementen sind nur innerhalb eines Prozesses eindeutig
- * Darstellungsinformationen im bpmndi-Namensraum beziehen sich immer
- * auf Elemente des angegebenen Prozesses (BPMNPlane)
- */
 public class Model implements ErrorHandler {
 
 	protected static final String BPMN = "http://www.omg.org/spec/BPMN/20100524/MODEL";  //$NON-NLS-1$
@@ -103,6 +98,7 @@ public class Model implements ErrorHandler {
 	protected void addElementToContainer(final BaseElement element,
 			final ExpandedProcess process) {
 		registerElementRef(element.getId(), element);
+		assert process != null;
 		if (process != null) {
 			process.addElement(element);
 		}
@@ -171,15 +167,21 @@ public class Model implements ErrorHandler {
 	}
 
 	protected void showUnknowNode(final Node node) {
-		logFrame.addError(MessageFormat.format(Messages.getString("Protocol.unknownElement"), node.getNodeName())); //$NON-NLS-1$
+		logFrame.addError(MessageFormat.format(
+				Messages.getString("Protocol.unknownElement"), //$NON-NLS-1$
+				node.getNodeName()));
 	}
 
 	protected void showElementNotFound(final String id) {
-		logFrame.addError(MessageFormat.format(Messages.getString("Protocol.elementNotFound"), id)); //$NON-NLS-1$
+		logFrame.addError(MessageFormat.format(
+				Messages.getString("Protocol.elementNotFound"), //$NON-NLS-1$
+				id));
 	}
 
 	protected void showUnknowAttribute(final String name, final Node node) {
-		logFrame.addWarning(MessageFormat.format(Messages.getString("Protocol.attributNotExist"), name, node.getNodeName())); //$NON-NLS-1$
+		logFrame.addWarning(
+				MessageFormat.format(Messages.getString("Protocol.attributeNotExist"), //$NON-NLS-1$
+				name, node.getNodeName()));
 	}
 
 	protected static boolean isElementNode(final Node node,
@@ -225,13 +227,11 @@ public class Model implements ErrorHandler {
 	}
 
 	protected float getAttributeFloat(final Node node, final String name) {
-		final String floatString = getAttributeString(node, name, true);
-		float value = 0;
 		try {
-			value = Float.parseFloat(floatString);
+			return Float.parseFloat(getAttributeString(node, name, true));
 		} catch (NumberFormatException e) {
+			return 0;
 		}
-		return value;
 	}
 
 	protected boolean convertStringToBool(final String string,
@@ -245,8 +245,7 @@ public class Model implements ErrorHandler {
 
 	protected boolean getAttributeBoolean(final Node node, final String name,
 			final boolean required, final boolean defaultValue) {
-		final String boolString = getAttributeString(node, name, required);
-		return convertStringToBool(boolString, defaultValue);
+		return convertStringToBool(getAttributeString(node, name, required), defaultValue);
 	}
 
 	protected BaseElement getAttributeElement(final Node node, final String name) {
@@ -306,6 +305,11 @@ public class Model implements ErrorHandler {
 		return getAttributeElement(node, "bpmnElement"); //$NON-NLS-1$
 	}
 
+	private static boolean isValidPlaneElement(final BaseElement planeElement) {
+		return (planeElement instanceof ExpandedProcess)
+				|| (planeElement instanceof Collaboration);
+	}
+
 	protected void readDiagram(final Node node) {
 		final NodeList childNodes = node.getChildNodes();
 		for (int i = 0; i < childNodes.getLength(); ++i) {
@@ -314,7 +318,7 @@ public class Model implements ErrorHandler {
 			if (isElementNode(childNode, BPMNDI, "BPMNPlane")) { //$NON-NLS-1$
 				final BaseElement planeElement = getBPMNElementAttribute(childNode);
 				if (planeElement != null) {
-					if ((planeElement instanceof ExpandedProcess) || (planeElement instanceof Collaboration)) {
+					if (isValidPlaneElement(planeElement)) {
 						readDiagramPlaneElements(childNode, planeElement);
 						final DiagramFrame diagramFrame = new DiagramFrame(planeElement);
 						desktop.add(diagramFrame);
@@ -376,13 +380,10 @@ public class Model implements ErrorHandler {
 
 	protected void readDiagramPlaneElementLabel(final Node node,
 			final JComponent planeElement, final BaseElement element) {
-		element.createElementLabel();
 		final Label label = element.getElementLabel();
 		if (label != null) {
 			final Node labelNode = getSingleSubElement(node, BPMNDI, "BPMNLabel"); //$NON-NLS-1$
-			if (labelNode == null) {
-				element.setElementLabelDefaultPosition();
-			} else {
+			if (labelNode != null) {
 				label.setBounds(getBoundsElement(labelNode));
 			}
 			planeElement.add(label, 0);
@@ -418,6 +419,7 @@ public class Model implements ErrorHandler {
 				} else {
 					showUnknowNode(childNode);
 				}
+				element.initSubElements();
 			}
 		}
 	}
@@ -528,12 +530,14 @@ public class Model implements ErrorHandler {
 		return text;
 	}
 
-	protected void readConditionExpressionElement(final Node node,
-			final SequenceFlow sequenceFlow) {
-		final Node conditionExpressionNode = getSingleSubElement(node, BPMN, "conditionExpression"); //$NON-NLS-1$
+	protected Expression getConditionExpressionElement(final Node node,
+			final String name) {
+		Expression expression = null;
+		final Node conditionExpressionNode = getSingleSubElement(node, BPMN, name);
 		if (conditionExpressionNode != null) {
-			sequenceFlow.setConditionExpression(conditionExpressionNode.getTextContent());
+			expression = new Expression(conditionExpressionNode.getTextContent());
 		}
+		return expression;
 	}
 
 	protected void readIncomingElements(final Node node, final FlowElement element) {
@@ -605,6 +609,32 @@ public class Model implements ErrorHandler {
 		}
 	}
 
+	protected void readFlowElement(final Node node, final FlowElement element) {
+		readIncomingElements(node, element);
+		readOutgoingElements(node, element);
+		if (element instanceof ElementWithDefaultSequenceFlow) {
+			readDefaultSequenceFlowAttribute(node, (ElementWithDefaultSequenceFlow)element);
+		}
+		readExtensionElements(node, element);
+	}
+
+	protected void readEventStart(final Node node, final StartEvent event) {
+		readFlowElement(node, event);
+	}
+
+	protected void readEventEnd(final Node node, final EndEvent event) {
+		readFlowElement(node, event);
+		readEndEventDefinitions(node, event);
+	}
+
+	protected void readTask(final Node node, final Task task) {
+		readFlowElement(node, task);
+	}
+
+	protected void readGateway(final Node node, final Gateway gateway) {
+		readFlowElement(node, gateway);
+	}
+
 	protected void readProcessElements(final Node node, final ExpandedProcess process) {
 		readIncomingElements(node, process);
 		readOutgoingElements(node, process);
@@ -635,92 +665,55 @@ public class Model implements ErrorHandler {
 						final String name = getNameAttribute(childNode);
 						if (isElementNode(childNode, BPMN, "startEvent")) { //$NON-NLS-1$
 							final StartEvent element = new StartEvent(id, name, getAnimator().getInstanceController());
-							readIncomingElements(childNode, element);
-							readOutgoingElements(childNode, element);
-							readExtensionElements(childNode, element);
+							readEventStart(childNode, element);
 							addElementToContainer(element, process);
 						} else if (isElementNode(childNode, BPMN, "endEvent")) { //$NON-NLS-1$
 							final EndEvent element = new EndEvent(id, name, getAnimator().getInstanceController());
-							readIncomingElements(childNode, element);
-							readOutgoingElements(childNode, element);
-							readEndEventDefinitions(childNode, element);
-							readExtensionElements(childNode, element);
+							readEventEnd(childNode, element);
 							addElementToContainer(element, process);
 						} else if (isElementNode(childNode, BPMN, "manualTask")) { //$NON-NLS-1$
 							final ManualTask element = new ManualTask(id, name);
-							readIncomingElements(childNode, element);
-							readOutgoingElements(childNode, element);
-							readDefaultSequenceFlowAttribute(childNode, element);
-							readExtensionElements(childNode, element);
+							readTask(childNode, element);
 							addElementToContainer(element, process);
 						} else if (isElementNode(childNode, BPMN, "userTask")) { //$NON-NLS-1$
 							final UserTask element = new UserTask(id, name);
-							readIncomingElements(childNode, element);
-							readOutgoingElements(childNode, element);
-							readDefaultSequenceFlowAttribute(childNode, element);
-							readExtensionElements(childNode, element);
+							readTask(childNode, element);
 							addElementToContainer(element, process);
 						} else if (isElementNode(childNode, BPMN, "businessRuleTask")) { //$NON-NLS-1$
 							final BusinessRuleTask element = new BusinessRuleTask(id, name);
-							readIncomingElements(childNode, element);
-							readOutgoingElements(childNode, element);
-							readDefaultSequenceFlowAttribute(childNode, element);
-							readExtensionElements(childNode, element);
+							readTask(childNode, element);
 							addElementToContainer(element, process);
 						} else if (isElementNode(childNode, BPMN, "scriptTask")) { //$NON-NLS-1$
 							final ScriptTask element = new ScriptTask(id, name);
-							readIncomingElements(childNode, element);
-							readOutgoingElements(childNode, element);
-							readDefaultSequenceFlowAttribute(childNode, element);
-							readExtensionElements(childNode, element);
+							readTask(childNode, element);
 							addElementToContainer(element, process);
 						} else if (isElementNode(childNode, BPMN, "serviceTask")) { //$NON-NLS-1$
 							final ServiceTask element = new ServiceTask(id, name);
-							readIncomingElements(childNode, element);
-							readOutgoingElements(childNode, element);
-							readDefaultSequenceFlowAttribute(childNode, element);
-							readExtensionElements(childNode, element);
+							readTask(childNode, element);
 							addElementToContainer(element, process);
 						} else if (isElementNode(childNode, BPMN, "sendTask")) { //$NON-NLS-1$
 							final SendTask element = new SendTask(id, name);
-							readIncomingElements(childNode, element);
-							readOutgoingElements(childNode, element);
-							readDefaultSequenceFlowAttribute(childNode, element);
-							readExtensionElements(childNode, element);
+							readTask(childNode, element);
 							addElementToContainer(element, process);
 						} else if (isElementNode(childNode, BPMN, "receiveTask")) { //$NON-NLS-1$
 							final ReceiveTask element = new ReceiveTask(id, name);
-							readIncomingElements(childNode, element);
-							readOutgoingElements(childNode, element);
-							readDefaultSequenceFlowAttribute(childNode, element);
-							readExtensionElements(childNode, element);
+							readTask(childNode, element);
 							addElementToContainer(element, process);
 						} else if (isElementNode(childNode, BPMN, "task")) { //$NON-NLS-1$
 							final Task element = new Task(id, name);
-							readIncomingElements(childNode, element);
-							readOutgoingElements(childNode, element);
-							readDefaultSequenceFlowAttribute(childNode, element);
-							readExtensionElements(childNode, element);
+							readTask(childNode, element);
 							addElementToContainer(element, process);
 						} else if (isElementNode(childNode, BPMN, "parallelGateway")) { //$NON-NLS-1$
 							final ParallelGateway element = new ParallelGateway(id, name);
-							readIncomingElements(childNode, element);
-							readOutgoingElements(childNode, element);
-							readExtensionElements(childNode, element);
+							readGateway(childNode, element);
 							addElementToContainer(element, process);
 						} else if (isElementNode(childNode, BPMN, "inclusiveGateway")) { //$NON-NLS-1$
 							final InclusiveGateway element = new InclusiveGateway(id, name);
-							readDefaultSequenceFlowAttribute(childNode, element);
-							readIncomingElements(childNode, element);
-							readOutgoingElements(childNode, element);
-							readExtensionElements(childNode, element);
+							readGateway(childNode, element);
 							addElementToContainer(element, process);
 						} else if (isElementNode(childNode, BPMN, "exclusiveGateway")) { //$NON-NLS-1$
 							final ExclusiveGateway element = new ExclusiveGateway(id, name);
-							readDefaultSequenceFlowAttribute(childNode, element);
-							readIncomingElements(childNode, element);
-							readOutgoingElements(childNode, element);
-							readExtensionElements(childNode, element);
+							readGateway(childNode, element);
 							addElementToContainer(element, process);
 						} else if (isElementNode(childNode, BPMN, "sequenceFlow")) { //$NON-NLS-1$
 							final SequenceFlow sequenceFlow = new SequenceFlow(id, name,
@@ -728,7 +721,7 @@ public class Model implements ErrorHandler {
 									getTargetRefAttribute(childNode));
 							readExtensionElements(childNode, sequenceFlow);
 							addElementToContainer(sequenceFlow, process);
-							readConditionExpressionElement(childNode, sequenceFlow);
+							sequenceFlow.setCondition(getConditionExpressionElement(childNode, "conditionExpression")); //$NON-NLS-1$
 							// Es ist möglich des der Modeller keine Incoming/Outgoing-Elemente
 							// für FlowElemente exportiert (z.B. BonitaStudio).
 							// Deshalb werden diese jetzt noch einmal anhand des ConnectingElement

@@ -178,7 +178,7 @@ public abstract class ConnectingElement extends BaseElement {
 	}
 
 	@Override
-	public void setElementLabelDefaultPosition() {
+	public void updateElementLabelPosition() {
 		getElementLabel().setCenterTopPosition(getElementCenter());
 	}
 

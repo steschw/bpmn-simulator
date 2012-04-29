@@ -240,17 +240,17 @@ public class ExpandedProcess extends Activity implements Scrollable {
 	}
 
 	@Override
-	public void createElementLabel() {
-		super.createElementLabel();
-		final Label label = getElementLabel(); 
+	public Label createElementLabel() {
+		final Label label = super.createElementLabel();
 		if (label != null) {
 			label.setAlignCenter(false);
 		}
+		return label;
 	}
 
 	@Override
-	public void setElementLabelDefaultPosition() {
-		final Point position = getElementLeftTop();
+	public void updateElementLabelPosition() {
+		final Point position = getInnerBounds().getLeftTop();
 		position.translate(4, 4);
 		getElementLabel().setLeftTopPosition(position);
 	}

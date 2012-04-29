@@ -21,6 +21,7 @@
 package bpmn.element.gateway;
 
 import java.awt.BasicStroke;
+import java.awt.Point;
 
 import bpmn.element.ElementRef;
 import bpmn.element.ElementWithDefaultSequenceFlow;
@@ -97,17 +98,22 @@ public abstract class Gateway extends TokenFlowElement implements ElementWithDef
 	}
 
 	@Override
-	public void createElementLabel() {
-		super.createElementLabel();
-		final Label label = getElementLabel();
+	public Label createElementLabel() {
+		final Label label = super.createElementLabel();
 		if (label != null) {
 			label.setAlignCenter(false);
 		}
+		return label;
 	}
 
 	@Override
-	public void setElementLabelDefaultPosition() {
-		getElementLabel().setLeftTopPosition(getInnerBounds().getRightBottom());
+	public void updateElementLabelPosition() {
+		final Rectangle innerBounds = getInnerBounds(); 
+		final Point position = innerBounds.getRightBottom();
+		position.translate(
+				-(int)(innerBounds.getWidth() / 4),
+				-(int)(innerBounds.getHeight() / 4));
+		getElementLabel().setLeftTopPosition(position);
 	}
 
 }

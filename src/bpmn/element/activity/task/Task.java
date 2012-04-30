@@ -20,6 +20,7 @@
  */
 package bpmn.element.activity.task;
 
+import java.awt.Color;
 import java.awt.Point;
 
 import javax.swing.Icon;
@@ -36,11 +37,22 @@ public class Task extends Activity {
 
 	private static final int ARC_LENGTH = 10;
 
+	private static Color defaultBackground;
+
 	private final Icon typeIcon;
+
+	public static final void setDefaultBackground(final Color color) {
+		defaultBackground = color;
+	}
+
+	public static final Color getDefaultBackground() {
+		return defaultBackground;
+	}
 
 	protected Task(final String id, final String name, final Icon icon) {
 		super(id, name);
 		typeIcon = icon;
+		setBackground(getDefaultBackground());
 	}
 
 	public Task(final String id, final String name) {

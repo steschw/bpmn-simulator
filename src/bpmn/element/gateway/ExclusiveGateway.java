@@ -33,6 +33,10 @@ public class ExclusiveGateway extends Gateway {
 		ExclusiveGateway.showSymbol = show;
 	}
 
+	public static boolean getShowSymbol() {
+		return ExclusiveGateway.showSymbol;
+	}
+
 	public ExclusiveGateway(final String id, final String name) {
 		super(id, name);
 	}
@@ -41,7 +45,7 @@ public class ExclusiveGateway extends Gateway {
 	protected void paintElement(final Graphics g) {
 		super.paintElement(g);
 
-		if (showSymbol) {
+		if (getShowSymbol()) {
 			g.drawCross(getSymbolBounds(), true);
 		}
 	}

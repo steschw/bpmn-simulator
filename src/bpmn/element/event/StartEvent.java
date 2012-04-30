@@ -20,6 +20,7 @@
  */
 package bpmn.element.event;
 
+import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -31,9 +32,20 @@ public class StartEvent extends Event implements MouseListener {
 
 	private static final long serialVersionUID = 1L;
 
+	private static Color defaultBackground;
+
+	public static final void setDefaultBackground(final Color color) {
+		defaultBackground = color;
+	}
+
+	public static final Color getDefaultBackground() {
+		return defaultBackground;
+	}
+
 	public StartEvent(final String id, final String name,
 			final InstanceController tockenController) {
 		super(id, name, tockenController);
+		setBackground(getDefaultBackground());
 		addMouseListener(this);
 	}
 

@@ -34,26 +34,51 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JDialog;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTabbedPane;
+import javax.swing.border.Border;
+
+import bpmn.Model;
+import bpmn.element.Graphics;
+import bpmn.element.activity.task.Task;
+import bpmn.element.event.EndEvent;
+import bpmn.element.event.StartEvent;
+import bpmn.element.gateway.ExclusiveGateway;
+import bpmn.element.gateway.Gateway;
 
 public class PreferencesDialog extends JDialog {
 
 	private static final long serialVersionUID = 1L;
 
-	private final JCheckBox checkShowExclusiveSymbol = new JCheckBox(Messages.getString("Preferences.showSymbolInExclusiveGateway"));  //$NON-NLS-1$
-	private final JCheckBox checkAntialiasing = new JCheckBox(Messages.getString("Preferences.enableAntialiasing"));  //$NON-NLS-1$
+	private static final int GAP = 10;
+
+	private final JCheckBox checkShowExclusiveSymbol
+			= new JCheckBox(Messages.getString("Preferences.showSymbolInExclusiveGateway"));  //$NON-NLS-1$
+	private final JCheckBox checkAntialiasing
+			= new JCheckBox(Messages.getString("Preferences.enableAntialiasing"));  //$NON-NLS-1$
+
+	private final JCheckBox checkIgnoreModelerColors
+			= new JCheckBox(Messages.getString("Preferences.ignoreModelerColors")); //$NON-NLS-1$
+
+	private final ColorSelector colorStartEventBackground
+			= new ColorSelector(Messages.getString("Preferences.backgroundColor")); //$NON-NLS-1$
+	private final ColorSelector colorEndEventBackground
+			= new ColorSelector(Messages.getString("Preferences.backgroundColor")); //$NON-NLS-1$
+	private final ColorSelector colorGatewayBackground
+			= new ColorSelector(Messages.getString("Preferences.backgroundColor")); //$NON-NLS-1$
+	private final ColorSelector colorTaskBackground
+			= new ColorSelector(Messages.getString("Preferences.backgroundColor")); //$NON-NLS-1$
 
 	public PreferencesDialog() {
 		super((Frame)null, Messages.getString("Preferences.preferences"), true); //$NON-NLS-1$
 
-		getContentPane().setLayout(new BorderLayout());
-		getContentPane().add(createOptionsPanel(), BorderLayout.CENTER);
-		getContentPane().add(createButtonPanel(), BorderLayout.PAGE_END);
+		create();
 
 		setResizable(false);
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
-		updateFromConfig();
+		load();
 
 		pack();
 	}
@@ -68,10 +93,27 @@ public class PreferencesDialog extends JDialog {
 		button.setPreferredSize(dimension);
 	}
 
-	protected JPanel createOptionsPanel() {
-		final JPanel panel = new JPanel();
+	protected void create() {
+		getContentPane().setLayout(new BorderLayout());
+		getContentPane().add(createPreferencesPane(), BorderLayout.CENTER);
+		getContentPane().add(createButtonPanel(), BorderLayout.PAGE_END);
+	}
 
-		panel.setLayout(new GridLayout(0, 1));
+	protected JTabbedPane createPreferencesPane() {
+		final JTabbedPane tabbedPane = new JTabbedPane();
+		tabbedPane.addTab(Messages.getString("Preferences.display"), createDisplayPanel()); //$NON-NLS-1$
+		tabbedPane.addTab(Messages.getString("Preferences.elementDefaults"), createElementsPanel()); //$NON-NLS-1$
+		return tabbedPane;
+	}
+
+	private Border createGapBorder() {
+		return BorderFactory.createEmptyBorder(GAP, GAP, GAP, GAP);
+	}
+
+	protected JPanel createDisplayPanel() {
+		final JPanel panel = new JPanel();
+		panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
+		panel.setBorder(createGapBorder());
 
 		panel.add(checkShowExclusiveSymbol);
 		panel.add(checkAntialiasing);
@@ -79,10 +121,39 @@ public class PreferencesDialog extends JDialog {
 		return panel;
 	}
 
+	protected JPanel createElementsPanel() {
+		final JPanel panel = new JPanel(new BorderLayout());
+		panel.setBorder(createGapBorder());
+
+		checkIgnoreModelerColors.setBorder(BorderFactory.createEmptyBorder(0, 0, GAP, 0));
+		panel.add(checkIgnoreModelerColors, BorderLayout.PAGE_START);
+		panel.add(createElementsDefaultsPanel(), BorderLayout.CENTER);
+
+		return panel;
+	}
+
+	protected JPanel createElementsDefaultsPanel() {
+		final JPanel panel = new JPanel(new GridLayout(0, 2, GAP, GAP));
+
+		panel.add(new JLabel(Messages.getString("Preferences.startEvent"))); //$NON-NLS-1$
+		panel.add(colorStartEventBackground);
+
+		panel.add(new JLabel(Messages.getString("Preferences.endEvent"))); //$NON-NLS-1$
+		panel.add(colorEndEventBackground);
+
+		panel.add(new JLabel(Messages.getString("Preferences.gateway"))); //$NON-NLS-1$
+		panel.add(colorGatewayBackground);
+
+		panel.add(new JLabel(Messages.getString("Preferences.task"))); //$NON-NLS-1$
+		panel.add(colorTaskBackground);
+
+		return panel;
+	}
+
 	protected JPanel createButtonPanel() {
 		final JPanel panel = new JPanel();
 		panel.setLayout(new BoxLayout(panel, BoxLayout.LINE_AXIS));
-		panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+		panel.setBorder(createGapBorder());
 
 		panel.add(Box.createHorizontalGlue());
 
@@ -105,7 +176,7 @@ public class PreferencesDialog extends JDialog {
 		buttonOk.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(final ActionEvent e) {
-				updateToConfig();
+				store();
 				PreferencesDialog.this.dispose();
 			}
 		});
@@ -116,17 +187,30 @@ public class PreferencesDialog extends JDialog {
 		return panel;
 	}
 
-	protected void updateFromConfig() {
-		final Config config = Config.getInstance();
-		checkShowExclusiveSymbol.setSelected(config.isShowExclusiveGatewaySymbol());
-		checkAntialiasing.setSelected(config.isAntialiasing());
+	protected void store() {
+		Graphics.setAntialiasing(checkAntialiasing.isSelected());
+		ExclusiveGateway.setShowSymbol(checkShowExclusiveSymbol.isSelected());
+
+		Model.setIgnoreColors(checkIgnoreModelerColors.isSelected());
+
+		StartEvent.setDefaultBackground(colorStartEventBackground.getSelectedColor());
+		EndEvent.setDefaultBackground(colorEndEventBackground.getSelectedColor());
+		Gateway.setDefaultBackground(colorGatewayBackground.getSelectedColor());
+		Task.setDefaultBackground(colorTaskBackground.getSelectedColor());
+
+		Config.getInstance().store();
 	}
 
-	protected void updateToConfig() {
-		final Config config = Config.getInstance();
-		config.setShowExclusiveGatewaySymbol(checkShowExclusiveSymbol.isSelected());
-		config.setAntialiasing(checkAntialiasing.isSelected());
-		config.store();
+	protected void load() {
+		checkAntialiasing.setSelected(Graphics.isAntialiasing());
+		checkShowExclusiveSymbol.setSelected(ExclusiveGateway.getShowSymbol());
+
+		checkIgnoreModelerColors.setSelected(Model.getIgnoreColors());
+
+		colorStartEventBackground.setSelectedColor(StartEvent.getDefaultBackground());
+		colorEndEventBackground.setSelectedColor(EndEvent.getDefaultBackground());
+		colorGatewayBackground.setSelectedColor(Gateway.getDefaultBackground());
+		colorTaskBackground.setSelectedColor(Task.getDefaultBackground());
 	}
 
 }

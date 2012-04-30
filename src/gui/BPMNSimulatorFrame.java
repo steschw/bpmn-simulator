@@ -195,7 +195,6 @@ public class BPMNSimulatorFrame extends JFrame {
 		fileChoser.setCurrentDirectory(new File(config.getLastDirectory()));
 		if (fileChoser.showOpenDialog(this) == 	JFileChooser.APPROVE_OPTION) {
 			config.setLastDirectory(fileChoser.getCurrentDirectory().getAbsolutePath());
-			config.store();
 			closeFile();
 			model = new Model(desktop.getDesktopPane());
 			final File file = fileChoser.getSelectedFile();

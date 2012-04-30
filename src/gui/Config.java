@@ -20,30 +20,40 @@
  */
 package gui;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.Properties;
+import java.awt.Color;
+import java.util.prefs.BackingStoreException;
+import java.util.prefs.Preferences;
 
+import bpmn.Model;
 import bpmn.element.Graphics;
+import bpmn.element.activity.task.Task;
+import bpmn.element.event.EndEvent;
+import bpmn.element.event.StartEvent;
 import bpmn.element.gateway.ExclusiveGateway;
+import bpmn.element.gateway.Gateway;
 
 public class Config {
 
-	private static final String FILENAME = "config"; //$NON-NLS-1$
+	private static final String NODE = "bpmnsimulator";
 
 	private static final String SHOW_EXCLUSIVEGATEWAYSYMBOL = "showExclusiveGatewaySymbol"; //$NON-NLS-1$
 	private static final String ANTIALIASING = "antialiasing"; //$NON-NLS-1$
+
+	private static final String IGNORE_COLORS = "ignoreColors";
+
+	private static final Color DEFAULT_BACKGROUND = Color.WHITE;
+
+	private static final String STARTEVENT_BACKGROUND = "startEventBackground";
+	private static final String ENDEVENT_BACKGROUND = "endEventBackground";
+	private static final String GATEWAY_BACKGROUND = "gatewayBackground";
+	private static final String TASK_BACKGROUND = "taskBackground";
+
 	private static final String LAST_DIRECTORY = "lastDirectory"; //$NON-NLS-1$
 
 	private static Config instance;
 
-	private final Properties properties = new Properties();
-
 	protected Config() {
 		super();
-		defaults();
 	}
 
 	public static synchronized Config getInstance() {
@@ -53,69 +63,52 @@ public class Config {
 		return instance;
 	}
 
-	protected void defaults() {
-		setShowExclusiveGatewaySymbol(true);
-		setAntialiasing(true);
+	protected Preferences getRootNode() {
+		return Preferences.userRoot().node(NODE);
+	}
+
+	protected Color getBackground(final Preferences preferences, final String key) {
+		return new Color(preferences.getInt(key, DEFAULT_BACKGROUND.getRGB()));
+	}
+
+	protected void putColor(final Preferences preferences, final String key,
+			final Color value) {
+		preferences.putInt(key, value.getRGB());
 	}
 
 	public void load() {
-		try {
-			final FileInputStream input = new FileInputStream(FILENAME);
-			properties.load(input);
-			input.close();
-			update();
-		} catch (FileNotFoundException e) {
-			defaults();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		final Preferences preferences = getRootNode();
+		Graphics.setAntialiasing(preferences.getBoolean(ANTIALIASING, true));
+		ExclusiveGateway.setShowSymbol(preferences.getBoolean(SHOW_EXCLUSIVEGATEWAYSYMBOL, true));
+		Model.setIgnoreColors(preferences.getBoolean(IGNORE_COLORS, false));
+		StartEvent.setDefaultBackground(getBackground(preferences, STARTEVENT_BACKGROUND));
+		EndEvent.setDefaultBackground(getBackground(preferences, ENDEVENT_BACKGROUND));
+		Gateway.setDefaultBackground(getBackground(preferences, GATEWAY_BACKGROUND));
+		Task.setDefaultBackground(getBackground(preferences, TASK_BACKGROUND));
 	}
 
 	public void store() {
+		final Preferences preferences = getRootNode();
+		preferences.putBoolean(ANTIALIASING, Graphics.isAntialiasing());
+		preferences.putBoolean(SHOW_EXCLUSIVEGATEWAYSYMBOL, ExclusiveGateway.getShowSymbol());
+		preferences.putBoolean(IGNORE_COLORS, Model.getIgnoreColors());
+		putColor(preferences, STARTEVENT_BACKGROUND, StartEvent.getDefaultBackground());
+		putColor(preferences, ENDEVENT_BACKGROUND, EndEvent.getDefaultBackground());
+		putColor(preferences, GATEWAY_BACKGROUND, Gateway.getDefaultBackground());
+		putColor(preferences, TASK_BACKGROUND, Task.getDefaultBackground());
 		try {
-			final FileOutputStream output = new FileOutputStream(FILENAME);
-			properties.store(output, "");
-			output.close();
-		} catch (IOException e) {
+			preferences.flush();
+		} catch (BackingStoreException e) {
 			e.printStackTrace();
 		}
 	}
 
-	protected void update() {
-		setShowExclusiveGatewaySymbol(isShowExclusiveGatewaySymbol());
-		setAntialiasing(isAntialiasing());
-	}
-
-	protected boolean getPropertyBoolean(final String name) {
-		final String value = properties.getProperty(name);
-		return Boolean.parseBoolean(value);
-	}
-
-	public void setAntialiasing(final boolean antialiasing) {
-		properties.setProperty(ANTIALIASING, Boolean.toString(antialiasing));
-		Graphics.setAntialiasing(antialiasing);
-	}
-
-	public boolean isAntialiasing() {
-		return getPropertyBoolean(ANTIALIASING);
-	}
-
-	public void setShowExclusiveGatewaySymbol(final boolean show) {
-		properties.setProperty(SHOW_EXCLUSIVEGATEWAYSYMBOL, Boolean.toString(show));
-		ExclusiveGateway.setShowSymbol(show);
-	}
-
-	public boolean isShowExclusiveGatewaySymbol() {
-		return getPropertyBoolean(SHOW_EXCLUSIVEGATEWAYSYMBOL);
+	public String getLastDirectory() {
+		return getRootNode().get(LAST_DIRECTORY, System.getProperty("user.home"));
 	}
 
 	public void setLastDirectory(final String directory) {
-		properties.setProperty(LAST_DIRECTORY, directory);
-	}
-
-	public String getLastDirectory() {
-		final String directory = properties.getProperty(LAST_DIRECTORY);
-		return (directory == null) ? "" : directory;
+		getRootNode().put(LAST_DIRECTORY, directory);
 	}
 
 }

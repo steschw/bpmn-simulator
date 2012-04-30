@@ -74,6 +74,16 @@ public class Model implements ErrorHandler {
 
 	private final TokenAnimator tokenAnimator = new TokenAnimator();
 
+	private static boolean ignoreColors;
+
+	public static final void setIgnoreColors(final boolean ignoreColors) {
+		Model.ignoreColors = ignoreColors;
+	}
+
+	public static final boolean getIgnoreColors() {
+		return Model.ignoreColors;
+	}
+
 	public Model(final JDesktopPane desktop) {
 		super();
 		this.desktop = desktop;
@@ -493,7 +503,9 @@ public class Model implements ErrorHandler {
 			final BaseElement element) {
 		final String keyNode = getAttributeString(node, "metaKey", true); //$NON-NLS-1$
 		final String valueNode = getAttributeString(node, "metaValue", true); //$NON-NLS-1$
-		if ("bgcolor".equals(keyNode) && ((valueNode != null) && !valueNode.isEmpty())) { //$NON-NLS-1$
+		if (!getIgnoreColors()
+				&& "bgcolor".equals(keyNode) //$NON-NLS-1$
+				&& ((valueNode != null) && !valueNode.isEmpty())) {
 			final Color color = convertStringToColor(valueNode);
 			if (color != null) {
 				element.setBackground(color);

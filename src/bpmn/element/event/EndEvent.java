@@ -20,6 +20,8 @@
  */
 package bpmn.element.event;
 
+import java.awt.Color;
+
 import bpmn.element.Graphics;
 import bpmn.element.Rectangle;
 import bpmn.token.InstanceController;
@@ -31,11 +33,22 @@ public class EndEvent extends Event {
 
 	private static final int TERMINATION_MARGIN = 4;
 
+	private static Color defaultBackground;
+
 	private boolean termination;
+
+	public static final void setDefaultBackground(final Color color) {
+		defaultBackground = color;
+	}
+
+	public static final Color getDefaultBackground() {
+		return defaultBackground;
+	}
 
 	public EndEvent(final String id, final String name,
 			final InstanceController tockenController) {
 		super(id, name, tockenController);
+		setBackground(getDefaultBackground());
 	}
 
 	public void setTermination(final boolean termination) {

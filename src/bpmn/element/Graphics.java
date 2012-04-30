@@ -65,11 +65,17 @@ public class Graphics {
 		QUALITY.put(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		QUALITY.put(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_LCD_HRGB);
 		QUALITY.put(RenderingHints.KEY_ALPHA_INTERPOLATION, RenderingHints.VALUE_ALPHA_INTERPOLATION_QUALITY);
+		//QUALITY.put(RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_PURE);
 	}
 
 	public static void setAntialiasing(final boolean antialiasing) {
 		Graphics.antialiasing = antialiasing;
 	}
+
+	public static boolean isAntialiasing() {
+		return Graphics.antialiasing;
+	}
+
 
 	public static Icon loadIcon(final String filename) {
 		final URL url = Graphics.class.getResource(filename);
@@ -83,7 +89,7 @@ public class Graphics {
 	}
 
 	protected final void initGraphics() {
-		if (antialiasing) {
+		if (isAntialiasing()) {
 			graphics.addRenderingHints(QUALITY);
 		}
 	}

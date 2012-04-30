@@ -29,7 +29,6 @@ import javax.swing.Icon;
 
 import bpmn.element.FlowElement;
 import bpmn.element.Graphics;
-import bpmn.element.Rectangle;
 import bpmn.token.Instance;
 import bpmn.token.Token;
 
@@ -96,8 +95,7 @@ public class CollapsedProcess extends FlowElement {
 	protected void paintTokens(final Graphics g) {
 		super.paintTokens(g);
 
-		final Rectangle bounds = getElementInnerBounds();
-		final Point point = bounds.getRightTop();
+		final Point point = getElementInnerBounds().getRightTop();
 		for (Instance instance : getInstances()) {
 			instance.paint(g, point);
 			point.translate(-TOKEN_MARGIN, 0);

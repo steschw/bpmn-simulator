@@ -34,8 +34,6 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.KeyStroke;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import bpmn.Model;
@@ -217,26 +215,6 @@ public class BPMNSimulatorFrame extends JFrame {
 			model = null;
 			updateFrameTitle(null);
 		}
-	}
-
-	private static void initLookAndFeel() {
-		 try {
-			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		} catch (InstantiationException e) {
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			e.printStackTrace();
-		} catch (UnsupportedLookAndFeelException e) {
-			e.printStackTrace();
-		}
-		//JFrame.setDefaultLookAndFeelDecorated(true);
-	}
-
-	public static void main(final String[] args) {
-		initLookAndFeel();
-		new BPMNSimulatorFrame();
 	}
 
 }

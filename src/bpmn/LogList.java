@@ -50,6 +50,7 @@ public class LogList extends JScrollPane {
 
 			private static final long serialVersionUID = 1L;
 
+			@Override
 			public void setValue(final Object value) {
 				if (value instanceof Icon) {
 					setIcon((Icon)value);

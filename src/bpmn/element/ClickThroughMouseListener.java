@@ -46,7 +46,7 @@ public class ClickThroughMouseListener implements MouseListener {
 				&& ((componentZIndex < lowerZIndex) || (lowerZIndex == -1));
 	}
 
-	private void dispatchEventToUnderlyingComponent(final MouseEvent event) {
+	private static void dispatchEventToUnderlyingComponent(final MouseEvent event) {
 		final Component sourceComponent = event.getComponent();
 		Component targetComponent = null;
 		final Container parent = sourceComponent.getParent();

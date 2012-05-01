@@ -141,8 +141,6 @@ public abstract class BaseElement extends JComponent {
 			graphics.setStroke(getStroke());
 			paintElement(graphics);
 
-			paintText(graphics);
-
 			paintTokens(graphics);
 
 			if (hasException()) {
@@ -180,9 +178,6 @@ public abstract class BaseElement extends JComponent {
 
 	protected void paintException(final Graphics g) {
 		g.drawIcon(EXCEPTION_ICON, new Point(0, 0));
-	}
-
-	protected void paintText(final Graphics g) {
 	}
 
 	protected void paintTokens(final Graphics g) {

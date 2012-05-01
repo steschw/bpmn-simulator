@@ -205,7 +205,7 @@ public class Model implements ErrorHandler {
 	 * Liefert ein Unterelement von einem Element und prüft dabei ob dieses nur einmal vorkommt
 	 * @return Liefert null zurück wenn das Unterelement nicht gefunden wird. Bei mehreren wird das erste zurück gegeben.
 	 */
-	protected Node getSingleSubElement(final Node node, final String namespace, final String name) {
+	protected static Node getSingleSubElement(final Node node, final String namespace, final String name) {
 		Node subElement = null;
 		final NodeList childNodes = node.getChildNodes();
 		for (int i = 0; i < childNodes.getLength(); ++i) {
@@ -244,7 +244,7 @@ public class Model implements ErrorHandler {
 		}
 	}
 
-	protected boolean convertStringToBool(final String string,
+	protected static boolean convertStringToBool(final String string,
 			final boolean defaultValue) {
 		if ((string == null) || string.isEmpty()) {
 			return defaultValue;
@@ -533,7 +533,7 @@ public class Model implements ErrorHandler {
 		}
 	}
 
-	protected String getTextElement(final Node node) {
+	protected static String getTextElement(final Node node) {
 		String text = ""; //$NON-NLS-1$
 		final Node textNode = getSingleSubElement(node, BPMN, "text"); //$NON-NLS-1$
 		if (textNode != null) {
@@ -542,7 +542,7 @@ public class Model implements ErrorHandler {
 		return text;
 	}
 
-	protected Expression getConditionExpressionElement(final Node node,
+	protected static Expression getConditionExpressionElement(final Node node,
 			final String name) {
 		Expression expression = null;
 		final Node conditionExpressionNode = getSingleSubElement(node, BPMN, name);

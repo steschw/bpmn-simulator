@@ -106,7 +106,7 @@ public class PreferencesDialog extends JDialog {
 		return tabbedPane;
 	}
 
-	private Border createGapBorder() {
+	private static Border createGapBorder() {
 		return BorderFactory.createEmptyBorder(GAP, GAP, GAP, GAP);
 	}
 

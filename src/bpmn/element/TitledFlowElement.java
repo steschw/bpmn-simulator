@@ -26,6 +26,8 @@ public class TitledFlowElement extends FlowElement {
 
 	private static final int HEADER_SIZE = 32;
 
+	private static final int LABEL_MARGIN = 4; 
+
 	private boolean horizontal;
 
 	public TitledFlowElement(final String id, final String name) {
@@ -51,7 +53,7 @@ public class TitledFlowElement extends FlowElement {
 		g.drawRect(getElementInnerBounds());
 	}
 
-	protected Rectangle getTitleBounds() {
+	protected Rectangle getInnerTitleBounds() {
 		final Rectangle innerBounds = getElementInnerBounds();
 		if (isHorizontal()) {
 			return new Rectangle((int)innerBounds.getMinX(), (int)innerBounds.getMinY(),
@@ -63,19 +65,25 @@ public class TitledFlowElement extends FlowElement {
 	}
 
 	@Override
-	protected void paintText(final Graphics g) {
-		final Rectangle bounds = getTitleBounds();
-		bounds.grow(-4, -4);
-		if (isHorizontal()) {
-			g.drawMultilineTextVertical(bounds, getName(), false, false);
-		} else {
-			g.drawMultilineText(bounds, getName(), false, false);
+	public Label createElementLabel() {
+		final String name = getName();
+		Label label = null;
+		if ((name != null) && !name.isEmpty()) {
+			label = new Label(this, name, isHorizontal());
 		}
+		return label;
 	}
 
 	@Override
-	public Label createElementLabel() {
-		return null;
+	public void updateElementLabelPosition() {
+		final Rectangle titleBounds = getInnerBounds();
+		if (isHorizontal()) {
+			titleBounds.shrink(LABEL_MARGIN, 0, 0, LABEL_MARGIN);
+			getElementLabel().setLeftBottomPosition(titleBounds.getLeftBottom());
+		} else {
+			titleBounds.shrink(LABEL_MARGIN, 0, LABEL_MARGIN, 0);
+			getElementLabel().setLeftTopPosition(titleBounds.getLeftTop());
+		}
 	}
 
 }

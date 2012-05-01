@@ -22,7 +22,10 @@ package bpmn.element;
 
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Point;
+import java.awt.geom.AffineTransform;
 
 import javax.swing.JLabel;
 
@@ -32,14 +35,26 @@ public class Label extends JLabel {
 
 	private static final Font FONT = new Font("Tahoma", Font.PLAIN, 11);
 
+	private boolean needsRotate;
+	private final boolean vertical;
+
 	private boolean alignCenter = true;
 
 	public Label(final BaseElement element, final String text) {
+		this(element, text, false);
+	}
+
+	public Label(final BaseElement element, final String text, final boolean vertical) {
 		super(text);
+		this.vertical = vertical;
 		setFont(FONT);
 		addMouseListener(new ClickThroughMouseListener());
 		updateText();
 		setLabelFor(element);
+	}
+
+	public boolean isVertical() {
+		return vertical;
 	}
 
 	@Override
@@ -104,6 +119,55 @@ public class Label extends JLabel {
 		final Dimension size = getPreferredSize();
 		setSize(size);
 		setLocation(center.x, center.y);
+	}
+
+	public void setLeftBottomPosition(final Point center) {
+		final Dimension size = getPreferredSize();
+		setSize(size);
+		setLocation(center.x, center.y - size.height);
+	}
+
+	public void setRightBottomPosition(final Point center) {
+		final Dimension size = getPreferredSize();
+		setSize(size);
+		setLocation(center.x - size.width, center.y - size.height);
+	}
+
+	@Override
+	public Dimension getPreferredSize() {
+		final Dimension preferredSize = super.getPreferredSize();
+		if (isVertical()) {
+			return new Dimension(preferredSize.height, preferredSize.width);
+		}
+		return preferredSize;
+	}
+
+	@Override
+	public int getHeight() {
+		if (isVertical() && needsRotate) {
+			return super.getWidth();
+		}
+		return super.getHeight();
+	}
+
+	@Override
+	public int getWidth() {
+		if (isVertical() && needsRotate) {
+			return super.getHeight();
+		}
+		return super.getWidth();
+	}
+
+	@Override
+	protected void paintComponent(final Graphics g) {
+		final Graphics2D g2d = (Graphics2D)g.create();
+		if (isVertical()) {
+			g2d.translate(0, getHeight());
+			g2d.transform(AffineTransform.getQuadrantRotateInstance(-1));
+		}
+		needsRotate = true;
+		super.paintComponent(g2d);
+		needsRotate = false;
 	}
 
 }

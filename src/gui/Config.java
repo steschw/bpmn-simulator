@@ -63,15 +63,15 @@ public class Config {
 		return instance;
 	}
 
-	protected Preferences getRootNode() {
+	protected static Preferences getRootNode() {
 		return Preferences.userRoot().node(NODE);
 	}
 
-	protected Color getBackground(final Preferences preferences, final String key) {
+	protected static Color getBackground(final Preferences preferences, final String key) {
 		return new Color(preferences.getInt(key, DEFAULT_BACKGROUND.getRGB()));
 	}
 
-	protected void putColor(final Preferences preferences, final String key,
+	protected static void putColor(final Preferences preferences, final String key,
 			final Color value) {
 		preferences.putInt(key, value.getRGB());
 	}

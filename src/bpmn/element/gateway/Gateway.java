@@ -59,10 +59,12 @@ public abstract class Gateway extends TokenFlowElement
 		setBackground(getDefaultBackground());
 	}
 
+	@Override
 	public void setDefaultSequenceFlowRef(final ElementRef<SequenceFlow> sequenceFlowRef) {
 		defaultSequenceFlowRef = sequenceFlowRef;
 	}
 
+	@Override
 	public ElementRef<SequenceFlow> getDefaultElementFlowRef() {
 		return defaultSequenceFlowRef;
 	}

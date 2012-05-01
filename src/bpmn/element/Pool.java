@@ -54,7 +54,7 @@ public class Pool extends TitledFlowElement {
 	protected void paintElement(final Graphics g) {
 		super.paintElement(g);
 
-		final Rectangle bounds = getTitleBounds();
+		final Rectangle bounds = getInnerTitleBounds();
 		if (isHorizontal()) {
 			g.drawLine(new Point((int)bounds.getMaxX(), (int)bounds.getMinY()),
 					new Point((int)bounds.getMaxX(), (int)bounds.getMaxY()));

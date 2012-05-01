@@ -89,6 +89,7 @@ public abstract class TokenConnectingElement extends ConnectingElement
 		return !getTokens().byInstance(instance).isEmpty(); 
 	}
 
+	@Override
 	public boolean hasIncomingPathWithActiveToken(final Instance instance) {
 		if (hasElementActiveToken(instance)) {
 			return true;

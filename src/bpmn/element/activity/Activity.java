@@ -45,10 +45,12 @@ public abstract class Activity extends TokenFlowElement
 		super(id, name);
 	}
 
+	@Override
 	public void setDefaultSequenceFlowRef(final ElementRef<SequenceFlow> sequenceFlowRef) {
 		defaultSequenceFlowRef = sequenceFlowRef;
 	}
 
+	@Override
 	public ElementRef<SequenceFlow> getDefaultElementFlowRef() {
 		return defaultSequenceFlowRef;
 	}

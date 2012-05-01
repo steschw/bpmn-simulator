@@ -21,7 +21,6 @@
 package bpmn.element;
 
 import java.awt.Color;
-import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Paint;
 import java.awt.Point;
@@ -30,14 +29,8 @@ import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.Shape;
 import java.awt.Stroke;
-import java.awt.font.FontRenderContext;
-import java.awt.font.LineBreakMeasurer;
-import java.awt.font.TextLayout;
-import java.awt.geom.AffineTransform;
 import java.awt.geom.GeneralPath;
 import java.net.URL;
-import java.text.AttributedCharacterIterator;
-import java.text.AttributedString;
 
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -57,7 +50,6 @@ public class Graphics {
 
 	private Stroke storedStroke;
 	private Paint storedPaint;
-	private Font storedFont;
 
 	static {
 		QUALITY.put(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
@@ -97,13 +89,11 @@ public class Graphics {
 	public final void push() {
 		storedStroke = graphics.getStroke();
 		storedPaint = graphics.getPaint();
-		storedFont = graphics.getFont();
 	}
 
 	public final void pop() {
 		graphics.setStroke(storedStroke);
 		graphics.setPaint(storedPaint);
-		graphics.setFont(storedFont);
 	}
 
 	public final void setPaint(final Paint paint) {
@@ -118,67 +108,8 @@ public class Graphics {
 		graphics.setStroke(stroke);
 	}
 
-	protected final int getMultilineTextHeight(final Rectangle bounds, final String text) {
-		int height = 0;
-		final AttributedString attributetString = new AttributedString(text);
-		final AttributedCharacterIterator characterIterator = attributetString.getIterator();
-		final FontRenderContext fontRenderContext = graphics.getFontRenderContext();
-		final LineBreakMeasurer measurer = new LineBreakMeasurer(characterIterator, fontRenderContext);
-		TextLayout textLayout;
-		while (measurer.getPosition() < characterIterator.getEndIndex()) {
-			textLayout = measurer.nextLayout(bounds.width);
-			height += textLayout.getAscent();
-		}
-		return height;
-	}
-
-	/*
-	 * Text beginnt oben links
-	 */
-	public void drawMultilineText(final Rectangle bounds, final String text, final boolean alignCenter, final boolean alignMiddle) {
-		if ((text != null) && !text.isEmpty()) {
-			int x = bounds.x;
-			int y = bounds.y;
-
-			if (alignMiddle) {
-				y = bounds.y + (int)((bounds.height - getMultilineTextHeight(bounds, text)) / 2.);
-			}
-
-			final AttributedString attributetString = new AttributedString(text);
-			final AttributedCharacterIterator characterIterator = attributetString.getIterator();
-			final FontRenderContext fontRenderContext = graphics.getFontRenderContext();
-			final LineBreakMeasurer measurer = new LineBreakMeasurer(characterIterator, fontRenderContext);
-			TextLayout textLayout;
-			while (measurer.getPosition() < characterIterator.getEndIndex()) {
-				textLayout = measurer.nextLayout(bounds.width);
-				y += textLayout.getAscent();
-				if (alignCenter) {
-					x = bounds.x + (int)((bounds.getWidth() - textLayout.getBounds().getWidth()) /2.);
-				}
-				textLayout.draw(graphics, x, y);
-				y += textLayout.getDescent() + textLayout.getLeading();
-			} 
-		}
-	}
-
-	/*
-	 * Text beginnt unten links
-	 */
-	public void drawMultilineTextVertical(final Rectangle bounds, final String text, final boolean alignCenter, final boolean alignMiddle) {
-		final AffineTransform transformation = graphics.getTransform();
-
-		graphics.translate(bounds.getMinX(), bounds.getMaxY());
-		graphics.rotate(-Math.PI/2., 0, 0);
-
-		final Rectangle rotatedRect = new Rectangle(0, 0, (int)bounds.getHeight(), (int)bounds.getWidth());
-		drawMultilineText(rotatedRect, text, alignCenter, alignMiddle);
-
-		graphics.setTransform(transformation);
-	}
-
 	public void drawIcon(final Icon icon, final Point position) {
 		icon.paintIcon(null, graphics, position.x, position.y);
-//		graphics.drawImage(icon.getImage(), position.x, position.y, null);
 	}
 
 	public void draw(final Shape shape) {

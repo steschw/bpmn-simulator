@@ -70,6 +70,18 @@ public class ScrollDesktop extends JScrollPane {
 			return component;
 		}
 
+		@Override
+		public void remove(final int index) {
+			super.remove(index);
+			resizeDesktop();
+		}
+
+		@Override
+		public void removeAll() {
+			super.removeAll();
+			resizeDesktop();
+		}
+
 		protected ScrollDesktop getScrollDesktop() {
 			return ScrollDesktop.this;
 		}

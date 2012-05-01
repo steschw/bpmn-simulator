@@ -284,7 +284,8 @@ public class Instance {
 		assert count > 0;
 		if (count > 1) {
 			g.setPaint(Color.BLACK);
-			g.drawMultilineText(getBounds(center, STAR_SIZE), Integer.toString(count), true, true);
+			assert false;
+			///XXX: g.drawMultilineText(getBounds(center, STAR_SIZE), Integer.toString(count), true, true);
 		}
 	}
 

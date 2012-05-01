@@ -88,4 +88,11 @@ public class Rectangle extends java.awt.Rectangle {
 		width -= n;
 	}
 
+	public void shrink(final int l, final int r, final int t, final int b) {
+		x += l;
+		y += t;
+		width -= l + r;
+		height -= t + b;
+	}
+
 }

@@ -52,7 +52,7 @@ public class InclusiveGateway extends Gateway {
 		for (ElementRef<SequenceFlow> incoming : getIncoming()) {
 			if (incoming.hasElement()) {
 				final SequenceFlow incomingSequenceFlow = incoming.getElement();
-				final Token incomingToken = getFirstTokenForIncoming(incoming.getElement(), instance);
+				final Token incomingToken = getFirstTokenForIncoming(incomingSequenceFlow, instance);
 				if (incomingToken == null) {
 					// für diesen eingang ist noch kein token vorhanden
 					if (incomingSequenceFlow.hasIncomingPathWithActiveToken(instance)) {

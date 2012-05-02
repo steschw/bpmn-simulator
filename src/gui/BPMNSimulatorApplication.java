@@ -28,6 +28,14 @@ public class BPMNSimulatorApplication {
 	public static final String NAME = "BPMN Simulator";  //$NON-NLS-1$
 	public static final String URL = "http://code.google.com/p/bpmn-simulator/"; //$NON-NLS-1$
 
+	private BPMNSimulatorApplication() {
+		super();
+	}
+
+	public static String getVersion() {
+		return BPMNSimulatorApplication.class.getPackage().getImplementationVersion();		
+	}
+
 	private static void initLookAndFeel() {
 		 try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());

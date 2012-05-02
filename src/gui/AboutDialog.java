@@ -64,7 +64,7 @@ public class AboutDialog extends JDialog {
 		panel.add(Box.createVerticalStrut(20));
 
 		final StringBuffer applicationInfo = new StringBuffer(BPMNSimulatorApplication.NAME);
-		final String version = getClass().getPackage().getImplementationVersion();
+		final String version = BPMNSimulatorApplication.getVersion();
 		if (version != null) {
 			applicationInfo.append(' ');
 			applicationInfo.append(version);

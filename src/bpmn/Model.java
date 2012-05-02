@@ -285,7 +285,7 @@ public class Model implements ErrorHandler {
 		return stylesheet.stringToColor(value);
 	}
 
-	protected boolean isDocumentationNode(final Node node) {
+	protected static boolean isDocumentationNode(final Node node) {
 		return isElementNode(node, BPMN, "documentation"); //$NON-NLS-1$
 	}
 
@@ -610,7 +610,7 @@ public class Model implements ErrorHandler {
 		return laneSet;
 	}
 
-	protected void readEndEventDefinitions(final Node node, final EndEvent event) {
+	protected static void readEndEventDefinitions(final Node node, final EndEvent event) {
 		final NodeList childNodes = node.getChildNodes();
 		for (int i = 0; i < childNodes.getLength(); ++i) {
 			final Node childNode = childNodes.item(i);

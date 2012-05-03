@@ -191,10 +191,6 @@ public abstract class BaseElement extends JComponent {
 		return label;
 	}
 
-	public boolean hasElementLabel() {
-		return getElementLabel() != null;
-	}
-
 	protected void setElementLabel(final Label label) {
 		assert this.label == null;
 		this.label = label;

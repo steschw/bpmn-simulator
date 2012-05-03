@@ -21,6 +21,7 @@
 package gui;
 
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Desktop;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -41,11 +42,14 @@ public class Hyperlink extends JButton implements ActionListener {
 
 	public Hyperlink(final String text, final URI uri) {
 		super(text);
+
 		setURI(uri);
 
 		setOpaque(false);
 		setBorderPainted(false);
+		setContentAreaFilled(false);
 		setForeground(Color.BLUE);
+		setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 
 		addActionListener(this);
 	}

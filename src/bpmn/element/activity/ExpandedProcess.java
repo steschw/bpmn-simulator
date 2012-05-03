@@ -162,10 +162,6 @@ public class ExpandedProcess extends Activity implements Scrollable {
 		}
 	}
 
-	public void updateSizeByComponents() {
-		setSize(getPreferredSize());
-	}
-
 	@Override
 	public Dimension getPreferredSize() {
 		return calcSizeByInnerComponents();

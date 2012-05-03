@@ -107,7 +107,7 @@ public class SequenceFlow extends TokenConnectingElement {
 		final FlowElement flowElement = getSource();
 		if (flowElement instanceof ElementWithDefaultSequenceFlow) {
 			final ElementWithDefaultSequenceFlow element = (ElementWithDefaultSequenceFlow)flowElement;
-			final ElementRef<SequenceFlow> defaultElementFlowRef = element.getDefaultElementFlowRef();
+			final ElementRef<SequenceFlow> defaultElementFlowRef = element.getDefaultSequenceFlowRef();
 			if (defaultElementFlowRef != null) {
 				return defaultElementFlowRef.equalsElement(this);
 			}

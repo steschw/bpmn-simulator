@@ -117,39 +117,19 @@ public abstract class TokenFlowElement extends FlowElement implements TokenFlow 
 		}
 	}
 
-	protected final boolean passTokenToFirstOutgoing(final Token token) {
-		return passTokenToFirstOutgoing(token, token.getInstance());
-	}
-
-	protected final boolean passTokenToFirstOutgoing(final Token token, final Instance instance) {
-		if (hasOutgoing()) {
-			if (passTokenToFirstSequenceFlow(token, instance)) {
-				return true;
-			} else {
-				return passTokenToDefaultSequenceFlow(token, instance);
-			}
-		} else {
-			return passTokenToParent(token, instance);
-		}
-	}
-
 	protected boolean passTokenToAllOutgoing(final Token token) {
 		return passTokenToAllOutgoing(token, token.getInstance());
 	}
 
 	protected boolean passTokenToAllOutgoing(final Token token, final Instance instance) {
 		if (hasOutgoing()) {
-			if (passTokenToAllSequenceFlows(token, instance) == 0) {
-				return passTokenToDefaultSequenceFlow(token, instance);
-			} else {
-				return true;
-			}
+			return passTokenToAllSequenceFlows(token, instance) > 0;
 		} else {
 			return passTokenToParent(token, instance);
 		}
 	}
 
-	private boolean passTokenToParent(final Token token, final Instance instance) {
+	protected boolean passTokenToParent(final Token token, final Instance instance) {
 		final ExpandedProcess parentProcess = getParentProcess();
 		if (parentProcess != null) {
 			token.passTo(parentProcess, instance);
@@ -158,22 +138,20 @@ public abstract class TokenFlowElement extends FlowElement implements TokenFlow 
 		return false;
 	}
 
-	private boolean passTokenToFirstSequenceFlow(final Token token, final Instance instance) {
+	protected boolean passTokenToFirstSequenceFlow(final Token token, final Instance instance) {
 		for (ElementRef<SequenceFlow> outgoingRef : getOutgoing()) {
 			if (outgoingRef.hasElement()) {
 				final SequenceFlow sequenceFlow = outgoingRef.getElement();
-				if (sequenceFlow != null) {
-					if (sequenceFlow.acceptsToken() && !sequenceFlow.isDefault()) {
-						token.passTo(sequenceFlow, instance);
-						return true;
-					}
+				if (sequenceFlow.acceptsToken() && !sequenceFlow.isDefault()) {
+					token.passTo(sequenceFlow, instance);
+					return true;
 				}
 			}
 		}
 		return false;
 	}
 
-	private int passTokenToAllSequenceFlows(final Token token, final Instance instance) {
+	protected int passTokenToAllSequenceFlows(final Token token, final Instance instance) {
 		int forewardCount = 0;
 		for (ElementRef<SequenceFlow> outgoingRef : getOutgoing()) {
 			if (outgoingRef.hasElement()) {
@@ -185,17 +163,6 @@ public abstract class TokenFlowElement extends FlowElement implements TokenFlow 
 			}
 		}
 		return forewardCount;
-	}
-
-	private boolean passTokenToDefaultSequenceFlow(final Token token, final Instance instance) {
-		if (this instanceof ElementWithDefaultSequenceFlow) {
-			final ElementRef<SequenceFlow> defaultSequenceFlowRef = ((ElementWithDefaultSequenceFlow)this).getDefaultElementFlowRef();
-			if ((defaultSequenceFlowRef != null) && defaultSequenceFlowRef.hasElement()) {
-				token.passTo(defaultSequenceFlowRef.getElement(), instance);
-				return true;
-			}
-		}
-		return false;
 	}
 
 	@Override

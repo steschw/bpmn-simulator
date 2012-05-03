@@ -24,27 +24,22 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Point;
 
-import bpmn.element.ElementRef;
-import bpmn.element.ElementWithDefaultSequenceFlow;
 import bpmn.element.Graphics;
 import bpmn.element.Label;
 import bpmn.element.Rectangle;
 import bpmn.element.SequenceFlow;
-import bpmn.element.TokenFlowElement;
+import bpmn.element.TokenFlowElementWithDefault;
 import bpmn.token.Instance;
 import bpmn.token.Token;
 import bpmn.token.TokenCollection;
 
-public abstract class Gateway extends TokenFlowElement
-	implements ElementWithDefaultSequenceFlow {
+public abstract class Gateway extends TokenFlowElementWithDefault {
 
 	private static final long serialVersionUID = 1L;
 
 	private static final int SYMBOL_MARGIN = 14;
 
 	private static Color defaultBackground;
-
-	private ElementRef<SequenceFlow> defaultSequenceFlowRef;
 
 	public static final void setDefaultBackground(final Color color) {
 		defaultBackground = color;
@@ -57,16 +52,6 @@ public abstract class Gateway extends TokenFlowElement
 	public Gateway(final String id, final String name) {
 		super(id, name);
 		setBackground(getDefaultBackground());
-	}
-
-	@Override
-	public void setDefaultSequenceFlowRef(final ElementRef<SequenceFlow> sequenceFlowRef) {
-		defaultSequenceFlowRef = sequenceFlowRef;
-	}
-
-	@Override
-	public ElementRef<SequenceFlow> getDefaultElementFlowRef() {
-		return defaultSequenceFlowRef;
 	}
 
 	@Override

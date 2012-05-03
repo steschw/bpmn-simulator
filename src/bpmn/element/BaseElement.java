@@ -41,8 +41,6 @@ public abstract class BaseElement extends JComponent {
 
 	protected static final int MARGIN = 10;
 
-	protected static final int TOKEN_MARGIN = 5;
-
 	private static final Icon EXCEPTION_ICON = Graphics.loadIcon("exception.png"); 
 
 	private ExpandedProcess parentProcess;

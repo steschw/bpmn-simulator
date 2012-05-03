@@ -24,6 +24,8 @@ public interface ElementWithDefaultSequenceFlow {
 
 	void setDefaultSequenceFlowRef(final ElementRef<SequenceFlow> sequenceFlowRef);
 
-	ElementRef<SequenceFlow> getDefaultElementFlowRef();
+	ElementRef<SequenceFlow> getDefaultSequenceFlowRef();
+
+	SequenceFlow getDefaultSequenceFlow();
 
 }

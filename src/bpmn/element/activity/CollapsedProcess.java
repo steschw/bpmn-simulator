@@ -36,6 +36,8 @@ public class CollapsedProcess extends FlowElement {
 
 	private static final long serialVersionUID = 1L;
 
+	protected static final int TOKEN_MARGIN = 5;
+
 	private static final int ARC_LENGTH = 10;
 
 	private static final Icon COLLAPSED_ICON = Graphics.loadIcon("collapsed.png");

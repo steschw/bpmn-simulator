@@ -22,37 +22,21 @@ package bpmn.element.activity;
 
 import java.awt.Point;
 
-import bpmn.element.ElementRef;
-import bpmn.element.ElementWithDefaultSequenceFlow;
 import bpmn.element.Graphics;
-import bpmn.element.SequenceFlow;
-import bpmn.element.TokenFlowElement;
+import bpmn.element.TokenFlowElementWithDefault;
 import bpmn.token.Instance;
 import bpmn.token.Token;
 import bpmn.token.TokenCollection;
 
-public abstract class Activity extends TokenFlowElement
-		implements ElementWithDefaultSequenceFlow {
+public abstract class Activity extends TokenFlowElementWithDefault {
 
 	private static final long serialVersionUID = 1L;
 
 	private final TokenCollection incomingTokens = new TokenCollection();
 	private final TokenCollection outgoingTokens = new TokenCollection();
 
-	private ElementRef<SequenceFlow> defaultSequenceFlowRef;
-
 	public Activity(final String id, final String name) {
 		super(id, name);
-	}
-
-	@Override
-	public void setDefaultSequenceFlowRef(final ElementRef<SequenceFlow> sequenceFlowRef) {
-		defaultSequenceFlowRef = sequenceFlowRef;
-	}
-
-	@Override
-	public ElementRef<SequenceFlow> getDefaultElementFlowRef() {
-		return defaultSequenceFlowRef;
 	}
 
 	public final TokenCollection getIncomingTokens() {

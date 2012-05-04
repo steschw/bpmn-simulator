@@ -25,11 +25,12 @@ import java.awt.Graphics2D;
 import java.awt.Paint;
 import java.awt.Point;
 import java.awt.Polygon;
-import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.Shape;
 import java.awt.Stroke;
+import java.awt.geom.Arc2D;
 import java.awt.geom.GeneralPath;
+import java.awt.geom.Path2D;
 import java.net.URL;
 
 import javax.swing.Icon;
@@ -108,8 +109,8 @@ public class Graphics {
 		graphics.setStroke(stroke);
 	}
 
-	public void drawIcon(final Icon icon, final Point position) {
-		icon.paintIcon(null, graphics, position.x, position.y);
+	public void drawIcon(final Icon icon, final Point positionTopLeft) {
+		icon.paintIcon(null, graphics, positionTopLeft.x, positionTopLeft.y);
 	}
 
 	public void draw(final Shape shape) {
@@ -190,7 +191,7 @@ public class Graphics {
 		return createArrowPath(from, to, RAD_30, 10.);
 	}
 
-	public static GeneralPath createArrowPath(final Point from, final Point to,
+	protected static GeneralPath createArrowPath(final Point from, final Point to,
 			final double d, final double length) {
 		final GeneralPath path = new GeneralPath();
 		final double angle = getAngle(to, from);
@@ -264,6 +265,96 @@ public class Graphics {
 		final Point symbolTo = polarToCartesian(symbolFrom, CONNECTING_SYMBOL_LENGTH, a - angle - Math.PI);
 
 		drawLine(symbolFrom, symbolTo);
+	}
+
+	protected static double getNForDataObjectShape(final Rectangle bounds) {
+		return Math.min(bounds.getWidth(), bounds.getHeight()) * 0.3;
+	}
+
+	public static Shape createDataObjectShape(final Rectangle bounds) {
+		final double n = getNForDataObjectShape(bounds);
+		final Path2D path = new Path2D.Float();
+
+		path.moveTo(bounds.getMinX(), bounds.getMinY());
+		path.lineTo(bounds.getMinX(), bounds.getMaxY());
+		path.lineTo(bounds.getMaxX(), bounds.getMaxY());
+		path.lineTo(bounds.getMaxX(), bounds.getMinY() + n);
+		path.lineTo(bounds.getMaxX() - n, bounds.getMinY());
+		path.closePath();
+
+		return path;
+	}
+
+	public void drawDataObject(final Rectangle bounds) {
+		final double n = getNForDataObjectShape(bounds);
+		graphics.draw(createDataObjectShape(bounds));
+		graphics.drawLine(
+				(int)(bounds.getMaxX() - n), (int)(bounds.getMinY() + n),
+				(int)bounds.getMaxX(), (int)(bounds.getMinY() + n));
+		graphics.drawLine(
+				(int)(bounds.getMaxX() - n), (int)(bounds.getMinY() + n),
+				(int)(bounds.getMaxX() - n), (int)bounds.getMinY());
+	}
+
+	protected static int getNForDataStoreShape(final Rectangle bounds) {
+		return (int)(bounds.getHeight() / 6.);
+	}
+
+	public static Shape createDataStoreShape(final Rectangle bounds) {
+		final int n = getNForDataStoreShape(bounds);
+
+		final Path2D path = new Path2D.Float();
+		path.append(
+				new Arc2D.Double(
+						bounds.getMinX(),
+						bounds.getMaxY() - n,
+						bounds.getWidth(),
+						n,
+						180,
+						180,
+						Arc2D.OPEN),
+				true);
+		path.append(
+				new Arc2D.Double(
+						bounds.getMinX(),
+						bounds.getMinY(),
+						bounds.getWidth(),
+						n,
+						0,
+						180,
+						Arc2D.OPEN),
+				true);
+		path.closePath();
+
+		return path;
+	}
+
+	public void drawDataStore(final Rectangle bounds) {
+		final int n = getNForDataStoreShape(bounds);
+
+		graphics.draw(createDataStoreShape(bounds));
+
+		graphics.drawArc(
+				(int)bounds.getMinX(),
+				(int)bounds.getMinY(),
+				(int)bounds.getWidth(),
+				n,
+				180,
+				180);
+		graphics.drawArc(
+				(int)bounds.getMinX(),
+				(int)bounds.getMinY() + n / 2,
+				(int)bounds.getWidth(),
+				n,
+				180,
+				180);
+		graphics.drawArc(
+				(int)bounds.getMinX(),
+				(int)bounds.getMinY() + n,
+				(int)bounds.getWidth(),
+				n,
+				180,
+				180);
 	}
 
 }

@@ -21,22 +21,67 @@
 package bpmn.element;
 
 import java.awt.BasicStroke;
+import java.awt.Point;
 import java.awt.Stroke;
 
 public class Association extends ConnectingElement {
 
 	private static final long serialVersionUID = 1L;
 
-	public Association(final String id, final String name,
+	public static enum Direction {
+		NONE,
+		ONE,
+		BOTH;
+
+		public static Direction byValue(final String value) {
+			if ("none".equalsIgnoreCase(value)) {
+				return NONE;
+			} else if ("one".equalsIgnoreCase(value)) {
+				return ONE;
+			} else if ("both".equalsIgnoreCase(value)) {
+				return BOTH;
+			} else {
+				return null;
+			}
+		}
+
+	}
+
+	private Direction direction = Direction.NONE;
+
+	public Association(final String id,
 			final ElementRef<FlowElement> source,
 			final ElementRef<FlowElement> target) {
-		super(id, name, source, target);
+		super(id, null, source, target);
+	}
+
+	public void setDirection(final Direction direction) {
+		this.direction = direction;
+	}
+
+	public Direction getDirection() {
+		return direction;
 	}
 
 	@Override
 	protected Stroke getStroke() {
 		return new BasicStroke(getBorderWidth(),
 				BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER, 1.f, new float[] { 4.f, 6.f }, 0); 
+	}
+
+	@Override
+	protected void paintConnectingStart(Graphics g, Point from, Point start) {
+		if (Direction.BOTH.equals(getDirection())) {
+			g.drawArrow(from, start);
+		}
+	}
+
+	@Override
+	protected void paintConnectingEnd(Graphics g, Point from, Point end) {
+		final Direction direction = getDirection();
+		if (Direction.ONE.equals(direction) || Direction.BOTH.equals(direction)) {
+			g.drawArrow(from, end);
+		}
 	}
 
 }

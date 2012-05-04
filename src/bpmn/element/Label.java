@@ -25,9 +25,11 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.geom.AffineTransform;
 
 import javax.swing.JLabel;
+import javax.swing.text.View;
 
 public class Label extends JLabel {
 
@@ -98,9 +100,11 @@ public class Label extends JLabel {
 	}
 
 	public void setMaxWidth(final int width) {
-		final Dimension maximumSize = getMaximumSize();
-		maximumSize.width = width;
-		setMaximumSize(maximumSize);
+		final View view =
+				(View)getClientProperty(javax.swing.plaf.basic.BasicHTML.propertyKey);
+		view.setSize(width, 0);
+		setSize((int)view.getPreferredSpan(View.X_AXIS),
+				(int)view.getPreferredSpan(View.Y_AXIS));
 	}
 
 	public void setCenterPosition(final Point center) {

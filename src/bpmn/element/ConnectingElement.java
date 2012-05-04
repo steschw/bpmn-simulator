@@ -20,7 +20,9 @@
  */
 package bpmn.element;
 
+import java.awt.BasicStroke;
 import java.awt.Point;
+import java.awt.Stroke;
 import java.util.Collection;
 import java.util.Deque;
 import java.util.Iterator;
@@ -130,15 +132,38 @@ public abstract class ConnectingElement extends BaseElement {
 		Point lastPoint = null;
 		final Iterator<Point> i = getWaypoints().iterator();
 		Point currentPoint = null;
-		while (i.hasNext()) {
-			currentPoint = i.next();
-			if (lastPoint != null) {
+		if (i.hasNext()) {
+			lastPoint = i.next();
+			boolean first = true;
+			while (i.hasNext()) {
+				currentPoint = i.next();
 				final Point fromPoint = waypointToRelative(lastPoint);
 				final Point toPoint = waypointToRelative(currentPoint);
 				g.drawLine(fromPoint, toPoint);
+				if (first) {
+					g.setStroke(getStartEndStroke());
+					paintConnectingStart(g, toPoint, fromPoint);
+					g.setStroke(getStroke());
+					first = false;
+				}
+				if (!i.hasNext()) {
+					g.setStroke(getStartEndStroke());
+					paintConnectingEnd(g, fromPoint, toPoint);
+					g.setStroke(getStroke());
+				}
+				lastPoint = currentPoint;
 			}
-			lastPoint = currentPoint;
 		}
+	}
+
+	protected Stroke getStartEndStroke() {
+		return new BasicStroke(getBorderWidth());
+	}
+
+	protected void paintConnectingStart(final Graphics g, final Point from, final Point start) {
+	}
+
+	protected void paintConnectingEnd(final Graphics g, final Point from, final Point end) {
 	}
 
 	protected int getLength() {

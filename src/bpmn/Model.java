@@ -140,6 +140,7 @@ public class Model implements ErrorHandler {
 
 	protected void registerElementRef(final String id,
 			final BaseElement element) {
+		assert id != null;
 		if (elements.containsKey(id)) {
 			final ElementRef<BaseElement> elementRef = elements.get(id);
 			if (!elementRef.hasElement()) {
@@ -647,6 +648,12 @@ public class Model implements ErrorHandler {
 		readFlowElement(node, gateway);
 	}
 
+	protected Association.Direction getParameterAssociationDirection(final Node node) {
+		final String value = getAttributeString(node,  "associationDirection", false);
+		Association.Direction direction = Association.Direction.byValue(value);
+		return (direction == null) ? Association.Direction.NONE : direction; 
+	}
+
 	protected void readProcessElements(final Node node, final ExpandedProcess process) {
 		readIncomingElements(node, process);
 		readOutgoingElements(node, process);
@@ -673,6 +680,13 @@ public class Model implements ErrorHandler {
 						addElementToContainer(new Group(id), process);
 					} else if (isElementNode(childNode, BPMN, "laneSet")) { //$NON-NLS-1$
 						addElementToContainer(readLaneSet(childNode), process);
+					} else if (isElementNode(childNode, BPMN, "association")) { //$NON-NLS-1$
+						final Association association = new Association(id,
+								getSourceRefAttribute(childNode),
+								getTargetRefAttribute(childNode));
+						association.setDirection(getParameterAssociationDirection(childNode));
+						readExtensionElements(childNode, association);
+						addElementToContainer(association, process);
 					} else {
 						final String name = getNameAttribute(childNode);
 						if (isElementNode(childNode, BPMN, "startEvent")) { //$NON-NLS-1$
@@ -727,6 +741,15 @@ public class Model implements ErrorHandler {
 							final ExclusiveGateway element = new ExclusiveGateway(id, name);
 							readGateway(childNode, element);
 							addElementToContainer(element, process);
+						} else if (isElementNode(childNode, BPMN, "dataObject")) { //$NON-NLS-1$
+							final DataObject dataObject = new DataObject(id, name);
+							dataObject.setCollection(getAttributeBoolean(childNode, "isCollection", false, false));
+							readFlowElement(childNode, dataObject);
+							addElementToContainer(dataObject, process);
+						} else if (isElementNode(childNode, BPMN, "dataStoreReference")) { //$NON-NLS-1$
+							final DataStoreReference dataStore = new DataStoreReference(id, name);
+							readFlowElement(childNode, dataStore);
+							addElementToContainer(dataStore);
 						} else if (isElementNode(childNode, BPMN, "sequenceFlow")) { //$NON-NLS-1$
 							final SequenceFlow sequenceFlow = new SequenceFlow(id, name,
 									getSourceRefAttribute(childNode),
@@ -739,13 +762,6 @@ public class Model implements ErrorHandler {
 							// Deshalb werden diese jetzt noch einmal anhand des ConnectingElement
 							// hinzugefügt.
 							assignFlowElementsToConnectingElement(sequenceFlow);
-//							process.setComponentZOrder(sequenceFlow, 0);
-						} else if (isElementNode(childNode, BPMN, "association")) { //$NON-NLS-1$
-							final Association association = new Association(id, name,
-									getSourceRefAttribute(childNode),
-									getTargetRefAttribute(childNode));
-							readExtensionElements(childNode, association);
-							addElementToContainer(association, process);
 						} else {
 							showUnknowNode(childNode);
 						}

@@ -167,10 +167,7 @@ public abstract class TokenFlowElement extends FlowElement implements TokenFlow 
 
 	@Override
 	public Color getForeground() {
-		if (!hasToken()) {
-			return Token.HIGHLIGHT_COLOR;
-		}
-		return super.getForeground();
+		return hasToken() ? Token.HIGHLIGHT_COLOR : super.getForeground();   
 	}
 
 	@Override

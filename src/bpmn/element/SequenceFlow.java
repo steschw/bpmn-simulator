@@ -20,9 +20,9 @@
  */
 package bpmn.element;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Point;
-import java.util.Iterator;
 
 import bpmn.element.gateway.ExclusiveGateway;
 import bpmn.element.gateway.Gateway;
@@ -126,29 +126,19 @@ public class SequenceFlow extends TokenConnectingElement {
 	}
 
 	@Override
-	protected void paintElement(final Graphics g) {
-		super.paintElement(g);
-
-		final Iterator<Point> waypoints = getWaypoints().iterator();
-		if (waypoints.hasNext()) {
-			Point prevPoint = waypointToRelative(waypoints.next());
-			if (waypoints.hasNext()) {
-				// Startsymbol
-				Point curPoint = waypointToRelative(waypoints.next());
-				if (isDefault()) {
-					g.drawDefaultSymbol(prevPoint, curPoint);
-				} else if (!isSourceElementInclusiveOrExclusiveGatewayAndHasMoreThanOnceOutgoing()
-						&& isConditional()) {
-					g.drawConditionalSymbol(prevPoint, curPoint);
-				}
-				// Endepfeil
-				while (waypoints.hasNext()) {
-					prevPoint = curPoint;
-					curPoint = waypointToRelative(waypoints.next());
-				}
-				g.fillArrow(prevPoint, curPoint);
-			}
+	protected void paintConnectingStart(final Graphics g, final Point from, final Point start) {
+		if (isDefault()) {
+			g.drawDefaultSymbol(start, from);
+		} else if (!isSourceElementInclusiveOrExclusiveGatewayAndHasMoreThanOnceOutgoing()
+				&& isConditional()) {
+			g.setPaint(Color.red);
+			g.drawConditionalSymbol(start, from);
 		}
+	}
+
+	@Override
+	protected void paintConnectingEnd(final Graphics g, final Point from, final Point end) {
+		g.fillArrow(from, end);
 	}
 
 }

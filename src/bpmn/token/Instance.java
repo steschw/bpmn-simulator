@@ -23,11 +23,11 @@ package bpmn.token;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Point;
-import java.awt.Rectangle;
 import java.util.Collection;
 import java.util.Vector;
 
 import bpmn.element.Graphics;
+import bpmn.element.Rectangle;
 
 public class Instance {
 

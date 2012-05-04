@@ -26,6 +26,7 @@ import java.awt.Point;
 import javax.swing.Icon;
 
 import bpmn.element.Graphics;
+import bpmn.element.Label;
 import bpmn.element.Rectangle;
 import bpmn.element.activity.Activity;
 
@@ -82,6 +83,16 @@ public class Task extends Activity {
 	protected void paintElement(final Graphics g) {
 		g.drawRoundRect(getElementInnerBounds(), ARC_LENGTH, ARC_LENGTH);
 		paintTypeIcon(g);
+	}
+
+	@Override
+	protected void updateElementLabelPosition() {
+		final Label label = getElementLabel();
+		if (label != null) {
+			final Rectangle bounds = getElementInnerBounds();
+			label.setMaxWidth(bounds.width);
+		}
+		super.updateElementLabelPosition();
 	}
 
 }

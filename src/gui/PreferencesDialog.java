@@ -43,6 +43,7 @@ import bpmn.Model;
 import bpmn.element.Graphics;
 import bpmn.element.activity.task.Task;
 import bpmn.element.event.EndEvent;
+import bpmn.element.event.IntermediateEvent;
 import bpmn.element.event.StartEvent;
 import bpmn.element.gateway.ExclusiveGateway;
 import bpmn.element.gateway.Gateway;
@@ -62,6 +63,8 @@ public class PreferencesDialog extends JDialog {
 			= new JCheckBox(Messages.getString("Preferences.ignoreModelerColors")); //$NON-NLS-1$
 
 	private final ColorSelector colorStartEventBackground
+			= new ColorSelector(Messages.getString("Preferences.backgroundColor")); //$NON-NLS-1$
+	private final ColorSelector colorIntermediateEventBackground
 			= new ColorSelector(Messages.getString("Preferences.backgroundColor")); //$NON-NLS-1$
 	private final ColorSelector colorEndEventBackground
 			= new ColorSelector(Messages.getString("Preferences.backgroundColor")); //$NON-NLS-1$
@@ -138,6 +141,9 @@ public class PreferencesDialog extends JDialog {
 		panel.add(new JLabel(Messages.getString("Preferences.startEvent"))); //$NON-NLS-1$
 		panel.add(colorStartEventBackground);
 
+		panel.add(new JLabel(Messages.getString("Preferences.intermediateEvent"))); //$NON-NLS-1$
+		panel.add(colorIntermediateEventBackground);
+
 		panel.add(new JLabel(Messages.getString("Preferences.endEvent"))); //$NON-NLS-1$
 		panel.add(colorEndEventBackground);
 
@@ -194,6 +200,7 @@ public class PreferencesDialog extends JDialog {
 		Model.setIgnoreColors(checkIgnoreModelerColors.isSelected());
 
 		StartEvent.setDefaultBackground(colorStartEventBackground.getSelectedColor());
+		IntermediateEvent.setDefaultBackground(colorIntermediateEventBackground.getSelectedColor());
 		EndEvent.setDefaultBackground(colorEndEventBackground.getSelectedColor());
 		Gateway.setDefaultBackground(colorGatewayBackground.getSelectedColor());
 		Task.setDefaultBackground(colorTaskBackground.getSelectedColor());
@@ -208,6 +215,7 @@ public class PreferencesDialog extends JDialog {
 		checkIgnoreModelerColors.setSelected(Model.getIgnoreColors());
 
 		colorStartEventBackground.setSelectedColor(StartEvent.getDefaultBackground());
+		colorIntermediateEventBackground.setSelectedColor(IntermediateEvent.getDefaultBackground());
 		colorEndEventBackground.setSelectedColor(EndEvent.getDefaultBackground());
 		colorGatewayBackground.setSelectedColor(Gateway.getDefaultBackground());
 		colorTaskBackground.setSelectedColor(Task.getDefaultBackground());

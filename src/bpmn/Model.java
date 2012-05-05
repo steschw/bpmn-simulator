@@ -50,6 +50,8 @@ import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 
 import bpmn.element.*;
+import bpmn.element.Association.Direction;
+import bpmn.element.activity.Activity;
 import bpmn.element.activity.ExpandedProcess;
 import bpmn.element.activity.task.*;
 import bpmn.element.event.*;
@@ -611,17 +613,6 @@ public class Model implements ErrorHandler {
 		return laneSet;
 	}
 
-	protected static void readEndEventDefinitions(final Node node, final EndEvent event) {
-		final NodeList childNodes = node.getChildNodes();
-		for (int i = 0; i < childNodes.getLength(); ++i) {
-			final Node childNode = childNodes.item(i);
-			debugNode(childNode);
-			if (isElementNode(childNode, BPMN, "terminateEventDefinition")) { //$NON-NLS-1$
-				event.setTermination(true);
-			}
-		}
-	}
-
 	protected void readFlowElement(final Node node, final FlowElement element) {
 		readIncomingElements(node, element);
 		readOutgoingElements(node, element);
@@ -631,17 +622,69 @@ public class Model implements ErrorHandler {
 		readExtensionElements(node, element);
 	}
 
+	protected static void readEventDefinitions(final Node node, final Event event) {
+		final NodeList childNodes = node.getChildNodes();
+		for (int i = 0; i < childNodes.getLength(); ++i) {
+			final Node childNode = childNodes.item(i);
+			debugNode(childNode);
+			if (isElementNode(childNode, BPMN, "terminateEventDefinition")) { //$NON-NLS-1$
+				event.setTermination(true);
+			}
+			if (isElementNode(childNode, BPMN, "timerEventDefinition")) { //$NON-NLS-1$
+				event.setTimer(true);
+			}
+		}
+	}
+
+	protected void readEventIntermediateThrow(final Node node,
+			final IntermediateThrowEvent event) {
+		readFlowElement(node, event);
+		readEventDefinitions(node, event);
+	}
+
+	protected void readEventIntermediateCatch(final Node node,
+			final IntermediateCatchEvent event) {
+		readFlowElement(node, event);
+		readEventDefinitions(node, event);
+	}
+
 	protected void readEventStart(final Node node, final StartEvent event) {
 		readFlowElement(node, event);
+		readEventDefinitions(node, event);
 	}
 
 	protected void readEventEnd(final Node node, final EndEvent event) {
 		readFlowElement(node, event);
-		readEndEventDefinitions(node, event);
+		readEventDefinitions(node, event);
+	}
+
+	protected void readDataAssociations(final Node node) {
+		final NodeList childNodes = node.getChildNodes();
+		for (int i = 0; i < childNodes.getLength(); ++i) {
+			final Node childNode = childNodes.item(i);
+			debugNode(childNode);
+			if (isElementNode(childNode, BPMN, "dataInputAssociation")
+					|| isElementNode(childNode, BPMN, "dataOutputAssociation")) {
+				final Node sourceElement = getSingleSubElement(childNode, BPMN, "sourceRef");
+				final Node targetElement = getSingleSubElement(childNode, BPMN, "targetRef");
+				final ElementRef<FlowElement> sourceRef = getElementRefById(sourceElement.getTextContent());
+				final ElementRef<FlowElement> targetRef = getElementRefById(targetElement.getTextContent());
+				final DataAssociation dataAssociation =
+						new DataAssociation(getIdAttribute(childNode),
+								sourceRef, targetRef);
+				dataAssociation.setDirection(Direction.ONE);
+				addElementToContainer(dataAssociation);
+			}
+		}
+	}
+
+	protected void readActivity(final Node node, final Activity activity) {
+		readFlowElement(node, activity);
+		readDataAssociations(node);
 	}
 
 	protected void readTask(final Node node, final Task task) {
-		readFlowElement(node, task);
+		readActivity(node, task);
 	}
 
 	protected void readGateway(final Node node, final Gateway gateway) {
@@ -655,9 +698,7 @@ public class Model implements ErrorHandler {
 	}
 
 	protected void readProcessElements(final Node node, final ExpandedProcess process) {
-		readIncomingElements(node, process);
-		readOutgoingElements(node, process);
-		readDefaultSequenceFlowAttribute(node, process);
+		readActivity(node, process);
 		final NodeList childNodes = node.getChildNodes();
 		for (int i = 0; i < childNodes.getLength(); ++i) {
 			final Node childNode = childNodes.item(i);
@@ -692,6 +733,14 @@ public class Model implements ErrorHandler {
 						if (isElementNode(childNode, BPMN, "startEvent")) { //$NON-NLS-1$
 							final StartEvent element = new StartEvent(id, name, getAnimator().getInstanceController());
 							readEventStart(childNode, element);
+							addElementToContainer(element, process);
+						} else if (isElementNode(childNode, BPMN, "intermediateThrowEvent")) { //$NON-NLS-1$
+							final IntermediateThrowEvent element = new IntermediateThrowEvent(id, name);
+							readEventIntermediateThrow(childNode, element);
+							addElementToContainer(element, process);
+						} else if (isElementNode(childNode, BPMN, "intermediateCatchEvent")) { //$NON-NLS-1$
+							final IntermediateCatchEvent element = new IntermediateCatchEvent(id, name);
+							readEventIntermediateCatch(childNode, element);
 							addElementToContainer(element, process);
 						} else if (isElementNode(childNode, BPMN, "endEvent")) { //$NON-NLS-1$
 							final EndEvent element = new EndEvent(id, name, getAnimator().getInstanceController());

@@ -20,6 +20,10 @@
  */
 package bpmn.element.event;
 
+import java.awt.Point;
+
+import javax.swing.Icon;
+
 import bpmn.element.Graphics;
 import bpmn.element.TokenFlowElement;
 import bpmn.token.InstanceController;
@@ -28,7 +32,12 @@ public abstract class Event extends TokenFlowElement {
 
 	private static final long serialVersionUID = 1L;
 
+	private static Icon TIMER_ICON = Graphics.loadIcon("event/timer.png");
+
 	private InstanceController instanceController;
+
+	private boolean timer;
+	private boolean termination;
 
 	public Event(final String id, final String name,
 			final InstanceController tockenController) {
@@ -43,6 +52,22 @@ public abstract class Event extends TokenFlowElement {
 
 	protected InstanceController getInstanceController() {
 		return instanceController;
+	}
+
+	public void setTermination(final boolean isTermination) {
+		this.termination = isTermination;
+	}
+
+	public boolean isTermination() {
+		return termination;
+	}
+
+	public void setTimer(final boolean isTimer) {
+		this.timer = isTimer;
+	}
+
+	public boolean isTimer() {
+		return timer;
 	}
 
 	@Override
@@ -60,6 +85,25 @@ public abstract class Event extends TokenFlowElement {
 	@Override
 	protected void paintElement(final Graphics g) {
 		g.drawOval(getElementInnerBounds());
+		
+		paintIcon(g);
+	}
+
+	protected Icon getInnerIcon() {
+		Icon icon = null;
+		if (isTimer()) {
+			icon = TIMER_ICON;
+		}
+		return icon;
+	}
+
+	protected void paintIcon(final Graphics g) {
+		final Icon icon = getInnerIcon();
+		if (icon != null) {
+			final Point position = getElementInnerBounds().getCenter();
+			position.translate(-icon.getIconWidth() / 2, -icon.getIconHeight() / 2);
+			g.drawIcon(icon, position);
+		}
 	}
 
 	@Override

@@ -35,8 +35,6 @@ public class EndEvent extends Event {
 
 	private static Color defaultBackground;
 
-	private boolean termination;
-
 	public static final void setDefaultBackground(final Color color) {
 		defaultBackground = color;
 	}
@@ -51,22 +49,14 @@ public class EndEvent extends Event {
 		setBackground(getDefaultBackground());
 	}
 
-	public void setTermination(final boolean termination) {
-		this.termination = termination;
-	}
-
-	public boolean isTermination() {
-		return termination;
-	}
-
 	@Override
 	protected int getBorderWidth() {
 		return 3;
 	}
 
 	@Override
-	protected void paintElement(final Graphics g) {
-		super.paintElement(g);
+	protected void paintIcon(Graphics g) {
+		super.paintIcon(g);
 
 		if (isTermination()) {
 			final Rectangle bounds = getElementInnerBounds();

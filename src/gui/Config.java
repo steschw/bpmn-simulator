@@ -28,6 +28,7 @@ import bpmn.Model;
 import bpmn.element.Graphics;
 import bpmn.element.activity.task.Task;
 import bpmn.element.event.EndEvent;
+import bpmn.element.event.IntermediateEvent;
 import bpmn.element.event.StartEvent;
 import bpmn.element.gateway.ExclusiveGateway;
 import bpmn.element.gateway.Gateway;
@@ -44,6 +45,7 @@ public class Config {
 	private static final Color DEFAULT_BACKGROUND = Color.WHITE;
 
 	private static final String STARTEVENT_BACKGROUND = "startEventBackground";
+	private static final String INTERMEDIATEEVENT_BACKGROUND = "intermediateEventBackground";
 	private static final String ENDEVENT_BACKGROUND = "endEventBackground";
 	private static final String GATEWAY_BACKGROUND = "gatewayBackground";
 	private static final String TASK_BACKGROUND = "taskBackground";
@@ -82,6 +84,7 @@ public class Config {
 		ExclusiveGateway.setShowSymbol(preferences.getBoolean(SHOW_EXCLUSIVEGATEWAYSYMBOL, true));
 		Model.setIgnoreColors(preferences.getBoolean(IGNORE_COLORS, false));
 		StartEvent.setDefaultBackground(getBackground(preferences, STARTEVENT_BACKGROUND));
+		IntermediateEvent.setDefaultBackground(getBackground(preferences, INTERMEDIATEEVENT_BACKGROUND));
 		EndEvent.setDefaultBackground(getBackground(preferences, ENDEVENT_BACKGROUND));
 		Gateway.setDefaultBackground(getBackground(preferences, GATEWAY_BACKGROUND));
 		Task.setDefaultBackground(getBackground(preferences, TASK_BACKGROUND));
@@ -93,6 +96,7 @@ public class Config {
 		preferences.putBoolean(SHOW_EXCLUSIVEGATEWAYSYMBOL, ExclusiveGateway.getShowSymbol());
 		preferences.putBoolean(IGNORE_COLORS, Model.getIgnoreColors());
 		putColor(preferences, STARTEVENT_BACKGROUND, StartEvent.getDefaultBackground());
+		putColor(preferences, INTERMEDIATEEVENT_BACKGROUND, IntermediateEvent.getDefaultBackground());
 		putColor(preferences, ENDEVENT_BACKGROUND, EndEvent.getDefaultBackground());
 		putColor(preferences, GATEWAY_BACKGROUND, Gateway.getDefaultBackground());
 		putColor(preferences, TASK_BACKGROUND, Task.getDefaultBackground());

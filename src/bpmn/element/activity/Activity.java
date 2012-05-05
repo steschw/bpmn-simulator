@@ -117,7 +117,7 @@ public abstract class Activity extends TokenFlowElementWithDefault {
 		final Point point = getElementInnerBounds().getLeftBottom();
 		for (Instance instance : getIncomingTokens().getInstances()) {
 			instance.paint(g, point, getIncomingTokens().byInstance(instance).byCurrentFlow(this).getCount());
-			point.translate(0, TOKEN_MARGIN);
+			point.translate(0, -TOKEN_MARGIN);
 		}
 	}
 
@@ -125,7 +125,7 @@ public abstract class Activity extends TokenFlowElementWithDefault {
 		final Point point = getElementInnerBounds().getRightBottom();
 		for (Instance instance : getOutgoingTokens().getInstances()) {
 			instance.paint(g, point, getOutgoingTokens().byInstance(instance).byCurrentFlow(this).getCount());
-			point.translate(0, TOKEN_MARGIN);
+			point.translate(0, -TOKEN_MARGIN);
 		}
 	}
 

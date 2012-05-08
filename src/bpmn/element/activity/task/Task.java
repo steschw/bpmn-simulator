@@ -28,6 +28,7 @@ import javax.swing.Icon;
 import bpmn.element.Graphics;
 import bpmn.element.Label;
 import bpmn.element.Rectangle;
+import bpmn.element.VisualConfig;
 import bpmn.element.activity.Activity;
 
 public class Task extends Activity {
@@ -38,26 +39,8 @@ public class Task extends Activity {
 
 	private static final int ARC_LENGTH = 10;
 
-	private static Color defaultBackground;
-
-	private final Icon typeIcon;
-
-	public static final void setDefaultBackground(final Color color) {
-		defaultBackground = color;
-	}
-
-	public static final Color getDefaultBackground() {
-		return defaultBackground;
-	}
-
-	protected Task(final String id, final String name, final Icon icon) {
-		super(id, name);
-		typeIcon = icon;
-		setBackground(getDefaultBackground());
-	}
-
 	public Task(final String id, final String name) {
-		this(id, name, null);
+		super(id, name);
 	}
 
 	@Override
@@ -66,11 +49,21 @@ public class Task extends Activity {
 	}
 
 	@Override
+	protected Color getElementBackgroundColor() {
+		return getVisualConfig().getBackground(VisualConfig.Element.TASK);
+	}
+
+	@Override
 	protected void paintBackground(final Graphics g) {
 		g.fillRoundRect(getElementInnerBounds(), ARC_LENGTH, ARC_LENGTH);
 	}
 
+	protected Icon getTypeIcon() {
+		return null;
+	}
+
 	public void paintTypeIcon(final Graphics g) {
+		final Icon typeIcon = getTypeIcon();
 		if (typeIcon != null) {
 			final Rectangle innerBounds = getElementInnerBounds();
 			final Point position = innerBounds.getLeftTop();

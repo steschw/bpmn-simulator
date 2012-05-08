@@ -26,13 +26,12 @@ import javax.swing.Icon;
 
 import bpmn.element.Graphics;
 import bpmn.element.TokenFlowElement;
+import bpmn.element.VisualConfig;
 import bpmn.token.InstanceController;
 
 public abstract class Event extends TokenFlowElement {
 
 	private static final long serialVersionUID = 1L;
-
-	private static Icon TIMER_ICON = Graphics.loadIcon("event/timer.png");
 
 	private InstanceController instanceController;
 
@@ -92,7 +91,7 @@ public abstract class Event extends TokenFlowElement {
 	protected Icon getInnerIcon() {
 		Icon icon = null;
 		if (isTimer()) {
-			icon = TIMER_ICON;
+			icon = getVisualConfig().getIcon(VisualConfig.ICON_TIMER);
 		}
 		return icon;
 	}

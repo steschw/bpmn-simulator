@@ -25,6 +25,7 @@ import java.awt.Cursor;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
+import bpmn.element.VisualConfig;
 import bpmn.element.activity.ExpandedProcess;
 import bpmn.token.InstanceController;
 
@@ -32,21 +33,15 @@ public class StartEvent extends Event implements MouseListener {
 
 	private static final long serialVersionUID = 1L;
 
-	private static Color defaultBackground;
-
-	public static final void setDefaultBackground(final Color color) {
-		defaultBackground = color;
-	}
-
-	public static final Color getDefaultBackground() {
-		return defaultBackground;
-	}
-
 	public StartEvent(final String id, final String name,
 			final InstanceController tockenController) {
 		super(id, name, tockenController);
-		setBackground(getDefaultBackground());
 		addMouseListener(this);
+	}
+
+	@Override
+	protected Color getElementBackgroundColor() {
+		return getVisualConfig().getBackground(VisualConfig.Element.EVENT_START);
 	}
 
 	@Override

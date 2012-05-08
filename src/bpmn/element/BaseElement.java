@@ -30,7 +30,6 @@ import java.awt.Point;
 import java.awt.RadialGradientPaint;
 import java.awt.Stroke;
 
-import javax.swing.Icon;
 import javax.swing.JComponent;
 
 import bpmn.element.activity.ExpandedProcess;
@@ -41,7 +40,7 @@ public abstract class BaseElement extends JComponent {
 
 	protected static final int MARGIN = 10;
 
-	private static final Icon EXCEPTION_ICON = Graphics.loadIcon("exception.png"); 
+	private static VisualConfig DEFAULT_VISUALCONFIG = VisualConfig.createDefault();
 
 	private ExpandedProcess parentProcess;
 
@@ -50,6 +49,16 @@ public abstract class BaseElement extends JComponent {
 	private Label label;
 
 	private boolean exception;
+
+	private VisualConfig visualConfig = DEFAULT_VISUALCONFIG; 
+
+	public static void setDefaultVisualConfig(final VisualConfig visualConfig) {
+		DEFAULT_VISUALCONFIG = visualConfig;
+	}
+
+	public static VisualConfig getDefaultVisualConfig() {
+		return DEFAULT_VISUALCONFIG;
+	}
 
 	public BaseElement(final String id, final String name) {
 		super();
@@ -60,6 +69,10 @@ public abstract class BaseElement extends JComponent {
 		setForeground(Color.BLACK);
 		setFocusable(false);
 		setDoubleBuffered(true);
+	}
+
+	public VisualConfig getVisualConfig() {
+		return visualConfig;
 	}
 
 	public final void setId(final String id) {
@@ -132,6 +145,10 @@ public abstract class BaseElement extends JComponent {
 
 			graphics.push();
 
+			if (getVisualConfig().isAntialiasing()) {
+				graphics.enableAntialiasing();
+			}
+
 			graphics.setPaint(getBackgroundPaint());
 			paintBackground(graphics);
 
@@ -151,8 +168,12 @@ public abstract class BaseElement extends JComponent {
 		super.paint(g);
 	}
 
+	protected Color getElementBackgroundColor() {
+		return getBackground();
+	}
+
 	protected Paint getBackgroundPaint() {
-		final Color backgroundColor = getBackground();
+		final Color backgroundColor = getElementBackgroundColor();
 		if (backgroundColor != null) {
 			final Rectangle size = new Rectangle(getBounds());
 			return new RadialGradientPaint(0.f, 0.f, size.min(), new float[] { 0.f, 1.f }, new Color[] { Color.WHITE, backgroundColor });
@@ -175,7 +196,9 @@ public abstract class BaseElement extends JComponent {
 	protected abstract void paintElement(final Graphics g);
 
 	protected void paintException(final Graphics g) {
-		g.drawIcon(EXCEPTION_ICON, new Point(0, 0));
+		g.drawIcon(
+				getVisualConfig().getIcon(VisualConfig.ICON_EXCEPTION),
+				new Point(0, 0));
 	}
 
 	protected void paintTokens(final Graphics g) {

@@ -21,21 +21,19 @@
 package gui;
 
 import java.awt.Color;
+import java.util.Locale;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 
 import bpmn.Model;
-import bpmn.element.Graphics;
-import bpmn.element.activity.task.Task;
-import bpmn.element.event.EndEvent;
-import bpmn.element.event.IntermediateEvent;
-import bpmn.element.event.StartEvent;
-import bpmn.element.gateway.ExclusiveGateway;
-import bpmn.element.gateway.Gateway;
+import bpmn.element.BaseElement;
+import bpmn.element.VisualConfig;
 
 public class Config {
 
 	private static final String NODE = "bpmnsimulator";
+
+	private static final String LANGUAGE = "language";
 
 	private static final String SHOW_EXCLUSIVEGATEWAYSYMBOL = "showExclusiveGatewaySymbol"; //$NON-NLS-1$
 	private static final String ANTIALIASING = "antialiasing"; //$NON-NLS-1$
@@ -43,12 +41,6 @@ public class Config {
 	private static final String IGNORE_COLORS = "ignoreColors";
 
 	private static final Color DEFAULT_BACKGROUND = Color.WHITE;
-
-	private static final String STARTEVENT_BACKGROUND = "startEventBackground";
-	private static final String INTERMEDIATEEVENT_BACKGROUND = "intermediateEventBackground";
-	private static final String ENDEVENT_BACKGROUND = "endEventBackground";
-	private static final String GATEWAY_BACKGROUND = "gatewayBackground";
-	private static final String TASK_BACKGROUND = "taskBackground";
 
 	private static final String LAST_DIRECTORY = "lastDirectory"; //$NON-NLS-1$
 
@@ -69,6 +61,37 @@ public class Config {
 		return Preferences.userRoot().node(NODE);
 	}
 
+	protected static Preferences getElementNode(VisualConfig.Element element) {
+		return getRootNode().node(element.name().toLowerCase());
+	}
+
+	public void setVisualConfig(final VisualConfig visualConfig) {
+		final Preferences preferences = getRootNode();
+		preferences.putBoolean(ANTIALIASING, visualConfig.isAntialiasing());
+		preferences.putBoolean(SHOW_EXCLUSIVEGATEWAYSYMBOL, visualConfig.getShowExclusiveGatewaySymbol());
+
+		for (VisualConfig.Element element : VisualConfig.Element.values()) {
+			final Preferences elementPreferences = getElementNode(element); 
+			final Color color = visualConfig.getBackground(element);
+			putColor(elementPreferences, "backgroundColor", color);
+		}
+	}
+
+	public VisualConfig getVisualConfig() {
+		final VisualConfig visualConfig = VisualConfig.createDefault();
+
+		final Preferences preferences = getRootNode();
+		visualConfig.setAntialiasing(preferences.getBoolean(ANTIALIASING, true));
+		visualConfig.setShowExclusiveGatewaySymbol(preferences.getBoolean(SHOW_EXCLUSIVEGATEWAYSYMBOL, true));
+
+		for (VisualConfig.Element element : VisualConfig.Element.values()) {
+			final Color color = getBackground(getElementNode(element), "backgroundColor");
+			visualConfig.setBackground(element, color);
+		}
+
+		return visualConfig;
+	}
+
 	protected static Color getBackground(final Preferences preferences, final String key) {
 		return new Color(preferences.getInt(key, DEFAULT_BACKGROUND.getRGB()));
 	}
@@ -78,33 +101,35 @@ public class Config {
 		preferences.putInt(key, value.getRGB());
 	}
 
-	public void load() {
-		final Preferences preferences = getRootNode();
-		Graphics.setAntialiasing(preferences.getBoolean(ANTIALIASING, true));
-		ExclusiveGateway.setShowSymbol(preferences.getBoolean(SHOW_EXCLUSIVEGATEWAYSYMBOL, true));
-		Model.setIgnoreColors(preferences.getBoolean(IGNORE_COLORS, false));
-		StartEvent.setDefaultBackground(getBackground(preferences, STARTEVENT_BACKGROUND));
-		IntermediateEvent.setDefaultBackground(getBackground(preferences, INTERMEDIATEEVENT_BACKGROUND));
-		EndEvent.setDefaultBackground(getBackground(preferences, ENDEVENT_BACKGROUND));
-		Gateway.setDefaultBackground(getBackground(preferences, GATEWAY_BACKGROUND));
-		Task.setDefaultBackground(getBackground(preferences, TASK_BACKGROUND));
+	public void setIgnoreModelerColors(final boolean ignore) {
+		getRootNode().putBoolean(IGNORE_COLORS, ignore);
+		Model.setIgnoreColors(ignore);
 	}
 
-	public void store() {
-		final Preferences preferences = getRootNode();
-		preferences.putBoolean(ANTIALIASING, Graphics.isAntialiasing());
-		preferences.putBoolean(SHOW_EXCLUSIVEGATEWAYSYMBOL, ExclusiveGateway.getShowSymbol());
-		preferences.putBoolean(IGNORE_COLORS, Model.getIgnoreColors());
-		putColor(preferences, STARTEVENT_BACKGROUND, StartEvent.getDefaultBackground());
-		putColor(preferences, INTERMEDIATEEVENT_BACKGROUND, IntermediateEvent.getDefaultBackground());
-		putColor(preferences, ENDEVENT_BACKGROUND, EndEvent.getDefaultBackground());
-		putColor(preferences, GATEWAY_BACKGROUND, Gateway.getDefaultBackground());
-		putColor(preferences, TASK_BACKGROUND, Task.getDefaultBackground());
-		try {
-			preferences.flush();
-		} catch (BackingStoreException e) {
-			e.printStackTrace();
+	public boolean getIgnoreModelerColors() {
+		return getRootNode().getBoolean(IGNORE_COLORS, false);
+	}
+
+	public void setLocale(final Locale locale) {
+		if (locale == null) {
+			getRootNode().remove(LANGUAGE);
+		} else {
+			Locale.setDefault(locale);
+			getRootNode().put(LANGUAGE, locale.toString());
 		}
+	}
+
+	protected Locale getLocaleFromString(final String string) {
+		for (Locale locale : Locale.getAvailableLocales()) {
+			if (locale.toString().equals(string)) {
+				return locale;
+			}
+		}
+		return null;
+	}
+
+	public Locale getLocale() {
+		return getLocaleFromString(getRootNode().get(LANGUAGE, ""));
 	}
 
 	public String getLastDirectory() {
@@ -113,6 +138,20 @@ public class Config {
 
 	public void setLastDirectory(final String directory) {
 		getRootNode().put(LAST_DIRECTORY, directory);
+	}
+
+	public void load() {
+		setLocale(getLocale());
+		Model.setIgnoreColors(getIgnoreModelerColors());
+		BaseElement.setDefaultVisualConfig(getVisualConfig());
+	}
+
+	public void store() {
+		try {
+			getRootNode().flush();
+		} catch (BackingStoreException e) {
+			e.printStackTrace();
+		}
 	}
 
 }

@@ -692,7 +692,7 @@ public class Model implements ErrorHandler {
 	}
 
 	protected Association.Direction getParameterAssociationDirection(final Node node) {
-		final String value = getAttributeString(node,  "associationDirection", false);
+		final String value = getAttributeString(node, "associationDirection", false);
 		Association.Direction direction = Association.Direction.byValue(value);
 		return (direction == null) ? Association.Direction.NONE : direction; 
 	}
@@ -709,7 +709,9 @@ public class Model implements ErrorHandler {
 				if (isDocumentationNode(childNode)) {
 					// ignored
 				} else if (isElementNode(childNode, BPMN, "incoming") //$NON-NLS-1$
-						|| isElementNode(childNode, BPMN, "outgoing")) { //$NON-NLS-1$
+						|| isElementNode(childNode, BPMN, "outgoing") //$NON-NLS-1$
+						|| isElementNode(childNode, BPMN, "dataInputAssociation") //$NON-NLS-1$
+						|| isElementNode(childNode, BPMN, "dataOutputAssociation")) { //$NON-NLS-1$
 					// elemente werden ignoriert, da diese bereits zu anfang eingelesen werden
 				} else if (isElementNode(childNode, BPMN, "extensionElements")) { //$NON-NLS-1$
 					readExtensionElements(node, process);
@@ -790,8 +792,8 @@ public class Model implements ErrorHandler {
 							final ExclusiveGateway element = new ExclusiveGateway(id, name);
 							readGateway(childNode, element);
 							addElementToContainer(element, process);
-						} else if (isElementNode(childNode, BPMN, "dataObject")) { //$NON-NLS-1$
-							final DataObject dataObject = new DataObject(id, name);
+						} else if (isElementNode(childNode, BPMN, "dataObjectReference")) { //$NON-NLS-1$
+							final DataObjectReference dataObject = new DataObjectReference(id, name);
 							dataObject.setCollection(getAttributeBoolean(childNode, "isCollection", false, false));
 							readFlowElement(childNode, dataObject);
 							addElementToContainer(dataObject, process);

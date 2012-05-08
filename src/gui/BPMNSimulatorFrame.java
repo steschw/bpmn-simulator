@@ -59,8 +59,6 @@ public class BPMNSimulatorFrame extends JFrame {
 
 		create();
 
-		Config.getInstance().load();
-
 		setSize(800, 600);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setVisible(true);

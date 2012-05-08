@@ -29,6 +29,7 @@ import bpmn.element.Label;
 import bpmn.element.Rectangle;
 import bpmn.element.SequenceFlow;
 import bpmn.element.TokenFlowElementWithDefault;
+import bpmn.element.VisualConfig;
 import bpmn.token.Instance;
 import bpmn.token.Token;
 import bpmn.token.TokenCollection;
@@ -39,24 +40,18 @@ public abstract class Gateway extends TokenFlowElementWithDefault {
 
 	private static final int SYMBOL_MARGIN = 14;
 
-	private static Color defaultBackground;
-
-	public static final void setDefaultBackground(final Color color) {
-		defaultBackground = color;
-	}
-
-	public static final Color getDefaultBackground() {
-		return defaultBackground;
-	}
-
 	public Gateway(final String id, final String name) {
 		super(id, name);
-		setBackground(getDefaultBackground());
 	}
 
 	@Override
 	protected int getStepCount() {
 		return 10;
+	}
+
+	@Override
+	protected Color getElementBackgroundColor() {
+		return getVisualConfig().getBackground(VisualConfig.Element.GATEWAY);
 	}
 
 	@Override

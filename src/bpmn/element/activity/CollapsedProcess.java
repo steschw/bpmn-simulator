@@ -29,6 +29,7 @@ import javax.swing.Icon;
 
 import bpmn.element.FlowElement;
 import bpmn.element.Graphics;
+import bpmn.element.VisualConfig;
 import bpmn.token.Instance;
 import bpmn.token.Token;
 
@@ -39,8 +40,6 @@ public class CollapsedProcess extends FlowElement {
 	protected static final int TOKEN_MARGIN = 5;
 
 	private static final int ARC_LENGTH = 10;
-
-	private static final Icon COLLAPSED_ICON = Graphics.loadIcon("collapsed.png");
 
 	private final Collection<Instance> instances = new ArrayList<Instance>(); 
 
@@ -86,10 +85,11 @@ public class CollapsedProcess extends FlowElement {
 	}
 
 	protected void drawSymbol(final Graphics g) {
-		if (COLLAPSED_ICON != null) {
+		final Icon icon = getVisualConfig().getIcon(VisualConfig.ICON_COLLAPSED);
+		if (icon != null) {
 			final Point position = getElementInnerBounds().getCenterBottom();
-			position.translate(-(COLLAPSED_ICON.getIconWidth() / 2), -COLLAPSED_ICON.getIconHeight());
-			g.drawIcon(COLLAPSED_ICON, position);
+			position.translate(-(icon.getIconWidth() / 2), -icon.getIconHeight());
+			g.drawIcon(icon, position);
 		}
 	}
 

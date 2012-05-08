@@ -4,25 +4,20 @@ import java.awt.Color;
 
 import bpmn.element.Graphics;
 import bpmn.element.Rectangle;
+import bpmn.element.VisualConfig;
 
 @SuppressWarnings("serial")
 public abstract class IntermediateEvent extends Event {
 
 	private static final int CIRCLE_MARGIN = 4;
 
-	private static Color defaultBackground;
-
-	public static final void setDefaultBackground(final Color color) {
-		defaultBackground = color;
-	}
-
-	public static final Color getDefaultBackground() {
-		return defaultBackground;
-	}
-
 	public IntermediateEvent(final String id, final String name) {
 		super(id, name, null);
-		setBackground(getDefaultBackground());
+	}
+
+	@Override
+	protected Color getElementBackgroundColor() {
+		return getVisualConfig().getBackground(VisualConfig.Element.EVENT_INTERMEDIATE);
 	}
 
 	@Override

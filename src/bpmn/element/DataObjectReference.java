@@ -4,15 +4,13 @@ import java.awt.Point;
 
 import javax.swing.Icon;
 
-public class DataObject extends FlowElement {
+public class DataObjectReference extends FlowElement {
 
 	private static final long serialVersionUID = 1L;
 
-	private static final Icon COLLECTION_ICON = Graphics.loadIcon("collection.png");
-
 	private boolean isCollection;
 
-	public DataObject(final String id, final String name) {
+	public DataObjectReference(final String id, final String name) {
 		super(id, name);
 	}
 
@@ -37,11 +35,12 @@ public class DataObject extends FlowElement {
 		g.drawDataObject(bounds);
 
 		if (isCollection()) {
+			final Icon icon = getVisualConfig().getIcon(VisualConfig.ICON_COLLECTION);
 			final Point position = bounds.getCenterBottom();
 			position.translate(
-					-COLLECTION_ICON.getIconWidth() / 2,
-					-COLLECTION_ICON.getIconHeight());
-			g.drawIcon(COLLECTION_ICON, position);
+					-icon.getIconWidth() / 2,
+					-icon.getIconHeight());
+			g.drawIcon(icon, position);
 		}
 	}
 

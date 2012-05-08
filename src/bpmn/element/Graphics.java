@@ -31,10 +31,8 @@ import java.awt.Stroke;
 import java.awt.geom.Arc2D;
 import java.awt.geom.GeneralPath;
 import java.awt.geom.Path2D;
-import java.net.URL;
 
 import javax.swing.Icon;
-import javax.swing.ImageIcon;
 
 public class Graphics {
 
@@ -44,8 +42,6 @@ public class Graphics {
 	private static final double CONNECTING_SYMBOL_LENGTH = 12.;
 
 	private static final RenderingHints QUALITY = new RenderingHints(null);
-
-	private static boolean antialiasing = true; 
 
 	private final Graphics2D graphics;
 
@@ -61,30 +57,13 @@ public class Graphics {
 		//QUALITY.put(RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_PURE);
 	}
 
-	public static void setAntialiasing(final boolean antialiasing) {
-		Graphics.antialiasing = antialiasing;
-	}
-
-	public static boolean isAntialiasing() {
-		return Graphics.antialiasing;
-	}
-
-
-	public static Icon loadIcon(final String filename) {
-		final URL url = Graphics.class.getResource(filename);
-		return (url == null) ? null : new ImageIcon(url); 
-	}
-
 	public Graphics(final Graphics2D graphics) {
 		super();
 		this.graphics = graphics;
-		initGraphics();
 	}
 
-	protected final void initGraphics() {
-		if (isAntialiasing()) {
-			graphics.addRenderingHints(QUALITY);
-		}
+	public void enableAntialiasing() {
+		graphics.addRenderingHints(QUALITY);
 	}
 
 	public final void push() {

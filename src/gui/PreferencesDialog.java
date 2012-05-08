@@ -27,6 +27,7 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.util.Locale;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -40,19 +41,16 @@ import javax.swing.JTabbedPane;
 import javax.swing.border.Border;
 
 import bpmn.Model;
-import bpmn.element.Graphics;
-import bpmn.element.activity.task.Task;
-import bpmn.element.event.EndEvent;
-import bpmn.element.event.IntermediateEvent;
-import bpmn.element.event.StartEvent;
-import bpmn.element.gateway.ExclusiveGateway;
-import bpmn.element.gateway.Gateway;
+import bpmn.element.BaseElement;
+import bpmn.element.VisualConfig;
 
 public class PreferencesDialog extends JDialog {
 
 	private static final long serialVersionUID = 1L;
 
 	private static final int GAP = 10;
+
+	private final LocaleComboBox selectLanguage = new LocaleComboBox();
 
 	private final JCheckBox checkShowExclusiveSymbol
 			= new JCheckBox(Messages.getString("Preferences.showSymbolInExclusiveGateway"));  //$NON-NLS-1$
@@ -104,6 +102,7 @@ public class PreferencesDialog extends JDialog {
 
 	protected JTabbedPane createPreferencesPane() {
 		final JTabbedPane tabbedPane = new JTabbedPane();
+		tabbedPane.addTab(Messages.getString("Preferences.general"), createGeneralPanel()); //$NON-NLS-1$
 		tabbedPane.addTab(Messages.getString("Preferences.display"), createDisplayPanel()); //$NON-NLS-1$
 		tabbedPane.addTab(Messages.getString("Preferences.elementDefaults"), createElementsPanel()); //$NON-NLS-1$
 		return tabbedPane;
@@ -111,6 +110,20 @@ public class PreferencesDialog extends JDialog {
 
 	private static Border createGapBorder() {
 		return BorderFactory.createEmptyBorder(GAP, GAP, GAP, GAP);
+	}
+
+	protected JPanel createGeneralPanel() {
+		final JPanel generalPanel = new JPanel(new BorderLayout());
+		generalPanel.setBorder(createGapBorder());
+
+		final JPanel panel = new JPanel(new GridLayout(0, 2, GAP, GAP));
+		final JLabel labelLanguage = new JLabel(Messages.getString("Preferences.language")); //$NON-NLS-1$
+		labelLanguage.setLabelFor(selectLanguage);
+		panel.add(labelLanguage);
+		panel.add(selectLanguage);
+
+		generalPanel.add(panel, BorderLayout.PAGE_START);
+		return generalPanel;
 	}
 
 	protected JPanel createDisplayPanel() {
@@ -194,31 +207,40 @@ public class PreferencesDialog extends JDialog {
 	}
 
 	protected void store() {
-		Graphics.setAntialiasing(checkAntialiasing.isSelected());
-		ExclusiveGateway.setShowSymbol(checkShowExclusiveSymbol.isSelected());
+		final Config config = Config.getInstance(); 
+
+		config.setLocale((Locale)selectLanguage.getSelectedItem());
 
 		Model.setIgnoreColors(checkIgnoreModelerColors.isSelected());
 
-		StartEvent.setDefaultBackground(colorStartEventBackground.getSelectedColor());
-		IntermediateEvent.setDefaultBackground(colorIntermediateEventBackground.getSelectedColor());
-		EndEvent.setDefaultBackground(colorEndEventBackground.getSelectedColor());
-		Gateway.setDefaultBackground(colorGatewayBackground.getSelectedColor());
-		Task.setDefaultBackground(colorTaskBackground.getSelectedColor());
+		final VisualConfig visualConfig = BaseElement.getDefaultVisualConfig();
+		visualConfig.setAntialiasing(checkAntialiasing.isSelected());
+		visualConfig.setShowExclusiveGatewaySymbol(checkShowExclusiveSymbol.isSelected());
+		visualConfig.setBackground(VisualConfig.Element.EVENT_START, colorStartEventBackground.getSelectedColor());
+		visualConfig.setBackground(VisualConfig.Element.EVENT_INTERMEDIATE, colorIntermediateEventBackground.getSelectedColor());
+		visualConfig.setBackground(VisualConfig.Element.EVENT_END, colorEndEventBackground.getSelectedColor());
+		visualConfig.setBackground(VisualConfig.Element.GATEWAY, colorGatewayBackground.getSelectedColor());
+		visualConfig.setBackground(VisualConfig.Element.TASK, colorTaskBackground.getSelectedColor());
 
-		Config.getInstance().store();
+		config.setVisualConfig(visualConfig);
+		config.store();
 	}
 
 	protected void load() {
-		checkAntialiasing.setSelected(Graphics.isAntialiasing());
-		checkShowExclusiveSymbol.setSelected(ExclusiveGateway.getShowSymbol());
+		final Config config = Config.getInstance();
+
+		selectLanguage.setSelectedItem(config.getLocale());
 
 		checkIgnoreModelerColors.setSelected(Model.getIgnoreColors());
 
-		colorStartEventBackground.setSelectedColor(StartEvent.getDefaultBackground());
-		colorIntermediateEventBackground.setSelectedColor(IntermediateEvent.getDefaultBackground());
-		colorEndEventBackground.setSelectedColor(EndEvent.getDefaultBackground());
-		colorGatewayBackground.setSelectedColor(Gateway.getDefaultBackground());
-		colorTaskBackground.setSelectedColor(Task.getDefaultBackground());
+		final VisualConfig visualConfig = BaseElement.getDefaultVisualConfig();
+		checkAntialiasing.setSelected(visualConfig.isAntialiasing());
+		checkShowExclusiveSymbol.setSelected(visualConfig.getShowExclusiveGatewaySymbol());
+		colorStartEventBackground.setSelectedColor(visualConfig.getBackground(VisualConfig.Element.EVENT_START));
+		colorIntermediateEventBackground.setSelectedColor(visualConfig.getBackground(VisualConfig.Element.EVENT_INTERMEDIATE));
+		colorEndEventBackground.setSelectedColor(visualConfig.getBackground(VisualConfig.Element.EVENT_END));
+		colorGatewayBackground.setSelectedColor(visualConfig.getBackground(VisualConfig.Element.GATEWAY));
+		colorTaskBackground.setSelectedColor(visualConfig.getBackground(VisualConfig.Element.TASK));
 	}
 
 }

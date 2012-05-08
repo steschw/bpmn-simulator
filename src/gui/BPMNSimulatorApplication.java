@@ -52,7 +52,11 @@ public class BPMNSimulatorApplication {
 	}
 
 	public static void main(final String[] args) {
+
+		Config.getInstance().load();
+
 		initLookAndFeel();
+
 		new BPMNSimulatorFrame();
 	}
 

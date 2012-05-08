@@ -52,7 +52,7 @@ public class MessageFlow extends ConnectingElement {
 				// Startsymbol
 				final Rectangle point = new Rectangle(prevPoint);
 				point.grow(3, 3);
-				g.setPaint(getBackground());
+				g.setPaint(getElementBackgroundColor());
 				g.fillOval(point);
 				g.setPaint(getForeground());
 				g.drawOval(point);

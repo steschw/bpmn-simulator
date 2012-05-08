@@ -27,16 +27,6 @@ public class ExclusiveGateway extends Gateway {
 
 	private static final long serialVersionUID = 1L;
 
-	private static boolean showSymbol = true;
-
-	public static void setShowSymbol(final boolean show) {
-		ExclusiveGateway.showSymbol = show;
-	}
-
-	public static boolean getShowSymbol() {
-		return ExclusiveGateway.showSymbol;
-	}
-
 	public ExclusiveGateway(final String id, final String name) {
 		super(id, name);
 	}
@@ -45,7 +35,7 @@ public class ExclusiveGateway extends Gateway {
 	protected void paintElement(final Graphics g) {
 		super.paintElement(g);
 
-		if (getShowSymbol()) {
+		if (getVisualConfig().getShowExclusiveGatewaySymbol()) {
 			g.drawCross(getSymbolBounds(), true);
 		}
 	}

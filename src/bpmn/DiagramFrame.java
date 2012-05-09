@@ -20,6 +20,7 @@
  */
 package bpmn;
 
+import java.awt.Color;
 import java.net.URL;
 
 import javax.swing.Icon;
@@ -38,9 +39,11 @@ public class DiagramFrame extends JInternalFrame {
 	private static final Icon ICON_PROCESS = loadFrameIcon("process.png");
 	private static final Icon ICON_COLLABORATION = loadFrameIcon("collaboration.png");
 
-	public DiagramFrame(final BaseElement container) {
-		super(container.getName(), true, false, true);
-		setContentPane(new JScrollPane(container));
+	public DiagramFrame(final BaseElement container, final String name) {
+		super((name == null) ? container.getName() : name, true, false, true);
+		final JScrollPane scrollPane = new JScrollPane(container);
+		scrollPane.getViewport().setBackground(Color.WHITE);
+		setContentPane(scrollPane);
 		setFrameIcon(container);
 	}
 

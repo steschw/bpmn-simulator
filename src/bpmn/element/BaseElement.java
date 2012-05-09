@@ -66,7 +66,6 @@ public abstract class BaseElement extends JComponent {
 		super();
 		setId(id);
 		setName(name);
-		//setToolTipText(name +  " - " + id);
 		setForeground(Color.BLACK);
 		setFocusable(false);
 		setDoubleBuffered(true);
@@ -108,16 +107,6 @@ public abstract class BaseElement extends JComponent {
 		return getName();
 	}
 
-/*
-	protected final void debug(final String message) {
-		String name = getName();
-		if ((name == null) || name.isEmpty()) {
-			name = getId();
-		}
-		System.out.println(Thread.currentThread().getName() + " " + getClass().getName() + "[" + name + "]: " + message);
-	}
-*/
-
 	public void setInnerBounds(final Rectangle bounds) {
 		bounds.grow(MARGIN, MARGIN);
 		setBounds(bounds);
@@ -150,8 +139,11 @@ public abstract class BaseElement extends JComponent {
 				graphics.enableAntialiasing();
 			}
 
-			graphics.setPaint(getBackgroundPaint());
-			paintBackground(graphics);
+			final Paint paint = getBackgroundPaint();
+			if (paint != null) {
+				graphics.setPaint(paint);
+				paintBackground(graphics);
+			}
 
 			graphics.setPaint(getForeground());
 			graphics.setStroke(getStroke());

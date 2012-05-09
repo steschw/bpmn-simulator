@@ -328,6 +328,7 @@ public class Model implements ErrorHandler {
 	}
 
 	protected void readDiagram(final Node node) {
+		final String name = getNameAttribute(node);
 		final NodeList childNodes = node.getChildNodes();
 		for (int i = 0; i < childNodes.getLength(); ++i) {
 			final Node childNode = childNodes.item(i);
@@ -337,7 +338,7 @@ public class Model implements ErrorHandler {
 				if (planeElement != null) {
 					if (isValidPlaneElement(planeElement)) {
 						readDiagramPlaneElements(childNode, planeElement);
-						final DiagramFrame diagramFrame = new DiagramFrame(planeElement);
+						final DiagramFrame diagramFrame = new DiagramFrame(planeElement, name);
 						desktop.add(diagramFrame);
 						diagramFrame.showFrame();
 					} else {

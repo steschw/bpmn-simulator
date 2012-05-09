@@ -49,7 +49,7 @@ public class Task extends Activity {
 	}
 
 	@Override
-	protected Color getElementBackgroundColor() {
+	protected Color getElementDefaultBackground() {
 		return getVisualConfig().getBackground(VisualConfig.Element.TASK);
 	}
 

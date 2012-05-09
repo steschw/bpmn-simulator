@@ -43,7 +43,7 @@ public class Expression extends JCheckBox implements ItemListener {
 	public String getText() {
 		final String text = super.getText();
 		if (text != null) {
-			final StringBuffer html = new StringBuffer("<html>");
+			final StringBuilder html = new StringBuilder("<html>");
 			html.append(text.replaceAll("\n", "<br>"));
 			html.append("</html>");
 			return html.toString();

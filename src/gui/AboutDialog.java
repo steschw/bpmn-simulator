@@ -63,7 +63,7 @@ public class AboutDialog extends JDialog {
 
 		panel.add(Box.createVerticalStrut(20));
 
-		final StringBuffer applicationInfo = new StringBuffer(BPMNSimulatorApplication.NAME);
+		final StringBuilder applicationInfo = new StringBuilder(BPMNSimulatorApplication.NAME);
 		final String version = BPMNSimulatorApplication.getVersion();
 		if (version != null) {
 			applicationInfo.append(' ');
@@ -86,7 +86,7 @@ public class AboutDialog extends JDialog {
 
 		panel.add(Box.createVerticalStrut(40));
 
-		final StringBuffer javaInfo = new StringBuffer("Java: "); //$NON-NLS-1$
+		final StringBuilder javaInfo = new StringBuilder("Java: "); //$NON-NLS-1$
 		javaInfo.append(System.getProperty("java.vendor")); //$NON-NLS-1$
 		javaInfo.append(' '); //$NON-NLS-1$
 		javaInfo.append(System.getProperty("java.version")); //$NON-NLS-1$
@@ -99,7 +99,7 @@ public class AboutDialog extends JDialog {
 
 		panel.add(Box.createVerticalStrut(20));
 
-		final StringBuffer systemInfo = new StringBuffer("System: "); //$NON-NLS-1$
+		final StringBuilder systemInfo = new StringBuilder("System: "); //$NON-NLS-1$
 		systemInfo.append(System.getProperty("os.name")); //$NON-NLS-1$
 		systemInfo.append(' '); //$NON-NLS-1$
 		systemInfo.append(System.getProperty("os.version")); //$NON-NLS-1$

@@ -291,7 +291,7 @@ public class Instance {
 
 	@Override
 	public String toString() {
-		final StringBuffer buffer = new StringBuffer();
+		final StringBuilder buffer = new StringBuilder();
 		final Instance parentInstance = getParentInstance();
 		if (parentInstance != null) {
 			buffer.append(parentInstance.toString()); 

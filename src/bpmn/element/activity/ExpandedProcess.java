@@ -20,8 +20,8 @@
  */
 package bpmn.element.activity;
 
+import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Paint;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.util.ArrayList;
@@ -32,6 +32,7 @@ import javax.swing.Scrollable;
 import bpmn.element.BaseElement;
 import bpmn.element.Graphics;
 import bpmn.element.Label;
+import bpmn.element.VisualConfig;
 import bpmn.element.event.Event;
 import bpmn.element.event.StartEvent;
 import bpmn.token.Instance;
@@ -73,7 +74,6 @@ public class ExpandedProcess extends Activity implements Scrollable {
 	public CollapsedProcess createCollapsed() {
 		assert collapsedProcess == null;
 		collapsedProcess = new CollapsedProcess(this);
-		collapsedProcess.setBackground(getBackground());
 		collapsedProcess.setForeground(getForeground());
 		final ExpandedProcess parentProcess = getParentProcess();
 		if (parentProcess != null) {
@@ -220,14 +220,15 @@ public class ExpandedProcess extends Activity implements Scrollable {
 	}
 
 	@Override
+	protected Color getElementDefaultBackground() {
+		return getVisualConfig().getBackground(VisualConfig.Element.PROCESS);
+	}
+
+	@Override
 	protected void paintBackground(final Graphics g) {
 		super.paintBackground(g);
 
-		final Paint paint = getBackgroundPaint();
-		if (paint != null) {
-			g.setPaint(paint);
-			g.fillRoundRect(getElementInnerBounds(), ARC_LENGTH, ARC_LENGTH);
-		}
+		g.fillRoundRect(getElementInnerBounds(), ARC_LENGTH, ARC_LENGTH);
 	}
 
 	@Override

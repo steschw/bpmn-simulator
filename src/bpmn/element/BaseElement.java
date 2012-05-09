@@ -48,6 +48,8 @@ public abstract class BaseElement extends JComponent {
 
 	private Label label;
 
+	private Color background;
+
 	private boolean exception;
 
 	private VisualConfig visualConfig = DEFAULT_VISUALCONFIG; 
@@ -65,7 +67,6 @@ public abstract class BaseElement extends JComponent {
 		setId(id);
 		setName(name);
 		//setToolTipText(name +  " - " + id);
-		setBackground(Color.WHITE);
 		setForeground(Color.BLACK);
 		setFocusable(false);
 		setDoubleBuffered(true);
@@ -168,15 +169,23 @@ public abstract class BaseElement extends JComponent {
 		super.paint(g);
 	}
 
-	protected Color getElementBackgroundColor() {
-		return getBackground();
+	public void setElementBackground(final Color color) {
+		background = color;
+	}
+
+	protected Color getElementBackground() {
+		return (background == null) ? getElementDefaultBackground() : background;
+	}
+
+	protected Color getElementDefaultBackground() {
+		return null;
 	}
 
 	protected Paint getBackgroundPaint() {
-		final Color backgroundColor = getElementBackgroundColor();
-		if (backgroundColor != null) {
+		final Color color = getElementBackground();
+		if (color != null) {
 			final Rectangle size = new Rectangle(getBounds());
-			return new RadialGradientPaint(0.f, 0.f, size.min(), new float[] { 0.f, 1.f }, new Color[] { Color.WHITE, backgroundColor });
+			return new RadialGradientPaint(0.f, 0.f, size.min(), new float[] { 0.f, 1.f }, new Color[] { Color.WHITE, color });
 		}
 		return null;
 	}

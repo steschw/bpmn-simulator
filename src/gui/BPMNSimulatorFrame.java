@@ -65,7 +65,7 @@ public class BPMNSimulatorFrame extends JFrame {
 	}
 
 	protected void updateFrameTitle(final String filename) {
-		final StringBuffer title = new StringBuffer(BPMNSimulatorApplication.NAME);
+		final StringBuilder title = new StringBuilder(BPMNSimulatorApplication.NAME);
 		if ((filename != null) && !filename.isEmpty()) {
 			title.append(" - "); //$NON-NLS-1$
 			title.append(filename);

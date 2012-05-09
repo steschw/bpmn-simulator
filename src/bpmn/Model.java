@@ -142,25 +142,29 @@ public class Model implements ErrorHandler {
 
 	protected void registerElementRef(final String id,
 			final BaseElement element) {
-		assert id != null;
-		if (elements.containsKey(id)) {
-			final ElementRef<BaseElement> elementRef = elements.get(id);
-			if (!elementRef.hasElement()) {
-				elementRef.setElement(element);
+		if (id != null) {
+			if (elements.containsKey(id)) {
+				final ElementRef<BaseElement> elementRef = elements.get(id);
+				if (!elementRef.hasElement()) {
+					elementRef.setElement(element);
+				} else {
+					assert elementRef.getElement() == element;
+				}
 			} else {
-				assert elementRef.getElement() == element;
+				elements.put(id, new ElementRef<BaseElement>(element));
 			}
-		} else {
-			elements.put(id, new ElementRef<BaseElement>(element));
 		}
 	}
 
 	protected <T extends BaseElement> ElementRef<T> getElementRefById(final String id) {
-		assert id != null;
-		if (!elements.containsKey(id)) {
-			registerElementRef(id, null);
+		if (id != null) {
+			if (!elements.containsKey(id)) {
+				registerElementRef(id, null);
+			}
+			return (ElementRef<T>)elements.get(id);
+		} else {
+			return null;
 		}
-		return (ElementRef<T>)elements.get(id);
 	}
 
 	protected <T extends BaseElement> T getElementById(final String id) {
@@ -511,7 +515,7 @@ public class Model implements ErrorHandler {
 				&& ((valueNode != null) && !valueNode.isEmpty())) {
 			final Color color = convertStringToColor(valueNode);
 			if (color != null) {
-				element.setBackground(color);
+				element.setElementBackground(color);
 			}
 		}
 	}

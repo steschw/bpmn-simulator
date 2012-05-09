@@ -84,7 +84,7 @@ public class Label extends JLabel {
 
 	@Override
 	public String getText() {
-		final StringBuffer text = new StringBuffer("<html>");
+		final StringBuilder text = new StringBuilder("<html>");
 		text.append("<body>");
 		text.append("<div");
 		if (isAlignCenter()) {

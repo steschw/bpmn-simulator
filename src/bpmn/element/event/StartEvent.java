@@ -40,7 +40,7 @@ public class StartEvent extends Event implements MouseListener {
 	}
 
 	@Override
-	protected Color getElementBackgroundColor() {
+	protected Color getElementDefaultBackground() {
 		return getVisualConfig().getBackground(VisualConfig.Element.EVENT_START);
 	}
 

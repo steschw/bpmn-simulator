@@ -78,7 +78,13 @@ public class CollapsedProcess extends FlowElement {
 	}
 
 	@Override
+	protected Color getElementDefaultBackground() {
+		return getParentProcess().getElementDefaultBackground();
+	}
+
+	@Override
 	protected void paintElement(final Graphics g) {
+
 		g.drawRoundRect(getElementInnerBounds(), ARC_LENGTH, ARC_LENGTH);
 
 		drawSymbol(g);

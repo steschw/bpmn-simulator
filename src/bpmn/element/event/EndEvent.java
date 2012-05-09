@@ -40,7 +40,7 @@ public class EndEvent extends Event {
 	}
 
 	@Override
-	protected Color getElementBackgroundColor() {
+	protected Color getElementDefaultBackground() {
 		return getVisualConfig().getBackground(VisualConfig.Element.EVENT_END);
 	}
 

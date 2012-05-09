@@ -70,6 +70,8 @@ public class PreferencesDialog extends JDialog {
 			= new ColorSelector(Messages.getString("Preferences.backgroundColor")); //$NON-NLS-1$
 	private final ColorSelector colorTaskBackground
 			= new ColorSelector(Messages.getString("Preferences.backgroundColor")); //$NON-NLS-1$
+	private final ColorSelector colorProcessBackground
+			= new ColorSelector(Messages.getString("Preferences.backgroundColor")); //$NON-NLS-1$
 
 	public PreferencesDialog() {
 		super((Frame)null, Messages.getString("Preferences.preferences"), true); //$NON-NLS-1$
@@ -117,12 +119,17 @@ public class PreferencesDialog extends JDialog {
 		generalPanel.setBorder(createGapBorder());
 
 		final JPanel panel = new JPanel(new GridLayout(0, 2, GAP, GAP));
-		final JLabel labelLanguage = new JLabel(Messages.getString("Preferences.language")); //$NON-NLS-1$
+		final StringBuilder textLanguage = new StringBuilder(Messages.getString("Preferences.language")); //$NON-NLS-1$
+		textLanguage.append(": *"); //$NON-NLS-1$
+		final JLabel labelLanguage = new JLabel(textLanguage.toString());
 		labelLanguage.setLabelFor(selectLanguage);
 		panel.add(labelLanguage);
 		panel.add(selectLanguage);
 
 		generalPanel.add(panel, BorderLayout.PAGE_START);
+		final StringBuilder textRestart = new StringBuilder("* "); //$NON-NLS-1$
+		textRestart.append(Messages.getString("Preferences.requiresRestart")); //$NON-NLS-1$
+		generalPanel.add(new JLabel(textRestart.toString()), BorderLayout.PAGE_END);
 		return generalPanel;
 	}
 
@@ -165,6 +172,9 @@ public class PreferencesDialog extends JDialog {
 
 		panel.add(new JLabel(Messages.getString("Preferences.task"))); //$NON-NLS-1$
 		panel.add(colorTaskBackground);
+
+		panel.add(new JLabel(Messages.getString("Preferences.process"))); //$NON-NLS-1$
+		panel.add(colorProcessBackground);
 
 		return panel;
 	}
@@ -221,6 +231,7 @@ public class PreferencesDialog extends JDialog {
 		visualConfig.setBackground(VisualConfig.Element.EVENT_END, colorEndEventBackground.getSelectedColor());
 		visualConfig.setBackground(VisualConfig.Element.GATEWAY, colorGatewayBackground.getSelectedColor());
 		visualConfig.setBackground(VisualConfig.Element.TASK, colorTaskBackground.getSelectedColor());
+		visualConfig.setBackground(VisualConfig.Element.PROCESS, colorProcessBackground.getSelectedColor());
 
 		config.setVisualConfig(visualConfig);
 		config.store();
@@ -241,6 +252,7 @@ public class PreferencesDialog extends JDialog {
 		colorEndEventBackground.setSelectedColor(visualConfig.getBackground(VisualConfig.Element.EVENT_END));
 		colorGatewayBackground.setSelectedColor(visualConfig.getBackground(VisualConfig.Element.GATEWAY));
 		colorTaskBackground.setSelectedColor(visualConfig.getBackground(VisualConfig.Element.TASK));
+		colorProcessBackground.setSelectedColor(visualConfig.getBackground(VisualConfig.Element.PROCESS));
 	}
 
 }

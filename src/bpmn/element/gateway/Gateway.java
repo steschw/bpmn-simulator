@@ -50,7 +50,7 @@ public abstract class Gateway extends TokenFlowElementWithDefault {
 	}
 
 	@Override
-	protected Color getElementBackgroundColor() {
+	protected Color getElementDefaultBackground() {
 		return getVisualConfig().getBackground(VisualConfig.Element.GATEWAY);
 	}
 

@@ -828,13 +828,15 @@ public class Model implements ErrorHandler {
 
 	protected void assignFlowElementsToConnectingElement(final SequenceFlow connectingElement) {
 		final ElementRef<SequenceFlow> connectingRef = getElementRefById(connectingElement.getId());
-		final FlowElement source = connectingElement.getSource(); 
-		if (source != null) {
-			source.addOutgoing(connectingRef);
-		}
-		final FlowElement target = connectingElement.getTarget();
-		if (target != null) {
-			target.addIncoming(connectingRef);
+		if (connectingRef != null) {
+			final FlowElement source = connectingElement.getSource(); 
+			if (source != null) {
+				source.addOutgoing(connectingRef);
+			}
+			final FlowElement target = connectingElement.getTarget();
+			if (target != null) {
+				target.addIncoming(connectingRef);
+			}
 		}
 	}
 

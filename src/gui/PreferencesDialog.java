@@ -221,11 +221,10 @@ public class PreferencesDialog extends JDialog {
 
 		config.setLocale((Locale)selectLanguage.getSelectedItem());
 
-		Model.setIgnoreColors(checkIgnoreModelerColors.isSelected());
-
 		final VisualConfig visualConfig = BaseElement.getDefaultVisualConfig();
 		visualConfig.setAntialiasing(checkAntialiasing.isSelected());
 		visualConfig.setShowExclusiveGatewaySymbol(checkShowExclusiveSymbol.isSelected());
+		visualConfig.setIgnoreColors(checkIgnoreModelerColors.isSelected());
 		visualConfig.setBackground(VisualConfig.Element.EVENT_START, colorStartEventBackground.getSelectedColor());
 		visualConfig.setBackground(VisualConfig.Element.EVENT_INTERMEDIATE, colorIntermediateEventBackground.getSelectedColor());
 		visualConfig.setBackground(VisualConfig.Element.EVENT_END, colorEndEventBackground.getSelectedColor());
@@ -242,11 +241,10 @@ public class PreferencesDialog extends JDialog {
 
 		selectLanguage.setSelectedItem(config.getLocale());
 
-		checkIgnoreModelerColors.setSelected(Model.getIgnoreColors());
-
 		final VisualConfig visualConfig = BaseElement.getDefaultVisualConfig();
 		checkAntialiasing.setSelected(visualConfig.isAntialiasing());
 		checkShowExclusiveSymbol.setSelected(visualConfig.getShowExclusiveGatewaySymbol());
+		checkIgnoreModelerColors.setSelected(visualConfig.getIgnoreColors());
 		colorStartEventBackground.setSelectedColor(visualConfig.getBackground(VisualConfig.Element.EVENT_START));
 		colorIntermediateEventBackground.setSelectedColor(visualConfig.getBackground(VisualConfig.Element.EVENT_INTERMEDIATE));
 		colorEndEventBackground.setSelectedColor(visualConfig.getBackground(VisualConfig.Element.EVENT_END));

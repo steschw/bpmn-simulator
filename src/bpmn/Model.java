@@ -76,16 +76,6 @@ public class Model implements ErrorHandler {
 
 	private final TokenAnimator tokenAnimator = new TokenAnimator();
 
-	private static boolean ignoreColors;
-
-	public static final void setIgnoreColors(final boolean ignoreColors) {
-		Model.ignoreColors = ignoreColors;
-	}
-
-	public static final boolean getIgnoreColors() {
-		return Model.ignoreColors;
-	}
-
 	public Model(final JDesktopPane desktop) {
 		super();
 		this.desktop = desktop;
@@ -511,8 +501,7 @@ public class Model implements ErrorHandler {
 			final BaseElement element) {
 		final String keyNode = getAttributeString(node, "metaKey", true); //$NON-NLS-1$
 		final String valueNode = getAttributeString(node, "metaValue", true); //$NON-NLS-1$
-		if (!getIgnoreColors()
-				&& "bgcolor".equals(keyNode) //$NON-NLS-1$
+		if ("bgcolor".equals(keyNode) //$NON-NLS-1$
 				&& ((valueNode != null) && !valueNode.isEmpty())) {
 			final Color color = convertStringToColor(valueNode);
 			if (color != null) {
@@ -558,6 +547,15 @@ public class Model implements ErrorHandler {
 			expression = new Expression(conditionExpressionNode.getTextContent());
 		}
 		return expression;
+	}
+
+	protected Documentation getDocumentationElement(final Node node) {
+		Documentation documentation = null;
+		final Node documentationNode = getSingleSubElement(node, BPMN, "documentation");
+		if (documentationNode != null) {
+			documentation = new Documentation(documentationNode.getTextContent());
+		}
+		return documentation;
 	}
 
 	protected void readIncomingElements(final Node node, final FlowElement element) {
@@ -619,6 +617,7 @@ public class Model implements ErrorHandler {
 	}
 
 	protected void readFlowElement(final Node node, final FlowElement element) {
+		element.setDocumentation(getDocumentationElement(node));
 		readIncomingElements(node, element);
 		readOutgoingElements(node, element);
 		if (element instanceof ElementWithDefaultSequenceFlow) {

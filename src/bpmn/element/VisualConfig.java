@@ -43,6 +43,8 @@ public class VisualConfig {
 
 	private final Map<Element, Color> backgroundColors = new EnumMap<Element, Color>(Element.class);
 
+	private boolean ignoreColors;
+
 	private boolean antialiasing = true;
 	private boolean showExclusiveGatewaySymbol = true;
 
@@ -109,6 +111,14 @@ public class VisualConfig {
 
 	public boolean getShowExclusiveGatewaySymbol() {
 		return showExclusiveGatewaySymbol;
+	}
+
+	public void setIgnoreColors(final boolean ignore) {
+		this.ignoreColors = ignore;
+	}
+
+	public boolean getIgnoreColors() {
+		return ignoreColors;
 	}
 
 }

@@ -32,9 +32,11 @@ import javax.swing.Scrollable;
 import bpmn.element.BaseElement;
 import bpmn.element.Graphics;
 import bpmn.element.Label;
+import bpmn.element.TokenFlowElement;
 import bpmn.element.VisualConfig;
 import bpmn.element.event.Event;
 import bpmn.element.event.StartEvent;
+import bpmn.element.gateway.Gateway;
 import bpmn.token.Instance;
 import bpmn.token.Token;
 import bpmn.token.TokenFlow;
@@ -80,6 +82,12 @@ public class ExpandedProcess extends Activity implements Scrollable {
 			parentProcess.addElement(collapsedProcess);
 		}
 		return collapsedProcess;
+	}
+
+	@Override
+	protected void removeToken(Token token) {
+		// TODO Auto-generated method stub
+		super.removeToken(token);
 	}
 
 	@Override
@@ -149,12 +157,12 @@ public class ExpandedProcess extends Activity implements Scrollable {
 		}
 		final Event startEvent = getStartEvent();
 		if (startEvent == null) {
-			final Collection<Activity> activities = getStartActivities();
-			if (activities.isEmpty()) {
+			final Collection<TokenFlowElement> startElements = getStartElements();
+			if (startElements.isEmpty()) {
 				token.passTo(this, subInstance);
 			} else {
-				for (Activity startActivity : activities) {
-					token.passTo(startActivity, subInstance);
+				for (TokenFlowElement startElement : startElements) {
+					token.passTo(startElement, subInstance);
 				}
 			}
 		} else {
@@ -167,17 +175,20 @@ public class ExpandedProcess extends Activity implements Scrollable {
 		return calcSizeByInnerComponents();
 	}
 
-	public Collection<Activity> getStartActivities() {
-		final Collection<Activity> activities = new ArrayList<Activity>();
+	public Collection<TokenFlowElement> getStartElements() {
+		final Collection<TokenFlowElement> startElements = new ArrayList<TokenFlowElement>();
 		for (BaseElement element : elements) {
-			if (element instanceof Activity) {
-				final Activity activity = (Activity)element;
-				if (!activity.hasIncoming()) {
-					activities.add(activity);
+			if (element instanceof TokenFlowElement) {
+				final TokenFlowElement tokenFlowElement = (TokenFlowElement)element; 
+				if (!tokenFlowElement.hasIncoming()) {
+					if (tokenFlowElement instanceof Activity
+							|| tokenFlowElement instanceof Gateway) {
+						startElements.add(tokenFlowElement);
+					}
 				}
 			}
 		}
-		return activities;
+		return startElements;
 	}
 
 	public StartEvent getStartEvent() {
@@ -185,8 +196,10 @@ public class ExpandedProcess extends Activity implements Scrollable {
 		for (BaseElement element : elements) {
 			if (element instanceof StartEvent) {
 				final StartEvent event = (StartEvent)element;
-				assert start == null;
-				start = event;
+				if (event.isPlain()) {
+					assert start == null;
+					start = event;
+				}
 			}
 		}
 		return start;

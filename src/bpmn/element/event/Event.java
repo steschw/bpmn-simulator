@@ -69,6 +69,10 @@ public abstract class Event extends TokenFlowElement {
 		return timer;
 	}
 
+	public boolean isPlain() {
+		return !isTimer() && !isTermination();
+	}
+
 	@Override
 	protected int getStepCount() {
 		return 5;

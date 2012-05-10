@@ -25,7 +25,6 @@ import java.util.Locale;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 
-import bpmn.Model;
 import bpmn.element.BaseElement;
 import bpmn.element.VisualConfig;
 
@@ -68,6 +67,7 @@ public class Config {
 	public void setVisualConfig(final VisualConfig visualConfig) {
 		final Preferences preferences = getRootNode();
 		preferences.putBoolean(ANTIALIASING, visualConfig.isAntialiasing());
+		preferences.putBoolean(IGNORE_COLORS, visualConfig.getIgnoreColors());
 		preferences.putBoolean(SHOW_EXCLUSIVEGATEWAYSYMBOL, visualConfig.getShowExclusiveGatewaySymbol());
 
 		for (VisualConfig.Element element : VisualConfig.Element.values()) {
@@ -82,6 +82,7 @@ public class Config {
 
 		final Preferences preferences = getRootNode();
 		visualConfig.setAntialiasing(preferences.getBoolean(ANTIALIASING, true));
+		visualConfig.setIgnoreColors(preferences.getBoolean(IGNORE_COLORS, false));
 		visualConfig.setShowExclusiveGatewaySymbol(preferences.getBoolean(SHOW_EXCLUSIVEGATEWAYSYMBOL, true));
 
 		for (VisualConfig.Element element : VisualConfig.Element.values()) {
@@ -99,15 +100,6 @@ public class Config {
 	protected static void putColor(final Preferences preferences, final String key,
 			final Color value) {
 		preferences.putInt(key, value.getRGB());
-	}
-
-	public void setIgnoreModelerColors(final boolean ignore) {
-		getRootNode().putBoolean(IGNORE_COLORS, ignore);
-		Model.setIgnoreColors(ignore);
-	}
-
-	public boolean getIgnoreModelerColors() {
-		return getRootNode().getBoolean(IGNORE_COLORS, false);
 	}
 
 	public void setLocale(final Locale locale) {
@@ -142,7 +134,6 @@ public class Config {
 
 	public void load() {
 		setLocale(getLocale());
-		Model.setIgnoreColors(getIgnoreModelerColors());
 		BaseElement.setDefaultVisualConfig(getVisualConfig());
 	}
 

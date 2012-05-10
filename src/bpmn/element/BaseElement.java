@@ -29,6 +29,7 @@ import java.awt.Paint;
 import java.awt.Point;
 import java.awt.RadialGradientPaint;
 import java.awt.Stroke;
+import java.awt.event.MouseEvent;
 
 import javax.swing.JComponent;
 
@@ -47,6 +48,8 @@ public abstract class BaseElement extends JComponent {
 	private String id;
 
 	private Label label;
+
+	private Documentation documentation;
 
 	private Color background;
 
@@ -69,6 +72,28 @@ public abstract class BaseElement extends JComponent {
 		setForeground(Color.BLACK);
 		setFocusable(false);
 		setDoubleBuffered(true);
+		setToolTipText("");
+	}
+
+	@Override
+	public String getToolTipText(final MouseEvent event) {
+		final StringBuilder tooltipText = new StringBuilder();
+		tooltipText.append("<html><table>");
+		tooltipText.append("<tr><td><b>ID:</b></td><td>");
+		tooltipText.append(getId());
+		tooltipText.append("</td></tr>");
+		if (hasName()) {
+			tooltipText.append("<tr><td><b>Name:</b></td><td>");
+			tooltipText.append(getName());
+			tooltipText.append("</td></tr>");
+		}
+		if (hasDocumentation()) {
+			tooltipText.append("<tr><td><b>Documentation:</b></td><td>");
+			tooltipText.append(getDocumentation().toHtml());
+			tooltipText.append("</td></tr>");
+		}
+		tooltipText.append("</table></html>");
+		return tooltipText.toString();
 	}
 
 	public VisualConfig getVisualConfig() {
@@ -81,6 +106,23 @@ public abstract class BaseElement extends JComponent {
 
 	public final String getId() {
 		return id;
+	}
+
+	public void setDocumentation(final Documentation documentation) {
+		this.documentation = documentation;
+	}
+
+	public Documentation getDocumentation() {
+		return documentation;
+	}
+
+	public boolean hasDocumentation() {
+		return (getDocumentation() != null);
+	}
+
+	public boolean hasName() {
+		final String name = getName();
+		return (name != null) && !name.isEmpty();
 	}
 
 	protected void setException(final boolean exception) {
@@ -166,7 +208,9 @@ public abstract class BaseElement extends JComponent {
 	}
 
 	protected Color getElementBackground() {
-		return (background == null) ? getElementDefaultBackground() : background;
+		return ((background == null) || getVisualConfig().getIgnoreColors())
+				? getElementDefaultBackground()
+				: background;
 	}
 
 	protected Color getElementDefaultBackground() {

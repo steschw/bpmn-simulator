@@ -18,9 +18,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package bpmn.element;
+package bpmn.element.artifact;
 
 import java.awt.Color;
+
+import bpmn.element.ClickThroughMouseListener;
+import bpmn.element.FlowElement;
 
 public abstract class Artifact extends FlowElement {
 

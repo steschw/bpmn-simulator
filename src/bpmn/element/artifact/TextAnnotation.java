@@ -18,9 +18,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package bpmn.element;
+package bpmn.element.artifact;
 
 import java.awt.Point;
+
+import bpmn.element.Graphics;
+import bpmn.element.Label;
+import bpmn.element.Rectangle;
 
 public class TextAnnotation extends Artifact {
 

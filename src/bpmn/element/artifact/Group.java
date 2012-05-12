@@ -18,10 +18,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package bpmn.element;
+package bpmn.element.artifact;
 
 import java.awt.BasicStroke;
 import java.awt.Stroke;
+
+import bpmn.element.Graphics;
 
 public class Group extends Artifact {
 

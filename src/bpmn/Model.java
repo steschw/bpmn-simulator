@@ -55,6 +55,8 @@ import bpmn.element.Association.Direction;
 import bpmn.element.activity.Activity;
 import bpmn.element.activity.ExpandedProcess;
 import bpmn.element.activity.task.*;
+import bpmn.element.artifact.Group;
+import bpmn.element.artifact.TextAnnotation;
 import bpmn.element.event.*;
 import bpmn.element.gateway.*;
 import bpmn.token.TokenAnimator;

@@ -25,13 +25,14 @@ import java.awt.Cursor;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
+import javax.swing.Icon;
+
 import bpmn.element.VisualConfig;
 import bpmn.element.activity.ExpandedProcess;
 import bpmn.token.InstanceController;
 
+@SuppressWarnings("serial")
 public class StartEvent extends Event implements MouseListener {
-
-	private static final long serialVersionUID = 1L;
 
 	public StartEvent(final String id, final String name,
 			final InstanceController tockenController) {
@@ -51,13 +52,13 @@ public class StartEvent extends Event implements MouseListener {
 	}
 
 	@Override
-	public void setParentProcess(final ExpandedProcess parentProcess) {
-		super.setParentProcess(parentProcess);
+	public void setProcess(final ExpandedProcess parentProcess) {
+		super.setProcess(parentProcess);
 		updateCursor();
 	}
 
 	public boolean canStartManuell() {
-		final ExpandedProcess process = getParentProcess();
+		final ExpandedProcess process = getProcess();
 		return (getInstanceController() != null) && (process != null) && !process.hasIncoming(); 
 	}
 
@@ -96,6 +97,11 @@ public class StartEvent extends Event implements MouseListener {
 
 	@Override
 	public void mouseReleased(final MouseEvent event) {
+	}
+
+	@Override
+	protected Icon getTypeIcon() {
+		return getDefinition().getIcon(getVisualConfig(), false);
 	}
 
 }

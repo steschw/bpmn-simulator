@@ -22,17 +22,14 @@ package bpmn.element.event;
 
 import java.awt.Color;
 
-import bpmn.element.Graphics;
-import bpmn.element.Rectangle;
+import javax.swing.Icon;
+
 import bpmn.element.VisualConfig;
 import bpmn.token.InstanceController;
 import bpmn.token.Token;
 
+@SuppressWarnings("serial")
 public class EndEvent extends Event {
-
-	private static final long serialVersionUID = 1L;
-
-	private static final int TERMINATION_MARGIN = 4;
 
 	public EndEvent(final String id, final String name,
 			final InstanceController tockenController) {
@@ -50,22 +47,16 @@ public class EndEvent extends Event {
 	}
 
 	@Override
-	protected void paintIcon(Graphics g) {
-		super.paintIcon(g);
-
-		if (isTermination()) {
-			final Rectangle bounds = getElementInnerBounds();
-			bounds.grow(-TERMINATION_MARGIN, -TERMINATION_MARGIN);
-			g.fillOval(bounds);
-		}
-	}
-
-	@Override
 	protected void tokenForward(final Token token) {
-		if (isTermination()) {
+		if (isTerminate()) {
 			token.getInstance().removeAllOtherTokens(token);
 		}
 		super.tokenForward(token);
+	}
+
+	@Override
+	protected Icon getTypeIcon() {
+		return getDefinition().getIcon(getVisualConfig(), true);
 	}
 
 }

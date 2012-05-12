@@ -29,6 +29,7 @@ import java.net.URL;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedList;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -70,6 +71,9 @@ public class Model implements ErrorHandler {
 	private final Map<String, ElementRef<BaseElement>> elements
 			= new TreeMap<String, ElementRef<BaseElement>>(); 
 
+	private final Collection<ExpandedProcess> processes
+			= new LinkedList<ExpandedProcess>();
+
 	private final JDesktopPane desktop;
 
 	private final LogFrame logFrame = new LogFrame(); 
@@ -83,6 +87,10 @@ public class Model implements ErrorHandler {
 
 	public TokenAnimator getAnimator() {
 		return tokenAnimator;
+	}
+
+	public Collection<ExpandedProcess> getProcesses() {
+		return processes;
 	}
 
 	protected void addElementToContainer(final BaseElement element) {
@@ -103,14 +111,6 @@ public class Model implements ErrorHandler {
 		assert process != null;
 		if (process != null) {
 			process.addElement(element);
-		}
-	}
-
-	protected void addElementToContainer(final LaneSet element,
-			final Pool pool) {
-		registerElementRef(element.getId(), element);
-		if (pool != null) {
-			pool.addLaneSet(element);
 		}
 	}
 
@@ -318,7 +318,7 @@ public class Model implements ErrorHandler {
 	}
 
 	protected void readDiagram(final Node node) {
-		final String name = getNameAttribute(node);
+		final String name = getNameAttribute(node, false);
 		final NodeList childNodes = node.getChildNodes();
 		for (int i = 0; i < childNodes.getLength(); ++i) {
 			final Node childNode = childNodes.item(i);
@@ -489,11 +489,14 @@ public class Model implements ErrorHandler {
 
 	protected ExpandedProcess readProcess(final Node node) {
 		final boolean isSubProcess = isElementNode(node, BPMN, "subProcess");  //$NON-NLS-1$
-		final String name = isSubProcess ? getNameAttribute(node) : "Process"; //$NON-NLS-1$
 		final String id = getIdAttribute(node);
-		final ExpandedProcess process = new ExpandedProcess(id, name);
+		final String name = getNameAttribute(node, false);
+		final ExpandedProcess process = new ExpandedProcess(this, id, name);
 		readProcessElements(node, process);
 		addElementToContainer(process);
+		if (!isSubProcess) {
+			processes.add(process);
+		}
 		return process;
 	}
 
@@ -626,16 +629,21 @@ public class Model implements ErrorHandler {
 		readExtensionElements(node, element);
 	}
 
-	protected static void readEventDefinitions(final Node node, final Event event) {
+	protected void readEventDefinitions(final Node node, final Event event) {
 		final NodeList childNodes = node.getChildNodes();
 		for (int i = 0; i < childNodes.getLength(); ++i) {
 			final Node childNode = childNodes.item(i);
 			debugNode(childNode);
 			if (isElementNode(childNode, BPMN, "terminateEventDefinition")) { //$NON-NLS-1$
-				event.setTermination(true);
-			}
-			if (isElementNode(childNode, BPMN, "timerEventDefinition")) { //$NON-NLS-1$
-				event.setTimer(true);
+				event.setDefinition(new TerminateEventDefinition());
+			} else if (isElementNode(childNode, BPMN, "timerEventDefinition")) { //$NON-NLS-1$
+				event.setDefinition(new TimerEventDefinition());
+			} else if (isElementNode(childNode, BPMN, "messageEventDefinition")) { //$NON-NLS-1$
+				event.setDefinition(new MessageEventDefinition());
+			} else if (isElementNode(childNode, BPMN, "linkEventDefinition")) { //$NON-NLS-1$
+				event.setDefinition(new LinkEventDefinition(getNameAttribute(childNode, true)));
+			} else {
+				showUnknowNode(childNode);
 			}
 		}
 	}
@@ -697,7 +705,7 @@ public class Model implements ErrorHandler {
 
 	protected Association.Direction getParameterAssociationDirection(final Node node) {
 		final String value = getAttributeString(node, "associationDirection", false);
-		Association.Direction direction = Association.Direction.byValue(value);
+		final Association.Direction direction = Association.Direction.byValue(value);
 		return (direction == null) ? Association.Direction.NONE : direction; 
 	}
 
@@ -794,6 +802,10 @@ public class Model implements ErrorHandler {
 							addElementToContainer(element, process);
 						} else if (isElementNode(childNode, BPMN, "exclusiveGateway")) { //$NON-NLS-1$
 							final ExclusiveGateway element = new ExclusiveGateway(id, name);
+							readGateway(childNode, element);
+							addElementToContainer(element, process);
+						} else if (isElementNode(childNode, BPMN, "eventBasedGateway")) { //$NON-NLS-1$
+							final EventBasedGateway element = new EventBasedGateway(id, name);
 							readGateway(childNode, element);
 							addElementToContainer(element, process);
 						} else if (isElementNode(childNode, BPMN, "dataObjectReference")) { //$NON-NLS-1$

@@ -3,7 +3,7 @@ package gui;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
-public class BPMNSimulatorApplication {
+public final class BPMNSimulatorApplication {
 
 	public static final String NOTICE =
 			"Copyright (C) 2012 Stefan Schweitzer\n" //$NON-NLS-1$

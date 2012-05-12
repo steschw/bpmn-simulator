@@ -130,7 +130,7 @@ public abstract class TokenFlowElement extends FlowElement implements TokenFlow 
 	}
 
 	protected boolean passTokenToParent(final Token token, final Instance instance) {
-		final ExpandedProcess parentProcess = getParentProcess();
+		final ExpandedProcess parentProcess = getProcess();
 		if (parentProcess != null) {
 			token.passTo(parentProcess, instance);
 			return true;

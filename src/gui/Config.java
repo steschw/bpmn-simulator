@@ -60,7 +60,7 @@ public class Config {
 		return Preferences.userRoot().node(NODE);
 	}
 
-	protected static Preferences getElementNode(VisualConfig.Element element) {
+	protected static Preferences getElementNode(final VisualConfig.Element element) {
 		return getRootNode().node(element.name().toLowerCase());
 	}
 
@@ -78,7 +78,7 @@ public class Config {
 	}
 
 	public VisualConfig getVisualConfig() {
-		final VisualConfig visualConfig = VisualConfig.createDefault();
+		final VisualConfig visualConfig = new VisualConfig();
 
 		final Preferences preferences = getRootNode();
 		visualConfig.setAntialiasing(preferences.getBoolean(ANTIALIASING, true));

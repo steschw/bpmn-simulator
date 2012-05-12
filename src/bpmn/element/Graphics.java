@@ -214,6 +214,23 @@ public class Graphics {
 		graphics.fillPolygon(createStar(size, corners));
 	}
 
+	protected static Polygon createPentagon(final Rectangle size) {
+		final Polygon polygon = new Polygon();
+		final Point center = new Point(size.x + size.width / 2, size.y + size.height / 2);
+		final double r = size.width / 2.;
+		final int corners = 5;
+		Point point = null;
+		for (int i = 0; i < 5; ++i) {
+			point = polarToCartesian(center, r, (RAD_FULL / corners) * i - (RAD_FULL / corners) / 2.);
+			polygon.addPoint(point.x, point.y);
+		}
+		return polygon;
+	}
+
+	public void drawPentagon(final Rectangle size) {
+		graphics.drawPolygon(createPentagon(size));
+	}
+
 	protected static Polygon createConditionalSymbol(final Point orgin, final double a) {
 		final Polygon polygon = new Polygon();
 		polygon.addPoint(orgin.x, orgin.y);

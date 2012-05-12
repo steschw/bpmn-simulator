@@ -20,7 +20,6 @@
  */
 package bpmn.element.gateway;
 
-import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Point;
 
@@ -64,8 +63,6 @@ public abstract class Gateway extends TokenFlowElementWithDefault {
 	@Override
 	protected void paintElement(final Graphics g) {
 		g.drawDiamond(getElementInnerBounds());
-
-		g.setStroke(new BasicStroke(3));
 	}
 
 	protected Rectangle getSymbolBounds() {

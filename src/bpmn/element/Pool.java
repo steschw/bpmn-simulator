@@ -21,8 +21,6 @@
 package bpmn.element;
 
 import java.awt.Point;
-import java.util.ArrayList;
-import java.util.Collection;
 
 import bpmn.element.activity.ExpandedProcess;
 
@@ -33,16 +31,9 @@ public class Pool extends TitledFlowElement {
 
 	private static final long serialVersionUID = 1L;
 
-	private final Collection<LaneSet> laneSets = new ArrayList<LaneSet>(); 
-
 	public Pool(final String id, final String name,
 			final ElementRef<ExpandedProcess> processRef) {
 		super(id, name);
-	}
-
-	public void addLaneSet(final LaneSet laneSet) {
-		assert laneSet != null;
-		laneSets.add(laneSet);
 	}
 
 	@Override

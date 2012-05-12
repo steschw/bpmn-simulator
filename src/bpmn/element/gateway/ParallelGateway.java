@@ -20,6 +20,7 @@
  */
 package bpmn.element.gateway;
 
+import java.awt.BasicStroke;
 import java.awt.Point;
 
 import bpmn.element.ElementRef;
@@ -42,6 +43,7 @@ public class ParallelGateway extends Gateway {
 	protected void paintElement(final Graphics g) {
 		super.paintElement(g);
 
+		g.setStroke(new BasicStroke(3));
 		g.drawCross(getSymbolBounds(), false);
 	}
 

@@ -20,6 +20,8 @@
  */
 package bpmn.element.gateway;
 
+import java.awt.BasicStroke;
+
 import bpmn.element.ElementRef;
 import bpmn.element.Graphics;
 import bpmn.element.SequenceFlow;
@@ -39,6 +41,7 @@ public class InclusiveGateway extends Gateway {
 	protected void paintElement(final Graphics g) {
 		super.paintElement(g);
 
+		g.setStroke(new BasicStroke(3));
 		g.drawOval(getSymbolBounds());
 	}
 

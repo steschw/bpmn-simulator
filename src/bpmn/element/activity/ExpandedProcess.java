@@ -29,6 +29,7 @@ import java.util.Collection;
 
 import javax.swing.Scrollable;
 
+import bpmn.Model;
 import bpmn.element.BaseElement;
 import bpmn.element.Graphics;
 import bpmn.element.Label;
@@ -51,15 +52,35 @@ public class ExpandedProcess extends Activity implements Scrollable {
 
 	private CollapsedProcess collapsedProcess; 
 
-	public ExpandedProcess(final String id, final String name) {
+	private final Model model;
+
+	public ExpandedProcess(final Model model, final String id, final String name) {
 		super(id, name);
+		this.model = model;
 		setAutoscrolls(true);
+	}
+
+	public ExpandedProcess(final String id, final String name) {
+		this(null, id, name);
+	}
+
+	public Model getModel() {
+		if (model == null) {
+			final ExpandedProcess parentProcess = getProcess();
+			return (parentProcess == null) ? null : parentProcess.getModel();
+		} else {
+			return model;
+		}
 	}
 
 	public void addElement(final BaseElement element) {
 		assert !elements.contains(element);
 		elements.add(element);
-		element.setParentProcess(this);
+		element.setProcess(this);
+	}
+
+	public Collection<BaseElement> getElements() {
+		return elements;
 	}
 
 	protected boolean containsTokenFlow(final TokenFlow tokenFlow) {
@@ -77,17 +98,11 @@ public class ExpandedProcess extends Activity implements Scrollable {
 		assert collapsedProcess == null;
 		collapsedProcess = new CollapsedProcess(this);
 		collapsedProcess.setForeground(getForeground());
-		final ExpandedProcess parentProcess = getParentProcess();
+		final ExpandedProcess parentProcess = getProcess();
 		if (parentProcess != null) {
 			parentProcess.addElement(collapsedProcess);
 		}
 		return collapsedProcess;
-	}
-
-	@Override
-	protected void removeToken(Token token) {
-		// TODO Auto-generated method stub
-		super.removeToken(token);
 	}
 
 	@Override

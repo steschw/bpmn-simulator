@@ -26,17 +26,14 @@ import javax.swing.Icon;
 
 import bpmn.element.Graphics;
 import bpmn.element.TokenFlowElement;
-import bpmn.element.VisualConfig;
 import bpmn.token.InstanceController;
 
+@SuppressWarnings("serial")
 public abstract class Event extends TokenFlowElement {
-
-	private static final long serialVersionUID = 1L;
 
 	private InstanceController instanceController;
 
-	private boolean timer;
-	private boolean termination;
+	private EventDefinition definition;
 
 	public Event(final String id, final String name,
 			final InstanceController tockenController) {
@@ -53,24 +50,32 @@ public abstract class Event extends TokenFlowElement {
 		return instanceController;
 	}
 
-	public void setTermination(final boolean isTermination) {
-		this.termination = isTermination;
+	public void setDefinition(final EventDefinition definition) {
+		this.definition = definition;
 	}
 
-	public boolean isTermination() {
-		return termination;
-	}
-
-	public void setTimer(final boolean isTimer) {
-		this.timer = isTimer;
+	protected EventDefinition getDefinition() {
+		return definition; 
 	}
 
 	public boolean isTimer() {
-		return timer;
+		return getDefinition() instanceof TimerEventDefinition;
+	}
+
+	public boolean isMessage() {
+		return getDefinition() instanceof MessageEventDefinition;
+	}
+
+	public boolean isLink() {
+		return getDefinition() instanceof LinkEventDefinition;
+	}
+
+	public boolean isTerminate() {
+		return getDefinition() instanceof TerminateEventDefinition;
 	}
 
 	public boolean isPlain() {
-		return !isTimer() && !isTermination();
+		return getDefinition() == null;
 	}
 
 	@Override
@@ -88,20 +93,16 @@ public abstract class Event extends TokenFlowElement {
 	@Override
 	protected void paintElement(final Graphics g) {
 		g.drawOval(getElementInnerBounds());
-		
-		paintIcon(g);
+
+		if (!isPlain()) {
+			paintIcon(g);
+		}
 	}
 
-	protected Icon getInnerIcon() {
-		Icon icon = null;
-		if (isTimer()) {
-			icon = getVisualConfig().getIcon(VisualConfig.ICON_TIMER);
-		}
-		return icon;
-	}
+	protected abstract Icon getTypeIcon();
 
 	protected void paintIcon(final Graphics g) {
-		final Icon icon = getInnerIcon();
+		final Icon icon = getTypeIcon();
 		if (icon != null) {
 			final Point position = getElementInnerBounds().getCenter();
 			position.translate(-icon.getIconWidth() / 2, -icon.getIconHeight() / 2);

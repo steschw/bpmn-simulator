@@ -38,9 +38,8 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 import bpmn.Model;
 
+@SuppressWarnings("serial")
 public class BPMNSimulatorFrame extends JFrame {
-
-	private static final long serialVersionUID = 1L;
 
 	private ScrollDesktop desktop;
 
@@ -52,6 +51,9 @@ public class BPMNSimulatorFrame extends JFrame {
 
 	private Model model;
 
+	private static final int DEFAULT_WIDTH = 800;
+	private static final int DEFAULT_HEIGHT = 600;
+
 	public BPMNSimulatorFrame() {
 		super();
 
@@ -59,7 +61,7 @@ public class BPMNSimulatorFrame extends JFrame {
 
 		create();
 
-		setSize(800, 600);
+		setSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setVisible(true);
 	}

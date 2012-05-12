@@ -11,18 +11,19 @@ import javax.swing.plaf.basic.BasicComboBoxRenderer;
 @SuppressWarnings("serial")
 public class LocaleComboBox extends JComboBox {
 
-	private static final Locale LOCALES[] = new Locale[] {
+	private static final Locale[] LOCALES = new Locale[] {
 		new Locale("en"),
-		new Locale("de")
+		new Locale("de"),
 	};
 
 	public LocaleComboBox() {
 		super(new DefaultComboBoxModel(LOCALES));
 		setRenderer(new BasicComboBoxRenderer() {
 			@Override
-			public Component getListCellRendererComponent(JList list, Object value,
-					int index, boolean isSelected, boolean cellHasFocus) {
-				Component component = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+			public Component getListCellRendererComponent(final JList list,
+					final Object value, final int index,
+					final boolean isSelected, final boolean cellHasFocus) {
+				final Component component = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
 				if (value == null) {
 					final StringBuilder string = new StringBuilder("Default");
 					string.append(" (");

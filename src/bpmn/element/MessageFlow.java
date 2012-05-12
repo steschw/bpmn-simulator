@@ -21,9 +21,9 @@
 package bpmn.element;
 
 import java.awt.BasicStroke;
+import java.awt.Color;
 import java.awt.Point;
 import java.awt.Stroke;
-import java.util.Iterator;
 
 public class MessageFlow extends ConnectingElement {
 
@@ -32,6 +32,7 @@ public class MessageFlow extends ConnectingElement {
 	public MessageFlow(final String id, final ElementRef<FlowElement> source,
 			final ElementRef<FlowElement> target) {
 		super(id, null, source, target);
+		setElementBackground(Color.WHITE);
 	}
 
 	@Override
@@ -41,33 +42,23 @@ public class MessageFlow extends ConnectingElement {
 	}
 
 	@Override
-	protected void paintElement(final Graphics g) {
-		super.paintElement(g);
-
+	protected void paintConnectingStart(final Graphics g, final Point from, final Point start) {
 		g.setStroke(new BasicStroke(1));
-		final Iterator<Point> waypoints = getWaypoints().iterator();
-		if (waypoints.hasNext()) {
-			Point prevPoint = waypointToRelative(waypoints.next());
-			if (waypoints.hasNext()) {
-				// Startsymbol
-				final Rectangle point = new Rectangle(prevPoint);
-				point.grow(3, 3);
-				g.setPaint(getElementDefaultBackground());
-				g.fillOval(point);
-				g.setPaint(getForeground());
-				g.drawOval(point);
-				// Endepfeil
-				Point curPoint = waypointToRelative(waypoints.next());
-				while (waypoints.hasNext()) {
-					prevPoint = curPoint;
-					curPoint = waypointToRelative(waypoints.next());
-				}
-				g.setPaint(getBackground());
-				g.fillArrow(prevPoint, curPoint);
-				g.setPaint(getForeground());
-				g.drawArrow(prevPoint, curPoint);
-			}
-		}
+		g.setPaint(getElementBackground());
+		final Rectangle point = new Rectangle(start);
+		point.grow(3, 3);
+		g.fillOval(point);
+		g.setPaint(getForeground());
+		g.drawOval(point);
+	}
+
+	@Override
+	protected void paintConnectingEnd(final Graphics g, final Point from, final Point end) {
+		g.setStroke(new BasicStroke(1));
+		g.setPaint(getElementBackground());
+		g.fillArrow(from, end);
+		g.setPaint(getForeground());
+		g.drawArrow(from, end);
 	}
 
 }

@@ -20,6 +20,8 @@
  */
 package bpmn.element.gateway;
 
+import java.awt.BasicStroke;
+
 import bpmn.element.Graphics;
 import bpmn.token.Token;
 
@@ -36,6 +38,7 @@ public class ExclusiveGateway extends Gateway {
 		super.paintElement(g);
 
 		if (getVisualConfig().getShowExclusiveGatewaySymbol()) {
+			g.setStroke(new BasicStroke(3));
 			g.drawCross(getSymbolBounds(), true);
 		}
 	}

@@ -79,7 +79,7 @@ public class CollapsedProcess extends FlowElement {
 
 	@Override
 	protected Color getElementDefaultBackground() {
-		return getParentProcess().getElementDefaultBackground();
+		return getProcess().getElementDefaultBackground();
 	}
 
 	@Override

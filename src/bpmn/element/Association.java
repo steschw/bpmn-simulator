@@ -70,14 +70,16 @@ public class Association extends ConnectingElement {
 	}
 
 	@Override
-	protected void paintConnectingStart(Graphics g, Point from, Point start) {
+	protected void paintConnectingStart(final Graphics g, final Point from,
+			final Point start) {
 		if (Direction.BOTH.equals(getDirection())) {
 			g.drawArrow(from, start);
 		}
 	}
 
 	@Override
-	protected void paintConnectingEnd(Graphics g, Point from, Point end) {
+	protected void paintConnectingEnd(final Graphics g, final Point from,
+			final Point end) {
 		final Direction direction = getDirection();
 		if (Direction.ONE.equals(direction) || Direction.BOTH.equals(direction)) {
 			g.drawArrow(from, end);

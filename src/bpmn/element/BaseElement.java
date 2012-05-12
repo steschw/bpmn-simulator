@@ -41,7 +41,7 @@ public abstract class BaseElement extends JComponent {
 
 	protected static final int MARGIN = 10;
 
-	private static VisualConfig DEFAULT_VISUALCONFIG = VisualConfig.createDefault();
+	private static VisualConfig defaultVisualConfig = new VisualConfig();
 
 	private ExpandedProcess parentProcess;
 
@@ -55,14 +55,14 @@ public abstract class BaseElement extends JComponent {
 
 	private boolean exception;
 
-	private VisualConfig visualConfig = DEFAULT_VISUALCONFIG; 
+	private VisualConfig visualConfig = defaultVisualConfig; 
 
 	public static void setDefaultVisualConfig(final VisualConfig visualConfig) {
-		DEFAULT_VISUALCONFIG = visualConfig;
+		defaultVisualConfig = visualConfig;
 	}
 
 	public static VisualConfig getDefaultVisualConfig() {
-		return DEFAULT_VISUALCONFIG;
+		return defaultVisualConfig;
 	}
 
 	public BaseElement(final String id, final String name) {
@@ -117,7 +117,7 @@ public abstract class BaseElement extends JComponent {
 	}
 
 	public boolean hasDocumentation() {
-		return (getDocumentation() != null);
+		return getDocumentation() != null;
 	}
 
 	public boolean hasName() {
@@ -133,11 +133,11 @@ public abstract class BaseElement extends JComponent {
 		return exception;
 	}
 
-	public void setParentProcess(final ExpandedProcess parentProcess) {
+	public void setProcess(final ExpandedProcess parentProcess) {
 		this.parentProcess = parentProcess;
 	}
 
-	public final ExpandedProcess getParentProcess() {
+	public final ExpandedProcess getProcess() {
 		return parentProcess;
 	}
 

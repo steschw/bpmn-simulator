@@ -27,6 +27,13 @@ public class VisualConfig {
 	public static final String ICON_SERVICE = "service.png";
 	public static final String ICON_TIMER = "timer.png";
 	public static final String ICON_USER = "user.png";
+	public static final String ICON_TERMINATE = "terminate.png";
+	public static final String ICON_LINK = "link.png";
+	public static final String ICON_LINK_INVERSE = "link_inverse.png";
+	public static final String ICON_MESSAGE = "send.png";
+	public static final String ICON_MESSAGE_INVERSE = "receive.png";
+
+	private static final Color DEFAULT_BACKGROUNDCOLOR = Color.WHITE;
 
 	private final Map<String, Icon> icons = new IdentityHashMap<String, Icon>();
 
@@ -39,8 +46,6 @@ public class VisualConfig {
 		EVENT_INTERMEDIATE
 	}
 
-	private static final Color DEFAULT_BACKGROUNDCOLOR = Color.WHITE;
-
 	private final Map<Element, Color> backgroundColors = new EnumMap<Element, Color>(Element.class);
 
 	private boolean ignoreColors;
@@ -48,10 +53,9 @@ public class VisualConfig {
 	private boolean antialiasing = true;
 	private boolean showExclusiveGatewaySymbol = true;
 
-	public static VisualConfig createDefault() {
-		VisualConfig environment = new VisualConfig();
-		environment.loadIcons();
-		return environment;
+	public VisualConfig() {
+		super();
+		loadIcons();
 	}
 
 	protected static Icon loadIconFromRessource(final String name) {
@@ -81,9 +85,13 @@ public class VisualConfig {
 		loadIcon(ICON_SERVICE);
 		loadIcon(ICON_TIMER);
 		loadIcon(ICON_USER);
+		loadIcon(ICON_TERMINATE);
+		loadIcon(ICON_LINK);
+		loadIcon(ICON_LINK_INVERSE);
 	}
 
 	public Icon getIcon(final String name) {
+		assert icons.containsKey(name);
 		return icons.get(name);
 	}
 

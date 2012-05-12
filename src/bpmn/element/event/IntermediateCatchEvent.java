@@ -5,6 +5,8 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.Iterator;
 
+import javax.swing.Icon;
+
 import bpmn.token.Token;
 
 @SuppressWarnings("serial")
@@ -16,21 +18,27 @@ public class IntermediateCatchEvent extends IntermediateEvent
 		addMouseListener(this);
 	}
 
+	private boolean isInteractive() {
+		return isTimer() || isMessage();
+	}
+
 	protected void updateCursor() {
-		setCursor(
-				getInnerTokens().isEmpty()
-						? Cursor.getDefaultCursor()
-						: Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		if (isInteractive()) {
+			setCursor(
+					getInnerTokens().isEmpty()
+							? Cursor.getDefaultCursor()
+							: Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		}
 	}
 
 	@Override
-	public void tokenEnter(Token token) {
+	public void tokenEnter(final Token token) {
 		super.tokenEnter(token);
 		updateCursor();
 	}
 
 	@Override
-	public void tokenExit(Token token) {
+	public void tokenExit(final Token token) {
 		super.tokenExit(token);
 		updateCursor();
 	}
@@ -46,12 +54,18 @@ public class IntermediateCatchEvent extends IntermediateEvent
 
 	@Override
 	protected boolean canForwardToken(final Token token) {
-		return false;
+		if (isInteractive()) {
+			return false;
+		} else {
+			return super.canForwardToken(token);
+		}
 	}
 
 	@Override
 	public void mouseClicked(final MouseEvent e) {
-		passFirstTokenToAllOutgoing();
+		if (isInteractive()) {
+			passFirstTokenToAllOutgoing();
+		}
 	}
 
 	@Override
@@ -68,6 +82,11 @@ public class IntermediateCatchEvent extends IntermediateEvent
 
 	@Override
 	public void mouseExited(final MouseEvent e) {
+	}
+
+	@Override
+	protected Icon getTypeIcon() {
+		return getDefinition().getIcon(getVisualConfig(), false);
 	}
 
 }

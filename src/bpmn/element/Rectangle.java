@@ -43,10 +43,6 @@ public class Rectangle extends java.awt.Rectangle {
 		super(p);
 	}
 
-	public Rectangle(final Point p1, final Point p2) {
-		this(p1.x, p1.y, p2.x - p1.x, p2.y - p1.y);
-	}
-
 	public int min() {
 		return Math.min(width, height);		
 	}
@@ -93,6 +89,12 @@ public class Rectangle extends java.awt.Rectangle {
 		y += t;
 		width -= l + r;
 		height -= t + b;
+	}
+
+	public void shrinkHalf() {
+		final int leftRight = (int)getWidth() / 4;
+		final int topBottom = (int)getHeight() / 4;
+		shrink(leftRight, leftRight, topBottom, topBottom);
 	}
 
 }

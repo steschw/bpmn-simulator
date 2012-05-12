@@ -17,7 +17,7 @@ public abstract class TokenFlowElementWithDefault
 
 	@Override
 	public void setDefaultSequenceFlowRef(
-			ElementRef<SequenceFlow> sequenceFlowRef) {
+			final ElementRef<SequenceFlow> sequenceFlowRef) {
 		defaultSequenceFlowRef = sequenceFlowRef;
 	}
 

@@ -24,9 +24,8 @@ import javax.swing.Icon;
 
 import bpmn.element.VisualConfig;
 
+@SuppressWarnings("serial")
 public final class ScriptTask extends Task {
-
-	private static final long serialVersionUID = 1L;
 
 	public ScriptTask(final String id, final String name) {
 		super(id, name);

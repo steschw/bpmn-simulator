@@ -30,9 +30,8 @@ import java.awt.geom.AffineTransform;
 import javax.swing.JLabel;
 import javax.swing.text.View;
 
+@SuppressWarnings("serial")
 public class Label extends JLabel {
-
-	private static final long serialVersionUID = 1L;
 
 	private static final Font FONT = new Font("Tahoma", Font.PLAIN, 11);
 
@@ -41,11 +40,11 @@ public class Label extends JLabel {
 
 	private boolean alignCenter = true;
 
-	public Label(final BaseElement element, final String text) {
+	public Label(final VisibleElement element, final String text) {
 		this(element, text, false);
 	}
 
-	public Label(final BaseElement element, final String text, final boolean vertical) {
+	public Label(final VisibleElement element, final String text, final boolean vertical) {
 		super(text);
 		this.vertical = vertical;
 		setFont(FONT);
@@ -90,7 +89,7 @@ public class Label extends JLabel {
 		if (isAlignCenter()) {
 			text.append(" style=\"text-align:center;\"");
 		}
-		text.append(">");
+		text.append('>');
 		text.append(super.getText().replaceAll("\n", "<br>"));
 		text.append("</div>");
 		text.append("</body>");

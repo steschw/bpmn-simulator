@@ -28,9 +28,8 @@ import bpmn.token.Instance;
 import bpmn.token.Token;
 import bpmn.token.TokenCollection;
 
+@SuppressWarnings("serial")
 public abstract class Activity extends TokenFlowElementWithDefault {
-
-	private static final long serialVersionUID = 1L;
 
 	private final TokenCollection incomingTokens = new TokenCollection();
 	private final TokenCollection outgoingTokens = new TokenCollection();

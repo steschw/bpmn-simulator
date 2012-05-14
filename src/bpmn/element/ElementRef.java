@@ -20,7 +20,7 @@
  */
 package bpmn.element;
 
-public class ElementRef<E extends BaseElement> {
+public class ElementRef<E extends Element> {
 
 	private E element;
 
@@ -45,8 +45,8 @@ public class ElementRef<E extends BaseElement> {
 		return element != null;
 	}
 
-	public boolean equalsElement(final BaseElement element) {
-		final BaseElement e = getElement();
+	public boolean equalsElement(final E element) {
+		final E e = getElement();
 		if ((e == null) || (element == null)) {
 			return false;
 		}
@@ -56,7 +56,9 @@ public class ElementRef<E extends BaseElement> {
 	@Override
 	public boolean equals(final Object object) {
 		if (object instanceof ElementRef<?>) {
-			return equalsElement(((ElementRef<?>)object).getElement());
+			@SuppressWarnings("unchecked")
+			final ElementRef<E> element = (ElementRef<E>)object; 
+			return equalsElement(element.getElement());
 		} else {
 			assert false;
 		}

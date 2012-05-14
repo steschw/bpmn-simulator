@@ -35,20 +35,15 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 
+@SuppressWarnings("serial")
 public class LogList extends JScrollPane {
 
-	private static final long serialVersionUID = 1L;
-
 	private static class LogListContent extends JTable {
-
-		private static final long serialVersionUID = 1L;
 
 		private static final String COLUMN_TYPE = "Type";
 		private static final String COLUMN_MESSAGE = "Nachricht";
 
 		private static class ProtocolTableCellRenderer extends DefaultTableCellRenderer {
-
-			private static final long serialVersionUID = 1L;
 
 			@Override
 			public void setValue(final Object value) {

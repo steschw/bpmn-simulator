@@ -39,6 +39,8 @@ public class Graphics {
 	private static final double RAD_FULL = 2. * Math.PI;
 	private static final double RAD_30 = RAD_FULL / 12.;
 
+	private static final int PENTAGON_CORNERS = 5;
+
 	private static final double CONNECTING_SYMBOL_LENGTH = 12.;
 
 	private static final RenderingHints QUALITY = new RenderingHints(null);
@@ -218,10 +220,12 @@ public class Graphics {
 		final Polygon polygon = new Polygon();
 		final Point center = new Point(size.x + size.width / 2, size.y + size.height / 2);
 		final double r = size.width / 2.;
-		final int corners = 5;
 		Point point = null;
 		for (int i = 0; i < 5; ++i) {
-			point = polarToCartesian(center, r, (RAD_FULL / corners) * i - (RAD_FULL / corners) / 2.);
+			point = polarToCartesian(
+					center, r,
+					(RAD_FULL / PENTAGON_CORNERS) * i
+							- (RAD_FULL / PENTAGON_CORNERS) / 2.);
 			polygon.addPoint(point.x, point.y);
 		}
 		return polygon;

@@ -29,9 +29,8 @@ import bpmn.token.Instance;
 import bpmn.token.Token;
 import bpmn.token.TokenCollection;
 
+@SuppressWarnings("serial")
 public class InclusiveGateway extends Gateway {
-
-	private static final long serialVersionUID = 1L;
 
 	public InclusiveGateway(final String id, final String name) {
 		super(id, name);

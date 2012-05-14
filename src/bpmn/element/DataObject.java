@@ -4,13 +4,12 @@ import java.awt.Point;
 
 import javax.swing.Icon;
 
-public class DataObjectReference extends FlowElement {
-
-	private static final long serialVersionUID = 1L;
+@SuppressWarnings("serial")
+public class DataObject extends FlowElement {
 
 	private boolean isCollection;
 
-	public DataObjectReference(final String id, final String name) {
+	public DataObject(final String id, final String name) {
 		super(id, name);
 	}
 

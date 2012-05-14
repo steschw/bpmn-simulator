@@ -25,7 +25,7 @@ import java.util.Locale;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 
-import bpmn.element.BaseElement;
+import bpmn.element.VisibleElement;
 import bpmn.element.VisualConfig;
 
 public class Config {
@@ -38,6 +38,8 @@ public class Config {
 	private static final String ANTIALIASING = "antialiasing"; //$NON-NLS-1$
 
 	private static final String IGNORE_COLORS = "ignoreColors";
+
+	private static final String BACKGROUND_COLOR = "backgroundColor";
 
 	private static final Color DEFAULT_BACKGROUND = Color.WHITE;
 
@@ -73,7 +75,7 @@ public class Config {
 		for (VisualConfig.Element element : VisualConfig.Element.values()) {
 			final Preferences elementPreferences = getElementNode(element); 
 			final Color color = visualConfig.getBackground(element);
-			putColor(elementPreferences, "backgroundColor", color);
+			setBackground(elementPreferences, color);
 		}
 	}
 
@@ -86,20 +88,20 @@ public class Config {
 		visualConfig.setShowExclusiveGatewaySymbol(preferences.getBoolean(SHOW_EXCLUSIVEGATEWAYSYMBOL, true));
 
 		for (VisualConfig.Element element : VisualConfig.Element.values()) {
-			final Color color = getBackground(getElementNode(element), "backgroundColor");
+			final Color color = getBackground(getElementNode(element));
 			visualConfig.setBackground(element, color);
 		}
 
 		return visualConfig;
 	}
 
-	protected static Color getBackground(final Preferences preferences, final String key) {
-		return new Color(preferences.getInt(key, DEFAULT_BACKGROUND.getRGB()));
+	protected static Color getBackground(final Preferences preferences) {
+		return new Color(preferences.getInt(BACKGROUND_COLOR, DEFAULT_BACKGROUND.getRGB()));
 	}
 
-	protected static void putColor(final Preferences preferences, final String key,
+	protected static void setBackground(final Preferences preferences,
 			final Color value) {
-		preferences.putInt(key, value.getRGB());
+		preferences.putInt(BACKGROUND_COLOR, value.getRGB());
 	}
 
 	public void setLocale(final Locale locale) {
@@ -134,7 +136,7 @@ public class Config {
 
 	public void load() {
 		setLocale(getLocale());
-		BaseElement.setDefaultVisualConfig(getVisualConfig());
+		VisibleElement.setDefaultVisualConfig(getVisualConfig());
 	}
 
 	public void store() {

@@ -28,9 +28,8 @@ import bpmn.element.gateway.ExclusiveGateway;
 import bpmn.element.gateway.Gateway;
 import bpmn.element.gateway.InclusiveGateway;
 
+@SuppressWarnings("serial")
 public class SequenceFlow extends TokenConnectingElement {
-
-	private static final long serialVersionUID = 1L;
 
 	private Expression condition;
 

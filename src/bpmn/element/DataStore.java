@@ -1,10 +1,9 @@
 package bpmn.element;
 
-public class DataStoreReference extends FlowElement {
+@SuppressWarnings("serial")
+public class DataStore extends FlowElement {
 
-	private static final long serialVersionUID = 1L;
-
-	public DataStoreReference(final String id, final String name) {
+	public DataStore(final String id, final String name) {
 		super(id, name);
 	}
 

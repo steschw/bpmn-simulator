@@ -29,9 +29,8 @@ import bpmn.token.Token;
 import bpmn.token.TokenCollection;
 import bpmn.token.TokenFlow;
 
+@SuppressWarnings("serial")
 public abstract class TokenFlowElement extends FlowElement implements TokenFlow {
-
-	private static final long serialVersionUID = 1L;
 
 	protected static final int TOKEN_MARGIN = 5;
 

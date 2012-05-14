@@ -31,9 +31,8 @@ import bpmn.element.Rectangle;
 import bpmn.element.VisualConfig;
 import bpmn.element.activity.Activity;
 
+@SuppressWarnings("serial")
 public class Task extends Activity {
-
-	private static final long serialVersionUID = 1L;
 
 	private static final int TYPEICON_MARGIN = 6;
 

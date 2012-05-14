@@ -33,9 +33,8 @@ import javax.swing.JPopupMenu;
 import bpmn.Model;
 import bpmn.element.event.StartEvent;
 
+@SuppressWarnings("serial")
 public class StartButton extends JButton implements ActionListener {
-
-	private static final long serialVersionUID = 1L;
 
 	private Model model;
 

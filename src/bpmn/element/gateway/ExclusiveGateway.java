@@ -25,9 +25,8 @@ import java.awt.BasicStroke;
 import bpmn.element.Graphics;
 import bpmn.token.Token;
 
+@SuppressWarnings("serial")
 public class ExclusiveGateway extends Gateway {
-
-	private static final long serialVersionUID = 1L;
 
 	public ExclusiveGateway(final String id, final String name) {
 		super(id, name);

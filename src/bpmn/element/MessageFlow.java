@@ -25,9 +25,8 @@ import java.awt.Color;
 import java.awt.Point;
 import java.awt.Stroke;
 
+@SuppressWarnings("serial")
 public class MessageFlow extends ConnectingElement {
-
-	private static final long serialVersionUID = 1L;
 
 	public MessageFlow(final String id, final ElementRef<FlowElement> source,
 			final ElementRef<FlowElement> target) {

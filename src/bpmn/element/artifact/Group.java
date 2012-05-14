@@ -25,9 +25,8 @@ import java.awt.Stroke;
 
 import bpmn.element.Graphics;
 
+@SuppressWarnings("serial")
 public class Group extends Artifact {
-
-	private static final long serialVersionUID = 1L;
 
 	protected static final int ARC_LENGTH = 20;
 

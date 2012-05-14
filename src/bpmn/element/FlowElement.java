@@ -23,9 +23,8 @@ package bpmn.element;
 import java.util.ArrayList;
 import java.util.Collection;
 
-public abstract class FlowElement extends BaseElement {
-
-	private static final long serialVersionUID = 1L;
+@SuppressWarnings("serial")
+public abstract class FlowElement extends VisibleElement {
 
 	private final Collection<ElementRef<SequenceFlow>> incoming = new ArrayList<ElementRef<SequenceFlow>>(); 
 	private final Collection<ElementRef<SequenceFlow>> outgoing = new ArrayList<ElementRef<SequenceFlow>>(); 

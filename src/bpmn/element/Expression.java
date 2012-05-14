@@ -8,9 +8,8 @@ import java.awt.event.ItemListener;
 import javax.swing.JCheckBox;
 import javax.swing.SwingConstants;
 
+@SuppressWarnings("serial")
 public class Expression extends JCheckBox implements ItemListener {
-
-	private static final long serialVersionUID = 1L;
 
 	private static final Color COLOR_TRUE = new Color(0, 196, 0);
 	private static final Color COLOR_FALSE = new Color(0, 0, 0);

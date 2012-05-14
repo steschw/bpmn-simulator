@@ -26,9 +26,8 @@ import bpmn.element.Graphics;
 import bpmn.element.Label;
 import bpmn.element.Rectangle;
 
+@SuppressWarnings("serial")
 public class TextAnnotation extends Artifact {
-
-	private static final long serialVersionUID = 1L;
 
 	private static final int MARGIN = 10;
 

@@ -20,9 +20,8 @@
  */
 package bpmn.element;
 
+@SuppressWarnings("serial")
 public class TitledFlowElement extends FlowElement {
-
-	private static final long serialVersionUID = 1L;
 
 	private static final int HEADER_SIZE = 32;
 

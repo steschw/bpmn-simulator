@@ -28,18 +28,17 @@ import javax.swing.ImageIcon;
 import javax.swing.JInternalFrame;
 import javax.swing.JScrollPane;
 
-import bpmn.element.BaseElement;
+import bpmn.element.VisibleElement;
 import bpmn.element.Collaboration;
 import bpmn.element.activity.ExpandedProcess;
 
+@SuppressWarnings("serial")
 public class DiagramFrame extends JInternalFrame {
-
-	private static final long serialVersionUID = 1L;
 
 	private static final Icon ICON_PROCESS = loadFrameIcon("process.png");
 	private static final Icon ICON_COLLABORATION = loadFrameIcon("collaboration.png");
 
-	public DiagramFrame(final BaseElement container, final String name) {
+	public DiagramFrame(final VisibleElement container, final String name) {
 		super((name == null) ? container.getName() : name, true, false, true);
 		final JScrollPane scrollPane = new JScrollPane(container);
 		scrollPane.getViewport().setBackground(Color.WHITE);
@@ -55,7 +54,7 @@ public class DiagramFrame extends JInternalFrame {
 		return null;
 	}
 
-	protected void setFrameIcon(final BaseElement container) {
+	protected void setFrameIcon(final VisibleElement container) {
 		Icon icon = null;
 		if (container instanceof ExpandedProcess) {
 			icon = ICON_PROCESS;

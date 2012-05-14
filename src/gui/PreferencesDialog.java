@@ -40,12 +40,11 @@ import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.border.Border;
 
-import bpmn.element.BaseElement;
+import bpmn.element.VisibleElement;
 import bpmn.element.VisualConfig;
 
+@SuppressWarnings("serial")
 public class PreferencesDialog extends JDialog {
-
-	private static final long serialVersionUID = 1L;
 
 	private static final int GAP = 10;
 
@@ -220,7 +219,7 @@ public class PreferencesDialog extends JDialog {
 
 		config.setLocale((Locale)selectLanguage.getSelectedItem());
 
-		final VisualConfig visualConfig = BaseElement.getDefaultVisualConfig();
+		final VisualConfig visualConfig = VisibleElement.getDefaultVisualConfig();
 		visualConfig.setAntialiasing(checkAntialiasing.isSelected());
 		visualConfig.setShowExclusiveGatewaySymbol(checkShowExclusiveSymbol.isSelected());
 		visualConfig.setIgnoreColors(checkIgnoreModelerColors.isSelected());
@@ -240,7 +239,7 @@ public class PreferencesDialog extends JDialog {
 
 		selectLanguage.setSelectedItem(config.getLocale());
 
-		final VisualConfig visualConfig = BaseElement.getDefaultVisualConfig();
+		final VisualConfig visualConfig = VisibleElement.getDefaultVisualConfig();
 		checkAntialiasing.setSelected(visualConfig.isAntialiasing());
 		checkShowExclusiveSymbol.setSelected(visualConfig.getShowExclusiveGatewaySymbol());
 		checkIgnoreModelerColors.setSelected(visualConfig.getIgnoreColors());

@@ -23,9 +23,8 @@ package bpmn.element;
 import java.awt.Dimension;
 import java.awt.Point;
 
+@SuppressWarnings("serial")
 public class Rectangle extends java.awt.Rectangle {
-
-	private static final long serialVersionUID = 1L;
 
 	public Rectangle(final int x, final int y, final int width, final int height) {
 		super(x, y, width, height);

@@ -30,9 +30,8 @@ import java.util.LinkedList;
 
 import javax.swing.SwingUtilities;
 
-public abstract class ConnectingElement extends BaseElement {
-
-	private static final long serialVersionUID = 1L;
+@SuppressWarnings("serial")
+public abstract class ConnectingElement extends VisibleElement {
 
 	private final Deque<Point> waypoints = new LinkedList<Point>();
 
@@ -56,7 +55,7 @@ public abstract class ConnectingElement extends BaseElement {
 		return sourceRef;
 	}
 
-	protected static final <E extends BaseElement> E getElementFromElementRef(
+	protected static final <E extends VisibleElement> E getElementFromElementRef(
 			final ElementRef<E> elementRef) {
 		if ((elementRef != null) && elementRef.hasElement()) {
 			return elementRef.getElement();

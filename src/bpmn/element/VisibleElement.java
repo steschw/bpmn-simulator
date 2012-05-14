@@ -35,9 +35,8 @@ import javax.swing.JComponent;
 
 import bpmn.element.activity.ExpandedProcess;
 
-public abstract class BaseElement extends JComponent {
-
-	private static final long serialVersionUID = 1L;
+@SuppressWarnings("serial")
+public abstract class VisibleElement extends JComponent implements Element {
 
 	protected static final int MARGIN = 10;
 
@@ -65,7 +64,7 @@ public abstract class BaseElement extends JComponent {
 		return defaultVisualConfig;
 	}
 
-	public BaseElement(final String id, final String name) {
+	public VisibleElement(final String id, final String name) {
 		super();
 		setId(id);
 		setName(name);
@@ -104,18 +103,22 @@ public abstract class BaseElement extends JComponent {
 		this.id = id;
 	}
 
+	@Override
 	public final String getId() {
 		return id;
 	}
 
+	@Override
 	public void setDocumentation(final Documentation documentation) {
 		this.documentation = documentation;
 	}
 
+	@Override
 	public Documentation getDocumentation() {
 		return documentation;
 	}
 
+	@Override
 	public boolean hasDocumentation() {
 		return getDocumentation() != null;
 	}

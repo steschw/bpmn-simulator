@@ -27,9 +27,8 @@ import bpmn.element.activity.ExpandedProcess;
 /**
  * A Pool is the graphical representation of a Participant in a Collaboration
  */
+@SuppressWarnings("serial")
 public class Pool extends TitledFlowElement {
-
-	private static final long serialVersionUID = 1L;
 
 	public Pool(final String id, final String name,
 			final ElementRef<ExpandedProcess> processRef) {

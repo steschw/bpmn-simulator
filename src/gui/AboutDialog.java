@@ -39,9 +39,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 
+@SuppressWarnings("serial")
 public class AboutDialog extends JDialog {
-
-	private static final long serialVersionUID = 1L;
 
 	private static final int WIDTH = 400;
 	private static final int HEIGHT = 300;

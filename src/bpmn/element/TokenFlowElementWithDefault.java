@@ -3,11 +3,10 @@ package bpmn.element;
 import bpmn.token.Instance;
 import bpmn.token.Token;
 
+@SuppressWarnings("serial")
 public abstract class TokenFlowElementWithDefault
 		extends TokenFlowElement
 		implements ElementWithDefaultSequenceFlow {
-
-	private static final long serialVersionUID = 1L;
 
 	private ElementRef<SequenceFlow> defaultSequenceFlowRef;
 

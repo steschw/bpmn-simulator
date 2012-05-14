@@ -30,17 +30,12 @@ import javax.swing.JDesktopPane;
 import javax.swing.JInternalFrame;
 import javax.swing.JScrollPane;
 
+@SuppressWarnings("serial")
 public class ScrollDesktop extends JScrollPane {
-
-	private static final long serialVersionUID = 1L;
 
 	public class ScrollDesktopPane extends JDesktopPane {
 
-		private static final long serialVersionUID = 1L;
-
 		private class ScrollDesktopManager extends DefaultDesktopManager {
-
-			private static final long serialVersionUID = 1L;
 
 			@Override
 			public void dragFrame(final JComponent f, final int newX, final int newY) {

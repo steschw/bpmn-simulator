@@ -24,9 +24,8 @@ import java.awt.BasicStroke;
 import java.awt.Point;
 import java.awt.Stroke;
 
+@SuppressWarnings("serial")
 public class Association extends ConnectingElement {
-
-	private static final long serialVersionUID = 1L;
 
 	public static enum Direction {
 		NONE,

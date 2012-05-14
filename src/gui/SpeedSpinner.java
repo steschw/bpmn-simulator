@@ -27,9 +27,8 @@ import javax.swing.JSpinner;
 import javax.swing.JTextField;
 import javax.swing.SpinnerListModel;
 
+@SuppressWarnings("serial")
 public class SpeedSpinner extends JSpinner {
-
-	private static final long serialVersionUID = 1L;
 
 	enum Speed {
 		HALF("x\u00BD", 0.5f),

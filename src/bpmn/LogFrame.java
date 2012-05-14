@@ -29,9 +29,8 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+@SuppressWarnings("serial")
 public class LogFrame extends JFrame {
-
-	private static final long serialVersionUID = 1L;
 
 	private final LogList listLog = new LogList();
 

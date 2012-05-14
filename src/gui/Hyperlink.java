@@ -30,9 +30,8 @@ import java.net.URI;
 
 import javax.swing.JButton;
 
+@SuppressWarnings("serial")
 public class Hyperlink extends JButton implements ActionListener {
-
-	private static final long serialVersionUID = 1L;
 
 	private URI uri;
 

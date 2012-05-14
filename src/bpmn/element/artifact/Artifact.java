@@ -25,9 +25,8 @@ import java.awt.Color;
 import bpmn.element.ClickThroughMouseListener;
 import bpmn.element.FlowElement;
 
+@SuppressWarnings("serial")
 public abstract class Artifact extends FlowElement {
-
-	private static final long serialVersionUID = 1L;
 
 	public Artifact(final String id) {
 		super(id, null);

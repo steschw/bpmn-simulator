@@ -38,9 +38,8 @@ import bpmn.Model;
 import bpmn.token.AnimationListener;
 import bpmn.token.Animator;
 
+@SuppressWarnings("serial")
 public class Toolbar extends JToolBar implements AnimationListener {
-
-	private static final long serialVersionUID = 1L;
 
 	private static final Icon ICON_OPEN = loadIcon("open.png"); //$NON-NLS-1$
 

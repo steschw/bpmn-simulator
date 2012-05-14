@@ -24,9 +24,8 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.Vector;
 
+@SuppressWarnings("serial")
 public class TokenCollection extends Vector<Token> {
-
-	private static final long serialVersionUID = 1L;
 
 	public TokenCollection() {
 		super();

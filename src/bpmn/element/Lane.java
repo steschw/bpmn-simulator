@@ -23,9 +23,8 @@ package bpmn.element;
 import java.util.ArrayList;
 import java.util.Collection;
 
+@SuppressWarnings("serial")
 public class Lane extends TitledFlowElement {
-
-	private static final long serialVersionUID = 1L;
 
 	private final Collection<LaneSet> laneSets = new ArrayList<LaneSet>(); 
 

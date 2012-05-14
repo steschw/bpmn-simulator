@@ -2,7 +2,7 @@ package bpmn.element.event;
 
 import javax.swing.Icon;
 
-import bpmn.element.BaseElement;
+import bpmn.element.VisibleElement;
 import bpmn.element.activity.ExpandedProcess;
 import bpmn.token.Token;
 
@@ -20,7 +20,7 @@ public class IntermediateThrowEvent extends IntermediateEvent {
 
 	protected static IntermediateCatchEvent findLinkTargetInProcess(
 			final ExpandedProcess process, final String targetName) {
-		for (final BaseElement element : process.getElements()) {
+		for (final VisibleElement element : process.getElements()) {
 			if (element instanceof IntermediateCatchEvent) {
 				final IntermediateCatchEvent event = (IntermediateCatchEvent)element;
 				final EventDefinition definition = event.getDefinition(); 

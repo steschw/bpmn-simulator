@@ -33,9 +33,8 @@ import bpmn.token.Instance;
 import bpmn.token.Token;
 import bpmn.token.TokenCollection;
 
+@SuppressWarnings("serial")
 public abstract class Gateway extends TokenFlowElementWithDefault {
-
-	private static final long serialVersionUID = 1L;
 
 	private static final int SYMBOL_MARGIN = 14;
 

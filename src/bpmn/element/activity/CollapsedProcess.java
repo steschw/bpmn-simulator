@@ -33,9 +33,8 @@ import bpmn.element.VisualConfig;
 import bpmn.token.Instance;
 import bpmn.token.Token;
 
+@SuppressWarnings("serial")
 public class CollapsedProcess extends FlowElement {
-
-	private static final long serialVersionUID = 1L;
 
 	protected static final int TOKEN_MARGIN = 5;
 

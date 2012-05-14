@@ -27,17 +27,16 @@ import java.util.Collection;
 
 import javax.swing.Scrollable;
 
+@SuppressWarnings("serial")
 public class Collaboration extends FlowElement implements Scrollable {
 
-	private static final long serialVersionUID = 1L;
-
-	private final Collection<BaseElement> elements = new ArrayList<BaseElement>(); 
+	private final Collection<VisibleElement> elements = new ArrayList<VisibleElement>(); 
 
 	public Collaboration(final String id) {
 		super(id, null);
 	}
 
-	public void addElement(final BaseElement element) {
+	public void addElement(final VisibleElement element) {
 		assert element != null;
 		elements.add(element);
 	}

@@ -30,7 +30,7 @@ import java.util.Collection;
 import javax.swing.Scrollable;
 
 import bpmn.Model;
-import bpmn.element.BaseElement;
+import bpmn.element.VisibleElement;
 import bpmn.element.Graphics;
 import bpmn.element.Label;
 import bpmn.element.TokenFlowElement;
@@ -42,13 +42,12 @@ import bpmn.token.Instance;
 import bpmn.token.Token;
 import bpmn.token.TokenFlow;
 
+@SuppressWarnings("serial")
 public class ExpandedProcess extends Activity implements Scrollable {
-
-	private static final long serialVersionUID = 1L;
 
 	private static final int ARC_LENGTH = 20;
 
-	private final Collection<BaseElement> elements = new ArrayList<BaseElement>();
+	private final Collection<VisibleElement> elements = new ArrayList<VisibleElement>();
 
 	private CollapsedProcess collapsedProcess; 
 
@@ -73,18 +72,18 @@ public class ExpandedProcess extends Activity implements Scrollable {
 		}
 	}
 
-	public void addElement(final BaseElement element) {
+	public void addElement(final VisibleElement element) {
 		assert !elements.contains(element);
 		elements.add(element);
 		element.setProcess(this);
 	}
 
-	public Collection<BaseElement> getElements() {
+	public Collection<VisibleElement> getElements() {
 		return elements;
 	}
 
 	protected boolean containsTokenFlow(final TokenFlow tokenFlow) {
-		for (BaseElement element : elements) {
+		for (VisibleElement element : elements) {
 			if (element instanceof TokenFlow) {
 				if ((TokenFlow)element == tokenFlow) {
 					return true;
@@ -192,7 +191,7 @@ public class ExpandedProcess extends Activity implements Scrollable {
 
 	public Collection<TokenFlowElement> getStartElements() {
 		final Collection<TokenFlowElement> startElements = new ArrayList<TokenFlowElement>();
-		for (BaseElement element : elements) {
+		for (VisibleElement element : elements) {
 			if (element instanceof TokenFlowElement) {
 				final TokenFlowElement tokenFlowElement = (TokenFlowElement)element; 
 				if (!tokenFlowElement.hasIncoming()) {
@@ -208,7 +207,7 @@ public class ExpandedProcess extends Activity implements Scrollable {
 
 	public StartEvent getStartEvent() {
 		StartEvent start = null;
-		for (BaseElement element : elements) {
+		for (VisibleElement element : elements) {
 			if (element instanceof StartEvent) {
 				final StartEvent event = (StartEvent)element;
 				if (event.isPlain()) {

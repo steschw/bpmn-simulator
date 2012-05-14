@@ -31,9 +31,8 @@ import bpmn.token.Instance;
 import bpmn.token.Token;
 import bpmn.token.TokenCollection;
 
+@SuppressWarnings("serial")
 public class ParallelGateway extends Gateway {
-
-	private static final long serialVersionUID = 1L;
 
 	public ParallelGateway(final String id, final String name) {
 		super(id, name);

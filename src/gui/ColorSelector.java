@@ -8,9 +8,8 @@ import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JColorChooser;
 
+@SuppressWarnings("serial")
 public class ColorSelector extends JButton implements ActionListener {
-
-	private static final long serialVersionUID = 1L;
 
 	public ColorSelector(final String text) {
 		super(text);

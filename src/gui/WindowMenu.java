@@ -36,15 +36,12 @@ import javax.swing.JRadioButtonMenuItem;
 import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
 
+@SuppressWarnings("serial")
 public class WindowMenu extends JMenu implements MenuListener {
-
-	private static final long serialVersionUID = 1L;
 
 	private JDesktopPane desktop;
 
 	private class WindowMenuItem extends JRadioButtonMenuItem implements ActionListener {
-
-		private static final long serialVersionUID = 1L;
 
 		private final JInternalFrame frame; 
 

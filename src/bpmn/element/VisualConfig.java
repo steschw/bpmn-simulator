@@ -11,7 +11,7 @@ import javax.swing.ImageIcon;
 
 public class VisualConfig {
 
-	private static final String ICONPATH = "../icons/";
+	private static final String ICONPATH = "bpmn/icons/";
 
 	public static final String ICON_BUSSINESRULE = "businessrule.png";
 	public static final String ICON_COLLAPSED = "collapsed.png";
@@ -59,10 +59,13 @@ public class VisualConfig {
 	}
 
 	protected static Icon loadIconFromRessource(final String name) {
-		final URL url = VisualConfig.class.getResource(ICONPATH + name);
+		final URL url = ClassLoader.getSystemClassLoader().getResource(ICONPATH + name);
 		assert url != null;
-		final Icon icon = new ImageIcon(url);
-		assert icon != null;
+		Icon icon = null;
+		if (url != null) {
+			icon = new ImageIcon(url);
+			assert icon != null;
+		}
 		return icon;
 	}
 

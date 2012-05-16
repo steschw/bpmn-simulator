@@ -31,6 +31,7 @@ import java.awt.Stroke;
 import java.awt.geom.Arc2D;
 import java.awt.geom.GeneralPath;
 import java.awt.geom.Path2D;
+import java.awt.geom.Rectangle2D;
 
 import javax.swing.Icon;
 
@@ -355,6 +356,14 @@ public class Graphics {
 				n,
 				180,
 				180);
+	}
+
+	public void drawText(final Rectangle bounds, final String text) {
+		final Rectangle2D textBounds
+			= graphics.getFontMetrics().getStringBounds(text, graphics);
+		final int x = bounds.x + (bounds.width - (int)textBounds.getWidth()) / 2;
+		final int y = bounds.y + (bounds.height - ((int)textBounds.getHeight() / 2));
+		graphics.drawString(text, x, y);
 	}
 
 }

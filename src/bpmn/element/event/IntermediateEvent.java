@@ -7,7 +7,7 @@ import bpmn.element.Rectangle;
 import bpmn.element.VisualConfig;
 
 @SuppressWarnings("serial")
-public abstract class IntermediateEvent extends Event {
+public abstract class IntermediateEvent extends AbstractEvent {
 
 	private static final int CIRCLE_MARGIN = 4;
 

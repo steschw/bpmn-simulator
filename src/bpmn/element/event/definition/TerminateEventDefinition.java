@@ -1,4 +1,4 @@
-package bpmn.element.event;
+package bpmn.element.event.definition;
 
 import javax.swing.Icon;
 

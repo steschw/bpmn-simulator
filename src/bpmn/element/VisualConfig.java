@@ -32,6 +32,8 @@ public class VisualConfig {
 	public static final String ICON_LINK_INVERSE = "link_inverse.png";
 	public static final String ICON_MESSAGE = "send.png";
 	public static final String ICON_MESSAGE_INVERSE = "receive.png";
+	public static final String ICON_SIGNAL = "signal.png";
+	public static final String ICON_SIGNAL_INVERSE = "signal_inverse.png";
 
 	private static final Color DEFAULT_BACKGROUNDCOLOR = Color.WHITE;
 
@@ -91,6 +93,8 @@ public class VisualConfig {
 		loadIcon(ICON_TERMINATE);
 		loadIcon(ICON_LINK);
 		loadIcon(ICON_LINK_INVERSE);
+		loadIcon(ICON_SIGNAL);
+		loadIcon(ICON_SIGNAL_INVERSE);
 	}
 
 	public Icon getIcon(final String name) {

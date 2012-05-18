@@ -29,15 +29,26 @@ import javax.swing.Icon;
 
 import bpmn.element.VisualConfig;
 import bpmn.element.activity.ExpandedProcess;
+import bpmn.token.Instance;
 import bpmn.token.InstanceController;
 
 @SuppressWarnings("serial")
-public class StartEvent extends Event implements MouseListener {
+public final class StartEvent extends AbstractEvent
+		implements CatchEvent, MouseListener {
 
 	public StartEvent(final String id, final String name,
 			final InstanceController tockenController) {
 		super(id, name, tockenController);
 		addMouseListener(this);
+	}
+
+	@Override
+	public void happen(final Instance instance) {
+		if (instance != null) {
+			instance.newChildInstance().newToken(this);
+		} else {
+			getInstanceController().newInstance().newToken(this);
+		}
 	}
 
 	@Override
@@ -68,18 +79,10 @@ public class StartEvent extends Event implements MouseListener {
 				: Cursor.getDefaultCursor());
 	}
 
-	public void start() {
-		final InstanceController instanceController = getInstanceController();
-		assert instanceController != null;
-		if (instanceController != null) {
-			instanceController.newInstance().newToken(this);
-		}
-	}
-
 	@Override
 	public void mouseClicked(final MouseEvent event) {
 		if (canStartManuell()) {
-			start();
+			happen(null);
 		}
 	}
 

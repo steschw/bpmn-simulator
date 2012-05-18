@@ -35,7 +35,7 @@ import bpmn.element.Graphics;
 import bpmn.element.Label;
 import bpmn.element.TokenFlowElement;
 import bpmn.element.VisualConfig;
-import bpmn.element.event.Event;
+import bpmn.element.event.AbstractEvent;
 import bpmn.element.event.StartEvent;
 import bpmn.element.gateway.Gateway;
 import bpmn.token.Instance;
@@ -169,7 +169,7 @@ public class ExpandedProcess extends Activity implements Scrollable {
 		if (collapsedProcess != null) {
 			collapsedProcess.addInstance(subInstance);
 		}
-		final Event startEvent = getStartEvent();
+		final AbstractEvent startEvent = getStartEvent();
 		if (startEvent == null) {
 			final Collection<TokenFlowElement> startElements = getStartElements();
 			if (startElements.isEmpty()) {

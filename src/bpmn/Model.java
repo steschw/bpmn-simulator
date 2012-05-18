@@ -56,6 +56,11 @@ import bpmn.element.activity.task.*;
 import bpmn.element.artifact.Group;
 import bpmn.element.artifact.TextAnnotation;
 import bpmn.element.event.*;
+import bpmn.element.event.definition.LinkEventDefinition;
+import bpmn.element.event.definition.MessageEventDefinition;
+import bpmn.element.event.definition.SignalEventDefinition;
+import bpmn.element.event.definition.TerminateEventDefinition;
+import bpmn.element.event.definition.TimerEventDefinition;
 import bpmn.element.gateway.*;
 import bpmn.token.TokenAnimator;
 
@@ -94,6 +99,22 @@ public class Model implements ErrorHandler {
 
 	public Collection<ExpandedProcess> getProcesses() {
 		return processes;
+	}
+
+	@SuppressWarnings("unchecked")
+	protected <E> Collection<E> getElements(final Class<E> type) {
+		final Collection<E> events = new LinkedList<E>();
+		for (final ElementRef<VisibleElement> elementRef : elements.values()) {
+			final Element element = elementRef.getElement();
+			if (type.isAssignableFrom(element.getClass())) {
+				events.add((E)element);
+			}
+		}
+		return events;
+	}
+
+	public Collection<CatchEvent> getCatchEvents() {
+		return getElements(CatchEvent.class);
 	}
 
 	protected void addElementToContainer(final VisibleElement element,
@@ -222,18 +243,27 @@ public class Model implements ErrorHandler {
 	}
 
 	@SuppressWarnings("unchecked")
-	protected <T extends VisibleElement> ElementRef<T> getElementRef(final String id) {
+	protected <T extends Element> ElementRef<T> getElementRef(final String id) {
 		return (ElementRef<T>)elements.getRef(id);
 	}
 
-	protected <T extends VisibleElement> ElementRef<T> getAttributeElementRef(
+	protected ElementRef<Signal> getSignalRef(final String id) {
+		return signals.getRef(id);
+	}
+
+	protected <T extends Element> ElementRef<T> getAttributeElementRef(
 			final Node node, final String name) {
 		return getAttributeElementRef(node, name, true);
 	}
 
-	protected <T extends VisibleElement> ElementRef<T> getAttributeElementRef(
+	protected <T extends Element> ElementRef<T> getAttributeElementRef(
 			final Node node, final String name, final boolean required) {
 		return getElementRef(getAttributeString(node, name, required));
+	}
+
+	protected ElementRef<Signal> getAttributeSignalRef(
+			final Node node, final String name) {
+		return getSignalRef(getAttributeString(node, name, true));
 	}
 
 	protected static Color convertStringToColor(final String value) {
@@ -620,7 +650,7 @@ public class Model implements ErrorHandler {
 		}
 	}
 
-	protected boolean readEventDefinitions(final Node node, final Event event) {
+	protected boolean readEventDefinitions(final Node node, final AbstractEvent event) {
 		if (isElementNode(node, BPMN, "terminateEventDefinition")) { //$NON-NLS-1$
 			event.setDefinition(new TerminateEventDefinition());
 		} else if (isElementNode(node, BPMN, "timerEventDefinition")) { //$NON-NLS-1$
@@ -629,13 +659,16 @@ public class Model implements ErrorHandler {
 			event.setDefinition(new MessageEventDefinition());
 		} else if (isElementNode(node, BPMN, "linkEventDefinition")) { //$NON-NLS-1$
 			event.setDefinition(new LinkEventDefinition(getNameAttribute(node, true)));
+		} else if (isElementNode(node, BPMN, "signalEventDefinition")) { //$NON-NLS-1$
+			final ElementRef<Signal> signalRef = getAttributeSignalRef(node, "signalRef");
+			event.setDefinition(new SignalEventDefinition(signalRef));
 		} else {
 			return false;
 		}
 		return true;
 	}
 
-	protected void readEvent(final Node node, final Event event) {
+	protected void readEvent(final Node node, final AbstractEvent event) {
 		final NodeList childNodes = node.getChildNodes();
 		for (int i = 0; i < childNodes.getLength(); ++i) {
 			final Node childNode = childNodes.item(i);

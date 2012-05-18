@@ -1,13 +1,20 @@
 package bpmn.element.event;
 
+import java.util.Collection;
+
 import javax.swing.Icon;
 
+import bpmn.Model;
 import bpmn.element.VisibleElement;
 import bpmn.element.activity.ExpandedProcess;
+import bpmn.element.event.definition.EventDefinition;
+import bpmn.element.event.definition.LinkEventDefinition;
+import bpmn.element.event.definition.SignalEventDefinition;
+import bpmn.token.Instance;
 import bpmn.token.Token;
 
 @SuppressWarnings("serial")
-public class IntermediateThrowEvent extends IntermediateEvent {
+public final class IntermediateThrowEvent extends IntermediateEvent {
 
 	public IntermediateThrowEvent(final String id, final String name) {
 		super(id, name);
@@ -58,6 +65,17 @@ public class IntermediateThrowEvent extends IntermediateEvent {
 				token.passTo(targetEvent);
 				token.remove();
 			}
+		} else if (isSignal()) {
+			final Instance instance = token.getInstance();
+			final Model model = getProcess().getModel();
+			final SignalEventDefinition eventDefinition = (SignalEventDefinition)getDefinition();
+			final Collection<CatchEvent> catchEvents =  model.getCatchEvents();
+			for (final CatchEvent catchEvent : catchEvents) {
+				if (eventDefinition.equals(catchEvent.getDefinition())) {
+					catchEvent.happen(instance);
+				}
+			}
+			token.remove();
 		} else {
 			super.tokenForward(token);
 		}

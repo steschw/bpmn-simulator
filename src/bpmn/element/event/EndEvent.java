@@ -29,7 +29,7 @@ import bpmn.token.InstanceController;
 import bpmn.token.Token;
 
 @SuppressWarnings("serial")
-public class EndEvent extends Event {
+public final class EndEvent extends AbstractEvent {
 
 	public EndEvent(final String id, final String name,
 			final InstanceController tockenController) {

@@ -1,4 +1,4 @@
-package bpmn.element.event;
+package bpmn.element.event.definition;
 
 import javax.swing.Icon;
 
@@ -19,9 +19,9 @@ public class LinkEventDefinition implements EventDefinition {
 
 	@Override
 	public Icon getIcon(final VisualConfig visualConfig, final boolean inverse) {
-		return inverse
-				? visualConfig.getIcon(VisualConfig.ICON_LINK_INVERSE)
-				: visualConfig.getIcon(VisualConfig.ICON_LINK);
+		return visualConfig.getIcon(inverse
+				? VisualConfig.ICON_LINK_INVERSE
+				: VisualConfig.ICON_LINK);
 	}
 
 }

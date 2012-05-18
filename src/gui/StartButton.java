@@ -54,7 +54,7 @@ public class StartButton extends JButton implements ActionListener {
 			final Collection<StartEvent> startEvents = model.getManuallStartEvents();
 			final Iterator<StartEvent> iterator = startEvents.iterator();
 			if (startEvents.size() == 1) {
-				iterator.next().start();
+				iterator.next().happen(null);
 			} else {
 				final JPopupMenu menu = new JPopupMenu();
 				while (iterator.hasNext()) {
@@ -63,7 +63,7 @@ public class StartButton extends JButton implements ActionListener {
 					menuItem.addActionListener(new ActionListener() {
 						@Override
 						public void actionPerformed(final ActionEvent e) {
-							startEvent.start();
+							startEvent.happen(null);
 						}
 					});
 					menu.add(menuItem);

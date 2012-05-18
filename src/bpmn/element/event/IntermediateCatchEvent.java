@@ -7,11 +7,12 @@ import java.util.Iterator;
 
 import javax.swing.Icon;
 
+import bpmn.token.Instance;
 import bpmn.token.Token;
 
 @SuppressWarnings("serial")
-public class IntermediateCatchEvent extends IntermediateEvent
-	implements MouseListener {
+public final class IntermediateCatchEvent extends IntermediateEvent
+	implements CatchEvent, MouseListener {
 
 	public IntermediateCatchEvent(final String id, final String name) {
 		super(id, name);
@@ -19,7 +20,7 @@ public class IntermediateCatchEvent extends IntermediateEvent
 	}
 
 	private boolean isInteractive() {
-		return isTimer() || isMessage();
+		return isTimer() || isMessage() || isSignal();
 	}
 
 	protected void updateCursor() {
@@ -29,6 +30,10 @@ public class IntermediateCatchEvent extends IntermediateEvent
 							? Cursor.getDefaultCursor()
 							: Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		}
+	}
+
+	public void happen(final Instance instance) {
+		passFirstTokenToAllOutgoing();
 	}
 
 	@Override
@@ -64,7 +69,7 @@ public class IntermediateCatchEvent extends IntermediateEvent
 	@Override
 	public void mouseClicked(final MouseEvent e) {
 		if (isInteractive()) {
-			passFirstTokenToAllOutgoing();
+			happen(null);
 		}
 	}
 

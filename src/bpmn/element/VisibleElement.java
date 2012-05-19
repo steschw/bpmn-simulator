@@ -145,11 +145,7 @@ public abstract class VisibleElement extends JComponent implements Element {
 	}
 
 	public String getElementName() {
-		final String name = getName();
-		if ((name == null) || name.isEmpty()) {
-			return getId();
-		}
-		return getName();
+		return hasName() ? getName() : getId();
 	}
 
 	public void setInnerBounds(final Rectangle bounds) {

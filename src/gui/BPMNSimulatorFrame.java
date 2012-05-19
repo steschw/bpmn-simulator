@@ -189,9 +189,9 @@ public class BPMNSimulatorFrame extends JFrame {
 
 		menubar.add(createMenuFile());
 
-		menubar.add(menuWindow);
-
 		menubar.add(createMenuExtra());
+
+		menubar.add(menuWindow);
 
 		menubar.add(createMenuHelp()); 
 

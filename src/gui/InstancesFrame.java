@@ -17,8 +17,6 @@ public class InstancesFrame extends JFrame {
 		setSize(200, 400);
 
 		create();
-
-		setVisible(true);
 	}
 
 	public void setInstanceManager(final InstanceManager instanceManager) {

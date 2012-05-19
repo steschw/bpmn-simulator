@@ -26,14 +26,27 @@ public class InstancesTree extends JTree implements InstanceListener {
 			this.instanceManager.removeInstanceListener(this);
 		}
 		this.instanceManager = instanceManager;
-		removeAll();
+		clear();
 		if (this.instanceManager != null) {
 			this.instanceManager.addInstanceListener(this);
 		}
 	}
 
+	private DefaultTreeModel getDefaultModel() {
+		return (DefaultTreeModel)getModel();
+	}
+
+	private DefaultMutableTreeNode getRoot() {
+		return ((DefaultMutableTreeNode)getModel().getRoot());
+	}
+
+	public void clear() {
+		getRoot().removeAllChildren();
+		getDefaultModel().reload();
+	}
+
 	private DefaultMutableTreeNode getInstanceNode(final Instance instance) {
-		DefaultMutableTreeNode rootNode = (DefaultMutableTreeNode)getModel().getRoot();
+		DefaultMutableTreeNode rootNode = getRoot();
 		if (instance == null) {
 			return rootNode;
 		} else {
@@ -52,16 +65,15 @@ public class InstancesTree extends JTree implements InstanceListener {
 	public void instanceAdded(final Instance instance) {
 		final DefaultMutableTreeNode instanceNode = new DefaultMutableTreeNode(instance);
 		final DefaultMutableTreeNode parentNode = getInstanceNode(instance.getParentInstance());
-		((DefaultTreeModel)getModel()).insertNodeInto(instanceNode, parentNode, parentNode.getChildCount());
-		parentNode.add(instanceNode);
-		expandPath(new TreePath(parentNode));
+		getDefaultModel().insertNodeInto(instanceNode, parentNode, parentNode.getChildCount());
+		expandPath(new TreePath(parentNode.getPath()));
 	}
 
 	@Override
 	public void instanceRemoved(final Instance instance) {
 		final DefaultMutableTreeNode node = getInstanceNode(instance);
 		if (node != null) {
-			((DefaultTreeModel)getModel()).removeNodeFromParent(node);
+			getDefaultModel().removeNodeFromParent(node);
 		}
 	}
 

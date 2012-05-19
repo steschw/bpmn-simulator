@@ -22,25 +22,26 @@ package bpmn.token;
 
 public class TokenAnimator extends Animator {
 
-	private final InstanceController instanceController = new InstanceController();
+	private final InstanceManager instanceManager;
 
-	public TokenAnimator() {
+	public TokenAnimator(final InstanceManager instanceManager) {
 		super();
+		this.instanceManager = instanceManager;
 		start();
 	}
 
-	public InstanceController getInstanceController() {
-		return instanceController;
+	public InstanceManager getInstanceManager() {
+		return instanceManager;
 	}
 
 	@Override
 	public synchronized void step(final int count) {
-		getInstanceController().stepAll(count);
+		getInstanceManager().stepAll(count);
 	}
 
 	@Override
 	public void reset() {
-		getInstanceController().removeAll();
+		getInstanceManager().removeAll();
 		super.reset();
 	}
 

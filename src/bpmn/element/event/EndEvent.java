@@ -25,15 +25,15 @@ import java.awt.Color;
 import javax.swing.Icon;
 
 import bpmn.element.VisualConfig;
-import bpmn.token.InstanceController;
+import bpmn.token.InstanceManager;
 import bpmn.token.Token;
 
 @SuppressWarnings("serial")
 public final class EndEvent extends AbstractEvent {
 
 	public EndEvent(final String id, final String name,
-			final InstanceController tockenController) {
-		super(id, name, tockenController);
+			final InstanceManager instanceManager) {
+		super(id, name, instanceManager);
 	}
 
 	@Override

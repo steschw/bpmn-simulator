@@ -32,28 +32,27 @@ import bpmn.element.event.definition.MessageEventDefinition;
 import bpmn.element.event.definition.SignalEventDefinition;
 import bpmn.element.event.definition.TerminateEventDefinition;
 import bpmn.element.event.definition.TimerEventDefinition;
-import bpmn.token.InstanceController;
+import bpmn.token.InstanceManager;
 
 @SuppressWarnings("serial")
 public abstract class AbstractEvent extends TokenFlowElement implements Event {
 
-	private InstanceController instanceController;
+	private InstanceManager instanceManager;
 
 	private EventDefinition definition;
 
 	public AbstractEvent(final String id, final String name,
-			final InstanceController tockenController) {
+			final InstanceManager instanceManager) {
 		super(id, name);
-
-		setTokenController(tockenController);
+		setInstanceManager(instanceManager);
 	}
 
-	protected void setTokenController(final InstanceController controller) {
-		instanceController = controller;
+	protected void setInstanceManager(final InstanceManager manager) {
+		this.instanceManager = manager;
 	}
 
-	protected InstanceController getInstanceController() {
-		return instanceController;
+	protected InstanceManager getInstanceManager() {
+		return instanceManager;
 	}
 
 	public void setDefinition(final EventDefinition definition) {

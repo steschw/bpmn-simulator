@@ -35,7 +35,8 @@ public class Instance {
 
 	private static final int STAR_CORNERS = 5; 
 
-	private Instance parent;
+	private final InstanceManager manager;
+	private final Instance parent;
 
 	private final Collection<Instance> childs = new Vector<Instance>();
 
@@ -43,18 +44,20 @@ public class Instance {
 
 	private Color color;
 
+	public Instance(final InstanceManager manager, final Color color) {
+		this(manager, null, color);
+	}
+
 	public Instance(final Instance parent) {
+		this(null, parent, null);
+	}
+
+	protected Instance(final InstanceManager manager,
+			final Instance parent, final Color color) {
 		super();
-		setParentInstance(parent);
-	}
-
-	public Instance(final Instance parent, final Color color) {
-		this(parent);
-		setColor(color);
-	}
-
-	protected final void setParentInstance(final Instance instance) {
-		parent = instance;
+		this.manager = manager;
+		this.parent = parent;
+		this.color = color;
 	}
 
 	public final Instance getParentInstance() {
@@ -67,6 +70,14 @@ public class Instance {
 			return this;
 		} else {
 			return parentInstance.getTopLevelInstance();
+		}
+	}
+
+	public InstanceManager getInstanceManager() {
+		if (manager == null) {
+			return getParentInstance().getInstanceManager();
+		} else {
+			return manager;
 		}
 	}
 
@@ -96,10 +107,12 @@ public class Instance {
 	}
 
 	public void remove() {
-		final Instance parentInstance = getParentInstance();
 		removeAllChildInstances();
 		removeAllTokens();
-		if (parentInstance != null) {
+		final Instance parentInstance = getParentInstance();
+		if (parentInstance == null) {
+			getInstanceManager().remove(this);
+		} else {
 			parentInstance.removeChildInstance(this);
 		}
 	}
@@ -114,9 +127,10 @@ public class Instance {
 		return childInstance;
 	}
 
-	protected void addChildInstance(final Instance instance) {
-		assert instance != null;
-		childs.add(instance);
+	protected void addChildInstance(final Instance childInstance) {
+		assert childInstance != null;
+		childs.add(childInstance);
+		getInstanceManager().notifyInstanceCreated(childInstance);
 	}
 
 	public int getChildInstanceCount() {
@@ -131,6 +145,7 @@ public class Instance {
 		assert childInstance != null;
 //		assert(childs.contains(childInstance));
 		childs.remove(childInstance);
+		getInstanceManager().notifyInstanceRemoved(childInstance);
 	}
 
 	public void removeAllChildInstances() {
@@ -291,15 +306,18 @@ public class Instance {
 	@Override
 	public String toString() {
 		final StringBuilder buffer = new StringBuilder();
+		/*
 		final Instance parentInstance = getParentInstance();
 		if (parentInstance != null) {
 			buffer.append(parentInstance.toString()); 
+			buffer.append(" -> "); 
 		}
+		*/
 		buffer.append('[');
-		buffer.append("instances:");
+		buffer.append("childInstances:");
 		buffer.append(getChildInstanceCount());
-		buffer.append(',');
-		buffer.append("tokens:");
+		buffer.append(';');
+		buffer.append("token:");
 		buffer.append(getTokenCount());
 		buffer.append(']');
 		return buffer.toString();

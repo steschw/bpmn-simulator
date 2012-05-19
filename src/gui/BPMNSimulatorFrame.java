@@ -51,6 +51,8 @@ public class BPMNSimulatorFrame extends JFrame {
 
 	private Model model;
 
+	private InstancesFrame frameInstances = new InstancesFrame();
+
 	private static final int DEFAULT_WIDTH = 800;
 	private static final int DEFAULT_HEIGHT = 600;
 
@@ -146,6 +148,23 @@ public class BPMNSimulatorFrame extends JFrame {
 		return menuFile;
 	}
 
+	protected JMenu createMenuExtra() {
+		final JMenu menuExtra = new JMenu(Messages.getString("Menu.extra")); //$NON-NLS-1$
+
+		final JMenuItem menuExtraInstances = new JMenuItem(Messages.getString("Menu.instances")); //$NON-NLS-1$
+		menuExtraInstances.setMnemonic(KeyEvent.VK_I);
+		menuExtraInstances.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_I, KeyEvent.ALT_MASK));
+		menuExtraInstances.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(final ActionEvent e) {
+				frameInstances.setVisible(true);
+			}
+		});
+		menuExtra.add(menuExtraInstances);
+
+		return menuExtra;
+	}
+
 	protected JMenu createMenuHelp() {
 		final JMenu menuHelp = new JMenu(Messages.getString("Menu.help")); //$NON-NLS-1$
 
@@ -172,6 +191,8 @@ public class BPMNSimulatorFrame extends JFrame {
 
 		menubar.add(menuWindow);
 
+		menubar.add(createMenuExtra());
+
 		menubar.add(createMenuHelp()); 
 
 		return menubar;
@@ -194,23 +215,29 @@ public class BPMNSimulatorFrame extends JFrame {
 		if (fileChoser.showOpenDialog(this) == 	JFileChooser.APPROVE_OPTION) {
 			config.setLastDirectory(fileChoser.getCurrentDirectory().getAbsolutePath());
 			closeFile();
-			model = new Model(desktop.getDesktopPane());
-			final File file = fileChoser.getSelectedFile();
-			model.load(file);
-			menuWindow.setDesktopPane(desktop.getDesktopPane());
-			toolbar.setModel(model);
-			updateFrameTitle(file.getAbsolutePath());
-			if (model.hasErrorMessages()) {
-				model.showMessages();
-			}
-			desktop.arrangeFrames();
+			createModel();
 		}
+	}
+
+	private void createModel() {
+		model = new Model(desktop.getDesktopPane());
+		final File file = fileChoser.getSelectedFile();
+		model.load(file);
+		frameInstances.setInstanceManager(model.getInstanceManager());
+		menuWindow.setDesktopPane(desktop.getDesktopPane());
+		toolbar.setModel(model);
+		updateFrameTitle(file.getAbsolutePath());
+		if (model.hasErrorMessages()) {
+			model.showMessages();
+		}
+		desktop.arrangeFrames();
 	}
 
 	private void closeFile() {
 		if (model != null) {
 			toolbar.setModel(null);
 			menuWindow.setDesktopPane(null);
+			frameInstances.setInstanceManager(null);
 			model.close();
 			model = null;
 			updateFrameTitle(null);

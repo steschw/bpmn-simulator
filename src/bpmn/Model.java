@@ -62,6 +62,7 @@ import bpmn.element.event.definition.SignalEventDefinition;
 import bpmn.element.event.definition.TerminateEventDefinition;
 import bpmn.element.event.definition.TimerEventDefinition;
 import bpmn.element.gateway.*;
+import bpmn.token.InstanceManager;
 import bpmn.token.TokenAnimator;
 
 public class Model implements ErrorHandler {
@@ -86,11 +87,18 @@ public class Model implements ErrorHandler {
 
 	private final LogFrame logFrame = new LogFrame(); 
 
-	private final TokenAnimator tokenAnimator = new TokenAnimator();
+	private final InstanceManager instanceManager = new InstanceManager();
+
+	private final TokenAnimator tokenAnimator;
 
 	public Model(final JDesktopPane desktop) {
 		super();
+		tokenAnimator = new TokenAnimator(getInstanceManager());
 		this.desktop = desktop;
+	}
+
+	public InstanceManager getInstanceManager() {
+		return instanceManager;
 	}
 
 	public TokenAnimator getAnimator() {
@@ -684,7 +692,7 @@ public class Model implements ErrorHandler {
 		if (isElementNode(node, BPMN, "startEvent")) { //$NON-NLS-1$
 			final StartEvent element = new StartEvent(
 					getIdAttribute(node), getNameAttribute(node),
-					getAnimator().getInstanceController());
+					getAnimator().getInstanceManager());
 			readEvent(node, element);
 			addElementToContainer(element, process);
 			return true;
@@ -723,7 +731,7 @@ public class Model implements ErrorHandler {
 			final ExpandedProcess process) {
 		if (isElementNode(node, BPMN, "endEvent")) { //$NON-NLS-1$
 			final EndEvent element = new EndEvent(getIdAttribute(node),
-					getNameAttribute(node), getAnimator().getInstanceController());
+					getNameAttribute(node), getAnimator().getInstanceManager());
 			readEvent(node, element);
 			addElementToContainer(element, process);
 			return true;

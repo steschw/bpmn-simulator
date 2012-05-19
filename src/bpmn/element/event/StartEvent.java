@@ -30,15 +30,15 @@ import javax.swing.Icon;
 import bpmn.element.VisualConfig;
 import bpmn.element.activity.ExpandedProcess;
 import bpmn.token.Instance;
-import bpmn.token.InstanceController;
+import bpmn.token.InstanceManager;
 
 @SuppressWarnings("serial")
 public final class StartEvent extends AbstractEvent
 		implements CatchEvent, MouseListener {
 
 	public StartEvent(final String id, final String name,
-			final InstanceController tockenController) {
-		super(id, name, tockenController);
+			final InstanceManager instanceManager) {
+		super(id, name, instanceManager);
 		addMouseListener(this);
 	}
 
@@ -47,7 +47,7 @@ public final class StartEvent extends AbstractEvent
 		if (instance != null) {
 			instance.newChildInstance().newToken(this);
 		} else {
-			getInstanceController().newInstance().newToken(this);
+			getInstanceManager().newInstance().newToken(this);
 		}
 	}
 
@@ -57,8 +57,8 @@ public final class StartEvent extends AbstractEvent
 	}
 
 	@Override
-	protected void setTokenController(final InstanceController controller) {
-		super.setTokenController(controller);
+	protected void setInstanceManager(final InstanceManager manager) {
+		super.setInstanceManager(manager);
 		updateCursor();
 	}
 
@@ -70,7 +70,7 @@ public final class StartEvent extends AbstractEvent
 
 	public boolean canStartManuell() {
 		final ExpandedProcess process = getProcess();
-		return (getInstanceController() != null) && (process != null) && !process.hasIncoming(); 
+		return (getInstanceManager() != null) && (process != null) && !process.hasIncoming(); 
 	}
 
 	protected void updateCursor() {

@@ -39,7 +39,7 @@ public class DiagramFrame extends JInternalFrame {
 	private static final Icon ICON_COLLABORATION = loadFrameIcon("collaboration.png");
 
 	public DiagramFrame(final VisibleElement container, final String name) {
-		super((name == null) ? container.getName() : name, true, false, true);
+		super((name == null) ? container.getElementName() : name, true, false, true);
 		final JScrollPane scrollPane = new JScrollPane(container);
 		scrollPane.getViewport().setBackground(Color.WHITE);
 		setContentPane(scrollPane);

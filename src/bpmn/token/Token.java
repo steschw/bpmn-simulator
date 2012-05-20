@@ -62,8 +62,8 @@ public class Token implements Cloneable {
 		currentFlow.tokenEnter(this);
 	}
 
-	protected TokenFlow getCurrentFlow() {
-		return currentFlow;		
+	public TokenFlow getCurrentFlow() {
+		return currentFlow;
 	}
 
 	protected void setPreviousFlow(final TokenFlow flow) {

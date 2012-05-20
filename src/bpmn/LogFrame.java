@@ -32,6 +32,9 @@ import javax.swing.JPanel;
 @SuppressWarnings("serial")
 public class LogFrame extends JFrame {
 
+	private static final int DEFAULT_WIDTH = 400;
+	private static final int DEFAULT_HEIGHT = 400;
+
 	private final LogList listLog = new LogList();
 
 	private int warningCount; 
@@ -61,7 +64,7 @@ public class LogFrame extends JFrame {
 		panel.add(buttonClose);
 		getContentPane().add(panel, BorderLayout.PAGE_END);
 
-		setSize(400, 400);
+		setSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
 		setLocation(new Point(0, 0));
 	}
 

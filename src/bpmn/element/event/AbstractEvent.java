@@ -27,10 +27,7 @@ import javax.swing.Icon;
 import bpmn.element.Graphics;
 import bpmn.element.TokenFlowElement;
 import bpmn.element.event.definition.EventDefinition;
-import bpmn.element.event.definition.LinkEventDefinition;
 import bpmn.element.event.definition.MessageEventDefinition;
-import bpmn.element.event.definition.SignalEventDefinition;
-import bpmn.element.event.definition.TerminateEventDefinition;
 import bpmn.element.event.definition.TimerEventDefinition;
 import bpmn.token.InstanceManager;
 
@@ -70,18 +67,6 @@ public abstract class AbstractEvent extends TokenFlowElement implements Event {
 
 	public boolean isMessage() {
 		return getDefinition() instanceof MessageEventDefinition;
-	}
-
-	public boolean isLink() {
-		return getDefinition() instanceof LinkEventDefinition;
-	}
-
-	public boolean isSignal() {
-		return getDefinition() instanceof SignalEventDefinition;
-	}
-
-	public boolean isTerminate() {
-		return getDefinition() instanceof TerminateEventDefinition;
 	}
 
 	public boolean isPlain() {

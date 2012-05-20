@@ -41,6 +41,9 @@ import bpmn.Model;
 @SuppressWarnings("serial")
 public class BPMNSimulatorFrame extends JFrame {
 
+	private static final int DEFAULT_WIDTH = 800;
+	private static final int DEFAULT_HEIGHT = 600;
+
 	private ScrollDesktop desktop;
 
 	private final WindowMenu menuWindow = new WindowMenu();
@@ -52,9 +55,6 @@ public class BPMNSimulatorFrame extends JFrame {
 	private Model model;
 
 	private InstancesFrame frameInstances = new InstancesFrame();
-
-	private static final int DEFAULT_WIDTH = 800;
-	private static final int DEFAULT_HEIGHT = 600;
 
 	public BPMNSimulatorFrame() {
 		super();

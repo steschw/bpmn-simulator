@@ -25,6 +25,7 @@ import java.awt.Color;
 import javax.swing.Icon;
 
 import bpmn.element.VisualConfig;
+import bpmn.element.event.definition.EventDefinition;
 import bpmn.token.InstanceManager;
 import bpmn.token.Token;
 
@@ -48,8 +49,9 @@ public final class EndEvent extends AbstractEvent {
 
 	@Override
 	protected void tokenForward(final Token token) {
-		if (isTerminate()) {
-			token.getInstance().removeAllOtherTokens(token);
+		final EventDefinition definition = getDefinition();
+		if (definition != null) {
+			definition.throwHappen(token);
 		}
 		super.tokenForward(token);
 	}

@@ -22,14 +22,14 @@ package bpmn.element.event.definition;
 
 import javax.swing.Icon;
 
-import bpmn.element.VisualConfig;
+import bpmn.element.Visualization;
 
 public final class TimerEventDefinition extends EventDefinition {
 
 	@Override
-	public Icon getIcon(final VisualConfig visualConfig, final boolean inverse) {
+	public Icon getIcon(final Visualization visualization, final boolean inverse) {
 		assert !inverse;
-		return visualConfig.getIcon(VisualConfig.ICON_TIMER);
+		return visualization.getIcon(Visualization.ICON_TIMER);
 	}
 
 }

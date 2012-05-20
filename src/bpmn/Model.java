@@ -283,7 +283,7 @@ public class Model implements ErrorHandler {
 		return getAttributeElement(node, "bpmnElement"); //$NON-NLS-1$
 	}
 
-	private static boolean isValidPlaneElement(final VisibleElement planeElement) {
+	private static boolean isValidPlaneElement(final Element planeElement) {
 		return (planeElement instanceof ExpandedProcess)
 				|| (planeElement instanceof Collaboration);
 	}

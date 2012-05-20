@@ -112,7 +112,7 @@ public final class IntermediateCatchEvent extends IntermediateEvent
 
 	@Override
 	protected Icon getTypeIcon() {
-		return getDefinition().getIcon(getVisualConfig(), false);
+		return getDefinition().getIcon(getVisualization(), false);
 	}
 
 }

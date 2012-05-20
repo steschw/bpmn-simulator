@@ -22,15 +22,15 @@ package bpmn.element.event.definition;
 
 import javax.swing.Icon;
 
-import bpmn.element.VisualConfig;
+import bpmn.element.Visualization;
 import bpmn.token.Token;
 
 public final class TerminateEventDefinition extends EventDefinition {
 
 	@Override
-	public Icon getIcon(final VisualConfig visualConfig, final boolean inverse) {
+	public Icon getIcon(final Visualization visualization, final boolean inverse) {
 		assert inverse;
-		return visualConfig.getIcon(VisualConfig.ICON_TERMINATE);
+		return visualization.getIcon(Visualization.ICON_TERMINATE);
 	}
 
 	@Override

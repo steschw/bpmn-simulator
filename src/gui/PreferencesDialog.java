@@ -40,8 +40,9 @@ import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.border.Border;
 
+import bpmn.element.Behavior;
 import bpmn.element.VisibleElement;
-import bpmn.element.VisualConfig;
+import bpmn.element.Visualization;
 
 @SuppressWarnings("serial")
 public class PreferencesDialog extends JDialog {
@@ -49,6 +50,9 @@ public class PreferencesDialog extends JDialog {
 	private static final int GAP = 10;
 
 	private final LocaleComboBox selectLanguage = new LocaleComboBox();
+
+	private final JCheckBox checkKeepEvents
+			= new JCheckBox(Messages.getString("Preferences.keepEvents")); //$NON-NLS-1$
 
 	private final JCheckBox checkShowExclusiveSymbol
 			= new JCheckBox(Messages.getString("Preferences.showSymbolInExclusiveGateway"));  //$NON-NLS-1$
@@ -103,6 +107,7 @@ public class PreferencesDialog extends JDialog {
 	protected JTabbedPane createPreferencesPane() {
 		final JTabbedPane tabbedPane = new JTabbedPane();
 		tabbedPane.addTab(Messages.getString("Preferences.general"), createGeneralPanel()); //$NON-NLS-1$
+		tabbedPane.addTab(Messages.getString("Preferences.behavior"), createBehaviorPanel()); //$NON-NLS-1$
 		tabbedPane.addTab(Messages.getString("Preferences.display"), createDisplayPanel()); //$NON-NLS-1$
 		tabbedPane.addTab(Messages.getString("Preferences.elementDefaults"), createElementsPanel()); //$NON-NLS-1$
 		return tabbedPane;
@@ -129,6 +134,16 @@ public class PreferencesDialog extends JDialog {
 		textRestart.append(Messages.getString("Preferences.requiresRestart")); //$NON-NLS-1$
 		generalPanel.add(new JLabel(textRestart.toString()), BorderLayout.PAGE_END);
 		return generalPanel;
+	}
+
+	protected JPanel createBehaviorPanel() {
+		final JPanel panel = new JPanel();
+		panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
+		panel.setBorder(createGapBorder());
+
+		panel.add(checkKeepEvents);
+
+		return panel;
 	}
 
 	protected JPanel createDisplayPanel() {
@@ -219,18 +234,22 @@ public class PreferencesDialog extends JDialog {
 
 		config.setLocale((Locale)selectLanguage.getSelectedItem());
 
-		final VisualConfig visualConfig = VisibleElement.getDefaultVisualConfig();
-		visualConfig.setAntialiasing(checkAntialiasing.isSelected());
-		visualConfig.setShowExclusiveGatewaySymbol(checkShowExclusiveSymbol.isSelected());
-		visualConfig.setIgnoreColors(checkIgnoreModelerColors.isSelected());
-		visualConfig.setBackground(VisualConfig.Element.EVENT_START, colorStartEventBackground.getSelectedColor());
-		visualConfig.setBackground(VisualConfig.Element.EVENT_INTERMEDIATE, colorIntermediateEventBackground.getSelectedColor());
-		visualConfig.setBackground(VisualConfig.Element.EVENT_END, colorEndEventBackground.getSelectedColor());
-		visualConfig.setBackground(VisualConfig.Element.GATEWAY, colorGatewayBackground.getSelectedColor());
-		visualConfig.setBackground(VisualConfig.Element.TASK, colorTaskBackground.getSelectedColor());
-		visualConfig.setBackground(VisualConfig.Element.PROCESS, colorProcessBackground.getSelectedColor());
+		final Behavior behavior = VisibleElement.getDefaultBehavior();
+		behavior.setKeepEvents(checkKeepEvents.isSelected());
+		config.setBehavior(behavior);
 
-		config.setVisualConfig(visualConfig);
+		final Visualization visualization = VisibleElement.getDefaultVisualization();
+		visualization.setAntialiasing(checkAntialiasing.isSelected());
+		visualization.setShowExclusiveGatewaySymbol(checkShowExclusiveSymbol.isSelected());
+		visualization.setIgnoreColors(checkIgnoreModelerColors.isSelected());
+		visualization.setBackground(Visualization.Element.EVENT_START, colorStartEventBackground.getSelectedColor());
+		visualization.setBackground(Visualization.Element.EVENT_INTERMEDIATE, colorIntermediateEventBackground.getSelectedColor());
+		visualization.setBackground(Visualization.Element.EVENT_END, colorEndEventBackground.getSelectedColor());
+		visualization.setBackground(Visualization.Element.GATEWAY, colorGatewayBackground.getSelectedColor());
+		visualization.setBackground(Visualization.Element.TASK, colorTaskBackground.getSelectedColor());
+		visualization.setBackground(Visualization.Element.PROCESS, colorProcessBackground.getSelectedColor());
+		config.setVisualization(visualization);
+
 		config.store();
 	}
 
@@ -239,16 +258,19 @@ public class PreferencesDialog extends JDialog {
 
 		selectLanguage.setSelectedItem(config.getLocale());
 
-		final VisualConfig visualConfig = VisibleElement.getDefaultVisualConfig();
-		checkAntialiasing.setSelected(visualConfig.isAntialiasing());
-		checkShowExclusiveSymbol.setSelected(visualConfig.getShowExclusiveGatewaySymbol());
-		checkIgnoreModelerColors.setSelected(visualConfig.getIgnoreColors());
-		colorStartEventBackground.setSelectedColor(visualConfig.getBackground(VisualConfig.Element.EVENT_START));
-		colorIntermediateEventBackground.setSelectedColor(visualConfig.getBackground(VisualConfig.Element.EVENT_INTERMEDIATE));
-		colorEndEventBackground.setSelectedColor(visualConfig.getBackground(VisualConfig.Element.EVENT_END));
-		colorGatewayBackground.setSelectedColor(visualConfig.getBackground(VisualConfig.Element.GATEWAY));
-		colorTaskBackground.setSelectedColor(visualConfig.getBackground(VisualConfig.Element.TASK));
-		colorProcessBackground.setSelectedColor(visualConfig.getBackground(VisualConfig.Element.PROCESS));
+		final Behavior behavior = VisibleElement.getDefaultBehavior();
+		checkKeepEvents.setSelected(behavior.getKeepEvents());
+
+		final Visualization visualization = VisibleElement.getDefaultVisualization();
+		checkAntialiasing.setSelected(visualization.isAntialiasing());
+		checkShowExclusiveSymbol.setSelected(visualization.getShowExclusiveGatewaySymbol());
+		checkIgnoreModelerColors.setSelected(visualization.getIgnoreColors());
+		colorStartEventBackground.setSelectedColor(visualization.getBackground(Visualization.Element.EVENT_START));
+		colorIntermediateEventBackground.setSelectedColor(visualization.getBackground(Visualization.Element.EVENT_INTERMEDIATE));
+		colorEndEventBackground.setSelectedColor(visualization.getBackground(Visualization.Element.EVENT_END));
+		colorGatewayBackground.setSelectedColor(visualization.getBackground(Visualization.Element.GATEWAY));
+		colorTaskBackground.setSelectedColor(visualization.getBackground(Visualization.Element.TASK));
+		colorProcessBackground.setSelectedColor(visualization.getBackground(Visualization.Element.PROCESS));
 	}
 
 }

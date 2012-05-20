@@ -27,7 +27,7 @@ import java.awt.event.MouseListener;
 
 import javax.swing.Icon;
 
-import bpmn.element.VisualConfig;
+import bpmn.element.Visualization;
 import bpmn.element.activity.ExpandedProcess;
 import bpmn.token.Instance;
 import bpmn.token.InstanceManager;
@@ -53,7 +53,7 @@ public final class StartEvent extends AbstractEvent
 
 	@Override
 	protected Color getElementDefaultBackground() {
-		return getVisualConfig().getBackground(VisualConfig.Element.EVENT_START);
+		return getVisualization().getBackground(Visualization.Element.EVENT_START);
 	}
 
 	@Override
@@ -104,7 +104,7 @@ public final class StartEvent extends AbstractEvent
 
 	@Override
 	protected Icon getTypeIcon() {
-		return getDefinition().getIcon(getVisualConfig(), false);
+		return getDefinition().getIcon(getVisualization(), false);
 	}
 
 }

@@ -18,22 +18,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package bpmn.element.activity.task;
+package bpmn.element;
 
-import javax.swing.Icon;
+public class Behavior {
 
-import bpmn.element.Visualization;
+	private boolean keepEvents;
 
-@SuppressWarnings("serial")
-public final class UserTask extends Task {
-
-	public UserTask(final String id, final String name) {
-		super(id, name);
+	public void setKeepEvents(final boolean keep) {
+		keepEvents = keep;
 	}
 
-	@Override
-	protected Icon getTypeIcon() {
-		return getVisualization().getIcon(Visualization.ICON_USER);
+	public boolean getKeepEvents() {
+		return keepEvents;
 	}
 
 }

@@ -36,7 +36,7 @@ public class ExclusiveGateway extends Gateway {
 	protected void paintElement(final Graphics g) {
 		super.paintElement(g);
 
-		if (getVisualConfig().getShowExclusiveGatewaySymbol()) {
+		if (getVisualization().getShowExclusiveGatewaySymbol()) {
 			g.setStroke(new BasicStroke(3));
 			g.drawCross(getSymbolBounds(), true);
 		}

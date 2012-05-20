@@ -28,7 +28,7 @@ import javax.swing.Icon;
 import bpmn.element.Graphics;
 import bpmn.element.Label;
 import bpmn.element.Rectangle;
-import bpmn.element.VisualConfig;
+import bpmn.element.Visualization;
 import bpmn.element.activity.Activity;
 
 @SuppressWarnings("serial")
@@ -49,7 +49,7 @@ public class Task extends Activity {
 
 	@Override
 	protected Color getElementDefaultBackground() {
-		return getVisualConfig().getBackground(VisualConfig.Element.TASK);
+		return getVisualization().getBackground(Visualization.Element.TASK);
 	}
 
 	@Override

@@ -24,7 +24,7 @@ import java.awt.Color;
 
 import bpmn.element.Graphics;
 import bpmn.element.Rectangle;
-import bpmn.element.VisualConfig;
+import bpmn.element.Visualization;
 
 @SuppressWarnings("serial")
 public abstract class IntermediateEvent extends AbstractEvent {
@@ -37,7 +37,7 @@ public abstract class IntermediateEvent extends AbstractEvent {
 
 	@Override
 	protected Color getElementDefaultBackground() {
-		return getVisualConfig().getBackground(VisualConfig.Element.EVENT_INTERMEDIATE);
+		return getVisualization().getBackground(Visualization.Element.EVENT_INTERMEDIATE);
 	}
 
 	@Override

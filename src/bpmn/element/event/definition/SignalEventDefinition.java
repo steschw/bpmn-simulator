@@ -27,7 +27,7 @@ import javax.swing.Icon;
 import bpmn.Model;
 import bpmn.element.ElementRef;
 import bpmn.element.Signal;
-import bpmn.element.VisualConfig;
+import bpmn.element.Visualization;
 import bpmn.element.event.CatchEvent;
 import bpmn.token.Instance;
 import bpmn.token.Token;
@@ -46,10 +46,10 @@ public final class SignalEventDefinition extends EventDefinition {
 	}
 
 	@Override
-	public Icon getIcon(final VisualConfig visualConfig, final boolean inverse) {
-		return visualConfig.getIcon(inverse
-				? VisualConfig.ICON_SIGNAL_INVERSE
-				: VisualConfig.ICON_SIGNAL);
+	public Icon getIcon(final Visualization visualization, final boolean inverse) {
+		return visualization.getIcon(inverse
+				? Visualization.ICON_SIGNAL_INVERSE
+				: Visualization.ICON_SIGNAL);
 	}
 
 	@Override

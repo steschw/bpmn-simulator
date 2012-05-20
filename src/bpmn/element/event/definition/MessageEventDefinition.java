@@ -22,15 +22,15 @@ package bpmn.element.event.definition;
 
 import javax.swing.Icon;
 
-import bpmn.element.VisualConfig;
+import bpmn.element.Visualization;
 
 public final class MessageEventDefinition extends EventDefinition {
 
 	@Override
-	public Icon getIcon(final VisualConfig visualConfig, final boolean inverse) {
-		return visualConfig.getIcon(inverse
-				? VisualConfig.ICON_MESSAGE_INVERSE
-				: VisualConfig.ICON_MESSAGE);
+	public Icon getIcon(final Visualization visualization, final boolean inverse) {
+		return visualization.getIcon(inverse
+				? Visualization.ICON_MESSAGE_INVERSE
+				: Visualization.ICON_MESSAGE);
 	}
 
 }

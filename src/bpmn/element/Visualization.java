@@ -29,7 +29,7 @@ import java.util.Map;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 
-public class VisualConfig {
+public class Visualization {
 
 	private static final String ICONPATH = "bpmn/icons/";
 
@@ -75,7 +75,7 @@ public class VisualConfig {
 	private boolean antialiasing = true;
 	private boolean showExclusiveGatewaySymbol = true;
 
-	public VisualConfig() {
+	public Visualization() {
 		super();
 		loadIcons();
 	}

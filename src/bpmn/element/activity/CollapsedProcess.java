@@ -29,7 +29,7 @@ import javax.swing.Icon;
 
 import bpmn.element.FlowElement;
 import bpmn.element.Graphics;
-import bpmn.element.VisualConfig;
+import bpmn.element.Visualization;
 import bpmn.token.Instance;
 import bpmn.token.Token;
 
@@ -90,7 +90,7 @@ public class CollapsedProcess extends FlowElement {
 	}
 
 	protected void drawSymbol(final Graphics g) {
-		final Icon icon = getVisualConfig().getIcon(VisualConfig.ICON_COLLAPSED);
+		final Icon icon = getVisualization().getIcon(Visualization.ICON_COLLAPSED);
 		if (icon != null) {
 			final Point position = getElementInnerBounds().getCenterBottom();
 			position.translate(-(icon.getIconWidth() / 2), -icon.getIconHeight());

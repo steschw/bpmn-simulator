@@ -34,7 +34,7 @@ public final class IntermediateThrowEvent extends IntermediateEvent {
 
 	@Override
 	protected Icon getTypeIcon() {
-		return getDefinition().getIcon(getVisualConfig(), true);
+		return getDefinition().getIcon(getVisualization(), true);
 	}
 
 	@Override

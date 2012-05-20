@@ -25,7 +25,7 @@ import java.util.Collection;
 import javax.swing.Icon;
 
 import bpmn.element.VisibleElement;
-import bpmn.element.VisualConfig;
+import bpmn.element.Visualization;
 import bpmn.element.activity.ExpandedProcess;
 import bpmn.element.event.CatchEvent;
 import bpmn.element.event.IntermediateCatchEvent;
@@ -45,10 +45,10 @@ public final class LinkEventDefinition extends EventDefinition {
 	}
 
 	@Override
-	public Icon getIcon(final VisualConfig visualConfig, final boolean inverse) {
-		return visualConfig.getIcon(inverse
-				? VisualConfig.ICON_LINK_INVERSE
-				: VisualConfig.ICON_LINK);
+	public Icon getIcon(final Visualization visualization, final boolean inverse) {
+		return visualization.getIcon(inverse
+				? Visualization.ICON_LINK_INVERSE
+				: Visualization.ICON_LINK);
 	}
 
 	protected static CatchEvent findLinkTargetInProcess(

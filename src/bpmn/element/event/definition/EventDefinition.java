@@ -23,13 +23,13 @@ package bpmn.element.event.definition;
 import javax.swing.Icon;
 
 import bpmn.element.VisibleElement;
-import bpmn.element.VisualConfig;
+import bpmn.element.Visualization;
 import bpmn.element.activity.ExpandedProcess;
 import bpmn.token.Token;
 
 public abstract class EventDefinition {
 
-	public abstract Icon getIcon(final VisualConfig visualConfig, final boolean inverse);
+	public abstract Icon getIcon(final Visualization visualization, final boolean inverse);
 
 	protected static ExpandedProcess getProcessByToken(final Token token) {
 		return ((VisibleElement)token.getCurrentFlow()).getProcess();		

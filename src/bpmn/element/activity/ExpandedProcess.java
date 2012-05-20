@@ -34,7 +34,7 @@ import bpmn.element.VisibleElement;
 import bpmn.element.Graphics;
 import bpmn.element.Label;
 import bpmn.element.TokenFlowElement;
-import bpmn.element.VisualConfig;
+import bpmn.element.Visualization;
 import bpmn.element.event.AbstractEvent;
 import bpmn.element.event.StartEvent;
 import bpmn.element.gateway.Gateway;
@@ -248,7 +248,7 @@ public class ExpandedProcess extends Activity implements Scrollable {
 
 	@Override
 	protected Color getElementDefaultBackground() {
-		return getVisualConfig().getBackground(VisualConfig.Element.PROCESS);
+		return getVisualization().getBackground(Visualization.Element.PROCESS);
 	}
 
 	@Override

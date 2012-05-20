@@ -54,7 +54,7 @@ public class DataObject extends FlowElement {
 		g.drawDataObject(bounds);
 
 		if (isCollection()) {
-			final Icon icon = getVisualConfig().getIcon(VisualConfig.ICON_COLLECTION);
+			final Icon icon = getVisualization().getIcon(Visualization.ICON_COLLECTION);
 			final Point position = bounds.getCenterBottom();
 			position.translate(
 					-icon.getIconWidth() / 2,

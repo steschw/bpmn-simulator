@@ -28,7 +28,7 @@ import bpmn.element.Label;
 import bpmn.element.Rectangle;
 import bpmn.element.SequenceFlow;
 import bpmn.element.TokenFlowElementWithDefault;
-import bpmn.element.VisualConfig;
+import bpmn.element.Visualization;
 import bpmn.token.Instance;
 import bpmn.token.Token;
 import bpmn.token.TokenCollection;
@@ -49,7 +49,7 @@ public abstract class Gateway extends TokenFlowElementWithDefault {
 
 	@Override
 	protected Color getElementDefaultBackground() {
-		return getVisualConfig().getBackground(VisualConfig.Element.GATEWAY);
+		return getVisualization().getBackground(Visualization.Element.GATEWAY);
 	}
 
 	@Override

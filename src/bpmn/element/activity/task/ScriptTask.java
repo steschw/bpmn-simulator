@@ -22,7 +22,7 @@ package bpmn.element.activity.task;
 
 import javax.swing.Icon;
 
-import bpmn.element.VisualConfig;
+import bpmn.element.Visualization;
 
 @SuppressWarnings("serial")
 public final class ScriptTask extends Task {
@@ -33,7 +33,7 @@ public final class ScriptTask extends Task {
 
 	@Override
 	protected Icon getTypeIcon() {
-		return getVisualConfig().getIcon(VisualConfig.ICON_SCRIPT);
+		return getVisualization().getIcon(Visualization.ICON_SCRIPT);
 	}
 
 }

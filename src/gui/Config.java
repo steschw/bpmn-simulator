@@ -25,14 +25,17 @@ import java.util.Locale;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 
+import bpmn.element.Behavior;
 import bpmn.element.VisibleElement;
-import bpmn.element.VisualConfig;
+import bpmn.element.Visualization;
 
 public class Config {
 
 	private static final String NODE = "bpmnsimulator";
 
 	private static final String LANGUAGE = "language";
+
+	private static final String KEEP_EVENTS = "keepEvents";
 
 	private static final String SHOW_EXCLUSIVEGATEWAYSYMBOL = "showExclusiveGatewaySymbol"; //$NON-NLS-1$
 	private static final String ANTIALIASING = "antialiasing"; //$NON-NLS-1$
@@ -62,37 +65,38 @@ public class Config {
 		return Preferences.userRoot().node(NODE);
 	}
 
-	protected static Preferences getElementNode(final VisualConfig.Element element) {
+	protected static Preferences getElementNode(final Visualization.Element element) {
 		return getRootNode().node(element.name().toLowerCase());
 	}
 
-	public void setVisualConfig(final VisualConfig visualConfig) {
+	public void setVisualization(final Visualization visualization) {
 		final Preferences preferences = getRootNode();
-		preferences.putBoolean(ANTIALIASING, visualConfig.isAntialiasing());
-		preferences.putBoolean(IGNORE_COLORS, visualConfig.getIgnoreColors());
-		preferences.putBoolean(SHOW_EXCLUSIVEGATEWAYSYMBOL, visualConfig.getShowExclusiveGatewaySymbol());
 
-		for (VisualConfig.Element element : VisualConfig.Element.values()) {
+		preferences.putBoolean(ANTIALIASING, visualization.isAntialiasing());
+		preferences.putBoolean(IGNORE_COLORS, visualization.getIgnoreColors());
+		preferences.putBoolean(SHOW_EXCLUSIVEGATEWAYSYMBOL, visualization.getShowExclusiveGatewaySymbol());
+
+		for (Visualization.Element element : Visualization.Element.values()) {
 			final Preferences elementPreferences = getElementNode(element); 
-			final Color color = visualConfig.getBackground(element);
+			final Color color = visualization.getBackground(element);
 			setBackground(elementPreferences, color);
 		}
 	}
 
-	public VisualConfig getVisualConfig() {
-		final VisualConfig visualConfig = new VisualConfig();
-
+	public Visualization getVisualization() {
+		final Visualization visualization = new Visualization();
 		final Preferences preferences = getRootNode();
-		visualConfig.setAntialiasing(preferences.getBoolean(ANTIALIASING, true));
-		visualConfig.setIgnoreColors(preferences.getBoolean(IGNORE_COLORS, false));
-		visualConfig.setShowExclusiveGatewaySymbol(preferences.getBoolean(SHOW_EXCLUSIVEGATEWAYSYMBOL, true));
 
-		for (VisualConfig.Element element : VisualConfig.Element.values()) {
+		visualization.setAntialiasing(preferences.getBoolean(ANTIALIASING, true));
+		visualization.setIgnoreColors(preferences.getBoolean(IGNORE_COLORS, false));
+		visualization.setShowExclusiveGatewaySymbol(preferences.getBoolean(SHOW_EXCLUSIVEGATEWAYSYMBOL, true));
+
+		for (Visualization.Element element : Visualization.Element.values()) {
 			final Color color = getBackground(getElementNode(element));
-			visualConfig.setBackground(element, color);
+			visualization.setBackground(element, color);
 		}
 
-		return visualConfig;
+		return visualization;
 	}
 
 	protected static Color getBackground(final Preferences preferences) {
@@ -104,11 +108,25 @@ public class Config {
 		preferences.putInt(BACKGROUND_COLOR, value.getRGB());
 	}
 
+	public Behavior getBehavior() {
+		final Behavior behavior = new Behavior();
+		final Preferences preferences = getRootNode();
+
+		behavior.setKeepEvents(preferences.getBoolean(KEEP_EVENTS, behavior.getKeepEvents()));
+
+		return behavior;
+	}
+
+	public void setBehavior(final Behavior behavior) {
+		final Preferences preferences = getRootNode();
+
+		preferences.putBoolean(KEEP_EVENTS, behavior.getKeepEvents());
+	}
+
 	public void setLocale(final Locale locale) {
 		if (locale == null) {
 			getRootNode().remove(LANGUAGE);
 		} else {
-			Locale.setDefault(locale);
 			getRootNode().put(LANGUAGE, locale.toString());
 		}
 	}
@@ -135,8 +153,14 @@ public class Config {
 	}
 
 	public void load() {
-		setLocale(getLocale());
-		VisibleElement.setDefaultVisualConfig(getVisualConfig());
+		final Locale locale = getLocale();
+		if (locale != null) {
+			Locale.setDefault(locale);
+		}
+
+		VisibleElement.setDefaultBehavior(getBehavior());
+
+		VisibleElement.setDefaultVisualization(getVisualization());
 	}
 
 	public void store() {

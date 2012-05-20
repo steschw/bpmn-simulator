@@ -24,7 +24,7 @@ import java.awt.Color;
 
 import javax.swing.Icon;
 
-import bpmn.element.VisualConfig;
+import bpmn.element.Visualization;
 import bpmn.element.event.definition.EventDefinition;
 import bpmn.token.InstanceManager;
 import bpmn.token.Token;
@@ -39,7 +39,7 @@ public final class EndEvent extends AbstractEvent {
 
 	@Override
 	protected Color getElementDefaultBackground() {
-		return getVisualConfig().getBackground(VisualConfig.Element.EVENT_END);
+		return getVisualization().getBackground(Visualization.Element.EVENT_END);
 	}
 
 	@Override
@@ -58,7 +58,7 @@ public final class EndEvent extends AbstractEvent {
 
 	@Override
 	protected Icon getTypeIcon() {
-		return getDefinition().getIcon(getVisualConfig(), true);
+		return getDefinition().getIcon(getVisualization(), true);
 	}
 
 }

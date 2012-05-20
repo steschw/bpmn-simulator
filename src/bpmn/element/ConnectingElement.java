@@ -55,7 +55,7 @@ public abstract class ConnectingElement extends VisibleElement {
 		return sourceRef;
 	}
 
-	protected static final <E extends VisibleElement> E getElementFromElementRef(
+	protected static final <E extends FlowElement> E getElementFromElementRef(
 			final ElementRef<E> elementRef) {
 		if ((elementRef != null) && elementRef.hasElement()) {
 			return elementRef.getElement();

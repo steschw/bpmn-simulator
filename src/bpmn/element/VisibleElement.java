@@ -40,7 +40,9 @@ public abstract class VisibleElement extends JComponent implements Element {
 
 	protected static final int MARGIN = 10;
 
-	private static VisualConfig defaultVisualConfig = new VisualConfig();
+	private static Visualization defaultVisualization = new Visualization();
+
+	private static Behavior defaultBehavior = new Behavior();
 
 	private ExpandedProcess parentProcess;
 
@@ -54,14 +56,24 @@ public abstract class VisibleElement extends JComponent implements Element {
 
 	private boolean exception;
 
-	private VisualConfig visualConfig = defaultVisualConfig; 
+	private Visualization visualization = defaultVisualization; 
 
-	public static void setDefaultVisualConfig(final VisualConfig visualConfig) {
-		defaultVisualConfig = visualConfig;
+	private Behavior behavior = defaultBehavior;
+
+	public static void setDefaultVisualization(final Visualization visualization) {
+		defaultVisualization = visualization;
 	}
 
-	public static VisualConfig getDefaultVisualConfig() {
-		return defaultVisualConfig;
+	public static Visualization getDefaultVisualization() {
+		return defaultVisualization;
+	}
+
+	public static final void setDefaultBehavior(Behavior behavior) {
+		defaultBehavior = behavior;
+	}
+
+	public static final Behavior getDefaultBehavior() {
+		return defaultBehavior;
 	}
 
 	public VisibleElement(final String id, final String name) {
@@ -95,8 +107,12 @@ public abstract class VisibleElement extends JComponent implements Element {
 		return tooltipText.toString();
 	}
 
-	public VisualConfig getVisualConfig() {
-		return visualConfig;
+	public Visualization getVisualization() {
+		return visualization;
+	}
+
+	public Behavior getBehavior() {
+		return behavior;
 	}
 
 	public final void setId(final String id) {
@@ -176,7 +192,7 @@ public abstract class VisibleElement extends JComponent implements Element {
 
 			graphics.push();
 
-			if (getVisualConfig().isAntialiasing()) {
+			if (getVisualization().isAntialiasing()) {
 				graphics.enableAntialiasing();
 			}
 
@@ -207,7 +223,7 @@ public abstract class VisibleElement extends JComponent implements Element {
 	}
 
 	protected Color getElementBackground() {
-		return ((background == null) || getVisualConfig().getIgnoreColors())
+		return ((background == null) || getVisualization().getIgnoreColors())
 				? getElementDefaultBackground()
 				: background;
 	}
@@ -241,7 +257,7 @@ public abstract class VisibleElement extends JComponent implements Element {
 
 	protected void paintException(final Graphics g) {
 		g.drawIcon(
-				getVisualConfig().getIcon(VisualConfig.ICON_EXCEPTION),
+				getVisualization().getIcon(Visualization.ICON_EXCEPTION),
 				new Point(0, 0));
 	}
 

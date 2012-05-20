@@ -62,6 +62,10 @@ public class Rectangle extends java.awt.Rectangle {
 		return new Point((int)getCenterX(), (int)getCenterY());
 	}
 
+	public Point getCenterTop() {
+		return new Point((int)getCenterX(), (int)getMinY());
+	}
+
 	public Point getCenterBottom() {
 		return new Point((int)getCenterX(), (int)getMaxY());
 	}

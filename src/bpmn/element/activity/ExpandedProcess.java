@@ -105,6 +105,14 @@ public class ExpandedProcess extends Activity implements Scrollable {
 	}
 
 	@Override
+	public void repaint() {
+		super.repaint();
+		if (collapsedProcess != null) {
+			collapsedProcess.repaint();
+		}
+	}
+
+	@Override
 	protected void forwardTokenFromIncoming(final Token token) {
 		passTokenToInner(token);
 		token.remove();

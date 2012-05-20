@@ -21,6 +21,7 @@
 package bpmn.element.activity;
 
 import java.awt.Point;
+import java.util.Collection;
 
 import bpmn.element.Graphics;
 import bpmn.element.TokenFlowElementWithDefault;
@@ -69,11 +70,13 @@ public abstract class Activity extends TokenFlowElementWithDefault {
 	}
 
 	protected void forwardTokenFromInner(final Token token) {
-		getInnerTokens().moveTo(getOutgoingTokens(), token);
+		if (canForwardToken(token)) {
+			getInnerTokens().moveTo(getOutgoingTokens(), token);
+		}
 	}
 
 	protected void forwardTokenFromOutgoing(final Token token) {
-		super.tokenDispatch(token);
+		tokenForward(token);
 	}
 
 	@Override
@@ -112,26 +115,42 @@ public abstract class Activity extends TokenFlowElementWithDefault {
 				|| !getOutgoingTokens().byInstance(instance).isEmpty();
 	}
 
-	protected void paintIncomingTokens(final Graphics g) {
-		final Point point = getElementInnerBounds().getLeftBottom();
-		for (Instance instance : getIncomingTokens().getInstances()) {
-			instance.paint(g, point, getIncomingTokens().byInstance(instance).byCurrentFlow(this).getCount());
-			point.translate(0, -TOKEN_MARGIN);
+	protected void paintTokensVertical(final Graphics g,
+			final TokenCollection tokens, final Point point) {
+		final Collection<Instance> instances = tokens.getInstances();
+		point.translate(0, -(TOKEN_MARGIN * instances.size()) / 2);
+		for (final Instance instance : instances) {
+			instance.paint(g, point, tokens.byInstance(instance).byCurrentFlow(this).getCount());
+			point.translate(0, TOKEN_MARGIN);
 		}
 	}
 
-	protected void paintOutgoingTokens(final Graphics g) {
-		final Point point = getElementInnerBounds().getRightBottom();
-		for (Instance instance : getOutgoingTokens().getInstances()) {
-			instance.paint(g, point, getOutgoingTokens().byInstance(instance).byCurrentFlow(this).getCount());
-			point.translate(0, -TOKEN_MARGIN);
+	protected void paintTokensHorizontal(final Graphics g,
+			final TokenCollection tokens, final Point point) {
+		final Collection<Instance> instances = tokens.getInstances();
+		point.translate(-(TOKEN_MARGIN * instances.size()) / 2, 0);
+		for (final Instance instance : instances) {
+			instance.paint(g, point, tokens.byInstance(instance).byCurrentFlow(this).getCount());
+			point.translate(TOKEN_MARGIN, 0);
 		}
+	}
+
+	protected void paintIncomingTokens(final Graphics g) {
+		paintTokensVertical(g, getIncomingTokens(), getElementInnerBounds().getLeftCenter());
+	}
+
+	protected void paintInnerTokens(final Graphics g) {
+		paintTokensHorizontal(g, getInnerTokens(), getElementInnerBounds().getCenterTop());
+	}
+
+	protected void paintOutgoingTokens(final Graphics g) {
+		paintTokensVertical(g, getOutgoingTokens(), getElementInnerBounds().getRightCenter());
 	}
 
 	@Override
 	protected void paintTokens(final Graphics g) {
 		paintIncomingTokens(g);
-		super.paintTokens(g);
+		paintInnerTokens(g);
 		paintOutgoingTokens(g);
 	}
 

@@ -82,7 +82,7 @@ public class TokenCollection extends Vector<Token> {
 	public synchronized TokenCollection byInstance(final Instance instance) {
 		final TokenCollection tokens = new TokenCollection();
 		for (Token token : this) {
-			if (token.getInstance().equals(instance)) {
+			if ((instance == null) || token.getInstance().equals(instance)) {
 				tokens.add(token);
 			}
 		}

@@ -68,7 +68,7 @@ public final class SignalEventDefinition extends EventDefinition {
 		final Model model = getProcessByToken(token).getModel();
 		final Collection<CatchEvent> catchEvents =  model.getCatchEvents();
 		for (final CatchEvent catchEvent : catchEvents) {
-			if (equals(catchEvent.getDefinition())) {
+			if (equals(catchEvent)) {
 				catchEvent.happen(instance);
 			}
 		}

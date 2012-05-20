@@ -26,7 +26,9 @@ import bpmn.element.event.definition.EventDefinition;
 import bpmn.token.Token;
 
 @SuppressWarnings("serial")
-public final class IntermediateThrowEvent extends IntermediateEvent {
+public final class IntermediateThrowEvent
+		extends IntermediateEvent
+		implements ThrowEvent{
 
 	public IntermediateThrowEvent(final String id, final String name) {
 		super(id, name);

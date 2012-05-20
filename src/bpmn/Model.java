@@ -458,6 +458,7 @@ public class Model implements ErrorHandler {
 			for (int i = 0; i < childNodes.getLength(); ++i) {
 				final Node childNode = childNodes.item(i);
 				if (!readElementSignal(childNode)
+						&& !readElementDataStore(childNode)
 						&& !readElementProcess(childNode, null)
 						&& !readElementCollaboration(childNode)
 						&& !readElementBPMNDiagram(childNode)) {
@@ -681,7 +682,8 @@ public class Model implements ErrorHandler {
 		for (int i = 0; i < childNodes.getLength(); ++i) {
 			final Node childNode = childNodes.item(i);
 			if (!readElementsForFlowElement(childNode, event)
-					&& !readEventDefinitions(childNode, event)) {
+					&& !readEventDefinitions(childNode, event)
+					&& !readElementsDataAssociations(childNode)) {
 				showUnknowNode(childNode);
 			}
 		}
@@ -971,9 +973,20 @@ public class Model implements ErrorHandler {
 		}
 	}
 
-	protected boolean readElementDataStore(final Node node, final ExpandedProcess process) {
-		final boolean isReference = isElementNode(node, BPMN, "dataStoreReference"); //$NON-NLS-1$
-		if (isReference || isElementNode(node, BPMN, "dataStore")) { //$NON-NLS-1$
+	protected boolean readElementDataStore(final Node node) {
+		if (isElementNode(node, BPMN, "dataStore")) { //$NON-NLS-1$
+			final DataStore dataStore = new DataStore(
+					getIdAttribute(node), getNameAttribute(node));
+			readBaseElement(node, dataStore);
+			elements.set(dataStore);
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	protected boolean readElementDataStoreReference(final Node node, final ExpandedProcess process) {
+		if (isElementNode(node, BPMN, "dataStoreReference")) { //$NON-NLS-1$
 			final DataStore dataStore = new DataStore(
 					getIdAttribute(node), getNameAttribute(node));
 			readFlowElement(node, dataStore);
@@ -1006,7 +1019,8 @@ public class Model implements ErrorHandler {
 						&& !readElementTextAnnotation(childNode, process)
 						&& !readElementGroup(childNode, process)
 						&& !readElementDataObject(childNode, process)
-						&& !readElementDataStore(childNode, process)
+						&& !readElementDataStoreReference(childNode, process)
+						&& !readElementsDataAssociations(childNode)
 						&& !readElementLaneSet(childNode, process, null)) {
 					showUnknowNode(childNode);
 				}

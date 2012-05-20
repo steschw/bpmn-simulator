@@ -20,8 +20,14 @@
  */
 package bpmn.element.gateway;
 
+import bpmn.element.ElementRef;
 import bpmn.element.Graphics;
 import bpmn.element.Rectangle;
+import bpmn.element.SequenceFlow;
+import bpmn.element.event.CatchEvent;
+import bpmn.token.Instance;
+import bpmn.token.Token;
+import bpmn.token.TokenCollection;
 
 @SuppressWarnings("serial")
 public class EventBasedGateway extends Gateway {
@@ -41,6 +47,35 @@ public class EventBasedGateway extends Gateway {
 		g.drawOval(bounds);
 		bounds.shrink(2, 2, 2, 2);
 		g.drawPentagon(bounds);
+	}
+
+	protected SequenceFlow getSequenceFlowToEvent(final CatchEvent catchEvent) {
+		for (ElementRef<SequenceFlow> outgoingRef : getOutgoing()) {
+			if (outgoingRef.hasElement()) {
+				final SequenceFlow outgoing = outgoingRef.getElement();
+				if (catchEvent.equals(outgoing.getTarget())) {
+					return outgoing;
+				}
+			}
+		}
+		return null;
+	}
+
+	public void eventHappen(final CatchEvent catchEvent, final Instance instance) {
+		final SequenceFlow sequenceFlow = getSequenceFlowToEvent(catchEvent);
+		if (sequenceFlow != null) {
+			final TokenCollection tokens = getInnerTokens().byInstance(instance);
+			if (!tokens.isEmpty()) {
+				final Token token = tokens.firstElement();
+				token.passTo(sequenceFlow);
+				token.remove();
+			}
+		}
+	}
+
+	@Override
+	protected boolean canForwardToken(Token token) {
+		return false;
 	}
 
 }

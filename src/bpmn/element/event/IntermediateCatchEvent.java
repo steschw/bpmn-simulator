@@ -27,24 +27,29 @@ import java.util.Iterator;
 
 import javax.swing.Icon;
 
+import bpmn.element.ElementRef;
+import bpmn.element.FlowElement;
+import bpmn.element.SequenceFlow;
+import bpmn.element.gateway.EventBasedGateway;
 import bpmn.token.Instance;
 import bpmn.token.Token;
 
 @SuppressWarnings("serial")
-public final class IntermediateCatchEvent extends IntermediateEvent
-	implements CatchEvent, MouseListener {
+public final class IntermediateCatchEvent
+		extends IntermediateEvent
+		implements CatchEvent, MouseListener {
 
 	public IntermediateCatchEvent(final String id, final String name) {
 		super(id, name);
 		addMouseListener(this);
 	}
 
-	private boolean isInteractive() {
+	private boolean getCanHappenManuall() {
 		return isTimer() || isMessage();
 	}
 
 	protected void updateCursor() {
-		if (isInteractive()) {
+		if (getCanHappenManuall()) {
 			setCursor(
 					getInnerTokens().isEmpty()
 							? Cursor.getDefaultCursor()
@@ -52,9 +57,39 @@ public final class IntermediateCatchEvent extends IntermediateEvent
 		}
 	}
 
+	protected int notifyEventBasedGatewaysEventHappen(final Instance instance) {
+		int count = 0;
+		for (final ElementRef<SequenceFlow> incomingRef : getIncoming()) {
+			if (incomingRef.hasElement()) {
+				final SequenceFlow incoming = incomingRef.getElement();
+				final FlowElement flowElement = incoming.getSource();
+				if (flowElement instanceof EventBasedGateway) {
+					((EventBasedGateway)flowElement).eventHappen(this, instance);
+					++count;
+				}
+			}
+		}
+		return count;
+	}
+
+	protected boolean isGatewayEvent() {
+		for (final ElementRef<SequenceFlow> incomingRef : getIncoming()) {
+			if (incomingRef.hasElement()) {
+				final SequenceFlow incoming = incomingRef.getElement();
+				final FlowElement flowElement = incoming.getSource();
+				if (flowElement instanceof EventBasedGateway) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
 	@Override
 	public void happen(final Instance instance) {
-		passFirstTokenToAllOutgoing();
+		if (notifyEventBasedGatewaysEventHappen(instance) == 0) {
+			passFirstTokenToAllOutgoing();
+		}
 	}
 
 	@Override
@@ -80,16 +115,12 @@ public final class IntermediateCatchEvent extends IntermediateEvent
 
 	@Override
 	protected boolean canForwardToken(final Token token) {
-		if (isInteractive()) {
-			return false;
-		} else {
-			return super.canForwardToken(token);
-		}
+		return isGatewayEvent();
 	}
 
 	@Override
 	public void mouseClicked(final MouseEvent e) {
-		if (isInteractive()) {
+		if (getCanHappenManuall()) {
 			happen(null);
 		}
 	}

@@ -70,7 +70,9 @@ public final class StartEvent extends AbstractEvent
 
 	public boolean canStartManuell() {
 		final ExpandedProcess process = getProcess();
-		return (getInstanceManager() != null) && (process != null) && !process.hasIncoming(); 
+		return (getInstanceManager() != null)
+				&& (process != null) && !process.hasIncoming()
+				&& (isPlain() || isTimer() || isMessage()); 
 	}
 
 	protected void updateCursor() {

@@ -20,20 +20,52 @@
  */
 package bpmn.element.activity.task;
 
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+
 import javax.swing.Icon;
 
 import bpmn.element.Visualization;
+import bpmn.element.event.CatchEvent;
+import bpmn.token.Instance;
 
 @SuppressWarnings("serial")
-public final class ReceiveTask extends Task {
+public final class ReceiveTask extends Task implements CatchEvent, MouseListener {
 
 	public ReceiveTask(final String id, final String name) {
 		super(id, name);
+		addMouseListener(this);
 	}
 
 	@Override
 	protected Icon getTypeIcon() {
 		return getVisualization().getIcon(Visualization.ICON_RECEIVE);
+	}
+
+	@Override
+	public void happen(final Instance instance) {
+		assert false; ///XXX
+	}
+
+	@Override
+	public void mouseClicked(final MouseEvent e) {
+		happen(null);
+	}
+
+	@Override
+	public void mousePressed(final MouseEvent e) {
+	}
+
+	@Override
+	public void mouseReleased(final MouseEvent e) {
+	}
+
+	@Override
+	public void mouseEntered(final MouseEvent e) {
+	}
+
+	@Override
+	public void mouseExited(final MouseEvent e) {
 	}
 
 }

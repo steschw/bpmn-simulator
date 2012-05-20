@@ -30,7 +30,9 @@ import bpmn.token.InstanceManager;
 import bpmn.token.Token;
 
 @SuppressWarnings("serial")
-public final class EndEvent extends AbstractEvent {
+public final class EndEvent
+		extends AbstractEvent
+		implements ThrowEvent {
 
 	public EndEvent(final String id, final String name,
 			final InstanceManager instanceManager) {

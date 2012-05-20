@@ -22,7 +22,7 @@ package bpmn.element.event;
 
 import bpmn.token.Instance;
 
-public interface CatchEvent extends Event {
+public interface CatchEvent {
 
 	void happen(final Instance instance);
 

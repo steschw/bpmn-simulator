@@ -40,12 +40,12 @@ public final class IntermediateThrowEvent
 	}
 
 	@Override
-	protected void tokenForward(final Token token) {
+	protected void tokenForwardToNextElement(final Token token) {
 		final EventDefinition eventDefinition = getDefinition();
 		if (eventDefinition != null) {
 			eventDefinition.throwHappen(token);
 		}
-		super.tokenForward(token);
+		super.tokenForwardToNextElement(token);
 	}
 
 }

@@ -50,12 +50,12 @@ public final class EndEvent
 	}
 
 	@Override
-	protected void tokenForward(final Token token) {
+	protected void tokenForwardToNextElement(final Token token) {
 		final EventDefinition definition = getDefinition();
 		if (definition != null) {
 			definition.throwHappen(token);
 		}
-		super.tokenForward(token);
+		super.tokenForwardToNextElement(token);
 	}
 
 	@Override

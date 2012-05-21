@@ -154,8 +154,8 @@ public class ExpandedProcess extends Activity implements Scrollable {
 	}
 
 	@Override
-	protected boolean canForwardToken(final Token token) {
-		return super.canForwardToken(token) && areAllTokenAtEnd(token.getInstance());
+	protected boolean canForwardTokenToNextElement(final Token token) {
+		return super.canForwardTokenToNextElement(token) && areAllTokenAtEnd(token.getInstance());
 	}
 
 	@Override

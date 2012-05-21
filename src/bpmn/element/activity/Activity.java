@@ -65,28 +65,40 @@ public abstract class Activity extends TokenFlowElementWithDefault {
 		}
 	}
 
+	protected boolean canForwardTokenToInner(final Token token) {
+		return true;
+	}
+
 	protected void forwardTokenFromIncoming(final Token token) {
 		getIncomingTokens().moveTo(getInnerTokens(), token);
 	}
 
+	protected boolean canForwardTokenToOutgoing(final Token token) {
+		return token.getSteps() >= getStepCount();
+	}
+
 	protected void forwardTokenFromInner(final Token token) {
-		if (canForwardToken(token)) {
-			getInnerTokens().moveTo(getOutgoingTokens(), token);
-		}
+		getInnerTokens().moveTo(getOutgoingTokens(), token);
 	}
 
 	protected void forwardTokenFromOutgoing(final Token token) {
-		tokenForward(token);
+		tokenForwardToNextElement(token);
 	}
 
 	@Override
 	public void tokenDispatch(final Token token) {
 		if (getInnerTokens().contains(token)) {
-			forwardTokenFromInner(token);
+			if (canForwardTokenToOutgoing(token)) {
+				forwardTokenFromInner(token);
+			}
 		} else if (getIncomingTokens().contains(token)) {
-			forwardTokenFromIncoming(token);
+			if (canForwardTokenToInner(token)) {
+				forwardTokenFromIncoming(token);
+			}
 		} else if (getOutgoingTokens().contains(token)) {
-			forwardTokenFromOutgoing(token);
+			if (canForwardTokenToNextElement(token)) {
+				forwardTokenFromOutgoing(token);
+			}
 		} else {
 			assert false;
 		}

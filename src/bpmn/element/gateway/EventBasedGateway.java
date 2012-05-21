@@ -74,7 +74,7 @@ public class EventBasedGateway extends Gateway {
 	}
 
 	@Override
-	protected boolean canForwardToken(Token token) {
+	protected boolean canForwardTokenToNextElement(Token token) {
 		return false;
 	}
 

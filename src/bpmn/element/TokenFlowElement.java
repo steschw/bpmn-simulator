@@ -54,8 +54,8 @@ public abstract class TokenFlowElement extends FlowElement implements TokenFlow 
 	@Override
 	public void tokenDispatch(final Token token) {
 //		assert getInnerTokens().contains(token);
-		if (canForwardToken(token)) {
-			tokenForward(token);
+		if (canForwardTokenToNextElement(token)) {
+			tokenForwardToNextElement(token);
 		}
 		repaint();
 	}
@@ -70,7 +70,7 @@ public abstract class TokenFlowElement extends FlowElement implements TokenFlow 
 		return 0;
 	}
 
-	protected boolean canForwardToken(final Token token) {
+	protected boolean canForwardTokenToNextElement(final Token token) {
 		return token.getSteps() >= getStepCount();
 	}
 
@@ -82,7 +82,7 @@ public abstract class TokenFlowElement extends FlowElement implements TokenFlow 
 		getInnerTokens().remove(token);
 	}
 
-	protected void tokenForward(final Token token) {
+	protected void tokenForwardToNextElement(final Token token) {
 		if (passTokenToAllOutgoing(token)) {
 			setException(false);
 			token.remove();
@@ -122,7 +122,7 @@ public abstract class TokenFlowElement extends FlowElement implements TokenFlow 
 
 	protected boolean passTokenToAllOutgoing(final Token token, final Instance instance) {
 		if (hasOutgoing()) {
-			return passTokenToAllSequenceFlows(token, instance) > 0;
+			return passTokenToAllOutgoingSequenceFlows(token, instance) > 0;
 		} else {
 			return passTokenToParent(token, instance);
 		}
@@ -150,7 +150,7 @@ public abstract class TokenFlowElement extends FlowElement implements TokenFlow 
 		return false;
 	}
 
-	protected int passTokenToAllSequenceFlows(final Token token, final Instance instance) {
+	protected int passTokenToAllOutgoingSequenceFlows(final Token token, final Instance instance) {
 		int forewardCount = 0;
 		for (ElementRef<SequenceFlow> outgoingRef : getOutgoing()) {
 			if (outgoingRef.hasElement()) {

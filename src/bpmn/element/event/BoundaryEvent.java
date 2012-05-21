@@ -80,7 +80,7 @@ public final class BoundaryEvent
 			final TokenCollection activityTokens = activity.getAllTokens();
 			if (!activityTokens.isEmpty()) {
 				final Token token = activityTokens.firstElement();
-				tokenForward(token);
+				tokenForwardToNextElement(token);
 				if (isInterrupting()) {
 					for (final Token activityToken : activityTokens) {
 						activityToken.remove();						

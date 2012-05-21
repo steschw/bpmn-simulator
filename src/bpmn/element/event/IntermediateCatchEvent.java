@@ -114,7 +114,7 @@ public final class IntermediateCatchEvent
 	}
 
 	@Override
-	protected boolean canForwardToken(final Token token) {
+	protected boolean canForwardTokenToNextElement(final Token token) {
 		return isGatewayEvent();
 	}
 

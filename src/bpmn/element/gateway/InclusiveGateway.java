@@ -74,11 +74,11 @@ public class InclusiveGateway extends Gateway {
 	}
 
 	@Override
-	protected void tokenForward(final Token token) {
+	protected void tokenForwardToNextElement(final Token token) {
 		if (isForMerging()) {
 			forwardTokenParallel(token.getInstance());
 		} else {
-			super.tokenForward(token);
+			super.tokenForwardToNextElement(token);
 		}
 	}
 

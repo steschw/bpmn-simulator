@@ -70,7 +70,7 @@ public abstract class TokenFlowElementWithDefault
 	@Override
 	protected boolean passTokenToAllOutgoing(final Token token, final Instance instance) {
 		if (hasOutgoing()) {
-			if (passTokenToAllSequenceFlows(token, instance) == 0) {
+			if (passTokenToAllOutgoingSequenceFlows(token, instance) == 0) {
 				return passTokenToDefaultSequenceFlow(token, instance);
 			} else {
 				return true;

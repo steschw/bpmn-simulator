@@ -39,11 +39,11 @@ public abstract class Activity extends TokenFlowElementWithDefault {
 		super(id, name);
 	}
 
-	public final TokenCollection getIncomingTokens() {
+	protected final TokenCollection getIncomingTokens() {
 		return incomingTokens;
 	}
 
-	public final TokenCollection getOutgoingTokens() {
+	protected final TokenCollection getOutgoingTokens() {
 		return outgoingTokens;
 	}
 
@@ -106,6 +106,14 @@ public abstract class Activity extends TokenFlowElementWithDefault {
 	@Override
 	public boolean hasToken() {
 		return super.hasToken() || hasIncomingTokens() || hasOutgoingTokens();
+	}
+
+	public TokenCollection getAllTokens() {
+		final TokenCollection allTokens = new TokenCollection();
+		allTokens.addAll(getIncomingTokens());
+		allTokens.addAll(getInnerTokens());
+		allTokens.addAll(getOutgoingTokens());
+		return allTokens;
 	}
 
 	@Override

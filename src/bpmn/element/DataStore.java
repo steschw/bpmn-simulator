@@ -20,6 +20,8 @@
  */
 package bpmn.element;
 
+import java.awt.Color;
+
 @SuppressWarnings("serial")
 public class DataStore extends FlowElement {
 
@@ -30,6 +32,11 @@ public class DataStore extends FlowElement {
 	@Override
 	protected void updateElementLabelPosition() {
 		getElementLabel().setCenterTopPosition(getInnerBounds().getCenterBottom());
+	}
+
+	@Override
+	protected Color getElementDefaultBackground() {
+		return getVisualization().getBackground(Visualization.Element.DATA_STORAGE);
 	}
 
 	@Override

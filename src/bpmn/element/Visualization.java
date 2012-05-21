@@ -65,7 +65,10 @@ public class Visualization {
 		PROCESS,
 		EVENT_START,
 		EVENT_END,
-		EVENT_INTERMEDIATE
+		EVENT_INTERMEDIATE,
+		EVENT_BOUNDARY,
+		DATA_OBJECT,
+		DATA_STORAGE,
 	}
 
 	private final Map<Element, Color> backgroundColors = new EnumMap<Element, Color>(Element.class);

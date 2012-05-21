@@ -68,11 +68,17 @@ public class PreferencesDialog extends JDialog {
 			= new ColorSelector(Messages.getString("Preferences.backgroundColor")); //$NON-NLS-1$
 	private final ColorSelector colorEndEventBackground
 			= new ColorSelector(Messages.getString("Preferences.backgroundColor")); //$NON-NLS-1$
+	private final ColorSelector colorBoundaryEventBackground
+			= new ColorSelector(Messages.getString("Preferences.backgroundColor")); //$NON-NLS-1$
 	private final ColorSelector colorGatewayBackground
 			= new ColorSelector(Messages.getString("Preferences.backgroundColor")); //$NON-NLS-1$
 	private final ColorSelector colorTaskBackground
 			= new ColorSelector(Messages.getString("Preferences.backgroundColor")); //$NON-NLS-1$
 	private final ColorSelector colorProcessBackground
+			= new ColorSelector(Messages.getString("Preferences.backgroundColor")); //$NON-NLS-1$
+	private final ColorSelector colorDataObjectBackground
+			= new ColorSelector(Messages.getString("Preferences.backgroundColor")); //$NON-NLS-1$
+	private final ColorSelector colorDataStorageBackground
 			= new ColorSelector(Messages.getString("Preferences.backgroundColor")); //$NON-NLS-1$
 
 	public PreferencesDialog() {
@@ -181,6 +187,9 @@ public class PreferencesDialog extends JDialog {
 		panel.add(new JLabel(Messages.getString("Preferences.endEvent"))); //$NON-NLS-1$
 		panel.add(colorEndEventBackground);
 
+		panel.add(new JLabel(Messages.getString("Preferences.boundaryEvent"))); //$NON-NLS-1$
+		panel.add(colorBoundaryEventBackground);
+
 		panel.add(new JLabel(Messages.getString("Preferences.gateway"))); //$NON-NLS-1$
 		panel.add(colorGatewayBackground);
 
@@ -189,6 +198,12 @@ public class PreferencesDialog extends JDialog {
 
 		panel.add(new JLabel(Messages.getString("Preferences.process"))); //$NON-NLS-1$
 		panel.add(colorProcessBackground);
+
+		panel.add(new JLabel(Messages.getString("Preferences.dataObject"))); //$NON-NLS-1$
+		panel.add(colorDataObjectBackground);
+
+		panel.add(new JLabel(Messages.getString("Preferences.dataStorage"))); //$NON-NLS-1$
+		panel.add(colorDataStorageBackground);
 
 		return panel;
 	}
@@ -246,9 +261,12 @@ public class PreferencesDialog extends JDialog {
 		visualization.setBackground(Visualization.Element.EVENT_START, colorStartEventBackground.getSelectedColor());
 		visualization.setBackground(Visualization.Element.EVENT_INTERMEDIATE, colorIntermediateEventBackground.getSelectedColor());
 		visualization.setBackground(Visualization.Element.EVENT_END, colorEndEventBackground.getSelectedColor());
+		visualization.setBackground(Visualization.Element.EVENT_BOUNDARY, colorBoundaryEventBackground.getSelectedColor());
 		visualization.setBackground(Visualization.Element.GATEWAY, colorGatewayBackground.getSelectedColor());
 		visualization.setBackground(Visualization.Element.TASK, colorTaskBackground.getSelectedColor());
 		visualization.setBackground(Visualization.Element.PROCESS, colorProcessBackground.getSelectedColor());
+		visualization.setBackground(Visualization.Element.DATA_OBJECT, colorDataObjectBackground.getSelectedColor());
+		visualization.setBackground(Visualization.Element.DATA_STORAGE, colorDataStorageBackground.getSelectedColor());
 		config.setVisualization(visualization);
 
 		config.store();
@@ -269,9 +287,12 @@ public class PreferencesDialog extends JDialog {
 		colorStartEventBackground.setSelectedColor(visualization.getBackground(Visualization.Element.EVENT_START));
 		colorIntermediateEventBackground.setSelectedColor(visualization.getBackground(Visualization.Element.EVENT_INTERMEDIATE));
 		colorEndEventBackground.setSelectedColor(visualization.getBackground(Visualization.Element.EVENT_END));
+		colorBoundaryEventBackground.setSelectedColor(visualization.getBackground(Visualization.Element.EVENT_BOUNDARY));
 		colorGatewayBackground.setSelectedColor(visualization.getBackground(Visualization.Element.GATEWAY));
 		colorTaskBackground.setSelectedColor(visualization.getBackground(Visualization.Element.TASK));
 		colorProcessBackground.setSelectedColor(visualization.getBackground(Visualization.Element.PROCESS));
+		colorDataObjectBackground.setSelectedColor(visualization.getBackground(Visualization.Element.DATA_OBJECT));
+		colorDataStorageBackground.setSelectedColor(visualization.getBackground(Visualization.Element.DATA_STORAGE));
 	}
 
 }

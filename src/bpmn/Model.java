@@ -689,47 +689,70 @@ public class Model implements ErrorHandler {
 		}
 	}
 
-	protected boolean readElementEventStart(final Node node,
+	protected boolean readElementStartEvent(final Node node,
 			final ExpandedProcess process) {
 		if (isElementNode(node, BPMN, "startEvent")) { //$NON-NLS-1$
-			final StartEvent element = new StartEvent(
+			final StartEvent event = new StartEvent(
 					getIdAttribute(node), getNameAttribute(node),
 					getAnimator().getInstanceManager());
-			readEvent(node, element);
-			addElementToContainer(element, process);
+			readEvent(node, event);
+			addElementToContainer(event, process);
 			return true;
 		} else {
 			return false;
 		}
 	}
 
-	protected boolean readElementEventIntermediateThrow(final Node node,
+	protected boolean readElementIntermediateThrowEvent(final Node node,
 			final ExpandedProcess process) {
 		if (isElementNode(node, BPMN, "intermediateThrowEvent")) { //$NON-NLS-1$
-			final IntermediateThrowEvent element = new IntermediateThrowEvent(
+			final IntermediateThrowEvent event = new IntermediateThrowEvent(
 					getIdAttribute(node), getNameAttribute(node));
-			readEvent(node, element);
-			addElementToContainer(element, process);
+			readEvent(node, event);
+			addElementToContainer(event, process);
 			return true;
 		} else {
 			return false;
 		}
 	}
 
-	protected boolean readElementEventIntermediateCatch(final Node node,
+	protected boolean readElementIntermediateCatchEvent(final Node node,
 			final ExpandedProcess process) {
 		if (isElementNode(node, BPMN, "intermediateCatchEvent")) { //$NON-NLS-1$
-			final IntermediateCatchEvent element = new IntermediateCatchEvent(
+			final IntermediateCatchEvent event = new IntermediateCatchEvent(
 					getIdAttribute(node), getNameAttribute(node));
-			readEvent(node, element);
-			addElementToContainer(element, process);
+			readEvent(node, event);
+			addElementToContainer(event, process);
 			return true;
 		} else {
 			return false;
 		}
 	}
 
-	protected boolean readElementEventEnd(final Node node,
+	protected boolean getCancelActivityAttribute(final Node node) {
+		return getAttributeBoolean(node, "cancelActivity", false, true);
+	}
+
+	protected ElementRef<Activity> getAttachedToRefAttribute(final Node node) {
+		return getAttributeElementRef(node, "attachedToRef", true);		
+	}
+
+	protected boolean readElementBoundaryEvent(final Node node,
+			final ExpandedProcess process) {
+		if (isElementNode(node, BPMN, "boundaryEvent")) { //$NON-NLS-1$
+			final BoundaryEvent event = new BoundaryEvent(getIdAttribute(node),
+					getNameAttribute(node),
+					getCancelActivityAttribute(node),
+					getAttachedToRefAttribute(node));
+			readEvent(node, event);
+			addElementToContainer(event, process);
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	protected boolean readElementEndEvent(final Node node,
 			final ExpandedProcess process) {
 		if (isElementNode(node, BPMN, "endEvent")) { //$NON-NLS-1$
 			final EndEvent element = new EndEvent(getIdAttribute(node),
@@ -1008,10 +1031,11 @@ public class Model implements ErrorHandler {
 				final Node childNode = childNodes.item(i);
 				if (!readElementProcess(childNode, process)
 						&& !readElementsForFlowElement(childNode, process)
-						&& !readElementEventStart(childNode, process)
-						&& !readElementEventIntermediateThrow(childNode, process)
-						&& !readElementEventIntermediateCatch(childNode, process)
-						&& !readElementEventEnd(childNode, process)
+						&& !readElementStartEvent(childNode, process)
+						&& !readElementIntermediateThrowEvent(childNode, process)
+						&& !readElementIntermediateCatchEvent(childNode, process)
+						&& !readElementBoundaryEvent(childNode, process)
+						&& !readElementEndEvent(childNode, process)
 						&& !readElementTask(childNode, process)
 						&& !readElementGateway(childNode, process)
 						&& !readElementAssociation(childNode, process)

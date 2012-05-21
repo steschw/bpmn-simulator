@@ -25,6 +25,7 @@ import java.awt.Point;
 import javax.swing.Icon;
 
 import bpmn.element.Graphics;
+import bpmn.element.Rectangle;
 import bpmn.element.TokenFlowElement;
 import bpmn.element.event.definition.EventDefinition;
 import bpmn.element.event.definition.MessageEventDefinition;
@@ -33,6 +34,8 @@ import bpmn.token.InstanceManager;
 
 @SuppressWarnings("serial")
 public abstract class AbstractEvent extends TokenFlowElement implements Event {
+
+	private static final int INNER_CIRCLE_MARGIN = 4;
 
 	private InstanceManager instanceManager;
 
@@ -95,6 +98,12 @@ public abstract class AbstractEvent extends TokenFlowElement implements Event {
 	}
 
 	protected abstract Icon getTypeIcon();
+
+	protected void paintInnerCircle(final Graphics g) {
+		final Rectangle bounds = getElementInnerBounds();
+		bounds.grow(-INNER_CIRCLE_MARGIN, -INNER_CIRCLE_MARGIN);
+		g.drawOval(bounds);
+	}
 
 	protected void paintIcon(final Graphics g) {
 		final Icon icon = getTypeIcon();

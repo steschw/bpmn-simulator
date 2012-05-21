@@ -20,6 +20,7 @@
  */
 package bpmn.element;
 
+import java.awt.Color;
 import java.awt.Point;
 
 import javax.swing.Icon;
@@ -39,6 +40,11 @@ public class DataObject extends FlowElement {
 
 	public boolean isCollection() {
 		return isCollection;
+	}
+
+	@Override
+	protected Color getElementDefaultBackground() {
+		return getVisualization().getBackground(Visualization.Element.DATA_OBJECT);
 	}
 
 	@Override

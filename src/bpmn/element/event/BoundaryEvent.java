@@ -22,6 +22,7 @@ package bpmn.element.event;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Stroke;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -51,6 +52,7 @@ public final class BoundaryEvent
 		this.cancelActivity = cancelActivity;
 		this.attachedToRef = attachedToRef;
 		addMouseListener(this);
+		setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 	}
 
 	public boolean isInterrupting() {

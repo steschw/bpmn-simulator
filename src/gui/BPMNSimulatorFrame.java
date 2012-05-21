@@ -27,12 +27,14 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
 import java.io.File;
+import java.io.IOException;
 
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
@@ -50,16 +52,16 @@ public class BPMNSimulatorFrame extends JFrame {
 
 	private final Toolbar toolbar = new Toolbar();
 
-	private final JFileChooser fileChoser = new JFileChooser();
-
 	private Model model;
+
+	private File file;
 
 	private InstancesFrame frameInstances = new InstancesFrame();
 
 	public BPMNSimulatorFrame() {
 		super();
 
-		updateFrameTitle(null);
+		updateFrameTitle();
 
 		create();
 
@@ -68,13 +70,19 @@ public class BPMNSimulatorFrame extends JFrame {
 		setVisible(true);
 	}
 
-	protected void updateFrameTitle(final String filename) {
+	protected void updateFrameTitle() {
 		final StringBuilder title = new StringBuilder(BPMNSimulatorApplication.NAME);
-		if ((filename != null) && !filename.isEmpty()) {
+		if (file != null) {
 			title.append(" - "); //$NON-NLS-1$
-			title.append(filename);
+			title.append(file.getAbsolutePath());
 		}
 		setTitle(title.toString());
+	}
+
+	protected void showPreferencesDialog() {
+		final PreferencesDialog frame = new PreferencesDialog();
+		frame.setLocationRelativeTo(BPMNSimulatorFrame.this);
+		frame.setVisible(true);
 	}
 
 	private void create() {
@@ -121,9 +129,7 @@ public class BPMNSimulatorFrame extends JFrame {
 		menuFilePreferences.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(final ActionEvent e) {
-				final PreferencesDialog frame = new PreferencesDialog();
-				frame.setLocationRelativeTo(BPMNSimulatorFrame.this);
-				frame.setVisible(true);
+				showPreferencesDialog();
 			}
 		});
 		menuFile.add(menuFilePreferences);
@@ -161,6 +167,29 @@ public class BPMNSimulatorFrame extends JFrame {
 			}
 		});
 		menuExtra.add(menuExtraInstances);
+
+		final JMenuItem menuExtraOpenExternalEditor = new JMenuItem(Messages.getString("Menu.openExternal")); //$NON-NLS-1$
+		menuExtraOpenExternalEditor.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(final ActionEvent event) {
+				if (file != null) {
+					final String externalEditor = Config.getInstance().getExternalEditor();
+					if ((externalEditor == null) || externalEditor.isEmpty()) {
+						showPreferencesDialog();
+					} else {
+						try {
+							Runtime.getRuntime().exec(new String[] {externalEditor, file.getAbsolutePath()});
+						} catch (final IOException exception) {
+							JOptionPane.showMessageDialog(BPMNSimulatorFrame.this,
+									exception.getLocalizedMessage(),
+									Messages.getString("error"), //$NON-NLS-1$
+									JOptionPane.ERROR_MESSAGE);
+						}
+					}
+				}
+			}
+		});
+		menuExtra.add(menuExtraOpenExternalEditor);
 
 		return menuExtra;
 	}
@@ -210,37 +239,45 @@ public class BPMNSimulatorFrame extends JFrame {
 
 	private void openFile() {
 		final Config config = Config.getInstance();
+		final JFileChooser fileChoser = new JFileChooser();
 		fileChoser.setFileFilter(new FileNameExtensionFilter("BPMN 2.0 XML", "bpmn")); //$NON-NLS-1$ //$NON-NLS-2$
 		fileChoser.setCurrentDirectory(new File(config.getLastDirectory()));
 		if (fileChoser.showOpenDialog(this) == 	JFileChooser.APPROVE_OPTION) {
 			config.setLastDirectory(fileChoser.getCurrentDirectory().getAbsolutePath());
 			closeFile();
+			file = fileChoser.getSelectedFile();
 			createModel();
 		}
 	}
 
 	private void createModel() {
 		model = new Model(desktop.getDesktopPane());
-		final File file = fileChoser.getSelectedFile();
 		model.load(file);
 		frameInstances.setInstanceManager(model.getInstanceManager());
 		menuWindow.setDesktopPane(desktop.getDesktopPane());
 		toolbar.setModel(model);
-		updateFrameTitle(file.getAbsolutePath());
+		updateFrameTitle();
 		if (model.hasErrorMessages()) {
 			model.showMessages();
 		}
 		desktop.arrangeFrames();
 	}
 
-	private void closeFile() {
+	private void closeModel() {
 		if (model != null) {
 			toolbar.setModel(null);
 			menuWindow.setDesktopPane(null);
 			frameInstances.setInstanceManager(null);
 			model.close();
 			model = null;
-			updateFrameTitle(null);
+		}
+	}
+
+	private void closeFile() {
+		closeModel();
+		if (file != null) {
+			file = null;
+			updateFrameTitle();
 		}
 	}
 

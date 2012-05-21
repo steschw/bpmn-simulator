@@ -23,7 +23,10 @@ package gui;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Frame;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -38,6 +41,7 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
+import javax.swing.JTextField;
 import javax.swing.border.Border;
 
 import bpmn.element.Behavior;
@@ -50,6 +54,7 @@ public class PreferencesDialog extends JDialog {
 	private static final int GAP = 10;
 
 	private final LocaleComboBox selectLanguage = new LocaleComboBox();
+	private final JTextField editExternalEditor = new JTextField(); 
 
 	private final JCheckBox checkKeepEvents
 			= new JCheckBox(Messages.getString("Preferences.keepEvents")); //$NON-NLS-1$
@@ -125,22 +130,51 @@ public class PreferencesDialog extends JDialog {
 	}
 
 	protected JPanel createGeneralPanel() {
-		final JPanel generalPanel = new JPanel(new BorderLayout());
-		generalPanel.setBorder(createGapBorder());
+		final JPanel panel = new JPanel(new GridBagLayout());
+		panel.setBorder(createGapBorder());
+		final GridBagConstraints c = new GridBagConstraints();
+		c.insets = new Insets(4, 4, 4, 4);
 
-		final JPanel panel = new JPanel(new GridLayout(0, 2, GAP, GAP));
 		final StringBuilder textLanguage = new StringBuilder(Messages.getString("Preferences.language")); //$NON-NLS-1$
 		textLanguage.append(": *"); //$NON-NLS-1$
 		final JLabel labelLanguage = new JLabel(textLanguage.toString());
 		labelLanguage.setLabelFor(selectLanguage);
-		panel.add(labelLanguage);
-		panel.add(selectLanguage);
+		c.gridx = 0;
+		c.gridy = 0;
+		c.gridwidth = 1;
+		c.fill = GridBagConstraints.NONE;
+		c.anchor = GridBagConstraints.BASELINE_LEADING;
+		panel.add(labelLanguage, c);
+		c.gridx = 1;
+		c.gridy = 0;
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.gridwidth = 2;
+		panel.add(selectLanguage, c);
+		c.gridx = 0;
+		c.gridy = 1;
+		c.gridwidth = 1;
+		c.fill = GridBagConstraints.NONE;
+		final StringBuilder textExternalEditor = new StringBuilder(Messages.getString("Preferences.externalEditor")); //$NON-NLS-1$
+		textExternalEditor.append(':');
+		final JLabel labelExternalEditor = new JLabel(textExternalEditor.toString());
+		labelExternalEditor.setLabelFor(editExternalEditor);
+		panel.add(labelExternalEditor, c);
+		c.gridx = 1;
+		c.gridy = 1;
+		c.gridwidth = 2;
+		c.fill = GridBagConstraints.HORIZONTAL;
+		panel.add(editExternalEditor, c);
 
-		generalPanel.add(panel, BorderLayout.PAGE_START);
 		final StringBuilder textRestart = new StringBuilder("* "); //$NON-NLS-1$
 		textRestart.append(Messages.getString("Preferences.requiresRestart")); //$NON-NLS-1$
-		generalPanel.add(new JLabel(textRestart.toString()), BorderLayout.PAGE_END);
-		return generalPanel;
+		c.gridx = 0;
+		c.weightx = 0;
+		c.weighty = 1;
+		c.gridwidth = 2;
+		c.anchor = GridBagConstraints.PAGE_END;
+		panel.add(new JLabel(textRestart.toString()), c);
+
+		return panel;
 	}
 
 	protected JPanel createBehaviorPanel() {
@@ -249,6 +283,7 @@ public class PreferencesDialog extends JDialog {
 		final Config config = Config.getInstance(); 
 
 		config.setLocale((Locale)selectLanguage.getSelectedItem());
+		config.setExternalEditor(editExternalEditor.getText());
 
 		final Behavior behavior = VisibleElement.getDefaultBehavior();
 		behavior.setKeepEvents(checkKeepEvents.isSelected());
@@ -276,6 +311,7 @@ public class PreferencesDialog extends JDialog {
 		final Config config = Config.getInstance();
 
 		selectLanguage.setSelectedItem(config.getLocale());
+		editExternalEditor.setText(config.getExternalEditor());
 
 		final Behavior behavior = VisibleElement.getDefaultBehavior();
 		checkKeepEvents.setSelected(behavior.getKeepEvents());

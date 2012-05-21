@@ -46,6 +46,8 @@ public class Config {
 
 	private static final Color DEFAULT_BACKGROUND = Color.WHITE;
 
+	private static final String EXTERNAL_EDITOR = "externalEditor";
+
 	private static final String LAST_DIRECTORY = "lastDirectory"; //$NON-NLS-1$
 
 	private static Config instance;
@@ -123,14 +125,6 @@ public class Config {
 		preferences.putBoolean(KEEP_EVENTS, behavior.getKeepEvents());
 	}
 
-	public void setLocale(final Locale locale) {
-		if (locale == null) {
-			getRootNode().remove(LANGUAGE);
-		} else {
-			getRootNode().put(LANGUAGE, locale.toString());
-		}
-	}
-
 	protected Locale getLocaleFromString(final String string) {
 		for (Locale locale : Locale.getAvailableLocales()) {
 			if (locale.toString().equals(string)) {
@@ -142,6 +136,22 @@ public class Config {
 
 	public Locale getLocale() {
 		return getLocaleFromString(getRootNode().get(LANGUAGE, ""));
+	}
+
+	public void setLocale(final Locale locale) {
+		if (locale == null) {
+			getRootNode().remove(LANGUAGE);
+		} else {
+			getRootNode().put(LANGUAGE, locale.toString());
+		}
+	}
+
+	public String getExternalEditor() {
+		return getRootNode().get(EXTERNAL_EDITOR, "");
+	}
+
+	public void setExternalEditor(final String filename) {
+		getRootNode().put(EXTERNAL_EDITOR, filename);
 	}
 
 	public String getLastDirectory() {

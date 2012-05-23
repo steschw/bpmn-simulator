@@ -169,12 +169,6 @@ public class Model implements ErrorHandler {
 				id));
 	}
 
-	protected void showUnknowAttribute(final String name, final Node node) {
-		logFrame.addWarning(
-				MessageFormat.format(Messages.getString("Protocol.attributeNotExist"), //$NON-NLS-1$
-				name, node.getNodeName()));
-	}
-
 	protected static boolean isElementNode(final Node node,
 			final String namespace, final String name) {
 		return (node.getNodeType() == Node.ELEMENT_NODE)
@@ -204,13 +198,9 @@ public class Model implements ErrorHandler {
 		return subElement;
 	}
 
-	protected String getAttributeString(final Node node, final String name,
-			final boolean required) {
+	protected String getAttributeString(final Node node, final String name) {
 		final Node attributeNode = node.getAttributes().getNamedItem(name);
 		if (attributeNode == null) {
-			if (required) {
-				showUnknowAttribute(name, node);
-			}
 			return null;
 		}
 		return attributeNode.getNodeValue();
@@ -218,7 +208,7 @@ public class Model implements ErrorHandler {
 
 	protected float getAttributeFloat(final Node node, final String name) {
 		try {
-			return Float.parseFloat(getAttributeString(node, name, true));
+			return Float.parseFloat(getAttributeString(node, name));
 		} catch (NumberFormatException e) {
 			return 0;
 		}
@@ -233,13 +223,12 @@ public class Model implements ErrorHandler {
 		}
 	}
 
-	protected boolean getAttributeBoolean(final Node node, final String name,
-			final boolean required, final boolean defaultValue) {
-		return convertStringToBool(getAttributeString(node, name, required), defaultValue);
+	protected boolean getAttributeBoolean(final Node node, final String name, final boolean defaultValue) {
+		return convertStringToBool(getAttributeString(node, name), defaultValue);
 	}
 
 	protected VisibleElement getAttributeElement(final Node node, final String name) {
-		final String elementId = getAttributeString(node, name, true);
+		final String elementId = getAttributeString(node, name);
 		VisibleElement element = null;
 		if (elementId != null) {
 			element = elements.get(elementId);
@@ -261,17 +250,12 @@ public class Model implements ErrorHandler {
 
 	protected <T extends Element> ElementRef<T> getAttributeElementRef(
 			final Node node, final String name) {
-		return getAttributeElementRef(node, name, true);
-	}
-
-	protected <T extends Element> ElementRef<T> getAttributeElementRef(
-			final Node node, final String name, final boolean required) {
-		return getElementRef(getAttributeString(node, name, required));
+		return getElementRef(getAttributeString(node, name));
 	}
 
 	protected ElementRef<Signal> getAttributeSignalRef(
 			final Node node, final String name) {
-		return getSignalRef(getAttributeString(node, name, true));
+		return getSignalRef(getAttributeString(node, name));
 	}
 
 	protected static Color convertStringToColor(final String value) {
@@ -358,7 +342,7 @@ public class Model implements ErrorHandler {
 
 	protected boolean readElementBPMNDiagram(final Node node) {
 		if (isElementNode(node, BPMNDI, "BPMNDiagram")) { //$NON-NLS-1$
-			final String name = getNameAttribute(node, false);
+			final String name = getNameAttribute(node);
 			final NodeList childNodes = node.getChildNodes();
 			for (int i = 0; i < childNodes.getLength(); ++i) {
 				final Node childNode = childNodes.item(i);
@@ -389,7 +373,7 @@ public class Model implements ErrorHandler {
 	}
 
 	protected boolean getIsExpandedAttribute(final Node node) {
-		return getAttributeBoolean(node, "isExpanded", false, true); //$NON-NLS-1$
+		return getAttributeBoolean(node, "isExpanded", true); //$NON-NLS-1$
 	}
 
 	protected Rectangle getBoundsElement(final Node node) {
@@ -429,15 +413,11 @@ public class Model implements ErrorHandler {
 	}
 
 	protected String getIdAttribute(final Node node) {
-		return getAttributeString(node, "id", true); //$NON-NLS-1$
+		return getAttributeString(node, "id"); //$NON-NLS-1$
 	}
 
 	protected String getNameAttribute(final Node node) {
-		return getNameAttribute(node, true);
-	}
-
-	protected String getNameAttribute(final Node node, final boolean required) {
-		return getAttributeString(node, "name", required); //$NON-NLS-1$
+		return getAttributeString(node, "name"); //$NON-NLS-1$
 	}
 
 	protected ElementRef<FlowElement> getSourceRefAttribute(final Node node) {
@@ -449,7 +429,7 @@ public class Model implements ErrorHandler {
 	}
 
 	protected boolean getIsHorizontalAttribute(final Node node) {
-		return getAttributeBoolean(node, "isHorizontal", true, false); //$NON-NLS-1$
+		return getAttributeBoolean(node, "isHorizontal", false); //$NON-NLS-1$
 	}
 
 	protected void readDefinitions(final Node node) {
@@ -457,7 +437,8 @@ public class Model implements ErrorHandler {
 			final NodeList childNodes = node.getChildNodes();
 			for (int i = 0; i < childNodes.getLength(); ++i) {
 				final Node childNode = childNodes.item(i);
-				if (!readElementSignal(childNode)
+				if (!readElementMessage(childNode)
+						&& !readElementSignal(childNode)
 						&& !readElementDataStore(childNode)
 						&& !readElementProcess(childNode, null)
 						&& !readElementCollaboration(childNode)
@@ -468,6 +449,18 @@ public class Model implements ErrorHandler {
 			logFrame.toFront();
 		} else {
 			logFrame.addError(Messages.getString("Protocol.noDefinitions")); //$NON-NLS-1$
+		}
+	}
+
+	protected boolean readElementMessage(final Node node) {
+		if (isElementNode(node, BPMN, "message")) { //$NON-NLS-1$
+			final Message message = new Message(getIdAttribute(node),
+					getNameAttribute(node));
+			readBaseElement(node, message);
+			elements.set(message);
+			return true;
+		} else {
+			return false;
 		}
 	}
 
@@ -486,9 +479,9 @@ public class Model implements ErrorHandler {
 	protected boolean readElementParticipant(final Node node) {
 		if (isElementNode(node, BPMN, "participant")) { //$NON-NLS-1$
 			final ElementRef<ExpandedProcess> processRef
-				= getAttributeElementRef(node, "processRef", false); //$NON-NLS-1$
+				= getAttributeElementRef(node, "processRef"); //$NON-NLS-1$
 			final Pool pool = new Pool(getIdAttribute(node),
-					getNameAttribute(node, false), processRef);
+					getNameAttribute(node), processRef);
 			readBaseElement(node, pool);
 			elements.set(pool);
 			return true;
@@ -497,12 +490,25 @@ public class Model implements ErrorHandler {
 		}
 	}
 
+	protected void assignCatchEventsToMessage(final MessageFlow messageFlow) {
+/*
+		final FlowElement source = messageFlow.getSource();
+		final FlowElement target = messageFlow.getTarget();
+		if (target instanceof CatchEvent) {
+			
+		} else {
+			assert false;
+		}*/
+	}
+
 	protected boolean readElementMessageFlow(final Node node, final Collaboration collaboration) {
 		if (isElementNode(node, BPMN, "messageFlow")) { //$NON-NLS-1$
 			final MessageFlow messageFlow = new MessageFlow(getIdAttribute(node),
+					getNameAttribute(node),
 					getSourceRefAttribute(node), getTargetRefAttribute(node));
 			readBaseElement(node, messageFlow);
 			addElementToContainer(messageFlow, collaboration);
+			assignCatchEventsToMessage(messageFlow);
 			return true;
 		} else {
 			return false;
@@ -530,8 +536,8 @@ public class Model implements ErrorHandler {
 
 	protected void readExtensionElementsPropertySignavio(final Node node,
 			final Element element) {
-		final String keyNode = getAttributeString(node, "metaKey", true); //$NON-NLS-1$
-		final String valueNode = getAttributeString(node, "metaValue", true); //$NON-NLS-1$
+		final String keyNode = getAttributeString(node, "metaKey"); //$NON-NLS-1$
+		final String valueNode = getAttributeString(node, "metaValue"); //$NON-NLS-1$
 		if ("bgcolor".equals(keyNode) //$NON-NLS-1$
 				&& ((valueNode != null) && !valueNode.isEmpty())) {
 			final Color color = convertStringToColor(valueNode);
@@ -557,7 +563,7 @@ public class Model implements ErrorHandler {
 	protected boolean readElementLane(final Node node,
 			final ExpandedProcess process, final LaneSet laneSet) {
 		if (isElementNode(node, BPMN, "lane")) { //$NON-NLS-1$
-			final Lane lane = new Lane(getIdAttribute(node), getNameAttribute(node, false));
+			final Lane lane = new Lane(getIdAttribute(node), getNameAttribute(node));
 			final NodeList childNodes = node.getChildNodes();
 			for (int i = 0; i < childNodes.getLength(); ++i) {
 				final Node childNode = childNodes.item(i);
@@ -613,7 +619,7 @@ public class Model implements ErrorHandler {
 
 	protected void readDefaultSequenceFlowAttribute(final Node node,
 			final ElementWithDefaultSequenceFlow element) {
-		final ElementRef<SequenceFlow> elementRef = getAttributeElementRef(node, "default", false);
+		final ElementRef<SequenceFlow> elementRef = getAttributeElementRef(node, "default");
 		if (elementRef != null) {
 			element.setDefaultSequenceFlowRef(elementRef);
 		}
@@ -661,16 +667,20 @@ public class Model implements ErrorHandler {
 
 	protected boolean readEventDefinitions(final Node node, final AbstractEvent event) {
 		if (isElementNode(node, BPMN, "terminateEventDefinition")) { //$NON-NLS-1$
-			event.setDefinition(new TerminateEventDefinition());
+			event.setDefinition(new TerminateEventDefinition(event));
 		} else if (isElementNode(node, BPMN, "timerEventDefinition")) { //$NON-NLS-1$
-			event.setDefinition(new TimerEventDefinition());
+			event.setDefinition(new TimerEventDefinition(event));
 		} else if (isElementNode(node, BPMN, "messageEventDefinition")) { //$NON-NLS-1$
-			event.setDefinition(new MessageEventDefinition());
+			final MessageEventDefinition definition =
+					new MessageEventDefinition(event, getElementRefAttribute(node));
+			event.setDefinition(definition);
 		} else if (isElementNode(node, BPMN, "linkEventDefinition")) { //$NON-NLS-1$
-			event.setDefinition(new LinkEventDefinition(getNameAttribute(node, true)));
+			final LinkEventDefinition definition =
+					new LinkEventDefinition(event, getNameAttribute(node));
+			event.setDefinition(definition);
 		} else if (isElementNode(node, BPMN, "signalEventDefinition")) { //$NON-NLS-1$
 			final ElementRef<Signal> signalRef = getAttributeSignalRef(node, "signalRef");
-			event.setDefinition(new SignalEventDefinition(signalRef));
+			event.setDefinition(new SignalEventDefinition(event, signalRef));
 		} else {
 			return false;
 		}
@@ -730,11 +740,11 @@ public class Model implements ErrorHandler {
 	}
 
 	protected boolean getCancelActivityAttribute(final Node node) {
-		return getAttributeBoolean(node, "cancelActivity", false, true);
+		return getAttributeBoolean(node, "cancelActivity", true);
 	}
 
 	protected ElementRef<Activity> getAttachedToRefAttribute(final Node node) {
-		return getAttributeElementRef(node, "attachedToRef", true);		
+		return getAttributeElementRef(node, "attachedToRef");		
 	}
 
 	protected boolean readElementBoundaryEvent(final Node node,
@@ -794,7 +804,7 @@ public class Model implements ErrorHandler {
 	}
 
 	protected Association.Direction getParameterAssociationDirection(final Node node) {
-		final String value = getAttributeString(node, "associationDirection", false);
+		final String value = getAttributeString(node, "associationDirection");
 		final Association.Direction direction = Association.Direction.byValue(value);
 		return (direction == null) ? Association.Direction.NONE : direction; 
 	}
@@ -874,47 +884,51 @@ public class Model implements ErrorHandler {
 		}
 	}
 
+	protected ElementRef<Message> getElementRefAttribute(final Node node) {
+		return getAttributeElementRef(node, "elementRef");
+	}
+
 	protected boolean readElementTask(final Node node, final ExpandedProcess process) {
 		if (isElementNode(node, BPMN, "manualTask")) { //$NON-NLS-1$
-			final ManualTask element = new ManualTask(getIdAttribute(node),
+			final ManualTask task = new ManualTask(getIdAttribute(node),
 					getNameAttribute(node));
-			readTask(node, element);
-			addElementToContainer(element, process);
+			readTask(node, task);
+			addElementToContainer(task, process);
 		} else if (isElementNode(node, BPMN, "userTask")) { //$NON-NLS-1$
-			final UserTask element = new UserTask(getIdAttribute(node),
+			final UserTask task = new UserTask(getIdAttribute(node),
 					getNameAttribute(node));
-			readTask(node, element);
-			addElementToContainer(element, process);
+			readTask(node, task);
+			addElementToContainer(task, process);
 		} else if (isElementNode(node, BPMN, "businessRuleTask")) { //$NON-NLS-1$
-			final BusinessRuleTask element = new BusinessRuleTask(getIdAttribute(node),
+			final BusinessRuleTask task = new BusinessRuleTask(getIdAttribute(node),
 					getNameAttribute(node));
-			readTask(node, element);
-			addElementToContainer(element, process);
+			readTask(node, task);
+			addElementToContainer(task, process);
 		} else if (isElementNode(node, BPMN, "scriptTask")) { //$NON-NLS-1$
-			final ScriptTask element = new ScriptTask(getIdAttribute(node),
+			final ScriptTask task = new ScriptTask(getIdAttribute(node),
 					getNameAttribute(node));
-			readTask(node, element);
-			addElementToContainer(element, process);
+			readTask(node, task);
+			addElementToContainer(task, process);
 		} else if (isElementNode(node, BPMN, "serviceTask")) { //$NON-NLS-1$
-			final ServiceTask element = new ServiceTask(getIdAttribute(node),
+			final ServiceTask task = new ServiceTask(getIdAttribute(node),
 					getNameAttribute(node));
-			readTask(node, element);
-			addElementToContainer(element, process);
+			readTask(node, task);
+			addElementToContainer(task, process);
 		} else if (isElementNode(node, BPMN, "sendTask")) { //$NON-NLS-1$
-			final SendTask element = new SendTask(getIdAttribute(node),
-					getNameAttribute(node));
-			readTask(node, element);
-			addElementToContainer(element, process);
+			final SendTask task = new SendTask(getIdAttribute(node),
+					getNameAttribute(node), getElementRefAttribute(node));
+			readTask(node, task);
+			addElementToContainer(task, process);
 		} else if (isElementNode(node, BPMN, "receiveTask")) { //$NON-NLS-1$
-			final ReceiveTask element = new ReceiveTask(getIdAttribute(node),
-					getNameAttribute(node));
-			readTask(node, element);
-			addElementToContainer(element, process);
+			final ReceiveTask task = new ReceiveTask(getIdAttribute(node),
+					getNameAttribute(node), getElementRefAttribute(node));
+			readTask(node, task);
+			addElementToContainer(task, process);
 		} else if (isElementNode(node, BPMN, "task")) { //$NON-NLS-1$
-			final Task element = new Task(getIdAttribute(node),
+			final Task task = new Task(getIdAttribute(node),
 					getNameAttribute(node));
-			readTask(node, element);
-			addElementToContainer(element, process);
+			readTask(node, task);
+			addElementToContainer(task, process);
 		} else {
 			return false;
 		}
@@ -986,7 +1000,7 @@ public class Model implements ErrorHandler {
 			final DataObject dataObject = new DataObject(
 					getIdAttribute(node), getNameAttribute(node));
 			if (!isReference) {
-				dataObject.setCollection(getAttributeBoolean(node, "isCollection", false, false));
+				dataObject.setCollection(getAttributeBoolean(node, "isCollection", false));
 			}
 			readFlowElement(node, dataObject);
 			addElementToContainer(dataObject, process);
@@ -1024,7 +1038,7 @@ public class Model implements ErrorHandler {
 		final boolean isSubProcess = isElementNode(node, BPMN, "subProcess"); 
 		if (isSubProcess || isElementNode(node, BPMN, "process")) {
 			final ExpandedProcess process = new ExpandedProcess(this,
-					getIdAttribute(node), getNameAttribute(node, false));
+					getIdAttribute(node), getNameAttribute(node));
 			readDefaultSequenceFlowAttribute(node, process);
 			final NodeList childNodes = node.getChildNodes();
 			for (int i = 0; i < childNodes.getLength(); ++i) {

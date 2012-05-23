@@ -29,6 +29,7 @@ import bpmn.element.ElementRef;
 import bpmn.element.Signal;
 import bpmn.element.Visualization;
 import bpmn.element.event.CatchEvent;
+import bpmn.element.event.Event;
 import bpmn.token.Instance;
 import bpmn.token.Token;
 
@@ -36,8 +37,8 @@ public final class SignalEventDefinition extends EventDefinition {
 
 	private final ElementRef<Signal> signalRef;
 
-	public SignalEventDefinition(final ElementRef<Signal> signalRef) {
-		super();
+	public SignalEventDefinition(final Event event, final ElementRef<Signal> signalRef) {
+		super(event);
 		this.signalRef = signalRef; 
 	}
 

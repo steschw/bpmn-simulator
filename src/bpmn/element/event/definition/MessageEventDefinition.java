@@ -22,9 +22,26 @@ package bpmn.element.event.definition;
 
 import javax.swing.Icon;
 
+import bpmn.element.ElementRef;
+import bpmn.element.Message;
 import bpmn.element.Visualization;
+import bpmn.element.event.Event;
 
 public final class MessageEventDefinition extends EventDefinition {
+
+	private final ElementRef<Message> messageRef;
+
+	public MessageEventDefinition(final Event event,
+			final ElementRef<Message> messageRef) {
+		super(event);
+		this.messageRef = messageRef;
+	}
+
+	public Message getMessage() {
+		return (messageRef != null) && messageRef.hasElement()
+				? messageRef.getElement()
+				: null;
+	}
 
 	@Override
 	public Icon getIcon(final Visualization visualization, final boolean inverse) {

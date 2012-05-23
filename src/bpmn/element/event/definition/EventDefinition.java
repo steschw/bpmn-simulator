@@ -25,9 +25,21 @@ import javax.swing.Icon;
 import bpmn.element.VisibleElement;
 import bpmn.element.Visualization;
 import bpmn.element.activity.ExpandedProcess;
+import bpmn.element.event.Event;
 import bpmn.token.Token;
 
 public abstract class EventDefinition {
+
+	private final Event event;
+
+	public EventDefinition(final Event event) {
+		super();
+		this.event = event;
+	}
+
+	protected Event getEvent() {
+		return event;
+	}
 
 	public abstract Icon getIcon(final Visualization visualization, final boolean inverse);
 

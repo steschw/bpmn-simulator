@@ -23,7 +23,6 @@ package bpmn.element.event;
 import java.awt.Cursor;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.util.Iterator;
 
 import javax.swing.Icon;
 
@@ -57,6 +56,7 @@ public final class IntermediateCatchEvent
 		}
 	}
 
+	///XXX: doppelt in ReceiveTask
 	protected int notifyEventBasedGatewaysEventHappen(final Instance instance) {
 		int count = 0;
 		for (final ElementRef<SequenceFlow> incomingRef : getIncoming()) {
@@ -72,24 +72,10 @@ public final class IntermediateCatchEvent
 		return count;
 	}
 
-	protected boolean isGatewayEvent() {
-		for (final ElementRef<SequenceFlow> incomingRef : getIncoming()) {
-			if (incomingRef.hasElement()) {
-				final SequenceFlow incoming = incomingRef.getElement();
-				final FlowElement flowElement = incoming.getSource();
-				if (flowElement instanceof EventBasedGateway) {
-					return true;
-				}
-			}
-		}
-		return false;
-	}
-
 	@Override
 	public void happen(final Instance instance) {
-		if (notifyEventBasedGatewaysEventHappen(instance) == 0) {
-			passFirstTokenToAllOutgoing();
-		}
+		notifyEventBasedGatewaysEventHappen(instance);
+		passFirstTokenToAllOutgoing();
 	}
 
 	@Override
@@ -104,18 +90,9 @@ public final class IntermediateCatchEvent
 		updateCursor();
 	}
 
-	protected void passFirstTokenToAllOutgoing() {
-		final Iterator<Token> iterator = getInnerTokens().iterator();
-		if (iterator.hasNext()) {
-			final Token firstToken = iterator.next();
-			passTokenToAllOutgoing(firstToken);
-			firstToken.remove();
-		}
-	}
-
 	@Override
 	protected boolean canForwardTokenToNextElement(final Token token) {
-		return isGatewayEvent();
+		return isGatewayCondition();
 	}
 
 	@Override

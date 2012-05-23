@@ -18,23 +18,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package bpmn.element.event.definition;
+package bpmn.element.activity.task;
 
-import javax.swing.Icon;
+import bpmn.element.ElementRef;
+import bpmn.element.Message;
 
-import bpmn.element.Visualization;
-import bpmn.element.event.Event;
+@SuppressWarnings("serial")
+public abstract class AbstractMessageTask extends Task {
 
-public final class TimerEventDefinition extends EventDefinition {
+	private final ElementRef<Message> messageRef;
 
-	public TimerEventDefinition(final Event event) {
-		super(event);
+	public AbstractMessageTask(final String id, final String name,
+			final ElementRef<Message> messageRef) {
+		super(id, name);
+		this.messageRef = messageRef;
 	}
 
-	@Override
-	public Icon getIcon(final Visualization visualization, final boolean inverse) {
-		assert !inverse;
-		return visualization.getIcon(Visualization.ICON_TIMER);
+	public Message getMessage() {
+		return (messageRef != null) && messageRef.hasElement()
+				? messageRef.getElement()
+				: null;
 	}
 
 }

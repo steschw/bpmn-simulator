@@ -28,6 +28,7 @@ import bpmn.element.VisibleElement;
 import bpmn.element.Visualization;
 import bpmn.element.activity.ExpandedProcess;
 import bpmn.element.event.CatchEvent;
+import bpmn.element.event.Event;
 import bpmn.element.event.IntermediateCatchEvent;
 import bpmn.token.Token;
 
@@ -35,8 +36,8 @@ public final class LinkEventDefinition extends EventDefinition {
 
 	private final String name;
 
-	public LinkEventDefinition(final String name) {
-		super();
+	public LinkEventDefinition(final Event event, final String name) {
+		super(event);
 		this.name = name;
 	}
 

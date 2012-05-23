@@ -23,9 +23,14 @@ package bpmn.element.event.definition;
 import javax.swing.Icon;
 
 import bpmn.element.Visualization;
+import bpmn.element.event.Event;
 import bpmn.token.Token;
 
 public final class TerminateEventDefinition extends EventDefinition {
+
+	public TerminateEventDefinition(final Event event) {
+		super(event);
+	}
 
 	@Override
 	public Icon getIcon(final Visualization visualization, final boolean inverse) {

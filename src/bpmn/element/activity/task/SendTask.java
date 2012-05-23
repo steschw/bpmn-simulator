@@ -22,13 +22,17 @@ package bpmn.element.activity.task;
 
 import javax.swing.Icon;
 
+import bpmn.element.ElementRef;
+import bpmn.element.Message;
 import bpmn.element.Visualization;
 
 @SuppressWarnings("serial")
-public final class SendTask extends Task {
+public final class SendTask
+		extends AbstractMessageTask {
 
-	public SendTask(final String id, final String name) {
-		super(id, name);
+	public SendTask(final String id, final String name,
+			final ElementRef<Message> messageRef) {
+		super(id, name, messageRef);
 	}
 
 	@Override

@@ -18,23 +18,35 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package bpmn.element.event.definition;
+package bpmn.element;
 
-import javax.swing.Icon;
+import java.awt.Color;
+import java.awt.Point;
 
-import bpmn.element.Visualization;
-import bpmn.element.event.Event;
+@SuppressWarnings("serial")
+public class Message extends FlowElement {
 
-public final class TimerEventDefinition extends EventDefinition {
-
-	public TimerEventDefinition(final Event event) {
-		super(event);
+	public Message(final String id, final String name) {
+		super(id, name);
+		setElementBackground(Color.WHITE);
 	}
 
 	@Override
-	public Icon getIcon(final Visualization visualization, final boolean inverse) {
-		assert !inverse;
-		return visualization.getIcon(Visualization.ICON_TIMER);
+	protected void paintBackground(final Graphics g) {
+		super.paintBackground(g);
+
+		final Rectangle bounds = getElementInnerBounds();
+		g.fillRect(bounds);
+	}
+
+	@Override
+	protected void paintElement(final Graphics g) {
+
+		final Rectangle bounds = getElementInnerBounds();
+		g.drawRect(bounds);
+		final Point center = bounds.getCenter();
+		g.drawLine(bounds.getLeftTop(), center);
+		g.drawLine(bounds.getRightTop(), center);
 	}
 
 }

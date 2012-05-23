@@ -29,6 +29,10 @@ public class Signal extends InvisibleElement {
 		this.name = name;
 	}
 
+	public boolean hasName() {
+		return (name != null) && !name.isEmpty();
+	}
+
 	public String getName() {
 		return name;
 	}

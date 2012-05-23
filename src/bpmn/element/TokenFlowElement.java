@@ -22,8 +22,10 @@ package bpmn.element;
 
 import java.awt.Color;
 import java.awt.Point;
+import java.util.Iterator;
 
 import bpmn.element.activity.ExpandedProcess;
+import bpmn.element.gateway.EventBasedGateway;
 import bpmn.token.Instance;
 import bpmn.token.Token;
 import bpmn.token.TokenCollection;
@@ -176,6 +178,28 @@ public abstract class TokenFlowElement extends FlowElement implements TokenFlow 
 		for (Instance instance : getInnerTokens().getInstances()) {
 			instance.paint(g, point, getInnerTokens().byInstance(instance).byCurrentFlow(this).getCount());
 			point.translate(-TOKEN_MARGIN, 0);
+		}
+	}
+
+	protected boolean isGatewayCondition() {
+		for (final ElementRef<SequenceFlow> incomingRef : getIncoming()) {
+			if (incomingRef.hasElement()) {
+				final SequenceFlow incoming = incomingRef.getElement();
+				final FlowElement flowElement = incoming.getSource();
+				if (flowElement instanceof EventBasedGateway) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	protected void passFirstTokenToAllOutgoing() {
+		final Iterator<Token> iterator = getInnerTokens().iterator();
+		if (iterator.hasNext()) {
+			final Token firstToken = iterator.next();
+			passTokenToAllOutgoing(firstToken);
+			firstToken.remove();
 		}
 	}
 

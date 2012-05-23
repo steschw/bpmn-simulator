@@ -28,9 +28,10 @@ import java.awt.Stroke;
 @SuppressWarnings("serial")
 public class MessageFlow extends ConnectingElement {
 
-	public MessageFlow(final String id, final ElementRef<FlowElement> source,
-			final ElementRef<FlowElement> target) {
-		super(id, null, source, target);
+	public MessageFlow(final String id, final String name,
+			final ElementRef<FlowElement> sourceRef,
+			final ElementRef<FlowElement> targetRef) {
+		super(id, name, sourceRef, targetRef);
 		setElementBackground(Color.WHITE);
 	}
 

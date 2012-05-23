@@ -25,15 +25,24 @@ import java.awt.event.MouseListener;
 
 import javax.swing.Icon;
 
+import bpmn.element.ElementRef;
+import bpmn.element.FlowElement;
+import bpmn.element.Message;
+import bpmn.element.SequenceFlow;
 import bpmn.element.Visualization;
 import bpmn.element.event.CatchEvent;
+import bpmn.element.gateway.EventBasedGateway;
 import bpmn.token.Instance;
+import bpmn.token.Token;
 
 @SuppressWarnings("serial")
-public final class ReceiveTask extends Task implements CatchEvent, MouseListener {
+public final class ReceiveTask
+		extends AbstractMessageTask
+		implements CatchEvent, MouseListener {
 
-	public ReceiveTask(final String id, final String name) {
-		super(id, name);
+	public ReceiveTask(final String id, final String name,
+			final ElementRef<Message> messageRef) {
+		super(id, name, messageRef);
 		addMouseListener(this);
 	}
 
@@ -42,9 +51,30 @@ public final class ReceiveTask extends Task implements CatchEvent, MouseListener
 		return getVisualization().getIcon(Visualization.ICON_RECEIVE);
 	}
 
+	protected int notifyEventBasedGatewaysEventHappen(final Instance instance) {
+		int count = 0;
+		for (final ElementRef<SequenceFlow> incomingRef : getIncoming()) {
+			if (incomingRef.hasElement()) {
+				final SequenceFlow incoming = incomingRef.getElement();
+				final FlowElement flowElement = incoming.getSource();
+				if (flowElement instanceof EventBasedGateway) {
+					((EventBasedGateway)flowElement).eventHappen(this, instance);
+					++count;
+				}
+			}
+		}
+		return count;
+	}
+
 	@Override
 	public void happen(final Instance instance) {
-		assert false; ///XXX
+		notifyEventBasedGatewaysEventHappen(instance);
+		passFirstTokenToAllOutgoing();
+	}
+
+	@Override
+	protected boolean canForwardTokenToOutgoing(final Token token) {
+		return isGatewayCondition();
 	}
 
 	@Override

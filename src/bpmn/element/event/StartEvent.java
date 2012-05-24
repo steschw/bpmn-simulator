@@ -68,22 +68,22 @@ public final class StartEvent extends AbstractEvent
 		updateCursor();
 	}
 
-	public boolean canStartManuell() {
+	public boolean canHappenManual() {
 		final ExpandedProcess process = getProcess();
 		return (getInstanceManager() != null)
 				&& (process != null) && !process.hasIncoming()
-				&& (isPlain() || isTimer() || isMessage()); 
+				&& (isPlain() || isTimer()); 
 	}
 
 	protected void updateCursor() {
-		setCursor(canStartManuell()
+		setCursor(canHappenManual()
 				? new Cursor(Cursor.HAND_CURSOR)
 				: Cursor.getDefaultCursor());
 	}
 
 	@Override
 	public void mouseClicked(final MouseEvent event) {
-		if (canStartManuell()) {
+		if (canHappenManual()) {
 			happen(null);
 		}
 	}

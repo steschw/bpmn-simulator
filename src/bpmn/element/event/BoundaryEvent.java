@@ -47,7 +47,7 @@ public final class BoundaryEvent
 
 	public BoundaryEvent(final String id, final String name,
 			final boolean cancelActivity,
-			ElementRef<Activity> attachedToRef) {
+			final ElementRef<Activity> attachedToRef) {
 		super(id, name, null);
 		this.cancelActivity = cancelActivity;
 		this.attachedToRef = attachedToRef;

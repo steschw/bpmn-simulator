@@ -25,13 +25,14 @@ import javax.swing.Icon;
 import bpmn.element.ElementRef;
 import bpmn.element.Message;
 import bpmn.element.Visualization;
-import bpmn.element.event.Event;
+import bpmn.element.event.AbstractEvent;
+import bpmn.token.Token;
 
 public final class MessageEventDefinition extends EventDefinition {
 
 	private final ElementRef<Message> messageRef;
 
-	public MessageEventDefinition(final Event event,
+	public MessageEventDefinition(final AbstractEvent event,
 			final ElementRef<Message> messageRef) {
 		super(event);
 		this.messageRef = messageRef;
@@ -48,6 +49,14 @@ public final class MessageEventDefinition extends EventDefinition {
 		return visualization.getIcon(inverse
 				? Visualization.ICON_MESSAGE_INVERSE
 				: Visualization.ICON_MESSAGE);
+	}
+
+	@Override
+	public void throwHappen(final Token token) {
+		super.throwHappen(token);
+	
+		final AbstractEvent event = getEvent();
+		event.getModel().sendMessagesFrom(event, token.getInstance());
 	}
 
 }

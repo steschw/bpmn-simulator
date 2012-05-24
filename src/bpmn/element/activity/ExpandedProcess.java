@@ -63,13 +63,9 @@ public class ExpandedProcess extends Activity implements Scrollable {
 		this(null, id, name);
 	}
 
+	@Override
 	public Model getModel() {
-		if (model == null) {
-			final ExpandedProcess parentProcess = getProcess();
-			return (parentProcess == null) ? null : parentProcess.getModel();
-		} else {
-			return model;
-		}
+		return (model == null) ? super.getModel() : model;
 	}
 
 	public void addElement(final VisibleElement element) {
@@ -135,7 +131,7 @@ public class ExpandedProcess extends Activity implements Scrollable {
 
 	protected boolean isTokenFromInnerElement(final Token token) {
 		final TokenFlow from = token.getPreviousFlow();
-		return from.equals(this) || containsTokenFlow(from);
+		return this.equals(from) || containsTokenFlow(from);
 	}
 
 	@Override

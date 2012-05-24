@@ -20,21 +20,11 @@
  */
 package bpmn.element;
 
-import java.util.ArrayList;
-import java.util.Collection;
-
 @SuppressWarnings("serial")
 public class LaneSet extends FlowElement {
 
-	private final Collection<Lane> lanes = new ArrayList<Lane>(); 
-
 	public LaneSet(final String id) {
 		super(id, null);
-	}
-
-	public void addLane(final Lane lane) {
-		assert lane != null;
-		lanes.add(lane);
 	}
 
 	@Override

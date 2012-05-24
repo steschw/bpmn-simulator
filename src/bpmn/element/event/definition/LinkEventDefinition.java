@@ -27,8 +27,8 @@ import javax.swing.Icon;
 import bpmn.element.VisibleElement;
 import bpmn.element.Visualization;
 import bpmn.element.activity.ExpandedProcess;
+import bpmn.element.event.AbstractEvent;
 import bpmn.element.event.CatchEvent;
-import bpmn.element.event.Event;
 import bpmn.element.event.IntermediateCatchEvent;
 import bpmn.token.Token;
 
@@ -36,7 +36,7 @@ public final class LinkEventDefinition extends EventDefinition {
 
 	private final String name;
 
-	public LinkEventDefinition(final Event event, final String name) {
+	public LinkEventDefinition(final AbstractEvent event, final String name) {
 		super(event);
 		this.name = name;
 	}
@@ -82,6 +82,8 @@ public final class LinkEventDefinition extends EventDefinition {
 
 	@Override
 	public void throwHappen(final Token token) {
+		super.throwHappen(token);
+
 		final ExpandedProcess process = getProcessByToken(token);
 		final String targetName = getName();
 		CatchEvent linkTarget

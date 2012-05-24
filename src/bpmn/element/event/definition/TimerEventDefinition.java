@@ -23,11 +23,11 @@ package bpmn.element.event.definition;
 import javax.swing.Icon;
 
 import bpmn.element.Visualization;
-import bpmn.element.event.Event;
+import bpmn.element.event.AbstractEvent;
 
 public final class TimerEventDefinition extends EventDefinition {
 
-	public TimerEventDefinition(final Event event) {
+	public TimerEventDefinition(final AbstractEvent event) {
 		super(event);
 	}
 

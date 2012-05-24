@@ -28,12 +28,13 @@ import bpmn.element.Graphics;
 import bpmn.element.Rectangle;
 import bpmn.element.TokenFlowElement;
 import bpmn.element.event.definition.EventDefinition;
-import bpmn.element.event.definition.MessageEventDefinition;
 import bpmn.element.event.definition.TimerEventDefinition;
 import bpmn.token.InstanceManager;
 
 @SuppressWarnings("serial")
-public abstract class AbstractEvent extends TokenFlowElement implements Event {
+public abstract class AbstractEvent
+		extends TokenFlowElement
+		implements Event {
 
 	private static final int INNER_CIRCLE_MARGIN = 4;
 
@@ -66,10 +67,6 @@ public abstract class AbstractEvent extends TokenFlowElement implements Event {
 
 	public boolean isTimer() {
 		return getDefinition() instanceof TimerEventDefinition;
-	}
-
-	public boolean isMessage() {
-		return getDefinition() instanceof MessageEventDefinition;
 	}
 
 	public boolean isPlain() {

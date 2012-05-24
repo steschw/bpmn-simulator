@@ -30,7 +30,8 @@ import bpmn.token.Token;
 import bpmn.token.TokenCollection;
 
 @SuppressWarnings("serial")
-public abstract class Activity extends TokenFlowElementWithDefault {
+public abstract class Activity
+		extends TokenFlowElementWithDefault {
 
 	private final TokenCollection incomingTokens = new TokenCollection();
 	private final TokenCollection outgoingTokens = new TokenCollection();

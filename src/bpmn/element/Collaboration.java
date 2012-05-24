@@ -27,18 +27,31 @@ import java.util.Collection;
 
 import javax.swing.Scrollable;
 
+import bpmn.element.event.CatchEvent;
+import bpmn.token.Instance;
+
 @SuppressWarnings("serial")
 public class Collaboration extends FlowElement implements Scrollable {
 
-	private final Collection<VisibleElement> elements = new ArrayList<VisibleElement>(); 
+	private final Collection<MessageFlow> messageFlows = new ArrayList<MessageFlow>();
 
 	public Collaboration(final String id) {
 		super(id, null);
 	}
 
-	public void addElement(final VisibleElement element) {
-		assert element != null;
-		elements.add(element);
+	public void addMessageFlow(final MessageFlow messageFlow) {
+		messageFlows.add(messageFlow);
+	}
+
+	public void sendMessagesFrom(final FlowElement source, final Instance instance) {
+		for (final MessageFlow messageFlow : messageFlows) {
+			if (source.equals(messageFlow.getSource())) {
+				final FlowElement target = messageFlow.getTarget();
+				if (target instanceof CatchEvent) {
+					((CatchEvent)target).happen(null);
+				}
+			}
+		}
 	}
 
 	@Override

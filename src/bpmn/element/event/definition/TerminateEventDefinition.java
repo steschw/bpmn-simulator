@@ -23,12 +23,12 @@ package bpmn.element.event.definition;
 import javax.swing.Icon;
 
 import bpmn.element.Visualization;
-import bpmn.element.event.Event;
+import bpmn.element.event.AbstractEvent;
 import bpmn.token.Token;
 
 public final class TerminateEventDefinition extends EventDefinition {
 
-	public TerminateEventDefinition(final Event event) {
+	public TerminateEventDefinition(final AbstractEvent event) {
 		super(event);
 	}
 
@@ -40,6 +40,8 @@ public final class TerminateEventDefinition extends EventDefinition {
 
 	@Override
 	public void throwHappen(final Token token) {
+		super.throwHappen(token);
+
 		token.getInstance().removeAllOtherTokens(token);
 	}
 

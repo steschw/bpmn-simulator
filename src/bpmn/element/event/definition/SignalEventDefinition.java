@@ -28,8 +28,8 @@ import bpmn.Model;
 import bpmn.element.ElementRef;
 import bpmn.element.Signal;
 import bpmn.element.Visualization;
+import bpmn.element.event.AbstractEvent;
 import bpmn.element.event.CatchEvent;
-import bpmn.element.event.Event;
 import bpmn.token.Instance;
 import bpmn.token.Token;
 
@@ -37,7 +37,7 @@ public final class SignalEventDefinition extends EventDefinition {
 
 	private final ElementRef<Signal> signalRef;
 
-	public SignalEventDefinition(final Event event, final ElementRef<Signal> signalRef) {
+	public SignalEventDefinition(final AbstractEvent event, final ElementRef<Signal> signalRef) {
 		super(event);
 		this.signalRef = signalRef; 
 	}
@@ -65,6 +65,8 @@ public final class SignalEventDefinition extends EventDefinition {
 
 	@Override
 	public void throwHappen(final Token token) {
+		super.throwHappen(token);
+
 		final Instance instance = token.getInstance();
 		final Model model = getProcessByToken(token).getModel();
 		final Collection<CatchEvent> catchEvents =  model.getCatchEvents();

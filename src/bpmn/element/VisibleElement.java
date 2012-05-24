@@ -33,6 +33,7 @@ import java.awt.event.MouseEvent;
 
 import javax.swing.JComponent;
 
+import bpmn.Model;
 import bpmn.element.activity.ExpandedProcess;
 
 @SuppressWarnings("serial")
@@ -68,7 +69,7 @@ public abstract class VisibleElement extends JComponent implements Element {
 		return defaultVisualization;
 	}
 
-	public static final void setDefaultBehavior(Behavior behavior) {
+	public static final void setDefaultBehavior(final Behavior behavior) {
 		defaultBehavior = behavior;
 	}
 
@@ -158,6 +159,10 @@ public abstract class VisibleElement extends JComponent implements Element {
 
 	public final ExpandedProcess getProcess() {
 		return parentProcess;
+	}
+
+	public Model getModel() {
+		return (parentProcess == null) ? null : parentProcess.getModel();
 	}
 
 	public String getElementName() {

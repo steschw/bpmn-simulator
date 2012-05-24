@@ -38,7 +38,7 @@ import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-import bpmn.Model;
+import bpmn.DiagramInterchangeModel;
 
 @SuppressWarnings("serial")
 public class BPMNSimulatorFrame extends JFrame {
@@ -52,7 +52,7 @@ public class BPMNSimulatorFrame extends JFrame {
 
 	private final Toolbar toolbar = new Toolbar();
 
-	private Model model;
+	private DiagramInterchangeModel model;
 
 	private File file;
 
@@ -240,7 +240,7 @@ public class BPMNSimulatorFrame extends JFrame {
 	private void openFile() {
 		final Config config = Config.getInstance();
 		final JFileChooser fileChoser = new JFileChooser();
-		fileChoser.setFileFilter(new FileNameExtensionFilter("BPMN 2.0 XML", "bpmn")); //$NON-NLS-1$ //$NON-NLS-2$
+		fileChoser.setFileFilter(new FileNameExtensionFilter("BPMN 2.0 XML", "bpmn", "xml")); //$NON-NLS-1$ //$NON-NLS-2$
 		fileChoser.setCurrentDirectory(new File(config.getLastDirectory()));
 		if (fileChoser.showOpenDialog(this) == 	JFileChooser.APPROVE_OPTION) {
 			config.setLastDirectory(fileChoser.getCurrentDirectory().getAbsolutePath());
@@ -251,7 +251,7 @@ public class BPMNSimulatorFrame extends JFrame {
 	}
 
 	private void createModel() {
-		model = new Model(desktop.getDesktopPane());
+		model = new DiagramInterchangeModel(desktop.getDesktopPane());
 		model.load(file);
 		frameInstances.setInstanceManager(model.getInstanceManager());
 		menuWindow.setDesktopPane(desktop.getDesktopPane());

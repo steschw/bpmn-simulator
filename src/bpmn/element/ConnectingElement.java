@@ -193,7 +193,8 @@ public abstract class ConnectingElement extends VisibleElement {
 			}
 			last = current;
 		}
-		return null;
+		assert last != null;
+		return last;
 	}
 
 	@Override

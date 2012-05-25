@@ -28,8 +28,8 @@ import bpmn.token.InstanceManager;
 @SuppressWarnings("serial")
 public class InstancesFrame extends JFrame {
 
-	private static final int DEFAULT_WIDTH = 200;
-	private static final int DEFAULT_HEIGHT = 400;
+	private static final int DEFAULT_WIDTH = 300;
+	private static final int DEFAULT_HEIGHT = 200;
 
 	private final InstancesTree treeInstances = new InstancesTree();
 
@@ -37,7 +37,10 @@ public class InstancesFrame extends JFrame {
 		super(Messages.getString("Instances.instances")); //$NON-NLS-1$
 
 		setDefaultCloseOperation(HIDE_ON_CLOSE);
+
 		setSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
+
+		setAlwaysOnTop(true);
 
 		create();
 	}

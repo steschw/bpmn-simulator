@@ -24,6 +24,8 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.Vector;
 
+import bpmn.element.activity.Activity;
+
 public class InstanceManager {
 
 	private final ColorGenerator colorGenerator = new ColorGenerator(); 
@@ -74,8 +76,8 @@ public class InstanceManager {
 		notifyInstanceRemoved(instance);
 	}
 
-	public Instance newInstance() {
-		final Instance instance = new Instance(this, colorGenerator.next());
+	public Instance newInstance(final Activity activity) {
+		final Instance instance = new Instance(this, activity, colorGenerator.next());
 		add(instance);
 		return instance;
 	}

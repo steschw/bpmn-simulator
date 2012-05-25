@@ -28,6 +28,7 @@ import java.util.Vector;
 
 import bpmn.element.Graphics;
 import bpmn.element.Rectangle;
+import bpmn.element.activity.Activity;
 
 public class Instance {
 
@@ -42,21 +43,25 @@ public class Instance {
 
 	private final TokenCollection tokens = new TokenCollection();
 
+	private final Activity activity;
+
 	private Color color;
 
-	public Instance(final InstanceManager manager, final Color color) {
-		this(manager, null, color);
+	public Instance(final InstanceManager manager, final Activity activity,
+			final Color color) {
+		this(manager, null, activity, color);
 	}
 
-	public Instance(final Instance parent) {
-		this(null, parent, null);
+	public Instance(final Instance parent, final Activity activity) {
+		this(null, parent, activity, null);
 	}
 
 	protected Instance(final InstanceManager manager,
-			final Instance parent, final Color color) {
+			final Instance parent, final Activity activity, final Color color) {
 		super();
 		this.manager = manager;
 		this.parent = parent;
+		this.activity = activity;
 		this.color = color;
 	}
 
@@ -81,7 +86,11 @@ public class Instance {
 		}
 	}
 
-	protected Collection<Instance> getChildInstances() {
+	public Activity getActivity() {
+		return activity;
+	}
+
+	public Collection<Instance> getChildInstances() {
 		return childs;
 	}
 
@@ -121,8 +130,8 @@ public class Instance {
 	 * child instances
 	 */
 
-	public Instance newChildInstance() {
-		final Instance childInstance = new Instance(this);
+	public Instance newChildInstance(final Activity activity) {
+		final Instance childInstance = new Instance(this, activity);
 		addChildInstance(childInstance);
 		return childInstance;
 	}

@@ -30,4 +30,10 @@ public interface Element {
 
 	Documentation getDocumentation();
 
+	/*
+	 * Liefert einen möglichst eindeutigen Namen für das Element zurück.
+	 * Normalerweise der Name des Elements oder wenn nicht vorhanden die Id.
+	 */
+	String getElementName();
+
 }

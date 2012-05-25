@@ -48,7 +48,7 @@ import org.xml.sax.SAXParseException;
 
 import bpmn.element.*;
 import bpmn.element.Association.Direction;
-import bpmn.element.activity.Activity;
+import bpmn.element.activity.AbstractActivity;
 import bpmn.element.activity.ExpandedProcess;
 import bpmn.element.activity.task.*;
 import bpmn.element.artifact.Group;
@@ -588,7 +588,7 @@ public class Model implements ErrorHandler {
 		return getAttributeBoolean(node, "cancelActivity", true);
 	}
 
-	protected ElementRef<Activity> getAttachedToRefAttribute(final Node node) {
+	protected ElementRef<AbstractActivity> getAttachedToRefAttribute(final Node node) {
 		return getAttributeElementRef(node, "attachedToRef");		
 	}
 
@@ -638,7 +638,7 @@ public class Model implements ErrorHandler {
 		}
 	}
 
-	protected boolean readElementsForActivity(final Node node, final Activity activity) {
+	protected boolean readElementsForActivity(final Node node, final AbstractActivity activity) {
 		return readElementsForFlowElement(node, activity)
 				|| readElementsDataAssociations(node);
 	}

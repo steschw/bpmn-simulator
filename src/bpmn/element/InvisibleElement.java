@@ -51,4 +51,9 @@ public class InvisibleElement implements Element {
 		return documentation;
 	}
 
+	@Override
+	public String getElementName() {
+		return getId();
+	}
+
 }

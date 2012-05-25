@@ -32,7 +32,7 @@ import javax.swing.Icon;
 import bpmn.element.ElementRef;
 import bpmn.element.Graphics;
 import bpmn.element.Visualization;
-import bpmn.element.activity.Activity;
+import bpmn.element.activity.AbstractActivity;
 import bpmn.token.Instance;
 import bpmn.token.Token;
 import bpmn.token.TokenCollection;
@@ -43,11 +43,11 @@ public final class BoundaryEvent
 		implements CatchEvent, MouseListener {
 
 	private final boolean cancelActivity;
-	private final ElementRef<Activity> attachedToRef;
+	private final ElementRef<AbstractActivity> attachedToRef;
 
 	public BoundaryEvent(final String id, final String name,
 			final boolean cancelActivity,
-			final ElementRef<Activity> attachedToRef) {
+			final ElementRef<AbstractActivity> attachedToRef) {
 		super(id, name, null);
 		this.cancelActivity = cancelActivity;
 		this.attachedToRef = attachedToRef;
@@ -59,12 +59,12 @@ public final class BoundaryEvent
 		return cancelActivity;
 	}
 
-	protected ElementRef<Activity> getAttachedToRef() {
+	protected ElementRef<AbstractActivity> getAttachedToRef() {
 		return attachedToRef;
 	}
 
-	public Activity getAttachedTo() {
-		final ElementRef<Activity> activityRef = getAttachedToRef();
+	public AbstractActivity getAttachedTo() {
+		final ElementRef<AbstractActivity> activityRef = getAttachedToRef();
 		return ((activityRef == null) || !activityRef.hasElement())
 				? null
 				: activityRef.getElement();
@@ -77,7 +77,7 @@ public final class BoundaryEvent
 
 	@Override
 	public void happen(final Instance instance) {
-		final Activity activity = getAttachedTo();
+		final AbstractActivity activity = getAttachedTo();
 		if (activity != null) {
 			final TokenCollection activityTokens = activity.getAllTokens();
 			if (!activityTokens.isEmpty()) {

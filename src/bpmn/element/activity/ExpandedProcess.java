@@ -43,7 +43,7 @@ import bpmn.token.Token;
 import bpmn.token.TokenFlow;
 
 @SuppressWarnings("serial")
-public class ExpandedProcess extends Activity implements Scrollable {
+public class ExpandedProcess extends AbstractActivity implements Scrollable {
 
 	private static final int ARC_LENGTH = 20;
 
@@ -169,7 +169,7 @@ public class ExpandedProcess extends Activity implements Scrollable {
 	}
 
 	protected void passTokenToInner(final Token token) {
-		final Instance subInstance = token.getInstance().newChildInstance();
+		final Instance subInstance = token.getInstance().newChildInstance(this);
 		if (collapsedProcess != null) {
 			collapsedProcess.addInstance(subInstance);
 		}
@@ -199,7 +199,7 @@ public class ExpandedProcess extends Activity implements Scrollable {
 			if (element instanceof TokenFlowElement) {
 				final TokenFlowElement tokenFlowElement = (TokenFlowElement)element; 
 				if (!tokenFlowElement.hasIncoming()) {
-					if (tokenFlowElement instanceof Activity
+					if (tokenFlowElement instanceof AbstractActivity
 							|| tokenFlowElement instanceof Gateway) {
 						startElements.add(tokenFlowElement);
 					}

@@ -51,6 +51,7 @@ public class InstancesTree extends JTree implements InstanceListener {
 				final Object userObject = node.getUserObject();
 				if (userObject instanceof Instance) {
 					final Instance instance = (Instance)userObject;
+					label.setText(instance.getActivity().getElementName());
 					label.setOpaque(true);
 					label.setBackground(instance.getColor());
 				}

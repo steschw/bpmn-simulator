@@ -45,9 +45,9 @@ public final class StartEvent extends AbstractEvent
 	@Override
 	public void happen(final Instance instance) {
 		if (instance != null) {
-			instance.newChildInstance().newToken(this);
+			instance.newChildInstance(getProcess()).newToken(this);
 		} else {
-			getInstanceManager().newInstance().newToken(this);
+			getInstanceManager().newInstance(getProcess()).newToken(this);
 		}
 	}
 

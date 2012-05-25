@@ -29,10 +29,10 @@ import bpmn.element.Graphics;
 import bpmn.element.Label;
 import bpmn.element.Rectangle;
 import bpmn.element.Visualization;
-import bpmn.element.activity.Activity;
+import bpmn.element.activity.AbstractActivity;
 
 @SuppressWarnings("serial")
-public class Task extends Activity {
+public class Task extends AbstractActivity {
 
 	private static final int TYPEICON_MARGIN = 6;
 

@@ -165,6 +165,7 @@ public abstract class VisibleElement extends JComponent implements Element {
 		return (parentProcess == null) ? null : parentProcess.getModel();
 	}
 
+	@Override
 	public String getElementName() {
 		return hasName() ? getName() : getId();
 	}

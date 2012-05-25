@@ -67,6 +67,11 @@ public final class ReceiveTask
 	}
 
 	@Override
+	public boolean canHappenManual() {
+		return false;
+	}
+
+	@Override
 	public void happen(final Instance instance) {
 		notifyEventBasedGatewaysEventHappen(instance);
 		passFirstTokenToAllOutgoing();

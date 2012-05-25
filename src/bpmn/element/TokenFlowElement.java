@@ -47,6 +47,11 @@ public abstract class TokenFlowElement extends FlowElement implements TokenFlow 
 	}
 
 	@Override
+	public TokenCollection getTokens() {
+		return getInnerTokens();
+	}
+
+	@Override
 	public void tokenEnter(final Token token) {
 		addToken(token);
 		repaint();
@@ -85,7 +90,12 @@ public abstract class TokenFlowElement extends FlowElement implements TokenFlow 
 	}
 
 	protected void tokenForwardToNextElement(final Token token) {
-		if (passTokenToAllOutgoing(token)) {
+		tokenForwardToNextElement(token, token.getInstance());
+	}
+
+	protected void tokenForwardToNextElement(final Token token,
+			final Instance instance) {
+		if (passTokenToAllOutgoing(token, instance)) {
 			setException(false);
 			token.remove();
 		} else {
@@ -168,7 +178,7 @@ public abstract class TokenFlowElement extends FlowElement implements TokenFlow 
 
 	@Override
 	public Color getForeground() {
-		return hasToken() ? Token.HIGHLIGHT_COLOR : super.getForeground();   
+		return hasToken() ? Token.HIGHLIGHT_COLOR : Color.BLACK;
 	}
 
 	@Override

@@ -20,12 +20,17 @@
  */
 package bpmn.element.event.definition;
 
+import java.util.Collection;
+
 import javax.swing.Icon;
 
+import bpmn.Model;
 import bpmn.element.VisibleElement;
 import bpmn.element.Visualization;
 import bpmn.element.activity.ExpandedProcess;
 import bpmn.element.event.AbstractEvent;
+import bpmn.element.event.CatchEvent;
+import bpmn.element.event.Event;
 import bpmn.token.Token;
 
 public abstract class EventDefinition {
@@ -48,6 +53,19 @@ public abstract class EventDefinition {
 	}
 
 	public void throwHappen(final Token token) {
+	}
+
+	protected void throwHappenToEqualEvents(final Token token) {
+		final Model model = getProcessByToken(token).getModel();
+		final Collection<CatchEvent> catchEvents =  model.getCatchEvents();
+		for (final CatchEvent catchEvent : catchEvents) {
+			if (catchEvent instanceof Event) {
+				final Event event = (Event)catchEvent; 
+				if (equals(event.getDefinition())) {
+					catchEvent.happen(null);
+				}
+			}
+		}
 	}
 
 }

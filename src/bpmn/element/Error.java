@@ -18,18 +18,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package bpmn.token;
+package bpmn.element;
 
-public interface TokenFlow {
 
-	void tokenEnter(Token token);
+public class Error extends InvisibleElement {
 
-	void tokenDispatch(Token token);
+	private final String code;
+	private final String name;
 
-	void tokenExit(Token token);
+	public Error(final String id, final String code, final String name) {
+		super(id);
+		this.code = code;
+		this.name = name;
+	}
 
-	TokenCollection getTokens();
+	public String getCode() {
+		return code;
+	}
 
-	boolean hasIncomingPathWithActiveToken(Instance instance);
+	public String getName() {
+		return name;
+	}
 
 }

@@ -202,9 +202,15 @@ public class Instance {
 	}
 
 	public int getTokenCount() {
+		return getTokenCount(true);
+	}
+
+	public int getTokenCount(final boolean withSubinstances) {
 		int count = getTokens().getCount();
-		for (Instance childInstance : getChildInstances()) {
-			count += childInstance.getTokenCount();
+		if (withSubinstances) {
+			for (Instance childInstance : getChildInstances()) {
+				count += childInstance.getTokenCount(withSubinstances);
+			}
 		}
 		return count;
 	}
@@ -314,18 +320,14 @@ public class Instance {
 
 	@Override
 	public String toString() {
-		final StringBuilder buffer = new StringBuilder();
-		/*
-		final Instance parentInstance = getParentInstance();
-		if (parentInstance != null) {
-			buffer.append(parentInstance.toString()); 
-			buffer.append(" -> "); 
-		}
-		*/
-		buffer.append('[');
-		buffer.append("childInstances:");
+		final StringBuilder buffer = new StringBuilder('[');
+		buffer.append(super.toString());
+		buffer.append(", ");
+		buffer.append(getActivity());
+		buffer.append(", ");
+		buffer.append("childs:");
 		buffer.append(getChildInstanceCount());
-		buffer.append(';');
+		buffer.append(", ");
 		buffer.append("token:");
 		buffer.append(getTokenCount());
 		buffer.append(']');

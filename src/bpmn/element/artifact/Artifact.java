@@ -20,8 +20,6 @@
  */
 package bpmn.element.artifact;
 
-import java.awt.Color;
-
 import bpmn.element.ClickThroughMouseListener;
 import bpmn.element.FlowElement;
 
@@ -30,7 +28,6 @@ public abstract class Artifact extends FlowElement {
 
 	public Artifact(final String id) {
 		super(id, null);
-		setForeground(Color.DARK_GRAY);
 		addMouseListener(new ClickThroughMouseListener());
 	}
 

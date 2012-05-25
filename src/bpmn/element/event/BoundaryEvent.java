@@ -79,13 +79,13 @@ public final class BoundaryEvent
 	public void happen(final Instance instance) {
 		final AbstractActivity activity = getAttachedTo();
 		if (activity != null) {
-			final TokenCollection activityTokens = activity.getAllTokens();
+			final TokenCollection activityTokens = activity.getTokens();
 			if (!activityTokens.isEmpty()) {
 				final Token token = activityTokens.firstElement();
-				tokenForwardToNextElement(token);
+				tokenForwardToNextElement(token, token.getInstance().getParentInstance());
 				if (isInterrupting()) {
 					for (final Token activityToken : activityTokens) {
-						activityToken.remove();						
+						activityToken.remove();
 					}
 				}
 			}
@@ -131,6 +131,11 @@ public final class BoundaryEvent
 
 	@Override
 	public void mouseExited(final MouseEvent e) {
+	}
+
+	@Override
+	public boolean canHappenManual() {
+		return true;
 	}
 
 }

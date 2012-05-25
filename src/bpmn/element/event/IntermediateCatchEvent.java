@@ -43,12 +43,13 @@ public final class IntermediateCatchEvent
 		addMouseListener(this);
 	}
 
-	private boolean getCanHappenManual() {
-		return isTimer();
+	@Override
+	public boolean canHappenManual() {
+		return (isPlain() || isTimer() || isConditional());
 	}
 
 	protected void updateCursor() {
-		if (getCanHappenManual()) {
+		if (canHappenManual()) {
 			setCursor(
 					getInnerTokens().isEmpty()
 							? Cursor.getDefaultCursor()
@@ -97,7 +98,7 @@ public final class IntermediateCatchEvent
 
 	@Override
 	public void mouseClicked(final MouseEvent e) {
-		if (getCanHappenManual()) {
+		if (canHappenManual()) {
 			happen(null);
 		}
 	}

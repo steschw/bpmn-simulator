@@ -38,7 +38,8 @@ public abstract class TokenConnectingElement extends ConnectingElement
 		super(id, name, source, target);
 	}
 
-	protected TokenCollection getTokens() {
+	@Override
+	public TokenCollection getTokens() {
 		return tokens;
 	}
 

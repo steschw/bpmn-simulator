@@ -47,6 +47,7 @@ import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 
 import bpmn.element.*;
+import bpmn.element.Error;
 import bpmn.element.Association.Direction;
 import bpmn.element.activity.AbstractActivity;
 import bpmn.element.activity.ExpandedProcess;
@@ -54,6 +55,8 @@ import bpmn.element.activity.task.*;
 import bpmn.element.artifact.Group;
 import bpmn.element.artifact.TextAnnotation;
 import bpmn.element.event.*;
+import bpmn.element.event.definition.ConditionalEventDefinition;
+import bpmn.element.event.definition.ErrorEventDefinition;
 import bpmn.element.event.definition.LinkEventDefinition;
 import bpmn.element.event.definition.MessageEventDefinition;
 import bpmn.element.event.definition.SignalEventDefinition;
@@ -80,6 +83,9 @@ public class Model implements ErrorHandler {
 
 	private final ElementRefCollection<Signal> signals
 			= new ElementRefCollection<Signal>();
+
+	private final ElementRefCollection<Error> errors
+			= new ElementRefCollection<Error>();
 
 	private final Collection<Collaboration> collaborations
 			= new ArrayList<Collaboration>();
@@ -240,6 +246,15 @@ public class Model implements ErrorHandler {
 		return getSignalRef(getAttributeString(node, name));
 	}
 
+	protected ElementRef<Error> getErrorRef(final String id) {
+		return errors.getRef(id);
+	}
+
+	protected ElementRef<Error> getAttributeErrorRef(
+			final Node node, final String name) {
+		return getErrorRef(getAttributeString(node, name));
+	}
+
 	protected static Color convertStringToColor(final String value) {
 		final StyleSheet stylesheet = new StyleSheet();
 		return stylesheet.stringToColor(value);
@@ -285,9 +300,24 @@ public class Model implements ErrorHandler {
 		return getAttributeBoolean(node, "isHorizontal", false); //$NON-NLS-1$
 	}
 
+	protected String getErrorCodeAttribute(final Node node) {
+		return getAttributeString(node, "errorCode"); //$NON-NLS-1$
+	}
+
+	protected boolean readElementError(final Node node) {
+		if (isElementNode(node, BPMN, "error")) {
+			errors.set(new Error(getIdAttribute(node), getErrorCodeAttribute(node),
+					getNameAttribute(node)));
+			return true;
+		} else {
+			return false;
+		}
+	}
+
 	protected boolean readElementsForDefinitionsElement(final Node node) {
 		return readElementMessage(node)
 				|| readElementSignal(node)
+				|| readElementError(node)
 				|| readElementDataStore(node)
 				|| readElementProcess(node, null)
 				|| readElementCollaboration(node);
@@ -513,6 +543,11 @@ public class Model implements ErrorHandler {
 	protected boolean readEventDefinitions(final Node node, final AbstractEvent event) {
 		if (isElementNode(node, BPMN, "terminateEventDefinition")) { //$NON-NLS-1$
 			event.setDefinition(new TerminateEventDefinition(event));
+		} else if (isElementNode(node, BPMN, "errorEventDefinition")) { //$NON-NLS-1$
+			event.setDefinition(new ErrorEventDefinition(event,
+					getAttributeErrorRef(node, "errorRef"))); //$NON-NLS-1$
+		} else if (isElementNode(node, BPMN, "conditionalEventDefinition")) { //$NON-NLS-1$
+			event.setDefinition(new ConditionalEventDefinition(event));
 		} else if (isElementNode(node, BPMN, "timerEventDefinition")) { //$NON-NLS-1$
 			event.setDefinition(new TimerEventDefinition(event));
 		} else if (isElementNode(node, BPMN, "messageEventDefinition")) { //$NON-NLS-1$
@@ -996,17 +1031,17 @@ public class Model implements ErrorHandler {
 		logFrame.setVisible(true);
 	}
 
-	public Collection<StartEvent> getManuallStartEvents() {
-		final Collection<StartEvent> startEvents = new ArrayList<StartEvent>(); 
+	public Collection<CatchEvent> getManuallStartEvents() {
+		final Collection<CatchEvent> events = new ArrayList<CatchEvent>(); 
 		for (ElementRef<VisibleElement> element : elements.values()) {
-			if (element.getElement() instanceof StartEvent) {
-				final StartEvent startEvent = (StartEvent)element.getElement();
-				if (startEvent.canHappenManual()) {
-					startEvents.add(startEvent);
+			if (element.getElement() instanceof CatchEvent) {
+				final CatchEvent event = (CatchEvent)element.getElement();
+				if (event.canHappenManual()) {
+					events.add(event);
 				}
 			}
 		}
-		return startEvents;
+		return events;
 	}
 
 }

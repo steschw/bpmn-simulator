@@ -43,6 +43,14 @@ public final class StartEvent extends AbstractEvent
 	}
 
 	@Override
+	public boolean canHappenManual() {
+		final ExpandedProcess process = getProcess();
+		return (getInstanceManager() != null)
+				&& (process != null) && !process.hasIncoming()
+				&& (isPlain() || isTimer() || isConditional()); 
+	}
+
+	@Override
 	public void happen(final Instance instance) {
 		if (instance != null) {
 			instance.newChildInstance(getProcess()).newToken(this);
@@ -66,13 +74,6 @@ public final class StartEvent extends AbstractEvent
 	public void setProcess(final ExpandedProcess parentProcess) {
 		super.setProcess(parentProcess);
 		updateCursor();
-	}
-
-	public boolean canHappenManual() {
-		final ExpandedProcess process = getProcess();
-		return (getInstanceManager() != null)
-				&& (process != null) && !process.hasIncoming()
-				&& (isPlain() || isTimer()); 
 	}
 
 	protected void updateCursor() {

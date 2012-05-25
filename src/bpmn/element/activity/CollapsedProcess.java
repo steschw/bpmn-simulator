@@ -68,7 +68,7 @@ public class CollapsedProcess extends FlowElement {
 		if ((instances != null) && !instances.isEmpty()) {
 			return Token.HIGHLIGHT_COLOR;
 		}
-		return super.getForeground();
+		return Color.BLACK;
 	}
 
 	@Override

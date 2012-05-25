@@ -139,4 +139,17 @@ public class Token implements Cloneable {
 		passTo(tokenFlow, getInstance());
 	}
 
+	@Override
+	public String toString() {
+		final StringBuilder buffer = new StringBuilder('[');
+		buffer.append(super.toString());
+		buffer.append(getInstance());
+		buffer.append(", ");
+		buffer.append(getCurrentFlow());
+		buffer.append(", ");
+		buffer.append(getPreviousFlow());
+		buffer.append(']');
+		return buffer.toString();
+	}
+
 }

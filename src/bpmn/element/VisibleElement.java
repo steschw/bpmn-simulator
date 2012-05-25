@@ -81,7 +81,6 @@ public abstract class VisibleElement extends JComponent implements Element {
 		super();
 		setId(id);
 		setName(name);
-		setForeground(Color.BLACK);
 		setFocusable(false);
 		setDoubleBuffered(true);
 		setToolTipText("");
@@ -322,6 +321,18 @@ public abstract class VisibleElement extends JComponent implements Element {
 			}
 		}
 		return new Dimension(MARGIN + width + MARGIN, MARGIN + height + MARGIN);
+	}
+
+	@Override
+	public String toString() {
+		final StringBuffer buffer = new StringBuffer('['); 
+		buffer.append(this.getClass().toString());
+		buffer.append(", ");
+		buffer.append(getId());
+		buffer.append(", ");
+		buffer.append(getName());
+		buffer.append(']');
+		return buffer.toString();
 	}
 
 }

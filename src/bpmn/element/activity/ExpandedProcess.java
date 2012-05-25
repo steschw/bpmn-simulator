@@ -40,6 +40,7 @@ import bpmn.element.event.StartEvent;
 import bpmn.element.gateway.Gateway;
 import bpmn.token.Instance;
 import bpmn.token.Token;
+import bpmn.token.TokenCollection;
 import bpmn.token.TokenFlow;
 
 @SuppressWarnings("serial")
@@ -78,6 +79,22 @@ public class ExpandedProcess extends AbstractActivity implements Scrollable {
 		return elements;
 	}
 
+	@Override
+	public TokenCollection getTokens() {
+		final TokenCollection innerTokens = new TokenCollection(getIncomingTokens());
+		final Collection<VisibleElement> elements = getElements();
+		if (elements != null) {
+			for (final VisibleElement innerElement : elements) {
+				if (innerElement instanceof TokenFlow) {
+					final TokenFlow innerTokenFlow = (TokenFlow)innerElement;
+					innerTokens.addAll(innerTokenFlow.getTokens());
+				}
+			}
+		}
+		innerTokens.addAll(getOutgoingTokens());
+		return innerTokens;
+	}
+
 	protected boolean containsTokenFlow(final TokenFlow tokenFlow) {
 		for (VisibleElement element : elements) {
 			if (element instanceof TokenFlow) {
@@ -91,12 +108,8 @@ public class ExpandedProcess extends AbstractActivity implements Scrollable {
 
 	public CollapsedProcess createCollapsed() {
 		assert collapsedProcess == null;
+		assert false;
 		collapsedProcess = new CollapsedProcess(this);
-		collapsedProcess.setForeground(getForeground());
-		final ExpandedProcess parentProcess = getProcess();
-		if (parentProcess != null) {
-			parentProcess.addElement(collapsedProcess);
-		}
 		return collapsedProcess;
 	}
 
@@ -113,6 +126,23 @@ public class ExpandedProcess extends AbstractActivity implements Scrollable {
 		passTokenToInner(token);
 		token.remove();
 		repaint();
+	}
+
+	protected void passTokenToInner(final Token token) {
+		final AbstractEvent startEvent = getStartEvent();
+		if (startEvent == null) {
+			final Collection<TokenFlowElement> startElements = getStartElements();
+			if (startElements.isEmpty()) {
+				token.passTo(this);
+			} else {
+				for (TokenFlowElement startElement : startElements) {
+					token.passTo(startElement, token.getInstance().newChildInstance(this));
+				}
+			}
+			token.remove();
+		} else {
+			token.passTo(startEvent, token.getInstance().newChildInstance(this)); 
+		}
 	}
 
 	@Override
@@ -137,7 +167,7 @@ public class ExpandedProcess extends AbstractActivity implements Scrollable {
 	@Override
 	public void tokenEnter(final Token token) {
 		if (isTokenFromInnerElement(token)) {
-			forwardTokenFromInner(token);		
+			forwardTokenFromInner(token);
 			repaint();
 		} else {
 			super.tokenEnter(token);
@@ -155,37 +185,13 @@ public class ExpandedProcess extends AbstractActivity implements Scrollable {
 	}
 
 	@Override
-	protected boolean passTokenToAllOutgoing(final Token token) {
-		final Instance subInstance = token.getInstance(); 
-		final Instance parentInstance = subInstance.getParentInstance();
+	protected boolean passTokenToAllOutgoing(final Token token, final Instance instance) {
+		final Instance parentInstance = instance.getParentInstance();
 		boolean forwarded = true; // der hauptprozess hat keine ausgehenden sequence flows
 		if (parentInstance != null) {
 			forwarded = super.passTokenToAllOutgoing(token, parentInstance);
 		}
-		if (collapsedProcess != null) {
-			collapsedProcess.removeInstance(subInstance);
-		}
 		return forwarded;
-	}
-
-	protected void passTokenToInner(final Token token) {
-		final Instance subInstance = token.getInstance().newChildInstance(this);
-		if (collapsedProcess != null) {
-			collapsedProcess.addInstance(subInstance);
-		}
-		final AbstractEvent startEvent = getStartEvent();
-		if (startEvent == null) {
-			final Collection<TokenFlowElement> startElements = getStartElements();
-			if (startElements.isEmpty()) {
-				token.passTo(this, subInstance);
-			} else {
-				for (TokenFlowElement startElement : startElements) {
-					token.passTo(startElement, subInstance);
-				}
-			}
-		} else {
-			token.passTo(startEvent, subInstance);
-		}
 	}
 
 	@Override

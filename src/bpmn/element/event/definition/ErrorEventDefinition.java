@@ -23,37 +23,38 @@ package bpmn.element.event.definition;
 import javax.swing.Icon;
 
 import bpmn.element.ElementRef;
-import bpmn.element.Signal;
+import bpmn.element.Error;
 import bpmn.element.Visualization;
 import bpmn.element.event.AbstractEvent;
 import bpmn.token.Token;
 
-public final class SignalEventDefinition extends EventDefinition {
+public final class ErrorEventDefinition extends EventDefinition {
 
-	private final ElementRef<Signal> signalRef;
+	private final ElementRef<Error> errorRef;
 
-	public SignalEventDefinition(final AbstractEvent event, final ElementRef<Signal> signalRef) {
+	public ErrorEventDefinition(final AbstractEvent event,
+			final ElementRef<Error> errorRef) {
 		super(event);
-		this.signalRef = signalRef; 
+		this.errorRef = errorRef;
 	}
 
-	public ElementRef<Signal> getSignalRef() {
-		return signalRef;
+	private ElementRef<Error> getErrorRef() {
+		return errorRef;
 	}
 
 	@Override
 	public Icon getIcon(final Visualization visualization, final boolean inverse) {
 		return visualization.getIcon(inverse
-				? Visualization.ICON_SIGNAL_INVERSE
-				: Visualization.ICON_SIGNAL);
+				? Visualization.ICON_ERROR_INVERSE
+				: Visualization.ICON_ERROR);
 	}
 
 	@Override
 	public boolean equals(final Object obj) {
-		if (obj instanceof SignalEventDefinition) {
-			final SignalEventDefinition definition = (SignalEventDefinition)obj;
+		if (obj instanceof ErrorEventDefinition) {
+			final ErrorEventDefinition definition = (ErrorEventDefinition)obj;
 			return super.equals(obj)
-					|| (getSignalRef().equals(definition.getSignalRef()));
+					|| (getErrorRef().equals(definition.getErrorRef()));
 		}
 		return false;
 	}

@@ -54,6 +54,9 @@ public class Visualization {
 	public static final String ICON_MESSAGE_INVERSE = "receive.png";
 	public static final String ICON_SIGNAL = "signal.png";
 	public static final String ICON_SIGNAL_INVERSE = "signal_inverse.png";
+	public static final String ICON_ERROR = "error.png";
+	public static final String ICON_ERROR_INVERSE = "error_inverse.png";
+	public static final String ICON_CONDITIONAL = "conditional.png";
 
 	private static final Color DEFAULT_BACKGROUNDCOLOR = Color.WHITE;
 
@@ -118,6 +121,9 @@ public class Visualization {
 		loadIcon(ICON_LINK_INVERSE);
 		loadIcon(ICON_SIGNAL);
 		loadIcon(ICON_SIGNAL_INVERSE);
+		loadIcon(ICON_ERROR);
+		loadIcon(ICON_ERROR_INVERSE);
+		loadIcon(ICON_CONDITIONAL);
 	}
 
 	public Icon getIcon(final String name) {

@@ -50,6 +50,14 @@ public abstract class AbstractActivity
 	}
 
 	@Override
+	public TokenCollection getTokens() {
+		final TokenCollection tokens = super.getTokens();
+		tokens.addAll(getIncomingTokens());
+		tokens.addAll(getOutgoingTokens());
+		return tokens;
+	}
+
+	@Override
 	protected void addToken(final Token token) {
 		getIncomingTokens().add(token);
 	}
@@ -101,8 +109,6 @@ public abstract class AbstractActivity
 			if (canForwardTokenToNextElement(token)) {
 				forwardTokenFromOutgoing(token);
 			}
-		} else {
-			assert false;
 		}
 		repaint();
 	}
@@ -120,14 +126,6 @@ public abstract class AbstractActivity
 	@Override
 	public boolean hasToken() {
 		return super.hasToken() || hasIncomingTokens() || hasOutgoingTokens();
-	}
-
-	public TokenCollection getAllTokens() {
-		final TokenCollection allTokens = new TokenCollection();
-		allTokens.addAll(getIncomingTokens());
-		allTokens.addAll(getInnerTokens());
-		allTokens.addAll(getOutgoingTokens());
-		return allTokens;
 	}
 
 	@Override

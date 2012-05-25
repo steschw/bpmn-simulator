@@ -27,6 +27,7 @@ import javax.swing.Icon;
 import bpmn.element.Graphics;
 import bpmn.element.Rectangle;
 import bpmn.element.TokenFlowElement;
+import bpmn.element.event.definition.ConditionalEventDefinition;
 import bpmn.element.event.definition.EventDefinition;
 import bpmn.element.event.definition.TimerEventDefinition;
 import bpmn.token.InstanceManager;
@@ -67,6 +68,10 @@ public abstract class AbstractEvent
 
 	public boolean isTimer() {
 		return getDefinition() instanceof TimerEventDefinition;
+	}
+
+	public boolean isConditional() {
+		return getDefinition() instanceof ConditionalEventDefinition;
 	}
 
 	public boolean isPlain() {

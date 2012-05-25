@@ -31,7 +31,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
 import bpmn.Model;
-import bpmn.element.event.StartEvent;
+import bpmn.element.event.CatchEvent;
 
 @SuppressWarnings("serial")
 public class StartButton extends JButton implements ActionListener {
@@ -51,19 +51,19 @@ public class StartButton extends JButton implements ActionListener {
 	@Override
 	public void actionPerformed(final ActionEvent e) {
 		if (model != null) {
-			final Collection<StartEvent> startEvents = model.getManuallStartEvents();
-			final Iterator<StartEvent> iterator = startEvents.iterator();
+			final Collection<CatchEvent> startEvents = model.getManuallStartEvents();
+			final Iterator<CatchEvent> iterator = startEvents.iterator();
 			if (startEvents.size() == 1) {
 				iterator.next().happen(null);
 			} else {
 				final JPopupMenu menu = new JPopupMenu();
 				while (iterator.hasNext()) {
-					final StartEvent startEvent = iterator.next();
-					final JMenuItem menuItem = new JMenuItem(startEvent.getElementName());
+					final CatchEvent event = iterator.next();
+					final JMenuItem menuItem = new JMenuItem(event.getElementName());
 					menuItem.addActionListener(new ActionListener() {
 						@Override
 						public void actionPerformed(final ActionEvent e) {
-							startEvent.happen(null);
+							event.happen(null);
 						}
 					});
 					menu.add(menuItem);

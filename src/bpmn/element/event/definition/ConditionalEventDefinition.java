@@ -18,18 +18,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package bpmn.token;
+package bpmn.element.event.definition;
 
-public interface TokenFlow {
+import javax.swing.Icon;
 
-	void tokenEnter(Token token);
+import bpmn.element.Visualization;
+import bpmn.element.event.AbstractEvent;
 
-	void tokenDispatch(Token token);
+public final class ConditionalEventDefinition extends EventDefinition {
 
-	void tokenExit(Token token);
+	public ConditionalEventDefinition(final AbstractEvent event) {
+		super(event);
+	}
 
-	TokenCollection getTokens();
-
-	boolean hasIncomingPathWithActiveToken(Instance instance);
+	@Override
+	public Icon getIcon(final Visualization visualization, final boolean inverse) {
+		assert !inverse;
+		return visualization.getIcon(Visualization.ICON_CONDITIONAL);
+	}
 
 }

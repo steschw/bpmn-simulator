@@ -20,10 +20,13 @@
  */
 package bpmn.element.event;
 
+import bpmn.element.Element;
 import bpmn.token.Instance;
 
-public interface CatchEvent {
+public interface CatchEvent extends Element {
 
 	void happen(final Instance instance);
+
+	boolean canHappenManual();
 
 }

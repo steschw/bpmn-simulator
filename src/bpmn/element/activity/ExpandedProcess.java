@@ -147,7 +147,7 @@ public class ExpandedProcess
 		if (startEvent == null) {
 			final Collection<TokenFlowElement> startElements = getStartElements();
 			if (startElements.isEmpty()) {
-				token.passTo(this);
+				token.passTo(this, token.getInstance().newChildInstance(this));
 			} else {
 				for (TokenFlowElement startElement : startElements) {
 					token.passTo(startElement, token.getInstance().newChildInstance(this));

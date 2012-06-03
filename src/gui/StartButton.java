@@ -31,6 +31,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
 import bpmn.Model;
+import bpmn.trigger.Trigger;
 import bpmn.trigger.TriggerCatchElement;
 
 @SuppressWarnings("serial")
@@ -54,7 +55,7 @@ public class StartButton extends JButton implements ActionListener {
 			final Collection<TriggerCatchElement> startEvents = model.getManuallStartEvents();
 			final Iterator<TriggerCatchElement> iterator = startEvents.iterator();
 			if (startEvents.size() == 1) {
-				iterator.next().catchTrigger(null);
+				iterator.next().catchTrigger(new Trigger(null, null));
 			} else {
 				final JPopupMenu menu = new JPopupMenu();
 				while (iterator.hasNext()) {

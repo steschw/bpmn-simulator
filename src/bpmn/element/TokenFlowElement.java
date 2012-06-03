@@ -21,9 +21,9 @@
 package bpmn.element;
 
 import java.awt.Color;
-import java.awt.Point;
 import java.util.Iterator;
 
+import bpmn.Graphics;
 import bpmn.element.activity.ExpandedProcess;
 import bpmn.element.gateway.EventBasedGateway;
 import bpmn.instance.Instance;
@@ -37,15 +37,13 @@ import bpmn.trigger.TriggerNotifyElement;
 @SuppressWarnings("serial")
 public abstract class TokenFlowElement extends FlowElement implements TokenFlow {
 
-	protected static final int TOKEN_MARGIN = 5;
-
 	private final TokenCollection innerTokens = new TokenCollection();
 
 	public TokenFlowElement(final String id, final String name) {
 		super(id, name);
 	}
 
-	protected TokenCollection getInnerTokens() {
+	public TokenCollection getInnerTokens() {
 		return innerTokens;
 	}
 
@@ -186,12 +184,7 @@ public abstract class TokenFlowElement extends FlowElement implements TokenFlow 
 
 	@Override
 	protected void paintTokens(final Graphics g) {
-		final Rectangle bounds = getElementInnerBounds();
-		final Point point = new Point((int)bounds.getMaxX(), (int)bounds.getMinY());
-		for (Instance instance : getInnerTokens().getInstances()) {
-			instance.paint(g, point, getInnerTokens().byInstance(instance).byCurrentFlow(this).getCount());
-			point.translate(-TOKEN_MARGIN, 0);
-		}
+		getInnerTokens().paintHorizontalRight(g, getElementInnerBounds().getRightTop());
 	}
 
 	protected boolean isGatewayCondition() {

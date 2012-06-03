@@ -20,9 +20,9 @@
  */
 package bpmn.element.gateway;
 
+import bpmn.Graphics;
 import bpmn.element.ElementRef;
 import bpmn.element.FlowElement;
-import bpmn.element.Graphics;
 import bpmn.element.Rectangle;
 import bpmn.element.SequenceFlow;
 import bpmn.instance.Instance;

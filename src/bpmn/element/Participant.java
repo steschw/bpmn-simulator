@@ -22,6 +22,7 @@ package bpmn.element;
 
 import java.awt.Point;
 
+import bpmn.Graphics;
 import bpmn.element.activity.Process;
 
 @SuppressWarnings("serial")

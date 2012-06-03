@@ -22,6 +22,8 @@ package bpmn.element;
 
 import java.awt.Color;
 
+import bpmn.Graphics;
+
 @SuppressWarnings("serial")
 public class DataStore extends FlowElement {
 

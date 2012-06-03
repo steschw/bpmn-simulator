@@ -29,7 +29,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Vector;
 
-import bpmn.element.Graphics;
+import bpmn.Graphics;
 import bpmn.element.Rectangle;
 import bpmn.element.activity.Process;
 import bpmn.token.Token;

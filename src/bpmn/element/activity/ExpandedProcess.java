@@ -29,10 +29,10 @@ import java.util.Collection;
 
 import javax.swing.Scrollable;
 
+import bpmn.Graphics;
 import bpmn.Model;
 import bpmn.element.Element;
 import bpmn.element.VisibleElement;
-import bpmn.element.Graphics;
 import bpmn.element.Label;
 import bpmn.element.TokenFlowElement;
 import bpmn.element.Visualization;
@@ -83,9 +83,8 @@ public class ExpandedProcess
 		return elements;
 	}
 
-	@Override
-	public TokenCollection getTokens() {
-		final TokenCollection innerTokens = new TokenCollection(getIncomingTokens());
+	public TokenCollection getAllInnerTokens() {
+		final TokenCollection innerTokens = new TokenCollection(); 
 		final Collection<Element> elements = getElements();
 		if (elements != null) {
 			for (final Element innerElement : elements) {
@@ -95,6 +94,13 @@ public class ExpandedProcess
 				}
 			}
 		}
+		return innerTokens;
+	}
+
+	@Override
+	public TokenCollection getTokens() {
+		final TokenCollection innerTokens = new TokenCollection(getIncomingTokens());
+		innerTokens.addAll(getAllInnerTokens());
 		innerTokens.addAll(getOutgoingTokens());
 		return innerTokens;
 	}
@@ -117,7 +123,6 @@ public class ExpandedProcess
 
 	public CollapsedProcess createCollapsed() {
 		assert collapsedProcess == null;
-		assert false;
 		collapsedProcess = new CollapsedProcess(this);
 		return collapsedProcess;
 	}

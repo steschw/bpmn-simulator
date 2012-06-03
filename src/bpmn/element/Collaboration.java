@@ -27,6 +27,7 @@ import java.util.Collection;
 
 import javax.swing.Scrollable;
 
+import bpmn.Graphics;
 import bpmn.element.activity.Process;
 import bpmn.instance.Instance;
 import bpmn.trigger.TriggerCatchElement;

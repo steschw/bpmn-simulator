@@ -23,7 +23,7 @@ package bpmn.element.gateway;
 import java.awt.Color;
 import java.awt.Point;
 
-import bpmn.element.Graphics;
+import bpmn.Graphics;
 import bpmn.element.Label;
 import bpmn.element.Rectangle;
 import bpmn.element.SequenceFlow;

@@ -20,10 +20,7 @@
  */
 package bpmn.element.activity;
 
-import java.awt.Point;
-import java.util.Collection;
-
-import bpmn.element.Graphics;
+import bpmn.Graphics;
 import bpmn.element.TokenFlowElementWithDefault;
 import bpmn.instance.Instance;
 import bpmn.token.Token;
@@ -71,7 +68,7 @@ public abstract class AbstractActivity
 		} else if (getIncomingTokens().contains(token)) {
 			getIncomingTokens().remove(token);
 		} else {
-			assert false;
+			//assert false;
 		}
 	}
 
@@ -135,36 +132,16 @@ public abstract class AbstractActivity
 				|| !getOutgoingTokens().byInstance(instance).isEmpty();
 	}
 
-	protected void paintTokensVertical(final Graphics g,
-			final TokenCollection tokens, final Point point) {
-		final Collection<Instance> instances = tokens.getInstances();
-		point.translate(0, -(TOKEN_MARGIN * instances.size()) / 2);
-		for (final Instance instance : instances) {
-			instance.paint(g, point, tokens.byInstance(instance).byCurrentFlow(this).getCount());
-			point.translate(0, TOKEN_MARGIN);
-		}
-	}
-
-	protected void paintTokensHorizontal(final Graphics g,
-			final TokenCollection tokens, final Point point) {
-		final Collection<Instance> instances = tokens.getInstances();
-		point.translate(-(TOKEN_MARGIN * instances.size()) / 2, 0);
-		for (final Instance instance : instances) {
-			instance.paint(g, point, tokens.byInstance(instance).byCurrentFlow(this).getCount());
-			point.translate(TOKEN_MARGIN, 0);
-		}
-	}
-
 	protected void paintIncomingTokens(final Graphics g) {
-		paintTokensVertical(g, getIncomingTokens(), getElementInnerBounds().getLeftCenter());
+		getIncomingTokens().paintVertical(g, getElementInnerBounds().getLeftCenter());
 	}
 
 	protected void paintInnerTokens(final Graphics g) {
-		paintTokensHorizontal(g, getInnerTokens(), getElementInnerBounds().getCenterTop());
+		getInnerTokens().paintHorizontal(g, getElementInnerBounds().getCenterTop());
 	}
 
 	protected void paintOutgoingTokens(final Graphics g) {
-		paintTokensVertical(g, getOutgoingTokens(), getElementInnerBounds().getRightCenter());
+		getOutgoingTokens().paintVertical(g, getElementInnerBounds().getRightCenter());
 	}
 
 	@Override

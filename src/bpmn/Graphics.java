@@ -18,7 +18,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package bpmn.element;
+package bpmn;
 
 import java.awt.Color;
 import java.awt.FontMetrics;
@@ -35,6 +35,8 @@ import java.awt.geom.Path2D;
 import java.awt.geom.Rectangle2D;
 
 import javax.swing.Icon;
+
+import bpmn.element.Rectangle;
 
 public class Graphics {
 

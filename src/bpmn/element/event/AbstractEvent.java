@@ -24,7 +24,7 @@ import java.awt.Point;
 
 import javax.swing.Icon;
 
-import bpmn.element.Graphics;
+import bpmn.Graphics;
 import bpmn.element.Rectangle;
 import bpmn.element.TokenFlowElement;
 import bpmn.element.event.definition.ConditionalEventDefinition;

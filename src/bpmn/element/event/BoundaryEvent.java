@@ -29,8 +29,8 @@ import java.awt.event.MouseListener;
 
 import javax.swing.Icon;
 
+import bpmn.Graphics;
 import bpmn.element.ElementRef;
-import bpmn.element.Graphics;
 import bpmn.element.Visualization;
 import bpmn.element.activity.AbstractActivity;
 import bpmn.token.Token;

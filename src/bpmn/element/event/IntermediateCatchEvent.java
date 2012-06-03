@@ -26,7 +26,7 @@ import java.awt.event.MouseListener;
 
 import javax.swing.Icon;
 
-import bpmn.element.Graphics;
+import bpmn.Graphics;
 import bpmn.instance.Instance;
 import bpmn.instance.InstanceListener;
 import bpmn.instance.InstancePopupMenu;

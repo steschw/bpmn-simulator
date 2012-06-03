@@ -25,6 +25,8 @@ import java.awt.Point;
 
 import javax.swing.Icon;
 
+import bpmn.Graphics;
+
 @SuppressWarnings("serial")
 public class DataObject extends FlowElement {
 

@@ -23,6 +23,8 @@ package bpmn.element;
 import java.awt.Color;
 import java.awt.Point;
 
+import bpmn.Graphics;
+
 @SuppressWarnings("serial")
 public class Message extends FlowElement {
 

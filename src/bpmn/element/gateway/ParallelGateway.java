@@ -23,8 +23,8 @@ package bpmn.element.gateway;
 import java.awt.BasicStroke;
 import java.awt.Point;
 
+import bpmn.Graphics;
 import bpmn.element.ElementRef;
-import bpmn.element.Graphics;
 import bpmn.element.Rectangle;
 import bpmn.element.SequenceFlow;
 import bpmn.instance.Instance;
@@ -33,6 +33,8 @@ import bpmn.token.TokenCollection;
 
 @SuppressWarnings("serial")
 public class ParallelGateway extends Gateway {
+
+	protected static final int TOKEN_MARGIN = 5;
 
 	public ParallelGateway(final String id, final String name) {
 		super(id, name);

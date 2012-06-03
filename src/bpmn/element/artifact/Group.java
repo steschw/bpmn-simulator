@@ -23,7 +23,7 @@ package bpmn.element.artifact;
 import java.awt.BasicStroke;
 import java.awt.Stroke;
 
-import bpmn.element.Graphics;
+import bpmn.Graphics;
 
 @SuppressWarnings("serial")
 public class Group extends Artifact {

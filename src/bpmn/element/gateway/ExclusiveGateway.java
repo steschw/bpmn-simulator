@@ -22,7 +22,7 @@ package bpmn.element.gateway;
 
 import java.awt.BasicStroke;
 
-import bpmn.element.Graphics;
+import bpmn.Graphics;
 import bpmn.instance.Instance;
 import bpmn.token.Token;
 

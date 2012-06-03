@@ -22,7 +22,7 @@ package bpmn.element.event;
 
 import java.awt.Color;
 
-import bpmn.element.Graphics;
+import bpmn.Graphics;
 import bpmn.element.Visualization;
 
 @SuppressWarnings("serial")

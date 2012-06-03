@@ -22,8 +22,8 @@ package bpmn.element.gateway;
 
 import java.awt.BasicStroke;
 
+import bpmn.Graphics;
 import bpmn.element.ElementRef;
-import bpmn.element.Graphics;
 import bpmn.element.SequenceFlow;
 import bpmn.instance.Instance;
 import bpmn.token.Token;

@@ -24,6 +24,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Point;
 
+import bpmn.Graphics;
 import bpmn.element.gateway.ExclusiveGateway;
 import bpmn.element.gateway.Gateway;
 import bpmn.element.gateway.InclusiveGateway;

@@ -22,7 +22,7 @@ package bpmn.element.artifact;
 
 import java.awt.Point;
 
-import bpmn.element.Graphics;
+import bpmn.Graphics;
 import bpmn.element.Label;
 import bpmn.element.Rectangle;
 

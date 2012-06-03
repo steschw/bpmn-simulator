@@ -22,51 +22,40 @@ package bpmn.element.activity;
 
 import java.awt.Color;
 import java.awt.Point;
-import java.util.ArrayList;
-import java.util.Collection;
 
 import javax.swing.Icon;
 
+import bpmn.Graphics;
 import bpmn.element.FlowElement;
-import bpmn.element.Graphics;
 import bpmn.element.Visualization;
-import bpmn.instance.Instance;
-import bpmn.token.Token;
 
 @SuppressWarnings("serial")
 public class CollapsedProcess extends FlowElement {
 
-	protected static final int TOKEN_MARGIN = 5;
-
 	private static final int ARC_LENGTH = 10;
 
-	private final Collection<Instance> instances = new ArrayList<Instance>(); 
+	private final ExpandedProcess expandedProcess;
 
 	public CollapsedProcess(final ExpandedProcess expandedProcess) {
 		super(expandedProcess.getId(), expandedProcess.getName());
+		this.expandedProcess = expandedProcess;
 	}
 
-	protected Collection<Instance> getInstances() {
-		return instances;
+	@Override
+	protected Color getElementDefaultBackground() {
+		return expandedProcess.getElementDefaultBackground();
 	}
 
 	@Override
 	public Color getForeground() {
-		final Collection<Instance> instances = getInstances();
-		if ((instances != null) && !instances.isEmpty()) {
-			return Token.HIGHLIGHT_COLOR;
-		}
-		return Color.BLACK;
+		return (expandedProcess == null)
+				? super.getForeground()
+				: expandedProcess.getForeground();
 	}
 
 	@Override
 	protected void paintBackground(final Graphics g) {
 		g.fillRoundRect(getElementInnerBounds(), ARC_LENGTH, ARC_LENGTH);
-	}
-
-	@Override
-	protected Color getElementDefaultBackground() {
-		return getProcess().getElementDefaultBackground();
 	}
 
 	@Override
@@ -90,11 +79,9 @@ public class CollapsedProcess extends FlowElement {
 	protected void paintTokens(final Graphics g) {
 		super.paintTokens(g);
 
-		final Point point = getElementInnerBounds().getRightTop();
-		for (Instance instance : getInstances()) {
-			instance.paint(g, point);
-			point.translate(-TOKEN_MARGIN, 0);
-		}
+		expandedProcess.getIncomingTokens().paintVertical(g, getElementInnerBounds().getLeftCenter());
+		expandedProcess.getAllInnerTokens().paintHorizontal(g, getElementInnerBounds().getCenterTop());
+		expandedProcess.getOutgoingTokens().paintVertical(g, getElementInnerBounds().getRightCenter());
 	}
 
 }

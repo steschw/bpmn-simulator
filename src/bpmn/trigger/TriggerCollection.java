@@ -28,7 +28,7 @@ import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import bpmn.element.Graphics;
+import bpmn.Graphics;
 import bpmn.element.Rectangle;
 import bpmn.instance.Instance;
 

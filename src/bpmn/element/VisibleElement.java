@@ -33,6 +33,7 @@ import java.awt.event.MouseEvent;
 
 import javax.swing.JComponent;
 
+import bpmn.Graphics;
 import bpmn.Model;
 import bpmn.element.activity.ExpandedProcess;
 

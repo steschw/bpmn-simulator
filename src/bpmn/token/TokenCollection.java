@@ -20,14 +20,18 @@
  */
 package bpmn.token;
 
+import java.awt.Point;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Vector;
 
+import bpmn.Graphics;
 import bpmn.instance.Instance;
 
 @SuppressWarnings("serial")
 public class TokenCollection extends Vector<Token> {
+
+	protected static final int TOKEN_MARGIN = 5;
 
 	public TokenCollection() {
 		super();
@@ -119,6 +123,31 @@ public class TokenCollection extends Vector<Token> {
 			}
 		}
 		return tokens;
+	}
+
+	public void paintVertical(final Graphics g, final Point center) {
+		final Collection<Instance> instances = getInstances();
+		center.translate(0, -(TOKEN_MARGIN * instances.size()) / 2);
+		for (final Instance instance : instances) {
+			instance.paint(g, center, byInstance(instance).getCount());
+			center.translate(0, TOKEN_MARGIN);
+		}
+	}
+
+	public void paintHorizontal(final Graphics g, final Point center) {
+		final Collection<Instance> instances = getInstances();
+		center.translate(-(TOKEN_MARGIN * instances.size()) / 2, 0);
+		for (final Instance instance : instances) {
+			instance.paint(g, center, byInstance(instance).getCount());
+			center.translate(TOKEN_MARGIN, 0);
+		}
+	}
+
+	public void paintHorizontalRight(final Graphics g, final Point point) {
+		for (Instance instance : getInstances()) {
+			instance.paint(g, point, byInstance(instance).getCount());
+			point.translate(-TOKEN_MARGIN, 0);
+		}
 	}
 
 }

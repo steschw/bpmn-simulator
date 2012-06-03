@@ -20,6 +20,8 @@
  */
 package bpmn.element;
 
+import bpmn.Graphics;
+
 @SuppressWarnings("serial")
 public class TitledFlowElement extends FlowElement {
 

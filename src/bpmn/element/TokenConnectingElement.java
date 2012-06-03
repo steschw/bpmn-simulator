@@ -22,6 +22,7 @@ package bpmn.element;
 
 import java.awt.Color;
 
+import bpmn.Graphics;
 import bpmn.instance.Instance;
 import bpmn.token.Token;
 import bpmn.token.TokenCollection;

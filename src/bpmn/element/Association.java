@@ -24,6 +24,8 @@ import java.awt.BasicStroke;
 import java.awt.Point;
 import java.awt.Stroke;
 
+import bpmn.Graphics;
+
 @SuppressWarnings("serial")
 public class Association extends ConnectingElement {
 

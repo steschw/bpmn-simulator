@@ -30,6 +30,8 @@ import java.util.LinkedList;
 
 import javax.swing.SwingUtilities;
 
+import bpmn.Graphics;
+
 @SuppressWarnings("serial")
 public abstract class ConnectingElement extends VisibleElement {
 

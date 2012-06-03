@@ -76,9 +76,10 @@ public final class ReceiveTask
 		if (getBehavior().getKeepTriggers()) {
 			triggers.add(trigger);
 			trigger.getDestinationInstance().addInstanceListener(this);
+		} else {
+			passFirstInstanceTokenToAllNextElements(trigger.getDestinationInstance());
+			notifyTriggerNotifyEvents(this, trigger);
 		}
-		notifyTriggerNotifyEvents(this, trigger);
-		passFirstInstanceTokenToAllNextElements(trigger.getDestinationInstance());
 		repaint();
 	}
 

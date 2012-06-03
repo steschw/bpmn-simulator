@@ -72,7 +72,7 @@ public class ParallelGateway extends Gateway {
 		if (isForMerging()) {
 			forwardTokenParallel(instance);
 		} else {
-			super.tokenForwardToNextElement(token);
+			super.tokenForwardToNextElement(token, instance);
 		}
 	}
 

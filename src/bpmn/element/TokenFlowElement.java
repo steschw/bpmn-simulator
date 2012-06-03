@@ -129,7 +129,7 @@ public abstract class TokenFlowElement extends FlowElement implements TokenFlow 
 		}
 	}
 
-	protected boolean passTokenToAllOutgoing(final Token token) {
+	protected final boolean passTokenToAllOutgoing(final Token token) {
 		return passTokenToAllOutgoing(token, token.getInstance());
 	}
 

@@ -25,7 +25,6 @@ import javax.swing.Icon;
 import bpmn.element.ElementRef;
 import bpmn.element.Message;
 import bpmn.element.Visualization;
-import bpmn.token.Token;
 
 @SuppressWarnings("serial")
 public final class SendTask
@@ -39,12 +38,6 @@ public final class SendTask
 	@Override
 	protected Icon getTypeIcon() {
 		return getVisualization().getIcon(Visualization.ICON_SEND);
-	}
-
-	@Override
-	protected void forwardTokenFromIncoming(final Token token) {
-		super.forwardTokenFromIncoming(token);
-		getModel().sendMessages(this, token.getInstance());
 	}
 
 }

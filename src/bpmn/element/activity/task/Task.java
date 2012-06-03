@@ -30,6 +30,7 @@ import bpmn.element.Label;
 import bpmn.element.Rectangle;
 import bpmn.element.Visualization;
 import bpmn.element.activity.AbstractActivity;
+import bpmn.token.Token;
 
 @SuppressWarnings("serial")
 public class Task extends AbstractActivity {
@@ -45,6 +46,12 @@ public class Task extends AbstractActivity {
 	@Override
 	protected int getStepCount() {
 		return 50;
+	}
+
+	@Override
+	protected void forwardTokenFromIncoming(final Token token) {
+		super.forwardTokenFromIncoming(token);
+		getModel().sendMessages(this, token.getInstance());
 	}
 
 	@Override

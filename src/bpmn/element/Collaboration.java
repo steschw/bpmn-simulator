@@ -29,6 +29,7 @@ import javax.swing.Scrollable;
 
 import bpmn.Graphics;
 import bpmn.element.activity.Process;
+import bpmn.element.event.StartEvent;
 import bpmn.instance.Instance;
 import bpmn.trigger.TriggerCatchElement;
 import bpmn.trigger.Trigger;
@@ -62,19 +63,23 @@ public class Collaboration extends FlowElement implements Scrollable {
 			if (sourceElement.equals(messageFlow.getSource())) {
 				final FlowElement targetElement = messageFlow.getTarget();
 				if (targetElement instanceof TriggerCatchElement) {
-					final Collection<Instance> targetInstances
-						= targetElement.getProcess().getInstances();
-					Instance targetInstance
-						= sourceInstance.getCorrelationInstance(targetInstances);
-					if (targetInstance == null) {
-						targetInstance = findMessageTargetInstance(targetInstances, sourceElement.getProcess());
-						if (targetInstance != null) {
-							targetInstance.createCorrelationTo(sourceInstance);
-							sourceInstance.createCorrelationTo(targetInstance);
+					if (targetElement instanceof StartEvent) {
+						((TriggerCatchElement)targetElement).catchTrigger(new Trigger(null, null));
+					} else {
+						final Collection<Instance> targetInstances
+							= targetElement.getProcess().getInstances();
+						Instance targetInstance
+							= sourceInstance.getCorrelationInstance(targetInstances);
+						if (targetInstance == null) {
+							targetInstance = findMessageTargetInstance(targetInstances, sourceElement.getProcess());
+							if (targetInstance != null) {
+								targetInstance.createCorrelationTo(sourceInstance);
+								sourceInstance.createCorrelationTo(targetInstance);
+							}
 						}
-					}
-					if (targetInstance != null) {
-						((TriggerCatchElement)targetElement).catchTrigger(new Trigger(sourceInstance, targetInstance));
+						if (targetInstance != null) {
+							((TriggerCatchElement)targetElement).catchTrigger(new Trigger(sourceInstance, targetInstance));
+						}
 					}
 				}
 			}

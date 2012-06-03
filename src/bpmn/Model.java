@@ -51,6 +51,7 @@ import bpmn.element.Error;
 import bpmn.element.Association.Direction;
 import bpmn.element.activity.AbstractActivity;
 import bpmn.element.activity.ExpandedProcess;
+import bpmn.element.activity.Process;
 import bpmn.element.activity.task.*;
 import bpmn.element.artifact.Group;
 import bpmn.element.artifact.TextAnnotation;
@@ -63,9 +64,10 @@ import bpmn.element.event.definition.SignalEventDefinition;
 import bpmn.element.event.definition.TerminateEventDefinition;
 import bpmn.element.event.definition.TimerEventDefinition;
 import bpmn.element.gateway.*;
-import bpmn.token.Instance;
-import bpmn.token.InstanceManager;
+import bpmn.instance.Instance;
+import bpmn.instance.InstanceManager;
 import bpmn.token.TokenAnimator;
+import bpmn.trigger.TriggerCatchElement;
 
 public class Model implements ErrorHandler {
 
@@ -78,8 +80,8 @@ public class Model implements ErrorHandler {
 	private final ElementRefCollection<VisibleElement> elements
 			= new ElementRefCollection<VisibleElement>();
 
-	private final Collection<ExpandedProcess> processes
-			= new LinkedList<ExpandedProcess>();
+	private final Collection<Process> processes
+			= new LinkedList<Process>();
 
 	private final ElementRefCollection<Signal> signals
 			= new ElementRefCollection<Signal>();
@@ -111,13 +113,14 @@ public class Model implements ErrorHandler {
 		return collaborations;
 	}
 
-	public void sendMessagesFrom(final FlowElement source, final Instance instance) {
+	public void sendMessages(final FlowElement sourceElement,
+			final Instance sourceInstance) {
 		for (final Collaboration collaboration : collaborations) {
-			collaboration.sendMessagesFrom(source, instance);
+			collaboration.sendMessages(sourceElement, sourceInstance);
 		}
 	}
 
-	public Collection<ExpandedProcess> getProcesses() {
+	public Collection<Process> getProcesses() {
 		return processes;
 	}
 
@@ -133,8 +136,8 @@ public class Model implements ErrorHandler {
 		return events;
 	}
 
-	public Collection<CatchEvent> getCatchEvents() {
-		return getElements(CatchEvent.class);
+	public Collection<TriggerCatchElement> getCatchEvents() {
+		return getElements(TriggerCatchElement.class);
 	}
 
 	protected void addElementToContainer(final VisibleElement element,
@@ -306,8 +309,8 @@ public class Model implements ErrorHandler {
 
 	protected boolean readElementError(final Node node) {
 		if (isElementNode(node, BPMN, "error")) {
-			errors.set(new Error(getIdAttribute(node), getErrorCodeAttribute(node),
-					getNameAttribute(node)));
+			errors.set(new Error(this, getIdAttribute(node),
+					getErrorCodeAttribute(node), getNameAttribute(node)));
 			return true;
 		} else {
 			return false;
@@ -352,7 +355,7 @@ public class Model implements ErrorHandler {
 
 	protected boolean readElementSignal(final Node node) {
 		if (isElementNode(node, BPMN, "signal")) { //$NON-NLS-1$
-			final Signal signal = new Signal(getIdAttribute(node),
+			final Signal signal = new Signal(this, getIdAttribute(node),
 					getNameAttribute(node));
 			readBaseElement(node, signal);
 			signals.set(signal);
@@ -364,7 +367,7 @@ public class Model implements ErrorHandler {
 
 	protected boolean readElementParticipant(final Node node) {
 		if (isElementNode(node, BPMN, "participant")) { //$NON-NLS-1$
-			final ElementRef<ExpandedProcess> processRef
+			final ElementRef<Process> processRef
 				= getAttributeElementRef(node, "processRef"); //$NON-NLS-1$
 			final Participant pool = new Participant(getIdAttribute(node),
 					getNameAttribute(node), processRef);
@@ -1031,12 +1034,12 @@ public class Model implements ErrorHandler {
 		logFrame.setVisible(true);
 	}
 
-	public Collection<CatchEvent> getManuallStartEvents() {
-		final Collection<CatchEvent> events = new ArrayList<CatchEvent>(); 
+	public Collection<TriggerCatchElement> getManuallStartEvents() {
+		final Collection<TriggerCatchElement> events = new ArrayList<TriggerCatchElement>(); 
 		for (ElementRef<VisibleElement> element : elements.values()) {
-			if (element.getElement() instanceof CatchEvent) {
-				final CatchEvent event = (CatchEvent)element.getElement();
-				if (event.canHappenManual()) {
+			if (element.getElement() instanceof TriggerCatchElement) {
+				final TriggerCatchElement event = (TriggerCatchElement)element.getElement();
+				if (event.canTriggerManual()) {
 					events.add(event);
 				}
 			}

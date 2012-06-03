@@ -33,14 +33,15 @@ import bpmn.element.ElementRef;
 import bpmn.element.Graphics;
 import bpmn.element.Visualization;
 import bpmn.element.activity.AbstractActivity;
-import bpmn.token.Instance;
 import bpmn.token.Token;
 import bpmn.token.TokenCollection;
+import bpmn.trigger.TriggerCatchElement;
+import bpmn.trigger.Trigger;
 
 @SuppressWarnings("serial")
 public final class BoundaryEvent
 		extends AbstractEvent
-		implements CatchEvent, MouseListener {
+		implements TriggerCatchElement, MouseListener {
 
 	private final boolean cancelActivity;
 	private final ElementRef<AbstractActivity> attachedToRef;
@@ -76,7 +77,7 @@ public final class BoundaryEvent
 	}
 
 	@Override
-	public void happen(final Instance instance) {
+	public void catchTrigger(final Trigger trigger) {
 		final AbstractActivity activity = getAttachedTo();
 		if (activity != null) {
 			final TokenCollection activityTokens = activity.getTokens();
@@ -114,7 +115,7 @@ public final class BoundaryEvent
 
 	@Override
 	public void mouseClicked(final MouseEvent e) {
-		happen(null);
+		catchTrigger(new Trigger(null, null));
 	}
 
 	@Override
@@ -134,7 +135,7 @@ public final class BoundaryEvent
 	}
 
 	@Override
-	public boolean canHappenManual() {
+	public boolean canTriggerManual() {
 		return true;
 	}
 

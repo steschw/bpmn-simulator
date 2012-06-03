@@ -23,6 +23,7 @@ package bpmn.element.gateway;
 import java.awt.BasicStroke;
 
 import bpmn.element.Graphics;
+import bpmn.instance.Instance;
 import bpmn.token.Token;
 
 @SuppressWarnings("serial")
@@ -43,8 +44,8 @@ public class ExclusiveGateway extends Gateway {
 	}
 
 	@Override
-	protected void tokenForwardToNextElement(final Token token) {
-		if (passTokenToFirstOutgoing(token)) {
+	protected void tokenForwardToNextElement(final Token token, final Instance instance) {
+		if (passTokenToFirstOutgoing(token, instance)) {
 			token.remove();
 			setException(false);
 		} else {

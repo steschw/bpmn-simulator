@@ -29,7 +29,7 @@ import bpmn.element.Rectangle;
 import bpmn.element.SequenceFlow;
 import bpmn.element.TokenFlowElementWithDefault;
 import bpmn.element.Visualization;
-import bpmn.token.Instance;
+import bpmn.instance.Instance;
 import bpmn.token.Token;
 import bpmn.token.TokenCollection;
 

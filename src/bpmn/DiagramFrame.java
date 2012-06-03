@@ -30,7 +30,7 @@ import javax.swing.JScrollPane;
 
 import bpmn.element.VisibleElement;
 import bpmn.element.Collaboration;
-import bpmn.element.activity.ExpandedProcess;
+import bpmn.element.activity.Process;
 
 @SuppressWarnings("serial")
 public class DiagramFrame extends JInternalFrame {
@@ -56,7 +56,7 @@ public class DiagramFrame extends JInternalFrame {
 
 	protected void setFrameIcon(final VisibleElement container) {
 		Icon icon = null;
-		if (container instanceof ExpandedProcess) {
+		if (container instanceof Process) {
 			icon = ICON_PROCESS;
 		} else if (container instanceof Collaboration) {
 			icon = ICON_COLLABORATION;

@@ -20,7 +20,10 @@
  */
 package bpmn.token;
 
-public interface TokenFlow {
+import bpmn.element.Element;
+import bpmn.instance.Instance;
+
+public interface TokenFlow extends Element {
 
 	void tokenEnter(Token token);
 

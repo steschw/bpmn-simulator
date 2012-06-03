@@ -18,17 +18,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package bpmn.token;
+package bpmn.instance;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Point;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Vector;
 
 import bpmn.element.Graphics;
 import bpmn.element.Rectangle;
-import bpmn.element.activity.Activity;
+import bpmn.element.activity.Process;
+import bpmn.token.Token;
+import bpmn.token.TokenCollection;
+import bpmn.token.TokenFlow;
 
 public class Instance {
 
@@ -37,32 +43,57 @@ public class Instance {
 	private static final int STAR_CORNERS = 5; 
 
 	private final InstanceManager manager;
+
 	private final Instance parent;
+
+	private final Process process;
+
+	private final Collection<InstanceListener> listeners = new LinkedList<InstanceListener>();  
+
+	private List<Instance> correlations = new ArrayList<Instance>();
 
 	private final Collection<Instance> childs = new Vector<Instance>();
 
 	private final TokenCollection tokens = new TokenCollection();
 
-	private final Activity activity;
-
 	private Color color;
 
-	public Instance(final InstanceManager manager, final Activity activity,
+	public Instance(final InstanceManager manager, final Process process,
 			final Color color) {
-		this(manager, null, activity, color);
+		this(manager, null, process, color);
 	}
 
-	public Instance(final Instance parent, final Activity activity) {
-		this(null, parent, activity, null);
+	public Instance(final Instance parent, final Process process) {
+		this(null, parent, process, null);
 	}
 
 	protected Instance(final InstanceManager manager,
-			final Instance parent, final Activity activity, final Color color) {
+			final Instance parent, final Process process, final Color color) {
 		super();
 		this.manager = manager;
 		this.parent = parent;
-		this.activity = activity;
+		this.process = process;
 		this.color = color;
+	}
+
+	public void addInstanceListener(final InstanceListener listener) {
+		synchronized (listeners) {
+			listeners.add(listener);
+		}
+	}
+
+	public void removeInstanceListener(final InstanceListener listener) {
+		synchronized (listeners) {
+			listeners.remove(listener);
+		}
+	}
+
+	protected void notifyInstanceRemoved(final Instance instance) {
+		synchronized (listeners) {
+			for (InstanceListener listener : listeners) {
+				listener.instanceRemoved(instance);
+			}
+		}
 	}
 
 	public final Instance getParentInstance() {
@@ -86,9 +117,33 @@ public class Instance {
 		}
 	}
 
-	public Activity getActivity() {
-		return activity;
+	public Process getProcess() {
+		return process;
 	}
+
+	public Instance getCorrelationInstance(final Collection<Instance> instances) {
+		for (final Instance correlationInstance : instances) {
+			if (correlations.contains(correlationInstance)) {
+				return correlationInstance;
+			}
+		}
+		return null;
+	}
+
+	public boolean hasCorrelationTo(final Process process) {
+		for (Instance correlationInstance : correlations) {
+			if (correlationInstance.getProcess().equals(process)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public void createCorrelationTo(final Instance instance) {
+		correlations.add(instance);
+	}
+
+	///XXX: removeCorrelationTo(...)
 
 	public Collection<Instance> getChildInstances() {
 		return childs;
@@ -124,14 +179,16 @@ public class Instance {
 		} else {
 			parentInstance.removeChildInstance(this);
 		}
+		notifyInstanceRemoved(this);
+		getInstanceManager().notifyInstanceRemoved(this);
 	}
 
 	/*
 	 * child instances
 	 */
 
-	public Instance newChildInstance(final Activity activity) {
-		final Instance childInstance = new Instance(this, activity);
+	public Instance newChildInstance(final Process process) {
+		final Instance childInstance = new Instance(this, process);
 		addChildInstance(childInstance);
 		return childInstance;
 	}
@@ -154,7 +211,6 @@ public class Instance {
 		assert childInstance != null;
 //		assert(childs.contains(childInstance));
 		childs.remove(childInstance);
-		getInstanceManager().notifyInstanceRemoved(childInstance);
 	}
 
 	public void removeAllChildInstances() {
@@ -286,14 +342,9 @@ public class Instance {
 		}
 	}
 
-	private static Rectangle getBounds(final Point center, final int radius) {
-		return new Rectangle(center.x - radius, center.y - radius,
-				radius * 2, radius * 2);
-	}
-
 	public void paint(final Graphics g, final Point center) {
 		if (center != null) {
-			final Rectangle size = getBounds(center, STAR_SIZE); 
+			final Rectangle size = new Rectangle(center, STAR_SIZE); 
 
 			final Color color = getColor();
 			if (color != null) {
@@ -314,7 +365,7 @@ public class Instance {
 		assert count > 0;
 		if (count > 1) {
 			g.setPaint(Color.BLACK);
-			g.drawText(getBounds(center, STAR_SIZE), Integer.toString(count));
+			g.drawText(new Rectangle(center, STAR_SIZE), Integer.toString(count));
 		}
 	}
 
@@ -323,7 +374,7 @@ public class Instance {
 		final StringBuilder buffer = new StringBuilder('[');
 		buffer.append(super.toString());
 		buffer.append(", ");
-		buffer.append(getActivity());
+		buffer.append(getProcess());
 		buffer.append(", ");
 		buffer.append("childs:");
 		buffer.append(getChildInstanceCount());

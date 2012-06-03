@@ -21,16 +21,20 @@
 package bpmn.element.gateway;
 
 import bpmn.element.ElementRef;
+import bpmn.element.FlowElement;
 import bpmn.element.Graphics;
 import bpmn.element.Rectangle;
 import bpmn.element.SequenceFlow;
-import bpmn.element.event.CatchEvent;
-import bpmn.token.Instance;
+import bpmn.instance.Instance;
 import bpmn.token.Token;
 import bpmn.token.TokenCollection;
+import bpmn.trigger.TriggerCatchElement;
+import bpmn.trigger.StoringTriggerCatchElement;
+import bpmn.trigger.Trigger;
+import bpmn.trigger.TriggerNotifyElement;
 
 @SuppressWarnings("serial")
-public class EventBasedGateway extends Gateway {
+public class EventBasedGateway extends Gateway implements TriggerNotifyElement {
 
 	public EventBasedGateway(final String id, final String name) {
 		super(id, name);
@@ -49,11 +53,11 @@ public class EventBasedGateway extends Gateway {
 		g.drawPentagon(bounds);
 	}
 
-	protected SequenceFlow getSequenceFlowToEvent(final CatchEvent catchEvent) {
+	protected SequenceFlow getSequenceFlowToCatchElement(final TriggerCatchElement catchElement) {
 		for (ElementRef<SequenceFlow> outgoingRef : getOutgoing()) {
 			if (outgoingRef.hasElement()) {
 				final SequenceFlow outgoing = outgoingRef.getElement();
-				if (catchEvent.equals(outgoing.getTarget())) {
+				if (catchElement.equals(outgoing.getTarget())) {
 					return outgoing;
 				}
 			}
@@ -61,10 +65,11 @@ public class EventBasedGateway extends Gateway {
 		return null;
 	}
 
-	public void eventHappen(final CatchEvent catchEvent, final Instance instance) {
-		final SequenceFlow sequenceFlow = getSequenceFlowToEvent(catchEvent);
+	@Override
+	public void eventTriggered(final TriggerCatchElement catchElement, final Trigger trigger) {
+		final SequenceFlow sequenceFlow = getSequenceFlowToCatchElement(catchElement);
 		if (sequenceFlow != null) {
-			final TokenCollection tokens = getInnerTokens().byInstance(instance);
+			final TokenCollection tokens = getInnerTokens().byInstance(trigger.getDestinationInstance());
 			if (!tokens.isEmpty()) {
 				final Token token = tokens.firstElement();
 				token.passTo(sequenceFlow);
@@ -73,9 +78,42 @@ public class EventBasedGateway extends Gateway {
 		}
 	}
 
-	@Override
-	protected boolean canForwardTokenToNextElement(final Token token) {
-		return false;
+	private StoringTriggerCatchElement getTargetCatchElement(final Token token) {
+		final Instance instance = token.getInstance();
+		Trigger targetTrigger = null;
+		StoringTriggerCatchElement targetCatchElement = null;
+		for (ElementRef<SequenceFlow> outgoingRef : getOutgoing()) {
+			if (outgoingRef.hasElement()) {
+				final SequenceFlow sequenceFlow = outgoingRef.getElement(); 
+				final FlowElement flowElement = sequenceFlow.getTarget();
+				if (flowElement instanceof StoringTriggerCatchElement) {
+					final StoringTriggerCatchElement catchEvent = (StoringTriggerCatchElement)flowElement;
+					final Trigger catchTrigger = catchEvent.getFirstTrigger(instance);
+					if ((catchTrigger != null)
+							&& ((targetTrigger == null)
+									|| (catchTrigger.getTime() < targetTrigger.getTime()))) {
+						targetTrigger = catchTrigger;
+						targetCatchElement = catchEvent;
+					}
+				}
+			}
+		}
+		return targetCatchElement;
 	}
 
+	@Override
+	protected boolean canForwardTokenToNextElement(final Token token) {
+		return getTargetCatchElement(token) != null;
+	}
+
+	@Override
+	protected void tokenForwardToNextElement(final Token token, final Instance instance) {
+		final StoringTriggerCatchElement targetCatchElement = getTargetCatchElement(token);
+		token.passTo(getSequenceFlowToCatchElement(targetCatchElement));
+		token.remove();
+		if (targetCatchElement != null) {
+			targetCatchElement.removeFirstTrigger(instance);
+		}
+	}
+	
 }

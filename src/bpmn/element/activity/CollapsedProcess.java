@@ -30,7 +30,7 @@ import javax.swing.Icon;
 import bpmn.element.FlowElement;
 import bpmn.element.Graphics;
 import bpmn.element.Visualization;
-import bpmn.token.Instance;
+import bpmn.instance.Instance;
 import bpmn.token.Token;
 
 @SuppressWarnings("serial")
@@ -44,18 +44,6 @@ public class CollapsedProcess extends FlowElement {
 
 	public CollapsedProcess(final ExpandedProcess expandedProcess) {
 		super(expandedProcess.getId(), expandedProcess.getName());
-	}
-
-	public void addInstance(final Instance instance) {
-		assert !instances.contains(instance);
-		instances.add(instance);
-		repaint();
-	}
-
-	public void removeInstance(final Instance instance) {
-		assert instances.contains(instance);
-		instances.remove(instance);
-		repaint();
 	}
 
 	protected Collection<Instance> getInstances() {

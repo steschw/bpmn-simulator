@@ -27,8 +27,10 @@ import java.util.Collection;
 
 import javax.swing.Scrollable;
 
-import bpmn.element.event.CatchEvent;
-import bpmn.token.Instance;
+import bpmn.element.activity.Process;
+import bpmn.instance.Instance;
+import bpmn.trigger.TriggerCatchElement;
+import bpmn.trigger.Trigger;
 
 @SuppressWarnings("serial")
 public class Collaboration extends FlowElement implements Scrollable {
@@ -43,12 +45,36 @@ public class Collaboration extends FlowElement implements Scrollable {
 		messageFlows.add(messageFlow);
 	}
 
-	public void sendMessagesFrom(final FlowElement source, final Instance instance) {
+	private Instance findMessageTargetInstance(final Collection<Instance> instances,
+			final Process process) {
+		for (Instance instance : instances) {
+			if (!instance.hasCorrelationTo(process)) {
+				return instance;
+			}
+		}
+		return null;
+	}
+
+	public void sendMessages(final FlowElement sourceElement,
+			final Instance sourceInstance) {
 		for (final MessageFlow messageFlow : messageFlows) {
-			if (source.equals(messageFlow.getSource())) {
-				final FlowElement target = messageFlow.getTarget();
-				if (target instanceof CatchEvent) {
-					((CatchEvent)target).happen(null);
+			if (sourceElement.equals(messageFlow.getSource())) {
+				final FlowElement targetElement = messageFlow.getTarget();
+				if (targetElement instanceof TriggerCatchElement) {
+					final Collection<Instance> targetInstances
+						= targetElement.getProcess().getInstances();
+					Instance targetInstance
+						= sourceInstance.getCorrelationInstance(targetInstances);
+					if (targetInstance == null) {
+						targetInstance = findMessageTargetInstance(targetInstances, sourceElement.getProcess());
+						if (targetInstance != null) {
+							targetInstance.createCorrelationTo(sourceInstance);
+							sourceInstance.createCorrelationTo(targetInstance);
+						}
+					}
+					if (targetInstance != null) {
+						((TriggerCatchElement)targetElement).catchTrigger(new Trigger(sourceInstance, targetInstance));
+					}
 				}
 			}
 		}

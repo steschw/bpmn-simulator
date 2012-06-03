@@ -30,6 +30,7 @@ import java.util.Collection;
 import javax.swing.Scrollable;
 
 import bpmn.Model;
+import bpmn.element.Element;
 import bpmn.element.VisibleElement;
 import bpmn.element.Graphics;
 import bpmn.element.Label;
@@ -38,17 +39,19 @@ import bpmn.element.Visualization;
 import bpmn.element.event.AbstractEvent;
 import bpmn.element.event.StartEvent;
 import bpmn.element.gateway.Gateway;
-import bpmn.token.Instance;
+import bpmn.instance.Instance;
 import bpmn.token.Token;
 import bpmn.token.TokenCollection;
 import bpmn.token.TokenFlow;
 
 @SuppressWarnings("serial")
-public class ExpandedProcess extends AbstractActivity implements Scrollable {
+public class ExpandedProcess
+	extends AbstractActivity
+	implements Process, Scrollable {
 
 	private static final int ARC_LENGTH = 20;
 
-	private final Collection<VisibleElement> elements = new ArrayList<VisibleElement>();
+	private final Collection<Element> elements = new ArrayList<Element>();
 
 	private CollapsedProcess collapsedProcess; 
 
@@ -75,16 +78,17 @@ public class ExpandedProcess extends AbstractActivity implements Scrollable {
 		element.setProcess(this);
 	}
 
-	public Collection<VisibleElement> getElements() {
+	@Override
+	public Collection<Element> getElements() {
 		return elements;
 	}
 
 	@Override
 	public TokenCollection getTokens() {
 		final TokenCollection innerTokens = new TokenCollection(getIncomingTokens());
-		final Collection<VisibleElement> elements = getElements();
+		final Collection<Element> elements = getElements();
 		if (elements != null) {
-			for (final VisibleElement innerElement : elements) {
+			for (final Element innerElement : elements) {
 				if (innerElement instanceof TokenFlow) {
 					final TokenFlow innerTokenFlow = (TokenFlow)innerElement;
 					innerTokens.addAll(innerTokenFlow.getTokens());
@@ -95,8 +99,13 @@ public class ExpandedProcess extends AbstractActivity implements Scrollable {
 		return innerTokens;
 	}
 
+	@Override
+	public Collection<Instance> getInstances() {
+		return getTokens().getInstances();
+	}
+
 	protected boolean containsTokenFlow(final TokenFlow tokenFlow) {
-		for (VisibleElement element : elements) {
+		for (Element element : getElements()) {
 			if (element instanceof TokenFlow) {
 				if ((TokenFlow)element == tokenFlow) {
 					return true;
@@ -201,7 +210,7 @@ public class ExpandedProcess extends AbstractActivity implements Scrollable {
 
 	public Collection<TokenFlowElement> getStartElements() {
 		final Collection<TokenFlowElement> startElements = new ArrayList<TokenFlowElement>();
-		for (VisibleElement element : elements) {
+		for (Element element : getElements()) {
 			if (element instanceof TokenFlowElement) {
 				final TokenFlowElement tokenFlowElement = (TokenFlowElement)element; 
 				if (!tokenFlowElement.hasIncoming()) {
@@ -217,7 +226,7 @@ public class ExpandedProcess extends AbstractActivity implements Scrollable {
 
 	public StartEvent getStartEvent() {
 		StartEvent start = null;
-		for (VisibleElement element : elements) {
+		for (Element element : getElements()) {
 			if (element instanceof StartEvent) {
 				final StartEvent event = (StartEvent)element;
 				if (event.isPlain()) {

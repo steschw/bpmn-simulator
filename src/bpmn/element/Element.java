@@ -20,7 +20,11 @@
  */
 package bpmn.element;
 
+import bpmn.Model;
+
 public interface Element {
+
+	Model getModel();
 
 	String getId();
 

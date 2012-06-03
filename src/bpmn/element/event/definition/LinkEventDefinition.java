@@ -24,13 +24,15 @@ import java.util.Collection;
 
 import javax.swing.Icon;
 
-import bpmn.element.VisibleElement;
+import bpmn.element.Element;
 import bpmn.element.Visualization;
-import bpmn.element.activity.ExpandedProcess;
+import bpmn.element.activity.Process;
 import bpmn.element.event.AbstractEvent;
-import bpmn.element.event.CatchEvent;
 import bpmn.element.event.IntermediateCatchEvent;
+import bpmn.instance.Instance;
 import bpmn.token.Token;
+import bpmn.trigger.TriggerCatchElement;
+import bpmn.trigger.Trigger;
 
 public final class LinkEventDefinition extends EventDefinition {
 
@@ -52,9 +54,9 @@ public final class LinkEventDefinition extends EventDefinition {
 				: Visualization.ICON_LINK);
 	}
 
-	protected static CatchEvent findLinkTargetInProcess(
-			final ExpandedProcess process, final String targetName) {
-		for (final VisibleElement element : process.getElements()) {
+	protected static TriggerCatchElement findLinkTargetInProcess(
+			final Process process, final String targetName) {
+		for (final Element element : process.getElements()) {
 			if (element instanceof IntermediateCatchEvent) {
 				final IntermediateCatchEvent event = (IntermediateCatchEvent)element;
 				final EventDefinition definition = event.getDefinition(); 
@@ -69,10 +71,10 @@ public final class LinkEventDefinition extends EventDefinition {
 		return null;
 	}
 
-	protected CatchEvent findLinkTarget(
-			final Collection<ExpandedProcess> processes, final String targetName) {
-		for (final ExpandedProcess process : processes) {
-			final CatchEvent linkTarget = findLinkTargetInProcess(process, targetName);
+	protected TriggerCatchElement findLinkTarget(
+			final Collection<Process> processes, final String targetName) {
+		for (final Process process : processes) {
+			final TriggerCatchElement linkTarget = findLinkTargetInProcess(process, targetName);
 			if (linkTarget != null) {
 				return linkTarget; 
 			}
@@ -81,18 +83,19 @@ public final class LinkEventDefinition extends EventDefinition {
 	}
 
 	@Override
-	public void throwHappen(final Token token) {
-		super.throwHappen(token);
+	public void throwTrigger(final Token token) {
+		super.throwTrigger(token);
 
-		final ExpandedProcess process = getProcessByToken(token);
+		final Process process = getProcessByToken(token);
 		final String targetName = getName();
-		CatchEvent linkTarget
+		TriggerCatchElement linkTarget
 				= findLinkTargetInProcess(process, targetName);
 		if (linkTarget == null) {
 			linkTarget = findLinkTarget(process.getModel().getProcesses(), targetName);
 		}
 		if (linkTarget != null) {
-			linkTarget.happen(token.getInstance());
+			final Instance instance = token.getInstance();
+			linkTarget.catchTrigger(new Trigger(instance, instance));
 		}
 	}
 

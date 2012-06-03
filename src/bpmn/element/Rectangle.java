@@ -42,6 +42,10 @@ public class Rectangle extends java.awt.Rectangle {
 		super(p);
 	}
 
+	public Rectangle(final Point center, final int size) {
+		super(center.x - size, center.y - size, size + size, size + size);
+	}
+
 	public int min() {
 		return Math.min(width, height);		
 	}

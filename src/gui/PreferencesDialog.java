@@ -286,7 +286,7 @@ public class PreferencesDialog extends JDialog {
 		config.setExternalEditor(editExternalEditor.getText());
 
 		final Behavior behavior = VisibleElement.getDefaultBehavior();
-		behavior.setKeepEvents(checkKeepEvents.isSelected());
+		behavior.setKeepTriggers(checkKeepEvents.isSelected());
 		config.setBehavior(behavior);
 
 		final Visualization visualization = VisibleElement.getDefaultVisualization();
@@ -314,7 +314,7 @@ public class PreferencesDialog extends JDialog {
 		editExternalEditor.setText(config.getExternalEditor());
 
 		final Behavior behavior = VisibleElement.getDefaultBehavior();
-		checkKeepEvents.setSelected(behavior.getKeepEvents());
+		checkKeepEvents.setSelected(behavior.getKeepTriggers());
 
 		final Visualization visualization = VisibleElement.getDefaultVisualization();
 		checkAntialiasing.setSelected(visualization.isAntialiasing());

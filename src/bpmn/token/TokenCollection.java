@@ -24,6 +24,8 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.Vector;
 
+import bpmn.instance.Instance;
+
 @SuppressWarnings("serial")
 public class TokenCollection extends Vector<Token> {
 

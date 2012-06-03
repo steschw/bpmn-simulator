@@ -26,10 +26,13 @@ import java.util.Iterator;
 
 import bpmn.element.activity.ExpandedProcess;
 import bpmn.element.gateway.EventBasedGateway;
-import bpmn.token.Instance;
+import bpmn.instance.Instance;
 import bpmn.token.Token;
 import bpmn.token.TokenCollection;
 import bpmn.token.TokenFlow;
+import bpmn.trigger.Trigger;
+import bpmn.trigger.TriggerCatchElement;
+import bpmn.trigger.TriggerNotifyElement;
 
 @SuppressWarnings("serial")
 public abstract class TokenFlowElement extends FlowElement implements TokenFlow {
@@ -89,7 +92,7 @@ public abstract class TokenFlowElement extends FlowElement implements TokenFlow 
 		getInnerTokens().remove(token);
 	}
 
-	protected void tokenForwardToNextElement(final Token token) {
+	protected final void tokenForwardToNextElement(final Token token) {
 		tokenForwardToNextElement(token, token.getInstance());
 	}
 
@@ -205,12 +208,38 @@ public abstract class TokenFlowElement extends FlowElement implements TokenFlow 
 	}
 
 	protected void passFirstTokenToAllOutgoing() {
-		final Iterator<Token> iterator = getInnerTokens().iterator();
+		final Iterator<Token> iterator = getTokens().iterator();
 		if (iterator.hasNext()) {
 			final Token firstToken = iterator.next();
 			passTokenToAllOutgoing(firstToken);
 			firstToken.remove();
 		}
+	}
+
+	protected void passFirstInstanceTokenToAllNextElements(final Instance instance) {
+		for (final Token token : getTokens()) {
+			if (token.getInstance().equals(instance)) {
+				passTokenToAllOutgoing(token);
+				token.remove();
+				break;
+			}
+		}
+	}
+
+	protected int notifyTriggerNotifyEvents(
+			final TriggerCatchElement catchElement, final Trigger trigger) {
+		int count = 0;
+		for (final ElementRef<SequenceFlow> incomingRef : getIncoming()) {
+			if (incomingRef.hasElement()) {
+				final SequenceFlow incoming = incomingRef.getElement();
+				final FlowElement flowElement = incoming.getSource();
+				if (flowElement instanceof TriggerNotifyElement) {
+					((TriggerNotifyElement)flowElement).eventTriggered(catchElement, trigger);
+					++count;
+				}
+			}
+		}
+		return count;
 	}
 
 }

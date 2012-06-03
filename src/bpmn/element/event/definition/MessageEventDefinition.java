@@ -52,11 +52,11 @@ public final class MessageEventDefinition extends EventDefinition {
 	}
 
 	@Override
-	public void throwHappen(final Token token) {
-		super.throwHappen(token);
+	public void throwTrigger(final Token token) {
+		super.throwTrigger(token);
 	
 		final AbstractEvent event = getEvent();
-		event.getModel().sendMessagesFrom(event, token.getInstance());
+		event.getModel().sendMessages(event, token.getInstance());
 	}
 
 }

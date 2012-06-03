@@ -22,7 +22,7 @@ package bpmn.element;
 
 import java.awt.Color;
 
-import bpmn.token.Instance;
+import bpmn.instance.Instance;
 import bpmn.token.Token;
 import bpmn.token.TokenCollection;
 import bpmn.token.TokenFlow;

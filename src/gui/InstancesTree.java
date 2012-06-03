@@ -30,9 +30,9 @@ import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 
-import bpmn.token.Instance;
-import bpmn.token.InstanceManager;
-import bpmn.token.InstanceListener;
+import bpmn.instance.Instance;
+import bpmn.instance.InstanceListener;
+import bpmn.instance.InstanceManager;
 
 @SuppressWarnings("serial")
 public class InstancesTree extends JTree implements InstanceListener {
@@ -51,7 +51,7 @@ public class InstancesTree extends JTree implements InstanceListener {
 				final Object userObject = node.getUserObject();
 				if (userObject instanceof Instance) {
 					final Instance instance = (Instance)userObject;
-					final StringBuilder text = new StringBuilder(instance.getActivity().getElementName());
+					final StringBuilder text = new StringBuilder(instance.getProcess().getElementName());
 					text.append(" (");
 					text.append(instance.getTokenCount(false));
 					text.append(" tokens)");

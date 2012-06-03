@@ -21,6 +21,7 @@
 package bpmn.element;
 
 import java.awt.Color;
+import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.awt.Paint;
 import java.awt.Point;
@@ -359,10 +360,13 @@ public class Graphics {
 	}
 
 	public void drawText(final Rectangle bounds, final String text) {
+		final FontMetrics metrics = graphics.getFontMetrics(); 
 		final Rectangle2D textBounds
 			= graphics.getFontMetrics().getStringBounds(text, graphics);
 		final int x = bounds.x + (bounds.width - (int)textBounds.getWidth()) / 2;
-		final int y = bounds.y + (bounds.height - ((int)textBounds.getHeight() / 2));
+		final int textHeight = (int)textBounds.getHeight();
+		final int yOffset = (bounds.height - textHeight) / 2;
+		final int y = bounds.y + yOffset + metrics.getAscent();
 		graphics.drawString(text, x, y);
 	}
 

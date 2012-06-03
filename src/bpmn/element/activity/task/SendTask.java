@@ -44,7 +44,7 @@ public final class SendTask
 	@Override
 	protected void forwardTokenFromIncoming(final Token token) {
 		super.forwardTokenFromIncoming(token);
-		getModel().sendMessagesFrom(this, token.getInstance());
+		getModel().sendMessages(this, token.getInstance());
 	}
 
 }

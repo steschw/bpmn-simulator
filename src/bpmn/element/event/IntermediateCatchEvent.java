@@ -26,17 +26,21 @@ import java.awt.event.MouseListener;
 
 import javax.swing.Icon;
 
-import bpmn.element.ElementRef;
-import bpmn.element.FlowElement;
-import bpmn.element.SequenceFlow;
-import bpmn.element.gateway.EventBasedGateway;
-import bpmn.token.Instance;
+import bpmn.element.Graphics;
+import bpmn.instance.Instance;
+import bpmn.instance.InstanceListener;
+import bpmn.instance.InstancePopupMenu;
 import bpmn.token.Token;
+import bpmn.trigger.StoringTriggerCatchElement;
+import bpmn.trigger.Trigger;
+import bpmn.trigger.TriggerCollection;
 
 @SuppressWarnings("serial")
 public final class IntermediateCatchEvent
 		extends IntermediateEvent
-		implements CatchEvent, MouseListener {
+		implements StoringTriggerCatchElement, MouseListener, InstanceListener {
+
+	private TriggerCollection triggers = new TriggerCollection();
 
 	public IntermediateCatchEvent(final String id, final String name) {
 		super(id, name);
@@ -44,12 +48,23 @@ public final class IntermediateCatchEvent
 	}
 
 	@Override
-	public boolean canHappenManual() {
-		return (isPlain() || isTimer() || isConditional());
+	public Trigger getFirstTrigger(final Instance instance) {
+		return triggers.first(instance);
+	}
+
+	@Override
+	public void removeFirstTrigger(final Instance instance) {
+		triggers.removeFirst(instance);
+		repaint();
+	}
+
+	@Override
+	public boolean canTriggerManual() {
+		return isPlain() || isTimer() || isConditional();
 	}
 
 	protected void updateCursor() {
-		if (canHappenManual()) {
+		if (canTriggerManual()) {
 			setCursor(
 					getInnerTokens().isEmpty()
 							? Cursor.getDefaultCursor()
@@ -57,26 +72,39 @@ public final class IntermediateCatchEvent
 		}
 	}
 
-	///XXX: doppelt in ReceiveTask
-	protected int notifyEventBasedGatewaysEventHappen(final Instance instance) {
-		int count = 0;
-		for (final ElementRef<SequenceFlow> incomingRef : getIncoming()) {
-			if (incomingRef.hasElement()) {
-				final SequenceFlow incoming = incomingRef.getElement();
-				final FlowElement flowElement = incoming.getSource();
-				if (flowElement instanceof EventBasedGateway) {
-					((EventBasedGateway)flowElement).eventHappen(this, instance);
-					++count;
-				}
-			}
+	@Override
+	public void catchTrigger(final Trigger trigger) {
+		if (getBehavior().getKeepTriggers()) {
+			triggers.add(trigger);
+			trigger.getDestinationInstance().addInstanceListener(this);
 		}
-		return count;
+		notifyTriggerNotifyEvents(this, trigger);
+		passFirstInstanceTokenToAllNextElements(trigger.getDestinationInstance());
+		repaint();
 	}
 
 	@Override
-	public void happen(final Instance instance) {
-		notifyEventBasedGatewaysEventHappen(instance);
-		passFirstTokenToAllOutgoing();
+	public void instanceAdded(final Instance instance) {
+	}
+
+	@Override
+	public void instanceRemoved(final Instance instance) {
+		triggers.removeInstanceTriggers(instance);
+		repaint();
+	}
+
+	@Override
+	protected boolean canForwardTokenToNextElement(final Token token) {
+		return isGatewayCondition()
+				|| (triggers.first(token.getInstance()) != null);
+	}
+
+	@Override
+	protected void tokenForwardToNextElement(final Token token, final Instance instance) {
+		super.tokenForwardToNextElement(token, instance);
+		if (!isGatewayCondition()) {
+			triggers.removeFirst(token.getInstance());
+		}
 	}
 
 	@Override
@@ -91,15 +119,11 @@ public final class IntermediateCatchEvent
 		updateCursor();
 	}
 
-	@Override
-	protected boolean canForwardTokenToNextElement(final Token token) {
-		return isGatewayCondition();
-	}
 
 	@Override
 	public void mouseClicked(final MouseEvent e) {
-		if (canHappenManual()) {
-			happen(null);
+		if (canTriggerManual()) {
+			InstancePopupMenu.selectToTrigger(this, this, getProcess().getInstances());
 		}
 	}
 
@@ -122,6 +146,13 @@ public final class IntermediateCatchEvent
 	@Override
 	protected Icon getTypeIcon() {
 		return getDefinition().getIcon(getVisualization(), false);
+	}
+
+	@Override
+	protected void paintElement(final Graphics g) {
+		super.paintElement(g);
+
+		triggers.paint(g, getElementInnerBounds().getRightTop());
 	}
 
 }

@@ -25,7 +25,7 @@ import java.util.Collection;
 
 import bpmn.element.Graphics;
 import bpmn.element.TokenFlowElementWithDefault;
-import bpmn.token.Instance;
+import bpmn.instance.Instance;
 import bpmn.token.Token;
 import bpmn.token.TokenCollection;
 

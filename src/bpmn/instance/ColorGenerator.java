@@ -18,52 +18,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package bpmn.element;
+package bpmn.instance;
 
-import bpmn.Model;
+import java.awt.Color;
 
-public class InvisibleElement implements Element {
+public class ColorGenerator {
 
-	private final Model model;
+	private static final Color[] COLORS = new Color[] {
+			new Color(0xff5c26),
+			new Color(0x2626ff),
+			new Color(0xffff26),
+			new Color(0xc926ff),
+			new Color(0x5cff26),
+			new Color(0x26ff93),
+			new Color(0xff2692),
+			new Color(0x26c9ff),
+		};
 
-	private final String id;
+	private int index;
 
-	private Documentation documentation;
-
-	public InvisibleElement(final Model model, final String id) {
-		super();
-		this.model = model;
-		this.id = id;
-	}
-
-	@Override
-	public Model getModel() {
-		return model;
-	}
-
-	@Override
-	public String getId() {
-		return id;
-	}
-
-	@Override
-	public void setDocumentation(final Documentation documentation) {
-		this.documentation = documentation;
-	}
-
-	@Override
-	public boolean hasDocumentation() {
-		return getDocumentation() != null;
-	}
-
-	@Override
-	public Documentation getDocumentation() {
-		return documentation;
-	}
-
-	@Override
-	public String getElementName() {
-		return getId();
+	public Color next() {
+		if (index >= COLORS.length) {
+			index = 0;
+		}
+		return COLORS[index++];
 	}
 
 }

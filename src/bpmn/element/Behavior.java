@@ -22,14 +22,14 @@ package bpmn.element;
 
 public class Behavior {
 
-	private boolean keepEvents;
+	private boolean keepTriggers;
 
-	public void setKeepEvents(final boolean keep) {
-		keepEvents = keep;
+	public void setKeepTriggers(final boolean keep) {
+		keepTriggers = keep;
 	}
 
-	public boolean getKeepEvents() {
-		return keepEvents;
+	public boolean getKeepTriggers() {
+		return keepTriggers;
 	}
 
 }

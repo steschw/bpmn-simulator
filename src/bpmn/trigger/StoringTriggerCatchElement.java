@@ -18,52 +18,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package bpmn.element;
+package bpmn.trigger;
 
-import bpmn.Model;
+import bpmn.instance.Instance;
 
-public class InvisibleElement implements Element {
+public interface StoringTriggerCatchElement extends TriggerCatchElement {
 
-	private final Model model;
+	Trigger getFirstTrigger(final Instance instance);
 
-	private final String id;
-
-	private Documentation documentation;
-
-	public InvisibleElement(final Model model, final String id) {
-		super();
-		this.model = model;
-		this.id = id;
-	}
-
-	@Override
-	public Model getModel() {
-		return model;
-	}
-
-	@Override
-	public String getId() {
-		return id;
-	}
-
-	@Override
-	public void setDocumentation(final Documentation documentation) {
-		this.documentation = documentation;
-	}
-
-	@Override
-	public boolean hasDocumentation() {
-		return getDocumentation() != null;
-	}
-
-	@Override
-	public Documentation getDocumentation() {
-		return documentation;
-	}
-
-	@Override
-	public String getElementName() {
-		return getId();
-	}
+	void removeFirstTrigger(final Instance instance);
 
 }

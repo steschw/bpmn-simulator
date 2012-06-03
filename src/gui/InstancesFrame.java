@@ -23,7 +23,7 @@ package gui;
 import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 
-import bpmn.token.InstanceManager;
+import bpmn.instance.InstanceManager;
 
 @SuppressWarnings("serial")
 public class InstancesFrame extends JFrame {

@@ -18,57 +18,41 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package gui;
+package bpmn.instance;
 
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Collection;
 import java.util.Iterator;
 
-import javax.swing.Icon;
-import javax.swing.JButton;
-import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
-import bpmn.Model;
 import bpmn.trigger.TriggerCatchElement;
+import bpmn.trigger.Trigger;
 
 @SuppressWarnings("serial")
-public class StartButton extends JButton implements ActionListener {
+public class InstancePopupMenu extends JPopupMenu {
 
-	private Model model;
-
-	public StartButton(final Icon icon) {
-		super(icon);
-		addActionListener(this);
-	}
-
-	public void setModel(final Model model) {
-		this.model = model;
-		setEnabled(model != null);
-	}
-
-	@Override
-	public void actionPerformed(final ActionEvent e) {
-		if (model != null) {
-			final Collection<TriggerCatchElement> startEvents = model.getManuallStartEvents();
-			final Iterator<TriggerCatchElement> iterator = startEvents.iterator();
-			if (startEvents.size() == 1) {
-				iterator.next().catchTrigger(null);
+	public static void selectToTrigger(final Component component,
+			final TriggerCatchElement catchElement, final Collection<Instance> instances) {
+		if (!instances.isEmpty()) {
+			final Iterator<Instance> i = instances.iterator();
+			if (instances.size() == 1) {
+				catchElement.catchTrigger(new Trigger(null, i.next()));
 			} else {
 				final JPopupMenu menu = new JPopupMenu();
-				while (iterator.hasNext()) {
-					final TriggerCatchElement event = iterator.next();
-					final JMenuItem menuItem = new JMenuItem(event.getElementName());
+				for (final Instance instance : instances) {
+					final InstanceMenuItem menuItem = new InstanceMenuItem(instance);
 					menuItem.addActionListener(new ActionListener() {
 						@Override
 						public void actionPerformed(final ActionEvent e) {
-							event.catchTrigger(null);
+							catchElement.catchTrigger(new Trigger(null, instance));
 						}
 					});
 					menu.add(menuItem);
 				}
-				menu.show(this, 0, getHeight());
+				menu.show(component, 0, 0);
 			}
 		}
 	}

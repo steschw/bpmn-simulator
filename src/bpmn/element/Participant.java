@@ -22,13 +22,13 @@ package bpmn.element;
 
 import java.awt.Point;
 
-import bpmn.element.activity.ExpandedProcess;
+import bpmn.element.activity.Process;
 
 @SuppressWarnings("serial")
 public class Participant extends TitledFlowElement {
 
 	public Participant(final String id, final String name,
-			final ElementRef<ExpandedProcess> processRef) {
+			final ElementRef<Process> processRef) {
 		super(id, name);
 	}
 

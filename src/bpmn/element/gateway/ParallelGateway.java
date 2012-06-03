@@ -27,7 +27,7 @@ import bpmn.element.ElementRef;
 import bpmn.element.Graphics;
 import bpmn.element.Rectangle;
 import bpmn.element.SequenceFlow;
-import bpmn.token.Instance;
+import bpmn.instance.Instance;
 import bpmn.token.Token;
 import bpmn.token.TokenCollection;
 
@@ -66,9 +66,9 @@ public class ParallelGateway extends Gateway {
 	}
 
 	@Override
-	protected void tokenForwardToNextElement(final Token token) {
+	protected void tokenForwardToNextElement(final Token token, final Instance instance) {
 		if (isForMerging()) {
-			forwardTokenParallel(token.getInstance());
+			forwardTokenParallel(instance);
 		} else {
 			super.tokenForwardToNextElement(token);
 		}

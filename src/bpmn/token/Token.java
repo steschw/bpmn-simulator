@@ -22,6 +22,8 @@ package bpmn.token;
 
 import java.awt.Color;
 
+import bpmn.instance.Instance;
+
 public class Token implements Cloneable {
 
 	public static final Color HIGHLIGHT_COLOR = new Color(128, 32, 32);
@@ -88,7 +90,7 @@ public class Token implements Cloneable {
 	}
 
 	@Override
-	protected Object clone() throws CloneNotSupportedException {
+	public Object clone() throws CloneNotSupportedException {
 		final Token token = new Token(getInstance());
 		token.previousFlow = previousFlow;
 		token.currentFlow = currentFlow;

@@ -26,7 +26,8 @@ import javax.swing.Icon;
 
 import bpmn.element.Visualization;
 import bpmn.element.event.definition.EventDefinition;
-import bpmn.token.InstanceManager;
+import bpmn.instance.Instance;
+import bpmn.instance.InstanceManager;
 import bpmn.token.Token;
 
 @SuppressWarnings("serial")
@@ -50,12 +51,12 @@ public final class EndEvent
 	}
 
 	@Override
-	protected void tokenForwardToNextElement(final Token token) {
+	protected void tokenForwardToNextElement(final Token token, final Instance instance) {
 		final EventDefinition definition = getDefinition();
 		if (definition != null) {
-			definition.throwHappen(token);
+			definition.throwTrigger(token);
 		}
-		super.tokenForwardToNextElement(token);
+		super.tokenForwardToNextElement(token, instance);
 	}
 
 	@Override

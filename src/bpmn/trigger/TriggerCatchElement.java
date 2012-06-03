@@ -18,15 +18,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package bpmn.element.event;
+package bpmn.trigger;
 
-import bpmn.element.Element;
-import bpmn.token.Instance;
+import bpmn.token.TokenFlow;
 
-public interface CatchEvent extends Element {
+public interface TriggerCatchElement extends TokenFlow {
 
-	void happen(final Instance instance);
+	void catchTrigger(Trigger trigger);
 
-	boolean canHappenManual();
+	boolean canTriggerManual();
 
 }

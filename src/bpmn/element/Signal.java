@@ -20,12 +20,14 @@
  */
 package bpmn.element;
 
+import bpmn.Model;
+
 public class Signal extends InvisibleElement {
 
 	private final String name;
 
-	public Signal(final String id, final String name) {
-		super(id);
+	public Signal(final Model model, final String id, final String name) {
+		super(model, id);
 		this.name = name;
 	}
 

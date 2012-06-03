@@ -114,7 +114,7 @@ public class Config {
 		final Behavior behavior = new Behavior();
 		final Preferences preferences = getRootNode();
 
-		behavior.setKeepEvents(preferences.getBoolean(KEEP_EVENTS, behavior.getKeepEvents()));
+		behavior.setKeepTriggers(preferences.getBoolean(KEEP_EVENTS, behavior.getKeepTriggers()));
 
 		return behavior;
 	}
@@ -122,7 +122,7 @@ public class Config {
 	public void setBehavior(final Behavior behavior) {
 		final Preferences preferences = getRootNode();
 
-		preferences.putBoolean(KEEP_EVENTS, behavior.getKeepEvents());
+		preferences.putBoolean(KEEP_EVENTS, behavior.getKeepTriggers());
 	}
 
 	protected Locale getLocaleFromString(final String string) {

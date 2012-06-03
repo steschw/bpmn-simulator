@@ -26,19 +26,23 @@ import java.awt.event.MouseListener;
 import javax.swing.Icon;
 
 import bpmn.element.ElementRef;
-import bpmn.element.FlowElement;
+import bpmn.element.Graphics;
 import bpmn.element.Message;
-import bpmn.element.SequenceFlow;
 import bpmn.element.Visualization;
-import bpmn.element.event.CatchEvent;
-import bpmn.element.gateway.EventBasedGateway;
-import bpmn.token.Instance;
+import bpmn.instance.Instance;
+import bpmn.instance.InstanceListener;
+import bpmn.instance.InstancePopupMenu;
 import bpmn.token.Token;
+import bpmn.trigger.StoringTriggerCatchElement;
+import bpmn.trigger.Trigger;
+import bpmn.trigger.TriggerCollection;
 
 @SuppressWarnings("serial")
 public final class ReceiveTask
 		extends AbstractMessageTask
-		implements CatchEvent, MouseListener {
+		implements StoringTriggerCatchElement, MouseListener, InstanceListener {
+
+	private TriggerCollection triggers = new TriggerCollection();
 
 	public ReceiveTask(final String id, final String name,
 			final ElementRef<Message> messageRef) {
@@ -47,44 +51,66 @@ public final class ReceiveTask
 	}
 
 	@Override
+	public Trigger getFirstTrigger(final Instance instance) {
+		return triggers.first(instance);
+	}
+
+	@Override
+	public void removeFirstTrigger(final Instance instance) {
+		triggers.removeFirst(instance);
+		repaint();
+	}
+
+	@Override
 	protected Icon getTypeIcon() {
 		return getVisualization().getIcon(Visualization.ICON_RECEIVE);
 	}
 
-	protected int notifyEventBasedGatewaysEventHappen(final Instance instance) {
-		int count = 0;
-		for (final ElementRef<SequenceFlow> incomingRef : getIncoming()) {
-			if (incomingRef.hasElement()) {
-				final SequenceFlow incoming = incomingRef.getElement();
-				final FlowElement flowElement = incoming.getSource();
-				if (flowElement instanceof EventBasedGateway) {
-					((EventBasedGateway)flowElement).eventHappen(this, instance);
-					++count;
-				}
-			}
-		}
-		return count;
-	}
-
 	@Override
-	public boolean canHappenManual() {
+	public boolean canTriggerManual() {
 		return false;
 	}
 
 	@Override
-	public void happen(final Instance instance) {
-		notifyEventBasedGatewaysEventHappen(instance);
-		passFirstTokenToAllOutgoing();
+	public void catchTrigger(final Trigger trigger) {
+		if (getBehavior().getKeepTriggers()) {
+			triggers.add(trigger);
+			trigger.getDestinationInstance().addInstanceListener(this);
+		}
+		notifyTriggerNotifyEvents(this, trigger);
+		passFirstInstanceTokenToAllNextElements(trigger.getDestinationInstance());
+		repaint();
+	}
+
+	@Override
+	public void instanceAdded(final Instance instance) {
+	}
+
+	@Override
+	public void instanceRemoved(final Instance instance) {
+		triggers.removeInstanceTriggers(instance);
+		repaint();
 	}
 
 	@Override
 	protected boolean canForwardTokenToOutgoing(final Token token) {
-		return isGatewayCondition();
+		return isGatewayCondition()
+				|| (triggers.first(token.getInstance()) != null);
+	}
+
+	@Override
+	protected void forwardTokenFromInner(final Token token) {
+		super.forwardTokenFromInner(token);
+		if (!isGatewayCondition()) {
+			triggers.removeFirst(token.getInstance());
+		}
 	}
 
 	@Override
 	public void mouseClicked(final MouseEvent e) {
-		happen(null);
+		if (canTriggerManual()) {
+			InstancePopupMenu.selectToTrigger(this, this, getProcess().getInstances());
+		}
 	}
 
 	@Override
@@ -101,6 +127,13 @@ public final class ReceiveTask
 
 	@Override
 	public void mouseExited(final MouseEvent e) {
+	}
+
+	@Override
+	protected void paintElement(final Graphics g) {
+		super.paintElement(g);
+
+		triggers.paint(g, getElementInnerBounds().getRightTop());
 	}
 
 }

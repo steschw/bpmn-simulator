@@ -30,7 +30,7 @@ import bpmn.element.TokenFlowElement;
 import bpmn.element.event.definition.ConditionalEventDefinition;
 import bpmn.element.event.definition.EventDefinition;
 import bpmn.element.event.definition.TimerEventDefinition;
-import bpmn.token.InstanceManager;
+import bpmn.instance.InstanceManager;
 
 @SuppressWarnings("serial")
 public abstract class AbstractEvent

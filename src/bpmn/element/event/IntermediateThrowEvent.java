@@ -23,12 +23,13 @@ package bpmn.element.event;
 import javax.swing.Icon;
 
 import bpmn.element.event.definition.EventDefinition;
+import bpmn.instance.Instance;
 import bpmn.token.Token;
 
 @SuppressWarnings("serial")
 public final class IntermediateThrowEvent
 		extends IntermediateEvent
-		implements ThrowEvent{
+		implements ThrowEvent {
 
 	public IntermediateThrowEvent(final String id, final String name) {
 		super(id, name);
@@ -40,12 +41,12 @@ public final class IntermediateThrowEvent
 	}
 
 	@Override
-	protected void tokenForwardToNextElement(final Token token) {
+	protected void tokenForwardToNextElement(final Token token, final Instance instance) {
 		final EventDefinition eventDefinition = getDefinition();
 		if (eventDefinition != null) {
-			eventDefinition.throwHappen(token);
+			eventDefinition.throwTrigger(token);
 		}
-		super.tokenForwardToNextElement(token);
+		super.tokenForwardToNextElement(token, instance);
 	}
 
 }

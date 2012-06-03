@@ -20,6 +20,8 @@
  */
 package bpmn.token;
 
+import bpmn.instance.InstanceManager;
+
 public class TokenAnimator extends Animator {
 
 	private final InstanceManager instanceManager;

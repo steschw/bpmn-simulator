@@ -18,30 +18,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package bpmn.token;
+package bpmn.instance;
 
 import java.awt.Color;
 
-public class ColorGenerator {
+import javax.swing.JMenuItem;
 
-	private static final Color[] COLORS = new Color[] {
-			new Color(0xff5c26),
-			new Color(0x2626ff),
-			new Color(0xffff26),
-			new Color(0xc926ff),
-			new Color(0x5cff26),
-			new Color(0x26ff93),
-			new Color(0xff2692),
-			new Color(0x26c9ff),
-		};
+@SuppressWarnings("serial")
+public class InstanceMenuItem extends JMenuItem {
 
-	private int index;
+	private final Instance instance;
 
-	public Color next() {
-		if (index >= COLORS.length) {
-			index = 0;
-		}
-		return COLORS[index++];
+	public InstanceMenuItem(final Instance instance) {
+		super("Instance");
+		this.instance = instance;
+	}
+
+	@Override
+	public Color getForeground() {
+		return (instance == null) ? super.getForeground() : instance.getColor();
 	}
 
 }

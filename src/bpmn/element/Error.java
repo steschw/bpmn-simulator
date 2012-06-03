@@ -20,14 +20,16 @@
  */
 package bpmn.element;
 
+import bpmn.Model;
+
 
 public class Error extends InvisibleElement {
 
 	private final String code;
 	private final String name;
 
-	public Error(final String id, final String code, final String name) {
-		super(id);
+	public Error(final Model model, final String id, final String code, final String name) {
+		super(model, id);
 		this.code = code;
 		this.name = name;
 	}

@@ -59,10 +59,10 @@ public final class SignalEventDefinition extends EventDefinition {
 	}
 
 	@Override
-	public void throwHappen(final Token token) {
-		super.throwHappen(token);
+	public void throwTrigger(final Token token) {
+		super.throwTrigger(token);
 
-		throwHappenToEqualEvents(token);
+		throwTriggerToEqualEvents(token);
 	}
 
 }

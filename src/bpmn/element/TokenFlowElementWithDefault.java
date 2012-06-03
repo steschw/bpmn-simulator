@@ -20,7 +20,7 @@
  */
 package bpmn.element;
 
-import bpmn.token.Instance;
+import bpmn.instance.Instance;
 import bpmn.token.Token;
 
 @SuppressWarnings("serial")

@@ -18,52 +18,51 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package bpmn.element;
+package bpmn.trigger;
 
-import bpmn.Model;
+import java.awt.Color;
 
-public class InvisibleElement implements Element {
+import bpmn.instance.Instance;
 
-	private final Model model;
+public class Trigger implements Comparable<Trigger> {
 
-	private final String id;
+	public static final Color HIGHLIGHT_COLOR = new Color(128, 32, 32);
 
-	private Documentation documentation;
+	private final long time;
 
-	public InvisibleElement(final Model model, final String id) {
+	private final Instance sourceInstance;
+
+	private final Instance destinationInstance;
+
+	public Trigger(final Instance sourceInstance, final Instance destinationInstance) {
 		super();
-		this.model = model;
-		this.id = id;
+		time = System.currentTimeMillis();
+		this.sourceInstance = sourceInstance;
+		this.destinationInstance = destinationInstance;
+	}
+
+	public long getTime() {
+		return time;
+	}
+
+	public Instance getSourceInstance() {
+		return sourceInstance;
+	}
+
+	public Instance getDestinationInstance() {
+		return destinationInstance;
 	}
 
 	@Override
-	public Model getModel() {
-		return model;
+	public int compareTo(final Trigger trigger) {
+		assert getDestinationInstance() == trigger.getDestinationInstance();
+		return (int)(getTime() - trigger.getTime());
 	}
 
 	@Override
-	public String getId() {
-		return id;
+	public int hashCode() {
+		return (int)getTime();
 	}
 
-	@Override
-	public void setDocumentation(final Documentation documentation) {
-		this.documentation = documentation;
-	}
-
-	@Override
-	public boolean hasDocumentation() {
-		return getDocumentation() != null;
-	}
-
-	@Override
-	public Documentation getDocumentation() {
-		return documentation;
-	}
-
-	@Override
-	public String getElementName() {
-		return getId();
-	}
 
 }

@@ -29,12 +29,14 @@ import javax.swing.Icon;
 
 import bpmn.element.Visualization;
 import bpmn.element.activity.ExpandedProcess;
-import bpmn.token.Instance;
-import bpmn.token.InstanceManager;
+import bpmn.instance.Instance;
+import bpmn.instance.InstanceManager;
+import bpmn.trigger.TriggerCatchElement;
+import bpmn.trigger.Trigger;
 
 @SuppressWarnings("serial")
 public final class StartEvent extends AbstractEvent
-		implements CatchEvent, MouseListener {
+		implements TriggerCatchElement, MouseListener {
 
 	public StartEvent(final String id, final String name,
 			final InstanceManager instanceManager) {
@@ -43,7 +45,7 @@ public final class StartEvent extends AbstractEvent
 	}
 
 	@Override
-	public boolean canHappenManual() {
+	public boolean canTriggerManual() {
 		final ExpandedProcess process = getProcess();
 		return (getInstanceManager() != null)
 				&& (process != null) && !process.hasIncoming()
@@ -51,9 +53,10 @@ public final class StartEvent extends AbstractEvent
 	}
 
 	@Override
-	public void happen(final Instance instance) {
-		if (instance != null) {
-			instance.newChildInstance(getProcess()).newToken(this);
+	public void catchTrigger(final Trigger trigger) {
+		final Instance destinationInstance = trigger.getDestinationInstance();
+		if (destinationInstance != null) {
+			destinationInstance.newChildInstance(getProcess()).newToken(this);
 		} else {
 			getInstanceManager().newInstance(getProcess()).newToken(this);
 		}
@@ -77,15 +80,15 @@ public final class StartEvent extends AbstractEvent
 	}
 
 	protected void updateCursor() {
-		setCursor(canHappenManual()
+		setCursor(canTriggerManual()
 				? new Cursor(Cursor.HAND_CURSOR)
 				: Cursor.getDefaultCursor());
 	}
 
 	@Override
 	public void mouseClicked(final MouseEvent event) {
-		if (canHappenManual()) {
-			happen(null);
+		if (canTriggerManual()) {
+			catchTrigger(new Trigger(null, null));
 		}
 	}
 

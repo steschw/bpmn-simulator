@@ -18,52 +18,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package bpmn.element;
+package bpmn.element.activity;
 
-import bpmn.Model;
+import java.util.Collection;
 
-public class InvisibleElement implements Element {
+import bpmn.element.Element;
+import bpmn.instance.Instance;
 
-	private final Model model;
+public interface Process extends Activity {
 
-	private final String id;
+	Collection<Element> getElements();
 
-	private Documentation documentation;
-
-	public InvisibleElement(final Model model, final String id) {
-		super();
-		this.model = model;
-		this.id = id;
-	}
-
-	@Override
-	public Model getModel() {
-		return model;
-	}
-
-	@Override
-	public String getId() {
-		return id;
-	}
-
-	@Override
-	public void setDocumentation(final Documentation documentation) {
-		this.documentation = documentation;
-	}
-
-	@Override
-	public boolean hasDocumentation() {
-		return getDocumentation() != null;
-	}
-
-	@Override
-	public Documentation getDocumentation() {
-		return documentation;
-	}
-
-	@Override
-	public String getElementName() {
-		return getId();
-	}
+	Collection<Instance> getInstances();
 
 }

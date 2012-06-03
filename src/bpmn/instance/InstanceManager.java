@@ -18,13 +18,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package bpmn.token;
+package bpmn.instance;
 
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.Vector;
 
-import bpmn.element.activity.Activity;
+import bpmn.element.activity.Process;
 
 public class InstanceManager {
 
@@ -76,8 +76,8 @@ public class InstanceManager {
 		notifyInstanceRemoved(instance);
 	}
 
-	public Instance newInstance(final Activity activity) {
-		final Instance instance = new Instance(this, activity, colorGenerator.next());
+	public Instance newInstance(final Process process) {
+		final Instance instance = new Instance(this, process, colorGenerator.next());
 		add(instance);
 		return instance;
 	}

@@ -188,8 +188,8 @@ public class Instance {
 	 * child instances
 	 */
 
-	public Instance newChildInstance(final Process process) {
-		final Instance childInstance = new Instance(this, process);
+	public Instance newChildInstance(final Activity activity) {
+		final Instance childInstance = new Instance(this, activity);
 		addChildInstance(childInstance);
 		return childInstance;
 	}

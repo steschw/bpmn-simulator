@@ -67,7 +67,7 @@ import bpmn.element.gateway.*;
 import bpmn.instance.Instance;
 import bpmn.instance.InstanceManager;
 import bpmn.token.TokenAnimator;
-import bpmn.trigger.TriggerCatchElement;
+import bpmn.trigger.TriggerCatchingElement;
 
 public class Model implements ErrorHandler {
 
@@ -136,8 +136,8 @@ public class Model implements ErrorHandler {
 		return events;
 	}
 
-	public Collection<TriggerCatchElement> getCatchEvents() {
-		return getElements(TriggerCatchElement.class);
+	public Collection<TriggerCatchingElement> getCatchEvents() {
+		return getElements(TriggerCatchingElement.class);
 	}
 
 	protected void addElementToContainer(final VisibleElement element,
@@ -771,6 +771,10 @@ public class Model implements ErrorHandler {
 		return getAttributeElementRef(node, "elementRef");
 	}
 
+	protected boolean getInstantiateAttribute(final Node node) {
+		return getAttributeBoolean(node, "instantiate", false);
+	}
+
 	protected boolean readElementTask(final Node node, final ExpandedProcess process) {
 		if (isElementNode(node, BPMN, "manualTask")) { //$NON-NLS-1$
 			final ManualTask task = new ManualTask(getIdAttribute(node),
@@ -804,7 +808,8 @@ public class Model implements ErrorHandler {
 			addElementToContainer(task, process);
 		} else if (isElementNode(node, BPMN, "receiveTask")) { //$NON-NLS-1$
 			final ReceiveTask task = new ReceiveTask(getIdAttribute(node),
-					getNameAttribute(node), getElementRefAttribute(node));
+					getNameAttribute(node), getInstantiateAttribute(node),
+					getElementRefAttribute(node));
 			readTask(node, task);
 			addElementToContainer(task, process);
 		} else if (isElementNode(node, BPMN, "task")) { //$NON-NLS-1$
@@ -868,7 +873,8 @@ public class Model implements ErrorHandler {
 			addElementToContainer(element, process);
 		} else if (isElementNode(node, BPMN, "eventBasedGateway")) { //$NON-NLS-1$
 			final EventBasedGateway element = new EventBasedGateway(
-					getIdAttribute(node), getNameAttribute(node));
+					getIdAttribute(node), getNameAttribute(node),
+					getInstantiateAttribute(node));
 			readGateway(node, element);
 			addElementToContainer(element, process);
 		} else {
@@ -1034,11 +1040,11 @@ public class Model implements ErrorHandler {
 		logFrame.setVisible(true);
 	}
 
-	public Collection<TriggerCatchElement> getManuallStartEvents() {
-		final Collection<TriggerCatchElement> events = new ArrayList<TriggerCatchElement>(); 
+	public Collection<TriggerCatchingElement> getManuallStartEvents() {
+		final Collection<TriggerCatchingElement> events = new ArrayList<TriggerCatchingElement>(); 
 		for (ElementRef<VisibleElement> element : elements.values()) {
-			if (element.getElement() instanceof TriggerCatchElement) {
-				final TriggerCatchElement event = (TriggerCatchElement)element.getElement();
+			if (element.getElement() instanceof TriggerCatchingElement) {
+				final TriggerCatchingElement event = (TriggerCatchingElement)element.getElement();
 				if (event.canTriggerManual()) {
 					events.add(event);
 				}

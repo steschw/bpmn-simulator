@@ -20,8 +20,10 @@
  */
 package bpmn.trigger;
 
-public interface TriggerNotifyElement {
+import bpmn.token.TokenFlow;
 
-	void eventTriggered(TriggerCatchingElement catchElement, Trigger trigger);
+public interface TriggerCatchingElement extends TokenFlow, TriggerCatching {
+
+	boolean canTriggerManual();
 
 }

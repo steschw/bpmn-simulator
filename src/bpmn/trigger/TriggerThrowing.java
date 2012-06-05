@@ -20,8 +20,10 @@
  */
 package bpmn.trigger;
 
-public interface TriggerNotifyElement {
+import bpmn.token.Token;
 
-	void eventTriggered(TriggerCatchingElement catchElement, Trigger trigger);
+public interface TriggerThrowing {
+
+	void throwTrigger(Token token);
 
 }

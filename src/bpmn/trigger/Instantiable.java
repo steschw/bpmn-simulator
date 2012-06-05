@@ -20,12 +20,8 @@
  */
 package bpmn.trigger;
 
-import bpmn.instance.Instance;
+public interface Instantiable {
 
-public interface StoringTriggerCatchElement extends TriggerCatchElement {
-
-	Trigger getFirstTrigger(final Instance instance);
-
-	void removeFirstTrigger(final Instance instance);
+	boolean isInstantiable();
 
 }

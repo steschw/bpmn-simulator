@@ -30,10 +30,15 @@ import bpmn.element.Visualization;
 import bpmn.element.activity.ExpandedProcess;
 import bpmn.element.event.AbstractEvent;
 import bpmn.element.event.Event;
+import bpmn.instance.Instance;
 import bpmn.token.Token;
-import bpmn.trigger.TriggerCatchElement;
+import bpmn.trigger.Trigger;
+import bpmn.trigger.TriggerCatching;
+import bpmn.trigger.TriggerCatchingElement;
+import bpmn.trigger.TriggerThrowing;
 
-public abstract class EventDefinition {
+public abstract class EventDefinition
+	implements TriggerCatching, TriggerThrowing{
 
 	private final AbstractEvent event;
 
@@ -52,19 +57,30 @@ public abstract class EventDefinition {
 		return ((VisibleElement)token.getCurrentFlow()).getProcess();		
 	}
 
+	@Override
 	public void throwTrigger(final Token token) {
 	}
 
 	protected void throwTriggerToEqualEvents(final Token token) {
 		final Model model = getProcessByToken(token).getModel();
-		final Collection<TriggerCatchElement> catchEvents =  model.getCatchEvents();
-		for (final TriggerCatchElement catchEvent : catchEvents) {
+		final Collection<TriggerCatchingElement> catchEvents =  model.getCatchEvents();
+		for (final TriggerCatchingElement catchEvent : catchEvents) {
 			if (catchEvent instanceof Event) {
 				final Event event = (Event)catchEvent; 
 				if (equals(event.getDefinition())) {
-					catchEvent.catchTrigger(null);
+					catchEvent.catchTrigger(new Trigger(token.getInstance(), null));
 				}
 			}
+		}
+	}
+
+	@Override
+	public void catchTrigger(final Trigger trigger) {
+		final Instance destinationInstance = trigger.getDestinationInstance();
+		if (destinationInstance == null) {
+			getEvent().passAllTokenToAllNextElements();
+		} else {
+			getEvent().passFirstInstanceTokenToAllNextElements(destinationInstance);
 		}
 	}
 

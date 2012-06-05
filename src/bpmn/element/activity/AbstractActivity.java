@@ -151,4 +151,13 @@ public abstract class AbstractActivity
 		paintOutgoingTokens(g);
 	}
 
+	@Override
+	public Instance createInstance(final Instance parentInstance) {
+		if (parentInstance == null) {
+			return getModel().getInstanceManager().newInstance(this);
+		} else {
+			return parentInstance.newChildInstance(this);
+		}
+	}
+
 }

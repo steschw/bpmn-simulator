@@ -21,6 +21,8 @@
 package bpmn.element;
 
 import java.awt.Color;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
 
 import bpmn.Graphics;
@@ -30,16 +32,19 @@ import bpmn.instance.Instance;
 import bpmn.token.Token;
 import bpmn.token.TokenCollection;
 import bpmn.token.TokenFlow;
+import bpmn.trigger.Instantiable;
 import bpmn.trigger.Trigger;
-import bpmn.trigger.TriggerCatchElement;
+import bpmn.trigger.TriggerCatchingElement;
 import bpmn.trigger.TriggerNotifyElement;
 
 @SuppressWarnings("serial")
-public abstract class TokenFlowElement extends FlowElement implements TokenFlow {
+public abstract class AbstractTokenFlowElement
+	extends FlowElement
+	implements TokenFlow {
 
 	private final TokenCollection innerTokens = new TokenCollection();
 
-	public TokenFlowElement(final String id, final String name) {
+	public AbstractTokenFlowElement(final String id, final String name) {
 		super(id, name);
 	}
 
@@ -96,7 +101,7 @@ public abstract class TokenFlowElement extends FlowElement implements TokenFlow 
 
 	protected void tokenForwardToNextElement(final Token token,
 			final Instance instance) {
-		if (passTokenToAllOutgoing(token, instance)) {
+		if (passTokenToAllNextElements(token, instance)) {
 			setException(false);
 			token.remove();
 		} else {
@@ -129,11 +134,11 @@ public abstract class TokenFlowElement extends FlowElement implements TokenFlow 
 		}
 	}
 
-	protected final boolean passTokenToAllOutgoing(final Token token) {
-		return passTokenToAllOutgoing(token, token.getInstance());
+	protected final boolean passTokenToAllNextElements(final Token token) {
+		return passTokenToAllNextElements(token, token.getInstance());
 	}
 
-	protected boolean passTokenToAllOutgoing(final Token token, final Instance instance) {
+	protected boolean passTokenToAllNextElements(final Token token, final Instance instance) {
 		if (hasOutgoing()) {
 			return passTokenToAllOutgoingSequenceFlows(token, instance) > 0;
 		} else {
@@ -200,36 +205,82 @@ public abstract class TokenFlowElement extends FlowElement implements TokenFlow 
 		return false;
 	}
 
-	protected void passFirstTokenToAllOutgoing() {
+	public void passAllTokenToAllNextElements() {
+		Collection<Token> tokens = new ArrayList<Token>(getTokens());
+		for (final Token token : tokens) {
+			passTokenToAllNextElements(token);
+			token.remove();
+		}
+	}
+
+	public void passFirstTokenToAllNextElements() {
 		final Iterator<Token> iterator = getTokens().iterator();
 		if (iterator.hasNext()) {
 			final Token firstToken = iterator.next();
-			passTokenToAllOutgoing(firstToken);
+			passTokenToAllNextElements(firstToken);
 			firstToken.remove();
 		}
 	}
 
-	protected void passFirstInstanceTokenToAllNextElements(final Instance instance) {
+	public void passFirstInstanceTokenToAllNextElements(final Instance instance) {
 		for (final Token token : getTokens()) {
 			if (token.getInstance().equals(instance)) {
-				passTokenToAllOutgoing(token);
+				passTokenToAllNextElements(token);
 				token.remove();
 				break;
 			}
 		}
 	}
 
-	protected int notifyTriggerNotifyEvents(
-			final TriggerCatchElement catchElement, final Trigger trigger) {
-		int count = 0;
+	protected Collection<FlowElement> getIncomingFlowElements() {
+		Collection<FlowElement> incomingFlowElements = new ArrayList<FlowElement>();
 		for (final ElementRef<SequenceFlow> incomingRef : getIncoming()) {
 			if (incomingRef.hasElement()) {
 				final SequenceFlow incoming = incomingRef.getElement();
 				final FlowElement flowElement = incoming.getSource();
-				if (flowElement instanceof TriggerNotifyElement) {
-					((TriggerNotifyElement)flowElement).eventTriggered(catchElement, trigger);
-					++count;
+				if (flowElement != null) {
+					incomingFlowElements.add(flowElement);
 				}
+			}
+		}
+		return incomingFlowElements;
+	}
+
+	protected Collection<FlowElement> getOutgoingFlowElements() {
+		Collection<FlowElement> outgoingFlowElements = new ArrayList<FlowElement>();
+		for (final ElementRef<SequenceFlow> outgoingRef : getOutgoing()) {
+			if (outgoingRef.hasElement()) {
+				final SequenceFlow outgoing = outgoingRef.getElement();
+				final FlowElement flowElement = outgoing.getTarget();
+				if (flowElement != null) {
+					outgoingFlowElements.add(flowElement);
+				}
+			}
+		}
+		return outgoingFlowElements;
+	}
+
+	protected boolean areAllIncommingFlowElementsInstantiable() {
+		final Collection<FlowElement> incomingFlowElements = getIncomingFlowElements();
+		if (incomingFlowElements.isEmpty()) {
+			return false;
+		}
+		for (final FlowElement flowElement : incomingFlowElements) {
+			if (!((flowElement instanceof Instantiable)
+					&& ((Instantiable)flowElement).isInstantiable())) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	protected int notifyTriggerNotifyEvents(
+			final TriggerCatchingElement catchElement, final Trigger trigger) {
+		int count = 0;
+		for (final FlowElement flowElement : getIncomingFlowElements()) {
+			if (flowElement instanceof TriggerNotifyElement) {
+				((TriggerNotifyElement)flowElement).eventTriggered(catchElement, trigger);
+				++count;
 			}
 		}
 		return count;

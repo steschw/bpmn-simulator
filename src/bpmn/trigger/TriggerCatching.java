@@ -20,8 +20,8 @@
  */
 package bpmn.trigger;
 
-public interface TriggerNotifyElement {
+public interface TriggerCatching {
 
-	void eventTriggered(TriggerCatchingElement catchElement, Trigger trigger);
+	void catchTrigger(Trigger trigger);
 
 }

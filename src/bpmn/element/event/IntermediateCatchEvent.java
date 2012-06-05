@@ -27,24 +27,32 @@ import java.awt.event.MouseListener;
 import javax.swing.Icon;
 
 import bpmn.Graphics;
+import bpmn.element.event.definition.EventDefinition;
 import bpmn.instance.Instance;
 import bpmn.instance.InstanceListener;
 import bpmn.instance.InstancePopupMenu;
 import bpmn.token.Token;
-import bpmn.trigger.StoringTriggerCatchElement;
+import bpmn.trigger.Instantiable;
+import bpmn.trigger.StoringTriggerCatchingElement;
 import bpmn.trigger.Trigger;
 import bpmn.trigger.TriggerCollection;
 
 @SuppressWarnings("serial")
 public final class IntermediateCatchEvent
 		extends IntermediateEvent
-		implements StoringTriggerCatchElement, MouseListener, InstanceListener {
+		implements StoringTriggerCatchingElement, Instantiable,
+				MouseListener, InstanceListener {
 
 	private TriggerCollection triggers = new TriggerCollection();
 
 	public IntermediateCatchEvent(final String id, final String name) {
 		super(id, name);
 		addMouseListener(this);
+	}
+
+	@Override
+	public boolean isInstantiable() {
+		return areAllIncommingFlowElementsInstantiable();
 	}
 
 	@Override
@@ -74,11 +82,21 @@ public final class IntermediateCatchEvent
 
 	@Override
 	public void catchTrigger(final Trigger trigger) {
-		if (getBehavior().getKeepTriggers()) {
+		final Instance destinationInstance = trigger.getDestinationInstance();
+		if (getBehavior().getKeepTriggers() && !isInstantiable()) {
 			triggers.add(trigger);
-			trigger.getDestinationInstance().addInstanceListener(this);
+			destinationInstance.addInstanceListener(this);
 		} else {
-			passFirstInstanceTokenToAllNextElements(trigger.getDestinationInstance());
+			final EventDefinition definition = getDefinition();
+			if (definition == null) {
+				if (destinationInstance == null) {
+					passAllTokenToAllNextElements();
+				} else {
+					passFirstInstanceTokenToAllNextElements(destinationInstance);
+				}
+			} else {
+				definition.catchTrigger(trigger);
+			}
 			notifyTriggerNotifyEvents(this, trigger);
 		}
 		repaint();

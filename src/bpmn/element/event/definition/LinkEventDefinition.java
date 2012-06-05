@@ -31,7 +31,7 @@ import bpmn.element.event.AbstractEvent;
 import bpmn.element.event.IntermediateCatchEvent;
 import bpmn.instance.Instance;
 import bpmn.token.Token;
-import bpmn.trigger.TriggerCatchElement;
+import bpmn.trigger.TriggerCatchingElement;
 import bpmn.trigger.Trigger;
 
 public final class LinkEventDefinition extends EventDefinition {
@@ -54,7 +54,7 @@ public final class LinkEventDefinition extends EventDefinition {
 				: Visualization.ICON_LINK);
 	}
 
-	protected static TriggerCatchElement findLinkTargetInProcess(
+	protected static TriggerCatchingElement findLinkTargetInProcess(
 			final Process process, final String targetName) {
 		for (final Element element : process.getElements()) {
 			if (element instanceof IntermediateCatchEvent) {
@@ -63,7 +63,7 @@ public final class LinkEventDefinition extends EventDefinition {
 				if (definition instanceof LinkEventDefinition) {
 					final String name = ((LinkEventDefinition)definition).getName();
 					if (targetName.equals(name)) {
-						return event; 
+						return event;
 					}
 				}
 			}
@@ -71,10 +71,10 @@ public final class LinkEventDefinition extends EventDefinition {
 		return null;
 	}
 
-	protected TriggerCatchElement findLinkTarget(
+	protected TriggerCatchingElement findLinkTarget(
 			final Collection<Process> processes, final String targetName) {
 		for (final Process process : processes) {
-			final TriggerCatchElement linkTarget = findLinkTargetInProcess(process, targetName);
+			final TriggerCatchingElement linkTarget = findLinkTargetInProcess(process, targetName);
 			if (linkTarget != null) {
 				return linkTarget; 
 			}
@@ -88,7 +88,7 @@ public final class LinkEventDefinition extends EventDefinition {
 
 		final Process process = getProcessByToken(token);
 		final String targetName = getName();
-		TriggerCatchElement linkTarget
+		TriggerCatchingElement linkTarget
 				= findLinkTargetInProcess(process, targetName);
 		if (linkTarget == null) {
 			linkTarget = findLinkTarget(process.getModel().getProcesses(), targetName);
@@ -97,6 +97,12 @@ public final class LinkEventDefinition extends EventDefinition {
 			final Instance instance = token.getInstance();
 			linkTarget.catchTrigger(new Trigger(instance, instance));
 		}
+	}
+
+	@Override
+	public void catchTrigger(final Trigger trigger) {
+		trigger.getSourceInstance().newToken(getEvent());
+		super.catchTrigger(trigger);
 	}
 
 }

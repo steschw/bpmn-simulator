@@ -21,7 +21,10 @@
 package bpmn.element.activity;
 
 import bpmn.element.Element;
+import bpmn.instance.Instance;
 
 public interface Activity extends Element {
+
+	Instance createInstance(Instance parentInstance);
 
 }

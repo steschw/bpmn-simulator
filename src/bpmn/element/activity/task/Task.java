@@ -68,20 +68,22 @@ public class Task extends AbstractActivity {
 		return null;
 	}
 
-	public void paintTypeIcon(final Graphics g) {
-		final Icon typeIcon = getTypeIcon();
-		if (typeIcon != null) {
-			final Rectangle innerBounds = getElementInnerBounds();
-			final Point position = innerBounds.getLeftTop();
-			position.translate(TYPEICON_MARGIN, TYPEICON_MARGIN);
-			g.drawIcon(typeIcon, position);
-		}
+	public void paintTypeIcon(final Graphics g, final Icon icon, final Point position) {
+		g.drawIcon(icon, position);
 	}
 
 	@Override
 	protected void paintElement(final Graphics g) {
-		g.drawRoundRect(getElementInnerBounds(), ARC_LENGTH, ARC_LENGTH);
-		paintTypeIcon(g);
+		final Rectangle innerBounds = getElementInnerBounds();
+
+		g.drawRoundRect(innerBounds, ARC_LENGTH, ARC_LENGTH);
+
+		final Icon typeIcon = getTypeIcon();
+		if (typeIcon != null) {
+			final Point position = innerBounds.getLeftTop();
+			position.translate(TYPEICON_MARGIN, TYPEICON_MARGIN);
+			paintTypeIcon(g, typeIcon, position);
+		}
 	}
 
 	@Override

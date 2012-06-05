@@ -51,10 +51,10 @@ public class InstancesTree extends JTree implements InstanceListener {
 				final Object userObject = node.getUserObject();
 				if (userObject instanceof Instance) {
 					final Instance instance = (Instance)userObject;
-					final StringBuilder text = new StringBuilder(instance.getProcess().getElementName());
+					final StringBuilder text = new StringBuilder(instance.getActivity().getElementName());
 					text.append(" (");
 					text.append(instance.getTokenCount(false));
-					text.append(" tokens)");
+					text.append(" token)");
 					label.setText(text.toString());
 					label.setOpaque(true);
 					label.setBackground(instance.getColor());

@@ -29,14 +29,14 @@ import javax.swing.Icon;
 
 import bpmn.element.Visualization;
 import bpmn.element.activity.ExpandedProcess;
-import bpmn.instance.Instance;
 import bpmn.instance.InstanceManager;
-import bpmn.trigger.TriggerCatchElement;
+import bpmn.trigger.Instantiable;
+import bpmn.trigger.TriggerCatchingElement;
 import bpmn.trigger.Trigger;
 
 @SuppressWarnings("serial")
 public final class StartEvent extends AbstractEvent
-		implements TriggerCatchElement, MouseListener {
+		implements TriggerCatchingElement, Instantiable, MouseListener {
 
 	public StartEvent(final String id, final String name,
 			final InstanceManager instanceManager) {
@@ -54,12 +54,7 @@ public final class StartEvent extends AbstractEvent
 
 	@Override
 	public void catchTrigger(final Trigger trigger) {
-		final Instance destinationInstance = trigger.getDestinationInstance();
-		if (destinationInstance != null) {
-			destinationInstance.newChildInstance(getProcess()).newToken(this);
-		} else {
-			getInstanceManager().newInstance(getProcess()).newToken(this);
-		}
+		getProcess().createInstance(trigger.getDestinationInstance()).newToken(this);
 	}
 
 	@Override
@@ -111,6 +106,11 @@ public final class StartEvent extends AbstractEvent
 	@Override
 	protected Icon getTypeIcon() {
 		return getDefinition().getIcon(getVisualization(), false);
+	}
+
+	@Override
+	public boolean isInstantiable() {
+		return true;
 	}
 
 }

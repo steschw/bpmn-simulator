@@ -28,14 +28,14 @@ import java.util.Iterator;
 
 import javax.swing.JPopupMenu;
 
-import bpmn.trigger.TriggerCatchElement;
+import bpmn.trigger.TriggerCatchingElement;
 import bpmn.trigger.Trigger;
 
 @SuppressWarnings("serial")
 public class InstancePopupMenu extends JPopupMenu {
 
 	public static void selectToTrigger(final Component component,
-			final TriggerCatchElement catchElement, final Collection<Instance> instances) {
+			final TriggerCatchingElement catchElement, final Collection<Instance> instances) {
 		if (!instances.isEmpty()) {
 			final Iterator<Instance> i = instances.iterator();
 			if (instances.size() == 1) {

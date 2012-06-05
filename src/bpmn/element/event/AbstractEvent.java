@@ -26,7 +26,7 @@ import javax.swing.Icon;
 
 import bpmn.Graphics;
 import bpmn.element.Rectangle;
-import bpmn.element.TokenFlowElement;
+import bpmn.element.AbstractTokenFlowElement;
 import bpmn.element.event.definition.ConditionalEventDefinition;
 import bpmn.element.event.definition.EventDefinition;
 import bpmn.element.event.definition.TimerEventDefinition;
@@ -34,7 +34,7 @@ import bpmn.instance.InstanceManager;
 
 @SuppressWarnings("serial")
 public abstract class AbstractEvent
-		extends TokenFlowElement
+		extends AbstractTokenFlowElement
 		implements Event {
 
 	private static final int INNER_CIRCLE_MARGIN = 4;

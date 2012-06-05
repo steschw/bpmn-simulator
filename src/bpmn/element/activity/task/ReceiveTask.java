@@ -20,6 +20,8 @@
  */
 package bpmn.element.activity.task;
 
+import java.awt.Dimension;
+import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
@@ -28,26 +30,40 @@ import javax.swing.Icon;
 import bpmn.Graphics;
 import bpmn.element.ElementRef;
 import bpmn.element.Message;
+import bpmn.element.Rectangle;
 import bpmn.element.Visualization;
 import bpmn.instance.Instance;
 import bpmn.instance.InstanceListener;
 import bpmn.instance.InstancePopupMenu;
 import bpmn.token.Token;
-import bpmn.trigger.StoringTriggerCatchElement;
+import bpmn.trigger.Instantiable;
+import bpmn.trigger.StoringTriggerCatchingElement;
 import bpmn.trigger.Trigger;
 import bpmn.trigger.TriggerCollection;
 
 @SuppressWarnings("serial")
 public final class ReceiveTask
 		extends AbstractMessageTask
-		implements StoringTriggerCatchElement, MouseListener, InstanceListener {
+		implements StoringTriggerCatchingElement, Instantiable,
+				MouseListener, InstanceListener {
+
+	private static final int INSTANTIATE_MARGIN = 4;
 
 	private TriggerCollection triggers = new TriggerCollection();
 
+	private final boolean instantiate;
+
 	public ReceiveTask(final String id, final String name,
+			final boolean instantiate,
 			final ElementRef<Message> messageRef) {
 		super(id, name, messageRef);
+		this.instantiate = instantiate;
 		addMouseListener(this);
+	}
+
+	@Override
+	public boolean isInstantiable() {
+		return instantiate || areAllIncommingFlowElementsInstantiable();
 	}
 
 	@Override
@@ -73,12 +89,17 @@ public final class ReceiveTask
 
 	@Override
 	public void catchTrigger(final Trigger trigger) {
-		if (getBehavior().getKeepTriggers()) {
-			triggers.add(trigger);
-			trigger.getDestinationInstance().addInstanceListener(this);
+		final boolean incomingInstantiable = areAllIncommingFlowElementsInstantiable(); 
+		if (isInstantiable() && !incomingInstantiable) {
+			getProcess().createInstance(null).newToken(this);
 		} else {
-			passFirstInstanceTokenToAllNextElements(trigger.getDestinationInstance());
-			notifyTriggerNotifyEvents(this, trigger);
+			if (getBehavior().getKeepTriggers() && !incomingInstantiable) {
+				triggers.add(trigger);
+				trigger.getDestinationInstance().addInstanceListener(this);
+			} else {
+				passFirstInstanceTokenToAllNextElements(trigger.getDestinationInstance());
+				notifyTriggerNotifyEvents(this, trigger);
+			}
 		}
 		repaint();
 	}
@@ -95,8 +116,9 @@ public final class ReceiveTask
 
 	@Override
 	protected boolean canForwardTokenToOutgoing(final Token token) {
-		return isGatewayCondition()
-				|| (triggers.first(token.getInstance()) != null);
+		return super.canForwardTokenToOutgoing(token)
+				&& (isInstantiable() || isGatewayCondition()
+				|| (triggers.first(token.getInstance()) != null));
 	}
 
 	@Override
@@ -135,6 +157,18 @@ public final class ReceiveTask
 		super.paintElement(g);
 
 		triggers.paint(g, getElementInnerBounds().getRightTop());
+	}
+
+	@Override
+	public void paintTypeIcon(final Graphics g, final Icon icon, final Point position) {
+		super.paintTypeIcon(g, icon, position);
+
+		if (isInstantiable()) {
+			final Rectangle rect = new Rectangle(position,
+					new Dimension(icon.getIconWidth(), icon.getIconWidth()));
+			rect.grow(INSTANTIATE_MARGIN, INSTANTIATE_MARGIN);
+			g.drawOval(rect);
+		}
 	}
 
 }

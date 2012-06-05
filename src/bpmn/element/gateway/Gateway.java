@@ -73,7 +73,7 @@ public abstract class Gateway extends TokenFlowElementWithDefault {
 	protected final void forwardMergedTokensToAllOutgoing(final TokenCollection tokens) {
 		final Token mergedToken = tokens.merge();
 		if (mergedToken != null) {
-			passTokenToAllOutgoing(mergedToken);
+			passTokenToAllNextElements(mergedToken);
 			mergedToken.remove();
 		}
 	}

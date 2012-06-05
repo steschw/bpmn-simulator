@@ -35,13 +35,13 @@ import bpmn.element.Visualization;
 import bpmn.element.activity.AbstractActivity;
 import bpmn.token.Token;
 import bpmn.token.TokenCollection;
-import bpmn.trigger.TriggerCatchElement;
+import bpmn.trigger.TriggerCatchingElement;
 import bpmn.trigger.Trigger;
 
 @SuppressWarnings("serial")
 public final class BoundaryEvent
 		extends AbstractEvent
-		implements TriggerCatchElement, MouseListener {
+		implements TriggerCatchingElement, MouseListener {
 
 	private final boolean cancelActivity;
 	private final ElementRef<AbstractActivity> attachedToRef;

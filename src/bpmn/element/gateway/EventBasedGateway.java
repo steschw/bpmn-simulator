@@ -28,16 +28,28 @@ import bpmn.element.SequenceFlow;
 import bpmn.instance.Instance;
 import bpmn.token.Token;
 import bpmn.token.TokenCollection;
-import bpmn.trigger.TriggerCatchElement;
-import bpmn.trigger.StoringTriggerCatchElement;
+import bpmn.trigger.Instantiable;
+import bpmn.trigger.TriggerCatchingElement;
+import bpmn.trigger.StoringTriggerCatchingElement;
 import bpmn.trigger.Trigger;
 import bpmn.trigger.TriggerNotifyElement;
 
 @SuppressWarnings("serial")
-public class EventBasedGateway extends Gateway implements TriggerNotifyElement {
+public class EventBasedGateway
+	extends Gateway
+	implements TriggerNotifyElement, Instantiable {
 
-	public EventBasedGateway(final String id, final String name) {
+	private final boolean instantiate;
+
+	public EventBasedGateway(final String id, final String name,
+			final boolean instantiate) {
 		super(id, name);
+		this.instantiate = instantiate;
+	}
+
+	@Override
+	public boolean isInstantiable() {
+		return instantiate;
 	}
 
 	@Override
@@ -47,13 +59,15 @@ public class EventBasedGateway extends Gateway implements TriggerNotifyElement {
 		final Rectangle bounds = getElementInnerBounds();
 		bounds.shrinkHalf();
 		g.drawOval(bounds);
-		bounds.shrink(2, 2, 2, 2);
-		g.drawOval(bounds);
+		if (!isInstantiable()) {
+			bounds.shrink(2, 2, 2, 2);
+			g.drawOval(bounds);
+		}
 		bounds.shrink(2, 2, 2, 2);
 		g.drawPentagon(bounds);
 	}
 
-	protected SequenceFlow getSequenceFlowToCatchElement(final TriggerCatchElement catchElement) {
+	protected SequenceFlow getSequenceFlowToCatchElement(final TriggerCatchingElement catchElement) {
 		for (ElementRef<SequenceFlow> outgoingRef : getOutgoing()) {
 			if (outgoingRef.hasElement()) {
 				final SequenceFlow outgoing = outgoingRef.getElement();
@@ -66,35 +80,37 @@ public class EventBasedGateway extends Gateway implements TriggerNotifyElement {
 	}
 
 	@Override
-	public void eventTriggered(final TriggerCatchElement catchElement, final Trigger trigger) {
+	public void eventTriggered(final TriggerCatchingElement catchElement, final Trigger trigger) {
 		final SequenceFlow sequenceFlow = getSequenceFlowToCatchElement(catchElement);
+		assert sequenceFlow != null;
 		if (sequenceFlow != null) {
-			final TokenCollection tokens = getInnerTokens().byInstance(trigger.getDestinationInstance());
-			if (!tokens.isEmpty()) {
-				final Token token = tokens.firstElement();
-				token.passTo(sequenceFlow);
-				token.remove();
+			if (isInstantiable()) {
+				final Instance instance = getProcess().createInstance(null);
+				instance.newToken(sequenceFlow);
+			} else {
+				final TokenCollection tokens = getInnerTokens().byInstance(trigger.getDestinationInstance());
+				if (!tokens.isEmpty()) {
+					final Token token = tokens.firstElement();
+					token.passTo(sequenceFlow);
+					token.remove();
+				}
 			}
 		}
 	}
 
-	private StoringTriggerCatchElement getTargetCatchElement(final Token token) {
+	private StoringTriggerCatchingElement getTargetCatchElement(final Token token) {
 		final Instance instance = token.getInstance();
 		Trigger targetTrigger = null;
-		StoringTriggerCatchElement targetCatchElement = null;
-		for (ElementRef<SequenceFlow> outgoingRef : getOutgoing()) {
-			if (outgoingRef.hasElement()) {
-				final SequenceFlow sequenceFlow = outgoingRef.getElement(); 
-				final FlowElement flowElement = sequenceFlow.getTarget();
-				if (flowElement instanceof StoringTriggerCatchElement) {
-					final StoringTriggerCatchElement catchEvent = (StoringTriggerCatchElement)flowElement;
-					final Trigger catchTrigger = catchEvent.getFirstTrigger(instance);
-					if ((catchTrigger != null)
-							&& ((targetTrigger == null)
-									|| (catchTrigger.getTime() < targetTrigger.getTime()))) {
-						targetTrigger = catchTrigger;
-						targetCatchElement = catchEvent;
-					}
+		StoringTriggerCatchingElement targetCatchElement = null;
+		for (FlowElement flowElement : getOutgoingFlowElements()) {
+			if (flowElement instanceof StoringTriggerCatchingElement) {
+				final StoringTriggerCatchingElement catchEvent = (StoringTriggerCatchingElement)flowElement;
+				final Trigger catchTrigger = catchEvent.getFirstTrigger(instance);
+				if ((catchTrigger != null)
+						&& ((targetTrigger == null)
+								|| (catchTrigger.getTime() < targetTrigger.getTime()))) {
+					targetTrigger = catchTrigger;
+					targetCatchElement = catchEvent;
 				}
 			}
 		}
@@ -108,7 +124,7 @@ public class EventBasedGateway extends Gateway implements TriggerNotifyElement {
 
 	@Override
 	protected void tokenForwardToNextElement(final Token token, final Instance instance) {
-		final StoringTriggerCatchElement targetCatchElement = getTargetCatchElement(token);
+		final StoringTriggerCatchingElement targetCatchElement = getTargetCatchElement(token);
 		token.passTo(getSequenceFlowToCatchElement(targetCatchElement));
 		token.remove();
 		if (targetCatchElement != null) {

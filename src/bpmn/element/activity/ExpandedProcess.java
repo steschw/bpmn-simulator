@@ -34,7 +34,7 @@ import bpmn.Model;
 import bpmn.element.Element;
 import bpmn.element.VisibleElement;
 import bpmn.element.Label;
-import bpmn.element.TokenFlowElement;
+import bpmn.element.AbstractTokenFlowElement;
 import bpmn.element.Visualization;
 import bpmn.element.event.AbstractEvent;
 import bpmn.element.event.StartEvent;
@@ -145,11 +145,11 @@ public class ExpandedProcess
 	protected void passTokenToInner(final Token token) {
 		final AbstractEvent startEvent = getStartEvent();
 		if (startEvent == null) {
-			final Collection<TokenFlowElement> startElements = getStartElements();
+			final Collection<AbstractTokenFlowElement> startElements = getStartElements();
 			if (startElements.isEmpty()) {
 				token.passTo(this, token.getInstance().newChildInstance(this));
 			} else {
-				for (TokenFlowElement startElement : startElements) {
+				for (AbstractTokenFlowElement startElement : startElements) {
 					token.passTo(startElement, token.getInstance().newChildInstance(this));
 				}
 			}
@@ -199,11 +199,11 @@ public class ExpandedProcess
 	}
 
 	@Override
-	protected boolean passTokenToAllOutgoing(final Token token, final Instance instance) {
+	protected boolean passTokenToAllNextElements(final Token token, final Instance instance) {
 		final Instance parentInstance = instance.getParentInstance();
 		boolean forwarded = true; // der hauptprozess hat keine ausgehenden sequence flows
 		if (parentInstance != null) {
-			forwarded = super.passTokenToAllOutgoing(token, parentInstance);
+			forwarded = super.passTokenToAllNextElements(token, parentInstance);
 		}
 		return forwarded;
 	}
@@ -213,11 +213,11 @@ public class ExpandedProcess
 		return calcSizeByInnerComponents();
 	}
 
-	public Collection<TokenFlowElement> getStartElements() {
-		final Collection<TokenFlowElement> startElements = new ArrayList<TokenFlowElement>();
+	public Collection<AbstractTokenFlowElement> getStartElements() {
+		final Collection<AbstractTokenFlowElement> startElements = new ArrayList<AbstractTokenFlowElement>();
 		for (Element element : getElements()) {
-			if (element instanceof TokenFlowElement) {
-				final TokenFlowElement tokenFlowElement = (TokenFlowElement)element; 
+			if (element instanceof AbstractTokenFlowElement) {
+				final AbstractTokenFlowElement tokenFlowElement = (AbstractTokenFlowElement)element; 
 				if (!tokenFlowElement.hasIncoming()) {
 					if (tokenFlowElement instanceof AbstractActivity
 							|| tokenFlowElement instanceof Gateway) {

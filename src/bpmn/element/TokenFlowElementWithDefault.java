@@ -25,7 +25,7 @@ import bpmn.token.Token;
 
 @SuppressWarnings("serial")
 public abstract class TokenFlowElementWithDefault
-		extends TokenFlowElement
+		extends AbstractTokenFlowElement
 		implements ElementWithDefaultSequenceFlow {
 
 	private ElementRef<SequenceFlow> defaultSequenceFlowRef;
@@ -68,7 +68,7 @@ public abstract class TokenFlowElementWithDefault
 	}
 
 	@Override
-	protected boolean passTokenToAllOutgoing(final Token token, final Instance instance) {
+	protected boolean passTokenToAllNextElements(final Token token, final Instance instance) {
 		if (hasOutgoing()) {
 			if (passTokenToAllOutgoingSequenceFlows(token, instance) == 0) {
 				return passTokenToDefaultSequenceFlow(token, instance);

@@ -20,12 +20,12 @@
  */
 package bpmn.trigger;
 
-import bpmn.token.TokenFlow;
+import bpmn.instance.Instance;
 
-public interface TriggerCatchElement extends TokenFlow {
+public interface StoringTriggerCatchingElement extends TriggerCatchingElement {
 
-	void catchTrigger(Trigger trigger);
+	Trigger getFirstTrigger(final Instance instance);
 
-	boolean canTriggerManual();
+	void removeFirstTrigger(final Instance instance);
 
 }

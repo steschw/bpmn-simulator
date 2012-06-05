@@ -29,9 +29,9 @@ import javax.swing.Scrollable;
 
 import bpmn.Graphics;
 import bpmn.element.activity.Process;
-import bpmn.element.event.StartEvent;
 import bpmn.instance.Instance;
-import bpmn.trigger.TriggerCatchElement;
+import bpmn.trigger.Instantiable;
+import bpmn.trigger.TriggerCatchingElement;
 import bpmn.trigger.Trigger;
 
 @SuppressWarnings("serial")
@@ -62,9 +62,10 @@ public class Collaboration extends FlowElement implements Scrollable {
 		for (final MessageFlow messageFlow : messageFlows) {
 			if (sourceElement.equals(messageFlow.getSource())) {
 				final FlowElement targetElement = messageFlow.getTarget();
-				if (targetElement instanceof TriggerCatchElement) {
-					if (targetElement instanceof StartEvent) {
-						((TriggerCatchElement)targetElement).catchTrigger(new Trigger(null, null));
+				if (targetElement instanceof TriggerCatchingElement) {
+					if ((targetElement instanceof Instantiable)
+							&& ((Instantiable)targetElement).isInstantiable()) {
+						((TriggerCatchingElement)targetElement).catchTrigger(new Trigger(null, null));
 					} else {
 						final Collection<Instance> targetInstances
 							= targetElement.getProcess().getInstances();
@@ -78,7 +79,7 @@ public class Collaboration extends FlowElement implements Scrollable {
 							}
 						}
 						if (targetInstance != null) {
-							((TriggerCatchElement)targetElement).catchTrigger(new Trigger(sourceInstance, targetInstance));
+							((TriggerCatchingElement)targetElement).catchTrigger(new Trigger(sourceInstance, targetInstance));
 						}
 					}
 				}

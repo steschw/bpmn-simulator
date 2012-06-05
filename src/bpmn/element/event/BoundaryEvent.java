@@ -26,6 +26,7 @@ import java.awt.Cursor;
 import java.awt.Stroke;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.Collection;
 
 import javax.swing.Icon;
 
@@ -33,8 +34,9 @@ import bpmn.Graphics;
 import bpmn.element.ElementRef;
 import bpmn.element.Visualization;
 import bpmn.element.activity.AbstractActivity;
-import bpmn.token.Token;
-import bpmn.token.TokenCollection;
+import bpmn.element.activity.Activity;
+import bpmn.instance.Instance;
+import bpmn.instance.InstancePopupMenu;
 import bpmn.trigger.TriggerCatchingElement;
 import bpmn.trigger.Trigger;
 
@@ -77,18 +79,21 @@ public final class BoundaryEvent
 	}
 
 	@Override
+	public Collection<Instance> getTriggerDestinationInstances() {
+		return getAttachedTo().getInstances();
+	}
+
+	@Override
 	public void catchTrigger(final Trigger trigger) {
-		final AbstractActivity activity = getAttachedTo();
+		final Activity activity = getAttachedTo();
 		if (activity != null) {
-			final TokenCollection activityTokens = activity.getTokens();
-			if (!activityTokens.isEmpty()) {
-				final Token token = activityTokens.firstElement();
-				tokenForwardToNextElement(token, token.getInstance().getParentInstance());
-				if (isInterrupting()) {
-					for (final Token activityToken : activityTokens) {
-						activityToken.remove();
-					}
-				}
+			final Instance destinationInstance = trigger.getDestinationInstance(); 
+			final Instance parentInstance = destinationInstance.getParentInstance();
+			if (parentInstance != null) {
+				parentInstance.newToken(this);
+			}
+			if (isInterrupting()) {
+				destinationInstance.remove();
 			}
 		}
 	}
@@ -115,7 +120,8 @@ public final class BoundaryEvent
 
 	@Override
 	public void mouseClicked(final MouseEvent e) {
-		catchTrigger(new Trigger(null, null));
+		final Collection<Instance> instances = getTriggerDestinationInstances();
+		InstancePopupMenu.selectToTrigger(this, this, instances);
 	}
 
 	@Override

@@ -23,6 +23,7 @@ package bpmn.element.event;
 import java.awt.Cursor;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.Collection;
 
 import javax.swing.Icon;
 
@@ -78,6 +79,11 @@ public final class IntermediateCatchEvent
 							? Cursor.getDefaultCursor()
 							: Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		}
+	}
+
+	@Override
+	public Collection<Instance> getTriggerDestinationInstances() {
+		return getProcess().getInstances();
 	}
 
 	@Override

@@ -22,6 +22,7 @@ package bpmn.element.activity.task;
 
 import java.awt.Color;
 import java.awt.Point;
+import java.util.Collection;
 
 import javax.swing.Icon;
 
@@ -30,6 +31,7 @@ import bpmn.element.Label;
 import bpmn.element.Rectangle;
 import bpmn.element.Visualization;
 import bpmn.element.activity.AbstractActivity;
+import bpmn.instance.Instance;
 import bpmn.token.Token;
 
 @SuppressWarnings("serial")
@@ -94,6 +96,12 @@ public class Task extends AbstractActivity {
 			label.setMaxWidth(bounds.width);
 		}
 		super.updateElementLabelPosition();
+	}
+
+	@Override
+	public Collection<Instance> getInstances() {
+		assert false; ///XXX:
+		return null;
 	}
 
 }

@@ -20,10 +20,15 @@
  */
 package bpmn.trigger;
 
+import java.util.Collection;
+
+import bpmn.instance.Instance;
 import bpmn.token.TokenFlow;
 
 public interface TriggerCatchingElement extends TokenFlow, TriggerCatching {
 
 	boolean canTriggerManual();
+
+	Collection<Instance> getTriggerDestinationInstances();
 
 }

@@ -23,12 +23,9 @@ package bpmn.element.activity;
 import java.util.Collection;
 
 import bpmn.element.Element;
-import bpmn.instance.Instance;
 
 public interface Process extends Activity {
 
 	Collection<Element> getElements();
-
-	Collection<Instance> getInstances();
 
 }

@@ -32,7 +32,6 @@ import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
 import bpmn.Model;
-import bpmn.element.AbstractTokenFlowElement;
 import bpmn.instance.Instance;
 import bpmn.instance.InstanceMenuItem;
 import bpmn.trigger.Instantiable;
@@ -54,7 +53,7 @@ public class StartButton extends JButton implements ActionListener {
 		setEnabled(model != null);
 	}
 
-	public JMenuItem createInstancelessElementCall(final TriggerCatchingElement element) {
+	public JMenuItem createInstancelessElementSelection(final TriggerCatchingElement element) {
 		final JMenuItem menuItem = new JMenuItem(element.getElementName());
 		menuItem.addActionListener(new ActionListener() {
 			@Override
@@ -65,18 +64,36 @@ public class StartButton extends JButton implements ActionListener {
 		return menuItem;
 	}
 
-	public JMenu createInstanciatedElementCall(final TriggerCatchingElement element) {
+	public JMenu createInstanciatedElementSelection(final TriggerCatchingElement element) {
 		final Collection<Instance> instances
-				= ((AbstractTokenFlowElement)element).getProcess().getInstances();
+				= element.getTriggerDestinationInstances();
 		if (!instances.isEmpty()) {
 			final JMenu subMenu = new JMenu(element.getElementName());
 			for (final Instance instance : instances) {
 				final InstanceMenuItem menuItem = new InstanceMenuItem(instance);
+				menuItem.addActionListener(new ActionListener() {
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						element.catchTrigger(new Trigger(null, instance));
+					}
+				});
 				subMenu.add(menuItem);
 			}
 			return subMenu;
 		}
 		return null;
+	}
+
+	private boolean requiresInstanciatedCall(final TriggerCatchingElement element) {
+		if (element instanceof Instantiable) {
+			if (((Instantiable)element).isInstantiable()) {
+				return false;
+			} else {
+				return true;
+			}
+		} else {
+			return true;
+		}
 	}
 
 	@Override
@@ -90,13 +107,13 @@ public class StartButton extends JButton implements ActionListener {
 				final JPopupMenu menu = new JPopupMenu();
 				while (iterator.hasNext()) {
 					final TriggerCatchingElement element = iterator.next();
-					final boolean requiresTargetInstance =
-							((element instanceof Instantiable)
-									&& !((Instantiable)element).isInstantiable());
-					if (requiresTargetInstance) {
-						menu.add(createInstanciatedElementCall(element));
+					if (requiresInstanciatedCall(element)) {
+						final JMenu submenu = createInstanciatedElementSelection(element);
+						if (submenu != null) {
+							menu.add(submenu);
+						}
 					} else {
-						menu.add(createInstancelessElementCall(element));
+						menu.add(createInstancelessElementSelection(element));
 					}
 				}
 				menu.show(this, 0, getHeight());

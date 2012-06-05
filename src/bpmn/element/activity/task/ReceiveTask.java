@@ -24,6 +24,7 @@ import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.Collection;
 
 import javax.swing.Icon;
 
@@ -85,6 +86,11 @@ public final class ReceiveTask
 	@Override
 	public boolean canTriggerManual() {
 		return false;
+	}
+
+	@Override
+	public Collection<Instance> getTriggerDestinationInstances() {
+		return getProcess().getInstances();
 	}
 
 	@Override

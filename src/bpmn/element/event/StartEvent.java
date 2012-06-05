@@ -24,11 +24,13 @@ import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.Collection;
 
 import javax.swing.Icon;
 
 import bpmn.element.Visualization;
 import bpmn.element.activity.ExpandedProcess;
+import bpmn.instance.Instance;
 import bpmn.instance.InstanceManager;
 import bpmn.trigger.Instantiable;
 import bpmn.trigger.TriggerCatchingElement;
@@ -50,6 +52,11 @@ public final class StartEvent extends AbstractEvent
 		return (getInstanceManager() != null)
 				&& (process != null) && !process.hasIncoming()
 				&& (isPlain() || isTimer() || isConditional()); 
+	}
+
+	@Override
+	public Collection<Instance> getTriggerDestinationInstances() {
+		return getProcess().getInstances();
 	}
 
 	@Override

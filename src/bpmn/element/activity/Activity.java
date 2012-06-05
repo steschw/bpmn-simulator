@@ -20,10 +20,14 @@
  */
 package bpmn.element.activity;
 
+import java.util.Collection;
+
 import bpmn.element.Element;
 import bpmn.instance.Instance;
 
 public interface Activity extends Element {
+
+	Collection<Instance> getInstances();
 
 	Instance createInstance(Instance parentInstance);
 

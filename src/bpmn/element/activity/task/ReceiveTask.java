@@ -22,9 +22,6 @@ package bpmn.element.activity.task;
 
 import java.awt.Dimension;
 import java.awt.Point;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.util.Collection;
 
 import javax.swing.Icon;
 
@@ -33,24 +30,16 @@ import bpmn.element.ElementRef;
 import bpmn.element.Message;
 import bpmn.element.Rectangle;
 import bpmn.element.Visualization;
-import bpmn.instance.Instance;
-import bpmn.instance.InstanceListener;
-import bpmn.instance.InstancePopupMenu;
 import bpmn.token.Token;
 import bpmn.trigger.Instantiable;
-import bpmn.trigger.StoringTriggerCatchingElement;
 import bpmn.trigger.Trigger;
-import bpmn.trigger.TriggerCollection;
 
 @SuppressWarnings("serial")
 public final class ReceiveTask
 		extends AbstractMessageTask
-		implements StoringTriggerCatchingElement, Instantiable,
-				MouseListener, InstanceListener {
+		implements Instantiable {
 
 	private static final int INSTANTIATE_MARGIN = 4;
-
-	private TriggerCollection triggers = new TriggerCollection();
 
 	private final boolean instantiate;
 
@@ -59,7 +48,6 @@ public final class ReceiveTask
 			final ElementRef<Message> messageRef) {
 		super(id, name, messageRef);
 		this.instantiate = instantiate;
-		addMouseListener(this);
 	}
 
 	@Override
@@ -68,101 +56,8 @@ public final class ReceiveTask
 	}
 
 	@Override
-	public Trigger getFirstTrigger(final Instance instance) {
-		return triggers.first(instance);
-	}
-
-	@Override
-	public void removeFirstTrigger(final Instance instance) {
-		triggers.removeFirst(instance);
-		repaint();
-	}
-
-	@Override
 	protected Icon getTypeIcon() {
 		return getVisualization().getIcon(Visualization.ICON_RECEIVE);
-	}
-
-	@Override
-	public boolean canTriggerManual() {
-		return false;
-	}
-
-	@Override
-	public Collection<Instance> getTriggerDestinationInstances() {
-		return getProcess().getInstances();
-	}
-
-	@Override
-	public void catchTrigger(final Trigger trigger) {
-		final boolean incomingInstantiable = areAllIncommingFlowElementsInstantiable(); 
-		if (isInstantiable() && !incomingInstantiable) {
-			getProcess().createInstance(null).newToken(this);
-		} else {
-			if (getBehavior().getKeepTriggers() && !incomingInstantiable) {
-				triggers.add(trigger);
-				trigger.getDestinationInstance().addInstanceListener(this);
-			} else {
-				passFirstInstanceTokenToAllNextElements(trigger.getDestinationInstance());
-				notifyTriggerNotifyEvents(this, trigger);
-			}
-		}
-		repaint();
-	}
-
-	@Override
-	public void instanceAdded(final Instance instance) {
-	}
-
-	@Override
-	public void instanceRemoved(final Instance instance) {
-		triggers.removeInstanceTriggers(instance);
-		repaint();
-	}
-
-	@Override
-	protected boolean canForwardTokenToOutgoing(final Token token) {
-		return super.canForwardTokenToOutgoing(token)
-				&& (isInstantiable() || isGatewayCondition()
-				|| (triggers.first(token.getInstance()) != null));
-	}
-
-	@Override
-	protected void forwardTokenFromInner(final Token token) {
-		super.forwardTokenFromInner(token);
-		if (!isGatewayCondition()) {
-			triggers.removeFirst(token.getInstance());
-		}
-	}
-
-	@Override
-	public void mouseClicked(final MouseEvent e) {
-		if (canTriggerManual()) {
-			InstancePopupMenu.selectToTrigger(this, this, getProcess().getInstances());
-		}
-	}
-
-	@Override
-	public void mousePressed(final MouseEvent e) {
-	}
-
-	@Override
-	public void mouseReleased(final MouseEvent e) {
-	}
-
-	@Override
-	public void mouseEntered(final MouseEvent e) {
-	}
-
-	@Override
-	public void mouseExited(final MouseEvent e) {
-	}
-
-	@Override
-	protected void paintElement(final Graphics g) {
-		super.paintElement(g);
-
-		triggers.paint(g, getElementInnerBounds().getRightTop());
 	}
 
 	@Override
@@ -174,6 +69,20 @@ public final class ReceiveTask
 					new Dimension(icon.getIconWidth(), icon.getIconWidth()));
 			rect.grow(INSTANTIATE_MARGIN, INSTANTIATE_MARGIN);
 			g.drawOval(rect);
+		}
+	}
+
+	@Override
+	protected boolean waitsForMessage(final Token token) {
+		return super.waitsForMessage(token) && !isInstantiable();
+	}
+
+	@Override
+	public void catchTrigger(final Trigger trigger) {
+		if (isInstantiable() && !areAllIncommingFlowElementsInstantiable()) {
+			getProcess().createInstance(null).newToken(this);
+		} else {
+			super.catchTrigger(trigger);
 		}
 	}
 

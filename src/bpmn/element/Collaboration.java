@@ -57,6 +57,15 @@ public class Collaboration extends FlowElement implements Scrollable {
 		return null;
 	}
 
+	public boolean hasMessageTarget(final FlowElement element) {
+		for (final MessageFlow messageFlow : messageFlows) {
+			if (element.equals(messageFlow.getTarget())) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 	public void sendMessages(final FlowElement sourceElement,
 			final Instance sourceInstance) {
 		for (final MessageFlow messageFlow : messageFlows) {

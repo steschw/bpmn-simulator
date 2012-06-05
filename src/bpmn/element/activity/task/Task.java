@@ -27,19 +27,28 @@ import java.util.Collection;
 import javax.swing.Icon;
 
 import bpmn.Graphics;
+import bpmn.element.Collaboration;
 import bpmn.element.Label;
 import bpmn.element.Rectangle;
 import bpmn.element.Visualization;
 import bpmn.element.activity.AbstractActivity;
 import bpmn.instance.Instance;
+import bpmn.instance.InstanceListener;
 import bpmn.token.Token;
+import bpmn.trigger.StoringTriggerCatchingElement;
+import bpmn.trigger.Trigger;
+import bpmn.trigger.TriggerCollection;
 
 @SuppressWarnings("serial")
-public class Task extends AbstractActivity {
+public class Task
+	extends AbstractActivity
+	implements StoringTriggerCatchingElement, InstanceListener {
 
 	private static final int TYPEICON_MARGIN = 6;
 
 	private static final int ARC_LENGTH = 10;
+
+	private TriggerCollection triggers = new TriggerCollection();
 
 	public Task(final String id, final String name) {
 		super(id, name);
@@ -48,6 +57,37 @@ public class Task extends AbstractActivity {
 	@Override
 	protected int getStepCount() {
 		return 50;
+	}
+
+	@Override
+	public Trigger getFirstTrigger(final Instance instance) {
+		return triggers.first(instance);
+	}
+
+	@Override
+	public void removeFirstTrigger(final Instance instance) {
+		triggers.removeFirst(instance);
+		repaint();
+	}
+
+	@Override
+	public void instanceAdded(final Instance instance) {
+	}
+
+	@Override
+	public void instanceRemoved(final Instance instance) {
+		triggers.removeInstanceTriggers(instance);
+		repaint();
+	}
+
+	@Override
+	public boolean canTriggerManual() {
+		return false;
+	}
+
+	@Override
+	public Collection<Instance> getTriggerDestinationInstances() {
+		return getProcess().getInstances();
 	}
 
 	@Override
@@ -86,6 +126,8 @@ public class Task extends AbstractActivity {
 			position.translate(TYPEICON_MARGIN, TYPEICON_MARGIN);
 			paintTypeIcon(g, typeIcon, position);
 		}
+
+		triggers.paint(g, getElementInnerBounds().getRightTop());
 	}
 
 	@Override
@@ -102,6 +144,46 @@ public class Task extends AbstractActivity {
 	public Collection<Instance> getInstances() {
 		assert false; ///XXX:
 		return null;
+	}
+
+	private boolean canReceiveMessages() {
+		for (final Collaboration collaboration : getModel().getCollaborations()) {
+			if (collaboration.hasMessageTarget(this)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	@Override
+	public void catchTrigger(final Trigger trigger) {
+		if (getBehavior().getKeepTriggers() && !areAllIncommingFlowElementsInstantiable()) {
+			triggers.add(trigger);
+			trigger.getDestinationInstance().addInstanceListener(this);
+		} else {
+			passFirstInstanceTokenToAllNextElements(trigger.getDestinationInstance());
+			notifyTriggerNotifyEvents(this, trigger);
+		}
+		repaint();
+	}
+
+	protected boolean waitsForMessage(final Token token) {
+		return canReceiveMessages() && !isGatewayCondition()
+				&& (triggers.first(token.getInstance()) == null);		
+	}
+	
+	@Override
+	protected boolean canForwardTokenToOutgoing(final Token token) {
+		return super.canForwardTokenToOutgoing(token)
+				&& !waitsForMessage(token);
+	}
+
+	@Override
+	protected void forwardTokenFromInner(final Token token) {
+		super.forwardTokenFromInner(token);
+		if (!isGatewayCondition()) {
+			triggers.removeFirst(token.getInstance());
+		}
 	}
 
 }

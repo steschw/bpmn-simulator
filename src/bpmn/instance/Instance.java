@@ -31,6 +31,7 @@ import java.util.Vector;
 
 import bpmn.Graphics;
 import bpmn.element.Rectangle;
+import bpmn.element.activity.Activity;
 import bpmn.element.activity.Process;
 import bpmn.token.Token;
 import bpmn.token.TokenCollection;
@@ -46,7 +47,7 @@ public class Instance {
 
 	private final Instance parent;
 
-	private final Process process;
+	private final Activity activity;
 
 	private final Collection<InstanceListener> listeners = new LinkedList<InstanceListener>();  
 
@@ -58,21 +59,21 @@ public class Instance {
 
 	private Color color;
 
-	public Instance(final InstanceManager manager, final Process process,
+	public Instance(final InstanceManager manager, final Activity activity,
 			final Color color) {
-		this(manager, null, process, color);
+		this(manager, null, activity, color);
 	}
 
-	public Instance(final Instance parent, final Process process) {
-		this(null, parent, process, null);
+	public Instance(final Instance parent, final Activity activity) {
+		this(null, parent, activity, null);
 	}
 
 	protected Instance(final InstanceManager manager,
-			final Instance parent, final Process process, final Color color) {
+			final Instance parent, final Activity activity, final Color color) {
 		super();
 		this.manager = manager;
 		this.parent = parent;
-		this.process = process;
+		this.activity = activity;
 		this.color = color;
 	}
 
@@ -117,8 +118,8 @@ public class Instance {
 		}
 	}
 
-	public Process getProcess() {
-		return process;
+	public Activity getActivity() {
+		return activity;
 	}
 
 	public Instance getCorrelationInstance(final Collection<Instance> instances) {
@@ -132,7 +133,7 @@ public class Instance {
 
 	public boolean hasCorrelationTo(final Process process) {
 		for (Instance correlationInstance : correlations) {
-			if (correlationInstance.getProcess().equals(process)) {
+			if (correlationInstance.getActivity().equals(process)) {
 				return true;
 			}
 		}
@@ -374,7 +375,7 @@ public class Instance {
 		final StringBuilder buffer = new StringBuilder('[');
 		buffer.append(super.toString());
 		buffer.append(", ");
-		buffer.append(getProcess());
+		buffer.append(getActivity());
 		buffer.append(", ");
 		buffer.append("childs:");
 		buffer.append(getChildInstanceCount());

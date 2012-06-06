@@ -86,6 +86,10 @@ public class EventBasedGateway
 		if (sequenceFlow != null) {
 			if (isInstantiable()) {
 				final Instance instance = getProcess().createInstance(null);
+				final Instance sourceInstance = trigger.getSourceInstance();
+				if (sourceInstance != null) {
+					instance.setColor(sourceInstance.getColor());
+				}
 				instance.newToken(sequenceFlow);
 			} else {
 				final TokenCollection tokens = getInnerTokens().byInstance(trigger.getDestinationInstance());

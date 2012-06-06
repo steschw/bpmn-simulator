@@ -30,6 +30,7 @@ import bpmn.element.ElementRef;
 import bpmn.element.Message;
 import bpmn.element.Rectangle;
 import bpmn.element.Visualization;
+import bpmn.instance.Instance;
 import bpmn.token.Token;
 import bpmn.trigger.Instantiable;
 import bpmn.trigger.Trigger;
@@ -80,7 +81,12 @@ public final class ReceiveTask
 	@Override
 	public void catchTrigger(final Trigger trigger) {
 		if (isInstantiable() && !areAllIncommingFlowElementsInstantiable()) {
-			getProcess().createInstance(null).newToken(this);
+			final Instance instance = getProcess().createInstance(null);
+			final Instance sourceInstance = trigger.getSourceInstance();
+			if (sourceInstance != null) {
+				instance.setColor(sourceInstance.getColor());
+			}
+			instance.newToken(this);
 		} else {
 			super.catchTrigger(trigger);
 		}

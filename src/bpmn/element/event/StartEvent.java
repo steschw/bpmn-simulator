@@ -61,7 +61,12 @@ public final class StartEvent extends AbstractEvent
 
 	@Override
 	public void catchTrigger(final Trigger trigger) {
-		getProcess().createInstance(trigger.getDestinationInstance()).newToken(this);
+		final Instance instance = getProcess().createInstance(trigger.getDestinationInstance());
+		final Instance sourceInstance = trigger.getSourceInstance(); 
+		if (sourceInstance != null) {
+			instance.setColor(sourceInstance.getColor());			
+		}
+		instance.newToken(this);
 	}
 
 	@Override

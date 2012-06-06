@@ -74,7 +74,7 @@ public class Collaboration extends FlowElement implements Scrollable {
 				if (targetElement instanceof TriggerCatchingElement) {
 					if ((targetElement instanceof Instantiable)
 							&& ((Instantiable)targetElement).isInstantiable()) {
-						((TriggerCatchingElement)targetElement).catchTrigger(new Trigger(null, null));
+						((TriggerCatchingElement)targetElement).catchTrigger(new Trigger(sourceInstance, null));
 					} else {
 						final Collection<Instance> targetInstances
 							= targetElement.getProcess().getInstances();

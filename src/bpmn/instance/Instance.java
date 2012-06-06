@@ -365,7 +365,7 @@ public class Instance {
 
 		assert count > 0;
 		if (count > 1) {
-			g.setPaint(Color.BLACK);
+			g.setPaint(Graphics.contrastColor(getColor()));
 			g.drawText(new Rectangle(center, STAR_SIZE), Integer.toString(count));
 		}
 	}

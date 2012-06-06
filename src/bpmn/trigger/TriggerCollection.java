@@ -92,7 +92,7 @@ public class TriggerCollection {
 			final Set<Trigger> instanceTriggers = triggers.get(instance);
 			assert instanceTriggers != null;
 			if (instanceTriggers != null) {
-				graphics.setPaint(Color.BLACK);
+				graphics.setPaint(Graphics.contrastColor(color));
 				graphics.drawText(rect, Integer.toString(instanceTriggers.size()));
 			}
 			instancePosition.translate(-5, 0);

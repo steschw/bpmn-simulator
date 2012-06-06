@@ -63,6 +63,22 @@ public class Graphics {
 		//QUALITY.put(RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_PURE);
 	}
 
+	private static final float CONTRAST_BIRGHTNESS_THRESHOLD = 0.4f; 
+
+	public static Color contrastColor(final Color from) {
+		if (from == null) {
+			return Color.BLACK;
+		} else {
+			final float[] hsbvals
+				= Color.RGBtoHSB(from.getRed(), from.getBlue(), from.getGreen(), null);
+			if (hsbvals[2] < CONTRAST_BIRGHTNESS_THRESHOLD) {
+				return Color.WHITE;
+			} else {
+				return Color.BLACK;
+			}
+		}
+	}
+
 	public Graphics(final Graphics2D graphics) {
 		super();
 		this.graphics = graphics;

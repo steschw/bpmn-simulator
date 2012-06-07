@@ -22,7 +22,7 @@ package bpmn.element;
 
 public class Behavior {
 
-	private boolean keepTriggers;
+	private boolean keepTriggers = true;
 
 	public void setKeepTriggers(final boolean keep) {
 		keepTriggers = keep;

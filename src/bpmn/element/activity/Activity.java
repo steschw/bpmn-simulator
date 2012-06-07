@@ -31,4 +31,6 @@ public interface Activity extends Element {
 
 	Instance createInstance(Instance parentInstance);
 
+	Instance createCorrelationInstance(Instance partner);
+
 }

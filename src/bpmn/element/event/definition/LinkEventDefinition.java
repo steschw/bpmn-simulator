@@ -97,6 +97,8 @@ public final class LinkEventDefinition extends EventDefinition {
 			final Instance instance = token.getInstance();
 			linkTarget.catchTrigger(new Trigger(instance, instance));
 		}
+
+		token.remove();
 	}
 
 	@Override

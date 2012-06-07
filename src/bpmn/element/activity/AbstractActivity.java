@@ -160,4 +160,13 @@ public abstract class AbstractActivity
 		}
 	}
 
+	@Override
+	public Instance createCorrelationInstance(final Instance partner) {
+		final Instance instance = createInstance(null);
+		instance.createCorrelationTo(partner);
+		partner.createCorrelationTo(instance);
+		instance.setColor(partner.getColor());
+		return instance;
+	}
+
 }

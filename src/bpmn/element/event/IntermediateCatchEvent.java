@@ -89,7 +89,7 @@ public final class IntermediateCatchEvent
 	@Override
 	public void catchTrigger(final Trigger trigger) {
 		final Instance destinationInstance = trigger.getDestinationInstance();
-		if (getBehavior().getKeepTriggers() && !isInstantiable()) {
+		if (getBehavior().getKeepTriggers() && hasIncoming() && !isInstantiable()) {
 			triggers.add(trigger);
 			destinationInstance.addInstanceListener(this);
 		} else {

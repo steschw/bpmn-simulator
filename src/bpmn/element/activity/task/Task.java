@@ -174,7 +174,7 @@ public class Task
 		return canReceiveMessages()
 				&& !hasStoredTrigger(token.getInstance());
 	}
-	
+
 	@Override
 	protected boolean canForwardTokenToOutgoing(final Token token) {
 		return super.canForwardTokenToOutgoing(token)
@@ -184,9 +184,8 @@ public class Task
 	@Override
 	protected void forwardTokenFromInner(final Token token) {
 		super.forwardTokenFromInner(token);
-		if (!isGatewayCondition()) {
-			messageTriggers.removeFirst(token.getInstance());
-		}
+
+		messageTriggers.removeFirst(token.getInstance());
 	}
 
 }

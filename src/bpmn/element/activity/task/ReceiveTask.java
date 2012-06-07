@@ -81,7 +81,7 @@ public final class ReceiveTask
 	@Override
 	protected boolean waitsForMessage(final Token token) {
 		return super.waitsForMessage(token)
-				&& !isGatewayCondition() && !isInstantiableNotifying();
+				&& !isInstantiable() && !isInstantiableNotifying();
 	}
 
 	@Override

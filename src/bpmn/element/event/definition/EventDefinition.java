@@ -66,7 +66,7 @@ public abstract class EventDefinition
 		final Collection<TriggerCatchingElement> catchEvents =  model.getCatchEvents();
 		for (final TriggerCatchingElement catchEvent : catchEvents) {
 			if (catchEvent instanceof Event) {
-				final Event event = (Event)catchEvent; 
+				final Event event = (Event)catchEvent;
 				if (equals(event.getDefinition())) {
 					catchEvent.catchTrigger(new Trigger(token.getInstance(), null));
 				}

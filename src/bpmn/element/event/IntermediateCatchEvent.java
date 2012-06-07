@@ -92,7 +92,8 @@ public final class IntermediateCatchEvent
 		final Instance destinationInstance = trigger.getDestinationInstance();
 		if (isInstantiableNotifying()) {
 			notifyInstantiableIncomingFlowElements(this, trigger);
-		} else if (getBehavior().getKeepTriggers() && hasIncoming()) {
+		} else if (getBehavior().getKeepTriggers()
+				&& (destinationInstance != null) && hasIncoming()) {
 			triggers.add(trigger);
 			destinationInstance.addInstanceListener(this);
 		} else {
@@ -129,9 +130,8 @@ public final class IntermediateCatchEvent
 	@Override
 	protected void tokenForwardToNextElement(final Token token, final Instance instance) {
 		super.tokenForwardToNextElement(token, instance);
-		if (!isGatewayCondition()) {
-			triggers.removeFirst(token.getInstance());
-		}
+
+		triggers.removeFirst(token.getInstance());
 	}
 
 	@Override
@@ -150,7 +150,11 @@ public final class IntermediateCatchEvent
 	@Override
 	public void mouseClicked(final MouseEvent e) {
 		if (canTriggerManual()) {
-			InstancePopupMenu.selectToTrigger(this, this, getProcess().getInstances());
+			if (isInstantiableNotifying()) {
+				this.catchTrigger(new Trigger(null, null));
+			} else {
+				InstancePopupMenu.selectToTrigger(this, this, getProcess().getInstances());
+			}
 		}
 	}
 

@@ -28,16 +28,15 @@ import bpmn.element.SequenceFlow;
 import bpmn.instance.Instance;
 import bpmn.token.Token;
 import bpmn.token.TokenCollection;
-import bpmn.trigger.Instantiable;
 import bpmn.trigger.TriggerCatchingElement;
 import bpmn.trigger.StoringTriggerCatchingElement;
 import bpmn.trigger.Trigger;
-import bpmn.trigger.TriggerNotifyElement;
+import bpmn.trigger.InstantiableNotifiyTarget;
 
 @SuppressWarnings("serial")
 public class EventBasedGateway
 	extends Gateway
-	implements TriggerNotifyElement, Instantiable {
+	implements InstantiableNotifiyTarget {
 
 	private final boolean instantiate;
 

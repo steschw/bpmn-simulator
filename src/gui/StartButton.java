@@ -35,6 +35,7 @@ import bpmn.Model;
 import bpmn.instance.Instance;
 import bpmn.instance.InstanceMenuItem;
 import bpmn.trigger.Instantiable;
+import bpmn.trigger.InstantiableNotifiySource;
 import bpmn.trigger.Trigger;
 import bpmn.trigger.TriggerCatchingElement;
 
@@ -84,16 +85,12 @@ public class StartButton extends JButton implements ActionListener {
 		return null;
 	}
 
-	private boolean requiresInstanciatedCall(final TriggerCatchingElement element) {
-		if (element instanceof Instantiable) {
-			if (((Instantiable)element).isInstantiable()) {
-				return false;
-			} else {
-				return true;
-			}
-		} else {
-			return true;
-		}
+	private boolean requiresInstanciatedCall(final TriggerCatchingElement catchingElement) {
+		final boolean instantiable = (catchingElement instanceof Instantiable)
+				&& ((Instantiable)catchingElement).isInstantiable();
+		final boolean instantiableNotifing = (catchingElement instanceof InstantiableNotifiySource)
+				&& ((InstantiableNotifiySource)catchingElement).isInstantiableNotifying();
+		return !(instantiable || instantiableNotifing);
 	}
 
 	@Override

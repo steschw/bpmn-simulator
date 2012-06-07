@@ -32,12 +32,13 @@ import bpmn.element.Rectangle;
 import bpmn.element.Visualization;
 import bpmn.token.Token;
 import bpmn.trigger.Instantiable;
+import bpmn.trigger.InstantiableNotifiySource;
 import bpmn.trigger.Trigger;
 
 @SuppressWarnings("serial")
 public final class ReceiveTask
 		extends AbstractMessageTask
-		implements Instantiable {
+		implements Instantiable, InstantiableNotifiySource {
 
 	private static final int INSTANTIATE_MARGIN = 4;
 
@@ -52,7 +53,12 @@ public final class ReceiveTask
 
 	@Override
 	public boolean isInstantiable() {
-		return instantiate || areAllIncommingFlowElementsInstantiable();
+		return instantiate;
+	}
+
+	@Override
+	public boolean isInstantiableNotifying() {
+		return areAllIncommingFlowElementsInstantiableNotifyTargets();
 	}
 
 	@Override
@@ -74,13 +80,16 @@ public final class ReceiveTask
 
 	@Override
 	protected boolean waitsForMessage(final Token token) {
-		return super.waitsForMessage(token) && !isInstantiable();
+		return super.waitsForMessage(token)
+				&& !isGatewayCondition() && !isInstantiableNotifying();
 	}
 
 	@Override
 	public void catchTrigger(final Trigger trigger) {
-		if (isInstantiable() && !areAllIncommingFlowElementsInstantiable()) {
+		if (isInstantiable()) {
 			createCorrelationInstance(trigger.getSourceInstance()).newToken(this);
+		} else if (isInstantiableNotifying()) {
+			notifyInstantiableIncomingFlowElements(this, trigger);
 		} else {
 			super.catchTrigger(trigger);
 		}

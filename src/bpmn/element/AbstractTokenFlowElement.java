@@ -32,10 +32,9 @@ import bpmn.instance.Instance;
 import bpmn.token.Token;
 import bpmn.token.TokenCollection;
 import bpmn.token.TokenFlow;
-import bpmn.trigger.Instantiable;
 import bpmn.trigger.Trigger;
 import bpmn.trigger.TriggerCatchingElement;
-import bpmn.trigger.TriggerNotifyElement;
+import bpmn.trigger.InstantiableNotifiyTarget;
 
 @SuppressWarnings("serial")
 public abstract class AbstractTokenFlowElement
@@ -260,26 +259,26 @@ public abstract class AbstractTokenFlowElement
 		return outgoingFlowElements;
 	}
 
-	protected boolean areAllIncommingFlowElementsInstantiable() {
+	protected boolean areAllIncommingFlowElementsInstantiableNotifyTargets() {
 		final Collection<FlowElement> incomingFlowElements = getIncomingFlowElements();
 		if (incomingFlowElements.isEmpty()) {
 			return false;
 		}
 		for (final FlowElement flowElement : incomingFlowElements) {
-			if (!((flowElement instanceof Instantiable)
-					&& ((Instantiable)flowElement).isInstantiable())) {
+			if (!((flowElement instanceof InstantiableNotifiyTarget)
+					&& ((InstantiableNotifiyTarget)flowElement).isInstantiable())) {
 				return false;
 			}
 		}
 		return true;
 	}
 
-	protected int notifyTriggerNotifyEvents(
+	protected int notifyInstantiableIncomingFlowElements(
 			final TriggerCatchingElement catchElement, final Trigger trigger) {
 		int count = 0;
 		for (final FlowElement flowElement : getIncomingFlowElements()) {
-			if (flowElement instanceof TriggerNotifyElement) {
-				((TriggerNotifyElement)flowElement).eventTriggered(catchElement, trigger);
+			if (flowElement instanceof InstantiableNotifiyTarget) {
+				((InstantiableNotifiyTarget)flowElement).eventTriggered(catchElement, trigger);
 				++count;
 			}
 		}

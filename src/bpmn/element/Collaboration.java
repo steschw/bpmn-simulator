@@ -31,6 +31,7 @@ import bpmn.Graphics;
 import bpmn.element.activity.Process;
 import bpmn.instance.Instance;
 import bpmn.trigger.Instantiable;
+import bpmn.trigger.InstantiableNotifiySource;
 import bpmn.trigger.TriggerCatchingElement;
 import bpmn.trigger.Trigger;
 
@@ -47,16 +48,6 @@ public class Collaboration extends FlowElement implements Scrollable {
 		messageFlows.add(messageFlow);
 	}
 
-	private Instance findMessageTargetInstance(final Collection<Instance> instances,
-			final Process process) {
-		for (Instance instance : instances) {
-			if (!instance.hasCorrelationTo(process)) {
-				return instance;
-			}
-		}
-		return null;
-	}
-
 	public boolean hasMessageTarget(final FlowElement element) {
 		for (final MessageFlow messageFlow : messageFlows) {
 			if (element.equals(messageFlow.getTarget())) {
@@ -66,30 +57,56 @@ public class Collaboration extends FlowElement implements Scrollable {
 		return false;
 	}
 
+	private boolean requiresCorrelation(final TriggerCatchingElement catchingElement) {
+		final boolean instantiable = (catchingElement instanceof Instantiable)
+				&& ((Instantiable)catchingElement).isInstantiable();
+		final boolean instantiableNotifing = (catchingElement instanceof InstantiableNotifiySource)
+				&& ((InstantiableNotifiySource)catchingElement).isInstantiableNotifying();
+		return !(instantiable || instantiableNotifing);
+	}
+
+	private static Instance findMessageTargetInstance(final Collection<Instance> instances,
+			final Process process) {
+		for (Instance instance : instances) {
+			if (!instance.hasCorrelationTo(process)) {
+				return instance;
+			}
+		}
+		return null;
+	}
+
+	private static Instance findCorrelationInstance(
+			final Process sourceProcess, final Instance sourceInstance,
+			final Process targetProcess) {
+		final Collection<Instance> targetInstances = targetProcess.getInstances();
+		Instance targetInstance
+			= sourceInstance.getCorrelationInstance(targetInstances);
+		if (targetInstance == null) {
+			targetInstance = findMessageTargetInstance(targetInstances, sourceProcess);
+			if (targetInstance != null) {
+				targetInstance.createCorrelationTo(sourceInstance);
+				sourceInstance.createCorrelationTo(targetInstance);
+			}
+		}
+		return targetInstance;
+	}
+
 	public void sendMessages(final FlowElement sourceElement,
 			final Instance sourceInstance) {
 		for (final MessageFlow messageFlow : messageFlows) {
 			if (sourceElement.equals(messageFlow.getSource())) {
 				final FlowElement targetElement = messageFlow.getTarget();
 				if (targetElement instanceof TriggerCatchingElement) {
-					if ((targetElement instanceof Instantiable)
-							&& ((Instantiable)targetElement).isInstantiable()) {
-						((TriggerCatchingElement)targetElement).catchTrigger(new Trigger(sourceInstance, null));
-					} else {
-						final Collection<Instance> targetInstances
-							= targetElement.getProcess().getInstances();
-						Instance targetInstance
-							= sourceInstance.getCorrelationInstance(targetInstances);
-						if (targetInstance == null) {
-							targetInstance = findMessageTargetInstance(targetInstances, sourceElement.getProcess());
-							if (targetInstance != null) {
-								targetInstance.createCorrelationTo(sourceInstance);
-								sourceInstance.createCorrelationTo(targetInstance);
-							}
-						}
+					final TriggerCatchingElement catchingElement = (TriggerCatchingElement)targetElement;  
+					if (requiresCorrelation(catchingElement)) {
+						final Instance targetInstance = findCorrelationInstance(
+								sourceElement.getProcess(), sourceInstance,
+								targetElement.getProcess());
 						if (targetInstance != null) {
-							((TriggerCatchingElement)targetElement).catchTrigger(new Trigger(sourceInstance, targetInstance));
+							catchingElement.catchTrigger(new Trigger(sourceInstance, targetInstance));
 						}
+					} else {
+						catchingElement.catchTrigger(new Trigger(sourceInstance, null));
 					}
 				}
 			}

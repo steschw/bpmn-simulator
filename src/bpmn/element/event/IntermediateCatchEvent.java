@@ -33,7 +33,7 @@ import bpmn.instance.Instance;
 import bpmn.instance.InstanceListener;
 import bpmn.instance.InstancePopupMenu;
 import bpmn.token.Token;
-import bpmn.trigger.Instantiable;
+import bpmn.trigger.InstantiableNotifiySource;
 import bpmn.trigger.StoringTriggerCatchingElement;
 import bpmn.trigger.Trigger;
 import bpmn.trigger.TriggerCollection;
@@ -41,7 +41,7 @@ import bpmn.trigger.TriggerCollection;
 @SuppressWarnings("serial")
 public final class IntermediateCatchEvent
 		extends IntermediateEvent
-		implements StoringTriggerCatchingElement, Instantiable,
+		implements StoringTriggerCatchingElement, InstantiableNotifiySource,
 				MouseListener, InstanceListener {
 
 	private TriggerCollection triggers = new TriggerCollection();
@@ -51,9 +51,10 @@ public final class IntermediateCatchEvent
 		addMouseListener(this);
 	}
 
+
 	@Override
-	public boolean isInstantiable() {
-		return areAllIncommingFlowElementsInstantiable();
+	public boolean isInstantiableNotifying() {
+		return areAllIncommingFlowElementsInstantiableNotifyTargets();
 	}
 
 	@Override
@@ -89,7 +90,9 @@ public final class IntermediateCatchEvent
 	@Override
 	public void catchTrigger(final Trigger trigger) {
 		final Instance destinationInstance = trigger.getDestinationInstance();
-		if (getBehavior().getKeepTriggers() && hasIncoming() && !isInstantiable()) {
+		if (isInstantiableNotifying()) {
+			notifyInstantiableIncomingFlowElements(this, trigger);
+		} else if (getBehavior().getKeepTriggers() && hasIncoming()) {
 			triggers.add(trigger);
 			destinationInstance.addInstanceListener(this);
 		} else {
@@ -103,7 +106,6 @@ public final class IntermediateCatchEvent
 			} else {
 				definition.catchTrigger(trigger);
 			}
-			notifyTriggerNotifyEvents(this, trigger);
 		}
 		repaint();
 	}

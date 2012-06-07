@@ -48,7 +48,7 @@ public class Task
 
 	private static final int ARC_LENGTH = 10;
 
-	private TriggerCollection triggers = new TriggerCollection();
+	private TriggerCollection messageTriggers = new TriggerCollection();
 
 	public Task(final String id, final String name) {
 		super(id, name);
@@ -61,12 +61,12 @@ public class Task
 
 	@Override
 	public Trigger getFirstTrigger(final Instance instance) {
-		return triggers.first(instance);
+		return messageTriggers.first(instance);
 	}
 
 	@Override
 	public void removeFirstTrigger(final Instance instance) {
-		triggers.removeFirst(instance);
+		messageTriggers.removeFirst(instance);
 		repaint();
 	}
 
@@ -76,7 +76,7 @@ public class Task
 
 	@Override
 	public void instanceRemoved(final Instance instance) {
-		triggers.removeInstanceTriggers(instance);
+		messageTriggers.removeInstanceTriggers(instance);
 		repaint();
 	}
 
@@ -127,7 +127,7 @@ public class Task
 			paintTypeIcon(g, typeIcon, position);
 		}
 
-		triggers.paint(g, getElementInnerBounds().getRightTop());
+		messageTriggers.paint(g, getElementInnerBounds().getRightTop());
 	}
 
 	@Override
@@ -157,19 +157,22 @@ public class Task
 
 	@Override
 	public void catchTrigger(final Trigger trigger) {
-		if (getBehavior().getKeepTriggers() && !areAllIncommingFlowElementsInstantiable()) {
-			triggers.add(trigger);
+		if (getBehavior().getKeepTriggers() && !areAllIncommingFlowElementsInstantiableNotifyTargets()) {
+			messageTriggers.add(trigger);
 			trigger.getDestinationInstance().addInstanceListener(this);
 		} else {
 			passFirstInstanceTokenToAllNextElements(trigger.getDestinationInstance());
-			notifyTriggerNotifyEvents(this, trigger);
 		}
 		repaint();
 	}
 
+	private boolean hasStoredTrigger(final Instance instance) {
+		return messageTriggers.first(instance) != null;
+	}
+
 	protected boolean waitsForMessage(final Token token) {
-		return canReceiveMessages() && !isGatewayCondition()
-				&& (triggers.first(token.getInstance()) == null);		
+		return canReceiveMessages()
+				&& !hasStoredTrigger(token.getInstance());
 	}
 	
 	@Override
@@ -182,7 +185,7 @@ public class Task
 	protected void forwardTokenFromInner(final Token token) {
 		super.forwardTokenFromInner(token);
 		if (!isGatewayCondition()) {
-			triggers.removeFirst(token.getInstance());
+			messageTriggers.removeFirst(token.getInstance());
 		}
 	}
 

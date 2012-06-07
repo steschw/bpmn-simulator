@@ -20,8 +20,8 @@
  */
 package bpmn.trigger;
 
-public interface TriggerNotifyElement {
+public interface InstantiableNotifiyTarget extends Instantiable {
 
-	void eventTriggered(TriggerCatchingElement catchElement, Trigger trigger);
+	void eventTriggered(TriggerCatchingElement catchingElement, Trigger trigger);
 
 }

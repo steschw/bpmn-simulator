@@ -87,13 +87,14 @@ public class Visualization {
 	}
 
 	protected static Icon loadIconFromRessource(final String name) {
-		final URL url = ClassLoader.getSystemClassLoader().getResource(ICONPATH + name);
+		final ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+		final URL url = classLoader.getResource(ICONPATH + name);
 		assert url != null;
 		Icon icon = null;
 		if (url != null) {
 			icon = new ImageIcon(url);
-			assert icon != null;
 		}
+		assert icon != null;
 		return icon;
 	}
 

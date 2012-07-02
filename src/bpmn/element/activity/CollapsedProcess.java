@@ -28,6 +28,7 @@ import javax.swing.Icon;
 
 import bpmn.Graphics;
 import bpmn.element.FlowElement;
+import bpmn.element.Rectangle;
 import bpmn.element.Visualization;
 
 @SuppressWarnings("serial")
@@ -45,6 +46,11 @@ public class CollapsedProcess extends FlowElement {
 	@Override
 	protected Color getElementDefaultBackground() {
 		return expandedProcess.getElementDefaultBackground();
+	}
+
+	@Override
+	public int getInnerBorderMargin() {
+		return expandedProcess.getInnerBorderMargin();
 	}
 
 	@Override
@@ -67,7 +73,14 @@ public class CollapsedProcess extends FlowElement {
 	@Override
 	protected void paintElement(final Graphics g) {
 
-		g.drawRoundRect(getElementInnerBounds(), ARC_LENGTH, ARC_LENGTH);
+		final Rectangle innerBounds = getElementInnerBounds();
+		g.drawRoundRect(innerBounds, ARC_LENGTH, ARC_LENGTH);
+
+		final int innerMargin = getInnerBorderMargin();
+		if (innerMargin > 0) {
+			innerBounds.grow(-innerMargin, -innerMargin);
+			g.drawRoundRect(innerBounds, ARC_LENGTH, ARC_LENGTH);
+		}
 
 		drawSymbol(g);
 	}
@@ -76,7 +89,9 @@ public class CollapsedProcess extends FlowElement {
 		final Icon icon = getVisualization().getIcon(Visualization.ICON_COLLAPSED);
 		if (icon != null) {
 			final Point position = getElementInnerBounds().getCenterBottom();
-			position.translate(-(icon.getIconWidth() / 2), -icon.getIconHeight());
+			position.translate(
+					-(icon.getIconWidth() / 2),
+					-(icon.getIconHeight() + getInnerBorderMargin()));
 			g.drawIcon(icon, position);
 		}
 	}

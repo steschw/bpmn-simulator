@@ -27,11 +27,14 @@ import bpmn.element.Rectangle;
 @SuppressWarnings("serial")
 public class Transaction extends Process {
 
-	private static final int PADDING = 4;
-
 	public Transaction(final Model model, final String id, final String name,
 			final boolean triggeredByEvent) {
 		super(model, id, name, triggeredByEvent);
+	}
+
+	@Override
+	public int getInnerBorderMargin() {
+		return DEFAULT_INNER_MARGIN;
 	}
 
 	@Override
@@ -39,7 +42,8 @@ public class Transaction extends Process {
 		super.paintElement(g);
 
 		final Rectangle rect = getElementInnerBounds();
-		rect.grow(-PADDING, -PADDING);
+		final int innerMargin = getInnerBorderMargin();
+		rect.grow(-innerMargin, -innerMargin);
 		g.drawRoundRect(rect, ARC_LENGTH, ARC_LENGTH);
 	}
 

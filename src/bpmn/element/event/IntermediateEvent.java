@@ -22,7 +22,6 @@ package bpmn.element.event;
 
 import java.awt.Color;
 
-import bpmn.Graphics;
 import bpmn.element.Visualization;
 
 @SuppressWarnings("serial")
@@ -38,10 +37,8 @@ public abstract class IntermediateEvent extends AbstractEvent {
 	}
 
 	@Override
-	protected void paintElement(final Graphics g) {
-		super.paintElement(g);
-
-		paintInnerCircle(g);
+	public int getInnerBorderMargin() {
+		return DEFAULT_INNER_MARGIN;
 	}
 
 }

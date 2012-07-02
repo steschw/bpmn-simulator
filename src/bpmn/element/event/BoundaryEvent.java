@@ -30,7 +30,6 @@ import java.util.Collection;
 
 import javax.swing.Icon;
 
-import bpmn.Graphics;
 import bpmn.element.ElementRef;
 import bpmn.element.Visualization;
 import bpmn.element.activity.AbstractActivity;
@@ -105,12 +104,10 @@ public final class BoundaryEvent
 	}
 
 	@Override
-	protected void paintElement(final Graphics g) {
-		super.paintElement(g);
-
-		if (!isInterrupting()) {
-			paintInnerCircle(g);
-		}
+	public int getInnerBorderMargin() {
+		return isInterrupting()
+				? super.getInnerBorderMargin()
+				: DEFAULT_INNER_MARGIN;
 	}
 
 	@Override

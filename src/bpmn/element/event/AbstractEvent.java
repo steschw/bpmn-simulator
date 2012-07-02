@@ -37,8 +37,6 @@ public abstract class AbstractEvent
 		extends AbstractTokenFlowElement
 		implements Event {
 
-	private static final int INNER_CIRCLE_MARGIN = 4;
-
 	private InstanceManager instanceManager;
 
 	private EventDefinition definition;
@@ -92,7 +90,14 @@ public abstract class AbstractEvent
 
 	@Override
 	protected void paintElement(final Graphics g) {
-		g.drawOval(getElementInnerBounds());
+		final Rectangle innerBounds = getElementInnerBounds();
+		g.drawOval(innerBounds);
+
+		final int innerMargin = getInnerBorderMargin();
+		if (innerMargin > 0) {
+			innerBounds.grow(-innerMargin, -innerMargin);
+			g.drawOval(innerBounds);
+		}
 
 		if (!isPlain()) {
 			paintIcon(g);
@@ -100,12 +105,6 @@ public abstract class AbstractEvent
 	}
 
 	protected abstract Icon getTypeIcon();
-
-	protected void paintInnerCircle(final Graphics g) {
-		final Rectangle bounds = getElementInnerBounds();
-		bounds.grow(-INNER_CIRCLE_MARGIN, -INNER_CIRCLE_MARGIN);
-		g.drawOval(bounds);
-	}
 
 	protected void paintIcon(final Graphics g) {
 		final Icon icon = getTypeIcon();

@@ -26,6 +26,9 @@ import java.util.Collection;
 @SuppressWarnings("serial")
 public abstract class FlowElement extends VisibleElement {
 
+	protected static final int DEFAULT_INNER_MARGIN = 4;
+	protected static final int NO_INNER_BORDER = 0;
+
 	private final Collection<ElementRef<SequenceFlow>> incoming = new ArrayList<ElementRef<SequenceFlow>>(); 
 	private final Collection<ElementRef<SequenceFlow>> outgoing = new ArrayList<ElementRef<SequenceFlow>>(); 
 
@@ -61,6 +64,10 @@ public abstract class FlowElement extends VisibleElement {
 		if ((element != null) && !outgoing.contains(element)) {
 			outgoing.add(element);
 		}
+	}
+
+	public int getInnerBorderMargin() {
+		return NO_INNER_BORDER;
 	}
 
 }

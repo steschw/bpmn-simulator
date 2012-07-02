@@ -56,7 +56,7 @@ public class BPMNSimulatorFrame extends JFrame {
 
 	private File file;
 
-	private InstancesFrame frameInstances = new InstancesFrame();
+	private final InstancesFrame frameInstances = new InstancesFrame();
 
 	public BPMNSimulatorFrame() {
 		super();

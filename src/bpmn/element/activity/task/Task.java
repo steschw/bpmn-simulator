@@ -48,7 +48,7 @@ public class Task
 
 	private static final int ARC_LENGTH = 10;
 
-	private TriggerCollection messageTriggers = new TriggerCollection();
+	private final TriggerCollection messageTriggers = new TriggerCollection();
 
 	public Task(final String id, final String name) {
 		super(id, name);

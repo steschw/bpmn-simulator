@@ -205,7 +205,7 @@ public abstract class AbstractTokenFlowElement
 	}
 
 	public void passAllTokenToAllNextElements() {
-		Collection<Token> tokens = new ArrayList<Token>(getTokens());
+		final Collection<Token> tokens = new ArrayList<Token>(getTokens());
 		for (final Token token : tokens) {
 			passTokenToAllNextElements(token);
 			token.remove();
@@ -232,7 +232,7 @@ public abstract class AbstractTokenFlowElement
 	}
 
 	protected Collection<FlowElement> getIncomingFlowElements() {
-		Collection<FlowElement> incomingFlowElements = new ArrayList<FlowElement>();
+		final Collection<FlowElement> incomingFlowElements = new ArrayList<FlowElement>();
 		for (final ElementRef<SequenceFlow> incomingRef : getIncoming()) {
 			if (incomingRef.hasElement()) {
 				final SequenceFlow incoming = incomingRef.getElement();
@@ -246,7 +246,7 @@ public abstract class AbstractTokenFlowElement
 	}
 
 	protected Collection<FlowElement> getOutgoingFlowElements() {
-		Collection<FlowElement> outgoingFlowElements = new ArrayList<FlowElement>();
+		final Collection<FlowElement> outgoingFlowElements = new ArrayList<FlowElement>();
 		for (final ElementRef<SequenceFlow> outgoingRef : getOutgoing()) {
 			if (outgoingRef.hasElement()) {
 				final SequenceFlow outgoing = outgoingRef.getElement();

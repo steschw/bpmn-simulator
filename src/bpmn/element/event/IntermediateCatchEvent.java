@@ -44,7 +44,7 @@ public final class IntermediateCatchEvent
 		implements StoringTriggerCatchingElement, InstantiableNotifiySource,
 				MouseListener, InstanceListener {
 
-	private TriggerCollection triggers = new TriggerCollection();
+	private final TriggerCollection triggers = new TriggerCollection();
 
 	public IntermediateCatchEvent(final String id, final String name) {
 		super(id, name);

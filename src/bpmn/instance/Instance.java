@@ -51,7 +51,7 @@ public class Instance {
 
 	private final Collection<InstanceListener> listeners = new LinkedList<InstanceListener>();  
 
-	private List<Instance> correlations = new ArrayList<Instance>();
+	private final List<Instance> correlations = new ArrayList<Instance>();
 
 	private final Collection<Instance> childs = new Vector<Instance>();
 

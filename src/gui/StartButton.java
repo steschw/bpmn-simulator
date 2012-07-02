@@ -74,7 +74,7 @@ public class StartButton extends JButton implements ActionListener {
 				final InstanceMenuItem menuItem = new InstanceMenuItem(instance);
 				menuItem.addActionListener(new ActionListener() {
 					@Override
-					public void actionPerformed(ActionEvent e) {
+					public void actionPerformed(final ActionEvent e) {
 						element.catchTrigger(new Trigger(null, instance));
 					}
 				});

@@ -36,7 +36,7 @@ import bpmn.element.Label;
 import bpmn.element.Rectangle;
 import bpmn.element.TitledFlowElement;
 import bpmn.element.VisibleElement;
-import bpmn.element.activity.ExpandedProcess;
+import bpmn.element.activity.Process;
 
 public class DiagramInterchangeModel extends Model {
 
@@ -69,7 +69,7 @@ public class DiagramInterchangeModel extends Model {
 	}
 
 	private static boolean isValidPlaneElement(final Element planeElement) {
-		return (planeElement instanceof ExpandedProcess)
+		return (planeElement instanceof Process)
 				|| (planeElement instanceof Collaboration);
 	}
 
@@ -77,8 +77,8 @@ public class DiagramInterchangeModel extends Model {
 		if (isElementNode(node, BPMNDI, "BPMNShape")) { //$NON-NLS-1$
 			VisibleElement element = getBPMNElementAttribute(node);
 			if (element != null) {
-				if (element instanceof ExpandedProcess) {
-					final ExpandedProcess expandedProcess = (ExpandedProcess)element;
+				if (element instanceof Process) {
+					final Process expandedProcess = (Process)element;
 					if (!getIsExpandedAttribute(node)) {
 						element = expandedProcess.createCollapsed();
 					}

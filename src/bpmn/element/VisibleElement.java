@@ -35,7 +35,7 @@ import javax.swing.JComponent;
 
 import bpmn.Graphics;
 import bpmn.Model;
-import bpmn.element.activity.ExpandedProcess;
+import bpmn.element.activity.Process;
 
 @SuppressWarnings("serial")
 public abstract class VisibleElement extends JComponent implements Element {
@@ -46,7 +46,7 @@ public abstract class VisibleElement extends JComponent implements Element {
 
 	private static Behavior defaultBehavior = new Behavior();
 
-	private ExpandedProcess parentProcess;
+	private Process parentProcess;
 
 	private String id;
 
@@ -153,11 +153,11 @@ public abstract class VisibleElement extends JComponent implements Element {
 		return exception;
 	}
 
-	public void setProcess(final ExpandedProcess parentProcess) {
+	public void setProcess(final Process parentProcess) {
 		this.parentProcess = parentProcess;
 	}
 
-	public final ExpandedProcess getProcess() {
+	public final Process getProcess() {
 		return parentProcess;
 	}
 

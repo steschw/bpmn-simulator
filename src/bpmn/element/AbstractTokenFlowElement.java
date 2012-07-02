@@ -26,7 +26,7 @@ import java.util.Collection;
 import java.util.Iterator;
 
 import bpmn.Graphics;
-import bpmn.element.activity.ExpandedProcess;
+import bpmn.element.activity.Process;
 import bpmn.element.gateway.EventBasedGateway;
 import bpmn.instance.Instance;
 import bpmn.token.Token;
@@ -146,7 +146,7 @@ public abstract class AbstractTokenFlowElement
 	}
 
 	protected boolean passTokenToParent(final Token token, final Instance instance) {
-		final ExpandedProcess parentProcess = getProcess();
+		final Process parentProcess = getProcess();
 		if (parentProcess != null) {
 			token.passTo(parentProcess, instance);
 			return true;

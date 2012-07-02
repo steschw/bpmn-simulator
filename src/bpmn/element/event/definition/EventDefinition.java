@@ -27,7 +27,7 @@ import javax.swing.Icon;
 import bpmn.Model;
 import bpmn.element.VisibleElement;
 import bpmn.element.Visualization;
-import bpmn.element.activity.ExpandedProcess;
+import bpmn.element.activity.Process;
 import bpmn.element.event.AbstractEvent;
 import bpmn.element.event.Event;
 import bpmn.instance.Instance;
@@ -53,7 +53,7 @@ public abstract class EventDefinition
 
 	public abstract Icon getIcon(final Visualization visualization, final boolean inverse);
 
-	protected static ExpandedProcess getProcessByToken(final Token token) {
+	protected static Process getProcessByToken(final Token token) {
 		return ((VisibleElement)token.getCurrentFlow()).getProcess();		
 	}
 

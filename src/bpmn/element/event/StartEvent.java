@@ -29,7 +29,7 @@ import java.util.Collection;
 import javax.swing.Icon;
 
 import bpmn.element.Visualization;
-import bpmn.element.activity.ExpandedProcess;
+import bpmn.element.activity.Process;
 import bpmn.instance.Instance;
 import bpmn.instance.InstanceManager;
 import bpmn.trigger.Instantiable;
@@ -48,7 +48,7 @@ public final class StartEvent extends AbstractEvent
 
 	@Override
 	public boolean canTriggerManual() {
-		final ExpandedProcess process = getProcess();
+		final Process process = getProcess();
 		return (getInstanceManager() != null)
 				&& (process != null) && !process.hasIncoming()
 				&& (isPlain() || isTimer() || isConditional()); 
@@ -82,7 +82,7 @@ public final class StartEvent extends AbstractEvent
 	}
 
 	@Override
-	public void setProcess(final ExpandedProcess parentProcess) {
+	public void setProcess(final Process parentProcess) {
 		super.setProcess(parentProcess);
 		updateCursor();
 	}

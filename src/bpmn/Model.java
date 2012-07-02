@@ -50,8 +50,8 @@ import bpmn.element.*;
 import bpmn.element.Error;
 import bpmn.element.Association.Direction;
 import bpmn.element.activity.AbstractActivity;
-import bpmn.element.activity.ExpandedProcess;
 import bpmn.element.activity.Process;
+import bpmn.element.activity.Transaction;
 import bpmn.element.activity.task.*;
 import bpmn.element.artifact.Group;
 import bpmn.element.artifact.TextAnnotation;
@@ -141,7 +141,7 @@ public class Model implements ErrorHandler {
 	}
 
 	protected void addElementToContainer(final VisibleElement element,
-			final ExpandedProcess process) {
+			final Process process) {
 		elements.set(element);
 		if (process != null) {
 			process.addElement(element);
@@ -322,7 +322,7 @@ public class Model implements ErrorHandler {
 				|| readElementSignal(node)
 				|| readElementError(node)
 				|| readElementDataStore(node)
-				|| readElementProcess(node, null)
+				|| readElementProcess(node)
 				|| readElementCollaboration(node);
 	}
 
@@ -441,7 +441,7 @@ public class Model implements ErrorHandler {
 	}
 
 	protected boolean readElementLane(final Node node,
-			final ExpandedProcess process, final LaneSet laneSet) {
+			final Process process, final LaneSet laneSet) {
 		if (isElementNode(node, BPMN, "lane")) { //$NON-NLS-1$
 			final Lane lane = new Lane(getIdAttribute(node), getNameAttribute(node));
 			final NodeList childNodes = node.getChildNodes();
@@ -460,7 +460,7 @@ public class Model implements ErrorHandler {
 	}
 
 	protected boolean readElementLaneSet(final Node node,
-			final ExpandedProcess process, final Lane lane) {
+			final Process process, final Lane lane) {
 		final boolean isChild = isElementNode(node, BPMN, "childLaneSet");
 		if (isChild || isElementNode(node, BPMN, "laneSet")) { //$NON-NLS-1$
 			final LaneSet laneSet = new LaneSet(getIdAttribute(node));
@@ -583,7 +583,7 @@ public class Model implements ErrorHandler {
 	}
 
 	protected boolean readElementStartEvent(final Node node,
-			final ExpandedProcess process) {
+			final Process process) {
 		if (isElementNode(node, BPMN, "startEvent")) { //$NON-NLS-1$
 			final StartEvent event = new StartEvent(
 					getIdAttribute(node), getNameAttribute(node),
@@ -597,7 +597,7 @@ public class Model implements ErrorHandler {
 	}
 
 	protected boolean readElementIntermediateThrowEvent(final Node node,
-			final ExpandedProcess process) {
+			final Process process) {
 		if (isElementNode(node, BPMN, "intermediateThrowEvent")) { //$NON-NLS-1$
 			final IntermediateThrowEvent event = new IntermediateThrowEvent(
 					getIdAttribute(node), getNameAttribute(node));
@@ -610,7 +610,7 @@ public class Model implements ErrorHandler {
 	}
 
 	protected boolean readElementIntermediateCatchEvent(final Node node,
-			final ExpandedProcess process) {
+			final Process process) {
 		if (isElementNode(node, BPMN, "intermediateCatchEvent")) { //$NON-NLS-1$
 			final IntermediateCatchEvent event = new IntermediateCatchEvent(
 					getIdAttribute(node), getNameAttribute(node));
@@ -631,7 +631,7 @@ public class Model implements ErrorHandler {
 	}
 
 	protected boolean readElementBoundaryEvent(final Node node,
-			final ExpandedProcess process) {
+			final Process process) {
 		if (isElementNode(node, BPMN, "boundaryEvent")) { //$NON-NLS-1$
 			final BoundaryEvent event = new BoundaryEvent(getIdAttribute(node),
 					getNameAttribute(node),
@@ -646,7 +646,7 @@ public class Model implements ErrorHandler {
 	}
 
 	protected boolean readElementEndEvent(final Node node,
-			final ExpandedProcess process) {
+			final Process process) {
 		if (isElementNode(node, BPMN, "endEvent")) { //$NON-NLS-1$
 			final EndEvent element = new EndEvent(getIdAttribute(node),
 					getNameAttribute(node), getAnimator().getInstanceManager());
@@ -704,7 +704,7 @@ public class Model implements ErrorHandler {
 		}
 	}
 
-	protected boolean readElementAssociation(final Node node, final ExpandedProcess process) {
+	protected boolean readElementAssociation(final Node node, final Process process) {
 		if (isElementNode(node, BPMN, "association")) { //$NON-NLS-1$
 			final Association association = new Association(getIdAttribute(node),
 					getSourceRefAttribute(node),
@@ -730,7 +730,7 @@ public class Model implements ErrorHandler {
 		}
 	}
 
-	protected boolean readElementSequenceflow(final Node node, final ExpandedProcess process) {
+	protected boolean readElementSequenceflow(final Node node, final Process process) {
 		if (isElementNode(node, BPMN, "sequenceFlow")) { //$NON-NLS-1$
 			final SequenceFlow sequenceFlow = new SequenceFlow(
 					getIdAttribute(node), getNameAttribute(node),
@@ -775,7 +775,7 @@ public class Model implements ErrorHandler {
 		return getAttributeBoolean(node, "instantiate", false);
 	}
 
-	protected boolean readElementTask(final Node node, final ExpandedProcess process) {
+	protected boolean readElementTask(final Node node, final Process process) {
 		if (isElementNode(node, BPMN, "manualTask")) { //$NON-NLS-1$
 			final ManualTask task = new ManualTask(getIdAttribute(node),
 					getNameAttribute(node));
@@ -832,7 +832,7 @@ public class Model implements ErrorHandler {
 		return text;
 	}
 
-	protected boolean readElementTextAnnotation(final Node node, final ExpandedProcess process) {
+	protected boolean readElementTextAnnotation(final Node node, final Process process) {
 		if (isElementNode(node, BPMN, "textAnnotation")) { //$NON-NLS-1$
 			final String text = getTextElement(node);
 			final TextAnnotation textAnnotation = new TextAnnotation(getIdAttribute(node), text);
@@ -844,7 +844,7 @@ public class Model implements ErrorHandler {
 		}
 	}
 
-	protected boolean readElementGroup(final Node node, final ExpandedProcess process) {
+	protected boolean readElementGroup(final Node node, final Process process) {
 		if (isElementNode(node, BPMN, "group")) { //$NON-NLS-1$
 			final Group group = new Group(getIdAttribute(node));
 			readElementsForBaseElement(node, group);
@@ -855,7 +855,7 @@ public class Model implements ErrorHandler {
 		}
 	}
 
-	protected boolean readElementGateway(final Node node, final ExpandedProcess process) {
+	protected boolean readElementGateway(final Node node, final Process process) {
 		if (isElementNode(node, BPMN, "parallelGateway")) { //$NON-NLS-1$
 			final ParallelGateway element = new ParallelGateway(
 					getIdAttribute(node), getNameAttribute(node));
@@ -883,7 +883,7 @@ public class Model implements ErrorHandler {
 		return true;
 	}
 
-	protected boolean readElementDataObject(final Node node, final ExpandedProcess process) {
+	protected boolean readElementDataObject(final Node node, final Process process) {
 		final boolean isReference = isElementNode(node, BPMN, "dataObjectReference"); //$NON-NLS-1$
 		if (isReference || isElementNode(node, BPMN, "dataObject")) { //$NON-NLS-1$
 			final DataObject dataObject = new DataObject(
@@ -911,7 +911,7 @@ public class Model implements ErrorHandler {
 		}
 	}
 
-	protected boolean readElementDataStoreReference(final Node node, final ExpandedProcess process) {
+	protected boolean readElementDataStoreReference(final Node node, final Process process) {
 		if (isElementNode(node, BPMN, "dataStoreReference")) { //$NON-NLS-1$
 			final DataStore dataStore = new DataStore(
 					getIdAttribute(node), getNameAttribute(node));
@@ -923,38 +923,72 @@ public class Model implements ErrorHandler {
 		}
 	}
 
-	protected boolean readElementProcess(final Node node, final ExpandedProcess parentProcess) {
-		final boolean isSubProcess = isElementNode(node, BPMN, "subProcess"); 
-		if (isSubProcess || isElementNode(node, BPMN, "process")) {
-			final ExpandedProcess process = new ExpandedProcess(this,
-					getIdAttribute(node), getNameAttribute(node));
+	protected void readFlowElementsContainer(final Node node, final Process container) {
+		final NodeList childNodes = node.getChildNodes();
+		for (int i = 0; i < childNodes.getLength(); ++i) {
+			final Node childNode = childNodes.item(i);
+			if (!readElementSubprocess(childNode, container)
+					&& !readElementTransaction(childNode, container)
+					&& !readElementsForFlowElement(childNode, container)
+					&& !readElementStartEvent(childNode, container)
+					&& !readElementIntermediateThrowEvent(childNode, container)
+					&& !readElementIntermediateCatchEvent(childNode, container)
+					&& !readElementBoundaryEvent(childNode, container)
+					&& !readElementEndEvent(childNode, container)
+					&& !readElementTask(childNode, container)
+					&& !readElementGateway(childNode, container)
+					&& !readElementAssociation(childNode, container)
+					&& !readElementSequenceflow(childNode, container)
+					&& !readElementTextAnnotation(childNode, container)
+					&& !readElementGroup(childNode, container)
+					&& !readElementDataObject(childNode, container)
+					&& !readElementDataStoreReference(childNode, container)
+					&& !readElementsDataAssociations(childNode)
+					&& !readElementLaneSet(childNode, container, null)) {
+				showUnknowNode(childNode);
+			}
+		}
+	}
+
+	protected boolean getTriggeredByEventAttribute(final Node node) {
+		return getAttributeBoolean(node, "triggeredByEvent", false);
+	}
+
+	protected boolean readElementTransaction(final Node node, final Process parentProcess) {
+		if (isElementNode(node, BPMN, "transaction")) {
+			final Transaction transaction = new Transaction(this,
+					getIdAttribute(node), getNameAttribute(node),
+					getTriggeredByEventAttribute(node));
+			readDefaultSequenceFlowAttribute(node, transaction);
+			readFlowElementsContainer(node, transaction);
+			addElementToContainer(transaction, parentProcess);
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	protected boolean readElementProcess(final Node node) {
+		if (isElementNode(node, BPMN, "process")) {
+			final Process process = new Process(this,
+					getIdAttribute(node), getNameAttribute(node), false);
 			readDefaultSequenceFlowAttribute(node, process);
-			final NodeList childNodes = node.getChildNodes();
-			for (int i = 0; i < childNodes.getLength(); ++i) {
-				final Node childNode = childNodes.item(i);
-				if (!readElementProcess(childNode, process)
-						&& !readElementsForFlowElement(childNode, process)
-						&& !readElementStartEvent(childNode, process)
-						&& !readElementIntermediateThrowEvent(childNode, process)
-						&& !readElementIntermediateCatchEvent(childNode, process)
-						&& !readElementBoundaryEvent(childNode, process)
-						&& !readElementEndEvent(childNode, process)
-						&& !readElementTask(childNode, process)
-						&& !readElementGateway(childNode, process)
-						&& !readElementAssociation(childNode, process)
-						&& !readElementSequenceflow(childNode, process)
-						&& !readElementTextAnnotation(childNode, process)
-						&& !readElementGroup(childNode, process)
-						&& !readElementDataObject(childNode, process)
-						&& !readElementDataStoreReference(childNode, process)
-						&& !readElementsDataAssociations(childNode)
-						&& !readElementLaneSet(childNode, process, null)) {
-					showUnknowNode(childNode);
-				}
-			}
-			if (!isSubProcess) {
-				processes.add(process);
-			}
+			readFlowElementsContainer(node, process);
+			processes.add(process);
+			addElementToContainer(process, null);
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	protected boolean readElementSubprocess(final Node node, final Process parentProcess) {
+		if (isElementNode(node, BPMN, "subProcess")) {
+			final Process process = new Process(this,
+					getIdAttribute(node), getNameAttribute(node),
+					getTriggeredByEventAttribute(node));
+			readDefaultSequenceFlowAttribute(node, process);
+			readFlowElementsContainer(node, process);
 			addElementToContainer(process, parentProcess);
 			return true;
 		} else {

@@ -22,6 +22,7 @@ package bpmn.element.activity;
 
 import java.awt.Color;
 import java.awt.Point;
+import java.awt.Stroke;
 
 import javax.swing.Icon;
 
@@ -32,11 +33,11 @@ import bpmn.element.Visualization;
 @SuppressWarnings("serial")
 public class CollapsedProcess extends FlowElement {
 
-	private static final int ARC_LENGTH = 10;
+	protected static final int ARC_LENGTH = 10;
 
-	private final ExpandedProcess expandedProcess;
+	private final Process expandedProcess;
 
-	public CollapsedProcess(final ExpandedProcess expandedProcess) {
+	public CollapsedProcess(final Process expandedProcess) {
 		super(expandedProcess.getId(), expandedProcess.getName());
 		this.expandedProcess = expandedProcess;
 	}
@@ -51,6 +52,11 @@ public class CollapsedProcess extends FlowElement {
 		return (expandedProcess == null)
 				? super.getForeground()
 				: expandedProcess.getForeground();
+	}
+
+	@Override
+	protected Stroke getStroke() {
+		return expandedProcess.getStroke();
 	}
 
 	@Override

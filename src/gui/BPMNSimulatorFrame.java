@@ -112,6 +112,17 @@ public class BPMNSimulatorFrame extends JFrame {
 		});
 		menuFile.add(menuFileOpen);
 
+		final JMenuItem menuFileReload = new JMenuItem(Messages.getString("Menu.reload")); //$NON-NLS-1$
+		menuFileReload.setMnemonic(KeyEvent.VK_R);
+		menuFileReload.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R, KeyEvent.ALT_MASK));
+		menuFileReload.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(final ActionEvent e) {
+				reloadModel();
+			}
+		});
+		menuFile.add(menuFileReload);
+
 		final JMenuItem menuFileClose = new JMenuItem(Messages.getString("Menu.close")); //$NON-NLS-1$
 		menuFileClose.setMnemonic(KeyEvent.VK_C);
 		menuFileClose.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, KeyEvent.ALT_MASK));
@@ -253,14 +264,16 @@ public class BPMNSimulatorFrame extends JFrame {
 	}
 
 	private void createModel() {
-		model = new DiagramInterchangeModel(desktop.getDesktopPane());
-		model.addStructureExceptionListener(logFrame);
-		model.load(file);
-		frameInstances.setInstanceManager(model.getInstanceManager());
-		menuWindow.setDesktopPane(desktop.getDesktopPane());
-		toolbar.setModel(model);
-		updateFrameTitle();
-		desktop.arrangeFrames();
+		if (file != null) {
+			model = new DiagramInterchangeModel(desktop.getDesktopPane());
+			model.addStructureExceptionListener(logFrame);
+			model.load(file);
+			frameInstances.setInstanceManager(model.getInstanceManager());
+			menuWindow.setDesktopPane(desktop.getDesktopPane());
+			toolbar.setModel(model);
+			updateFrameTitle();
+			desktop.arrangeFrames();
+		}
 	}
 
 	private void closeModel() {
@@ -280,6 +293,11 @@ public class BPMNSimulatorFrame extends JFrame {
 			file = null;
 			updateFrameTitle();
 		}
+	}
+
+	private void reloadModel() {
+		closeModel();
+		createModel();
 	}
 
 }

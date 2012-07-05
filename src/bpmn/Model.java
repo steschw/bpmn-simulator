@@ -64,6 +64,8 @@ import bpmn.element.event.definition.SignalEventDefinition;
 import bpmn.element.event.definition.TerminateEventDefinition;
 import bpmn.element.event.definition.TimerEventDefinition;
 import bpmn.element.gateway.*;
+import bpmn.exception.StructureException;
+import bpmn.exception.StructureExceptionListener;
 import bpmn.instance.Instance;
 import bpmn.instance.InstanceManager;
 import bpmn.token.TokenAnimator;
@@ -75,7 +77,8 @@ public class Model implements ErrorHandler {
 
 	protected static final String EXTENSION_SIGNAVIO = "http://www.signavio.com"; //$NON-NLS-1$
 
-	protected final LogFrame logFrame = new LogFrame();
+	private final Collection<StructureExceptionListener> structureExceptionListeners
+			= new ArrayList<StructureExceptionListener>();
 
 	private final ElementRefCollection<VisibleElement> elements
 			= new ElementRefCollection<VisibleElement>();
@@ -99,6 +102,20 @@ public class Model implements ErrorHandler {
 	public Model() {
 		super();
 		tokenAnimator = new TokenAnimator(getInstanceManager());
+	}
+
+	public void addStructureExceptionListener(final StructureExceptionListener listener) {
+		synchronized (structureExceptionListeners) {
+			structureExceptionListeners.add(listener);
+		}
+	}
+
+	protected void notifyStructureExceptionListeners(final StructureException exception) {
+		synchronized (structureExceptionListeners) {
+			for (StructureExceptionListener listener : structureExceptionListeners) {
+				listener.onStructureException(exception);
+			}
+		}
 	}
 
 	public InstanceManager getInstanceManager() {
@@ -127,7 +144,7 @@ public class Model implements ErrorHandler {
 	@SuppressWarnings("unchecked")
 	protected <E> Collection<E> getElements(final Class<E> type) {
 		final Collection<E> events = new LinkedList<E>();
-		for (final ElementRef<VisibleElement> elementRef : elements.values()) {
+		for (final ElementRef<? extends VisibleElement> elementRef : elements.values()) {
 			final Element element = elementRef.getElement();
 			if (type.isAssignableFrom(element.getClass())) {
 				events.add((E)element);
@@ -149,15 +166,19 @@ public class Model implements ErrorHandler {
 	}
 
 	protected void showUnknowNode(final Node node) {
-		logFrame.addError(MessageFormat.format(
-				Messages.getString("Protocol.unknownElement"), //$NON-NLS-1$
-				node.getNodeName()));
+		final StructureException exception = new StructureException(this,
+				MessageFormat.format(
+					Messages.getString("Protocol.unknownElement"), //$NON-NLS-1$
+					node.getNodeName()));
+		notifyStructureExceptionListeners(exception);
 	}
 
 	protected void showElementNotFound(final String id) {
-		logFrame.addError(MessageFormat.format(
-				Messages.getString("Protocol.elementNotFound"), //$NON-NLS-1$
-				id));
+		final StructureException exception = new StructureException(this,
+				MessageFormat.format(
+					Messages.getString("Protocol.elementNotFound"), //$NON-NLS-1$
+					id));
+		notifyStructureExceptionListeners(exception);
 	}
 
 	protected static boolean isElementNode(final Node node,
@@ -239,6 +260,10 @@ public class Model implements ErrorHandler {
 		return signals.getRef(id);
 	}
 
+	protected ElementRef<Error> getErrorRef(final String id) {
+		return errors.getRef(id);
+	}
+
 	protected <T extends Element> ElementRef<T> getAttributeElementRef(
 			final Node node, final String name) {
 		return getElementRef(getAttributeString(node, name));
@@ -247,10 +272,6 @@ public class Model implements ErrorHandler {
 	protected ElementRef<Signal> getAttributeSignalRef(
 			final Node node, final String name) {
 		return getSignalRef(getAttributeString(node, name));
-	}
-
-	protected ElementRef<Error> getErrorRef(final String id) {
-		return errors.getRef(id);
 	}
 
 	protected ElementRef<Error> getAttributeErrorRef(
@@ -335,9 +356,11 @@ public class Model implements ErrorHandler {
 					showUnknowNode(childNode);
 				}
 			}
-			logFrame.toFront();
 		} else {
-			logFrame.addError(Messages.getString("Protocol.noDefinitions")); //$NON-NLS-1$
+			final StructureException exception
+				= new StructureException(this,
+					Messages.getString("Protocol.noDefinitions")); //$NON-NLS-1$
+			notifyStructureExceptionListeners(exception);
 		}
 	}
 
@@ -435,7 +458,12 @@ public class Model implements ErrorHandler {
 			if (isElementNode(childNode, EXTENSION_SIGNAVIO, "signavioMetaData")) { //$NON-NLS-1$
 				readExtensionElementsPropertySignavio(childNode, element);
 			} else {
-				logFrame.addWarning(MessageFormat.format(Messages.getString("Protocol.unknownExtensionProperty"), childNode.getNodeName())); //$NON-NLS-1$
+				final StructureException exception
+					= new StructureException(this,
+						MessageFormat.format(
+							Messages.getString("Protocol.unknownExtensionProperty"), //$NON-NLS-1$
+							childNode.getNodeName()));
+				notifyStructureExceptionListeners(exception);
 			}
 		}
 	}
@@ -483,12 +511,12 @@ public class Model implements ErrorHandler {
 		if (isElementNode(node, BPMN, "incoming")) { //$NON-NLS-1$
 			final String elementId = node.getTextContent();
 			final ElementRef<SequenceFlow> elementRef = getElementRef(elementId);
-			element.addIncoming(elementRef);
+			element.addIncomingRef(elementRef);
 			return true;
 		} else if (isElementNode(node, BPMN, "outgoing")) { //$NON-NLS-1$
 			final String elementId = node.getTextContent();
 			final ElementRef<SequenceFlow> elementRef = getElementRef(elementId);
-			element.addOutgoing(elementRef);
+			element.addOutgoingRef(elementRef);
 			return true;
 		} else {
 			return false;
@@ -588,8 +616,8 @@ public class Model implements ErrorHandler {
 			final StartEvent event = new StartEvent(
 					getIdAttribute(node), getNameAttribute(node),
 					getAnimator().getInstanceManager());
-			readEvent(node, event);
 			addElementToContainer(event, process);
+			readEvent(node, event);
 			return true;
 		} else {
 			return false;
@@ -681,7 +709,7 @@ public class Model implements ErrorHandler {
 				|| readElementsDataAssociations(node);
 	}
 
-	protected void readGateway(final Node node, final Gateway gateway) {
+	protected void readGateway(final Node node, final AbstractGateway gateway) {
 		readDefaultSequenceFlowAttribute(node, gateway);
 		readFlowElement(node, gateway);
 	}
@@ -1001,11 +1029,11 @@ public class Model implements ErrorHandler {
 		if (connectingRef != null) {
 			final FlowElement source = connectingElement.getSource(); 
 			if (source != null) {
-				source.addOutgoing(connectingRef);
+				source.addOutgoingRef(connectingRef);
 			}
 			final FlowElement target = connectingElement.getTarget();
 			if (target != null) {
-				target.addIncoming(connectingRef);
+				target.addIncomingRef(connectingRef);
 			}
 		}
 	}
@@ -1030,17 +1058,22 @@ public class Model implements ErrorHandler {
 			final Document document = documentBuilder.parse(file);
 			readDefinitions(document.getDocumentElement());
 		} catch (IOException e) {
-			logFrame.addException(e);
+			notifyStructureExceptionListeners(new StructureException(this, e));
 		} catch (ParserConfigurationException e) {
-			logFrame.addException(e);
+			notifyStructureExceptionListeners(new StructureException(this, e));
 		} catch (SAXException e) {
-			logFrame.addException(e);
+			notifyStructureExceptionListeners(new StructureException(this, e));
 		}
 	}
 
 	protected void showSAXParseException(final SAXParseException exception) {
-		logFrame.addError("[" + exception.getLineNumber() + ":" + exception.getColumnNumber() + "] " + //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-				exception.getLocalizedMessage());
+		final StringBuilder message = new StringBuilder('['); //$NON-NLS-1$
+		message.append(exception.getLineNumber());
+		message.append(':'); //$NON-NLS-1$
+		message.append(exception.getColumnNumber());
+		message.append("] "); //$NON-NLS-1$
+		message.append(exception.getLocalizedMessage());
+		notifyStructureExceptionListeners(new StructureException(this, message.toString()));
 	}
 
 	@Override
@@ -1062,26 +1095,11 @@ public class Model implements ErrorHandler {
 		tokenAnimator.end();
 	}
 
-	public boolean hasErrorMessages() {
-		return logFrame.hasErrors();
-	}
-
-	public boolean hasMessages() {
-		return logFrame.hasMessages();
-	}
-
-	public void showMessages() {
-		logFrame.setVisible(true);
-	}
-
 	public Collection<TriggerCatchingElement> getManuallStartEvents() {
 		final Collection<TriggerCatchingElement> events = new ArrayList<TriggerCatchingElement>(); 
-		for (ElementRef<VisibleElement> element : elements.values()) {
-			if (element.getElement() instanceof TriggerCatchingElement) {
-				final TriggerCatchingElement event = (TriggerCatchingElement)element.getElement();
-				if (event.canTriggerManual()) {
-					events.add(event);
-				}
+		for (final TriggerCatchingElement event : getElements(TriggerCatchingElement.class)) {
+			if (event.canTriggerManual()) {
+				events.add(event);
 			}
 		}
 		return events;

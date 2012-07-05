@@ -50,7 +50,9 @@ public class BPMNSimulatorFrame extends JFrame {
 
 	private final WindowMenu menuWindow = new WindowMenu();
 
-	private final Toolbar toolbar = new Toolbar();
+	private final LogFrame logFrame = new LogFrame();
+
+	private final Toolbar toolbar = new Toolbar(logFrame);
 
 	private DiagramInterchangeModel model;
 
@@ -252,14 +254,12 @@ public class BPMNSimulatorFrame extends JFrame {
 
 	private void createModel() {
 		model = new DiagramInterchangeModel(desktop.getDesktopPane());
+		model.addStructureExceptionListener(logFrame);
 		model.load(file);
 		frameInstances.setInstanceManager(model.getInstanceManager());
 		menuWindow.setDesktopPane(desktop.getDesktopPane());
 		toolbar.setModel(model);
 		updateFrameTitle();
-		if (model.hasErrorMessages()) {
-			model.showMessages();
-		}
 		desktop.arrangeFrames();
 	}
 
@@ -270,6 +270,7 @@ public class BPMNSimulatorFrame extends JFrame {
 			frameInstances.setInstanceManager(null);
 			model.close();
 			model = null;
+			logFrame.clear();
 		}
 	}
 

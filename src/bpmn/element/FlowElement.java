@@ -29,41 +29,85 @@ public abstract class FlowElement extends VisibleElement {
 	protected static final int DEFAULT_INNER_MARGIN = 4;
 	protected static final int NO_INNER_BORDER = 0;
 
-	private final Collection<ElementRef<SequenceFlow>> incoming = new ArrayList<ElementRef<SequenceFlow>>(); 
-	private final Collection<ElementRef<SequenceFlow>> outgoing = new ArrayList<ElementRef<SequenceFlow>>(); 
+	private final Collection<ElementRef<SequenceFlow>> incomingRefs
+		= new ArrayList<ElementRef<SequenceFlow>>(); 
+
+	private final Collection<ElementRef<SequenceFlow>> outgoingRefs
+		= new ArrayList<ElementRef<SequenceFlow>>(); 
 
 	public FlowElement(final String id, final String name) {
 		super(id, name);
 	}
 
-	protected Collection<ElementRef<SequenceFlow>> getIncoming() {
-		return incoming;
+	private Collection<ElementRef<SequenceFlow>> getIncomingRefs() {
+		return incomingRefs;
 	}
 
-	protected Collection<ElementRef<SequenceFlow>> getOutgoing() {
-		return outgoing;
+	private Collection<ElementRef<SequenceFlow>> getOutgoingRefs() {
+		return outgoingRefs;
+	}
+
+	protected static final <E extends SequenceFlow> Collection<E>
+			getElementsFromElementRefs( final Collection<ElementRef<E>> elementRefs) {
+		final Collection<E> elements = new ArrayList<E>();
+		for (ElementRef<E> elementRef : elementRefs) {
+			if ((elementRef != null) && elementRef.hasElement()) {
+				elements.add(elementRef.getElement());
+			}
+		}
+		return elements;
+	}
+
+	public Collection<SequenceFlow> getIncoming() {
+		return getElementsFromElementRefs(incomingRefs);
+	}
+
+	public Collection<SequenceFlow> getOutgoing() {
+		return getElementsFromElementRefs(outgoingRefs);
 	}
 
 	public boolean hasIncoming() {
-		return !getIncoming().isEmpty();
+		return !getIncomingRefs().isEmpty();
 	}
 
 	public boolean hasOutgoing() {
-		return !getOutgoing().isEmpty();
+		return !getOutgoingRefs().isEmpty();
 	}
 
-	public void addIncoming(final ElementRef<SequenceFlow> element) {
+	public void addIncomingRef(final ElementRef<SequenceFlow> element) {
 		assert element != null;
-		if ((element != null) && !incoming.contains(element)) {
-			incoming.add(element);
+		if ((element != null) && !incomingRefs.contains(element)) {
+			incomingRefs.add(element);
 		}
 	}
 
-	public void addOutgoing(final ElementRef<SequenceFlow> element) {
+	public void addOutgoingRef(final ElementRef<SequenceFlow> element) {
 		assert element != null;
-		if ((element != null) && !outgoing.contains(element)) {
-			outgoing.add(element);
+		if ((element != null) && !outgoingRefs.contains(element)) {
+			outgoingRefs.add(element);
 		}
+	}
+
+	protected Collection<FlowElement> getIncomingFlowElements() {
+		final Collection<FlowElement> incomingFlowElements = new ArrayList<FlowElement>();
+		for (final SequenceFlow incoming : getIncoming()) {
+			final FlowElement flowElement = incoming.getSource();
+			if (flowElement != null) {
+				incomingFlowElements.add(flowElement);
+			}
+		}
+		return incomingFlowElements;
+	}
+
+	protected Collection<FlowElement> getOutgoingFlowElements() {
+		final Collection<FlowElement> outgoingFlowElements = new ArrayList<FlowElement>();
+		for (final SequenceFlow outgoing : getOutgoing()) {
+			final FlowElement flowElement = outgoing.getTarget();
+			if (flowElement != null) {
+				outgoingFlowElements.add(flowElement);
+			}
+		}
+		return outgoingFlowElements;
 	}
 
 	public int getInnerBorderMargin() {

@@ -40,7 +40,7 @@ import bpmn.element.AbstractTokenFlowElement;
 import bpmn.element.Visualization;
 import bpmn.element.event.AbstractEvent;
 import bpmn.element.event.StartEvent;
-import bpmn.element.gateway.Gateway;
+import bpmn.element.gateway.AbstractGateway;
 import bpmn.instance.Instance;
 import bpmn.token.Token;
 import bpmn.token.TokenCollection;
@@ -236,7 +236,7 @@ public class Process
 				final AbstractTokenFlowElement tokenFlowElement = (AbstractTokenFlowElement)element; 
 				if (!tokenFlowElement.hasIncoming()) {
 					if (tokenFlowElement instanceof AbstractActivity
-							|| tokenFlowElement instanceof Gateway) {
+							|| tokenFlowElement instanceof AbstractGateway) {
 						startElements.add(tokenFlowElement);
 					}
 				}

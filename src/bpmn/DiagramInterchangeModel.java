@@ -37,6 +37,7 @@ import bpmn.element.Rectangle;
 import bpmn.element.TitledFlowElement;
 import bpmn.element.VisibleElement;
 import bpmn.element.activity.Process;
+import bpmn.exception.StructureException;
 
 public class DiagramInterchangeModel extends Model {
 
@@ -130,9 +131,11 @@ public class DiagramInterchangeModel extends Model {
 					desktop.add(diagramFrame);
 					diagramFrame.showFrame();
 				} else {
-					logFrame.addWarning(MessageFormat.format(
+					final StructureException exception = new StructureException(this,
+						MessageFormat.format(
 							Messages.getString("Protocol.invalidPlaneElement"), //$NON-NLS-1$
 							planeElement));
+					notifyStructureExceptionListeners(exception);
 				}
 			}
 			return true;

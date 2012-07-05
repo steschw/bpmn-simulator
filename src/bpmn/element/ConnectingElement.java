@@ -44,7 +44,7 @@ public abstract class ConnectingElement extends VisibleElement {
 			final ElementRef<FlowElement> source, final ElementRef<FlowElement> target) {
 		super(id, name);
 		setSourceRef(source);
-		setTarget(target);
+		setTargetRef(target);
 		addMouseListener(new ClickThroughMouseListener());
 	}
 
@@ -69,7 +69,7 @@ public abstract class ConnectingElement extends VisibleElement {
 		return getElementFromElementRef(getSourceRef());
 	}
 
-	protected void setTarget(final ElementRef<FlowElement> elementRef) {
+	protected void setTargetRef(final ElementRef<FlowElement> elementRef) {
 		assert elementRef != null;
 		targetRef = elementRef;
 	}

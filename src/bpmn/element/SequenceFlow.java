@@ -26,7 +26,7 @@ import java.awt.Point;
 
 import bpmn.Graphics;
 import bpmn.element.gateway.ExclusiveGateway;
-import bpmn.element.gateway.Gateway;
+import bpmn.element.gateway.AbstractGateway;
 import bpmn.element.gateway.InclusiveGateway;
 
 @SuppressWarnings("serial")
@@ -119,7 +119,7 @@ public class SequenceFlow extends TokenConnectingElement {
 		final FlowElement sourceElement = getSource();
 		if ((sourceElement instanceof InclusiveGateway)
 				|| (sourceElement instanceof ExclusiveGateway)) {
-			final Gateway gateway = (Gateway)sourceElement;
+			final AbstractGateway gateway = (AbstractGateway)sourceElement;
 			return gateway.getOutgoing().size() > 1;
 		}
 		return false;

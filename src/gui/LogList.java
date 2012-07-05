@@ -18,7 +18,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package bpmn;
+package gui;
 
 import java.awt.Dimension;
 import java.awt.Image;
@@ -95,12 +95,12 @@ public class LogList extends JScrollPane {
 			return false;
 		}
 
-/*
 		public synchronized void clear() {
 			((DefaultTableModel)getModel()).getDataVector().removeAllElements();
 			updateUI();
 		}
 
+/*
 		public void scrollToEnd() {
 			scrollRectToVisible(getCellRect(getRowCount() - 1, 0, true));
 		}
@@ -161,6 +161,10 @@ public class LogList extends JScrollPane {
 
 	public void addWarning(final String message) {
 		getContent().addMessage(ICON_WARNING, message);
+	}
+
+	public void clear() {
+		getContent().clear();
 	}
 
 }

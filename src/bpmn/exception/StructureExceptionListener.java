@@ -18,39 +18,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package bpmn.element.gateway;
+package bpmn.exception;
 
-import java.awt.BasicStroke;
+public interface StructureExceptionListener {
 
-import bpmn.Graphics;
-import bpmn.instance.Instance;
-import bpmn.token.Token;
-
-@SuppressWarnings("serial")
-public final class ExclusiveGateway extends AbstractGateway {
-
-	public ExclusiveGateway(final String id, final String name) {
-		super(id, name);
-	}
-
-	@Override
-	protected void paintElement(final Graphics g) {
-		super.paintElement(g);
-
-		if (getVisualization().getShowExclusiveGatewaySymbol()) {
-			g.setStroke(new BasicStroke(3));
-			g.drawCross(getSymbolBounds(), true);
-		}
-	}
-
-	@Override
-	protected void tokenForwardToNextElement(final Token token, final Instance instance) {
-		if (passTokenToFirstOutgoing(token, instance)) {
-			token.remove();
-			setException(false);
-		} else {
-			setException(true);
-		}
-	}
+	void onStructureException(StructureException exception);
 
 }

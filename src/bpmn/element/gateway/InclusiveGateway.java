@@ -23,14 +23,13 @@ package bpmn.element.gateway;
 import java.awt.BasicStroke;
 
 import bpmn.Graphics;
-import bpmn.element.ElementRef;
 import bpmn.element.SequenceFlow;
 import bpmn.instance.Instance;
 import bpmn.token.Token;
 import bpmn.token.TokenCollection;
 
 @SuppressWarnings("serial")
-public class InclusiveGateway extends Gateway {
+public final class InclusiveGateway extends AbstractMergingGateway {
 
 	public InclusiveGateway(final String id, final String name) {
 		super(id, name);
@@ -49,37 +48,22 @@ public class InclusiveGateway extends Gateway {
 		return false;
 	}
 
+	@Override
 	protected synchronized void forwardTokenParallel(final Instance instance) {
 		final TokenCollection popTokens = new TokenCollection();
-		for (ElementRef<SequenceFlow> incoming : getIncoming()) {
-			if (incoming.hasElement()) {
-				final SequenceFlow incomingSequenceFlow = incoming.getElement();
-				final Token incomingToken = getFirstTokenForIncoming(incomingSequenceFlow, instance);
-				if (incomingToken == null) {
-					// für diesen eingang ist noch kein token vorhanden
-					if (incomingSequenceFlow.hasIncomingPathWithActiveToken(instance)) {
-						// aber es kann noch eines ankommen
-						return;
-					}
-				} else {
-					popTokens.add(incomingToken);
+		for (final SequenceFlow incoming : getIncoming()) {
+			final Token incomingToken = getFirstTokenForIncoming(incoming, instance);
+			if (incomingToken == null) {
+				// für diesen eingang ist noch kein token vorhanden
+				if (incoming.hasIncomingPathWithActiveToken(instance)) {
+					// aber es kann noch eines ankommen
+					return;
 				}
+			} else {
+				popTokens.add(incomingToken);
 			}
 		}
 		forwardMergedTokensToAllOutgoing(popTokens);
-	}
-
-	public final boolean isForMerging() {
-		return getIncoming().size() > 1;
-	}
-
-	@Override
-	protected void tokenForwardToNextElement(final Token token, final Instance instance) {
-		if (isForMerging()) {
-			forwardTokenParallel(instance);
-		} else {
-			super.tokenForwardToNextElement(token);
-		}
 	}
 
 }

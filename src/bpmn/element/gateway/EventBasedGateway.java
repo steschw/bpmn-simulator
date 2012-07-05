@@ -21,7 +21,6 @@
 package bpmn.element.gateway;
 
 import bpmn.Graphics;
-import bpmn.element.ElementRef;
 import bpmn.element.FlowElement;
 import bpmn.element.Rectangle;
 import bpmn.element.SequenceFlow;
@@ -34,8 +33,8 @@ import bpmn.trigger.Trigger;
 import bpmn.trigger.InstantiableNotifiyTarget;
 
 @SuppressWarnings("serial")
-public class EventBasedGateway
-	extends Gateway
+public final class EventBasedGateway
+	extends AbstractGateway
 	implements InstantiableNotifiyTarget {
 
 	private final boolean instantiate;
@@ -67,12 +66,9 @@ public class EventBasedGateway
 	}
 
 	protected SequenceFlow getSequenceFlowToCatchElement(final TriggerCatchingElement catchElement) {
-		for (ElementRef<SequenceFlow> outgoingRef : getOutgoing()) {
-			if (outgoingRef.hasElement()) {
-				final SequenceFlow outgoing = outgoingRef.getElement();
-				if (catchElement.equals(outgoing.getTarget())) {
-					return outgoing;
-				}
+		for (final SequenceFlow outgoing : getOutgoing()) {
+			if (catchElement.equals(outgoing.getTarget())) {
+				return outgoing;
 			}
 		}
 		return null;
@@ -134,5 +130,5 @@ public class EventBasedGateway
 			targetCatchElement.removeFirstTrigger(instance);
 		}
 	}
-	
+
 }

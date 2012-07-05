@@ -66,6 +66,8 @@ public class Toolbar extends JToolBar implements AnimationListener {
 
 	private JButton buttonMessages;
 
+	private final LogFrame logFrame;
+
 	private Model model;
 
 	protected static ImageIcon loadIcon(final String filename) {
@@ -76,8 +78,10 @@ public class Toolbar extends JToolBar implements AnimationListener {
 		return null;
 	}
 
-	public Toolbar() {
+	public Toolbar(final LogFrame logFrame) {
 		super();
+
+		this.logFrame = logFrame;
 
 		create();
 	}
@@ -179,7 +183,7 @@ public class Toolbar extends JToolBar implements AnimationListener {
 		buttonMessages.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(final ActionEvent event) {
-				model.showMessages();
+				logFrame.setVisible(true);
 			}
 		});
 		add(buttonMessages);
@@ -193,8 +197,8 @@ public class Toolbar extends JToolBar implements AnimationListener {
 			buttonMessages.setVisible(false);
 			buttonMessages.setToolTipText(null);
 		} else {
-			buttonMessages.setVisible(model.hasMessages());
-			if (model.hasErrorMessages()) {
+			buttonMessages.setVisible(logFrame.hasMessages());
+			if (logFrame.hasErrors()) {
 				buttonMessages.setIcon(ICON_MESSAGESERROR);
 				buttonMessages.setToolTipText(Messages.getString("Toolbar.hintErrors")); //$NON-NLS-1$
 			} else {

@@ -21,20 +21,15 @@
 package bpmn.element.gateway;
 
 import java.awt.BasicStroke;
-import java.awt.Point;
 
 import bpmn.Graphics;
-import bpmn.element.ElementRef;
-import bpmn.element.Rectangle;
 import bpmn.element.SequenceFlow;
 import bpmn.instance.Instance;
 import bpmn.token.Token;
 import bpmn.token.TokenCollection;
 
 @SuppressWarnings("serial")
-public class ParallelGateway extends Gateway {
-
-	protected static final int TOKEN_MARGIN = 5;
+public final class ParallelGateway extends AbstractMergingGateway {
 
 	public ParallelGateway(final String id, final String name) {
 		super(id, name);
@@ -48,55 +43,18 @@ public class ParallelGateway extends Gateway {
 		g.drawCross(getSymbolBounds(), false);
 	}
 
+	@Override
 	protected synchronized void forwardTokenParallel(final Instance instance) {
 		final TokenCollection popTokens = new TokenCollection();
-		for (ElementRef<SequenceFlow> incoming : getIncoming()) {
-			if (incoming.hasElement()) {
-				final Token incomingToken = getFirstTokenForIncoming(incoming.getElement(), instance);
-				if (incomingToken == null) {
-					// es sind nicht für jeden eingang ein token vorhanden
-					return;
-				}
-				popTokens.add(incomingToken);
+		for (final SequenceFlow incoming : getIncoming()) {
+			final Token incomingToken = getFirstTokenForIncoming(incoming, instance);
+			if (incomingToken == null) {
+				// es sind nicht für jeden eingang ein token vorhanden
+				return;
 			}
+			popTokens.add(incomingToken);
 		}
 		forwardMergedTokensToAllOutgoing(popTokens);
-	}
-
-	public final boolean isForMerging() {
-		return getIncoming().size() > 1;
-	}
-
-	@Override
-	protected void tokenForwardToNextElement(final Token token, final Instance instance) {
-		if (isForMerging()) {
-			forwardTokenParallel(instance);
-		} else {
-			super.tokenForwardToNextElement(token, instance);
-		}
-	}
-
-	@Override
-	protected void paintTokens(final Graphics g) {
-		if (isForMerging()) {
-			final Rectangle bounds = getElementInnerBounds();
-			int y = bounds.y;
-			for (Instance tokenInstance : getInnerTokens().getInstances()) {
-				int x = bounds.x + (int)bounds.getWidth();
-				for (ElementRef<SequenceFlow> incoming : getIncoming()) {
-					if (incoming.hasElement()) {
-						final int count = getInnerTokens().byInstance(tokenInstance).byPreviousFlow(incoming.getElement()).getCount();
-						if (count > 0) {
-							tokenInstance.paint(g, new Point(x, y), count);
-						}
-					}
-					x -= TOKEN_MARGIN;
-				}
-				y += TOKEN_MARGIN;
-			}
-		} else {
-			super.paintTokens(g);
-		}
 	}
 
 }

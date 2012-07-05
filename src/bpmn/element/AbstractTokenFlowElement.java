@@ -123,9 +123,8 @@ public abstract class AbstractTokenFlowElement
 			return true;
 		} else {
 			// Oder eines der eingehenden Elemente hat noch Token dieser Instanz
-			for (ElementRef<SequenceFlow> incoming : getIncoming()) {
-				if (incoming.hasElement()
-						&& incoming.getElement().hasIncomingPathWithActiveToken(instance)) {
+			for (SequenceFlow incoming : getIncoming()) {
+				if (incoming.hasIncomingPathWithActiveToken(instance)) {
 					return true;
 				}
 			}
@@ -155,13 +154,10 @@ public abstract class AbstractTokenFlowElement
 	}
 
 	protected boolean passTokenToFirstSequenceFlow(final Token token, final Instance instance) {
-		for (ElementRef<SequenceFlow> outgoingRef : getOutgoing()) {
-			if (outgoingRef.hasElement()) {
-				final SequenceFlow sequenceFlow = outgoingRef.getElement();
-				if (sequenceFlow.acceptsToken() && !sequenceFlow.isDefault()) {
-					token.passTo(sequenceFlow, instance);
-					return true;
-				}
+		for (final SequenceFlow outgoing : getOutgoing()) {
+			if (outgoing.acceptsToken() && !outgoing.isDefault()) {
+				token.passTo(outgoing, instance);
+				return true;
 			}
 		}
 		return false;
@@ -169,13 +165,10 @@ public abstract class AbstractTokenFlowElement
 
 	protected int passTokenToAllOutgoingSequenceFlows(final Token token, final Instance instance) {
 		int forewardCount = 0;
-		for (ElementRef<SequenceFlow> outgoingRef : getOutgoing()) {
-			if (outgoingRef.hasElement()) {
-				final SequenceFlow sequenceFlow = outgoingRef.getElement();
-				if (sequenceFlow.acceptsToken() && !sequenceFlow.isDefault()) {
-					token.passTo(sequenceFlow, instance);
-					++forewardCount;
-				}
+		for (SequenceFlow outgoing : getOutgoing()) {
+			if (outgoing.acceptsToken() && !outgoing.isDefault()) {
+				token.passTo(outgoing, instance);
+				++forewardCount;
 			}
 		}
 		return forewardCount;
@@ -192,13 +185,9 @@ public abstract class AbstractTokenFlowElement
 	}
 
 	protected boolean isGatewayCondition() {
-		for (final ElementRef<SequenceFlow> incomingRef : getIncoming()) {
-			if (incomingRef.hasElement()) {
-				final SequenceFlow incoming = incomingRef.getElement();
-				final FlowElement flowElement = incoming.getSource();
-				if (flowElement instanceof EventBasedGateway) {
-					return true;
-				}
+		for (final SequenceFlow incoming : getIncoming()) {
+			if (incoming.getSource() instanceof EventBasedGateway) {
+				return true;
 			}
 		}
 		return false;
@@ -229,34 +218,6 @@ public abstract class AbstractTokenFlowElement
 				break;
 			}
 		}
-	}
-
-	protected Collection<FlowElement> getIncomingFlowElements() {
-		final Collection<FlowElement> incomingFlowElements = new ArrayList<FlowElement>();
-		for (final ElementRef<SequenceFlow> incomingRef : getIncoming()) {
-			if (incomingRef.hasElement()) {
-				final SequenceFlow incoming = incomingRef.getElement();
-				final FlowElement flowElement = incoming.getSource();
-				if (flowElement != null) {
-					incomingFlowElements.add(flowElement);
-				}
-			}
-		}
-		return incomingFlowElements;
-	}
-
-	protected Collection<FlowElement> getOutgoingFlowElements() {
-		final Collection<FlowElement> outgoingFlowElements = new ArrayList<FlowElement>();
-		for (final ElementRef<SequenceFlow> outgoingRef : getOutgoing()) {
-			if (outgoingRef.hasElement()) {
-				final SequenceFlow outgoing = outgoingRef.getElement();
-				final FlowElement flowElement = outgoing.getTarget();
-				if (flowElement != null) {
-					outgoingFlowElements.add(flowElement);
-				}
-			}
-		}
-		return outgoingFlowElements;
 	}
 
 	protected boolean areAllIncommingFlowElementsInstantiableNotifyTargets() {

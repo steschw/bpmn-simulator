@@ -18,7 +18,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package bpmn;
+package gui;
 
 import java.awt.BorderLayout;
 import java.awt.Point;
@@ -29,8 +29,14 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import bpmn.Messages;
+import bpmn.exception.StructureException;
+import bpmn.exception.StructureExceptionListener;
+
 @SuppressWarnings("serial")
-public class LogFrame extends JFrame {
+public class LogFrame
+	extends JFrame
+	implements StructureExceptionListener {
 
 	private static final int DEFAULT_WIDTH = 400;
 	private static final int DEFAULT_HEIGHT = 400;
@@ -68,27 +74,39 @@ public class LogFrame extends JFrame {
 		setLocation(new Point(0, 0));
 	}
 
-	public void addWarning(final String message) {
+	protected void addWarning(final String message) {
 		listLog.addWarning(message);
 		++warningCount;
 	}
 
-	public void addError(final String message) {
+	protected void addError(final String message) {
 		listLog.addError(message);
 		++errorCount;
+		setVisible(true);
+		toFront();
 	}
 
-	public void addException(final Exception exception) {
-		listLog.addError(exception.toString());
-		++errorCount;
+	protected void addException(final Exception exception) {
+		addError(exception.toString());
 	}
 
 	public boolean hasMessages() {
-		return (warningCount + errorCount) > 0; 
+		return (warningCount + errorCount) > 0;
 	}
 
 	public boolean hasErrors() {
 		return errorCount > 0;
+	}
+
+	@Override
+	public void onStructureException(final StructureException exception) {
+		addError(exception.getMessage());
+	}
+
+	public void clear() {
+		listLog.clear();
+		warningCount = 0;
+		errorCount = 0;
 	}
 
 }

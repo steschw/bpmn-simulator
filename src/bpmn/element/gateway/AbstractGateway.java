@@ -31,14 +31,13 @@ import bpmn.element.TokenFlowElementWithDefault;
 import bpmn.element.Visualization;
 import bpmn.instance.Instance;
 import bpmn.token.Token;
-import bpmn.token.TokenCollection;
 
 @SuppressWarnings("serial")
-public abstract class Gateway extends TokenFlowElementWithDefault {
+public abstract class AbstractGateway extends TokenFlowElementWithDefault {
 
 	private static final int SYMBOL_MARGIN = 14;
 
-	public Gateway(final String id, final String name) {
+	public AbstractGateway(final String id, final String name) {
 		super(id, name);
 	}
 
@@ -68,14 +67,6 @@ public abstract class Gateway extends TokenFlowElementWithDefault {
 		final Rectangle bounds = getElementInnerBounds();
 		bounds.grow(-SYMBOL_MARGIN, -SYMBOL_MARGIN);
 		return bounds;
-	}
-
-	protected final void forwardMergedTokensToAllOutgoing(final TokenCollection tokens) {
-		final Token mergedToken = tokens.merge();
-		if (mergedToken != null) {
-			passTokenToAllNextElements(mergedToken);
-			mergedToken.remove();
-		}
 	}
 
 	protected Token getFirstTokenForIncoming(final SequenceFlow sequenceFlow,

@@ -36,6 +36,8 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
+import javax.swing.event.MenuEvent;
+import javax.swing.event.MenuListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import bpmn.DiagramInterchangeModel;
@@ -164,6 +166,22 @@ public class BPMNSimulatorFrame extends JFrame {
 		});
 		menuFile.add(menuFileExit);
 
+		menuFile.addMenuListener(new MenuListener() {
+			@Override
+			public void menuSelected(final MenuEvent e) {
+				menuFileReload.setEnabled(isModelOpen());
+				menuFileClose.setEnabled(isModelOpen());
+			}
+			
+			@Override
+			public void menuDeselected(final MenuEvent e) {
+			}
+			
+			@Override
+			public void menuCanceled(final MenuEvent e) {
+			}
+		});
+
 		return menuFile;
 	}
 
@@ -203,6 +221,21 @@ public class BPMNSimulatorFrame extends JFrame {
 			}
 		});
 		menuExtra.add(menuExtraOpenExternalEditor);
+
+		menuExtra.addMenuListener(new MenuListener() {
+			@Override
+			public void menuSelected(final MenuEvent e) {
+				menuExtraOpenExternalEditor.setEnabled(isModelOpen());
+			}
+			
+			@Override
+			public void menuDeselected(final MenuEvent e) {
+			}
+			
+			@Override
+			public void menuCanceled(final MenuEvent e) {
+			}
+		});
 
 		return menuExtra;
 	}
@@ -298,6 +331,10 @@ public class BPMNSimulatorFrame extends JFrame {
 	private void reloadModel() {
 		closeModel();
 		createModel();
+	}
+
+	private boolean isModelOpen() {
+		return model != null; 
 	}
 
 }

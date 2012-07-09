@@ -304,7 +304,7 @@ public class Instance {
 		assert getTokenCount() == 0;
 	}
 
-	public void stepAllTokens(final int count) {
+	public void executeAllTokens(final int stepCount) {
 		/*
 		 * Möglicherweise wurden einige token beim Durchlaufen bereits gelöscht (z.B. durch merge)
 		 */
@@ -315,12 +315,12 @@ public class Instance {
 				exists = tokens.contains(token);
 			}
 			if (exists) {
-				token.step(count);
+				token.step(stepCount);
 			}
 		}
 		final Collection<Instance> childSnapshot = new Vector<Instance>(getChildInstances());
 		for (Instance childInstance : childSnapshot) {
-			childInstance.stepAllTokens(count);
+			childInstance.executeAllTokens(stepCount);
 		}
 	}
 

@@ -27,13 +27,13 @@ import bpmn.Graphics;
 import bpmn.element.Label;
 import bpmn.element.Rectangle;
 import bpmn.element.SequenceFlow;
-import bpmn.element.TokenFlowElementWithDefault;
+import bpmn.element.AbstractTokenFlowElementWithDefault;
 import bpmn.element.Visualization;
 import bpmn.instance.Instance;
 import bpmn.token.Token;
 
 @SuppressWarnings("serial")
-public abstract class AbstractGateway extends TokenFlowElementWithDefault {
+public abstract class AbstractGateway extends AbstractTokenFlowElementWithDefault {
 
 	private static final int SYMBOL_MARGIN = 14;
 

@@ -38,7 +38,7 @@ import bpmn.trigger.InstantiableNotifiyTarget;
 
 @SuppressWarnings("serial")
 public abstract class AbstractTokenFlowElement
-	extends FlowElement
+	extends AbstractFlowElement
 	implements TokenFlow {
 
 	private final TokenCollection innerTokens = new TokenCollection();
@@ -221,11 +221,11 @@ public abstract class AbstractTokenFlowElement
 	}
 
 	protected boolean areAllIncommingFlowElementsInstantiableNotifyTargets() {
-		final Collection<FlowElement> incomingFlowElements = getIncomingFlowElements();
+		final Collection<AbstractFlowElement> incomingFlowElements = getIncomingFlowElements();
 		if (incomingFlowElements.isEmpty()) {
 			return false;
 		}
-		for (final FlowElement flowElement : incomingFlowElements) {
+		for (final AbstractFlowElement flowElement : incomingFlowElements) {
 			if (!((flowElement instanceof InstantiableNotifiyTarget)
 					&& ((InstantiableNotifiyTarget)flowElement).isInstantiable())) {
 				return false;
@@ -237,7 +237,7 @@ public abstract class AbstractTokenFlowElement
 	protected int notifyInstantiableIncomingFlowElements(
 			final TriggerCatchingElement catchElement, final Trigger trigger) {
 		int count = 0;
-		for (final FlowElement flowElement : getIncomingFlowElements()) {
+		for (final AbstractFlowElement flowElement : getIncomingFlowElements()) {
 			if (flowElement instanceof InstantiableNotifiyTarget) {
 				((InstantiableNotifiyTarget)flowElement).eventTriggered(catchElement, trigger);
 				++count;

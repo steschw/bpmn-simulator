@@ -33,52 +33,52 @@ import javax.swing.SwingUtilities;
 import bpmn.Graphics;
 
 @SuppressWarnings("serial")
-public abstract class ConnectingElement extends VisibleElement {
+public abstract class AbstractConnectingElement<E extends Element>
+		extends VisibleElement {
 
 	private final Deque<Point> waypoints = new LinkedList<Point>();
 
-	private ElementRef<FlowElement> sourceRef;
-	private ElementRef<FlowElement> targetRef;
+	private ElementRef<E> sourceRef;
+	private ElementRef<E> targetRef;
 
-	public ConnectingElement(final String id, final String name,
-			final ElementRef<FlowElement> source, final ElementRef<FlowElement> target) {
+	public AbstractConnectingElement(final String id, final String name,
+			final ElementRef<E> source, final ElementRef<E> target) {
 		super(id, name);
 		setSourceRef(source);
 		setTargetRef(target);
 		addMouseListener(new ClickThroughMouseListener());
 	}
 
-	protected void setSourceRef(final ElementRef<FlowElement> elementRef) {
+	protected void setSourceRef(final ElementRef<E> elementRef) {
 		assert elementRef != null;
 		sourceRef = elementRef;
 	}
 
-	private ElementRef<FlowElement> getSourceRef() {
+	private ElementRef<E> getSourceRef() {
 		return sourceRef;
 	}
 
-	protected static final <E extends FlowElement> E getElementFromElementRef(
-			final ElementRef<E> elementRef) {
+	protected final E getElementFromElementRef(final ElementRef<E> elementRef) {
 		if ((elementRef != null) && elementRef.hasElement()) {
 			return elementRef.getElement();
 		}
 		return null;
 	}
 
-	public FlowElement getSource() {
+	public E getSource() {
 		return getElementFromElementRef(getSourceRef());
 	}
 
-	protected void setTargetRef(final ElementRef<FlowElement> elementRef) {
+	protected void setTargetRef(final ElementRef<E> elementRef) {
 		assert elementRef != null;
 		targetRef = elementRef;
 	}
 
-	private ElementRef<FlowElement> getTargetRef() {
+	private ElementRef<E> getTargetRef() {
 		return targetRef;
 	}
 
-	public FlowElement getTarget() {
+	public E getTarget() {
 		return getElementFromElementRef(getTargetRef());
 	}
 

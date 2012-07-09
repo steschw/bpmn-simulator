@@ -40,7 +40,7 @@ import bpmn.trigger.TriggerCollection;
 
 @SuppressWarnings("serial")
 public final class IntermediateCatchEvent
-		extends IntermediateEvent
+		extends AbstractIntermediateEvent
 		implements StoringTriggerCatchingElement, InstantiableNotifiySource,
 				MouseListener, InstanceListener {
 

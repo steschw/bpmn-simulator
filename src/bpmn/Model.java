@@ -66,9 +66,9 @@ import bpmn.element.event.definition.TimerEventDefinition;
 import bpmn.element.gateway.*;
 import bpmn.exception.StructureException;
 import bpmn.exception.StructureExceptionListener;
+import bpmn.execution.InstanceAnimator;
 import bpmn.instance.Instance;
 import bpmn.instance.InstanceManager;
-import bpmn.token.TokenAnimator;
 import bpmn.trigger.TriggerCatchingElement;
 
 public class Model implements ErrorHandler {
@@ -76,6 +76,8 @@ public class Model implements ErrorHandler {
 	protected static final String BPMN = "http://www.omg.org/spec/BPMN/20100524/MODEL";  //$NON-NLS-1$
 
 	protected static final String EXTENSION_SIGNAVIO = "http://www.signavio.com"; //$NON-NLS-1$
+
+	private static final String SCHEMA_RESOURCE = "xsd/BPMN20.xsd"; //$NON-NLS-1$
 
 	private final Collection<StructureExceptionListener> structureExceptionListeners
 			= new ArrayList<StructureExceptionListener>();
@@ -97,11 +99,11 @@ public class Model implements ErrorHandler {
 
 	private final InstanceManager instanceManager = new InstanceManager();
 
-	private final TokenAnimator tokenAnimator;
+	private final InstanceAnimator tokenAnimator;
 
 	public Model() {
 		super();
-		tokenAnimator = new TokenAnimator(getInstanceManager());
+		tokenAnimator = new InstanceAnimator(getInstanceManager());
 	}
 
 	public void addStructureExceptionListener(final StructureExceptionListener listener) {
@@ -110,7 +112,7 @@ public class Model implements ErrorHandler {
 		}
 	}
 
-	protected void notifyStructureExceptionListeners(final StructureException exception) {
+	public void notifyStructureExceptionListeners(final StructureException exception) {
 		synchronized (structureExceptionListeners) {
 			for (StructureExceptionListener listener : structureExceptionListeners) {
 				listener.onStructureException(exception);
@@ -122,7 +124,7 @@ public class Model implements ErrorHandler {
 		return instanceManager;
 	}
 
-	public TokenAnimator getAnimator() {
+	public InstanceAnimator getAnimator() {
 		return tokenAnimator;
 	}
 
@@ -130,7 +132,7 @@ public class Model implements ErrorHandler {
 		return collaborations;
 	}
 
-	public void sendMessages(final FlowElement sourceElement,
+	public void sendMessages(final AbstractFlowElement sourceElement,
 			final Instance sourceInstance) {
 		for (final Collaboration collaboration : collaborations) {
 			collaboration.sendMessages(sourceElement, sourceInstance);
@@ -170,14 +172,6 @@ public class Model implements ErrorHandler {
 				MessageFormat.format(
 					Messages.getString("Protocol.unknownElement"), //$NON-NLS-1$
 					node.getNodeName()));
-		notifyStructureExceptionListeners(exception);
-	}
-
-	protected void showElementNotFound(final String id) {
-		final StructureException exception = new StructureException(this,
-				MessageFormat.format(
-					Messages.getString("Protocol.elementNotFound"), //$NON-NLS-1$
-					id));
 		notifyStructureExceptionListeners(exception);
 	}
 
@@ -221,7 +215,7 @@ public class Model implements ErrorHandler {
 	protected float getAttributeFloat(final Node node, final String name) {
 		try {
 			return Float.parseFloat(getAttributeString(node, name));
-		} catch (NumberFormatException e) {
+		} catch (NumberFormatException exception) {
 			return 0;
 		}
 	}
@@ -239,20 +233,24 @@ public class Model implements ErrorHandler {
 		return convertStringToBool(getAttributeString(node, name), defaultValue);
 	}
 
-	protected VisibleElement getAttributeElement(final Node node, final String name) {
+	protected VisibleElement getAttributeElement(final Node node, final String name)
+			throws StructureException {
 		final String elementId = getAttributeString(node, name);
 		VisibleElement element = null;
 		if (elementId != null) {
 			element = elements.get(elementId);
-			if (element == null) {
-				showElementNotFound(elementId);
-			}
+		}
+		if (element == null) {
+			throw new StructureException(this,
+					MessageFormat.format(
+						Messages.getString("Protocol.elementNotFound"), //$NON-NLS-1$
+						elementId));
 		}
 		return element;
 	}
 
 	@SuppressWarnings("unchecked")
-	protected <T extends Element> ElementRef<T> getElementRef(final String id) {
+	protected <T extends VisibleElement> ElementRef<T> getElementRef(final String id) {
 		return (ElementRef<T>)elements.getRef(id);
 	}
 
@@ -264,7 +262,7 @@ public class Model implements ErrorHandler {
 		return errors.getRef(id);
 	}
 
-	protected <T extends Element> ElementRef<T> getAttributeElementRef(
+	protected <T extends VisibleElement> ElementRef<T> getAttributeElementRef(
 			final Node node, final String name) {
 		return getElementRef(getAttributeString(node, name));
 	}
@@ -312,11 +310,11 @@ public class Model implements ErrorHandler {
 		return getAttributeString(node, "name"); //$NON-NLS-1$
 	}
 
-	protected ElementRef<FlowElement> getSourceRefAttribute(final Node node) {
+	protected <E extends AbstractFlowElement> ElementRef<E> getSourceRefAttribute(final Node node) {
 		return getAttributeElementRef(node, "sourceRef"); //$NON-NLS-1$
 	}
 
-	protected ElementRef<FlowElement> getTargetRefAttribute(final Node node) {
+	protected <E extends AbstractFlowElement> ElementRef<E> getTargetRefAttribute(final Node node) {
 		return getAttributeElementRef(node, "targetRef"); //$NON-NLS-1$
 	}
 
@@ -507,7 +505,7 @@ public class Model implements ErrorHandler {
 		}
 	}
 
-	protected boolean readElementsIncomingOutgoing(final Node node, final FlowElement element) {
+	protected boolean readElementsIncomingOutgoing(final Node node, final AbstractFlowElement element) {
 		if (isElementNode(node, BPMN, "incoming")) { //$NON-NLS-1$
 			final String elementId = node.getTextContent();
 			final ElementRef<SequenceFlow> elementRef = getElementRef(elementId);
@@ -555,13 +553,13 @@ public class Model implements ErrorHandler {
 		}
 	}
 
-	protected boolean readElementsForFlowElement(final Node node, final FlowElement element) {
+	protected boolean readElementsForFlowElement(final Node node, final AbstractFlowElement element) {
 		return readElementsForBaseElement(node, element)
 				|| readElementsIncomingOutgoing(node, element)
 				|| readElementExtensionElements(node, element);
 	}
 
-	protected void readFlowElement(final Node node, final FlowElement element) {
+	protected void readFlowElement(final Node node, final AbstractFlowElement element) {
 		final NodeList childNodes = node.getChildNodes();
 		for (int i = 0; i < childNodes.getLength(); ++i) {
 			final Node childNode = childNodes.item(i);
@@ -691,8 +689,8 @@ public class Model implements ErrorHandler {
 				|| isElementNode(node, BPMN, "dataOutputAssociation")) {
 			final Node sourceElement = getSingleSubElement(node, BPMN, "sourceRef");
 			final Node targetElement = getSingleSubElement(node, BPMN, "targetRef");
-			final ElementRef<FlowElement> sourceRef = getElementRef(sourceElement.getTextContent());
-			final ElementRef<FlowElement> targetRef = getElementRef(targetElement.getTextContent());
+			final ElementRef<AbstractFlowElement> sourceRef = getElementRef(sourceElement.getTextContent());
+			final ElementRef<AbstractFlowElement> targetRef = getElementRef(targetElement.getTextContent());
 			final DataAssociation dataAssociation =
 					new DataAssociation(getIdAttribute(node),
 							sourceRef, targetRef);
@@ -760,10 +758,11 @@ public class Model implements ErrorHandler {
 
 	protected boolean readElementSequenceflow(final Node node, final Process process) {
 		if (isElementNode(node, BPMN, "sequenceFlow")) { //$NON-NLS-1$
+			final ElementRef<AbstractTokenFlowElement> sourceRef = getSourceRefAttribute(node); 
+			final ElementRef<AbstractTokenFlowElement> targetRef = getTargetRefAttribute(node); 
 			final SequenceFlow sequenceFlow = new SequenceFlow(
 					getIdAttribute(node), getNameAttribute(node),
-					getSourceRefAttribute(node),
-					getTargetRefAttribute(node));
+					sourceRef, targetRef);
 			final NodeList childNodes = node.getChildNodes();
 			for (int i = 0; i < childNodes.getLength(); ++i) {
 				final Node childNode = childNodes.item(i);
@@ -1027,11 +1026,11 @@ public class Model implements ErrorHandler {
 	protected void assignFlowElementsToConnectingElement(final SequenceFlow connectingElement) {
 		final ElementRef<SequenceFlow> connectingRef = getElementRef(connectingElement.getId());
 		if (connectingRef != null) {
-			final FlowElement source = connectingElement.getSource(); 
+			final AbstractFlowElement source = connectingElement.getSource(); 
 			if (source != null) {
 				source.addOutgoingRef(connectingRef);
 			}
-			final FlowElement target = connectingElement.getTarget();
+			final AbstractFlowElement target = connectingElement.getTarget();
 			if (target != null) {
 				target.addIncomingRef(connectingRef);
 			}
@@ -1039,7 +1038,7 @@ public class Model implements ErrorHandler {
 	}
 
 	protected Schema loadSchema() throws SAXException {
-		final URL resource = getClass().getResource("xsd/BPMN20.xsd");   //$NON-NLS-1$
+		final URL resource = getClass().getResource(SCHEMA_RESOURCE);
 		final SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);  
 		return factory.newSchema(resource);  
 	}

@@ -27,7 +27,8 @@ import java.awt.Stroke;
 import bpmn.Graphics;
 
 @SuppressWarnings("serial")
-public class Association extends ConnectingElement {
+public class Association
+		extends AbstractConnectingElement<AbstractFlowElement> {
 
 	public static enum Direction {
 		NONE,
@@ -51,8 +52,8 @@ public class Association extends ConnectingElement {
 	private Direction direction = Direction.NONE;
 
 	public Association(final String id,
-			final ElementRef<FlowElement> source,
-			final ElementRef<FlowElement> target) {
+			final ElementRef<AbstractFlowElement> source,
+			final ElementRef<AbstractFlowElement> target) {
 		super(id, null, source, target);
 	}
 

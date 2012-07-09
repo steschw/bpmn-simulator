@@ -82,10 +82,10 @@ public class InstanceManager {
 		return instance;
 	}
 
-	public void stepAll(final int count) {
+	public void executeAll(final int stepCount) {
 		final Collection<Instance> instanceSnapshot = new Vector<Instance>(instances); 
 		for (Instance instance : instanceSnapshot) {
-			instance.stepAllTokens(count);
+			instance.executeAllTokens(stepCount);
 		}
 	}
 

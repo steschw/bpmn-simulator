@@ -59,8 +59,9 @@ public abstract class AbstractMergingGateway extends AbstractGateway {
 		int y = bounds.y;
 		for (Instance tokenInstance : getInnerTokens().getInstances()) {
 			int x = bounds.x + (int)bounds.getWidth();
+			final TokenCollection instanceTokens = getInnerTokens().byInstance(tokenInstance);
 			for (final SequenceFlow incoming : getIncoming()) {
-				final int count = getInnerTokens().byInstance(tokenInstance).byPreviousFlow(incoming).getCount();
+				final int count = instanceTokens.byPreviousFlow(incoming).getCount();
 				if (count > 0) {
 					tokenInstance.paint(g, new Point(x, y), count);
 				}

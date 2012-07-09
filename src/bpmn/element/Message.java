@@ -26,7 +26,7 @@ import java.awt.Point;
 import bpmn.Graphics;
 
 @SuppressWarnings("serial")
-public class Message extends FlowElement {
+public class Message extends AbstractFlowElement {
 
 	public Message(final String id, final String name) {
 		super(id, name);

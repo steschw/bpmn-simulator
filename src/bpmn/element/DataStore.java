@@ -25,7 +25,7 @@ import java.awt.Color;
 import bpmn.Graphics;
 
 @SuppressWarnings("serial")
-public class DataStore extends FlowElement {
+public class DataStore extends AbstractFlowElement {
 
 	public DataStore(final String id, final String name) {
 		super(id, name);

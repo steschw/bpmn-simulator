@@ -24,8 +24,8 @@ package bpmn.element;
 public class DataAssociation extends Association {
 
 	public DataAssociation(final String id,
-			final ElementRef<FlowElement> source,
-			final ElementRef<FlowElement> target) {
+			final ElementRef<AbstractFlowElement> source,
+			final ElementRef<AbstractFlowElement> target) {
 		super(id, source, target);
 	}
 

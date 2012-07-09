@@ -18,27 +18,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package bpmn.element.event;
+package bpmn.execution;
 
-import java.awt.Color;
+public interface AnimationListener {
 
-import bpmn.element.Visualization;
+	void animationPlay();
 
-@SuppressWarnings("serial")
-public abstract class IntermediateEvent extends AbstractEvent {
+	void animationPause();
 
-	public IntermediateEvent(final String id, final String name) {
-		super(id, name, null);
-	}
-
-	@Override
-	protected Color getElementDefaultBackground() {
-		return getVisualization().getBackground(Visualization.Element.EVENT_INTERMEDIATE);
-	}
-
-	@Override
-	public int getInnerBorderMargin() {
-		return DEFAULT_INNER_MARGIN;
-	}
+	void animationReset();
 
 }

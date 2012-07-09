@@ -21,10 +21,10 @@
 package bpmn.element.artifact;
 
 import bpmn.element.ClickThroughMouseListener;
-import bpmn.element.FlowElement;
+import bpmn.element.AbstractFlowElement;
 
 @SuppressWarnings("serial")
-public abstract class Artifact extends FlowElement {
+public abstract class Artifact extends AbstractFlowElement {
 
 	public Artifact(final String id) {
 		super(id, null);

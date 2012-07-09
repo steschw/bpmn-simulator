@@ -23,7 +23,7 @@ package bpmn.element;
 import bpmn.Graphics;
 
 @SuppressWarnings("serial")
-public class LaneSet extends FlowElement {
+public class LaneSet extends AbstractFlowElement {
 
 	public LaneSet(final String id) {
 		super(id, null);

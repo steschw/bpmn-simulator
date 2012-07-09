@@ -22,7 +22,7 @@ package bpmn.element;
 
 import bpmn.Model;
 
-public class Signal extends InvisibleElement {
+public final class Signal extends InvisibleElement {
 
 	private final String name;
 

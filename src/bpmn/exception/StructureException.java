@@ -21,10 +21,12 @@
 package bpmn.exception;
 
 import bpmn.Model;
+import bpmn.element.Element;
 
 @SuppressWarnings("serial")
 public class StructureException extends Exception {
 
+	private Element element;
 	private final Model model;
 
 	public StructureException(final Model model, final String message) {
@@ -35,6 +37,24 @@ public class StructureException extends Exception {
 	public StructureException(final Model model, final Throwable cause) {
 		super(cause);
 		this.model = model;
+	}
+
+	public StructureException(final Element element, final String message) {
+		this(element.getModel(), message);
+		this.element = element;
+	}
+
+	public StructureException(final Element element, final Throwable cause) {
+		this(element.getModel(), cause);
+		this.element = element;
+	}
+
+	public final Element getElement() {
+		return element;
+	}
+
+	public final Model getModel() {
+		return model;
 	}
 
 }

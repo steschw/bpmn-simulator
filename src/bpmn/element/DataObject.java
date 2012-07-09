@@ -28,7 +28,7 @@ import javax.swing.Icon;
 import bpmn.Graphics;
 
 @SuppressWarnings("serial")
-public class DataObject extends FlowElement {
+public class DataObject extends AbstractFlowElement {
 
 	private boolean isCollection;
 

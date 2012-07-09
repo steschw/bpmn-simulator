@@ -29,13 +29,14 @@ import bpmn.token.TokenCollection;
 import bpmn.token.TokenFlow;
 
 @SuppressWarnings("serial")
-public abstract class TokenConnectingElement extends ConnectingElement
+public abstract class AbstractTokenConnectingElement<E extends AbstractFlowElement & TokenFlow>
+		extends AbstractConnectingElement<E>
 		implements TokenFlow {
 
 	private final TokenCollection tokens = new TokenCollection();
 
-	public TokenConnectingElement(final String id, final String name,
-			final ElementRef<FlowElement> source, final ElementRef<FlowElement> target) {
+	public AbstractTokenConnectingElement(final String id, final String name,
+			final ElementRef<E> source, final ElementRef<E> target) {
 		super(id, name, source, target);
 	}
 
@@ -79,11 +80,8 @@ public abstract class TokenConnectingElement extends ConnectingElement
 	}
 
 	protected void forwardToken(final Token token) {
-		final FlowElement flowElement = getTarget();
-		if (flowElement instanceof TokenFlow) {
-			token.passTo((TokenFlow)flowElement);
-			token.remove();
-		}
+		token.passTo(getTarget());
+		token.remove();
 	}
 
 	protected boolean hasElementActiveToken(final Instance instance) {
@@ -96,11 +94,12 @@ public abstract class TokenConnectingElement extends ConnectingElement
 			return true;
 		} else {
 			// Oder eines der eingehenden Elemente hat noch Token dieser Instanz
-			final FlowElement flowElement = getSource();
-			if (flowElement instanceof TokenFlow) {
-				return ((TokenFlow)flowElement).hasIncomingPathWithActiveToken(instance);
+			final E source = getSource();
+			if (source != null) {
+				return source.hasIncomingPathWithActiveToken(instance);
+			} else {
+				return false;
 			}
-			return false;
 		}
 	}
 

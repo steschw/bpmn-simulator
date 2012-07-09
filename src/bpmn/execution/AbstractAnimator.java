@@ -18,12 +18,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package bpmn.token;
+package bpmn.execution;
 
 import java.util.Collection;
 import java.util.Vector;
 
-public abstract class Animator implements Runnable {
+public abstract class AbstractAnimator implements Runnable {
 
 	private static final long FPS_25 = 1000 / 25;
 
@@ -32,7 +32,6 @@ public abstract class Animator implements Runnable {
 	private Thread thread;
 
 	private boolean paused;
-
 
 	private float speedFactor = 1.0f;
 

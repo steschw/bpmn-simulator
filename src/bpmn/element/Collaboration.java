@@ -36,7 +36,7 @@ import bpmn.trigger.TriggerCatchingElement;
 import bpmn.trigger.Trigger;
 
 @SuppressWarnings("serial")
-public class Collaboration extends FlowElement implements Scrollable {
+public class Collaboration extends AbstractFlowElement implements Scrollable {
 
 	private final Collection<MessageFlow> messageFlows = new ArrayList<MessageFlow>();
 
@@ -48,7 +48,7 @@ public class Collaboration extends FlowElement implements Scrollable {
 		messageFlows.add(messageFlow);
 	}
 
-	public boolean hasMessageTarget(final FlowElement element) {
+	public boolean hasMessageTarget(final AbstractFlowElement element) {
 		for (final MessageFlow messageFlow : messageFlows) {
 			if (element.equals(messageFlow.getTarget())) {
 				return true;
@@ -91,11 +91,11 @@ public class Collaboration extends FlowElement implements Scrollable {
 		return targetInstance;
 	}
 
-	public void sendMessages(final FlowElement sourceElement,
+	public void sendMessages(final AbstractFlowElement sourceElement,
 			final Instance sourceInstance) {
 		for (final MessageFlow messageFlow : messageFlows) {
 			if (sourceElement.equals(messageFlow.getSource())) {
-				final FlowElement targetElement = messageFlow.getTarget();
+				final AbstractFlowElement targetElement = messageFlow.getTarget();
 				if (targetElement instanceof TriggerCatchingElement) {
 					final TriggerCatchingElement catchingElement = (TriggerCatchingElement)targetElement;  
 					if (requiresCorrelation(catchingElement)) {

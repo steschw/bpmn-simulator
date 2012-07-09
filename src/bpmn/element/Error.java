@@ -23,7 +23,7 @@ package bpmn.element;
 import bpmn.Model;
 
 
-public class Error extends InvisibleElement {
+public final class Error extends InvisibleElement {
 
 	private final String code;
 	private final String name;

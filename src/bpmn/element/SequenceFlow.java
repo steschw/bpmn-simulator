@@ -30,12 +30,12 @@ import bpmn.element.gateway.AbstractGateway;
 import bpmn.element.gateway.InclusiveGateway;
 
 @SuppressWarnings("serial")
-public class SequenceFlow extends TokenConnectingElement {
+public class SequenceFlow extends AbstractTokenConnectingElement<AbstractTokenFlowElement> {
 
 	private Expression condition;
 
 	public SequenceFlow(final String id, final String name,
-			final ElementRef<FlowElement> source, final ElementRef<FlowElement> target) {
+			final ElementRef<AbstractTokenFlowElement> source, final ElementRef<AbstractTokenFlowElement> target) {
 		super(id, name, source, target);
 	}
 
@@ -104,7 +104,7 @@ public class SequenceFlow extends TokenConnectingElement {
 	}
 
 	public boolean isDefault() {
-		final FlowElement flowElement = getSource();
+		final AbstractFlowElement flowElement = getSource();
 		if (flowElement instanceof ElementWithDefaultSequenceFlow) {
 			final ElementWithDefaultSequenceFlow element = (ElementWithDefaultSequenceFlow)flowElement;
 			final ElementRef<SequenceFlow> defaultElementFlowRef = element.getDefaultSequenceFlowRef();
@@ -116,11 +116,10 @@ public class SequenceFlow extends TokenConnectingElement {
 	}
 
 	protected boolean isSourceElementInclusiveOrExclusiveGatewayAndHasMoreThanOnceOutgoing() {
-		final FlowElement sourceElement = getSource();
+		final AbstractFlowElement sourceElement = getSource();
 		if ((sourceElement instanceof InclusiveGateway)
 				|| (sourceElement instanceof ExclusiveGateway)) {
-			final AbstractGateway gateway = (AbstractGateway)sourceElement;
-			return gateway.getOutgoing().size() > 1;
+			return ((AbstractGateway)sourceElement).getOutgoing().size() > 1;
 		}
 		return false;
 	}

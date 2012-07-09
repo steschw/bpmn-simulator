@@ -29,9 +29,8 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import bpmn.element.Collaboration;
-import bpmn.element.ConnectingElement;
-import bpmn.element.Element;
-import bpmn.element.FlowElement;
+import bpmn.element.AbstractConnectingElement;
+import bpmn.element.AbstractFlowElement;
 import bpmn.element.Label;
 import bpmn.element.Rectangle;
 import bpmn.element.TitledFlowElement;
@@ -65,18 +64,25 @@ public class DiagramInterchangeModel extends Model {
 				|| readElementBPMNDiagram(node);
 	}
 
-	protected VisibleElement getBPMNElementAttribute(final Node node) {
-		return getAttributeElement(node, "bpmnElement"); //$NON-NLS-1$
+	@SuppressWarnings("unchecked")
+	protected <E extends VisibleElement> E getBPMNElementAttribute(final Node node, final Class<E> type)
+			throws StructureException {
+		final VisibleElement element = getAttributeElement(node, "bpmnElement"); //$NON-NLS-1$
+		if (!type.isAssignableFrom(element.getClass())) {
+			throw new StructureException(this, type.getSimpleName() + " expected");
+		}
+		return (E)element;
 	}
 
-	private static boolean isValidPlaneElement(final Element planeElement) {
+	private static boolean isValidPlaneElement(final AbstractFlowElement planeElement) {
 		return (planeElement instanceof Process)
 				|| (planeElement instanceof Collaboration);
 	}
 
-	protected boolean readElementBPMNShape(final Node node, final VisibleElement plane) {
+	protected boolean readElementBPMNShape(final Node node, final VisibleElement plane)
+			throws StructureException {
 		if (isElementNode(node, BPMNDI, "BPMNShape")) { //$NON-NLS-1$
-			VisibleElement element = getBPMNElementAttribute(node);
+			AbstractFlowElement element = getBPMNElementAttribute(node, AbstractFlowElement.class);
 			if (element != null) {
 				if (element instanceof Process) {
 					final Process expandedProcess = (Process)element;
@@ -89,7 +95,7 @@ public class DiagramInterchangeModel extends Model {
 					titledElementContainer.setHorizontal(getIsHorizontalAttribute(node));
 				}
 				plane.add(element, 0);
-				readDiagramPlaneElementBounds(node, (FlowElement)element);
+				readDiagramPlaneElementBounds(node, element);
 				readDiagramPlaneElementLabel(node, plane, element);
 				element.initSubElements();
 			}
@@ -99,12 +105,13 @@ public class DiagramInterchangeModel extends Model {
 		}
 	}
 
-	protected boolean readElementBPMNEdge(final Node node, final VisibleElement plane) {
+	protected boolean readElementBPMNEdge(final Node node, final VisibleElement plane)
+			throws StructureException {
 		if (isElementNode(node, BPMNDI, "BPMNEdge")) { //$NON-NLS-1$
-			final VisibleElement element = getBPMNElementAttribute(node);
+			final AbstractConnectingElement<?> element = getBPMNElementAttribute(node, AbstractConnectingElement.class);
 			if (element != null) {
 				plane.add(element, 0);
-				readDiagramPlaneElementWaypoints(node, (ConnectingElement)element);
+				readDiagramPlaneElementWaypoints(node, element);
 				readDiagramPlaneElementLabel(node, plane, element);
 				element.initSubElements();
 			}
@@ -114,24 +121,29 @@ public class DiagramInterchangeModel extends Model {
 		}
 	}
 
-	protected boolean readElementBPMNPlane(final Node node, final String name) {
+	protected boolean readElementBPMNPlane(final Node node, final String name)
+			throws StructureException {
 		if (isElementNode(node, BPMNDI, "BPMNPlane")) { //$NON-NLS-1$
-			final VisibleElement planeElement = getBPMNElementAttribute(node);
+			final AbstractFlowElement planeElement = getBPMNElementAttribute(node, AbstractFlowElement.class);
 			if (planeElement != null) {
 				if (isValidPlaneElement(planeElement)) {
 					final NodeList childNodes = node.getChildNodes();
 					for (int i = 0; i < childNodes.getLength(); ++i) {
 						final Node childNode = childNodes.item(i);
-						if (!readElementBPMNShape(childNode, planeElement)
-								&& !readElementBPMNEdge(childNode, planeElement)) {
-							showUnknowNode(childNode);
+						try {
+							if (!readElementBPMNShape(childNode, planeElement)
+									&& !readElementBPMNEdge(childNode, planeElement)) {
+								showUnknowNode(childNode);
+							}
+						} catch (StructureException exception) {
+							notifyStructureExceptionListeners(exception);
 						}
 					}
 					final DiagramFrame diagramFrame = new DiagramFrame(planeElement, name);
 					desktop.add(diagramFrame);
 					diagramFrame.showFrame();
 				} else {
-					final StructureException exception = new StructureException(this,
+					final StructureException exception = new StructureException(planeElement,
 						MessageFormat.format(
 							Messages.getString("Protocol.invalidPlaneElement"), //$NON-NLS-1$
 							planeElement));
@@ -150,8 +162,12 @@ public class DiagramInterchangeModel extends Model {
 			final NodeList childNodes = node.getChildNodes();
 			for (int i = 0; i < childNodes.getLength(); ++i) {
 				final Node childNode = childNodes.item(i);
-				if (!readElementBPMNPlane(childNode, name)) {
-					showUnknowNode(childNode);
+				try {
+					if (!readElementBPMNPlane(childNode, name)) {
+						showUnknowNode(childNode);
+					}
+				} catch (StructureException exception) {
+					notifyStructureExceptionListeners(exception);
 				}
 			}
 			return true;
@@ -169,12 +185,12 @@ public class DiagramInterchangeModel extends Model {
 	}
 
 	protected void readDiagramPlaneElementBounds(final Node node,
-			final FlowElement element) {
+			final AbstractFlowElement element) {
 		element.setInnerBounds(getBoundsElement(node));
 	}
 
 	protected void readDiagramPlaneElementWaypoints(final Node node,
-			final ConnectingElement element) {
+			final AbstractConnectingElement<?> element) {
 		final NodeList childNodes = node.getChildNodes();
 		for (int i = 0; i < childNodes.getLength(); ++i) {
 			final Node childNode = childNodes.item(i);

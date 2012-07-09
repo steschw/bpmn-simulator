@@ -18,33 +18,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package bpmn.token;
+package bpmn.element.event;
 
-import bpmn.instance.InstanceManager;
+import java.awt.Color;
 
-public class TokenAnimator extends Animator {
+import bpmn.element.Visualization;
 
-	private final InstanceManager instanceManager;
+@SuppressWarnings("serial")
+public abstract class AbstractIntermediateEvent extends AbstractEvent {
 
-	public TokenAnimator(final InstanceManager instanceManager) {
-		super();
-		this.instanceManager = instanceManager;
-		start();
-	}
-
-	public InstanceManager getInstanceManager() {
-		return instanceManager;
+	public AbstractIntermediateEvent(final String id, final String name) {
+		super(id, name, null);
 	}
 
 	@Override
-	public synchronized void step(final int count) {
-		getInstanceManager().stepAll(count);
+	protected Color getElementDefaultBackground() {
+		return getVisualization().getBackground(Visualization.Element.EVENT_INTERMEDIATE);
 	}
 
 	@Override
-	public void reset() {
-		getInstanceManager().removeAll();
-		super.reset();
+	public int getInnerBorderMargin() {
+		return DEFAULT_INNER_MARGIN;
 	}
 
 }

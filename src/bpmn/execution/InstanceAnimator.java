@@ -18,14 +18,34 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package bpmn.token;
+package bpmn.execution;
 
-public interface AnimationListener {
+import bpmn.instance.InstanceManager;
 
-	void animationPlay();
 
-	void animationPause();
+public class InstanceAnimator extends AbstractAnimator {
 
-	void animationReset();
+	private final InstanceManager instanceManager;
+
+	public InstanceAnimator(final InstanceManager instanceManager) {
+		super();
+		this.instanceManager = instanceManager;
+		start();
+	}
+
+	public InstanceManager getInstanceManager() {
+		return instanceManager;
+	}
+
+	@Override
+	public synchronized void step(final int count) {
+		getInstanceManager().executeAll(count);
+	}
+
+	@Override
+	public void reset() {
+		getInstanceManager().removeAll();
+		super.reset();
+	}
 
 }

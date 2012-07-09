@@ -28,7 +28,7 @@ import bpmn.token.Token;
 
 @SuppressWarnings("serial")
 public final class IntermediateThrowEvent
-		extends IntermediateEvent
+		extends AbstractIntermediateEvent
 		implements ThrowEvent {
 
 	public IntermediateThrowEvent(final String id, final String name) {

@@ -24,13 +24,13 @@ import bpmn.instance.Instance;
 import bpmn.token.Token;
 
 @SuppressWarnings("serial")
-public abstract class TokenFlowElementWithDefault
+public abstract class AbstractTokenFlowElementWithDefault
 		extends AbstractTokenFlowElement
 		implements ElementWithDefaultSequenceFlow {
 
 	private ElementRef<SequenceFlow> defaultSequenceFlowRef;
 
-	public TokenFlowElementWithDefault(final String id, final String name) {
+	public AbstractTokenFlowElementWithDefault(final String id, final String name) {
 		super(id, name);
 	}
 

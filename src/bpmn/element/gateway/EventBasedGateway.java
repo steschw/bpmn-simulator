@@ -21,7 +21,7 @@
 package bpmn.element.gateway;
 
 import bpmn.Graphics;
-import bpmn.element.FlowElement;
+import bpmn.element.AbstractFlowElement;
 import bpmn.element.Rectangle;
 import bpmn.element.SequenceFlow;
 import bpmn.instance.Instance;
@@ -101,7 +101,7 @@ public final class EventBasedGateway
 		final Instance instance = token.getInstance();
 		Trigger targetTrigger = null;
 		StoringTriggerCatchingElement targetCatchElement = null;
-		for (FlowElement flowElement : getOutgoingFlowElements()) {
+		for (AbstractFlowElement flowElement : getOutgoingFlowElements()) {
 			if (flowElement instanceof StoringTriggerCatchingElement) {
 				final StoringTriggerCatchingElement catchEvent = (StoringTriggerCatchingElement)flowElement;
 				final Trigger catchTrigger = catchEvent.getFirstTrigger(instance);

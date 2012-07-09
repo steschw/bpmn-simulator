@@ -327,14 +327,14 @@ public abstract class VisibleElement extends JComponent implements Element {
 
 	@Override
 	public String toString() {
-		final StringBuffer buffer = new StringBuffer('['); 
-		buffer.append(this.getClass().toString());
-		buffer.append(", ");
-		buffer.append(getId());
-		buffer.append(", ");
-		buffer.append(getName());
-		buffer.append(']');
-		return buffer.toString();
+		final StringBuilder string = new StringBuilder('['); 
+		string.append(this.getClass().toString());
+		string.append(", ");
+		string.append(getId());
+		string.append(", ");
+		string.append(getName());
+		string.append(']');
+		return string.toString();
 	}
 
 }

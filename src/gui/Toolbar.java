@@ -35,8 +35,8 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import bpmn.Model;
-import bpmn.token.AnimationListener;
-import bpmn.token.Animator;
+import bpmn.execution.AnimationListener;
+import bpmn.execution.AbstractAnimator;
 
 @SuppressWarnings("serial")
 public class Toolbar extends JToolBar implements AnimationListener {
@@ -87,7 +87,7 @@ public class Toolbar extends JToolBar implements AnimationListener {
 	}
 
 	public void setModel(final Model model) {
-		Animator animator = getAnimator();
+		AbstractAnimator animator = getAnimator();
 		if (animator != null) {
 			animator.removeAnimationListener(this);
 		}
@@ -102,7 +102,7 @@ public class Toolbar extends JToolBar implements AnimationListener {
 		updateMessages();
 	}
 
-	protected Animator getAnimator() {
+	protected AbstractAnimator getAnimator() {
 		return (model == null) ? null : model.getAnimator();
 	}
 
@@ -138,7 +138,7 @@ public class Toolbar extends JToolBar implements AnimationListener {
 		buttonPauseContinue.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(final ActionEvent event) {
-				final Animator animator = getAnimator();
+				final AbstractAnimator animator = getAnimator();
 				if (animator.isPaused()) {
 					animator.play();
 				} else {
@@ -209,7 +209,7 @@ public class Toolbar extends JToolBar implements AnimationListener {
 	}
 
 	protected void updateControls() {
-		final Animator animator = getAnimator();
+		final AbstractAnimator animator = getAnimator();
 
 		final boolean isPaused = (animator != null) && animator.isPaused();
 

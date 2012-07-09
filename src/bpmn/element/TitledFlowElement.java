@@ -23,7 +23,7 @@ package bpmn.element;
 import bpmn.Graphics;
 
 @SuppressWarnings("serial")
-public class TitledFlowElement extends FlowElement {
+public class TitledFlowElement extends AbstractFlowElement {
 
 	private static final int HEADER_SIZE = 32;
 

@@ -21,14 +21,14 @@
 package bpmn.element.activity;
 
 import bpmn.Graphics;
-import bpmn.element.TokenFlowElementWithDefault;
+import bpmn.element.AbstractTokenFlowElementWithDefault;
 import bpmn.instance.Instance;
 import bpmn.token.Token;
 import bpmn.token.TokenCollection;
 
 @SuppressWarnings("serial")
 public abstract class AbstractActivity
-		extends TokenFlowElementWithDefault
+		extends AbstractTokenFlowElementWithDefault
 		implements Activity{
 
 	private final TokenCollection incomingTokens = new TokenCollection();

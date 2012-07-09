@@ -24,7 +24,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 @SuppressWarnings("serial")
-public abstract class FlowElement extends VisibleElement {
+public abstract class AbstractFlowElement
+		extends VisibleElement {
 
 	protected static final int DEFAULT_INNER_MARGIN = 4;
 	protected static final int NO_INNER_BORDER = 0;
@@ -35,7 +36,7 @@ public abstract class FlowElement extends VisibleElement {
 	private final Collection<ElementRef<SequenceFlow>> outgoingRefs
 		= new ArrayList<ElementRef<SequenceFlow>>(); 
 
-	public FlowElement(final String id, final String name) {
+	public AbstractFlowElement(final String id, final String name) {
 		super(id, name);
 	}
 
@@ -47,8 +48,8 @@ public abstract class FlowElement extends VisibleElement {
 		return outgoingRefs;
 	}
 
-	protected static final <E extends SequenceFlow> Collection<E>
-			getElementsFromElementRefs( final Collection<ElementRef<E>> elementRefs) {
+	protected final <E extends SequenceFlow> Collection<E>
+			getElementsFromElementRefs(final Collection<ElementRef<E>> elementRefs) {
 		final Collection<E> elements = new ArrayList<E>();
 		for (ElementRef<E> elementRef : elementRefs) {
 			if ((elementRef != null) && elementRef.hasElement()) {
@@ -88,10 +89,10 @@ public abstract class FlowElement extends VisibleElement {
 		}
 	}
 
-	protected Collection<FlowElement> getIncomingFlowElements() {
-		final Collection<FlowElement> incomingFlowElements = new ArrayList<FlowElement>();
+	protected Collection<AbstractFlowElement> getIncomingFlowElements() {
+		final Collection<AbstractFlowElement> incomingFlowElements = new ArrayList<AbstractFlowElement>();
 		for (final SequenceFlow incoming : getIncoming()) {
-			final FlowElement flowElement = incoming.getSource();
+			final AbstractFlowElement flowElement = incoming.getSource();
 			if (flowElement != null) {
 				incomingFlowElements.add(flowElement);
 			}
@@ -99,10 +100,10 @@ public abstract class FlowElement extends VisibleElement {
 		return incomingFlowElements;
 	}
 
-	protected Collection<FlowElement> getOutgoingFlowElements() {
-		final Collection<FlowElement> outgoingFlowElements = new ArrayList<FlowElement>();
+	protected Collection<AbstractFlowElement> getOutgoingFlowElements() {
+		final Collection<AbstractFlowElement> outgoingFlowElements = new ArrayList<AbstractFlowElement>();
 		for (final SequenceFlow outgoing : getOutgoing()) {
-			final FlowElement flowElement = outgoing.getTarget();
+			final AbstractFlowElement flowElement = outgoing.getTarget();
 			if (flowElement != null) {
 				outgoingFlowElements.add(flowElement);
 			}

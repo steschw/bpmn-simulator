@@ -42,7 +42,7 @@ import bpmn.exception.StructureException;
 import bpmn.exception.StructureExceptionListener;
 
 public abstract class AbstractXmlModel
-	implements ErrorHandler {
+	implements Model, ErrorHandler {
 
 	private final Collection<StructureExceptionListener> structureExceptionListeners
 		= new ArrayList<StructureExceptionListener>();

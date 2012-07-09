@@ -34,7 +34,7 @@ import javax.swing.JToolBar;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import bpmn.Model;
+import bpmn.AbstractModel;
 import bpmn.execution.AnimationListener;
 import bpmn.execution.AbstractAnimator;
 
@@ -68,7 +68,7 @@ public class Toolbar extends JToolBar implements AnimationListener {
 
 	private final LogFrame logFrame;
 
-	private Model model;
+	private AbstractModel model;
 
 	protected static ImageIcon loadIcon(final String filename) {
 		final URL url = Toolbar.class.getResource(filename);
@@ -86,7 +86,7 @@ public class Toolbar extends JToolBar implements AnimationListener {
 		create();
 	}
 
-	public void setModel(final Model model) {
+	public void setModel(final AbstractModel model) {
 		AbstractAnimator animator = getAnimator();
 		if (animator != null) {
 			animator.removeAnimationListener(this);

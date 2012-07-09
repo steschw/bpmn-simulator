@@ -38,7 +38,7 @@ import bpmn.element.VisibleElement;
 import bpmn.element.activity.Process;
 import bpmn.exception.StructureException;
 
-public class DiagramInterchangeModel extends Model {
+public class DiagramInterchangeModel extends AbstractModel {
 
 	protected static final String BPMNDI = "http://www.omg.org/spec/BPMN/20100524/DI"; //$NON-NLS-1$
 	protected static final String DC = "http://www.omg.org/spec/DD/20100524/DC"; //$NON-NLS-1$

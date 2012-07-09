@@ -20,21 +20,21 @@
  */
 package bpmn.exception;
 
-import bpmn.AbstractXmlModel;
+import bpmn.Model;
 import bpmn.element.Element;
 
 @SuppressWarnings("serial")
 public class StructureException extends Exception {
 
 	private Element element;
-	private final AbstractXmlModel model;
+	private final Model model;
 
-	public StructureException(final AbstractXmlModel model, final String message) {
+	public StructureException(final Model model, final String message) {
 		super(message);
 		this.model = model;
 	}
 
-	public StructureException(final AbstractXmlModel model, final Throwable cause) {
+	public StructureException(final Model model, final Throwable cause) {
 		super(cause);
 		this.model = model;
 	}
@@ -53,7 +53,7 @@ public class StructureException extends Exception {
 		return element;
 	}
 
-	public final AbstractXmlModel getModel() {
+	public final Model getModel() {
 		return model;
 	}
 

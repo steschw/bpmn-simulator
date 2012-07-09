@@ -31,7 +31,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
-import bpmn.Model;
+import bpmn.AbstractModel;
 import bpmn.instance.Instance;
 import bpmn.instance.InstanceMenuItem;
 import bpmn.trigger.Instantiable;
@@ -42,14 +42,14 @@ import bpmn.trigger.TriggerCatchingElement;
 @SuppressWarnings("serial")
 public class StartButton extends JButton implements ActionListener {
 
-	private Model model;
+	private AbstractModel model;
 
 	public StartButton(final Icon icon) {
 		super(icon);
 		addActionListener(this);
 	}
 
-	public void setModel(final Model model) {
+	public void setModel(final AbstractModel model) {
 		this.model = model;
 		setEnabled(model != null);
 	}

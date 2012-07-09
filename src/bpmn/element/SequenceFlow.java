@@ -30,12 +30,14 @@ import bpmn.element.gateway.AbstractGateway;
 import bpmn.element.gateway.InclusiveGateway;
 
 @SuppressWarnings("serial")
-public class SequenceFlow extends AbstractTokenConnectingElement<AbstractTokenFlowElement> {
+public class SequenceFlow
+		extends AbstractTokenConnectingElement<AbstractTokenFlowElement> {
 
 	private Expression condition;
 
 	public SequenceFlow(final String id, final String name,
-			final ElementRef<AbstractTokenFlowElement> source, final ElementRef<AbstractTokenFlowElement> target) {
+			final ElementRef<AbstractTokenFlowElement> source,
+			final ElementRef<AbstractTokenFlowElement> target) {
 		super(id, name, source, target);
 	}
 

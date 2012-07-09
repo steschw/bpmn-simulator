@@ -54,7 +54,7 @@ public abstract class AbstractConnectingElement<E extends Element>
 		sourceRef = elementRef;
 	}
 
-	private ElementRef<E> getSourceRef() {
+	public ElementRef<E> getSourceRef() {
 		return sourceRef;
 	}
 
@@ -74,7 +74,7 @@ public abstract class AbstractConnectingElement<E extends Element>
 		targetRef = elementRef;
 	}
 
-	private ElementRef<E> getTargetRef() {
+	public ElementRef<E> getTargetRef() {
 		return targetRef;
 	}
 

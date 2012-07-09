@@ -23,28 +23,19 @@ package bpmn;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Point;
-import java.io.File;
-import java.io.IOException;
 import java.net.URL;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
 
-import javax.swing.text.html.StyleSheet;
 import javax.xml.XMLConstants;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 
-import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.xml.sax.ErrorHandler;
 import org.xml.sax.SAXException;
-import org.xml.sax.SAXParseException;
 
 import bpmn.element.*;
 import bpmn.element.Error;
@@ -65,22 +56,19 @@ import bpmn.element.event.definition.TerminateEventDefinition;
 import bpmn.element.event.definition.TimerEventDefinition;
 import bpmn.element.gateway.*;
 import bpmn.exception.StructureException;
-import bpmn.exception.StructureExceptionListener;
 import bpmn.execution.InstanceAnimator;
 import bpmn.instance.Instance;
 import bpmn.instance.InstanceManager;
 import bpmn.trigger.TriggerCatchingElement;
 
-public class Model implements ErrorHandler {
+public class Model
+		extends AbstractXmlModel {
 
 	protected static final String BPMN = "http://www.omg.org/spec/BPMN/20100524/MODEL";  //$NON-NLS-1$
 
 	protected static final String EXTENSION_SIGNAVIO = "http://www.signavio.com"; //$NON-NLS-1$
 
 	private static final String SCHEMA_RESOURCE = "xsd/BPMN20.xsd"; //$NON-NLS-1$
-
-	private final Collection<StructureExceptionListener> structureExceptionListeners
-			= new ArrayList<StructureExceptionListener>();
 
 	private final ElementRefCollection<VisibleElement> elements
 			= new ElementRefCollection<VisibleElement>();
@@ -104,20 +92,6 @@ public class Model implements ErrorHandler {
 	public Model() {
 		super();
 		tokenAnimator = new InstanceAnimator(getInstanceManager());
-	}
-
-	public void addStructureExceptionListener(final StructureExceptionListener listener) {
-		synchronized (structureExceptionListeners) {
-			structureExceptionListeners.add(listener);
-		}
-	}
-
-	public void notifyStructureExceptionListeners(final StructureException exception) {
-		synchronized (structureExceptionListeners) {
-			for (StructureExceptionListener listener : structureExceptionListeners) {
-				listener.onStructureException(exception);
-			}
-		}
 	}
 
 	public InstanceManager getInstanceManager() {
@@ -175,13 +149,6 @@ public class Model implements ErrorHandler {
 		notifyStructureExceptionListeners(exception);
 	}
 
-	protected static boolean isElementNode(final Node node,
-			final String namespace, final String name) {
-		return (node.getNodeType() == Node.ELEMENT_NODE)
-				&& name.equals(node.getLocalName())
-				&& namespace.equals(node.getNamespaceURI());
-	}
-
 	/**
 	 * Liefert ein Unterelement von einem Element und prüft dabei ob dieses nur einmal vorkommt
 	 * @return Liefert null zurück wenn das Unterelement nicht gefunden wird. Bei mehreren wird das erste zurück gegeben.
@@ -204,49 +171,33 @@ public class Model implements ErrorHandler {
 		return subElement;
 	}
 
-	protected String getAttributeString(final Node node, final String name) {
-		final Node attributeNode = node.getAttributes().getNamedItem(name);
-		if (attributeNode == null) {
-			return null;
-		}
-		return attributeNode.getNodeValue();
-	}
-
-	protected float getAttributeFloat(final Node node, final String name) {
-		try {
-			return Float.parseFloat(getAttributeString(node, name));
-		} catch (NumberFormatException exception) {
-			return 0;
-		}
-	}
-
-	private static boolean convertStringToBool(final String string,
-			final boolean defaultValue) {
-		if ((string == null) || string.isEmpty()) {
-			return defaultValue;
-		} else {
-			return Boolean.parseBoolean(string);
-		}
-	}
-
-	protected boolean getAttributeBoolean(final Node node, final String name, final boolean defaultValue) {
-		return convertStringToBool(getAttributeString(node, name), defaultValue);
-	}
-
-	protected VisibleElement getAttributeElement(final Node node, final String name)
+	protected void throwInvalidElementType(final Class<?> type, final Class<?> expectedType)
 			throws StructureException {
-		final String elementId = getAttributeString(node, name);
-		VisibleElement element = null;
-		if (elementId != null) {
-			element = elements.get(elementId);
-		}
+		throw new StructureException(this,
+				MessageFormat.format(
+						Messages.getString("Protocol.invalidElementType"), //$NON-NLS-1$
+						(type == null) ? null : type.getSimpleName(),
+						(expectedType == null) ? null : expectedType.getSimpleName()));
+	}
+
+	@SuppressWarnings("unchecked")
+	protected <E extends VisibleElement> E getElement(final String id, final Class<E> type)
+			throws StructureException {
+		final VisibleElement element = elements.get(id);
 		if (element == null) {
 			throw new StructureException(this,
 					MessageFormat.format(
-						Messages.getString("Protocol.elementNotFound"), //$NON-NLS-1$
-						elementId));
+							Messages.getString("Protocol.elementNotFound"), //$NON-NLS-1$
+							id));
+		} else if (!type.isAssignableFrom(element.getClass())) {
+			throwInvalidElementType(type, element.getClass());
 		}
-		return element;
+		return (E)element;
+	}
+
+	protected <E extends VisibleElement> E getAttributeElement(final Node node, final String name, final Class<E> type)
+			throws StructureException {
+		return getElement(getAttributeString(node, name), type);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -275,11 +226,6 @@ public class Model implements ErrorHandler {
 	protected ElementRef<Error> getAttributeErrorRef(
 			final Node node, final String name) {
 		return getErrorRef(getAttributeString(node, name));
-	}
-
-	protected static Color convertStringToColor(final String value) {
-		final StyleSheet stylesheet = new StyleSheet();
-		return stylesheet.stringToColor(value);
 	}
 
 	protected Point getPointAttribute(final Node node) {
@@ -776,7 +722,11 @@ public class Model implements ErrorHandler {
 			// für FlowElemente exportiert (z.B. BonitaStudio).
 			// Deshalb werden diese jetzt noch einmal anhand des ConnectingElement
 			// hinzugefügt.
-			assignFlowElementsToConnectingElement(sequenceFlow);
+			try {
+				assignFlowElementsToSequenceFlow(sequenceFlow);
+			} catch (StructureException e) {
+				notifyStructureExceptionListeners(e);
+			}
 			return true;
 		} else {
 			return false;
@@ -1023,71 +973,41 @@ public class Model implements ErrorHandler {
 		}
 	}
 
-	protected void assignFlowElementsToConnectingElement(final SequenceFlow connectingElement) {
-		final ElementRef<SequenceFlow> connectingRef = getElementRef(connectingElement.getId());
-		if (connectingRef != null) {
-			final AbstractFlowElement source = connectingElement.getSource(); 
-			if (source != null) {
-				source.addOutgoingRef(connectingRef);
+	protected void assignFlowElementsToSequenceFlow(final SequenceFlow sequenceFlow)
+			throws StructureException {
+		final ElementRef<SequenceFlow> sequenceFlowRef = getElementRef(sequenceFlow.getId());
+		if (sequenceFlowRef != null) {
+			AbstractFlowElement source = null;
+			try {
+				source = sequenceFlow.getSource(); 
+			} catch (ClassCastException exception) {
+				throwInvalidElementType(null, AbstractFlowElement.class);
 			}
-			final AbstractFlowElement target = connectingElement.getTarget();
+			if (source != null) {
+				source.addOutgoingRef(sequenceFlowRef);
+			}
+			AbstractFlowElement target = null;
+			try {
+				target = sequenceFlow.getTarget();
+			} catch (ClassCastException exception) {
+				throwInvalidElementType(null, AbstractFlowElement.class);
+			}
 			if (target != null) {
-				target.addIncomingRef(connectingRef);
+				target.addIncomingRef(sequenceFlowRef);
 			}
 		}
 	}
 
+	@Override
 	protected Schema loadSchema() throws SAXException {
 		final URL resource = getClass().getResource(SCHEMA_RESOURCE);
 		final SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);  
-		return factory.newSchema(resource);  
-	}
-
-	public void load(final File file) {
-		try {
-			final DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
-			documentBuilderFactory.setNamespaceAware(true);
-			documentBuilderFactory.setSchema(loadSchema());
-			documentBuilderFactory.setIgnoringElementContentWhitespace(true);
-			documentBuilderFactory.setIgnoringComments(true);
-			documentBuilderFactory.setCoalescing(true);
-			documentBuilderFactory.setValidating(false);
-			final DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder(); 
-			documentBuilder.setErrorHandler(this);
-			final Document document = documentBuilder.parse(file);
-			readDefinitions(document.getDocumentElement());
-		} catch (IOException e) {
-			notifyStructureExceptionListeners(new StructureException(this, e));
-		} catch (ParserConfigurationException e) {
-			notifyStructureExceptionListeners(new StructureException(this, e));
-		} catch (SAXException e) {
-			notifyStructureExceptionListeners(new StructureException(this, e));
-		}
-	}
-
-	protected void showSAXParseException(final SAXParseException exception) {
-		final StringBuilder message = new StringBuilder('['); //$NON-NLS-1$
-		message.append(exception.getLineNumber());
-		message.append(':'); //$NON-NLS-1$
-		message.append(exception.getColumnNumber());
-		message.append("] "); //$NON-NLS-1$
-		message.append(exception.getLocalizedMessage());
-		notifyStructureExceptionListeners(new StructureException(this, message.toString()));
+		return factory.newSchema(resource);
 	}
 
 	@Override
-	public void error(final SAXParseException exception) throws SAXException {
-		showSAXParseException(exception);
-	}
-
-	@Override
-	public void fatalError(final SAXParseException exception) throws SAXException {
-		showSAXParseException(exception);
-	}
-
-	@Override
-	public void warning(final SAXParseException exception) throws SAXException {
-		showSAXParseException(exception);
+	protected void loadData(final Node node) {
+		readDefinitions(node);
 	}
 
 	public void close() {

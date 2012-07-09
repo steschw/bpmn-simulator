@@ -64,14 +64,9 @@ public class DiagramInterchangeModel extends Model {
 				|| readElementBPMNDiagram(node);
 	}
 
-	@SuppressWarnings("unchecked")
 	protected <E extends VisibleElement> E getBPMNElementAttribute(final Node node, final Class<E> type)
 			throws StructureException {
-		final VisibleElement element = getAttributeElement(node, "bpmnElement"); //$NON-NLS-1$
-		if (!type.isAssignableFrom(element.getClass())) {
-			throw new StructureException(this, type.getSimpleName() + " expected");
-		}
-		return (E)element;
+		return getAttributeElement(node, "bpmnElement", type); //$NON-NLS-1$
 	}
 
 	private static boolean isValidPlaneElement(final AbstractFlowElement planeElement) {

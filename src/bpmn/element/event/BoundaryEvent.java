@@ -99,15 +99,16 @@ public final class BoundaryEvent
 
 	@Override
 	protected Stroke getStroke() {
-		return new BasicStroke(getBorderWidth(),
-				BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER, 1.f, new float[] { 4.f, 6.f }, 0); 
+		return isInterrupting()
+				? super.getStroke()
+				: new BasicStroke(getBorderWidth(),
+						BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER, 1.f,
+						new float[] { 4.f, 6.f }, 0); 
 	}
 
 	@Override
 	public int getInnerBorderMargin() {
-		return isInterrupting()
-				? super.getInnerBorderMargin()
-				: DEFAULT_INNER_MARGIN;
+		return DEFAULT_INNER_MARGIN;
 	}
 
 	@Override

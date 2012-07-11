@@ -29,7 +29,7 @@ import bpmn.Graphics;
 
 @SuppressWarnings("serial")
 public final class MessageFlow
-		extends AbstractTokenConnectingElement<AbstractTokenFlowElement> {
+		extends AbstractTokenConnectingElement {
 
 	public MessageFlow(final String id, final String name,
 			final ElementRef<AbstractTokenFlowElement> sourceRef,

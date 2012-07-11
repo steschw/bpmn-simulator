@@ -28,7 +28,7 @@ import bpmn.Graphics;
 
 @SuppressWarnings("serial")
 public class DataAssociation
-		extends AbstractTokenConnectingElement<AbstractTokenFlowElement> {
+		extends AbstractTokenConnectingElement {
 
 	public DataAssociation(final String id,
 			final ElementRef<AbstractTokenFlowElement> source,

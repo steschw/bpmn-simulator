@@ -20,9 +20,6 @@
  */
 package bpmn.element;
 
-import java.util.ArrayList;
-import java.util.Collection;
-
 @SuppressWarnings("serial")
 public abstract class AbstractFlowElement
 		extends VisibleElement {
@@ -30,85 +27,8 @@ public abstract class AbstractFlowElement
 	protected static final int DEFAULT_INNER_MARGIN = 4;
 	protected static final int NO_INNER_BORDER = 0;
 
-	private final Collection<ElementRef<SequenceFlow>> incomingRefs
-		= new ArrayList<ElementRef<SequenceFlow>>(); 
-
-	private final Collection<ElementRef<SequenceFlow>> outgoingRefs
-		= new ArrayList<ElementRef<SequenceFlow>>(); 
-
 	public AbstractFlowElement(final String id, final String name) {
 		super(id, name);
-	}
-
-	private Collection<ElementRef<SequenceFlow>> getIncomingRefs() {
-		return incomingRefs;
-	}
-
-	private Collection<ElementRef<SequenceFlow>> getOutgoingRefs() {
-		return outgoingRefs;
-	}
-
-	protected final <E extends SequenceFlow> Collection<E>
-			getElementsFromElementRefs(final Collection<ElementRef<E>> elementRefs) {
-		final Collection<E> elements = new ArrayList<E>();
-		for (ElementRef<E> elementRef : elementRefs) {
-			if ((elementRef != null) && elementRef.hasElement()) {
-				elements.add(elementRef.getElement());
-			}
-		}
-		return elements;
-	}
-
-	public Collection<SequenceFlow> getIncoming() {
-		return getElementsFromElementRefs(incomingRefs);
-	}
-
-	public Collection<SequenceFlow> getOutgoing() {
-		return getElementsFromElementRefs(outgoingRefs);
-	}
-
-	public boolean hasIncoming() {
-		return !getIncomingRefs().isEmpty();
-	}
-
-	public boolean hasOutgoing() {
-		return !getOutgoingRefs().isEmpty();
-	}
-
-	public void addIncomingRef(final ElementRef<SequenceFlow> element) {
-		assert element != null;
-		if ((element != null) && !incomingRefs.contains(element)) {
-			incomingRefs.add(element);
-		}
-	}
-
-	public void addOutgoingRef(final ElementRef<SequenceFlow> element) {
-		assert element != null;
-		if ((element != null) && !outgoingRefs.contains(element)) {
-			outgoingRefs.add(element);
-		}
-	}
-
-	protected Collection<AbstractFlowElement> getIncomingFlowElements() {
-		final Collection<AbstractFlowElement> incomingFlowElements = new ArrayList<AbstractFlowElement>();
-		for (final SequenceFlow incoming : getIncoming()) {
-			final AbstractFlowElement flowElement = incoming.getSource();
-			if (flowElement != null) {
-				incomingFlowElements.add(flowElement);
-			}
-		}
-		return incomingFlowElements;
-	}
-
-	protected Collection<AbstractFlowElement> getOutgoingFlowElements() {
-		final Collection<AbstractFlowElement> outgoingFlowElements = new ArrayList<AbstractFlowElement>();
-		for (final SequenceFlow outgoing : getOutgoing()) {
-			final AbstractFlowElement flowElement = outgoing.getTarget();
-			if (flowElement != null) {
-				outgoingFlowElements.add(flowElement);
-			}
-		}
-		return outgoingFlowElements;
 	}
 
 	public int getInnerBorderMargin() {

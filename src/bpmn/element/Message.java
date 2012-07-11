@@ -26,7 +26,8 @@ import java.awt.Point;
 import bpmn.Graphics;
 
 @SuppressWarnings("serial")
-public class Message extends AbstractFlowElement {
+public final class Message
+		extends AbstractFlowElement {
 
 	public Message(final String id, final String name) {
 		super(id, name);
@@ -43,7 +44,6 @@ public class Message extends AbstractFlowElement {
 
 	@Override
 	protected void paintElement(final Graphics g) {
-
 		final Rectangle bounds = getElementInnerBounds();
 		g.drawRect(bounds);
 		final Point center = bounds.getCenter();

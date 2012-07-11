@@ -29,52 +29,54 @@ import bpmn.token.TokenCollection;
 import bpmn.token.TokenFlow;
 
 @SuppressWarnings("serial")
-public abstract class AbstractTokenConnectingElement<E extends AbstractFlowElement & TokenFlow>
+public abstract class AbstractTokenConnectingElement
 		extends AbstractConnectingElement
 		implements TokenFlow {
 
-	private ElementRef<E> sourceRef;
-	private ElementRef<E> targetRef;
+	private ElementRef<AbstractTokenFlowElement> sourceRef;
+	private ElementRef<AbstractTokenFlowElement> targetRef;
 
 	private final TokenCollection tokens = new TokenCollection();
 
 	public AbstractTokenConnectingElement(final String id, final String name,
-			final ElementRef<E> source, final ElementRef<E> target) {
+			final ElementRef<AbstractTokenFlowElement> source,
+			final ElementRef<AbstractTokenFlowElement> target) {
 		super(id, name);
 		setSourceRef(source);
 		setTargetRef(target);
 	}
 
-	protected void setSourceRef(final ElementRef<E> elementRef) {
+	protected void setSourceRef(final ElementRef<AbstractTokenFlowElement> elementRef) {
 		assert elementRef != null;
 		sourceRef = elementRef;
 	}
 
-	public ElementRef<E> getSourceRef() {
+	public ElementRef<AbstractTokenFlowElement> getSourceRef() {
 		return sourceRef;
 	}
 
-	protected final E getElementFromElementRef(final ElementRef<E> elementRef) {
+	protected final AbstractTokenFlowElement getElementFromElementRef(
+			final ElementRef<AbstractTokenFlowElement> elementRef) {
 		if ((elementRef != null) && elementRef.hasElement()) {
 			return elementRef.getElement();
 		}
 		return null;
 	}
 
-	public E getSource() {
+	public AbstractTokenFlowElement getSource() {
 		return getElementFromElementRef(getSourceRef());
 	}
 
-	protected void setTargetRef(final ElementRef<E> elementRef) {
+	protected void setTargetRef(final ElementRef<AbstractTokenFlowElement> elementRef) {
 		assert elementRef != null;
 		targetRef = elementRef;
 	}
 
-	public ElementRef<E> getTargetRef() {
+	public ElementRef<AbstractTokenFlowElement> getTargetRef() {
 		return targetRef;
 	}
 
-	public E getTarget() {
+	public AbstractTokenFlowElement getTarget() {
 		return getElementFromElementRef(getTargetRef());
 	}
 
@@ -132,7 +134,7 @@ public abstract class AbstractTokenConnectingElement<E extends AbstractFlowEleme
 			return true;
 		} else {
 			// Oder eines der eingehenden Elemente hat noch Token dieser Instanz
-			final E source = getSource();
+			final AbstractTokenFlowElement source = getSource();
 			if (source != null) {
 				return source.hasIncomingPathWithActiveToken(instance);
 			} else {

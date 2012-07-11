@@ -38,13 +38,90 @@ import bpmn.trigger.InstantiableNotifiyTarget;
 
 @SuppressWarnings("serial")
 public abstract class AbstractTokenFlowElement
-	extends AbstractFlowElement
-	implements TokenFlow {
+		extends AbstractFlowElement
+		implements TokenFlow {
+
+	private final Collection<ElementRef<SequenceFlow>> incomingRefs
+			= new ArrayList<ElementRef<SequenceFlow>>(); 
+
+	private final Collection<ElementRef<SequenceFlow>> outgoingRefs
+			= new ArrayList<ElementRef<SequenceFlow>>(); 
 
 	private final TokenCollection innerTokens = new TokenCollection();
 
 	public AbstractTokenFlowElement(final String id, final String name) {
 		super(id, name);
+	}
+
+	private Collection<ElementRef<SequenceFlow>> getIncomingRefs() {
+		return incomingRefs;
+	}
+
+	private Collection<ElementRef<SequenceFlow>> getOutgoingRefs() {
+		return outgoingRefs;
+	}
+
+	protected final Collection<SequenceFlow> getElementsFromElementRefs(
+					final Collection<ElementRef<SequenceFlow>> elementRefs) {
+		final Collection<SequenceFlow> elements = new ArrayList<SequenceFlow>();
+		for (ElementRef<SequenceFlow> elementRef : elementRefs) {
+			if ((elementRef != null) && elementRef.hasElement()) {
+				elements.add(elementRef.getElement());
+			}
+		}
+		return elements;
+	}
+
+	public Collection<SequenceFlow> getIncoming() {
+		return getElementsFromElementRefs(incomingRefs);
+	}
+
+	public Collection<SequenceFlow> getOutgoing() {
+		return getElementsFromElementRefs(outgoingRefs);
+	}
+
+	public boolean hasIncoming() {
+		return !getIncomingRefs().isEmpty();
+	}
+
+	public boolean hasOutgoing() {
+		return !getOutgoingRefs().isEmpty();
+	}
+
+	public void addIncomingRef(final ElementRef<SequenceFlow> element) {
+		assert element != null;
+		if ((element != null) && !incomingRefs.contains(element)) {
+			incomingRefs.add(element);
+		}
+	}
+
+	public void addOutgoingRef(final ElementRef<SequenceFlow> element) {
+		assert element != null;
+		if ((element != null) && !outgoingRefs.contains(element)) {
+			outgoingRefs.add(element);
+		}
+	}
+
+	protected Collection<AbstractFlowElement> getIncomingFlowElements() {
+		final Collection<AbstractFlowElement> incomingFlowElements = new ArrayList<AbstractFlowElement>();
+		for (final SequenceFlow incoming : getIncoming()) {
+			final AbstractFlowElement flowElement = incoming.getSource();
+			if (flowElement != null) {
+				incomingFlowElements.add(flowElement);
+			}
+		}
+		return incomingFlowElements;
+	}
+
+	protected Collection<AbstractFlowElement> getOutgoingFlowElements() {
+		final Collection<AbstractFlowElement> outgoingFlowElements = new ArrayList<AbstractFlowElement>();
+		for (final SequenceFlow outgoing : getOutgoing()) {
+			final AbstractFlowElement flowElement = outgoing.getTarget();
+			if (flowElement != null) {
+				outgoingFlowElements.add(flowElement);
+			}
+		}
+		return outgoingFlowElements;
 	}
 
 	public TokenCollection getInnerTokens() {
@@ -123,7 +200,7 @@ public abstract class AbstractTokenFlowElement
 			return true;
 		} else {
 			// Oder eines der eingehenden Elemente hat noch Token dieser Instanz
-			for (SequenceFlow incoming : getIncoming()) {
+			for (final AbstractTokenConnectingElement incoming : getIncoming()) {
 				if (incoming.hasIncomingPathWithActiveToken(instance)) {
 					return true;
 				}
@@ -165,7 +242,7 @@ public abstract class AbstractTokenFlowElement
 
 	protected int passTokenToAllOutgoingSequenceFlows(final Token token, final Instance instance) {
 		int forewardCount = 0;
-		for (SequenceFlow outgoing : getOutgoing()) {
+		for (final SequenceFlow outgoing : getOutgoing()) {
 			if (outgoing.acceptsToken() && !outgoing.isDefault()) {
 				token.passTo(outgoing, instance);
 				++forewardCount;
@@ -185,7 +262,7 @@ public abstract class AbstractTokenFlowElement
 	}
 
 	protected boolean isGatewayCondition() {
-		for (final SequenceFlow incoming : getIncoming()) {
+		for (final AbstractTokenConnectingElement incoming : getIncoming()) {
 			if (incoming.getSource() instanceof EventBasedGateway) {
 				return true;
 			}

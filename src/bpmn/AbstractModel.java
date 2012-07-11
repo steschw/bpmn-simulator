@@ -456,7 +456,8 @@ public class AbstractModel
 		}
 	}
 
-	protected boolean readElementsIncomingOutgoing(final Node node, final AbstractFlowElement element) {
+	protected boolean readElementsIncomingOutgoing(final Node node,
+			final AbstractTokenFlowElement element) {
 		if (isElementNode(node, BPMN, "incoming")) { //$NON-NLS-1$
 			final String elementId = node.getTextContent();
 			final ElementRef<SequenceFlow> elementRef = getElementRef(elementId);
@@ -504,13 +505,13 @@ public class AbstractModel
 		}
 	}
 
-	protected boolean readElementsForFlowElement(final Node node, final AbstractFlowElement element) {
+	protected boolean readElementsForFlowElement(final Node node, final AbstractTokenFlowElement element) {
 		return readElementsForBaseElement(node, element)
 				|| readElementsIncomingOutgoing(node, element)
 				|| readElementExtensionElements(node, element);
 	}
 
-	protected void readFlowElement(final Node node, final AbstractFlowElement element) {
+	protected void readFlowElement(final Node node, final AbstractTokenFlowElement element) {
 		final NodeList childNodes = node.getChildNodes();
 		for (int i = 0; i < childNodes.getLength(); ++i) {
 			final Node childNode = childNodes.item(i);
@@ -868,7 +869,7 @@ public class AbstractModel
 			if (!isReference) {
 				dataObject.setCollection(getAttributeBoolean(node, "isCollection", false));
 			}
-			readFlowElement(node, dataObject);
+			readBaseElement(node, dataObject);
 			addElementToContainer(dataObject, process);
 			return true;
 		} else {
@@ -892,7 +893,7 @@ public class AbstractModel
 		if (isElementNode(node, BPMN, "dataStoreReference")) { //$NON-NLS-1$
 			final DataStore dataStore = new DataStore(
 					getIdAttribute(node), getNameAttribute(node));
-			readFlowElement(node, dataStore);
+			readBaseElement(node, dataStore);
 			addElementToContainer(dataStore, process);
 			return true;
 		} else {
@@ -977,7 +978,7 @@ public class AbstractModel
 			throws StructureException {
 		final ElementRef<SequenceFlow> sequenceFlowRef = getElementRef(sequenceFlow.getId());
 		if (sequenceFlowRef != null) {
-			AbstractFlowElement source = null;
+			AbstractTokenFlowElement source = null;
 			try {
 				source = sequenceFlow.getSource(); 
 			} catch (ClassCastException exception) {
@@ -986,7 +987,7 @@ public class AbstractModel
 			if (source != null) {
 				source.addOutgoingRef(sequenceFlowRef);
 			}
-			AbstractFlowElement target = null;
+			AbstractTokenFlowElement target = null;
 			try {
 				target = sequenceFlow.getTarget();
 			} catch (ClassCastException exception) {

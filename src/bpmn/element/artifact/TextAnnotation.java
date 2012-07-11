@@ -23,19 +23,23 @@ package bpmn.element.artifact;
 import java.awt.Point;
 
 import bpmn.Graphics;
+import bpmn.element.AbstractFlowElement;
+import bpmn.element.ClickThroughMouseListener;
 import bpmn.element.Label;
 import bpmn.element.Rectangle;
 
 @SuppressWarnings("serial")
-public class TextAnnotation extends Artifact {
+public class TextAnnotation
+		extends AbstractFlowElement {
 
 	private static final int MARGIN = 10;
 
 	private String text;
 
 	public TextAnnotation(final String id, final String text) {
-		super(id);
+		super(id, null);
 		setText(text);
+		addMouseListener(new ClickThroughMouseListener());
 	}
 
 	public final void setText(final String text) {
@@ -62,6 +66,11 @@ public class TextAnnotation extends Artifact {
 		final Rectangle innerBounds = getInnerBounds();
 		innerBounds.shrinkLeft(4);
 		getElementLabel().setBounds(innerBounds);
+	}
+
+	@Override
+	protected int getBorderWidth() {
+		return 2;
 	}
 
 	@Override

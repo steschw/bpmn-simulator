@@ -18,13 +18,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package bpmn.element;
+package bpmn.element.artifact;
 
 import java.awt.BasicStroke;
 import java.awt.Point;
 import java.awt.Stroke;
 
 import bpmn.Graphics;
+import bpmn.element.AbstractConnectingElement;
+import bpmn.element.AbstractFlowElement;
+import bpmn.element.ElementRef;
 
 @SuppressWarnings("serial")
 public class Association
@@ -63,6 +66,11 @@ public class Association
 
 	public Direction getDirection() {
 		return direction;
+	}
+
+	@Override
+	protected int getBorderWidth() {
+		return 2;
 	}
 
 	@Override

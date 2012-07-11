@@ -24,14 +24,23 @@ import java.awt.BasicStroke;
 import java.awt.Stroke;
 
 import bpmn.Graphics;
+import bpmn.element.AbstractFlowElement;
+import bpmn.element.ClickThroughMouseListener;
 
 @SuppressWarnings("serial")
-public class Group extends Artifact {
+public class Group
+		extends AbstractFlowElement {
 
 	protected static final int ARC_LENGTH = 20;
 
 	public Group(final String id) {
-		super(id);
+		super(id, null);
+		addMouseListener(new ClickThroughMouseListener());
+	}
+
+	@Override
+	protected int getBorderWidth() {
+		return 2;
 	}
 
 	@Override

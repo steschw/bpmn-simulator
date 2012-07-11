@@ -39,13 +39,14 @@ import org.xml.sax.SAXException;
 
 import bpmn.element.*;
 import bpmn.element.Error;
-import bpmn.element.Association.Direction;
 import bpmn.element.activity.AbstractActivity;
 import bpmn.element.activity.Process;
 import bpmn.element.activity.Transaction;
 import bpmn.element.activity.task.*;
+import bpmn.element.artifact.Association;
 import bpmn.element.artifact.Group;
 import bpmn.element.artifact.TextAnnotation;
+import bpmn.element.artifact.Association.Direction;
 import bpmn.element.event.*;
 import bpmn.element.event.definition.ConditionalEventDefinition;
 import bpmn.element.event.definition.ErrorEventDefinition;

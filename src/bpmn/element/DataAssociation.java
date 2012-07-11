@@ -20,6 +20,8 @@
  */
 package bpmn.element;
 
+import bpmn.element.artifact.Association;
+
 @SuppressWarnings("serial")
 public class DataAssociation extends Association {
 

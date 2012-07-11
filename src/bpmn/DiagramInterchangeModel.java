@@ -103,7 +103,7 @@ public class DiagramInterchangeModel extends AbstractModel {
 	protected boolean readElementBPMNEdge(final Node node, final VisibleElement plane)
 			throws StructureException {
 		if (isElementNode(node, BPMNDI, "BPMNEdge")) { //$NON-NLS-1$
-			final AbstractConnectingElement<?> element = getBPMNElementAttribute(node, AbstractConnectingElement.class);
+			final AbstractConnectingElement element = getBPMNElementAttribute(node, AbstractConnectingElement.class);
 			if (element != null) {
 				plane.add(element, 0);
 				readDiagramPlaneElementWaypoints(node, element);
@@ -185,7 +185,7 @@ public class DiagramInterchangeModel extends AbstractModel {
 	}
 
 	protected void readDiagramPlaneElementWaypoints(final Node node,
-			final AbstractConnectingElement<?> element) {
+			final AbstractConnectingElement element) {
 		final NodeList childNodes = node.getChildNodes();
 		for (int i = 0; i < childNodes.getLength(); ++i) {
 			final Node childNode = childNodes.item(i);

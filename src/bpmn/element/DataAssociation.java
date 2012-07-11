@@ -20,15 +20,37 @@
  */
 package bpmn.element;
 
-import bpmn.element.artifact.Association;
+import java.awt.BasicStroke;
+import java.awt.Point;
+import java.awt.Stroke;
+
+import bpmn.Graphics;
 
 @SuppressWarnings("serial")
-public class DataAssociation extends Association {
+public class DataAssociation
+		extends AbstractTokenConnectingElement<AbstractTokenFlowElement> {
 
 	public DataAssociation(final String id,
-			final ElementRef<AbstractFlowElement> source,
-			final ElementRef<AbstractFlowElement> target) {
-		super(id, source, target);
+			final ElementRef<AbstractTokenFlowElement> source,
+			final ElementRef<AbstractTokenFlowElement> target) {
+		super(id, null, source, target);
+	}
+
+	@Override
+	protected int getBorderWidth() {
+		return 2;
+	}
+
+	@Override
+	protected Stroke getStroke() {
+		return new BasicStroke(getBorderWidth(),
+				BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER, 1.f, new float[] { 4.f, 6.f }, 0); 
+	}
+
+	@Override
+	protected void paintConnectingEnd(final Graphics g, final Point from,
+			final Point end) {
+		g.drawArrow(from, end);
 	}
 
 }

@@ -30,14 +30,52 @@ import bpmn.token.TokenFlow;
 
 @SuppressWarnings("serial")
 public abstract class AbstractTokenConnectingElement<E extends AbstractFlowElement & TokenFlow>
-		extends AbstractConnectingElement<E>
+		extends AbstractConnectingElement
 		implements TokenFlow {
+
+	private ElementRef<E> sourceRef;
+	private ElementRef<E> targetRef;
 
 	private final TokenCollection tokens = new TokenCollection();
 
 	public AbstractTokenConnectingElement(final String id, final String name,
 			final ElementRef<E> source, final ElementRef<E> target) {
-		super(id, name, source, target);
+		super(id, name);
+		setSourceRef(source);
+		setTargetRef(target);
+	}
+
+	protected void setSourceRef(final ElementRef<E> elementRef) {
+		assert elementRef != null;
+		sourceRef = elementRef;
+	}
+
+	public ElementRef<E> getSourceRef() {
+		return sourceRef;
+	}
+
+	protected final E getElementFromElementRef(final ElementRef<E> elementRef) {
+		if ((elementRef != null) && elementRef.hasElement()) {
+			return elementRef.getElement();
+		}
+		return null;
+	}
+
+	public E getSource() {
+		return getElementFromElementRef(getSourceRef());
+	}
+
+	protected void setTargetRef(final ElementRef<E> elementRef) {
+		assert elementRef != null;
+		targetRef = elementRef;
+	}
+
+	public ElementRef<E> getTargetRef() {
+		return targetRef;
+	}
+
+	public E getTarget() {
+		return getElementFromElementRef(getTargetRef());
 	}
 
 	@Override

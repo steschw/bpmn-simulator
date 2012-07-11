@@ -46,7 +46,6 @@ import bpmn.element.activity.task.*;
 import bpmn.element.artifact.Association;
 import bpmn.element.artifact.Group;
 import bpmn.element.artifact.TextAnnotation;
-import bpmn.element.artifact.Association.Direction;
 import bpmn.element.event.*;
 import bpmn.element.event.definition.ConditionalEventDefinition;
 import bpmn.element.event.definition.ErrorEventDefinition;
@@ -262,11 +261,11 @@ public class AbstractModel
 		return getAttributeString(node, "name"); //$NON-NLS-1$
 	}
 
-	protected <E extends AbstractFlowElement> ElementRef<E> getSourceRefAttribute(final Node node) {
+	protected <E extends AbstractTokenFlowElement> ElementRef<E> getSourceRefAttribute(final Node node) {
 		return getAttributeElementRef(node, "sourceRef"); //$NON-NLS-1$
 	}
 
-	protected <E extends AbstractFlowElement> ElementRef<E> getTargetRefAttribute(final Node node) {
+	protected <E extends AbstractTokenFlowElement> ElementRef<E> getTargetRefAttribute(final Node node) {
 		return getAttributeElementRef(node, "targetRef"); //$NON-NLS-1$
 	}
 
@@ -355,8 +354,8 @@ public class AbstractModel
 	protected boolean readElementMessageFlow(final Node node,
 			final Collaboration collaboration) {
 		if (isElementNode(node, BPMN, "messageFlow")) { //$NON-NLS-1$
-			final MessageFlow messageFlow = new MessageFlow(getIdAttribute(node),
-					getNameAttribute(node),
+			final MessageFlow messageFlow = new MessageFlow(
+					getIdAttribute(node), getNameAttribute(node),
 					getSourceRefAttribute(node), getTargetRefAttribute(node));
 			readBaseElement(node, messageFlow);
 			elements.set(messageFlow);
@@ -641,12 +640,11 @@ public class AbstractModel
 				|| isElementNode(node, BPMN, "dataOutputAssociation")) {
 			final Node sourceElement = getSingleSubElement(node, BPMN, "sourceRef");
 			final Node targetElement = getSingleSubElement(node, BPMN, "targetRef");
-			final ElementRef<AbstractFlowElement> sourceRef = getElementRef(sourceElement.getTextContent());
-			final ElementRef<AbstractFlowElement> targetRef = getElementRef(targetElement.getTextContent());
+			final ElementRef<AbstractTokenFlowElement> sourceRef = getElementRef(sourceElement.getTextContent());
+			final ElementRef<AbstractTokenFlowElement> targetRef = getElementRef(targetElement.getTextContent());
 			final DataAssociation dataAssociation =
 					new DataAssociation(getIdAttribute(node),
 							sourceRef, targetRef);
-			dataAssociation.setDirection(Direction.ONE);
 			elements.set(dataAssociation);
 			return true;
 		} else {
@@ -684,9 +682,7 @@ public class AbstractModel
 
 	protected boolean readElementAssociation(final Node node, final Process process) {
 		if (isElementNode(node, BPMN, "association")) { //$NON-NLS-1$
-			final Association association = new Association(getIdAttribute(node),
-					getSourceRefAttribute(node),
-					getTargetRefAttribute(node));
+			final Association association = new Association(getIdAttribute(node));
 			association.setDirection(getParameterAssociationDirection(node));
 			readBaseElement(node, process);
 			addElementToContainer(association, process);
@@ -710,11 +706,9 @@ public class AbstractModel
 
 	protected boolean readElementSequenceflow(final Node node, final Process process) {
 		if (isElementNode(node, BPMN, "sequenceFlow")) { //$NON-NLS-1$
-			final ElementRef<AbstractTokenFlowElement> sourceRef = getSourceRefAttribute(node); 
-			final ElementRef<AbstractTokenFlowElement> targetRef = getTargetRefAttribute(node); 
 			final SequenceFlow sequenceFlow = new SequenceFlow(
 					getIdAttribute(node), getNameAttribute(node),
-					sourceRef, targetRef);
+					getSourceRefAttribute(node), getTargetRefAttribute(node));
 			final NodeList childNodes = node.getChildNodes();
 			for (int i = 0; i < childNodes.getLength(); ++i) {
 				final Node childNode = childNodes.item(i);

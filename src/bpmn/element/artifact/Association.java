@@ -26,12 +26,10 @@ import java.awt.Stroke;
 
 import bpmn.Graphics;
 import bpmn.element.AbstractConnectingElement;
-import bpmn.element.AbstractFlowElement;
-import bpmn.element.ElementRef;
 
 @SuppressWarnings("serial")
 public class Association
-		extends AbstractConnectingElement<AbstractFlowElement> {
+		extends AbstractConnectingElement {
 
 	public static enum Direction {
 		NONE,
@@ -54,10 +52,8 @@ public class Association
 
 	private Direction direction = Direction.NONE;
 
-	public Association(final String id,
-			final ElementRef<AbstractFlowElement> source,
-			final ElementRef<AbstractFlowElement> target) {
-		super(id, null, source, target);
+	public Association(final String id) {
+		super(id, null);
 	}
 
 	public void setDirection(final Direction direction) {

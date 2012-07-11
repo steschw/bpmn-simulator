@@ -28,11 +28,12 @@ import java.awt.Stroke;
 import bpmn.Graphics;
 
 @SuppressWarnings("serial")
-public final class MessageFlow extends AbstractConnectingElement<AbstractFlowElement> {
+public final class MessageFlow
+		extends AbstractTokenConnectingElement<AbstractTokenFlowElement> {
 
 	public MessageFlow(final String id, final String name,
-			final ElementRef<AbstractFlowElement> sourceRef,
-			final ElementRef<AbstractFlowElement> targetRef) {
+			final ElementRef<AbstractTokenFlowElement> sourceRef,
+			final ElementRef<AbstractTokenFlowElement> targetRef) {
 		super(id, name, sourceRef, targetRef);
 		setElementBackground(Color.WHITE);
 	}

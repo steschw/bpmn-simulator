@@ -68,7 +68,7 @@ public class AbstractModel
 
 	protected static final String EXTENSION_SIGNAVIO = "http://www.signavio.com"; //$NON-NLS-1$
 
-	private static final String SCHEMA_RESOURCE = "xsd/BPMN20.xsd"; //$NON-NLS-1$
+	private static final String SCHEMA_FILENAME = "bpmn/xsd/BPMN20.xsd"; //$NON-NLS-1$
 
 	private final ElementRefCollection<VisibleElement> elements
 			= new ElementRefCollection<VisibleElement>();
@@ -1001,9 +1001,11 @@ public class AbstractModel
 
 	@Override
 	protected Schema loadSchema() throws SAXException {
-		final URL resource = getClass().getResource(SCHEMA_RESOURCE);
+		final ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+		final URL url = classLoader.getResource(SCHEMA_FILENAME);
+		assert url != null;
 		final SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);  
-		return factory.newSchema(resource);
+		return factory.newSchema(url);
 	}
 
 	@Override

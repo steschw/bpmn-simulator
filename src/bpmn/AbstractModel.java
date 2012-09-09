@@ -75,7 +75,7 @@ public abstract class AbstractModel
 			= new ElementRefCollection<VisibleElement>();
 
 	private final Collection<Process> processes
-			= new LinkedList<Process>();
+			= new ArrayList<Process>();
 
 	private final ElementRefCollection<Signal> signals
 			= new ElementRefCollection<Signal>();
@@ -418,6 +418,17 @@ public abstract class AbstractModel
 		}
 	}
 
+	protected boolean readElementFlowNodeRef(final Node node, final Lane lane) {
+		if (isElementNode(node, BPMN, "flowNodeRef")) { //$NON-NLS-1$
+			final String elementId = node.getTextContent();
+			final ElementRef<AbstractFlowElement> elementRef = getElementRef(elementId);
+			lane.addFlowNodeRef(elementRef);
+			return true;
+		} else {
+			return false;
+		}
+	}
+
 	protected boolean readElementLane(final Node node,
 			final AbstractContainerActivity activity, final LaneSet laneSet) {
 		if (isElementNode(node, BPMN, "lane")) { //$NON-NLS-1$
@@ -426,7 +437,8 @@ public abstract class AbstractModel
 			for (int i = 0; i < childNodes.getLength(); ++i) {
 				final Node childNode = childNodes.item(i);
 				if (!readElementsForBaseElement(childNode, lane)
-						&& !readElementLaneSet(childNode, activity, lane)) {
+						&& !readElementLaneSet(childNode, activity, lane)
+						&& !readElementFlowNodeRef(childNode, lane)) {
 					showUnknowNode(childNode);
 				}
 			}

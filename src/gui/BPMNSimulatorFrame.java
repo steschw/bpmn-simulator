@@ -44,7 +44,8 @@ import bpmn.Diagram;
 import bpmn.DiagramInterchangeModel;
 
 @SuppressWarnings("serial")
-public class BPMNSimulatorFrame extends JFrame {
+public class BPMNSimulatorFrame
+		extends JFrame {
 
 	private static final int DEFAULT_WIDTH = 800;
 	private static final int DEFAULT_HEIGHT = 600;

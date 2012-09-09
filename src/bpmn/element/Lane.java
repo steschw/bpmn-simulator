@@ -20,11 +20,22 @@
  */
 package bpmn.element;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
 @SuppressWarnings("serial")
-public class Lane extends TitledFlowElement {
+public class Lane
+	extends TitledFlowElement {
+
+	private final Collection<ElementRef<AbstractFlowElement>> flowNodeRefs
+			= new ArrayList<ElementRef<AbstractFlowElement>>();
 
 	public Lane(final String id, final String name) {
 		super(id, name);
+	}
+
+	public void addFlowNodeRef(ElementRef<AbstractFlowElement> flowNodeRef) {
+		flowNodeRefs.add(flowNodeRef);
 	}
 
 }

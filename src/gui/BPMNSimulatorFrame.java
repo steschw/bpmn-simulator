@@ -28,6 +28,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.IOException;
+import java.util.Collection;
 
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -307,12 +308,20 @@ public class BPMNSimulatorFrame
 			frameInstances.setInstanceManager(model.getInstanceManager());
 			menuWindow.setDesktopPane(desktop.getDesktopPane());
 			toolbar.setModel(model);
-			for (final Diagram diagram : model.getDiagrams()) {
-				final DiagramFrame frame = new DiagramFrame(diagram);
-				desktop.add(frame);
-				frame.showFrame();
+			final Collection<Diagram> diagrams = model.getDiagrams();
+			if (diagrams.isEmpty()) {
+				JOptionPane.showMessageDialog(this,
+						Messages.getString("containsNoDiagrams"), //$NON-NLS-1$
+						Messages.getString("information"), //$NON-NLS-1$
+						JOptionPane.INFORMATION_MESSAGE);
+			} else {
+				for (final Diagram diagram : diagrams) {
+					final DiagramFrame frame = new DiagramFrame(diagram);
+					desktop.add(frame);
+					frame.showFrame();
+				}
+				desktop.arrangeFrames();
 			}
-			desktop.arrangeFrames();
 		}
 	}
 

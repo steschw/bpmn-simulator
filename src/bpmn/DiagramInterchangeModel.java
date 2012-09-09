@@ -33,7 +33,6 @@ import bpmn.element.Collaboration;
 import bpmn.element.AbstractConnectingElement;
 import bpmn.element.AbstractFlowElement;
 import bpmn.element.Label;
-import bpmn.element.Rectangle;
 import bpmn.element.TitledFlowElement;
 import bpmn.element.VisibleElement;
 import bpmn.element.activity.Process;

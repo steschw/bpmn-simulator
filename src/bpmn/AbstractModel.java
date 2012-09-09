@@ -155,26 +155,17 @@ public abstract class AbstractModel
 		notifyStructureExceptionListeners(exception);
 	}
 
-	/**
-	 * Liefert ein Unterelement von einem Element und prüft dabei ob dieses nur einmal vorkommt
-	 * @return Liefert null zurück wenn das Unterelement nicht gefunden wird. Bei mehreren wird das erste zurück gegeben.
-	 */
-	protected static Node getSingleSubElement(final Node node, final String namespace, final String name) {
-		Node subElement = null;
+	protected <E extends Element> ElementRef<E> getNodeElementRef(
+			final Node node, final String namespace, final String name) {
 		final NodeList childNodes = node.getChildNodes();
 		for (int i = 0; i < childNodes.getLength(); ++i) {
 			final Node childNode = childNodes.item(i);
 			if (isElementNode(childNode, namespace, name)) {
-				if (subElement == null) {
-					subElement = childNode;
-				} else {
-					// Sollte bereits durch XSD geprüft werden
-					//logFrame.addWarning("Element " + childNode.getNodeName() + " mehrfach gefunden, aber nur einmal erwartet");
-				}
-				subElement = childNode;
+				final String elementId = getNodeText(childNode); 
+				return getElementRef(elementId);
 			}
 		}
-		return subElement;
+		return null;
 	}
 
 	protected void throwInvalidElementType(final Class<?> type, final Class<?> expectedType)
@@ -187,7 +178,7 @@ public abstract class AbstractModel
 	}
 
 	@SuppressWarnings("unchecked")
-	protected <E extends VisibleElement> E getElement(final String id, final Class<E> type)
+	protected <E extends Element> E getElement(final String id, final Class<E> type)
 			throws StructureException {
 		final VisibleElement element = elements.get(id);
 		if (element == null) {
@@ -201,13 +192,13 @@ public abstract class AbstractModel
 		return (E)element;
 	}
 
-	protected <E extends VisibleElement> E getAttributeElement(final Node node, final String name, final Class<E> type)
+	protected <E extends Element> E getAttributeElement(final Node node, final String name, final Class<E> type)
 			throws StructureException {
 		return getElement(getAttributeString(node, name), type);
 	}
 
 	@SuppressWarnings("unchecked")
-	protected <T extends VisibleElement> ElementRef<T> getElementRef(final String id) {
+	protected <T extends Element> ElementRef<T> getElementRef(final String id) {
 		return (ElementRef<T>)elements.getRef(id);
 	}
 
@@ -652,12 +643,12 @@ public abstract class AbstractModel
 	protected boolean readElementsDataAssociations(final Node node) {
 		if (isElementNode(node, BPMN, "dataInputAssociation") //$NON-NLS-1$
 				|| isElementNode(node, BPMN, "dataOutputAssociation")) { //$NON-NLS-1$
-			final Node sourceElement = getSingleSubElement(node, BPMN, "sourceRef"); //$NON-NLS-1$
-			final Node targetElement = getSingleSubElement(node, BPMN, "targetRef"); //$NON-NLS-1$
-			final ElementRef<AbstractTokenFlowElement> sourceRef = getElementRef(sourceElement.getTextContent());
-			final ElementRef<AbstractTokenFlowElement> targetRef = getElementRef(targetElement.getTextContent());
-			final DataAssociation dataAssociation =
-					new DataAssociation(getIdAttribute(node),
+			final ElementRef<AbstractTokenFlowElement> sourceRef
+					= getNodeElementRef(node, BPMN, "sourceRef"); //$NON-NLS-1$
+			final ElementRef<AbstractTokenFlowElement> targetRef
+					= getNodeElementRef(node, BPMN, "targetRef"); //$NON-NLS-1$
+			final DataAssociation dataAssociation
+					= new DataAssociation(getIdAttribute(node),
 							sourceRef, targetRef);
 			elements.set(dataAssociation);
 			return true;

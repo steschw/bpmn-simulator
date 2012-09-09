@@ -87,9 +87,18 @@ public class DiagramInterchangeModel
 					final TitledFlowElement titledElementContainer = (TitledFlowElement)element;
 					titledElementContainer.setHorizontal(getIsHorizontalAttribute(node));
 				}
+
 				plane.add(element, 0);
-				readDiagramPlaneElementBounds(node, element);
-				readDiagramPlaneElementLabel(node, plane, element);
+
+				final NodeList childNodes = node.getChildNodes();
+				for (int i = 0; i < childNodes.getLength(); ++i) {
+					final Node childNode = childNodes.item(i);
+					if (!readElementBounds(childNode, element)
+							&& !readElementLabel(childNode, plane, element)) {
+						showUnknowNode(childNode);
+					}
+				}
+
 				element.initSubElements();
 			}
 			return true;
@@ -104,8 +113,16 @@ public class DiagramInterchangeModel
 			final AbstractConnectingElement element = getBPMNElementAttribute(node, AbstractConnectingElement.class);
 			if (element != null) {
 				plane.add(element, 0);
-				readDiagramPlaneElementWaypoints(node, element);
-				readDiagramPlaneElementLabel(node, plane, element);
+
+				final NodeList childNodes = node.getChildNodes();
+				for (int i = 0; i < childNodes.getLength(); ++i) {
+					final Node childNode = childNodes.item(i);
+					if (!readElementWaypoint(childNode, element)
+							&& !readElementLabel(childNode, plane, element)) {
+						showUnknowNode(childNode);
+					}
+				}
+
 				element.initSubElements();
 			}
 			return true;
@@ -167,39 +184,53 @@ public class DiagramInterchangeModel
 		}
 	}
 
-	protected Rectangle getBoundsElement(final Node node) {
-		final Node boundsNode = getSingleSubElement(node, DC, "Bounds"); //$NON-NLS-1$
-		if (boundsNode != null) {
-			return getRectangleAttribute(boundsNode);
-		}
-		return null;
-	}
-
-	protected void readDiagramPlaneElementBounds(final Node node,
+	protected boolean readElementBounds(final Node node,
 			final AbstractFlowElement element) {
-		element.setInnerBounds(getBoundsElement(node));
-	}
-
-	protected void readDiagramPlaneElementWaypoints(final Node node,
-			final AbstractConnectingElement element) {
-		final NodeList childNodes = node.getChildNodes();
-		for (int i = 0; i < childNodes.getLength(); ++i) {
-			final Node childNode = childNodes.item(i);
-			if (isElementNode(childNode, DI, "waypoint")) { //$NON-NLS-1$
-				element.addWaypoint(getPointAttribute(childNode));
-			}
+		if (isElementNode(node, DC, "Bounds")) { //$NON-NLS-1$
+			element.setInnerBounds(getRectangleAttribute(node));
+			return true;
+		} else {
+			return false;
 		}
 	}
 
-	protected void readDiagramPlaneElementLabel(final Node node,
+	protected boolean readElementWaypoint(final Node node,
+			final AbstractConnectingElement element) {
+		if (isElementNode(node, DI, "waypoint")) { //$NON-NLS-1$
+			element.addWaypoint(getPointAttribute(node));
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	protected boolean readElementBounds(final Node node,
+			final Label label) {
+		if (isElementNode(node, DC, "Bounds")) { //$NON-NLS-1$
+			label.setBounds(getRectangleAttribute(node));
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	protected boolean readElementLabel(final Node node,
 			final JComponent planeElement, final VisibleElement element) {
-		final Label label = element.getElementLabel();
-		if (label != null) {
-			final Node labelNode = getSingleSubElement(node, BPMNDI, "BPMNLabel"); //$NON-NLS-1$
-			if (labelNode != null) {
-				label.setBounds(getBoundsElement(labelNode));
+		if (isElementNode(node, BPMNDI, "BPMNLabel")) { //$NON-NLS-1$
+			final Label label = element.getElementLabel();
+			if (label != null) {
+				final NodeList childNodes = node.getChildNodes();
+				for (int i = 0; i < childNodes.getLength(); ++i) {
+					final Node childNode = childNodes.item(i);
+					if (!readElementBounds(childNode, label)) {
+						showUnknowNode(childNode);
+					}
+				}
+				planeElement.add(label, 0);
 			}
-			planeElement.add(label, 0);
+			return true;
+		} else {
+			return false;
 		}
 	}
 

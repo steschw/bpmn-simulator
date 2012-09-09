@@ -292,6 +292,7 @@ public class BPMNSimulatorFrame extends JFrame {
 			config.setLastDirectory(fileChoser.getCurrentDirectory().getAbsolutePath());
 			closeFile();
 			file = fileChoser.getSelectedFile();
+			updateFrameTitle();
 			createModel();
 		}
 	}
@@ -304,7 +305,6 @@ public class BPMNSimulatorFrame extends JFrame {
 			frameInstances.setInstanceManager(model.getInstanceManager());
 			menuWindow.setDesktopPane(desktop.getDesktopPane());
 			toolbar.setModel(model);
-			updateFrameTitle();
 			desktop.arrangeFrames();
 		}
 	}

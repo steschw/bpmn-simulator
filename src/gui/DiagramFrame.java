@@ -18,7 +18,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package bpmn;
+package gui;
 
 import java.awt.Color;
 import java.net.URL;
@@ -28,7 +28,8 @@ import javax.swing.ImageIcon;
 import javax.swing.JInternalFrame;
 import javax.swing.JScrollPane;
 
-import bpmn.element.VisibleElement;
+import bpmn.Diagram;
+import bpmn.element.Element;
 import bpmn.element.Collaboration;
 import bpmn.element.activity.Process;
 
@@ -39,12 +40,17 @@ public class DiagramFrame
 	private static final Icon ICON_PROCESS = loadFrameIcon("process.png"); //$NON-NLS-1$
 	private static final Icon ICON_COLLABORATION = loadFrameIcon("collaboration.png"); //$NON-NLS-1$
 
-	public DiagramFrame(final VisibleElement container, final String name) {
-		super((name == null) ? container.getElementName() : name, true, false, true);
-		final JScrollPane scrollPane = new JScrollPane(container);
+	private final Diagram diagram;
+
+	public DiagramFrame(final Diagram diagram) {
+		super(diagram.getTitle(), true, false, true);
+		this.diagram = diagram;
+
+		final JScrollPane scrollPane = new JScrollPane(diagram.getPlane());
 		scrollPane.getViewport().setBackground(Color.WHITE);
 		setContentPane(scrollPane);
-		setFrameIcon(container);
+
+		updateFrameIcon();
 	}
 
 	private static Icon loadFrameIcon(final String filename) {
@@ -55,11 +61,12 @@ public class DiagramFrame
 		return null;
 	}
 
-	protected void setFrameIcon(final VisibleElement container) {
+	protected void updateFrameIcon() {
 		Icon icon = null;
-		if (container instanceof Process) {
+		final Element plane = diagram.getPlane(); 
+		if (plane instanceof Process) {
 			icon = ICON_PROCESS;
-		} else if (container instanceof Collaboration) {
+		} else if (plane instanceof Collaboration) {
 			icon = ICON_COLLABORATION;
 		}
 		setFrameIcon(icon);

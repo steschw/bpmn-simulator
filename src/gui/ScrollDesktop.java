@@ -135,8 +135,19 @@ public class ScrollDesktop extends JScrollPane {
 		getViewport().add(desktopPane);
 	}
 
-	public ScrollDesktopPane getDesktopPane() {
+	protected ScrollDesktopPane getDesktopPane() {
 		return desktopPane;
+	}
+
+	public void add(final JInternalFrame frame) {
+		getDesktopPane().add(frame);
+	}
+
+	@Override
+	public void removeAll() {
+		final ScrollDesktopPane desktopPane = getDesktopPane();
+		desktopPane.removeAll();
+		desktopPane.repaint();
 	}
 
 	public void arrangeFrames() {

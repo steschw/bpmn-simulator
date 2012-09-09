@@ -40,6 +40,7 @@ import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import bpmn.Diagram;
 import bpmn.DiagramInterchangeModel;
 
 @SuppressWarnings("serial")
@@ -299,18 +300,24 @@ public class BPMNSimulatorFrame extends JFrame {
 
 	private void createModel() {
 		if (file != null) {
-			model = new DiagramInterchangeModel(desktop.getDesktopPane());
+			model = new DiagramInterchangeModel();
 			model.addStructureExceptionListener(logFrame);
 			model.load(file);
 			frameInstances.setInstanceManager(model.getInstanceManager());
 			menuWindow.setDesktopPane(desktop.getDesktopPane());
 			toolbar.setModel(model);
+			for (final Diagram diagram : model.getDiagrams()) {
+				final DiagramFrame frame = new DiagramFrame(diagram);
+				desktop.add(frame);
+				frame.showFrame();
+			}
 			desktop.arrangeFrames();
 		}
 	}
 
 	private void closeModel() {
 		if (model != null) {
+			desktop.removeAll();
 			toolbar.setModel(null);
 			menuWindow.setDesktopPane(null);
 			frameInstances.setInstanceManager(null);

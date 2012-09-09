@@ -21,9 +21,10 @@
 package bpmn;
 
 import java.text.MessageFormat;
+import java.util.Collection;
+import java.util.LinkedList;
 
 import javax.swing.JComponent;
-import javax.swing.JDesktopPane;
 
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -38,24 +39,21 @@ import bpmn.element.VisibleElement;
 import bpmn.element.activity.Process;
 import bpmn.exception.StructureException;
 
-public class DiagramInterchangeModel extends AbstractModel {
+public class DiagramInterchangeModel
+		extends AbstractModel {
 
 	protected static final String BPMNDI = "http://www.omg.org/spec/BPMN/20100524/DI"; //$NON-NLS-1$
 	protected static final String DC = "http://www.omg.org/spec/DD/20100524/DC"; //$NON-NLS-1$
 	protected static final String DI = "http://www.omg.org/spec/DD/20100524/DI"; //$NON-NLS-1$
 
-	private final JDesktopPane desktop;
+	private final Collection<Diagram> diagrams = new LinkedList<Diagram>();
 
-	public DiagramInterchangeModel(final JDesktopPane desktop) {
+	public DiagramInterchangeModel() {
 		super();
-		this.desktop = desktop;
 	}
 
-	@Override
-	public void close() {
-		super.close();
-		desktop.removeAll();
-		desktop.repaint();
+	public final Collection<Diagram> getDiagrams() {
+		return diagrams;
 	}
 
 	@Override
@@ -134,9 +132,7 @@ public class DiagramInterchangeModel extends AbstractModel {
 							notifyStructureExceptionListeners(exception);
 						}
 					}
-					final DiagramFrame diagramFrame = new DiagramFrame(planeElement, name);
-					desktop.add(diagramFrame);
-					diagramFrame.showFrame();
+					diagrams.add(new Diagram(planeElement, name));
 				} else {
 					final StructureException exception = new StructureException(planeElement,
 						MessageFormat.format(

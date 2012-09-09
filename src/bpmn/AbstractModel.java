@@ -62,7 +62,7 @@ import bpmn.instance.Instance;
 import bpmn.instance.InstanceManager;
 import bpmn.trigger.TriggerCatchingElement;
 
-public class AbstractModel
+public abstract class AbstractModel
 		extends AbstractXmlModel {
 
 	protected static final String BPMN = "http://www.omg.org/spec/BPMN/20100524/MODEL";  //$NON-NLS-1$

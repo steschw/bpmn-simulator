@@ -832,8 +832,8 @@ public abstract class AbstractModel
 			final NodeList childNodes = node.getChildNodes();
 			for (int i = 0; i < childNodes.getLength(); ++i) {
 				final Node childNode = childNodes.item(i);
-				if (!readElementsForBaseElement(node, textAnnotation)
-						&& !readElementText(node, textAnnotation)) {
+				if (!readElementsForBaseElement(childNode, textAnnotation)
+						&& !readElementText(childNode, textAnnotation)) {
 					showUnknowNode(childNode);
 				}
 			}

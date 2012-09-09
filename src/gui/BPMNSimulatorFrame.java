@@ -286,7 +286,7 @@ public class BPMNSimulatorFrame extends JFrame {
 	private void openFile() {
 		final Config config = Config.getInstance();
 		final JFileChooser fileChoser = new JFileChooser();
-		fileChoser.setFileFilter(new FileNameExtensionFilter("BPMN 2.0 XML", "bpmn", "xml")); //$NON-NLS-1$ //$NON-NLS-2$
+		fileChoser.setFileFilter(new FileNameExtensionFilter("BPMN 2.0 XML", "bpmn", "xml")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		fileChoser.setCurrentDirectory(new File(config.getLastDirectory()));
 		if (fileChoser.showOpenDialog(this) == 	JFileChooser.APPROVE_OPTION) {
 			config.setLastDirectory(fileChoser.getCurrentDirectory().getAbsolutePath());

@@ -87,9 +87,9 @@ public final class BoundaryEvent
 		final Activity activity = getAttachedTo();
 		if (activity != null) {
 			final Instance destinationInstance = trigger.getDestinationInstance(); 
-			final Instance parentInstance = destinationInstance.getParentInstance();
+			final Instance parentInstance = destinationInstance.getParent();
 			if (parentInstance != null) {
-				parentInstance.newToken(this);
+				parentInstance.addNewToken(this);
 			}
 			if (isInterrupting()) {
 				destinationInstance.remove();

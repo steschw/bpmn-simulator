@@ -33,7 +33,8 @@ import bpmn.instance.Instance;
 import bpmn.token.Token;
 
 @SuppressWarnings("serial")
-public abstract class AbstractGateway extends AbstractTokenFlowElementWithDefault {
+public abstract class AbstractGateway
+		extends AbstractTokenFlowElementWithDefault {
 
 	private static final int SYMBOL_MARGIN = 14;
 
@@ -71,7 +72,8 @@ public abstract class AbstractGateway extends AbstractTokenFlowElementWithDefaul
 
 	protected Token getFirstTokenForIncoming(final SequenceFlow sequenceFlow,
 			final Instance instance) {
-		for (Token token : getInnerTokens().byInstance(instance)) {
+		for (final Token token : getInnerTokens().byInstance(instance)) {
+			assert token.getPreviousFlow() != null;
 			if (sequenceFlow.equals(token.getPreviousFlow())) {
 				return token;
 			}
@@ -96,6 +98,17 @@ public abstract class AbstractGateway extends AbstractTokenFlowElementWithDefaul
 				-(int)(innerBounds.getWidth() / 4),
 				-(int)(innerBounds.getHeight() / 4));
 		getElementLabel().setLeftTopPosition(position);
+	}
+
+	@Override
+	protected void tokenForwardToNextElement(final Token token,
+			final Instance instance) {
+		if (passTokenToAllNextElements(token, instance)) {
+			setException(false);
+			token.remove();
+		} else {
+			setException(true);
+		}
 	}
 
 }

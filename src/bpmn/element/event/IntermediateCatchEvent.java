@@ -84,7 +84,7 @@ public final class IntermediateCatchEvent
 
 	@Override
 	public Collection<Instance> getTriggerDestinationInstances() {
-		return getProcess().getInstances();
+		return getContainerActivity().getInstances();
 	}
 
 	@Override
@@ -153,7 +153,7 @@ public final class IntermediateCatchEvent
 			if (isInstantiableNotifying()) {
 				this.catchTrigger(new Trigger(null, null));
 			} else {
-				InstancePopupMenu.selectToTrigger(this, this, getProcess().getInstances());
+				InstancePopupMenu.selectToTrigger(this, this, getContainerActivity().getInstances());
 			}
 		}
 	}

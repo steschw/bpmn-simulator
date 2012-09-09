@@ -29,7 +29,7 @@ import java.util.Collection;
 import javax.swing.Icon;
 
 import bpmn.element.Visualization;
-import bpmn.element.activity.Process;
+import bpmn.element.activity.AbstractContainerActivity;
 import bpmn.instance.Instance;
 import bpmn.instance.InstanceManager;
 import bpmn.trigger.Instantiable;
@@ -48,15 +48,15 @@ public final class StartEvent extends AbstractEvent
 
 	@Override
 	public boolean canTriggerManual() {
-		final Process process = getProcess();
+		final AbstractContainerActivity containerActivity = getContainerActivity();
 		return (getInstanceManager() != null)
-				&& (process != null) && !process.hasIncoming()
+				&& (containerActivity != null) && !containerActivity.hasIncoming()
 				&& (isPlain() || isTimer() || isConditional()); 
 	}
 
 	@Override
 	public Collection<Instance> getTriggerDestinationInstances() {
-		return getProcess().getInstances();
+		return getContainerActivity().getInstances();
 	}
 
 	@Override
@@ -64,9 +64,9 @@ public final class StartEvent extends AbstractEvent
 		assert trigger.getDestinationInstance() == null;
 		final Instance sourceInstance = trigger.getSourceInstance();
 		if (sourceInstance == null) {
-			getProcess().createInstance(null).newToken(this);
+			getContainerActivity().createInstance(null).addNewToken(this);
 		} else {
-			getProcess().createCorrelationInstance(sourceInstance).newToken(this);
+			getContainerActivity().createCorrelationInstance(sourceInstance).addNewToken(this);
 		}
 	}
 
@@ -82,8 +82,8 @@ public final class StartEvent extends AbstractEvent
 	}
 
 	@Override
-	public void setProcess(final Process parentProcess) {
-		super.setProcess(parentProcess);
+	public void setContainerActivity(final AbstractContainerActivity parentActivity) {
+		super.setContainerActivity(parentActivity);
 		updateCursor();
 	}
 

@@ -26,7 +26,7 @@ import java.util.Collection;
 import java.util.Iterator;
 
 import bpmn.Graphics;
-import bpmn.element.activity.Process;
+import bpmn.element.activity.AbstractContainerActivity;
 import bpmn.element.gateway.EventBasedGateway;
 import bpmn.instance.Instance;
 import bpmn.token.Token;
@@ -61,7 +61,7 @@ public abstract class AbstractTokenFlowElement
 		return outgoingRefs;
 	}
 
-	protected final Collection<SequenceFlow> getElementsFromElementRefs(
+	protected static Collection<SequenceFlow> getElementsFromElementRefs(
 					final Collection<ElementRef<SequenceFlow>> elementRefs) {
 		final Collection<SequenceFlow> elements = new ArrayList<SequenceFlow>();
 		for (ElementRef<SequenceFlow> elementRef : elementRefs) {
@@ -82,10 +82,6 @@ public abstract class AbstractTokenFlowElement
 
 	public boolean hasIncoming() {
 		return !getIncomingRefs().isEmpty();
-	}
-
-	public boolean hasOutgoing() {
-		return !getOutgoingRefs().isEmpty();
 	}
 
 	public void addIncomingRef(final ElementRef<SequenceFlow> element) {
@@ -160,7 +156,7 @@ public abstract class AbstractTokenFlowElement
 	}
 
 	protected boolean canForwardTokenToNextElement(final Token token) {
-		return token.getSteps() >= getStepCount();
+		return isTokenAtEnd(token);
 	}
 
 	protected void addToken(final Token token) {
@@ -178,10 +174,7 @@ public abstract class AbstractTokenFlowElement
 	protected void tokenForwardToNextElement(final Token token,
 			final Instance instance) {
 		if (passTokenToAllNextElements(token, instance)) {
-			setException(false);
 			token.remove();
-		} else {
-			setException(true);
 		}
 	}
 
@@ -214,20 +207,20 @@ public abstract class AbstractTokenFlowElement
 	}
 
 	protected boolean passTokenToAllNextElements(final Token token, final Instance instance) {
-		if (hasOutgoing()) {
-			return passTokenToAllOutgoingSequenceFlows(token, instance) > 0;
+		if (isEndNode()) {
+			notifyTokenReachedEndNode(token);
+			return false;
 		} else {
-			return passTokenToParent(token, instance);
+			return passTokenToAllOutgoingSequenceFlows(token, instance) > 0;
 		}
 	}
 
-	protected boolean passTokenToParent(final Token token, final Instance instance) {
-		final Process parentProcess = getProcess();
-		if (parentProcess != null) {
-			token.passTo(parentProcess, instance);
-			return true;
+	protected void notifyTokenReachedEndNode(final Token token) {
+		final AbstractContainerActivity containerActivity = getContainerActivity();
+		assert containerActivity != null;
+		if (containerActivity != null) {
+			containerActivity.tokenReachedEndNode(token);
 		}
-		return false;
 	}
 
 	protected boolean passTokenToFirstSequenceFlow(final Token token, final Instance instance) {
@@ -321,6 +314,16 @@ public abstract class AbstractTokenFlowElement
 			}
 		}
 		return count;
+	}
+
+	@Override
+	public boolean isEndNode() {
+		return getOutgoingRefs().isEmpty();
+	}
+
+	@Override
+	public boolean isTokenAtEnd(final Token token) {
+		return token.getSteps() >= getStepCount();
 	}
 
 }

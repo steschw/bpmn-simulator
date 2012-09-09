@@ -25,19 +25,51 @@ import java.util.Enumeration;
 
 import javax.swing.JLabel;
 import javax.swing.JTree;
+import javax.swing.SwingUtilities;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreePath;
 
 import bpmn.instance.Instance;
 import bpmn.instance.InstanceListener;
 import bpmn.instance.InstanceManager;
+import bpmn.token.Token;
+import bpmn.token.TokenFlow;
+import bpmn.token.TokenListener;
 
 @SuppressWarnings("serial")
-public class InstancesTree extends JTree implements InstanceListener {
+public class InstancesTree
+		extends JTree
+		implements InstanceListener, TokenListener {
+
+	private static final String ROOT_NODE_TITLE = "Instances";
 
 	private static class InstancesTreeCellRenderer extends DefaultTreeCellRenderer {
+
+		private static void createInstanceComponent(final JLabel component, final Instance instance) {
+			final StringBuilder text = new StringBuilder("Instance of ");
+			text.append(instance.getActivity().getElementName());
+			text.append(" (");
+			text.append(instance.getTokenCount(false));
+			text.append(" token)");
+			component.setText(text.toString());
+			component.setOpaque(true);
+			component.setBackground(instance.getColor());
+		}
+
+		private static void createTokenComponent(final JLabel component, final Token token) {
+			final StringBuilder text = new StringBuilder("Token in ");
+			final TokenFlow currentFlow = token.getCurrentFlow();
+			text.append((currentFlow == null) ? "null" : currentFlow.getElementName());
+			component.setText(text.toString());
+			final Instance instance = token.getInstance();
+			if (instance != null) {
+				component.setOpaque(true);
+				component.setBackground(instance.getColor());
+			}
+		}
 
 		@Override
 		public Component getTreeCellRendererComponent(final JTree tree,
@@ -50,15 +82,16 @@ public class InstancesTree extends JTree implements InstanceListener {
 				final DefaultMutableTreeNode node = (DefaultMutableTreeNode)value;
 				final Object userObject = node.getUserObject();
 				if (userObject instanceof Instance) {
-					final Instance instance = (Instance)userObject;
-					final StringBuilder text = new StringBuilder(instance.getActivity().getElementName());
-					text.append(" (");
-					text.append(instance.getTokenCount(false));
-					text.append(" token)");
-					label.setText(text.toString());
-					label.setOpaque(true);
-					label.setBackground(instance.getColor());
+					createInstanceComponent(label, (Instance)userObject);
+				} else if (userObject instanceof Token) {
+					createTokenComponent(label, (Token)userObject);
+				} else {
+					if (!userObject.equals(ROOT_NODE_TITLE)) {
+						assert false;
+					}
 				}
+			} else {
+				assert false;
 			}
 			return component;
 		}
@@ -68,7 +101,7 @@ public class InstancesTree extends JTree implements InstanceListener {
 	private InstanceManager instanceManager;
 
 	public InstancesTree() {
-		super(new DefaultMutableTreeNode("Instances"));
+		super(new DefaultMutableTreeNode(ROOT_NODE_TITLE));
 		setRootVisible(false);
 		setCellRenderer(new InstancesTreeCellRenderer());
 	}
@@ -97,15 +130,15 @@ public class InstancesTree extends JTree implements InstanceListener {
 		getDefaultModel().reload();
 	}
 
-	private DefaultMutableTreeNode getInstanceNode(final Instance instance) {
+	private DefaultMutableTreeNode getNodeByUserObject(final Object userObject) {
 		final DefaultMutableTreeNode rootNode = getRoot();
-		if (instance == null) {
+		if (userObject == null) {
 			return rootNode;
 		} else {
 			final Enumeration<?> enumeration = rootNode.breadthFirstEnumeration();
 			while (enumeration.hasMoreElements()) {
 				final DefaultMutableTreeNode node = (DefaultMutableTreeNode)enumeration.nextElement();
-				if (instance.equals(node.getUserObject())) {
+				if (userObject.equals(node.getUserObject())) {
 					return node;
 				}
 			}
@@ -113,20 +146,65 @@ public class InstancesTree extends JTree implements InstanceListener {
 		}
 	}
 
+	private void addAndExpandNode(final DefaultMutableTreeNode parentNode,
+			final Object userObject) {
+		assert parentNode != null;
+		if (parentNode != null) {
+			assert userObject != null;
+			final MutableTreeNode node = new DefaultMutableTreeNode(userObject);
+			getDefaultModel().insertNodeInto(node, parentNode, parentNode.getChildCount());
+			expandPath(new TreePath(parentNode.getPath()));
+		}
+	}
+
+	private void removeNode(final Object userData) {
+		final DefaultMutableTreeNode node = getNodeByUserObject(userData);
+		assert node != null;
+		if (node != null) {
+			getDefaultModel().removeNodeFromParent(node);
+		}
+	}
+
 	@Override
 	public void instanceAdded(final Instance instance) {
-		final DefaultMutableTreeNode instanceNode = new DefaultMutableTreeNode(instance);
-		final DefaultMutableTreeNode parentNode = getInstanceNode(instance.getParentInstance());
-		getDefaultModel().insertNodeInto(instanceNode, parentNode, parentNode.getChildCount());
-		expandPath(new TreePath(parentNode.getPath()));
+		instance.addInstanceListener(InstancesTree.this);
+		instance.addTokenListener(InstancesTree.this);
+		SwingUtilities.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				addAndExpandNode(getNodeByUserObject(instance.getParent()), instance);
+			}
+		});
 	}
 
 	@Override
 	public void instanceRemoved(final Instance instance) {
-		final DefaultMutableTreeNode node = getInstanceNode(instance);
-		if (node != null) {
-			getDefaultModel().removeNodeFromParent(node);
-		}
+		SwingUtilities.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				removeNode(instance);
+			}
+		});
+	}
+
+	@Override
+	public void tokenAdded(final Token token) {
+		SwingUtilities.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				addAndExpandNode(getNodeByUserObject(token.getInstance()), token);
+			}
+		});
+	}
+
+	@Override
+	public void tokenRemoved(final Token token) {
+		SwingUtilities.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				removeNode(token);
+			}
+		});
 	}
 
 }

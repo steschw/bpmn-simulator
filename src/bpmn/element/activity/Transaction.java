@@ -25,7 +25,8 @@ import bpmn.Model;
 import bpmn.element.Rectangle;
 
 @SuppressWarnings("serial")
-public class Transaction extends Process {
+public final class Transaction
+		extends AbstractContainerActivity {
 
 	public Transaction(final Model model, final String id, final String name,
 			final boolean triggeredByEvent) {

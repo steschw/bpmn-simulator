@@ -32,8 +32,8 @@ import javax.swing.plaf.basic.BasicComboBoxRenderer;
 public class LocaleComboBox extends JComboBox {
 
 	private static final Locale[] LOCALES = new Locale[] {
-		new Locale("en"),
-		new Locale("de"),
+		new Locale("en"), //$NON-NLS-1$
+		new Locale("de"), //$NON-NLS-1$
 	};
 
 	public LocaleComboBox() {

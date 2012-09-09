@@ -56,27 +56,29 @@ public abstract class AbstractTokenFlowElementWithDefault
 	}
 
 	protected final boolean passTokenToFirstOutgoing(final Token token, final Instance instance) {
-		if (hasOutgoing()) {
+		if (isEndNode()) {
+			notifyTokenReachedEndNode(token);
+			return false;
+		} else {
 			if (passTokenToFirstSequenceFlow(token, instance)) {
 				return true;
 			} else {
 				return passTokenToDefaultSequenceFlow(token, instance);
 			}
-		} else {
-			return passTokenToParent(token, instance);
 		}
 	}
 
 	@Override
 	protected boolean passTokenToAllNextElements(final Token token, final Instance instance) {
-		if (hasOutgoing()) {
+		if (isEndNode()) {
+			notifyTokenReachedEndNode(token);
+			return false;
+		} else {
 			if (passTokenToAllOutgoingSequenceFlows(token, instance) == 0) {
 				return passTokenToDefaultSequenceFlow(token, instance);
 			} else {
 				return true;
 			}
-		} else {
-			return passTokenToParent(token, instance);
 		}
 	}
 

@@ -44,10 +44,11 @@ public final class ExclusiveGateway extends AbstractGateway {
 	}
 
 	@Override
-	protected void tokenForwardToNextElement(final Token token, final Instance instance) {
+	protected void tokenForwardToNextElement(final Token token,
+			final Instance instance) {
 		if (passTokenToFirstOutgoing(token, instance)) {
-			token.remove();
 			setException(false);
+			token.remove();
 		} else {
 			setException(true);
 		}

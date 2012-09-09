@@ -31,9 +31,10 @@ import javax.swing.JLabel;
 import javax.swing.text.View;
 
 @SuppressWarnings("serial")
-public class Label extends JLabel {
+public class Label
+		extends JLabel {
 
-	private static final Font FONT = new Font("Tahoma", Font.PLAIN, 11);
+	private static final Font FONT = new Font("Tahoma", Font.PLAIN, 11); //$NON-NLS-1$
 
 	private boolean needsRotate;
 	private final boolean vertical;

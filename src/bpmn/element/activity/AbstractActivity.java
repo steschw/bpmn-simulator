@@ -20,6 +20,8 @@
  */
 package bpmn.element.activity;
 
+import java.util.Collection;
+
 import bpmn.Graphics;
 import bpmn.element.AbstractTokenFlowElementWithDefault;
 import bpmn.instance.Instance;
@@ -55,6 +57,20 @@ public abstract class AbstractActivity
 	}
 
 	@Override
+	public final Collection<Instance> getInstances() {
+		return getModel().getInstanceManager().getInstancesByActivity(this);
+	}
+
+	@Override
+	public void tokenEnter(final Token token) {
+		final Instance instance = token.getInstance();
+		final Instance activityInstance = instance.newChildInstance(this); 
+		token.setInstance(activityInstance);
+
+		super.tokenEnter(token);
+	}
+
+	@Override
 	protected void addToken(final Token token) {
 		getIncomingTokens().add(token);
 	}
@@ -72,24 +88,26 @@ public abstract class AbstractActivity
 		}
 	}
 
-	protected boolean canForwardTokenToInner(final Token token) {
-		return true;
-	}
-
 	protected void forwardTokenFromIncoming(final Token token) {
 		getIncomingTokens().moveTo(getInnerTokens(), token);
 	}
 
-	protected boolean canForwardTokenToOutgoing(final Token token) {
-		return token.getSteps() >= getStepCount();
+	protected boolean canForwardTokenToInner(final Token token) {
+		return true;
 	}
 
 	protected void forwardTokenFromInner(final Token token) {
 		getInnerTokens().moveTo(getOutgoingTokens(), token);
 	}
 
+	protected boolean canForwardTokenToOutgoing(final Token token) {
+		return isTokenAtEnd(token);
+	}
+
 	protected void forwardTokenFromOutgoing(final Token token) {
-		tokenForwardToNextElement(token);
+		final Instance instance = token.getInstance();
+		tokenForwardToNextElement(token, instance.getParent());
+		instance.remove();
 	}
 
 	@Override

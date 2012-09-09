@@ -35,10 +35,12 @@ import javax.swing.JComponent;
 
 import bpmn.Graphics;
 import bpmn.Model;
-import bpmn.element.activity.Process;
+import bpmn.element.activity.AbstractContainerActivity;
 
 @SuppressWarnings("serial")
-public abstract class VisibleElement extends JComponent implements Element {
+public abstract class VisibleElement
+		extends JComponent
+		implements Element {
 
 	protected static final int MARGIN = 10;
 
@@ -46,7 +48,7 @@ public abstract class VisibleElement extends JComponent implements Element {
 
 	private static Behavior defaultBehavior = new Behavior();
 
-	private Process parentProcess;
+	private AbstractContainerActivity parentActivity;
 
 	private String id;
 
@@ -153,17 +155,17 @@ public abstract class VisibleElement extends JComponent implements Element {
 		return exception;
 	}
 
-	public void setProcess(final Process parentProcess) {
-		this.parentProcess = parentProcess;
+	public void setContainerActivity(final AbstractContainerActivity parentActivity) {
+		this.parentActivity = parentActivity;
 	}
 
-	public final Process getProcess() {
-		return parentProcess;
+	public final AbstractContainerActivity getContainerActivity() {
+		return parentActivity;
 	}
 
 	@Override
 	public Model getModel() {
-		return (parentProcess == null) ? null : parentProcess.getModel();
+		return (parentActivity == null) ? null : parentActivity.getModel();
 	}
 
 	@Override

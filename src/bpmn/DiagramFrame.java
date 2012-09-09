@@ -33,10 +33,11 @@ import bpmn.element.Collaboration;
 import bpmn.element.activity.Process;
 
 @SuppressWarnings("serial")
-public class DiagramFrame extends JInternalFrame {
+public class DiagramFrame
+		extends JInternalFrame {
 
-	private static final Icon ICON_PROCESS = loadFrameIcon("process.png");
-	private static final Icon ICON_COLLABORATION = loadFrameIcon("collaboration.png");
+	private static final Icon ICON_PROCESS = loadFrameIcon("process.png"); //$NON-NLS-1$
+	private static final Icon ICON_COLLABORATION = loadFrameIcon("collaboration.png"); //$NON-NLS-1$
 
 	public DiagramFrame(final VisibleElement container, final String name) {
 		super((name == null) ? container.getElementName() : name, true, false, true);

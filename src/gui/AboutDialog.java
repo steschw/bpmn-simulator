@@ -42,8 +42,8 @@ import javax.swing.JTextArea;
 @SuppressWarnings("serial")
 public class AboutDialog extends JDialog {
 
-	private static final int WIDTH = 400;
-	private static final int HEIGHT = 300;
+	private static final int DIALOG_WIDTH = 400;
+	private static final int DIALOG_HEIGHT = 300;
 
 	public AboutDialog() {
 		super((Frame)null, Messages.getString("About.about"), true); //$NON-NLS-1$
@@ -51,7 +51,7 @@ public class AboutDialog extends JDialog {
 		setResizable(false);
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
-		setSize(WIDTH, HEIGHT);
+		setSize(DIALOG_WIDTH, DIALOG_HEIGHT);
 
 		create();
 	}
@@ -76,7 +76,7 @@ public class AboutDialog extends JDialog {
 		panel.add(Box.createVerticalStrut(20));
 
 		try {
-			final Hyperlink hyperlink = new Hyperlink(new URI(BPMNSimulatorApplication.URL)); //$NON-NLS-1$
+			final Hyperlink hyperlink = new Hyperlink(new URI(BPMNSimulatorApplication.URL));
 			hyperlink.setAlignmentX(CENTER_ALIGNMENT);
 			panel.add(hyperlink);
 		} catch (URISyntaxException e) {
@@ -85,24 +85,24 @@ public class AboutDialog extends JDialog {
 
 		panel.add(Box.createVerticalStrut(40));
 
-		final StringBuilder javaInfo = new StringBuilder("Java: "); //$NON-NLS-1$
+		final StringBuilder javaInfo = new StringBuilder("Java: ");
 		javaInfo.append(System.getProperty("java.vendor")); //$NON-NLS-1$
-		javaInfo.append(' '); //$NON-NLS-1$
+		javaInfo.append(' ');
 		javaInfo.append(System.getProperty("java.version")); //$NON-NLS-1$
-		javaInfo.append(" ("); //$NON-NLS-1$
+		javaInfo.append(" (");
 		javaInfo.append(System.getProperty("java.home")); //$NON-NLS-1$
-		javaInfo.append(')'); //$NON-NLS-1$
+		javaInfo.append(')');
 		final JLabel labelJava = new JLabel(javaInfo.toString()); 
 		labelJava.setAlignmentX(CENTER_ALIGNMENT);
 		panel.add(labelJava);
 
 		panel.add(Box.createVerticalStrut(20));
 
-		final StringBuilder systemInfo = new StringBuilder("System: "); //$NON-NLS-1$
+		final StringBuilder systemInfo = new StringBuilder("System: ");
 		systemInfo.append(System.getProperty("os.name")); //$NON-NLS-1$
-		systemInfo.append(' '); //$NON-NLS-1$
+		systemInfo.append(' ');
 		systemInfo.append(System.getProperty("os.version")); //$NON-NLS-1$
-		systemInfo.append(' '); //$NON-NLS-1$
+		systemInfo.append(' ');
 		systemInfo.append(System.getProperty("os.arch")); //$NON-NLS-1$
 		final JLabel labelSystem = new JLabel(systemInfo.toString()); 
 		labelSystem.setAlignmentX(CENTER_ALIGNMENT);

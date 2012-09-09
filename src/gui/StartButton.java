@@ -40,7 +40,9 @@ import bpmn.trigger.Trigger;
 import bpmn.trigger.TriggerCatchingElement;
 
 @SuppressWarnings("serial")
-public class StartButton extends JButton implements ActionListener {
+public class StartButton
+		extends JButton
+		implements ActionListener {
 
 	private AbstractModel model;
 
@@ -85,7 +87,7 @@ public class StartButton extends JButton implements ActionListener {
 		return null;
 	}
 
-	private boolean requiresInstanciatedCall(final TriggerCatchingElement catchingElement) {
+	private static boolean requiresInstanciatedCall(final TriggerCatchingElement catchingElement) {
 		final boolean instantiable = (catchingElement instanceof Instantiable)
 				&& ((Instantiable)catchingElement).isInstantiable();
 		final boolean instantiableNotifing = (catchingElement instanceof InstantiableNotifiySource)

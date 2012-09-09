@@ -31,22 +31,22 @@ import bpmn.element.Visualization;
 
 public class Config {
 
-	private static final String NODE = "bpmnsimulator";
+	private static final String NODE = "bpmnsimulator"; //$NON-NLS-1$
 
-	private static final String LANGUAGE = "language";
+	private static final String LANGUAGE = "language"; //$NON-NLS-1$
 
-	private static final String KEEP_EVENTS = "keepEvents";
+	private static final String KEEP_EVENTS = "keepEvents"; //$NON-NLS-1$
 
 	private static final String SHOW_EXCLUSIVEGATEWAYSYMBOL = "showExclusiveGatewaySymbol"; //$NON-NLS-1$
 	private static final String ANTIALIASING = "antialiasing"; //$NON-NLS-1$
 
-	private static final String IGNORE_COLORS = "ignoreColors";
+	private static final String IGNORE_COLORS = "ignoreColors"; //$NON-NLS-1$
 
-	private static final String BACKGROUND_COLOR = "backgroundColor";
+	private static final String BACKGROUND_COLOR = "backgroundColor"; //$NON-NLS-1$
 
 	private static final Color DEFAULT_BACKGROUND = Color.WHITE;
 
-	private static final String EXTERNAL_EDITOR = "externalEditor";
+	private static final String EXTERNAL_EDITOR = "externalEditor"; //$NON-NLS-1$
 
 	private static final String LAST_DIRECTORY = "lastDirectory"; //$NON-NLS-1$
 
@@ -155,7 +155,7 @@ public class Config {
 	}
 
 	public String getLastDirectory() {
-		return getRootNode().get(LAST_DIRECTORY, System.getProperty("user.home"));
+		return getRootNode().get(LAST_DIRECTORY, System.getProperty("user.home")); //$NON-NLS-1$
 	}
 
 	public void setLastDirectory(final String directory) {

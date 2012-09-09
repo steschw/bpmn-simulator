@@ -31,32 +31,32 @@ import javax.swing.ImageIcon;
 
 public class Visualization {
 
-	private static final String ICONPATH = "bpmn/icons/";
+	private static final String ICONPATH = "bpmn/icons/"; //$NON-NLS-1$
 
-	public static final String ICON_BUSSINESRULE = "businessrule.png";
-	public static final String ICON_COLLAPSED = "collapsed.png";
-	public static final String ICON_COLLECTION = "collection.png";
-	public static final String ICON_EXCEPTION = "exception.png";
-	public static final String ICON_LOOP = "loop.png";
-	public static final String ICON_MANUAL = "manual.png";
-	public static final String ICON_PARALLEL = "parallel.png";
-	public static final String ICON_RECEIVE = "receive.png";
-	public static final String ICON_SCRIPT = "script.png";
-	public static final String ICON_SEND = "send.png";
-	public static final String ICON_SEQUENTIAL = "sequential.png";
-	public static final String ICON_SERVICE = "service.png";
-	public static final String ICON_TIMER = "timer.png";
-	public static final String ICON_USER = "user.png";
-	public static final String ICON_TERMINATE = "terminate.png";
-	public static final String ICON_LINK = "link.png";
-	public static final String ICON_LINK_INVERSE = "link_inverse.png";
-	public static final String ICON_MESSAGE = "send.png";
-	public static final String ICON_MESSAGE_INVERSE = "receive.png";
-	public static final String ICON_SIGNAL = "signal.png";
-	public static final String ICON_SIGNAL_INVERSE = "signal_inverse.png";
-	public static final String ICON_ERROR = "error.png";
-	public static final String ICON_ERROR_INVERSE = "error_inverse.png";
-	public static final String ICON_CONDITIONAL = "conditional.png";
+	public static final String ICON_BUSSINESRULE = "businessrule.png"; //$NON-NLS-1$
+	public static final String ICON_COLLAPSED = "collapsed.png"; //$NON-NLS-1$
+	public static final String ICON_COLLECTION = "collection.png"; //$NON-NLS-1$
+	public static final String ICON_EXCEPTION = "exception.png"; //$NON-NLS-1$
+	public static final String ICON_LOOP = "loop.png"; //$NON-NLS-1$
+	public static final String ICON_MANUAL = "manual.png"; //$NON-NLS-1$
+	public static final String ICON_PARALLEL = "parallel.png"; //$NON-NLS-1$
+	public static final String ICON_RECEIVE = "receive.png"; //$NON-NLS-1$
+	public static final String ICON_SCRIPT = "script.png"; //$NON-NLS-1$
+	public static final String ICON_SEND = "send.png"; //$NON-NLS-1$
+	public static final String ICON_SEQUENTIAL = "sequential.png"; //$NON-NLS-1$
+	public static final String ICON_SERVICE = "service.png"; //$NON-NLS-1$
+	public static final String ICON_TIMER = "timer.png"; //$NON-NLS-1$
+	public static final String ICON_USER = "user.png"; //$NON-NLS-1$
+	public static final String ICON_TERMINATE = "terminate.png"; //$NON-NLS-1$
+	public static final String ICON_LINK = "link.png"; //$NON-NLS-1$
+	public static final String ICON_LINK_INVERSE = "link_inverse.png"; //$NON-NLS-1$
+	public static final String ICON_MESSAGE = "send.png"; //$NON-NLS-1$
+	public static final String ICON_MESSAGE_INVERSE = "receive.png"; //$NON-NLS-1$
+	public static final String ICON_SIGNAL = "signal.png"; //$NON-NLS-1$
+	public static final String ICON_SIGNAL_INVERSE = "signal_inverse.png"; //$NON-NLS-1$
+	public static final String ICON_ERROR = "error.png"; //$NON-NLS-1$
+	public static final String ICON_ERROR_INVERSE = "error_inverse.png"; //$NON-NLS-1$
+	public static final String ICON_CONDITIONAL = "conditional.png"; //$NON-NLS-1$
 
 	private static final Color DEFAULT_BACKGROUNDCOLOR = Color.WHITE;
 

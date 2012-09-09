@@ -27,7 +27,7 @@ import javax.swing.Icon;
 import bpmn.Model;
 import bpmn.element.VisibleElement;
 import bpmn.element.Visualization;
-import bpmn.element.activity.Process;
+import bpmn.element.activity.AbstractContainerActivity;
 import bpmn.element.event.AbstractEvent;
 import bpmn.element.event.Event;
 import bpmn.instance.Instance;
@@ -53,8 +53,8 @@ public abstract class EventDefinition
 
 	public abstract Icon getIcon(final Visualization visualization, final boolean inverse);
 
-	protected static Process getProcessByToken(final Token token) {
-		return ((VisibleElement)token.getCurrentFlow()).getProcess();		
+	protected static AbstractContainerActivity getContainerActivityByToken(final Token token) {
+		return ((VisibleElement)token.getCurrentFlow()).getContainerActivity();		
 	}
 
 	@Override
@@ -62,7 +62,7 @@ public abstract class EventDefinition
 	}
 
 	protected void throwTriggerToEqualEvents(final Token token) {
-		final Model model = getProcessByToken(token).getModel();
+		final Model model = getContainerActivityByToken(token).getModel();
 		final Collection<TriggerCatchingElement> catchEvents =  model.getCatchEvents();
 		for (final TriggerCatchingElement catchEvent : catchEvents) {
 			if (catchEvent instanceof Event) {

@@ -62,11 +62,11 @@ public abstract class AbstractXmlModel
 	}
 
 	protected void showSAXParseException(final SAXParseException exception) {
-		final StringBuilder message = new StringBuilder('['); //$NON-NLS-1$
+		final StringBuilder message = new StringBuilder('[');
 		message.append(exception.getLineNumber());
-		message.append(':'); //$NON-NLS-1$
+		message.append(':');
 		message.append(exception.getColumnNumber());
-		message.append("] "); //$NON-NLS-1$
+		message.append("] ");
 		message.append(exception.getLocalizedMessage());
 		notifyStructureExceptionListeners(new StructureException(this, message.toString()));
 	}

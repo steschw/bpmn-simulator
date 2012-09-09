@@ -30,7 +30,8 @@ import bpmn.token.Token;
 import bpmn.token.TokenCollection;
 
 @SuppressWarnings("serial")
-public abstract class AbstractMergingGateway extends AbstractGateway {
+public abstract class AbstractMergingGateway
+		extends AbstractGateway {
 
 	protected static final int TOKEN_MARGIN = 5;
 

@@ -26,6 +26,7 @@ import javax.swing.Icon;
 
 import bpmn.element.Element;
 import bpmn.element.Visualization;
+import bpmn.element.activity.AbstractContainerActivity;
 import bpmn.element.activity.Process;
 import bpmn.element.event.AbstractEvent;
 import bpmn.element.event.IntermediateCatchEvent;
@@ -55,8 +56,8 @@ public final class LinkEventDefinition extends EventDefinition {
 	}
 
 	protected static TriggerCatchingElement findLinkTargetInProcess(
-			final Process process, final String targetName) {
-		for (final Element element : process.getElements()) {
+			final AbstractContainerActivity containerActivity, final String targetName) {
+		for (final Element element : containerActivity.getElements()) {
 			if (element instanceof IntermediateCatchEvent) {
 				final IntermediateCatchEvent event = (IntermediateCatchEvent)element;
 				final EventDefinition definition = event.getDefinition(); 
@@ -71,7 +72,7 @@ public final class LinkEventDefinition extends EventDefinition {
 		return null;
 	}
 
-	protected TriggerCatchingElement findLinkTarget(
+	protected static TriggerCatchingElement findLinkTarget(
 			final Collection<Process> processes, final String targetName) {
 		for (final Process process : processes) {
 			final TriggerCatchingElement linkTarget = findLinkTargetInProcess(process, targetName);
@@ -86,12 +87,12 @@ public final class LinkEventDefinition extends EventDefinition {
 	public void throwTrigger(final Token token) {
 		super.throwTrigger(token);
 
-		final Process process = getProcessByToken(token);
+		final AbstractContainerActivity containerActivity = getContainerActivityByToken(token);
 		final String targetName = getName();
 		TriggerCatchingElement linkTarget
-				= findLinkTargetInProcess(process, targetName);
+				= findLinkTargetInProcess(containerActivity, targetName);
 		if (linkTarget == null) {
-			linkTarget = findLinkTarget(process.getModel().getProcesses(), targetName);
+			linkTarget = findLinkTarget(containerActivity.getModel().getProcesses(), targetName);
 		}
 		if (linkTarget != null) {
 			final Instance instance = token.getInstance();
@@ -103,7 +104,7 @@ public final class LinkEventDefinition extends EventDefinition {
 
 	@Override
 	public void catchTrigger(final Trigger trigger) {
-		trigger.getSourceInstance().newToken(getEvent());
+		trigger.getSourceInstance().addNewToken(getEvent());
 		super.catchTrigger(trigger);
 	}
 

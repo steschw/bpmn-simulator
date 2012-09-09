@@ -22,8 +22,8 @@ package bpmn.instance;
 
 public interface InstanceListener {
 
-	void instanceAdded(final Instance instance);
+	void instanceAdded(Instance instance);
 
-	void instanceRemoved(final Instance instance);
+	void instanceRemoved(Instance instance);
 
 }

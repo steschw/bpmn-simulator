@@ -28,7 +28,7 @@ import java.util.Collection;
 import javax.swing.Scrollable;
 
 import bpmn.Graphics;
-import bpmn.element.activity.Process;
+import bpmn.element.activity.Activity;
 import bpmn.instance.Instance;
 import bpmn.trigger.Instantiable;
 import bpmn.trigger.InstantiableNotifiySource;
@@ -36,7 +36,9 @@ import bpmn.trigger.TriggerCatchingElement;
 import bpmn.trigger.Trigger;
 
 @SuppressWarnings("serial")
-public class Collaboration extends AbstractFlowElement implements Scrollable {
+public class Collaboration
+		extends AbstractFlowElement
+		implements Scrollable {
 
 	private final Collection<MessageFlow> messageFlows = new ArrayList<MessageFlow>();
 
@@ -50,14 +52,17 @@ public class Collaboration extends AbstractFlowElement implements Scrollable {
 
 	public boolean hasMessageTarget(final AbstractFlowElement element) {
 		for (final MessageFlow messageFlow : messageFlows) {
-			if (element.equals(messageFlow.getTarget())) {
-				return true;
+			try {
+				if (element.equals(messageFlow.getTarget())) {
+					return true;
+				}
+			} catch (ClassCastException e) {
 			}
 		}
 		return false;
 	}
 
-	private boolean requiresCorrelation(final TriggerCatchingElement catchingElement) {
+	private static boolean requiresCorrelation(final TriggerCatchingElement catchingElement) {
 		final boolean instantiable = (catchingElement instanceof Instantiable)
 				&& ((Instantiable)catchingElement).isInstantiable();
 		final boolean instantiableNotifing = (catchingElement instanceof InstantiableNotifiySource)
@@ -66,9 +71,9 @@ public class Collaboration extends AbstractFlowElement implements Scrollable {
 	}
 
 	private static Instance findMessageTargetInstance(final Collection<Instance> instances,
-			final Process process) {
+			final Activity activity) {
 		for (Instance instance : instances) {
-			if (!instance.hasCorrelationTo(process)) {
+			if (!instance.hasCorrelationTo(activity)) {
 				return instance;
 			}
 		}
@@ -76,13 +81,13 @@ public class Collaboration extends AbstractFlowElement implements Scrollable {
 	}
 
 	private static Instance findCorrelationInstance(
-			final Process sourceProcess, final Instance sourceInstance,
-			final Process targetProcess) {
-		final Collection<Instance> targetInstances = targetProcess.getInstances();
+			final Activity sourceActivity, final Instance sourceInstance,
+			final Activity targetActivity) {
+		final Collection<Instance> targetInstances = targetActivity.getInstances();
 		Instance targetInstance
 			= sourceInstance.getCorrelationInstance(targetInstances);
 		if (targetInstance == null) {
-			targetInstance = findMessageTargetInstance(targetInstances, sourceProcess);
+			targetInstance = findMessageTargetInstance(targetInstances, sourceActivity);
 			if (targetInstance != null) {
 				targetInstance.createCorrelationTo(sourceInstance);
 				sourceInstance.createCorrelationTo(targetInstance);
@@ -94,21 +99,24 @@ public class Collaboration extends AbstractFlowElement implements Scrollable {
 	public void sendMessages(final AbstractFlowElement sourceElement,
 			final Instance sourceInstance) {
 		for (final MessageFlow messageFlow : messageFlows) {
-			if (sourceElement.equals(messageFlow.getSource())) {
-				final AbstractFlowElement targetElement = messageFlow.getTarget();
-				if (targetElement instanceof TriggerCatchingElement) {
-					final TriggerCatchingElement catchingElement = (TriggerCatchingElement)targetElement;  
-					if (requiresCorrelation(catchingElement)) {
-						final Instance targetInstance = findCorrelationInstance(
-								sourceElement.getProcess(), sourceInstance,
-								targetElement.getProcess());
-						if (targetInstance != null) {
-							catchingElement.catchTrigger(new Trigger(sourceInstance, targetInstance));
+			try {
+				if (sourceElement.equals(messageFlow.getSource())) {
+					final AbstractFlowElement targetElement = messageFlow.getTarget();
+					if (targetElement instanceof TriggerCatchingElement) {
+						final TriggerCatchingElement catchingElement = (TriggerCatchingElement)targetElement;  
+						if (requiresCorrelation(catchingElement)) {
+							final Instance targetInstance = findCorrelationInstance(
+									sourceElement.getContainerActivity(), sourceInstance,
+									targetElement.getContainerActivity());
+							if (targetInstance != null) {
+								catchingElement.catchTrigger(new Trigger(sourceInstance, targetInstance));
+							}
+						} else {
+							catchingElement.catchTrigger(new Trigger(sourceInstance, null));
 						}
-					} else {
-						catchingElement.catchTrigger(new Trigger(sourceInstance, null));
 					}
 				}
+			} catch (ClassCastException e) {
 			}
 		}
 	}

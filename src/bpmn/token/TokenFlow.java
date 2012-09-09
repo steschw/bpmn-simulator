@@ -35,4 +35,8 @@ public interface TokenFlow extends Element {
 
 	boolean hasIncomingPathWithActiveToken(Instance instance);
 
+	boolean isEndNode();
+
+	boolean isTokenAtEnd(Token token);
+
 }

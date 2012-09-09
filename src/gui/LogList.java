@@ -132,8 +132,8 @@ public class LogList extends JScrollPane {
 
 	}
 
-	private static final Icon ICON_ERROR = loadResizedIcon(UIManager.getIcon("OptionPane.errorIcon"));
-	private static final Icon ICON_WARNING = loadResizedIcon(UIManager.getIcon("OptionPane.warningIcon")); 
+	private static final Icon ICON_ERROR = loadResizedIcon(UIManager.getIcon("OptionPane.errorIcon")); //$NON-NLS-1$
+	private static final Icon ICON_WARNING = loadResizedIcon(UIManager.getIcon("OptionPane.warningIcon"));  //$NON-NLS-1$
 
 	protected static final Icon loadResizedIcon(final Icon icon) {
 		if ((icon != null) && (icon instanceof ImageIcon)) {

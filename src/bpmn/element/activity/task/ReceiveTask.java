@@ -87,7 +87,7 @@ public final class ReceiveTask
 	@Override
 	public void catchTrigger(final Trigger trigger) {
 		if (isInstantiable()) {
-			createCorrelationInstance(trigger.getSourceInstance()).newToken(this);
+			createCorrelationInstance(trigger.getSourceInstance()).addNewToken(this);
 		} else if (isInstantiableNotifying()) {
 			notifyInstantiableIncomingFlowElements(this, trigger);
 		} else {

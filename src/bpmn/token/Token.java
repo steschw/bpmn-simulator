@@ -24,7 +24,8 @@ import java.awt.Color;
 
 import bpmn.instance.Instance;
 
-public class Token implements Cloneable {
+public class Token
+		implements Cloneable {
 
 	public static final Color HIGHLIGHT_COLOR = new Color(128, 32, 32);
 
@@ -38,6 +39,7 @@ public class Token implements Cloneable {
 
 	public Token(final Instance instance) {
 		super();
+		assert instance != null;
 		setInstance(instance);
 	}
 
@@ -46,22 +48,37 @@ public class Token implements Cloneable {
 		setCurrentFlow(currentTokenFlow);
 	}
 
-	protected void setInstance(final Instance instance) {
-		assert instance != null;
-		this.instance = instance;
+	public void setInstance(final Instance instance) {
+		if (instance != this.instance) {
+			if (this.instance != null) {
+				this.instance.removeToken(this);
+			}
+			this.instance = instance;
+			if (this.instance != null) {
+				this.instance.addToken(this);
+			}
+		}
 	}
 
 	public Instance getInstance() {
-		assert instance != null;
 		return instance;
 	}
 
-	protected void setCurrentFlow(final TokenFlow flow) {
-		assert flow != null;
-		setPreviousFlow(currentFlow);
+	public void assignTokenFlow(final TokenFlow flow) {
 		currentFlow = flow;
 		reset();
-		currentFlow.tokenEnter(this);
+	}
+
+	protected void setCurrentFlow(final TokenFlow flow) {
+		if (flow != currentFlow) {
+			if (currentFlow != null) {
+				currentFlow.tokenExit(this);
+			}
+			assignTokenFlow(flow);
+			if (currentFlow != null) {
+				currentFlow.tokenEnter(this);
+			}
+		}
 	}
 
 	public TokenFlow getCurrentFlow() {
@@ -88,21 +105,15 @@ public class Token implements Cloneable {
 	protected void reset() {
 		setSteps(0);
 	}
-
+/*
 	@Override
 	public Object clone() throws CloneNotSupportedException {
-		final Token token = new Token(getInstance());
-		token.previousFlow = previousFlow;
-		token.currentFlow = currentFlow;
+		final Token token = (Token)super.clone();
+//		token.previousFlow = previousFlow;
+//		token.currentFlow = currentFlow;
 		return token;
 	}
-
-	public Token copyTo(final Instance instance) {
-		final Token token = instance.cloneToken(this);
-		token.setInstance(instance);
-		return token;
-	}
-
+*/
 	public synchronized void merge(final Token token) {
 		assert getInstance() == token.getInstance();
 		assert getCurrentFlow() == token.getCurrentFlow();
@@ -112,19 +123,15 @@ public class Token implements Cloneable {
 	public synchronized void step(final int count) {
 		setSteps(getSteps() + count);
 		final TokenFlow tokenFlow = getCurrentFlow();
-		assert tokenFlow != null;
+//		assert tokenFlow != null;
 		if (tokenFlow != null) {
 			tokenFlow.tokenDispatch(this);
 		}
 	}
 
 	public synchronized void remove() {
-		getInstance().removeToken(this);
-		final TokenFlow tokenFlow = getCurrentFlow();
-		assert tokenFlow != null;
-		if (tokenFlow != null) {
-			tokenFlow.tokenExit(this);
-		}
+		setInstance(null);
+		setCurrentFlow(null);
 	}
 
 	/**
@@ -133,7 +140,9 @@ public class Token implements Cloneable {
 	public synchronized void passTo(final TokenFlow tokenFlow, final Instance instance) {
 		assert tokenFlow != null;
 		if (tokenFlow != null) {
-			copyTo(instance).setCurrentFlow(tokenFlow);
+			final Token passToken = new Token(instance);
+			passToken.setPreviousFlow(getCurrentFlow());
+			passToken.setCurrentFlow(tokenFlow);
 		}
 	}
 
@@ -145,13 +154,33 @@ public class Token implements Cloneable {
 	public String toString() {
 		final StringBuilder buffer = new StringBuilder('[');
 		buffer.append(super.toString());
-		buffer.append(getInstance());
+		buffer.append(instance);
 		buffer.append(", ");
-		buffer.append(getCurrentFlow());
+		buffer.append(currentFlow);
 		buffer.append(", ");
-		buffer.append(getPreviousFlow());
+		buffer.append(previousFlow);
 		buffer.append(']');
 		return buffer.toString();
+	}
+
+	public boolean hasEndNodeReached() {
+		final TokenFlow tokenFlow = getCurrentFlow();
+		return (tokenFlow.isEndNode() && tokenFlow.isTokenAtEnd(this));
+	}
+
+	public void assignToParentInstance() {
+		final Instance instance = getInstance();
+		final Instance parentInstance = instance.getParent();
+		assert parentInstance != null;
+		if (parentInstance != null) {
+			setInstance(parentInstance);
+		}
+	}
+
+	public void assignToNewChildInstance() {
+		final Instance instance = getInstance();
+		final Instance childInstance = instance.newChildInstance(instance.getActivity()); 
+		setInstance(childInstance);
 	}
 
 }

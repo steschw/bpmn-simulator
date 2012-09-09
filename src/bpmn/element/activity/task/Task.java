@@ -41,8 +41,8 @@ import bpmn.trigger.TriggerCollection;
 
 @SuppressWarnings("serial")
 public class Task
-	extends AbstractActivity
-	implements StoringTriggerCatchingElement, InstanceListener {
+		extends AbstractActivity
+		implements StoringTriggerCatchingElement, InstanceListener {
 
 	private static final int TYPEICON_MARGIN = 6;
 
@@ -87,13 +87,33 @@ public class Task
 
 	@Override
 	public Collection<Instance> getTriggerDestinationInstances() {
-		return getProcess().getInstances();
+		return getContainerActivity().getInstances();
 	}
 
 	@Override
 	protected void forwardTokenFromIncoming(final Token token) {
 		super.forwardTokenFromIncoming(token);
+
+		token.assignToNewChildInstance();
+
 		getModel().sendMessages(this, token.getInstance());
+	}
+
+	@Override
+	protected void forwardTokenFromInner(final Token token) {
+		messageTriggers.removeFirst(token.getInstance());
+
+		final Instance instance = token.getInstance();
+		token.assignToParentInstance();
+		instance.remove();
+
+		super.forwardTokenFromInner(token);
+	}
+
+	@Override
+	protected boolean canForwardTokenToOutgoing(final Token token) {
+		return super.canForwardTokenToOutgoing(token)
+				&& !waitsForMessage(token);
 	}
 
 	@Override
@@ -140,12 +160,6 @@ public class Task
 		super.updateElementLabelPosition();
 	}
 
-	@Override
-	public Collection<Instance> getInstances() {
-		assert false; ///XXX:
-		return null;
-	}
-
 	private boolean canReceiveMessages() {
 		for (final Collaboration collaboration : getModel().getCollaborations()) {
 			if (collaboration.hasMessageTarget(this)) {
@@ -173,19 +187,6 @@ public class Task
 	protected boolean waitsForMessage(final Token token) {
 		return canReceiveMessages()
 				&& !hasStoredTrigger(token.getInstance());
-	}
-
-	@Override
-	protected boolean canForwardTokenToOutgoing(final Token token) {
-		return super.canForwardTokenToOutgoing(token)
-				&& !waitsForMessage(token);
-	}
-
-	@Override
-	protected void forwardTokenFromInner(final Token token) {
-		super.forwardTokenFromInner(token);
-
-		messageTriggers.removeFirst(token.getInstance());
 	}
 
 }

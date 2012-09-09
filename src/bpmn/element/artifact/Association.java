@@ -37,11 +37,11 @@ public class Association
 		BOTH;
 
 		public static Direction byValue(final String value) {
-			if ("none".equalsIgnoreCase(value)) {
+			if ("none".equalsIgnoreCase(value)) { //$NON-NLS-1$
 				return NONE;
-			} else if ("one".equalsIgnoreCase(value)) {
+			} else if ("one".equalsIgnoreCase(value)) { //$NON-NLS-1$
 				return ONE;
-			} else if ("both".equalsIgnoreCase(value)) {
+			} else if ("both".equalsIgnoreCase(value)) { //$NON-NLS-1$
 				return BOTH;
 			} else {
 				return null;

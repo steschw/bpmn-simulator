@@ -40,6 +40,7 @@ import org.xml.sax.SAXException;
 import bpmn.element.*;
 import bpmn.element.Error;
 import bpmn.element.activity.AbstractActivity;
+import bpmn.element.activity.AbstractContainerActivity;
 import bpmn.element.activity.Process;
 import bpmn.element.activity.Transaction;
 import bpmn.element.activity.task.*;
@@ -139,10 +140,10 @@ public class AbstractModel
 	}
 
 	protected void addElementToContainer(final VisibleElement element,
-			final Process process) {
+			final AbstractContainerActivity container) {
 		elements.set(element);
-		if (process != null) {
-			process.addElement(element);
+		if (container != null) {
+			container.addElement(element);
 		}
 	}
 
@@ -278,7 +279,7 @@ public class AbstractModel
 	}
 
 	protected boolean readElementError(final Node node) {
-		if (isElementNode(node, BPMN, "error")) {
+		if (isElementNode(node, BPMN, "error")) { //$NON-NLS-1$
 			errors.set(new Error(this, getIdAttribute(node),
 					getErrorCodeAttribute(node), getNameAttribute(node)));
 			return true;
@@ -418,18 +419,18 @@ public class AbstractModel
 	}
 
 	protected boolean readElementLane(final Node node,
-			final Process process, final LaneSet laneSet) {
+			final AbstractContainerActivity activity, final LaneSet laneSet) {
 		if (isElementNode(node, BPMN, "lane")) { //$NON-NLS-1$
 			final Lane lane = new Lane(getIdAttribute(node), getNameAttribute(node));
 			final NodeList childNodes = node.getChildNodes();
 			for (int i = 0; i < childNodes.getLength(); ++i) {
 				final Node childNode = childNodes.item(i);
 				if (!readElementsForBaseElement(childNode, lane)
-						&& !readElementLaneSet(childNode, process, lane)) {
+						&& !readElementLaneSet(childNode, activity, lane)) {
 					showUnknowNode(childNode);
 				}
 			}
-			addElementToContainer(lane, process);
+			addElementToContainer(lane, activity);
 			return true;
 		} else {
 			return false;
@@ -437,19 +438,19 @@ public class AbstractModel
 	}
 
 	protected boolean readElementLaneSet(final Node node,
-			final Process process, final Lane lane) {
-		final boolean isChild = isElementNode(node, BPMN, "childLaneSet");
+			final AbstractContainerActivity activity, final Lane lane) {
+		final boolean isChild = isElementNode(node, BPMN, "childLaneSet"); //$NON-NLS-1$
 		if (isChild || isElementNode(node, BPMN, "laneSet")) { //$NON-NLS-1$
 			final LaneSet laneSet = new LaneSet(getIdAttribute(node));
 			final NodeList childNodes = node.getChildNodes();
 			for (int i = 0; i < childNodes.getLength(); ++i) {
 				final Node childNode = childNodes.item(i);
 				if (!readElementsForBaseElement(childNode, lane)
-						&& !readElementLane(childNode, process, laneSet)) {
+						&& !readElementLane(childNode, activity, laneSet)) {
 					showUnknowNode(childNode);
 				}
 			}
-			addElementToContainer(laneSet, process);
+			addElementToContainer(laneSet, activity);
 			return true;
 		} else {
 			return false;
@@ -475,7 +476,7 @@ public class AbstractModel
 
 	protected void readDefaultSequenceFlowAttribute(final Node node,
 			final ElementWithDefaultSequenceFlow element) {
-		final ElementRef<SequenceFlow> elementRef = getAttributeElementRef(node, "default");
+		final ElementRef<SequenceFlow> elementRef = getAttributeElementRef(node, "default"); //$NON-NLS-1$
 		if (elementRef != null) {
 			element.setDefaultSequenceFlowRef(elementRef);
 		}
@@ -540,7 +541,7 @@ public class AbstractModel
 					new LinkEventDefinition(event, getNameAttribute(node));
 			event.setDefinition(definition);
 		} else if (isElementNode(node, BPMN, "signalEventDefinition")) { //$NON-NLS-1$
-			final ElementRef<Signal> signalRef = getAttributeSignalRef(node, "signalRef");
+			final ElementRef<Signal> signalRef = getAttributeSignalRef(node, "signalRef"); //$NON-NLS-1$
 			event.setDefinition(new SignalEventDefinition(event, signalRef));
 		} else {
 			return false;
@@ -561,12 +562,12 @@ public class AbstractModel
 	}
 
 	protected boolean readElementStartEvent(final Node node,
-			final Process process) {
+			final AbstractContainerActivity activity) {
 		if (isElementNode(node, BPMN, "startEvent")) { //$NON-NLS-1$
 			final StartEvent event = new StartEvent(
 					getIdAttribute(node), getNameAttribute(node),
 					getAnimator().getInstanceManager());
-			addElementToContainer(event, process);
+			addElementToContainer(event, activity);
 			readEvent(node, event);
 			return true;
 		} else {
@@ -575,12 +576,12 @@ public class AbstractModel
 	}
 
 	protected boolean readElementIntermediateThrowEvent(final Node node,
-			final Process process) {
+			final AbstractContainerActivity activity) {
 		if (isElementNode(node, BPMN, "intermediateThrowEvent")) { //$NON-NLS-1$
 			final IntermediateThrowEvent event = new IntermediateThrowEvent(
 					getIdAttribute(node), getNameAttribute(node));
 			readEvent(node, event);
-			addElementToContainer(event, process);
+			addElementToContainer(event, activity);
 			return true;
 		} else {
 			return false;
@@ -588,12 +589,12 @@ public class AbstractModel
 	}
 
 	protected boolean readElementIntermediateCatchEvent(final Node node,
-			final Process process) {
+			final AbstractContainerActivity activity) {
 		if (isElementNode(node, BPMN, "intermediateCatchEvent")) { //$NON-NLS-1$
 			final IntermediateCatchEvent event = new IntermediateCatchEvent(
 					getIdAttribute(node), getNameAttribute(node));
 			readEvent(node, event);
-			addElementToContainer(event, process);
+			addElementToContainer(event, activity);
 			return true;
 		} else {
 			return false;
@@ -601,22 +602,22 @@ public class AbstractModel
 	}
 
 	protected boolean getCancelActivityAttribute(final Node node) {
-		return getAttributeBoolean(node, "cancelActivity", true);
+		return getAttributeBoolean(node, "cancelActivity", true); //$NON-NLS-1$
 	}
 
 	protected ElementRef<AbstractActivity> getAttachedToRefAttribute(final Node node) {
-		return getAttributeElementRef(node, "attachedToRef");		
+		return getAttributeElementRef(node, "attachedToRef");		 //$NON-NLS-1$
 	}
 
 	protected boolean readElementBoundaryEvent(final Node node,
-			final Process process) {
+			final AbstractContainerActivity activity) {
 		if (isElementNode(node, BPMN, "boundaryEvent")) { //$NON-NLS-1$
 			final BoundaryEvent event = new BoundaryEvent(getIdAttribute(node),
 					getNameAttribute(node),
 					getCancelActivityAttribute(node),
 					getAttachedToRefAttribute(node));
 			readEvent(node, event);
-			addElementToContainer(event, process);
+			addElementToContainer(event, activity);
 			return true;
 		} else {
 			return false;
@@ -624,12 +625,12 @@ public class AbstractModel
 	}
 
 	protected boolean readElementEndEvent(final Node node,
-			final Process process) {
+			final AbstractContainerActivity activity) {
 		if (isElementNode(node, BPMN, "endEvent")) { //$NON-NLS-1$
 			final EndEvent element = new EndEvent(getIdAttribute(node),
 					getNameAttribute(node), getAnimator().getInstanceManager());
 			readEvent(node, element);
-			addElementToContainer(element, process);
+			addElementToContainer(element, activity);
 			return true;
 		} else {
 			return false;
@@ -637,10 +638,10 @@ public class AbstractModel
 	}
 
 	protected boolean readElementsDataAssociations(final Node node) {
-		if (isElementNode(node, BPMN, "dataInputAssociation")
-				|| isElementNode(node, BPMN, "dataOutputAssociation")) {
-			final Node sourceElement = getSingleSubElement(node, BPMN, "sourceRef");
-			final Node targetElement = getSingleSubElement(node, BPMN, "targetRef");
+		if (isElementNode(node, BPMN, "dataInputAssociation") //$NON-NLS-1$
+				|| isElementNode(node, BPMN, "dataOutputAssociation")) { //$NON-NLS-1$
+			final Node sourceElement = getSingleSubElement(node, BPMN, "sourceRef"); //$NON-NLS-1$
+			final Node targetElement = getSingleSubElement(node, BPMN, "targetRef"); //$NON-NLS-1$
 			final ElementRef<AbstractTokenFlowElement> sourceRef = getElementRef(sourceElement.getTextContent());
 			final ElementRef<AbstractTokenFlowElement> targetRef = getElementRef(targetElement.getTextContent());
 			final DataAssociation dataAssociation =
@@ -664,7 +665,7 @@ public class AbstractModel
 	}
 
 	protected Association.Direction getParameterAssociationDirection(final Node node) {
-		final String value = getAttributeString(node, "associationDirection");
+		final String value = getAttributeString(node, "associationDirection"); //$NON-NLS-1$
 		final Association.Direction direction = Association.Direction.byValue(value);
 		return (direction == null) ? Association.Direction.NONE : direction; 
 	}
@@ -681,20 +682,22 @@ public class AbstractModel
 		}
 	}
 
-	protected boolean readElementAssociation(final Node node, final Process process) {
+	protected boolean readElementAssociation(final Node node,
+			final AbstractContainerActivity activity) {
 		if (isElementNode(node, BPMN, "association")) { //$NON-NLS-1$
 			final Association association = new Association(getIdAttribute(node));
 			association.setDirection(getParameterAssociationDirection(node));
-			readBaseElement(node, process);
-			addElementToContainer(association, process);
+			readBaseElement(node, activity);
+			addElementToContainer(association, activity);
 			return true;
 		} else {
 			return false;
 		}
 	}
 
-	protected boolean readElementConditionExpression(final Node node, final SequenceFlow sequenceFlow) {
-		if (isElementNode(node, BPMN, "conditionExpression")) {
+	protected boolean readElementConditionExpression(final Node node,
+			final SequenceFlow sequenceFlow) {
+		if (isElementNode(node, BPMN, "conditionExpression")) { //$NON-NLS-1$
 			final String text = node.getTextContent();
 			if (text != null && !text.isEmpty()) {
 				sequenceFlow.setCondition(new Expression(text));
@@ -705,7 +708,8 @@ public class AbstractModel
 		}
 	}
 
-	protected boolean readElementSequenceflow(final Node node, final Process process) {
+	protected boolean readElementSequenceflow(final Node node,
+			final AbstractContainerActivity activity) {
 		if (isElementNode(node, BPMN, "sequenceFlow")) { //$NON-NLS-1$
 			final SequenceFlow sequenceFlow = new SequenceFlow(
 					getIdAttribute(node), getNameAttribute(node),
@@ -718,7 +722,7 @@ public class AbstractModel
 					showUnknowNode(childNode);
 				}
 			}
-			addElementToContainer(sequenceFlow, process);
+			addElementToContainer(sequenceFlow, activity);
 			// Es ist möglich des der Modeller keine Incoming/Outgoing-Elemente
 			// für FlowElemente exportiert (z.B. BonitaStudio).
 			// Deshalb werden diese jetzt noch einmal anhand des ConnectingElement
@@ -746,55 +750,56 @@ public class AbstractModel
 	}
 
 	protected ElementRef<Message> getElementRefAttribute(final Node node) {
-		return getAttributeElementRef(node, "elementRef");
+		return getAttributeElementRef(node, "elementRef"); //$NON-NLS-1$
 	}
 
 	protected boolean getInstantiateAttribute(final Node node) {
-		return getAttributeBoolean(node, "instantiate", false);
+		return getAttributeBoolean(node, "instantiate", false); //$NON-NLS-1$
 	}
 
-	protected boolean readElementTask(final Node node, final Process process) {
+	protected boolean readElementTask(final Node node,
+			final AbstractContainerActivity activity) {
 		if (isElementNode(node, BPMN, "manualTask")) { //$NON-NLS-1$
 			final ManualTask task = new ManualTask(getIdAttribute(node),
 					getNameAttribute(node));
 			readTask(node, task);
-			addElementToContainer(task, process);
+			addElementToContainer(task, activity);
 		} else if (isElementNode(node, BPMN, "userTask")) { //$NON-NLS-1$
 			final UserTask task = new UserTask(getIdAttribute(node),
 					getNameAttribute(node));
 			readTask(node, task);
-			addElementToContainer(task, process);
+			addElementToContainer(task, activity);
 		} else if (isElementNode(node, BPMN, "businessRuleTask")) { //$NON-NLS-1$
 			final BusinessRuleTask task = new BusinessRuleTask(getIdAttribute(node),
 					getNameAttribute(node));
 			readTask(node, task);
-			addElementToContainer(task, process);
+			addElementToContainer(task, activity);
 		} else if (isElementNode(node, BPMN, "scriptTask")) { //$NON-NLS-1$
 			final ScriptTask task = new ScriptTask(getIdAttribute(node),
 					getNameAttribute(node));
 			readTask(node, task);
-			addElementToContainer(task, process);
+			addElementToContainer(task, activity);
 		} else if (isElementNode(node, BPMN, "serviceTask")) { //$NON-NLS-1$
 			final ServiceTask task = new ServiceTask(getIdAttribute(node),
 					getNameAttribute(node));
 			readTask(node, task);
-			addElementToContainer(task, process);
+			addElementToContainer(task, activity);
 		} else if (isElementNode(node, BPMN, "sendTask")) { //$NON-NLS-1$
 			final SendTask task = new SendTask(getIdAttribute(node),
 					getNameAttribute(node), getElementRefAttribute(node));
 			readTask(node, task);
-			addElementToContainer(task, process);
+			addElementToContainer(task, activity);
 		} else if (isElementNode(node, BPMN, "receiveTask")) { //$NON-NLS-1$
 			final ReceiveTask task = new ReceiveTask(getIdAttribute(node),
 					getNameAttribute(node), getInstantiateAttribute(node),
 					getElementRefAttribute(node));
 			readTask(node, task);
-			addElementToContainer(task, process);
+			addElementToContainer(task, activity);
 		} else if (isElementNode(node, BPMN, "task")) { //$NON-NLS-1$
 			final Task task = new Task(getIdAttribute(node),
 					getNameAttribute(node));
 			readTask(node, task);
-			addElementToContainer(task, process);
+			addElementToContainer(task, activity);
 		} else {
 			return false;
 		}
@@ -810,67 +815,71 @@ public class AbstractModel
 		return text;
 	}
 
-	protected boolean readElementTextAnnotation(final Node node, final Process process) {
+	protected boolean readElementTextAnnotation(final Node node,
+			final AbstractContainerActivity activity) {
 		if (isElementNode(node, BPMN, "textAnnotation")) { //$NON-NLS-1$
 			final String text = getTextElement(node);
 			final TextAnnotation textAnnotation = new TextAnnotation(getIdAttribute(node), text);
 			readElementsForBaseElement(node, textAnnotation);
-			addElementToContainer(textAnnotation, process);
+			addElementToContainer(textAnnotation, activity);
 			return true;
 		} else {
 			return false;
 		}
 	}
 
-	protected boolean readElementGroup(final Node node, final Process process) {
+	protected boolean readElementGroup(final Node node,
+			final AbstractContainerActivity activity) {
 		if (isElementNode(node, BPMN, "group")) { //$NON-NLS-1$
 			final Group group = new Group(getIdAttribute(node));
 			readElementsForBaseElement(node, group);
-			addElementToContainer(group, process);
+			addElementToContainer(group, activity);
 			return true;
 		} else {
 			return false;
 		}
 	}
 
-	protected boolean readElementGateway(final Node node, final Process process) {
+	protected boolean readElementGateway(final Node node,
+			final AbstractContainerActivity activity) {
 		if (isElementNode(node, BPMN, "parallelGateway")) { //$NON-NLS-1$
 			final ParallelGateway element = new ParallelGateway(
 					getIdAttribute(node), getNameAttribute(node));
 			readGateway(node, element);
-			addElementToContainer(element, process);
+			addElementToContainer(element, activity);
 		} else if (isElementNode(node, BPMN, "inclusiveGateway")) { //$NON-NLS-1$
 			final InclusiveGateway element = new InclusiveGateway(
 					getIdAttribute(node), getNameAttribute(node));
 			readGateway(node, element);
-			addElementToContainer(element, process);
+			addElementToContainer(element, activity);
 		} else if (isElementNode(node, BPMN, "exclusiveGateway")) { //$NON-NLS-1$
 			final ExclusiveGateway element = new ExclusiveGateway(
 					getIdAttribute(node), getNameAttribute(node));
 			readGateway(node, element);
-			addElementToContainer(element, process);
+			addElementToContainer(element, activity);
 		} else if (isElementNode(node, BPMN, "eventBasedGateway")) { //$NON-NLS-1$
 			final EventBasedGateway element = new EventBasedGateway(
 					getIdAttribute(node), getNameAttribute(node),
 					getInstantiateAttribute(node));
 			readGateway(node, element);
-			addElementToContainer(element, process);
+			addElementToContainer(element, activity);
 		} else {
 			return false;
 		}
 		return true;
 	}
 
-	protected boolean readElementDataObject(final Node node, final Process process) {
+	protected boolean readElementDataObject(final Node node,
+			final AbstractContainerActivity activity) {
 		final boolean isReference = isElementNode(node, BPMN, "dataObjectReference"); //$NON-NLS-1$
 		if (isReference || isElementNode(node, BPMN, "dataObject")) { //$NON-NLS-1$
 			final DataObject dataObject = new DataObject(
 					getIdAttribute(node), getNameAttribute(node));
 			if (!isReference) {
-				dataObject.setCollection(getAttributeBoolean(node, "isCollection", false));
+				dataObject.setCollection(getAttributeBoolean(node, "isCollection", false)); //$NON-NLS-1$
 			}
 			readBaseElement(node, dataObject);
-			addElementToContainer(dataObject, process);
+			addElementToContainer(dataObject, activity);
 			return true;
 		} else {
 			return false;
@@ -889,19 +898,21 @@ public class AbstractModel
 		}
 	}
 
-	protected boolean readElementDataStoreReference(final Node node, final Process process) {
+	protected boolean readElementDataStoreReference(final Node node,
+			final AbstractContainerActivity activity) {
 		if (isElementNode(node, BPMN, "dataStoreReference")) { //$NON-NLS-1$
 			final DataStore dataStore = new DataStore(
 					getIdAttribute(node), getNameAttribute(node));
 			readBaseElement(node, dataStore);
-			addElementToContainer(dataStore, process);
+			addElementToContainer(dataStore, activity);
 			return true;
 		} else {
 			return false;
 		}
 	}
 
-	protected void readFlowElementsContainer(final Node node, final Process container) {
+	protected void readFlowElementsContainer(final Node node,
+			final AbstractContainerActivity container) {
 		final NodeList childNodes = node.getChildNodes();
 		for (int i = 0; i < childNodes.getLength(); ++i) {
 			final Node childNode = childNodes.item(i);
@@ -929,17 +940,18 @@ public class AbstractModel
 	}
 
 	protected boolean getTriggeredByEventAttribute(final Node node) {
-		return getAttributeBoolean(node, "triggeredByEvent", false);
+		return getAttributeBoolean(node, "triggeredByEvent", false); //$NON-NLS-1$
 	}
 
-	protected boolean readElementTransaction(final Node node, final Process parentProcess) {
-		if (isElementNode(node, BPMN, "transaction")) {
+	protected boolean readElementTransaction(final Node node,
+			final AbstractContainerActivity parentActivity) {
+		if (isElementNode(node, BPMN, "transaction")) { //$NON-NLS-1$
 			final Transaction transaction = new Transaction(this,
 					getIdAttribute(node), getNameAttribute(node),
 					getTriggeredByEventAttribute(node));
 			readDefaultSequenceFlowAttribute(node, transaction);
 			readFlowElementsContainer(node, transaction);
-			addElementToContainer(transaction, parentProcess);
+			addElementToContainer(transaction, parentActivity);
 			return true;
 		} else {
 			return false;
@@ -947,7 +959,7 @@ public class AbstractModel
 	}
 
 	protected boolean readElementProcess(final Node node) {
-		if (isElementNode(node, BPMN, "process")) {
+		if (isElementNode(node, BPMN, "process")) { //$NON-NLS-1$
 			final Process process = new Process(this,
 					getIdAttribute(node), getNameAttribute(node), false);
 			readDefaultSequenceFlowAttribute(node, process);
@@ -960,14 +972,15 @@ public class AbstractModel
 		}
 	}
 
-	protected boolean readElementSubprocess(final Node node, final Process parentProcess) {
-		if (isElementNode(node, BPMN, "subProcess")) {
+	protected boolean readElementSubprocess(final Node node,
+			final AbstractContainerActivity parentActivity) {
+		if (isElementNode(node, BPMN, "subProcess")) { //$NON-NLS-1$
 			final Process process = new Process(this,
 					getIdAttribute(node), getNameAttribute(node),
 					getTriggeredByEventAttribute(node));
 			readDefaultSequenceFlowAttribute(node, process);
 			readFlowElementsContainer(node, process);
-			addElementToContainer(process, parentProcess);
+			addElementToContainer(process, parentActivity);
 			return true;
 		} else {
 			return false;

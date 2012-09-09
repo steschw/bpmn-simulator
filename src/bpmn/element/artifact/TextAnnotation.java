@@ -32,7 +32,7 @@ import bpmn.element.Rectangle;
 public class TextAnnotation
 		extends AbstractFlowElement {
 
-	private static final int MARGIN = 10;
+	private static final int BRACKET_WIDTH = 10;
 
 	private String text;
 
@@ -78,9 +78,9 @@ public class TextAnnotation
 		final Rectangle bounds = getElementInnerBounds();
 		final int x = (int)bounds.getMinX();
 		final int y = (int)bounds.getMinY();
-		g.drawLine(new Point(x, y), new Point(x + MARGIN, y));
+		g.drawLine(new Point(x, y), new Point(x + BRACKET_WIDTH, y));
 		g.drawLine(new Point(x, y), new Point(x, y + bounds.height));
-		g.drawLine(new Point(x, y + bounds.height), new Point(x + MARGIN, y + bounds.height));
+		g.drawLine(new Point(x, y + bounds.height), new Point(x + BRACKET_WIDTH, y + bounds.height));
 	}
 
 }

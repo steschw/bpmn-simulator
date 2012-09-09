@@ -32,12 +32,13 @@ import java.util.Vector;
 import bpmn.Graphics;
 import bpmn.element.Rectangle;
 import bpmn.element.activity.Activity;
-import bpmn.element.activity.Process;
 import bpmn.token.Token;
 import bpmn.token.TokenCollection;
 import bpmn.token.TokenFlow;
+import bpmn.token.TokenListener;
 
-public class Instance {
+public final class Instance
+	extends AbstractChildinstancesContainer {
 
 	private static final int STAR_SIZE = 10; 
 
@@ -49,13 +50,11 @@ public class Instance {
 
 	private final Activity activity;
 
-	private final Collection<InstanceListener> listeners = new LinkedList<InstanceListener>();  
-
 	private final List<Instance> correlations = new ArrayList<Instance>();
 
-	private final Collection<Instance> childs = new Vector<Instance>();
-
 	private final TokenCollection tokens = new TokenCollection();
+
+	private final Collection<TokenListener> tokenListeners = new LinkedList<TokenListener>();  
 
 	private Color color;
 
@@ -73,36 +72,45 @@ public class Instance {
 		super();
 		this.manager = manager;
 		this.parent = parent;
+		assert manager != null || parent != null;
 		this.activity = activity;
 		this.color = color;
 	}
 
-	public void addInstanceListener(final InstanceListener listener) {
-		synchronized (listeners) {
-			listeners.add(listener);
+	public void addTokenListener(final TokenListener listener) {
+		synchronized (tokenListeners) {
+			tokenListeners.add(listener);
 		}
 	}
 
-	public void removeInstanceListener(final InstanceListener listener) {
-		synchronized (listeners) {
-			listeners.remove(listener);
+	public void removeTokenListener(final TokenListener listener) {
+		synchronized (tokenListeners) {
+			tokenListeners.remove(listener);
 		}
 	}
 
-	protected void notifyInstanceRemoved(final Instance instance) {
-		synchronized (listeners) {
-			for (InstanceListener listener : listeners) {
-				listener.instanceRemoved(instance);
+	protected void notifyTokenAdded(final Token token) {
+		synchronized (tokenListeners) {
+			for (final TokenListener listener : tokenListeners) {
+				listener.tokenAdded(token);
 			}
 		}
 	}
 
-	public final Instance getParentInstance() {
+	protected void notifyTokenRemoved(final Token token) {
+		synchronized (tokenListeners) {
+			for (final TokenListener listener : tokenListeners) {
+				listener.tokenRemoved(token);
+			}
+		}
+	}
+
+	public final Instance getParent() {
 		return parent;
 	}
 
 	public Instance getTopLevelInstance() {
-		final Instance parentInstance = getParentInstance();
+		final Instance parentInstance = getParent();
 		if (parentInstance == null) {
 			return this;
 		} else {
@@ -112,7 +120,7 @@ public class Instance {
 
 	public InstanceManager getInstanceManager() {
 		if (manager == null) {
-			return getParentInstance().getInstanceManager();
+			return getParent().getInstanceManager();
 		} else {
 			return manager;
 		}
@@ -131,9 +139,9 @@ public class Instance {
 		return null;
 	}
 
-	public boolean hasCorrelationTo(final Process process) {
-		for (Instance correlationInstance : correlations) {
-			if (correlationInstance.getActivity().equals(process)) {
+	public boolean hasCorrelationTo(final Activity activity) {
+		for (final Instance correlationInstance : correlations) {
+			if (correlationInstance.getActivity().equals(activity)) {
 				return true;
 			}
 		}
@@ -146,10 +154,6 @@ public class Instance {
 
 	///XXX: removeCorrelationTo(...)
 
-	public Collection<Instance> getChildInstances() {
-		return childs;
-	}
-
 	public TokenCollection getTokens() {
 		return tokens;
 	}
@@ -160,7 +164,7 @@ public class Instance {
 
 	public final Color getColor() {
 		if (color == null) {
-			final Instance parentInstance = getParentInstance();
+			final Instance parentInstance = getParent();
 			if (parentInstance == null) {
 				return null;
 			} else {
@@ -174,14 +178,12 @@ public class Instance {
 	public void remove() {
 		removeAllChildInstances();
 		removeAllTokens();
-		final Instance parentInstance = getParentInstance();
+		final Instance parentInstance = getParent();
 		if (parentInstance == null) {
-			getInstanceManager().remove(this);
+			getInstanceManager().removeChildInstance(this);
 		} else {
 			parentInstance.removeChildInstance(this);
 		}
-		notifyInstanceRemoved(this);
-		getInstanceManager().notifyInstanceRemoved(this);
 	}
 
 	/*
@@ -194,67 +196,26 @@ public class Instance {
 		return childInstance;
 	}
 
-	protected void addChildInstance(final Instance childInstance) {
-		assert childInstance != null;
-		childs.add(childInstance);
-		getInstanceManager().notifyInstanceCreated(childInstance);
-	}
-
-	public int getChildInstanceCount() {
-		int count = getChildInstances().size();
-		for (Instance childInstance : getChildInstances()) {
-			count += childInstance.getChildInstanceCount();
-		}
-		return count;
-	}
-
-	protected void removeChildInstance(final Instance childInstance) {
-		assert childInstance != null;
-//		assert(childs.contains(childInstance));
-		childs.remove(childInstance);
-	}
-
-	public void removeAllChildInstances() {
-		final Collection<Instance> instanceSnapshot = new Vector<Instance>(getChildInstances()); 
-		for (Instance childInstance : instanceSnapshot) {
-			childInstance.remove();
-		}
-		assert getChildInstanceCount() == 0;
-	}
-
 	/*
 	 * tokens
 	 */
 
-/*
-	protected void moveTokensToInstance(final Instance instance) {
-		for (Token token : getTokens()) {
-			token.setInstance(instance);
-		}
+	public Token addNewToken(final TokenFlow tokenFlow) {
+		return new Token(this, tokenFlow);
 	}
-*/
 
-	public Token newToken(final TokenFlow tokenFlow) {
-		final Token token = new Token(this, tokenFlow);
-		addToken(token);
+	public Token assignNewToken(final TokenFlow tokenFlow) {
+		// Keine Benachrichtigung über das Einfügen an den TokenFlow
+		final Token token = new Token(this);
+		token.assignTokenFlow(tokenFlow);
 		return token;
 	}
 
-	public Token cloneToken(final Token token) {
-		Token newToken = null;
-		try {
-			newToken = (Token)token.clone();
-			addToken(newToken);
-		} catch (CloneNotSupportedException e) {
-			e.printStackTrace();
-		}
-		return newToken;
-	}
-
-	protected void addToken(final Token token) {
+	public void addToken(final Token token) {
 		synchronized (tokens) {
 			assert !tokens.contains(token);
 			tokens.add(token);
+			notifyTokenAdded(token);
 		}
 	}
 
@@ -275,6 +236,7 @@ public class Instance {
 	public void removeToken(final Token token) {
 		synchronized (tokens) {
 //			assert(tokens.contains(token));
+			notifyTokenRemoved(token);
 			tokens.remove(token);
 		}
 	}
@@ -304,12 +266,18 @@ public class Instance {
 		assert getTokenCount() == 0;
 	}
 
-	public void executeAllTokens(final int stepCount) {
+	@Override
+	public void executeAllChildInstances(final int stepCount) {
+		executeAllInstanceTokens(stepCount);
+		super.executeAllChildInstances(stepCount);
+	}
+
+	protected void executeAllInstanceTokens(final int stepCount) {
 		/*
 		 * Möglicherweise wurden einige token beim Durchlaufen bereits gelöscht (z.B. durch merge)
 		 */
 		final TokenCollection tokenSnapshot = new TokenCollection(tokens);
-		for (Token token : tokenSnapshot) {
+		for (final Token token : tokenSnapshot) {
 			boolean exists = false;
 			synchronized (tokens) {
 				exists = tokens.contains(token);
@@ -318,15 +286,11 @@ public class Instance {
 				token.step(stepCount);
 			}
 		}
-		final Collection<Instance> childSnapshot = new Vector<Instance>(getChildInstances());
-		for (Instance childInstance : childSnapshot) {
-			childInstance.executeAllTokens(stepCount);
-		}
 	}
 
 	public boolean hasTokens() {
 		if (tokens.isEmpty()) {
-			for (Instance childInstance : getChildInstances()) {
+			for (final Instance childInstance : getChildInstances()) {
 				if (childInstance.hasTokens()) {
 					return true;
 				}
@@ -341,6 +305,18 @@ public class Instance {
 		if (!hasTokens()) {
 			remove();
 		}
+	}
+
+	public Collection<Instance> getInstancesByActivity(final Activity activity) {
+		final Collection<Instance> instances = new ArrayList<Instance>();
+		if (activity.equals(getActivity())) {
+			instances.add(this);
+		} else {
+			for (final Instance childInstance : getChildInstances()) {
+				instances.addAll(childInstance.getInstancesByActivity(activity));
+			}
+		}
+		return instances;
 	}
 
 	public void paint(final Graphics g, final Point center) {
@@ -375,7 +351,7 @@ public class Instance {
 		final StringBuilder buffer = new StringBuilder('[');
 		buffer.append(super.toString());
 		buffer.append(", ");
-		buffer.append(getActivity());
+		buffer.append(activity);
 		buffer.append(", ");
 		buffer.append("childs:");
 		buffer.append(getChildInstanceCount());
@@ -384,6 +360,15 @@ public class Instance {
 		buffer.append(getTokenCount());
 		buffer.append(']');
 		return buffer.toString();
+	}
+
+	public boolean isEnded() {
+		for (final Token token: getTokens()) {
+			if (!token.hasEndNodeReached()) {
+				return false;
+			}
+		}
+		return true;
 	}
 
 }

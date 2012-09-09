@@ -20,81 +20,28 @@
  */
 package bpmn.instance;
 
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.LinkedList;
-import java.util.Vector;
 
 import bpmn.element.activity.Activity;
 
-public class InstanceManager {
+public final class InstanceManager
+	extends AbstractChildinstancesContainer {
 
 	private final ColorGenerator colorGenerator = new ColorGenerator(); 
 
-	private final Collection<Instance> instances = new Vector<Instance>(); 
-
-	private final Collection<InstanceListener> listeners = new LinkedList<InstanceListener>();  
-
-	public void addInstanceListener(final InstanceListener listener) {
-		synchronized (listeners) {
-			listeners.add(listener);
-		}
-	}
-
-	public void removeInstanceListener(final InstanceListener listener) {
-		synchronized (listeners) {
-			listeners.remove(listener);
-		}
-	}
-
-	protected void notifyInstanceCreated(final Instance instance) {
-		synchronized (listeners) {
-			for (InstanceListener listener : listeners) {
-				listener.instanceAdded(instance);
-			}
-		}
-	}
-
-	protected void notifyInstanceRemoved(final Instance instance) {
-		synchronized (listeners) {
-			for (InstanceListener listener : listeners) {
-				listener.instanceRemoved(instance);
-			}
-		}
-	}
-
-	private void add(final Instance instance) {
-		synchronized (instances) {
-			instances.add(instance);
-		}
-		notifyInstanceCreated(instance);
-	}
-
-	protected void remove(final Instance instance) {
-		synchronized (instances) {
-			instances.remove(instance);
-		}
-		notifyInstanceRemoved(instance);
-	}
-
 	public Instance newInstance(final Activity activity) {
 		final Instance instance = new Instance(this, activity, colorGenerator.next());
-		add(instance);
+		addChildInstance(instance);
 		return instance;
 	}
 
-	public void executeAll(final int stepCount) {
-		final Collection<Instance> instanceSnapshot = new Vector<Instance>(instances); 
-		for (Instance instance : instanceSnapshot) {
-			instance.executeAllTokens(stepCount);
+	public Collection<Instance> getInstancesByActivity(final Activity activity) {
+		final Collection<Instance> instances = new ArrayList<Instance>();
+		for (final Instance childInstance : getChildInstances()) {
+			instances.addAll(childInstance.getInstancesByActivity(activity));
 		}
-	}
-
-	public void removeAll() {
-		final Collection<Instance> instanceSnapshot = new Vector<Instance>(instances); 
-		for (Instance instance : instanceSnapshot) {
-			instance.remove();
-		}
-		instances.clear();
+		return instances;
 	}
 
 }

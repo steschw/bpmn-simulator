@@ -117,7 +117,7 @@ public abstract class AbstractAnimator implements Runnable {
 	protected synchronized void start() {
 		assert thread == null;
 		if (thread == null) {
-			thread = new Thread(this, "Animation");
+			thread = new Thread(this, "Animation"); //$NON-NLS-1$
 			thread.start();
 		}
 	}

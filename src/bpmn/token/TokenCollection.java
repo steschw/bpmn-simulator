@@ -43,7 +43,7 @@ public class TokenCollection extends Vector<Token> {
 
 	@Override
 	public synchronized boolean addAll(final Collection<? extends Token> c) {
-		for (Token token : c) {
+		for (final Token token : c) {
 			if (contains(token)) {
 				assert false;
 			}
@@ -86,9 +86,9 @@ public class TokenCollection extends Vector<Token> {
 
 	public synchronized Collection<Instance> getInstances() {
 		final Collection<Instance> instances = new Vector<Instance>();
-		for (Token token : this) {
+		for (final Token token : this) {
 			final Instance instance = token.getInstance(); 
-			if (!instances.contains(instance)) {
+			if ((instance != null) && !instances.contains(instance)) {
 				instances.add(instance);
 			}
 		}
@@ -97,8 +97,8 @@ public class TokenCollection extends Vector<Token> {
 
 	public synchronized TokenCollection byInstance(final Instance instance) {
 		final TokenCollection tokens = new TokenCollection();
-		for (Token token : this) {
-			if ((instance == null) || token.getInstance().equals(instance)) {
+		for (final Token token : this) {
+			if ((instance == null) || instance.equals(token.getInstance())) {
 				tokens.add(token);
 			}
 		}

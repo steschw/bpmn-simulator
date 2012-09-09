@@ -55,7 +55,7 @@ public abstract class AbstractTokenConnectingElement
 		return sourceRef;
 	}
 
-	protected final AbstractTokenFlowElement getElementFromElementRef(
+	protected static AbstractTokenFlowElement getElementFromElementRef(
 			final ElementRef<AbstractTokenFlowElement> elementRef) {
 		if ((elementRef != null) && elementRef.hasElement()) {
 			return elementRef.getElement();
@@ -108,7 +108,7 @@ public abstract class AbstractTokenConnectingElement
 	}
 
 	protected boolean canForwardToken(final Token token) {
-		return token.getSteps() >= getLength();
+		return isTokenAtEnd(token);
 	}
 
 	protected void addToken(final Token token) {
@@ -160,6 +160,16 @@ public abstract class AbstractTokenConnectingElement
 				token.getInstance().paint(g, waypointToRelative(getPosition(token.getSteps())));
 			}
 		}
+	}
+
+	@Override
+	public boolean isEndNode() {
+		return getTarget() == null;
+	}
+
+	@Override
+	public boolean isTokenAtEnd(final Token token) {
+		return token.getSteps() >= getLength();		
 	}
 
 }

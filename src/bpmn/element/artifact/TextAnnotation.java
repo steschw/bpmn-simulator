@@ -36,6 +36,10 @@ public class TextAnnotation
 
 	private String text;
 
+	public TextAnnotation(final String id) {
+		this(id, null);
+	}
+
 	public TextAnnotation(final String id, final String text) {
 		super(id, null);
 		setText(text);

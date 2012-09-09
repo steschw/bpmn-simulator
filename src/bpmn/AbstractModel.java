@@ -818,21 +818,34 @@ public abstract class AbstractModel
 		return true;
 	}
 
-	protected static String getTextElement(final Node node) {
-		String text = ""; //$NON-NLS-1$
-		final Node textNode = getSingleSubElement(node, BPMN, "text"); //$NON-NLS-1$
-		if (textNode != null) {
-			text = textNode.getTextContent();
-		}
+	public static String getNodeText(final Node node) {
+		final String text = node.getTextContent();
+		assert text != null && !text.isEmpty();
 		return text;
+	}
+
+	protected static boolean readElementText(final Node node,
+			final TextAnnotation textAnnotation) {
+		if (isElementNode(node, BPMN, "text")) { //$NON-NLS-1$
+			textAnnotation.setText(getNodeText(node));
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	protected boolean readElementTextAnnotation(final Node node,
 			final AbstractContainerActivity activity) {
 		if (isElementNode(node, BPMN, "textAnnotation")) { //$NON-NLS-1$
-			final String text = getTextElement(node);
-			final TextAnnotation textAnnotation = new TextAnnotation(getIdAttribute(node), text);
-			readElementsForBaseElement(node, textAnnotation);
+			final TextAnnotation textAnnotation = new TextAnnotation(getIdAttribute(node));
+			final NodeList childNodes = node.getChildNodes();
+			for (int i = 0; i < childNodes.getLength(); ++i) {
+				final Node childNode = childNodes.item(i);
+				if (!readElementsForBaseElement(node, textAnnotation)
+						&& !readElementText(node, textAnnotation)) {
+					showUnknowNode(childNode);
+				}
+			}
 			addElementToContainer(textAnnotation, activity);
 			return true;
 		} else {

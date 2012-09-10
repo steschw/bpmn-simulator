@@ -217,7 +217,6 @@ public abstract class AbstractTokenFlowElement
 
 	protected void notifyTokenReachedEndNode(final Token token) {
 		final AbstractContainerActivity containerActivity = getContainerActivity();
-		assert containerActivity != null;
 		if (containerActivity != null) {
 			containerActivity.tokenReachedEndNode(token);
 		}

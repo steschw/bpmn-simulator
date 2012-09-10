@@ -133,7 +133,6 @@ public abstract class AbstractContainerActivity
 	@Override
 	protected void forwardTokenFromIncoming(final Token token) {
 		passTokenToInner(token);
-		token.remove();
 		repaint();
 	}
 
@@ -142,21 +141,18 @@ public abstract class AbstractContainerActivity
 		if (startEvent == null) {
 			final Collection<AbstractTokenFlowElement> startElements = getStartElements();
 			if (startElements.isEmpty()) {
-				token.passTo(this, token.getInstance().newChildInstance(this));
+				super.forwardTokenFromIncoming(token);
 			} else {
+				final Instance subInstance = token.getInstance().newChildInstance(this);
 				for (final AbstractTokenFlowElement startElement : startElements) {
-					token.passTo(startElement, token.getInstance().newChildInstance(this));
+					token.passTo(startElement, subInstance);
 				}
+				token.remove();
 			}
-			token.remove();
 		} else {
 			token.passTo(startEvent, token.getInstance().newChildInstance(this)); 
+			token.remove();
 		}
-	}
-
-	@Override
-	protected void forwardTokenFromInner(final Token token) {
-		getOutgoingTokens().add(token);
 	}
 
 	protected boolean isTokenFromInnerElement(final Token token) {
@@ -280,7 +276,7 @@ public abstract class AbstractContainerActivity
 		if (instance.isEnded()) {
 			final Instance parentInstance = instance.getParent();
 			if (parentInstance != null) {
-				forwardTokenFromInner(parentInstance.assignNewToken(this));
+				getOutgoingTokens().add(parentInstance.assignNewToken(this));
 			}
 			instance.remove();
 		}

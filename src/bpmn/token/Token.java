@@ -154,6 +154,7 @@ public class Token
 	public String toString() {
 		final StringBuilder buffer = new StringBuilder('[');
 		buffer.append(super.toString());
+		buffer.append(", ");
 		buffer.append(instance);
 		buffer.append(", ");
 		buffer.append(currentFlow);

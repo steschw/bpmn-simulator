@@ -58,7 +58,7 @@ public class TokenCollection extends Vector<Token> {
 	}
 
 	public synchronized boolean remove(final Token token) {
-//		assert(contains(token));
+		assert contains(token);
 		return super.remove(token);
 	}
 

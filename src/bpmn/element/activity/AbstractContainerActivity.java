@@ -52,6 +52,7 @@ public abstract class AbstractContainerActivity
 		implements Scrollable {
 
 	protected static final int ARC_LENGTH = 20;
+	private static final int LABEL_MARGIN = 4;
 
 	private final Collection<Element> elements = new ArrayList<Element>();
 
@@ -267,7 +268,7 @@ public abstract class AbstractContainerActivity
 	@Override
 	public void updateElementLabelPosition() {
 		final Point position = getInnerBounds().getLeftTop();
-		position.translate(4, 4);
+		position.translate(LABEL_MARGIN, LABEL_MARGIN);
 		getElementLabel().setLeftTopPosition(position);
 	}
 

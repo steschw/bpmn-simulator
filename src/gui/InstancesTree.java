@@ -147,11 +147,11 @@ public class InstancesTree
 	}
 
 	private void addAndExpandNode(final DefaultMutableTreeNode parentNode,
-			final Object userObject) {
+			final Object userData) {
 		assert parentNode != null;
 		if (parentNode != null) {
-			assert userObject != null;
-			final MutableTreeNode node = new DefaultMutableTreeNode(userObject);
+			assert userData != null;
+			final MutableTreeNode node = new DefaultMutableTreeNode(userData);
 			getDefaultModel().insertNodeInto(node, parentNode, parentNode.getChildCount());
 			expandPath(new TreePath(parentNode.getPath()));
 		}
@@ -167,8 +167,8 @@ public class InstancesTree
 
 	@Override
 	public void instanceAdded(final Instance instance) {
-		instance.addInstanceListener(InstancesTree.this);
-		instance.addTokenListener(InstancesTree.this);
+		instance.addInstanceListener(this);
+		instance.addTokenListener(this);
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {

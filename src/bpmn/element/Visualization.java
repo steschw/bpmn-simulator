@@ -20,7 +20,9 @@
  */
 package bpmn.element;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.Stroke;
 import java.net.URL;
 import java.util.EnumMap;
 import java.util.IdentityHashMap;
@@ -164,6 +166,37 @@ public class Visualization {
 
 	public boolean getIgnoreColors() {
 		return ignoreColors;
+	}
+
+	public Stroke createStrokeSolid(final int width) {
+		return new BasicStroke(1.f);
+	}
+
+	public Stroke createStrokeDotted(final int width) {
+		return new BasicStroke(width,
+				BasicStroke.CAP_SQUARE,
+				BasicStroke.JOIN_MITER,
+				1.f,
+				new float[] { 1.f, 6.f },
+				0);
+	}
+
+	public Stroke createStrokeDashed(final int width) {
+		return new BasicStroke(width,
+				BasicStroke.CAP_SQUARE,
+				BasicStroke.JOIN_MITER,
+				1.f,
+				new float[] { 3.f, 6.f },
+				0);
+	}
+
+	public Stroke createStrokeDashedDotted(final int width) {
+		return new BasicStroke(width,
+				BasicStroke.CAP_SQUARE,
+				BasicStroke.JOIN_MITER,
+				1.f,
+				new float[] { 8.f, 5.f, 1.f, 5.f },
+				0); 
 	}
 
 }

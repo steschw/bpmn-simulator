@@ -20,7 +20,6 @@
  */
 package bpmn.element;
 
-import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -255,8 +254,7 @@ public abstract class VisibleElement
 	}
 
 	protected Stroke getStroke() {
-		return new BasicStroke(getBorderWidth(),
-				BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER, 1.f); 
+		return getVisualization().createStrokeSolid(getBorderWidth()); 
 	}
 
 	protected void paintBackground(final Graphics g) {

@@ -20,7 +20,6 @@
  */
 package bpmn.element.artifact;
 
-import java.awt.BasicStroke;
 import java.awt.Stroke;
 
 import bpmn.Graphics;
@@ -45,12 +44,7 @@ public class Group
 
 	@Override
 	protected Stroke getStroke() {
-		return new BasicStroke(getBorderWidth(),
-				BasicStroke.CAP_SQUARE,
-				BasicStroke.JOIN_MITER,
-				1.f,
-				new float[] { 8.f, 5.f, 1.f, 5.f },
-				0); 
+		return getVisualization().createStrokeDashedDotted(getBorderWidth());
 	}
 
 	@Override

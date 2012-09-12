@@ -20,7 +20,6 @@
  */
 package bpmn.element.activity;
 
-import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Point;
@@ -123,9 +122,7 @@ public abstract class AbstractContainerActivity
 	@Override
 	protected Stroke getStroke() {
 		if (isTriggeredByEvent()) {
-			return new BasicStroke(getBorderWidth(),
-					BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER, 1.f,
-					new float[] { 2.f, 3.f }, 0); 
+			return getVisualization().createStrokeDotted(getBorderWidth());
 		} else {
 			return super.getStroke();
 		}

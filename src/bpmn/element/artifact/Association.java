@@ -20,7 +20,6 @@
  */
 package bpmn.element.artifact;
 
-import java.awt.BasicStroke;
 import java.awt.Point;
 import java.awt.Stroke;
 
@@ -71,8 +70,7 @@ public class Association
 
 	@Override
 	protected Stroke getStroke() {
-		return new BasicStroke(getBorderWidth(),
-				BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER, 1.f, new float[] { 4.f, 6.f }, 0); 
+		return getVisualization().createStrokeDotted(getBorderWidth());
 	}
 
 	@Override

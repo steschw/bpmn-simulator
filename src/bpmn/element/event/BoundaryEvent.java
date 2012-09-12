@@ -20,7 +20,6 @@
  */
 package bpmn.element.event;
 
-import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Stroke;
@@ -101,9 +100,7 @@ public final class BoundaryEvent
 	protected Stroke getStroke() {
 		return isInterrupting()
 				? super.getStroke()
-				: new BasicStroke(getBorderWidth(),
-						BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER, 1.f,
-						new float[] { 4.f, 6.f }, 0); 
+				: getVisualization().createStrokeDashed(getBorderWidth()); 
 	}
 
 	@Override

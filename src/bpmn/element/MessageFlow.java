@@ -40,8 +40,7 @@ public final class MessageFlow
 
 	@Override
 	protected Stroke getStroke() {
-		return new BasicStroke(getBorderWidth(),
-				BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER, 1.f, new float[] { 3.f, 6.f }, 0); 
+		return getVisualization().createStrokeDashed(getBorderWidth()); 
 	}
 
 	@Override

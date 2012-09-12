@@ -71,8 +71,8 @@ public abstract class AbstractModel
 
 	private static final String SCHEMA_FILENAME = "bpmn/xsd/BPMN20.xsd"; //$NON-NLS-1$
 
-	private final ElementRefCollection<VisibleElement> elements
-			= new ElementRefCollection<VisibleElement>();
+	private final ElementRefCollection<AbstractFlowElement> elements
+			= new ElementRefCollection<AbstractFlowElement>();
 
 	private final Collection<Process> processes
 			= new ArrayList<Process>();
@@ -125,9 +125,9 @@ public abstract class AbstractModel
 	@SuppressWarnings("unchecked")
 	protected <E> Collection<E> getElements(final Class<E> type) {
 		final Collection<E> events = new LinkedList<E>();
-		for (final ElementRef<? extends VisibleElement> elementRef : elements.values()) {
-			final Element element = elementRef.getElement();
-			if (type.isAssignableFrom(element.getClass())) {
+		for (final ElementRef<? extends AbstractFlowElement> elementRef : elements.values()) {
+			final BaseElement element = elementRef.getElement();
+			if ((element != null) && type.isAssignableFrom(element.getClass())) {
 				events.add((E)element);
 			}
 		}
@@ -139,7 +139,7 @@ public abstract class AbstractModel
 		return getElements(TriggerCatchingElement.class);
 	}
 
-	protected void addElementToContainer(final VisibleElement element,
+	protected void addElementToContainer(final AbstractFlowElement element,
 			final AbstractContainerActivity container) {
 		elements.set(element);
 		if (container != null) {
@@ -155,7 +155,7 @@ public abstract class AbstractModel
 		notifyStructureExceptionListeners(exception);
 	}
 
-	protected <E extends Element> ElementRef<E> getNodeElementRef(
+	protected <E extends BaseElement> ElementRef<E> getNodeElementRef(
 			final Node node, final String namespace, final String name) {
 		final NodeList childNodes = node.getChildNodes();
 		for (int i = 0; i < childNodes.getLength(); ++i) {
@@ -178,9 +178,9 @@ public abstract class AbstractModel
 	}
 
 	@SuppressWarnings("unchecked")
-	protected <E extends Element> E getElement(final String id, final Class<E> type)
+	protected <E extends BaseElement> E getElement(final String id, final Class<E> type)
 			throws StructureException {
-		final VisibleElement element = elements.get(id);
+		final AbstractFlowElement element = elements.get(id);
 		if (element == null) {
 			throw new StructureException(this,
 					MessageFormat.format(
@@ -192,13 +192,13 @@ public abstract class AbstractModel
 		return (E)element;
 	}
 
-	protected <E extends Element> E getAttributeElement(final Node node, final String name, final Class<E> type)
+	protected <E extends BaseElement> E getAttributeElement(final Node node, final String name, final Class<E> type)
 			throws StructureException {
 		return getElement(getAttributeString(node, name), type);
 	}
 
 	@SuppressWarnings("unchecked")
-	protected <T extends Element> ElementRef<T> getElementRef(final String id) {
+	protected <T extends BaseElement> ElementRef<T> getElementRef(final String id) {
 		return (ElementRef<T>)elements.getRef(id);
 	}
 
@@ -210,7 +210,7 @@ public abstract class AbstractModel
 		return errors.getRef(id);
 	}
 
-	protected <T extends VisibleElement> ElementRef<T> getAttributeElementRef(
+	protected <T extends AbstractFlowElement> ElementRef<T> getAttributeElementRef(
 			final Node node, final String name) {
 		return getElementRef(getAttributeString(node, name));
 	}
@@ -279,6 +279,13 @@ public abstract class AbstractModel
 		}
 	}
 
+	///TODO
+	protected boolean readArtifacts(final Node node) {
+		return readElementAssociation(node)
+				|| readElementGroup(node)
+				|| readElementTextAnnotation(node);
+	}
+
 	protected boolean readElementsForDefinitionsElement(final Node node) {
 		return readElementMessage(node)
 				|| readElementSignal(node)
@@ -329,14 +336,16 @@ public abstract class AbstractModel
 		}
 	}
 
-	protected boolean readElementParticipant(final Node node) {
+	protected boolean readElementParticipant(final Node node,
+			final Collaboration collaboration) {
 		if (isElementNode(node, BPMN, "participant")) { //$NON-NLS-1$
 			final ElementRef<Process> processRef
 				= getAttributeElementRef(node, "processRef"); //$NON-NLS-1$
-			final Participant pool = new Participant(getIdAttribute(node),
+			final Participant participant = new Participant(getIdAttribute(node),
 					getNameAttribute(node), processRef);
-			readBaseElement(node, pool);
-			elements.set(pool);
+			readBaseElement(node, participant);
+			elements.set(participant);
+			collaboration.addParticipant(participant);
 			return true;
 		} else {
 			return false;
@@ -365,7 +374,8 @@ public abstract class AbstractModel
 			for (int i = 0; i < childNodes.getLength(); ++i) {
 				final Node childNode = childNodes.item(i);
 				if (!readElementDocumentation(childNode, collaboration)
-						&& !readElementParticipant(childNode)
+						&& !readArtifacts(childNode)
+						&& !readElementParticipant(childNode, collaboration)
 						&& !readElementMessageFlow(childNode, collaboration)) {
 					showUnknowNode(childNode);
 				}
@@ -379,20 +389,20 @@ public abstract class AbstractModel
 	}
 
 	protected void readExtensionElementsPropertySignavio(final Node node,
-			final Element element) {
+			final BaseElement element) {
 		final String keyNode = getAttributeString(node, "metaKey"); //$NON-NLS-1$
 		final String valueNode = getAttributeString(node, "metaValue"); //$NON-NLS-1$
 		if ("bgcolor".equals(keyNode) //$NON-NLS-1$
 				&& ((valueNode != null) && !valueNode.isEmpty())) {
 			final Color color = convertStringToColor(valueNode);
-			if ((color != null) && (element instanceof VisibleElement)) {
-				((VisibleElement)element).setElementBackground(color);
+			if ((color != null) && (element instanceof AbstractFlowElement)) {
+				((AbstractFlowElement)element).setElementBackground(color);
 			}
 		}
 	}
 
 	protected void readExtensionElementsProperties(final Node node,
-			final Element element) {
+			final BaseElement element) {
 		final NodeList childNodes = node.getChildNodes();
 		for (int i = 0; i < childNodes.getLength(); ++i) {
 			final Node childNode = childNodes.item(i);
@@ -485,7 +495,7 @@ public abstract class AbstractModel
 		}
 	}
 
-	protected boolean readElementExtensionElements(final Node node, final Element element) {
+	protected boolean readElementExtensionElements(final Node node, final BaseElement element) {
 		if (isElementNode(node, BPMN, "extensionElements")) { //$NON-NLS-1$
 			readExtensionElementsProperties(node, element);
 			return true;
@@ -494,12 +504,12 @@ public abstract class AbstractModel
 		}
 	}
 
-	protected boolean readElementsForBaseElement(final Node node, final Element element) {
+	protected boolean readElementsForBaseElement(final Node node, final BaseElement element) {
 		return readElementExtensionElements(node, element)
 				|| readElementDocumentation(node, element);
 	}
 
-	protected void readBaseElement(final Node node, final Element element) {
+	protected void readBaseElement(final Node node, final BaseElement element) {
 		final NodeList childNodes = node.getChildNodes();
 		for (int i = 0; i < childNodes.getLength(); ++i) {
 			final Node childNode = childNodes.item(i);
@@ -673,25 +683,13 @@ public abstract class AbstractModel
 		return (direction == null) ? Association.Direction.NONE : direction; 
 	}
 
-	protected boolean readElementDocumentation(final Node node, final Element element) {
+	protected boolean readElementDocumentation(final Node node,
+			final BaseElement element) {
 		if (isElementNode(node, BPMN, "documentation")) { //$NON-NLS-1$
 			final String text = node.getTextContent();
 			if (text != null && !text.isEmpty()) {
 				element.setDocumentation(new Documentation(text));
 			}
-			return true;
-		} else {
-			return false;
-		}
-	}
-
-	protected boolean readElementAssociation(final Node node,
-			final AbstractContainerActivity activity) {
-		if (isElementNode(node, BPMN, "association")) { //$NON-NLS-1$
-			final Association association = new Association(getIdAttribute(node));
-			association.setDirection(getParameterAssociationDirection(node));
-			readBaseElement(node, activity);
-			addElementToContainer(association, activity);
 			return true;
 		} else {
 			return false;
@@ -825,8 +823,7 @@ public abstract class AbstractModel
 		}
 	}
 
-	protected boolean readElementTextAnnotation(final Node node,
-			final AbstractContainerActivity activity) {
+	protected boolean readElementTextAnnotation(final Node node) {
 		if (isElementNode(node, BPMN, "textAnnotation")) { //$NON-NLS-1$
 			final TextAnnotation textAnnotation = new TextAnnotation(getIdAttribute(node));
 			final NodeList childNodes = node.getChildNodes();
@@ -837,19 +834,30 @@ public abstract class AbstractModel
 					showUnknowNode(childNode);
 				}
 			}
-			addElementToContainer(textAnnotation, activity);
+			elements.set(textAnnotation);
 			return true;
 		} else {
 			return false;
 		}
 	}
 
-	protected boolean readElementGroup(final Node node,
-			final AbstractContainerActivity activity) {
+	protected boolean readElementAssociation(final Node node) {
+		if (isElementNode(node, BPMN, "association")) { //$NON-NLS-1$
+			final Association association = new Association(getIdAttribute(node));
+			association.setDirection(getParameterAssociationDirection(node));
+			readBaseElement(node, association);
+			elements.set(association);
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	protected boolean readElementGroup(final Node node) {
 		if (isElementNode(node, BPMN, "group")) { //$NON-NLS-1$
 			final Group group = new Group(getIdAttribute(node));
-			readElementsForBaseElement(node, group);
-			addElementToContainer(group, activity);
+			readBaseElement(node, group);
+			elements.set(group);
 			return true;
 		} else {
 			return false;
@@ -942,10 +950,8 @@ public abstract class AbstractModel
 					&& !readElementEndEvent(childNode, container)
 					&& !readElementTask(childNode, container)
 					&& !readElementGateway(childNode, container)
-					&& !readElementAssociation(childNode, container)
 					&& !readElementSequenceflow(childNode, container)
-					&& !readElementTextAnnotation(childNode, container)
-					&& !readElementGroup(childNode, container)
+					&& !readArtifacts(childNode)
 					&& !readElementDataObject(childNode, container)
 					&& !readElementDataStoreReference(childNode, container)
 					&& !readElementsDataAssociations(childNode)

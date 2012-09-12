@@ -40,6 +40,7 @@ public class Collaboration
 		extends AbstractFlowElement
 		implements Scrollable {
 
+	private final Collection<Participant> participants = new ArrayList<Participant>();
 	private final Collection<MessageFlow> messageFlows = new ArrayList<MessageFlow>();
 
 	public Collaboration(final String id) {
@@ -48,6 +49,10 @@ public class Collaboration
 
 	public void addMessageFlow(final MessageFlow messageFlow) {
 		messageFlows.add(messageFlow);
+	}
+
+	public void addParticipant(final Participant participant) {
+		participants.add(participant);
 	}
 
 	public boolean hasMessageTarget(final AbstractFlowElement element) {

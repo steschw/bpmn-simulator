@@ -23,8 +23,8 @@ package bpmn.element.artifact;
 import java.awt.Stroke;
 
 import bpmn.Graphics;
-import bpmn.element.AbstractFlowElement;
 import bpmn.element.ClickThroughMouseListener;
+import bpmn.element.AbstractFlowElement;
 
 @SuppressWarnings("serial")
 public class Group

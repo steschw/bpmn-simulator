@@ -22,9 +22,7 @@ package bpmn.element;
 
 import bpmn.Model;
 
-public interface Element {
-
-	Model getModel();
+public interface BaseElement {
 
 	String getId();
 
@@ -33,6 +31,8 @@ public interface Element {
 	boolean hasDocumentation();
 
 	Documentation getDocumentation();
+
+	Model getModel();
 
 	/*
 	 * Liefert einen möglichst eindeutigen Namen für das Element zurück.

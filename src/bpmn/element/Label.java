@@ -41,11 +41,11 @@ public class Label
 
 	private boolean alignCenter = true;
 
-	public Label(final VisibleElement element, final String text) {
+	public Label(final AbstractFlowElement element, final String text) {
 		this(element, text, false);
 	}
 
-	public Label(final VisibleElement element, final String text, final boolean vertical) {
+	public Label(final AbstractFlowElement element, final String text, final boolean vertical) {
 		super(text);
 		this.vertical = vertical;
 		setFont(FONT);

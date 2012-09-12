@@ -22,8 +22,8 @@ package bpmn;
 
 import java.util.Collection;
 
-import bpmn.element.AbstractFlowElement;
 import bpmn.element.Collaboration;
+import bpmn.element.AbstractFlowElement;
 import bpmn.element.activity.Process;
 import bpmn.instance.Instance;
 import bpmn.instance.InstanceManager;

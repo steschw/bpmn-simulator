@@ -26,7 +26,7 @@ import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 
 import bpmn.element.Behavior;
-import bpmn.element.VisibleElement;
+import bpmn.element.AbstractFlowElement;
 import bpmn.element.Visualization;
 
 public class Config {
@@ -168,9 +168,9 @@ public class Config {
 			Locale.setDefault(locale);
 		}
 
-		VisibleElement.setDefaultBehavior(getBehavior());
+		AbstractFlowElement.setDefaultBehavior(getBehavior());
 
-		VisibleElement.setDefaultVisualization(getVisualization());
+		AbstractFlowElement.setDefaultVisualization(getVisualization());
 	}
 
 	public void store() {

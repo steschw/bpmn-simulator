@@ -33,9 +33,9 @@ import javax.swing.Scrollable;
 import bpmn.Graphics;
 import bpmn.Model;
 import bpmn.element.AbstractTokenFlowElement;
-import bpmn.element.Element;
+import bpmn.element.BaseElement;
 import bpmn.element.Label;
-import bpmn.element.VisibleElement;
+import bpmn.element.AbstractFlowElement;
 import bpmn.element.Visualization;
 import bpmn.element.event.AbstractEvent;
 import bpmn.element.event.StartEvent;
@@ -53,7 +53,7 @@ public abstract class AbstractContainerActivity
 	protected static final int ARC_LENGTH = 20;
 	private static final int LABEL_MARGIN = 4;
 
-	private final Collection<Element> elements = new ArrayList<Element>();
+	private final Collection<BaseElement> elements = new ArrayList<BaseElement>();
 
 	private final boolean triggeredByEvent;
 
@@ -76,21 +76,21 @@ public abstract class AbstractContainerActivity
 		return triggeredByEvent;
 	}
 
-	public void addElement(final VisibleElement element) {
+	public void addElement(final AbstractFlowElement element) {
 		assert !elements.contains(element);
 		elements.add(element);
 		element.setContainerActivity(this);
 	}
 
-	public Collection<Element> getElements() {
+	public Collection<BaseElement> getElements() {
 		return elements;
 	}
 
 	public TokenCollection getAllInnerTokens() {
 		final TokenCollection innerTokens = new TokenCollection(); 
-		final Collection<Element> elements = getElements();
+		final Collection<BaseElement> elements = getElements();
 		if (elements != null) {
-			for (final Element innerElement : elements) {
+			for (final BaseElement innerElement : elements) {
 				if (innerElement instanceof TokenFlow) {
 					final TokenFlow innerTokenFlow = (TokenFlow)innerElement;
 					innerTokens.addAll(innerTokenFlow.getTokens());
@@ -109,7 +109,7 @@ public abstract class AbstractContainerActivity
 	}
 
 	protected boolean containsTokenFlow(final TokenFlow tokenFlow) {
-		for (Element element : getElements()) {
+		for (BaseElement element : getElements()) {
 			if (element instanceof TokenFlow) {
 				if ((TokenFlow)element == tokenFlow) {
 					return true;
@@ -181,7 +181,7 @@ public abstract class AbstractContainerActivity
 
 	public Collection<AbstractTokenFlowElement> getStartElements() {
 		final Collection<AbstractTokenFlowElement> startElements = new ArrayList<AbstractTokenFlowElement>();
-		for (Element element : getElements()) {
+		for (BaseElement element : getElements()) {
 			if (element instanceof AbstractTokenFlowElement) {
 				final AbstractTokenFlowElement tokenFlowElement = (AbstractTokenFlowElement)element; 
 				if (!tokenFlowElement.hasIncoming()) {
@@ -197,7 +197,7 @@ public abstract class AbstractContainerActivity
 
 	public StartEvent getPlainStartEvent() {
 		StartEvent start = null;
-		for (Element element : getElements()) {
+		for (BaseElement element : getElements()) {
 			if (element instanceof StartEvent) {
 				final StartEvent event = (StartEvent)element;
 				if (event.isPlain()) {

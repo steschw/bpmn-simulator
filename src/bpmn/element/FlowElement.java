@@ -18,13 +18,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package bpmn.element.event;
+package bpmn.element;
 
-import bpmn.element.BaseElement;
-import bpmn.element.event.definition.EventDefinition;
+public interface FlowElement
+		extends BaseElement {
 
-public interface Event extends BaseElement {
+	void setName(String name);
 
-	EventDefinition getDefinition();
+	String getName();
 
 }

@@ -24,7 +24,7 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.TreeMap;
 
-public class ElementRefCollection<T extends Element> {
+public class ElementRefCollection<T extends BaseElement> {
 
 	private final Map<String, ElementRef<T>> data
 			= new TreeMap<String, ElementRef<T>>();

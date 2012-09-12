@@ -22,7 +22,7 @@ package bpmn.element;
 
 import bpmn.Model;
 
-public class InvisibleElement implements Element {
+public class InvisibleElement implements BaseElement {
 
 	private final Model model;
 

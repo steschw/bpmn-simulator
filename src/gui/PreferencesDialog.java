@@ -45,7 +45,7 @@ import javax.swing.JTextField;
 import javax.swing.border.Border;
 
 import bpmn.element.Behavior;
-import bpmn.element.VisibleElement;
+import bpmn.element.AbstractFlowElement;
 import bpmn.element.Visualization;
 
 @SuppressWarnings("serial")
@@ -285,11 +285,11 @@ public class PreferencesDialog extends JDialog {
 		config.setLocale((Locale)selectLanguage.getSelectedItem());
 		config.setExternalEditor(editExternalEditor.getText());
 
-		final Behavior behavior = VisibleElement.getDefaultBehavior();
+		final Behavior behavior = AbstractFlowElement.getDefaultBehavior();
 		behavior.setKeepTriggers(checkKeepEvents.isSelected());
 		config.setBehavior(behavior);
 
-		final Visualization visualization = VisibleElement.getDefaultVisualization();
+		final Visualization visualization = AbstractFlowElement.getDefaultVisualization();
 		visualization.setAntialiasing(checkAntialiasing.isSelected());
 		visualization.setShowExclusiveGatewaySymbol(checkShowExclusiveSymbol.isSelected());
 		visualization.setIgnoreColors(checkIgnoreModelerColors.isSelected());
@@ -313,10 +313,10 @@ public class PreferencesDialog extends JDialog {
 		selectLanguage.setSelectedItem(config.getLocale());
 		editExternalEditor.setText(config.getExternalEditor());
 
-		final Behavior behavior = VisibleElement.getDefaultBehavior();
+		final Behavior behavior = AbstractFlowElement.getDefaultBehavior();
 		checkKeepEvents.setSelected(behavior.getKeepTriggers());
 
-		final Visualization visualization = VisibleElement.getDefaultVisualization();
+		final Visualization visualization = AbstractFlowElement.getDefaultVisualization();
 		checkAntialiasing.setSelected(visualization.isAntialiasing());
 		checkShowExclusiveSymbol.setSelected(visualization.getShowExclusiveGatewaySymbol());
 		checkIgnoreModelerColors.setSelected(visualization.getIgnoreColors());

@@ -25,7 +25,7 @@ import java.util.Collection;
 import javax.swing.Icon;
 
 import bpmn.Model;
-import bpmn.element.VisibleElement;
+import bpmn.element.AbstractFlowElement;
 import bpmn.element.Visualization;
 import bpmn.element.activity.AbstractContainerActivity;
 import bpmn.element.event.AbstractEvent;
@@ -54,7 +54,7 @@ public abstract class EventDefinition
 	public abstract Icon getIcon(final Visualization visualization, final boolean inverse);
 
 	protected static AbstractContainerActivity getContainerActivityByToken(final Token token) {
-		return ((VisibleElement)token.getCurrentFlow()).getContainerActivity();		
+		return ((AbstractFlowElement)token.getCurrentFlow()).getContainerActivity();		
 	}
 
 	@Override

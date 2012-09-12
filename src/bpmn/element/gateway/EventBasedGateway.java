@@ -21,9 +21,9 @@
 package bpmn.element.gateway;
 
 import bpmn.Graphics;
-import bpmn.element.AbstractFlowElement;
 import bpmn.element.Rectangle;
 import bpmn.element.SequenceFlow;
+import bpmn.element.AbstractFlowElement;
 import bpmn.instance.Instance;
 import bpmn.token.Token;
 import bpmn.token.TokenCollection;

@@ -22,10 +22,10 @@ package bpmn.element.activity;
 
 import java.util.Collection;
 
-import bpmn.element.Element;
+import bpmn.element.BaseElement;
 import bpmn.instance.Instance;
 
-public interface Activity extends Element {
+public interface Activity extends BaseElement {
 
 	Collection<Instance> getInstances();
 

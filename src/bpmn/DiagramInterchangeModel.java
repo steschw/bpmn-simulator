@@ -31,10 +31,9 @@ import org.w3c.dom.NodeList;
 
 import bpmn.element.Collaboration;
 import bpmn.element.AbstractConnectingElement;
-import bpmn.element.AbstractFlowElement;
 import bpmn.element.Label;
 import bpmn.element.TitledFlowElement;
-import bpmn.element.VisibleElement;
+import bpmn.element.AbstractFlowElement;
 import bpmn.element.activity.Process;
 import bpmn.exception.StructureException;
 
@@ -61,7 +60,7 @@ public class DiagramInterchangeModel
 				|| readElementBPMNDiagram(node);
 	}
 
-	protected <E extends VisibleElement> E getBPMNElementAttribute(final Node node, final Class<E> type)
+	protected <E extends AbstractFlowElement> E getBPMNElementAttribute(final Node node, final Class<E> type)
 			throws StructureException {
 		return getAttributeElement(node, "bpmnElement", type); //$NON-NLS-1$
 	}
@@ -71,7 +70,7 @@ public class DiagramInterchangeModel
 				|| (planeElement instanceof Collaboration);
 	}
 
-	protected boolean readElementBPMNShape(final Node node, final VisibleElement plane)
+	protected boolean readElementBPMNShape(final Node node, final AbstractFlowElement plane)
 			throws StructureException {
 		if (isElementNode(node, BPMNDI, "BPMNShape")) { //$NON-NLS-1$
 			AbstractFlowElement element = getBPMNElementAttribute(node, AbstractFlowElement.class);
@@ -106,7 +105,7 @@ public class DiagramInterchangeModel
 		}
 	}
 
-	protected boolean readElementBPMNEdge(final Node node, final VisibleElement plane)
+	protected boolean readElementBPMNEdge(final Node node, final AbstractFlowElement plane)
 			throws StructureException {
 		if (isElementNode(node, BPMNDI, "BPMNEdge")) { //$NON-NLS-1$
 			final AbstractConnectingElement element = getBPMNElementAttribute(node, AbstractConnectingElement.class);
@@ -214,7 +213,7 @@ public class DiagramInterchangeModel
 	}
 
 	protected boolean readElementLabel(final Node node,
-			final JComponent planeElement, final VisibleElement element) {
+			final JComponent planeElement, final AbstractFlowElement element) {
 		if (isElementNode(node, BPMNDI, "BPMNLabel")) { //$NON-NLS-1$
 			final Label label = element.getElementLabel();
 			if (label != null) {

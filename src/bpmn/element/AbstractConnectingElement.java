@@ -34,7 +34,7 @@ import bpmn.Graphics;
 
 @SuppressWarnings("serial")
 public abstract class AbstractConnectingElement
-		extends VisibleElement {
+		extends AbstractFlowElement {
 
 	private final Deque<Point> waypoints = new LinkedList<Point>();
 

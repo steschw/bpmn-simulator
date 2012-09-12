@@ -20,7 +20,7 @@
  */
 package bpmn.element;
 
-public class ElementRef<E extends Element> {
+public class ElementRef<E extends BaseElement> {
 
 	private E element;
 

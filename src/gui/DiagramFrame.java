@@ -29,7 +29,7 @@ import javax.swing.JInternalFrame;
 import javax.swing.JScrollPane;
 
 import bpmn.Diagram;
-import bpmn.element.Element;
+import bpmn.element.BaseElement;
 import bpmn.element.Collaboration;
 import bpmn.element.activity.Process;
 
@@ -63,7 +63,7 @@ public class DiagramFrame
 
 	protected void updateFrameIcon() {
 		Icon icon = null;
-		final Element plane = diagram.getPlane(); 
+		final BaseElement plane = diagram.getPlane(); 
 		if (plane instanceof Process) {
 			icon = ICON_PROCESS;
 		} else if (plane instanceof Collaboration) {

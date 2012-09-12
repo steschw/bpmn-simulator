@@ -27,12 +27,13 @@ import java.awt.Stroke;
 import javax.swing.Icon;
 
 import bpmn.Graphics;
-import bpmn.element.AbstractFlowElement;
 import bpmn.element.Rectangle;
+import bpmn.element.AbstractFlowElement;
 import bpmn.element.Visualization;
 
 @SuppressWarnings("serial")
-public class CollapsedProcess extends AbstractFlowElement {
+public class CollapsedProcess
+		extends AbstractFlowElement {
 
 	protected static final int ARC_LENGTH = 10;
 

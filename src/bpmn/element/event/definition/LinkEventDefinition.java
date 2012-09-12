@@ -24,7 +24,7 @@ import java.util.Collection;
 
 import javax.swing.Icon;
 
-import bpmn.element.Element;
+import bpmn.element.BaseElement;
 import bpmn.element.Visualization;
 import bpmn.element.activity.AbstractContainerActivity;
 import bpmn.element.activity.Process;
@@ -57,7 +57,7 @@ public final class LinkEventDefinition extends EventDefinition {
 
 	protected static TriggerCatchingElement findLinkTargetInProcess(
 			final AbstractContainerActivity containerActivity, final String targetName) {
-		for (final Element element : containerActivity.getElements()) {
+		for (final BaseElement element : containerActivity.getElements()) {
 			if (element instanceof IntermediateCatchEvent) {
 				final IntermediateCatchEvent event = (IntermediateCatchEvent)element;
 				final EventDefinition definition = event.getDefinition(); 

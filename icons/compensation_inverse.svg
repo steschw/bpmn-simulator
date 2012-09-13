@@ -14,10 +14,7 @@
    id="svg2"
    version="1.1"
    inkscape:version="0.48.3.1 r9886"
-   sodipodi:docname="escalation.svg"
-   inkscape:export-filename="C:\Dokumente und Einstellungen\Administrator\workspace\BPMNSimulator\icons\timer.png"
-   inkscape:export-xdpi="45"
-   inkscape:export-ydpi="45">
+   sodipodi:docname="compensation_inverse.svg">
   <defs
      id="defs4" />
   <sodipodi:namedview
@@ -27,21 +24,17 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="15"
-     inkscape:cx="15.460094"
-     inkscape:cy="13.76894"
+     inkscape:zoom="20"
+     inkscape:cx="17.104281"
+     inkscape:cy="16.406867"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
-     inkscape:showpageshadow="true"
-     showborder="true"
-     inkscape:window-width="879"
-     inkscape:window-height="783"
-     inkscape:window-x="74"
-     inkscape:window-y="77"
-     inkscape:window-maximized="0"
-     showguides="true"
-     inkscape:guide-bbox="true" />
+     inkscape:window-width="1280"
+     inkscape:window-height="977"
+     inkscape:window-x="-4"
+     inkscape:window-y="-4"
+     inkscape:window-maximized="1" />
   <metadata
      id="metadata7">
     <rdf:RDF>
@@ -50,7 +43,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+        <dc:title></dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -60,11 +53,17 @@
      id="layer1"
      transform="translate(0,-1020.3622)">
     <path
-       style="fill:none;stroke:#000000;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:5.8;stroke-opacity:1;stroke-dasharray:none;marker-mid:none"
-       d="M 16,4 6,26 16,16 26,26 z"
-       id="path3011"
+       style="fill:#000000;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;fill-opacity:1"
+       d="M 16,8 16,24 2,16 z"
+       id="path3823"
        inkscape:connector-curvature="0"
        transform="translate(0,1020.3622)"
-       sodipodi:nodetypes="ccccc" />
+       sodipodi:nodetypes="cccc" />
+    <path
+       style="fill:#000000;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;stroke-miterlimit:2;stroke-dasharray:none;fill-opacity:1"
+       d="m 30,1028.3622 0,16 -14,-8 z"
+       id="path3823-0"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cccc" />
   </g>
 </svg>

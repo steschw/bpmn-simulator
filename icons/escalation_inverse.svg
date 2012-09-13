@@ -14,7 +14,7 @@
    id="svg2"
    version="1.1"
    inkscape:version="0.48.3.1 r9886"
-   sodipodi:docname="escalation.svg"
+   sodipodi:docname="escalation_inverse.svg"
    inkscape:export-filename="C:\Dokumente und Einstellungen\Administrator\workspace\BPMNSimulator\icons\timer.png"
    inkscape:export-xdpi="45"
    inkscape:export-ydpi="45">
@@ -50,7 +50,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+        <dc:title></dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -60,7 +60,7 @@
      id="layer1"
      transform="translate(0,-1020.3622)">
     <path
-       style="fill:none;stroke:#000000;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:5.8;stroke-opacity:1;stroke-dasharray:none;marker-mid:none"
+       style="fill:#000000;stroke:#000000;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:5.79999999999999980;stroke-opacity:1;stroke-dasharray:none;marker-mid:none;fill-opacity:1"
        d="M 16,4 6,26 16,16 26,26 z"
        id="path3011"
        inkscape:connector-curvature="0"

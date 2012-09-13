@@ -161,6 +161,7 @@ public class InstancesTree
 		final DefaultMutableTreeNode node = getNodeByUserObject(userData);
 		assert node != null;
 		if (node != null) {
+			assert node.getChildCount() == 0; 
 			getDefaultModel().removeNodeFromParent(node);
 		}
 	}

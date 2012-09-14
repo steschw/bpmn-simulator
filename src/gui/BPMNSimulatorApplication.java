@@ -20,6 +20,8 @@
  */
 package gui;
 
+import gui.preferences.Config;
+
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 

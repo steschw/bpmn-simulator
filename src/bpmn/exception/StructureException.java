@@ -20,11 +20,12 @@
  */
 package bpmn.exception;
 
-import bpmn.Model;
-import bpmn.element.BaseElement;
+import bpmn.model.Model;
+import bpmn.model.core.foundation.BaseElement;
 
 @SuppressWarnings("serial")
-public class StructureException extends Exception {
+public class StructureException
+		extends Exception {
 
 	private BaseElement element;
 	private final Model model;

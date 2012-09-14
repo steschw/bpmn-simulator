@@ -23,7 +23,8 @@ package bpmn.execution;
 import bpmn.instance.InstanceManager;
 
 
-public class InstanceAnimator extends AbstractAnimator {
+public class InstanceAnimator
+		extends AbstractAnimator {
 
 	private final InstanceManager instanceManager;
 

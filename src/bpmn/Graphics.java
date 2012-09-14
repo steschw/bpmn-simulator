@@ -36,7 +36,6 @@ import java.awt.geom.Rectangle2D;
 
 import javax.swing.Icon;
 
-import bpmn.element.Rectangle;
 
 public class Graphics {
 

@@ -31,9 +31,9 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
-import bpmn.AbstractModel;
 import bpmn.instance.Instance;
 import bpmn.instance.InstanceMenuItem;
+import bpmn.model.AbstractBPMNModel;
 import bpmn.trigger.Instantiable;
 import bpmn.trigger.InstantiableNotifiySource;
 import bpmn.trigger.Trigger;
@@ -44,14 +44,14 @@ public class StartButton
 		extends JButton
 		implements ActionListener {
 
-	private AbstractModel model;
+	private AbstractBPMNModel model;
 
 	public StartButton(final Icon icon) {
 		super(icon);
 		addActionListener(this);
 	}
 
-	public void setModel(final AbstractModel model) {
+	public void setModel(final AbstractBPMNModel model) {
 		this.model = model;
 		setEnabled(model != null);
 	}

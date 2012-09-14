@@ -29,7 +29,7 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 
 import bpmn.Graphics;
-import bpmn.element.Rectangle;
+import bpmn.Rectangle;
 import bpmn.instance.Instance;
 
 public class TriggerCollection {

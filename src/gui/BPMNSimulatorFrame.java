@@ -20,6 +20,11 @@
  */
 package gui;
 
+import gui.instances.InstancesFrame;
+import gui.log.LogFrame;
+import gui.preferences.Config;
+import gui.preferences.PreferencesDialog;
+
 import java.awt.BorderLayout;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
@@ -41,8 +46,8 @@ import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-import bpmn.Diagram;
-import bpmn.DiagramInterchangeModel;
+import bpmn.di.BPMNDiagram;
+import bpmn.model.DiagramInterchangeModel;
 
 @SuppressWarnings("serial")
 public class BPMNSimulatorFrame
@@ -308,14 +313,14 @@ public class BPMNSimulatorFrame
 			frameInstances.setInstanceManager(model.getInstanceManager());
 			menuWindow.setDesktopPane(desktop.getDesktopPane());
 			toolbar.setModel(model);
-			final Collection<Diagram> diagrams = model.getDiagrams();
+			final Collection<BPMNDiagram> diagrams = model.getDiagrams();
 			if (diagrams.isEmpty()) {
 				JOptionPane.showMessageDialog(this,
 						Messages.getString("containsNoDiagrams"), //$NON-NLS-1$
 						Messages.getString("information"), //$NON-NLS-1$
 						JOptionPane.INFORMATION_MESSAGE);
 			} else {
-				for (final Diagram diagram : diagrams) {
+				for (final BPMNDiagram diagram : diagrams) {
 					final DiagramFrame frame = new DiagramFrame(diagram);
 					desktop.add(frame);
 					frame.showFrame();

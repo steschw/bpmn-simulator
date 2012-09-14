@@ -20,10 +20,11 @@
  */
 package bpmn.token;
 
-import bpmn.element.BaseElement;
 import bpmn.instance.Instance;
+import bpmn.model.core.foundation.BaseElement;
 
-public interface TokenFlow extends BaseElement {
+public interface TokenFlow
+		extends BaseElement {
 
 	void tokenEnter(Token token);
 

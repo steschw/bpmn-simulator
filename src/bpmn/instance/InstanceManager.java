@@ -23,7 +23,7 @@ package bpmn.instance;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import bpmn.element.activity.Activity;
+import bpmn.model.process.activities.Activity;
 
 public final class InstanceManager
 	extends AbstractChildinstancesContainer {

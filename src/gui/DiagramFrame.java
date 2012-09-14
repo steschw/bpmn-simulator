@@ -28,10 +28,10 @@ import javax.swing.ImageIcon;
 import javax.swing.JInternalFrame;
 import javax.swing.JScrollPane;
 
-import bpmn.Diagram;
-import bpmn.element.BaseElement;
-import bpmn.element.Collaboration;
-import bpmn.element.activity.Process;
+import bpmn.di.BPMNDiagram;
+import bpmn.model.collaboration.Collaboration;
+import bpmn.model.core.foundation.BaseElement;
+import bpmn.model.process.activities.Subprocess;
 
 @SuppressWarnings("serial")
 public class DiagramFrame
@@ -40,9 +40,9 @@ public class DiagramFrame
 	private static final Icon ICON_PROCESS = loadFrameIcon("process.png"); //$NON-NLS-1$
 	private static final Icon ICON_COLLABORATION = loadFrameIcon("collaboration.png"); //$NON-NLS-1$
 
-	private final Diagram diagram;
+	private final BPMNDiagram diagram;
 
-	public DiagramFrame(final Diagram diagram) {
+	public DiagramFrame(final BPMNDiagram diagram) {
 		super(diagram.getTitle(), true, false, true);
 		this.diagram = diagram;
 
@@ -64,7 +64,7 @@ public class DiagramFrame
 	protected void updateFrameIcon() {
 		Icon icon = null;
 		final BaseElement plane = diagram.getPlane(); 
-		if (plane instanceof Process) {
+		if (plane instanceof Subprocess) {
 			icon = ICON_PROCESS;
 		} else if (plane instanceof Collaboration) {
 			icon = ICON_COLLABORATION;

@@ -30,8 +30,8 @@ import java.util.List;
 import java.util.Vector;
 
 import bpmn.Graphics;
-import bpmn.element.Rectangle;
-import bpmn.element.activity.Activity;
+import bpmn.Rectangle;
+import bpmn.model.process.activities.Activity;
 import bpmn.token.Token;
 import bpmn.token.TokenCollection;
 import bpmn.token.TokenFlow;

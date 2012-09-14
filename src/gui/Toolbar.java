@@ -20,6 +20,8 @@
  */
 package gui;
 
+import gui.log.LogFrame;
+
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -34,9 +36,9 @@ import javax.swing.JToolBar;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import bpmn.AbstractModel;
 import bpmn.execution.AnimationListener;
 import bpmn.execution.AbstractAnimator;
+import bpmn.model.AbstractBPMNModel;
 
 @SuppressWarnings("serial")
 public class Toolbar extends JToolBar implements AnimationListener {
@@ -68,7 +70,7 @@ public class Toolbar extends JToolBar implements AnimationListener {
 
 	private final LogFrame logFrame;
 
-	private AbstractModel model;
+	private AbstractBPMNModel model;
 
 	protected static ImageIcon loadIcon(final String filename) {
 		final URL url = Toolbar.class.getResource(filename);
@@ -86,7 +88,7 @@ public class Toolbar extends JToolBar implements AnimationListener {
 		create();
 	}
 
-	public void setModel(final AbstractModel model) {
+	public void setModel(final AbstractBPMNModel model) {
 		AbstractAnimator animator = getAnimator();
 		if (animator != null) {
 			animator.removeAnimationListener(this);

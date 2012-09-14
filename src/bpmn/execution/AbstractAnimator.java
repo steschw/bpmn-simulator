@@ -23,7 +23,8 @@ package bpmn.execution;
 import java.util.Collection;
 import java.util.Vector;
 
-public abstract class AbstractAnimator implements Runnable {
+public abstract class AbstractAnimator
+		implements Runnable {
 
 	private static final long FPS_25 = 1000 / 25;
 

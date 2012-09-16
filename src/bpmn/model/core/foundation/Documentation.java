@@ -20,26 +20,81 @@
  */
 package bpmn.model.core.foundation;
 
+import javax.activation.MimeType;
+import javax.activation.MimeTypeParseException;
+
 public class Documentation {
+
+	private static final MimeType TEXT_PLAIN = newMimeType("text", "plain"); //$NON-NLS-1$ //$NON-NLS-2$
+	private static final MimeType TEXT_HTML = newMimeType("text", "html"); //$NON-NLS-1$ //$NON-NLS-2$
+
+	private static final MimeType DEFAULT_TEXTFORMAT = TEXT_PLAIN;
+
+	protected static final MimeType newMimeType(final String primary,
+			final String sub) {
+		try {
+			return new MimeType(primary, sub);
+		} catch (MimeTypeParseException e) {
+			return null;
+		}
+	}
 
 	private String text;
 
+	private MimeType textFormat;
+
 	public Documentation(final String text) {
+		this(text, null);
+	}
+
+	public Documentation(final String text, final MimeType textFormat) {
 		super();
 		setText(text);
+		setTextFormat(textFormat);
+	}
+
+	private static String transformLineEnding(final String text) {
+		return text.replaceAll("\r?\n", System.getProperty("line.separator")); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	public void setText(final String text) {
 		assert (text != null) && !text.isEmpty();
-		this.text = text;
+		this.text = transformLineEnding(text);
 	}
 
 	public final String getText() {
 		return text;
 	}
 
+	public void setTextFormat(final MimeType textFormat) {
+		assert (textFormat == null)
+				|| textFormat.match(TEXT_PLAIN)
+				|| textFormat.match(TEXT_HTML);
+		this.textFormat = textFormat;
+	}
+
+	public MimeType getTextFormat() {
+		return (textFormat == null) ? DEFAULT_TEXTFORMAT : textFormat;
+	}
+
+	private static String escapeHTML(final String text) {
+		return text
+				.replaceAll("&", "&amp;") //$NON-NLS-1$ //$NON-NLS-2$
+				.replaceAll("<", "&lt;") //$NON-NLS-1$ //$NON-NLS-2$
+				.replaceAll(">", "&gt;") //$NON-NLS-1$ //$NON-NLS-2$
+				.replaceAll(System.getProperty("line.separator"), "<br/>"); //$NON-NLS-1$ //$NON-NLS-2$
+	}
+
 	public String toHtml() {
-		return getText().replaceAll("\n", "<br />");
+		final MimeType textFormat = getTextFormat();
+		if (TEXT_PLAIN.match(textFormat)) {
+			return escapeHTML(getText());
+		} else if (TEXT_HTML.match(textFormat)) {
+			return getText();
+		} else {
+			assert false;
+			return getText();
+		}
 	}
 
 }

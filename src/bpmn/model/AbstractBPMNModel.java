@@ -21,14 +21,13 @@
 package bpmn.model;
 
 import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Point;
 import java.net.URL;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
 
+import javax.activation.MimeType;
 import javax.xml.XMLConstants;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
@@ -38,7 +37,6 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import bpmn.Messages;
-import bpmn.Rectangle;
 import bpmn.exception.StructureException;
 import bpmn.execution.InstanceAnimator;
 import bpmn.instance.Instance;
@@ -227,7 +225,8 @@ public abstract class AbstractBPMNModel
 		return (E)element;
 	}
 
-	protected <E extends BaseElement> E getAttributeElement(final Node node, final String name, final Class<E> type)
+	protected <E extends BaseElement> E getAttributeElement(final Node node,
+			final String name, final Class<E> type)
 			throws StructureException {
 		return getElement(getAttributeString(node, name), type);
 	}
@@ -260,26 +259,6 @@ public abstract class AbstractBPMNModel
 		return getErrorRef(getAttributeString(node, name));
 	}
 
-	protected Point getPointAttribute(final Node node) {
-		return new Point(
-				(int)getAttributeFloat(node, "x"), //$NON-NLS-1$
-				(int)getAttributeFloat(node, "y")); //$NON-NLS-1$
-	}
-
-	protected Dimension getDimensionAttribute(final Node node) {
-		final int width = (int)getAttributeFloat(node, "width"); //$NON-NLS-1$
-		final int height = (int)getAttributeFloat(node, "height"); //$NON-NLS-1$
-		return new Dimension(width, height);
-	}
-
-	protected Rectangle getRectangleAttribute(final Node node) {
-		return new Rectangle(getPointAttribute(node), getDimensionAttribute(node));
-	}
-
-	protected boolean getIsExpandedAttribute(final Node node) {
-		return getAttributeBoolean(node, "isExpanded", true); //$NON-NLS-1$
-	}
-
 	protected String getIdAttribute(final Node node) {
 		return getAttributeString(node, "id"); //$NON-NLS-1$
 	}
@@ -296,10 +275,6 @@ public abstract class AbstractBPMNModel
 		return getAttributeElementRef(node, "targetRef"); //$NON-NLS-1$
 	}
 
-	protected boolean getIsHorizontalAttribute(final Node node) {
-		return getAttributeBoolean(node, "isHorizontal", false); //$NON-NLS-1$
-	}
-
 	protected String getErrorCodeAttribute(final Node node) {
 		return getAttributeString(node, "errorCode"); //$NON-NLS-1$
 	}
@@ -314,7 +289,6 @@ public abstract class AbstractBPMNModel
 		}
 	}
 
-	///TODO
 	protected boolean readArtifacts(final Node node) {
 		return readElementAssociation(node)
 				|| readElementGroup(node)
@@ -718,12 +692,17 @@ public abstract class AbstractBPMNModel
 		return (direction == null) ? Association.Direction.NONE : direction; 
 	}
 
+	protected MimeType getTextFormatAttribute(final Node node) {
+		return getAttributeMimeType(node, "textFormat"); //$NON-NLS-1$
+	}
+
 	protected boolean readElementDocumentation(final Node node,
 			final BaseElement element) {
 		if (isElementNode(node, BPMN, "documentation")) { //$NON-NLS-1$
 			final String text = node.getTextContent();
-			if (text != null && !text.isEmpty()) {
-				element.setDocumentation(new Documentation(text));
+			if ((text != null) && !text.isEmpty()) {
+				element.setDocumentation(new Documentation(text,
+						getTextFormatAttribute(node)));
 			}
 			return true;
 		} else {

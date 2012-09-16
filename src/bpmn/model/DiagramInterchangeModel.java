@@ -20,6 +20,8 @@
  */
 package bpmn.model;
 
+import java.awt.Dimension;
+import java.awt.Point;
 import java.text.MessageFormat;
 import java.util.Collection;
 import java.util.LinkedList;
@@ -30,6 +32,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import bpmn.Messages;
+import bpmn.Rectangle;
 import bpmn.di.BPMNDiagram;
 import bpmn.exception.StructureException;
 import bpmn.model.collaboration.Collaboration;
@@ -63,7 +66,32 @@ public class DiagramInterchangeModel
 				|| readElementBPMNDiagram(node);
 	}
 
-	protected <E extends AbstractFlowElement> E getBPMNElementAttribute(final Node node, final Class<E> type)
+	protected Dimension getDimensionAttribute(final Node node) {
+		final int width = (int)getAttributeFloat(node, "width"); //$NON-NLS-1$
+		final int height = (int)getAttributeFloat(node, "height"); //$NON-NLS-1$
+		return new Dimension(width, height);
+	}
+
+	protected Point getPointAttribute(final Node node) {
+		return new Point(
+				(int)getAttributeFloat(node, "x"), //$NON-NLS-1$
+				(int)getAttributeFloat(node, "y")); //$NON-NLS-1$
+	}
+
+	protected Rectangle getRectangleAttribute(final Node node) {
+		return new Rectangle(getPointAttribute(node), getDimensionAttribute(node));
+	}
+
+	protected boolean getIsExpandedAttribute(final Node node) {
+		return getAttributeBoolean(node, "isExpanded", true); //$NON-NLS-1$
+	}
+
+	protected boolean getIsHorizontalAttribute(final Node node) {
+		return getAttributeBoolean(node, "isHorizontal", false); //$NON-NLS-1$
+	}
+
+	protected <E extends AbstractFlowElement> E getBPMNElementAttribute(
+			final Node node, final Class<E> type)
 			throws StructureException {
 		return getAttributeElement(node, "bpmnElement", type); //$NON-NLS-1$
 	}

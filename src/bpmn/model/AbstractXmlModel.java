@@ -26,6 +26,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import javax.activation.MimeType;
+import javax.activation.MimeTypeParseException;
 import javax.swing.text.html.StyleSheet;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -121,6 +123,18 @@ public abstract class AbstractXmlModel
 	protected static boolean getAttributeBoolean(final Node node,
 			final String name, final boolean defaultValue) {
 		return convertStringToBool(getAttributeString(node, name), defaultValue);
+	}
+
+	protected MimeType getAttributeMimeType(final Node node, final String name) {
+		final String value = getAttributeString(node, name);
+		if ((value != null) && !value.isEmpty()) {
+			try {
+				return new MimeType(value);
+			} catch (MimeTypeParseException e) {
+				notifyStructureExceptionListeners(new StructureException(this, e));
+			}
+		}
+		return null;
 	}
 
 	protected static Color convertStringToColor(final String value) {

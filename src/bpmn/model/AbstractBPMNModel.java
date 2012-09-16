@@ -123,6 +123,9 @@ public abstract class AbstractBPMNModel
 
 	private final InstanceAnimator tokenAnimator;
 
+	private String exporter;
+	private String exporterVersion;
+
 	public AbstractBPMNModel() {
 		super();
 		tokenAnimator = new InstanceAnimator(getInstanceManager());
@@ -135,6 +138,22 @@ public abstract class AbstractBPMNModel
 
 	public InstanceAnimator getAnimator() {
 		return tokenAnimator;
+	}
+
+	protected void setExporter(final String exporter) {
+		this.exporter = exporter;
+	}
+
+	public String getExporter() {
+		return exporter;
+	}
+
+	protected void setExporterVersion(final String exporterVersion) {
+		this.exporterVersion = exporterVersion;
+	}
+
+	public String getExporterVersion() {
+		return exporterVersion;
 	}
 
 	@Override
@@ -304,8 +323,18 @@ public abstract class AbstractBPMNModel
 				|| readElementCollaboration(node);
 	}
 
+	protected String getExporterAttribute(final Node node) {
+		return getAttributeString(node, "exporter"); //$NON-NLS-1$
+	}
+
+	protected String getExporterVersionAttribute(final Node node) {
+		return getAttributeString(node, "exporterVersion"); //$NON-NLS-1$
+	}
+
 	protected void readDefinitions(final Node node) {
 		if (isElementNode(node, BPMN, "definitions")) { //$NON-NLS-1$
+			setExporter(getExporterAttribute(node));
+			setExporterVersion(getExporterVersionAttribute(node));
 			final NodeList childNodes = node.getChildNodes();
 			for (int i = 0; i < childNodes.getLength(); ++i) {
 				final Node childNode = childNodes.item(i);

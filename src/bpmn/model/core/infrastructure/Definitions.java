@@ -27,6 +27,10 @@ import bpmn.model.process.activities.Process;
 
 public interface Definitions {
 
+	String getExporter();
+
+	String getExporterVersion();
+
 	Collection<Collaboration> getCollaborations();
 
 	Collection<Process> getProcesses();

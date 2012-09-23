@@ -24,11 +24,14 @@ import java.awt.Point;
 import java.awt.Stroke;
 
 import bpmn.Graphics;
+import bpmn.Messages;
 import bpmn.model.core.common.AbstractConnectingElement;
 
 @SuppressWarnings("serial")
 public class Association
 		extends AbstractConnectingElement {
+
+	public static final String ELEMENT_NAME = Messages.getString("association"); //$NON-NLS-1$
 
 	public static enum Direction {
 		NONE,
@@ -53,6 +56,11 @@ public class Association
 
 	public Association(final String id) {
 		super(id, null);
+	}
+
+	@Override
+	public String getElementName() {
+		return ELEMENT_NAME;
 	}
 
 	public void setDirection(final Direction direction) {

@@ -23,6 +23,7 @@ package bpmn.model.process.data;
 import java.awt.Color;
 
 import bpmn.Graphics;
+import bpmn.Messages;
 import bpmn.model.core.common.AbstractFlowElement;
 import bpmn.model.core.common.Visualization;
 
@@ -30,8 +31,15 @@ import bpmn.model.core.common.Visualization;
 public class DataStore
 		extends AbstractFlowElement {
 
+	public static final String ELEMENT_NAME = Messages.getString("dataStore"); //$NON-NLS-1$
+
 	public DataStore(final String id, final String name) {
 		super(id, name);
+	}
+
+	@Override
+	public String getElementName() {
+		return ELEMENT_NAME;
 	}
 
 	@Override

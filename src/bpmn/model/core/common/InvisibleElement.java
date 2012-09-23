@@ -65,7 +65,7 @@ public class InvisibleElement
 	}
 
 	@Override
-	public String getElementName() {
+	public String getFullName() {
 		return getId();
 	}
 

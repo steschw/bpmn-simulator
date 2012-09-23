@@ -25,6 +25,7 @@ import java.awt.Dimension;
 import java.awt.Point;
 
 import bpmn.Graphics;
+import bpmn.Messages;
 import bpmn.model.ElementRef;
 import bpmn.model.core.common.gateways.AbstractGateway;
 import bpmn.model.core.common.gateways.ExclusiveGateway;
@@ -34,12 +35,19 @@ import bpmn.model.core.common.gateways.InclusiveGateway;
 public final class SequenceFlow
 		extends AbstractTokenConnectingElement {
 
+	public static final String ELEMENT_NAME = Messages.getString("sequenceFlow"); //$NON-NLS-1$
+
 	private Expression condition;
 
 	public SequenceFlow(final String id, final String name,
 			final ElementRef<AbstractTokenFlowElement> source,
 			final ElementRef<AbstractTokenFlowElement> target) {
 		super(id, name, source, target);
+	}
+
+	@Override
+	public String getElementName() {
+		return ELEMENT_NAME;
 	}
 
 	public void setCondition(final Expression condition) {

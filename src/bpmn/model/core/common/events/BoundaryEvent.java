@@ -29,6 +29,7 @@ import java.util.Collection;
 
 import javax.swing.Icon;
 
+import bpmn.Messages;
 import bpmn.instance.Instance;
 import bpmn.instance.InstancePopupMenu;
 import bpmn.model.ElementRef;
@@ -43,6 +44,8 @@ public final class BoundaryEvent
 		extends AbstractEvent
 		implements TriggerCatchingElement, MouseListener {
 
+	public static final String ELEMENT_NAME = Messages.getString("boundaryEvent"); //$NON-NLS-1$
+
 	private final boolean cancelActivity;
 	private final ElementRef<AbstractActivity> attachedToRef;
 
@@ -54,6 +57,11 @@ public final class BoundaryEvent
 		this.attachedToRef = attachedToRef;
 		addMouseListener(this);
 		setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+	}
+
+	@Override
+	public String getElementName() {
+		return ELEMENT_NAME;
 	}
 
 	public boolean isInterrupting() {

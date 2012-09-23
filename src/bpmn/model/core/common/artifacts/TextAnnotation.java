@@ -23,6 +23,7 @@ package bpmn.model.core.common.artifacts;
 import java.awt.Point;
 
 import bpmn.Graphics;
+import bpmn.Messages;
 import bpmn.Rectangle;
 import bpmn.model.ClickThroughMouseListener;
 import bpmn.model.core.common.AbstractFlowElement;
@@ -31,6 +32,8 @@ import bpmn.model.core.common.Label;
 @SuppressWarnings("serial")
 public class TextAnnotation
 		extends AbstractFlowElement {
+
+	public static final String ELEMENT_NAME = Messages.getString("textAnnotation"); //$NON-NLS-1$
 
 	private static final int BRACKET_WIDTH = 10;
 
@@ -44,6 +47,11 @@ public class TextAnnotation
 		super(id, null);
 		setText(text);
 		addMouseListener(new ClickThroughMouseListener());
+	}
+
+	@Override
+	public String getElementName() {
+		return ELEMENT_NAME;
 	}
 
 	public final void setText(final String text) {

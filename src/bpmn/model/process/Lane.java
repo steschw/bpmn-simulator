@@ -23,19 +23,27 @@ package bpmn.model.process;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import bpmn.Messages;
 import bpmn.model.ElementRef;
 import bpmn.model.collaboration.TitledFlowElement;
 import bpmn.model.core.common.AbstractFlowElement;
 
 @SuppressWarnings("serial")
 public class Lane
-	extends TitledFlowElement {
+		extends TitledFlowElement {
+
+	public static final String ELEMENT_NAME = Messages.getString("lane"); //$NON-NLS-1$
 
 	private final Collection<ElementRef<AbstractFlowElement>> flowNodeRefs
 			= new ArrayList<ElementRef<AbstractFlowElement>>();
 
 	public Lane(final String id, final String name) {
 		super(id, name);
+	}
+
+	@Override
+	public String getElementName() {
+		return ELEMENT_NAME;
 	}
 
 	public void addFlowNodeRef(ElementRef<AbstractFlowElement> flowNodeRef) {

@@ -172,9 +172,20 @@ public abstract class AbstractFlowElement
 		return (parentActivity == null) ? null : parentActivity.getModel();
 	}
 
+	public abstract String getElementName();
+
 	@Override
-	public String getElementName() {
-		return hasName() ? getName() : getId();
+	public String getFullName() {
+		StringBuilder fullName = new StringBuilder(getElementName());
+		fullName.append(": ");
+		if (hasName()) {
+			fullName.append('"');
+			fullName.append(getName());
+			fullName.append('"');
+		} else {
+			fullName.append(getId());
+		}
+		return fullName.toString();
 	}
 
 	public void setInnerBounds(final Rectangle bounds) {

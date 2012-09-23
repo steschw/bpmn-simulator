@@ -24,6 +24,7 @@ import java.awt.Color;
 
 import javax.swing.Icon;
 
+import bpmn.Messages;
 import bpmn.instance.Instance;
 import bpmn.instance.InstanceManager;
 import bpmn.model.core.common.Visualization;
@@ -34,9 +35,16 @@ public final class EndEvent
 		extends AbstractEvent
 		implements ThrowEvent {
 
+	public static final String ELEMENT_NAME = Messages.getString("endEvent"); //$NON-NLS-1$
+
 	public EndEvent(final String id, final String name,
 			final InstanceManager instanceManager) {
 		super(id, name, instanceManager);
+	}
+
+	@Override
+	public String getElementName() {
+		return ELEMENT_NAME;
 	}
 
 	@Override

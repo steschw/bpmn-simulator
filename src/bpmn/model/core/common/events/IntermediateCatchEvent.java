@@ -28,6 +28,7 @@ import java.util.Collection;
 import javax.swing.Icon;
 
 import bpmn.Graphics;
+import bpmn.Messages;
 import bpmn.instance.Instance;
 import bpmn.instance.InstanceListener;
 import bpmn.instance.InstancePopupMenu;
@@ -43,6 +44,8 @@ public final class IntermediateCatchEvent
 		implements StoringTriggerCatchingElement, InstantiableNotifiySource,
 				MouseListener, InstanceListener {
 
+	public static final String ELEMENT_NAME = Messages.getString("intermediateCatchEvent"); //$NON-NLS-1$
+
 	private final TriggerCollection triggers = new TriggerCollection();
 
 	public IntermediateCatchEvent(final String id, final String name) {
@@ -50,6 +53,10 @@ public final class IntermediateCatchEvent
 		addMouseListener(this);
 	}
 
+	@Override
+	public String getElementName() {
+		return ELEMENT_NAME;
+	}
 
 	@Override
 	public boolean isInstantiableNotifying() {

@@ -24,6 +24,7 @@ import java.awt.Point;
 import java.awt.Stroke;
 
 import bpmn.Graphics;
+import bpmn.Messages;
 import bpmn.model.ElementRef;
 import bpmn.model.core.common.AbstractTokenConnectingElement;
 import bpmn.model.core.common.AbstractTokenFlowElement;
@@ -32,10 +33,17 @@ import bpmn.model.core.common.AbstractTokenFlowElement;
 public class DataAssociation
 		extends AbstractTokenConnectingElement {
 
+	public static final String ELEMENT_NAME = Messages.getString("dataAssociation"); //$NON-NLS-1$
+
 	public DataAssociation(final String id,
 			final ElementRef<AbstractTokenFlowElement> source,
 			final ElementRef<AbstractTokenFlowElement> target) {
 		super(id, null, source, target);
+	}
+
+	@Override
+	public String getElementName() {
+		return ELEMENT_NAME;
 	}
 
 	@Override

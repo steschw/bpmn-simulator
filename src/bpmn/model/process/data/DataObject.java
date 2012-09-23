@@ -26,6 +26,7 @@ import java.awt.Point;
 import javax.swing.Icon;
 
 import bpmn.Graphics;
+import bpmn.Messages;
 import bpmn.Rectangle;
 import bpmn.model.core.common.AbstractFlowElement;
 import bpmn.model.core.common.Visualization;
@@ -34,10 +35,17 @@ import bpmn.model.core.common.Visualization;
 public class DataObject
 		extends AbstractFlowElement {
 
+	public static final String ELEMENT_NAME = Messages.getString("dataObject"); //$NON-NLS-1$
+
 	private boolean isCollection;
 
 	public DataObject(final String id, final String name) {
 		super(id, name);
+	}
+
+	@Override
+	public String getElementName() {
+		return ELEMENT_NAME;
 	}
 
 	public void setCollection(final boolean isCollection) {

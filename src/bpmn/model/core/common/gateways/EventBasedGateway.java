@@ -21,6 +21,7 @@
 package bpmn.model.core.common.gateways;
 
 import bpmn.Graphics;
+import bpmn.Messages;
 import bpmn.Rectangle;
 import bpmn.instance.Instance;
 import bpmn.model.core.common.AbstractFlowElement;
@@ -34,8 +35,10 @@ import bpmn.trigger.InstantiableNotifiyTarget;
 
 @SuppressWarnings("serial")
 public final class EventBasedGateway
-	extends AbstractGateway
-	implements InstantiableNotifiyTarget {
+		extends AbstractGateway
+		implements InstantiableNotifiyTarget {
+
+	public static final String ELEMENT_NAME = Messages.getString("eventBasedGateway"); //$NON-NLS-1$
 
 	private final boolean instantiate;
 
@@ -43,6 +46,11 @@ public final class EventBasedGateway
 			final boolean instantiate) {
 		super(id, name);
 		this.instantiate = instantiate;
+	}
+
+	@Override
+	public String getElementName() {
+		return ELEMENT_NAME;
 	}
 
 	@Override

@@ -23,6 +23,7 @@ package bpmn.model.core.common.artifacts;
 import java.awt.Stroke;
 
 import bpmn.Graphics;
+import bpmn.Messages;
 import bpmn.model.ClickThroughMouseListener;
 import bpmn.model.core.common.AbstractFlowElement;
 
@@ -30,11 +31,18 @@ import bpmn.model.core.common.AbstractFlowElement;
 public class Group
 		extends AbstractFlowElement {
 
+	public static final String ELEMENT_NAME = Messages.getString("group"); //$NON-NLS-1$
+
 	protected static final int ARC_LENGTH = 20;
 
 	public Group(final String id) {
 		super(id, null);
 		addMouseListener(new ClickThroughMouseListener());
+	}
+
+	@Override
+	public String getElementName() {
+		return ELEMENT_NAME;
 	}
 
 	@Override

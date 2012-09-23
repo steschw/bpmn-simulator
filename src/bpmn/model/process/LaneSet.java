@@ -21,14 +21,22 @@
 package bpmn.model.process;
 
 import bpmn.Graphics;
+import bpmn.Messages;
 import bpmn.model.core.common.AbstractFlowElement;
 
 @SuppressWarnings("serial")
 public class LaneSet
 		extends AbstractFlowElement {
 
+	public static final String ELEMENT_NAME = Messages.getString("laneSet"); //$NON-NLS-1$
+
 	public LaneSet(final String id) {
 		super(id, null);
+	}
+
+	@Override
+	public String getElementName() {
+		return ELEMENT_NAME;
 	}
 
 	@Override

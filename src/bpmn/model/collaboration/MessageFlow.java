@@ -26,6 +26,7 @@ import java.awt.Point;
 import java.awt.Stroke;
 
 import bpmn.Graphics;
+import bpmn.Messages;
 import bpmn.Rectangle;
 import bpmn.model.ElementRef;
 import bpmn.model.core.common.AbstractTokenConnectingElement;
@@ -35,11 +36,18 @@ import bpmn.model.core.common.AbstractTokenFlowElement;
 public final class MessageFlow
 		extends AbstractTokenConnectingElement {
 
+	public static final String ELEMENT_NAME = Messages.getString("messageFlow"); //$NON-NLS-1$
+
 	public MessageFlow(final String id, final String name,
 			final ElementRef<AbstractTokenFlowElement> sourceRef,
 			final ElementRef<AbstractTokenFlowElement> targetRef) {
 		super(id, name, sourceRef, targetRef);
 		setElementBackground(Color.WHITE);
+	}
+
+	@Override
+	public String getElementName() {
+		return ELEMENT_NAME;
 	}
 
 	@Override

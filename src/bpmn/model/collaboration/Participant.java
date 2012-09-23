@@ -23,16 +23,25 @@ package bpmn.model.collaboration;
 import java.awt.Point;
 
 import bpmn.Graphics;
+import bpmn.Messages;
 import bpmn.Rectangle;
 import bpmn.model.ElementRef;
 import bpmn.model.process.activities.Subprocess;
 
 @SuppressWarnings("serial")
-public class Participant extends TitledFlowElement {
+public class Participant
+		extends TitledFlowElement {
+
+	public static final String ELEMENT_NAME = Messages.getString("participant"); //$NON-NLS-1$
 
 	public Participant(final String id, final String name,
 			final ElementRef<Subprocess> processRef) {
 		super(id, name);
+	}
+
+	@Override
+	public String getElementName() {
+		return ELEMENT_NAME;
 	}
 
 	@Override

@@ -43,7 +43,7 @@ public final class BPMNDiagram {
 
 	public String getTitle() {
 		final String name = getName();
-		return (name == null) ? plane.getElementName() : name;
+		return (name == null) ? plane.getFullName() : name;
 	}
 
 }

@@ -22,11 +22,14 @@ package bpmn.model.process.activities;
 
 import java.awt.Stroke;
 
+import bpmn.Messages;
 import bpmn.model.Model;
 
 @SuppressWarnings("serial")
 public class Subprocess
 		extends AbstractContainerActivity {
+
+	public static final String ELEMENT_NAME = Messages.getString("subprocess"); //$NON-NLS-1$
 
 	private final boolean triggeredByEvent;
 
@@ -36,6 +39,11 @@ public class Subprocess
 			final boolean triggeredByEvent) {
 		super(model, id, name);
 		this.triggeredByEvent = triggeredByEvent;
+	}
+
+	@Override
+	public String getElementName() {
+		return ELEMENT_NAME;
 	}
 
 	public boolean isTriggeredByEvent() {

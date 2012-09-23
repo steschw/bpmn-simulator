@@ -27,6 +27,7 @@ import java.util.Collection;
 import javax.swing.Icon;
 
 import bpmn.Graphics;
+import bpmn.Messages;
 import bpmn.Rectangle;
 import bpmn.instance.Instance;
 import bpmn.instance.InstanceListener;
@@ -44,6 +45,8 @@ public class Task
 		extends AbstractActivity
 		implements StoringTriggerCatchingElement, InstanceListener {
 
+	public static final String ELEMENT_NAME = Messages.getString("task"); //$NON-NLS-1$
+
 	private static final int TYPEICON_MARGIN = 6;
 
 	private static final int ARC_LENGTH = 10;
@@ -52,6 +55,11 @@ public class Task
 
 	public Task(final String id, final String name) {
 		super(id, name);
+	}
+
+	@Override
+	public String getElementName() {
+		return ELEMENT_NAME;
 	}
 
 	@Override

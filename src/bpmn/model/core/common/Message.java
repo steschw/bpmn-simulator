@@ -24,15 +24,23 @@ import java.awt.Color;
 import java.awt.Point;
 
 import bpmn.Graphics;
+import bpmn.Messages;
 import bpmn.Rectangle;
 
 @SuppressWarnings("serial")
 public final class Message
 		extends AbstractFlowElement {
 
+	public static final String ELEMENT_NAME = Messages.getString("message"); //$NON-NLS-1$
+
 	public Message(final String id, final String name) {
 		super(id, name);
 		setElementBackground(Color.WHITE);
+	}
+
+	@Override
+	public String getElementName() {
+		return ELEMENT_NAME;
 	}
 
 	@Override

@@ -28,6 +28,7 @@ import java.util.Collection;
 import javax.swing.Scrollable;
 
 import bpmn.Graphics;
+import bpmn.Messages;
 import bpmn.instance.Instance;
 import bpmn.model.core.common.AbstractFlowElement;
 import bpmn.model.process.activities.Activity;
@@ -41,11 +42,18 @@ public class Collaboration
 		extends AbstractFlowElement
 		implements Scrollable {
 
+	public static final String ELEMENT_NAME = Messages.getString("collaboration"); //$NON-NLS-1$
+
 	private final Collection<Participant> participants = new ArrayList<Participant>();
 	private final Collection<MessageFlow> messageFlows = new ArrayList<MessageFlow>();
 
 	public Collaboration(final String id) {
 		super(id, null);
+	}
+
+	@Override
+	public String getElementName() {
+		return ELEMENT_NAME;
 	}
 
 	public void addMessageFlow(final MessageFlow messageFlow) {

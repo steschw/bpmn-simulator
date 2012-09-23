@@ -22,6 +22,7 @@ package bpmn.model.core.common.events;
 
 import javax.swing.Icon;
 
+import bpmn.Messages;
 import bpmn.instance.Instance;
 import bpmn.token.Token;
 
@@ -30,8 +31,15 @@ public final class IntermediateThrowEvent
 		extends AbstractIntermediateEvent
 		implements ThrowEvent {
 
+	public static final String ELEMENT_NAME = Messages.getString("intermediateThrowEvent"); //$NON-NLS-1$
+
 	public IntermediateThrowEvent(final String id, final String name) {
 		super(id, name);
+	}
+
+	@Override
+	public String getElementName() {
+		return ELEMENT_NAME;
 	}
 
 	@Override

@@ -28,6 +28,7 @@ import java.util.Collection;
 
 import javax.swing.Icon;
 
+import bpmn.Messages;
 import bpmn.instance.Instance;
 import bpmn.instance.InstanceManager;
 import bpmn.model.core.common.Visualization;
@@ -37,13 +38,21 @@ import bpmn.trigger.TriggerCatchingElement;
 import bpmn.trigger.Trigger;
 
 @SuppressWarnings("serial")
-public final class StartEvent extends AbstractEvent
+public final class StartEvent
+		extends AbstractEvent
 		implements TriggerCatchingElement, Instantiable, MouseListener {
+
+	public static final String ELEMENT_NAME = Messages.getString("startEvent"); //$NON-NLS-1$
 
 	public StartEvent(final String id, final String name,
 			final InstanceManager instanceManager) {
 		super(id, name, instanceManager);
 		addMouseListener(this);
+	}
+
+	@Override
+	public String getElementName() {
+		return ELEMENT_NAME;
 	}
 
 	@Override

@@ -23,16 +23,25 @@ package bpmn.model.core.common.gateways;
 import java.awt.BasicStroke;
 
 import bpmn.Graphics;
+import bpmn.Messages;
 import bpmn.instance.Instance;
 import bpmn.model.core.common.SequenceFlow;
 import bpmn.token.Token;
 import bpmn.token.TokenCollection;
 
 @SuppressWarnings("serial")
-public final class ParallelGateway extends AbstractMergingGateway {
+public final class ParallelGateway
+		extends AbstractMergingGateway {
+
+	public static final String ELEMENT_NAME = Messages.getString("parallelGateway"); //$NON-NLS-1$
 
 	public ParallelGateway(final String id, final String name) {
 		super(id, name);
+	}
+
+	@Override
+	public String getElementName() {
+		return ELEMENT_NAME;
 	}
 
 	@Override

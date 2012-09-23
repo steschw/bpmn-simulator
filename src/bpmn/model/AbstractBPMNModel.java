@@ -144,6 +144,7 @@ public abstract class AbstractBPMNModel
 		this.exporter = exporter;
 	}
 
+	@Override
 	public String getExporter() {
 		return exporter;
 	}
@@ -152,6 +153,7 @@ public abstract class AbstractBPMNModel
 		this.exporterVersion = exporterVersion;
 	}
 
+	@Override
 	public String getExporterVersion() {
 		return exporterVersion;
 	}

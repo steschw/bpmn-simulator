@@ -20,14 +20,22 @@
  */
 package bpmn.model.process.activities;
 
+import bpmn.Messages;
 import bpmn.model.Model;
 
 @SuppressWarnings("serial")
 public final class Process
 		extends AbstractContainerActivity {
 
+	public static final String ELEMENT_NAME = Messages.getString("process"); //$NON-NLS-1$
+
 	public Process(final Model model, final String id, final String name) {
 		super(model, id, name);
+	}
+
+	@Override
+	public String getElementName() {
+		return ELEMENT_NAME;
 	}
 
 }

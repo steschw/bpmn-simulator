@@ -23,14 +23,23 @@ package bpmn.model.core.common.gateways;
 import java.awt.BasicStroke;
 
 import bpmn.Graphics;
+import bpmn.Messages;
 import bpmn.instance.Instance;
 import bpmn.token.Token;
 
 @SuppressWarnings("serial")
-public final class ExclusiveGateway extends AbstractGateway {
+public final class ExclusiveGateway
+		extends AbstractGateway {
+
+	public static final String ELEMENT_NAME = Messages.getString("exclusiveGateway"); //$NON-NLS-1$
 
 	public ExclusiveGateway(final String id, final String name) {
 		super(id, name);
+	}
+
+	@Override
+	public String getElementName() {
+		return ELEMENT_NAME;
 	}
 
 	@Override

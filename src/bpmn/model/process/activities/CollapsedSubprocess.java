@@ -27,6 +27,7 @@ import java.awt.Stroke;
 import javax.swing.Icon;
 
 import bpmn.Graphics;
+import bpmn.Messages;
 import bpmn.Rectangle;
 import bpmn.model.core.common.AbstractFlowElement;
 import bpmn.model.core.common.Visualization;
@@ -35,6 +36,8 @@ import bpmn.model.core.common.Visualization;
 public class CollapsedSubprocess
 		extends AbstractFlowElement {
 
+	public static final String ELEMENT_NAME = Messages.getString("collapsedSubprocess"); //$NON-NLS-1$
+
 	protected static final int ARC_LENGTH = 10;
 
 	private final Subprocess expandedSubprocess;
@@ -42,6 +45,11 @@ public class CollapsedSubprocess
 	public CollapsedSubprocess(final Subprocess expandedProcess) {
 		super(expandedProcess.getId(), expandedProcess.getName());
 		this.expandedSubprocess = expandedProcess;
+	}
+
+	@Override
+	public String getElementName() {
+		return ELEMENT_NAME;
 	}
 
 	@Override

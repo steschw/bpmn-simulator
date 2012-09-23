@@ -30,7 +30,7 @@ import bpmn.model.process.activities.Subprocess;
 
 @SuppressWarnings("serial")
 public class Participant
-		extends TitledFlowElement {
+		extends AbstractTitledFlowElement {
 
 	public static final String ELEMENT_NAME = Messages.getString("participant"); //$NON-NLS-1$
 

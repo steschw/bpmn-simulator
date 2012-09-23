@@ -36,7 +36,7 @@ import bpmn.Rectangle;
 import bpmn.di.BPMNDiagram;
 import bpmn.exception.StructureException;
 import bpmn.model.collaboration.Collaboration;
-import bpmn.model.collaboration.TitledFlowElement;
+import bpmn.model.collaboration.AbstractTitledFlowElement;
 import bpmn.model.core.common.AbstractConnectingElement;
 import bpmn.model.core.common.AbstractFlowElement;
 import bpmn.model.core.common.Label;
@@ -112,8 +112,8 @@ public class DiagramInterchangeModel
 						element = expandedProcess.createCollapsed();
 					}
 				}
-				if (element instanceof TitledFlowElement) {
-					final TitledFlowElement titledElementContainer = (TitledFlowElement)element;
+				if (element instanceof AbstractTitledFlowElement) {
+					final AbstractTitledFlowElement titledElementContainer = (AbstractTitledFlowElement)element;
 					titledElementContainer.setHorizontal(getIsHorizontalAttribute(node));
 				}
 

@@ -25,12 +25,12 @@ import java.util.Collection;
 
 import bpmn.Messages;
 import bpmn.model.ElementRef;
-import bpmn.model.collaboration.TitledFlowElement;
+import bpmn.model.collaboration.AbstractTitledFlowElement;
 import bpmn.model.core.common.AbstractFlowElement;
 
 @SuppressWarnings("serial")
 public class Lane
-		extends TitledFlowElement {
+		extends AbstractTitledFlowElement {
 
 	public static final String ELEMENT_NAME = Messages.getString("lane"); //$NON-NLS-1$
 

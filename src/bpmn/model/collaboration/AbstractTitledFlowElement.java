@@ -26,7 +26,7 @@ import bpmn.model.core.common.AbstractFlowElement;
 import bpmn.model.core.common.Label;
 
 @SuppressWarnings("serial")
-public abstract class TitledFlowElement
+public abstract class AbstractTitledFlowElement
 		extends AbstractFlowElement {
 
 	private static final int HEADER_SIZE = 32;
@@ -35,7 +35,7 @@ public abstract class TitledFlowElement
 
 	private boolean horizontal;
 
-	public TitledFlowElement(final String id, final String name) {
+	public AbstractTitledFlowElement(final String id, final String name) {
 		super(id, name);
 		setHorizontal(true);
 	}

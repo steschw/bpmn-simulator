@@ -57,7 +57,7 @@ public class StartButton
 	}
 
 	public JMenuItem createInstancelessElementSelection(final TriggerCatchingElement element) {
-		final JMenuItem menuItem = new JMenuItem(element.getElementName());
+		final JMenuItem menuItem = new JMenuItem(element.getFullName());
 		menuItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(final ActionEvent e) {
@@ -71,7 +71,7 @@ public class StartButton
 		final Collection<Instance> instances
 				= element.getTriggerDestinationInstances();
 		if (!instances.isEmpty()) {
-			final JMenu subMenu = new JMenu(element.getElementName());
+			final JMenu subMenu = new JMenu(element.getFullName());
 			for (final Instance instance : instances) {
 				final InstanceMenuItem menuItem = new InstanceMenuItem(instance);
 				menuItem.addActionListener(new ActionListener() {

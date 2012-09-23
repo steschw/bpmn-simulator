@@ -50,7 +50,7 @@ public class InstancesTree
 
 		private static void createInstanceComponent(final JLabel component, final Instance instance) {
 			final StringBuilder text = new StringBuilder("Instance of ");
-			text.append(instance.getActivity().getElementName());
+			text.append(instance.getActivity().getFullName());
 			text.append(" (");
 			text.append(instance.getTokenCount(false));
 			text.append(" token)");
@@ -62,7 +62,7 @@ public class InstancesTree
 		private static void createTokenComponent(final JLabel component, final Token token) {
 			final StringBuilder text = new StringBuilder("Token in ");
 			final TokenFlow currentFlow = token.getCurrentFlow();
-			text.append((currentFlow == null) ? "null" : currentFlow.getElementName());
+			text.append((currentFlow == null) ? "null" : currentFlow.getFullName());
 			component.setText(text.toString());
 			final Instance instance = token.getInstance();
 			if (instance != null) {

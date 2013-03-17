@@ -20,11 +20,10 @@
  */
 package gui.preferences;
 
+import gui.AbstractDialog;
 import gui.Messages;
 
 import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.Frame;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
@@ -39,23 +38,22 @@ import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
-import javax.swing.JDialog;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
-import javax.swing.border.Border;
 
 import bpmn.model.core.common.AbstractFlowElement;
 import bpmn.model.core.common.Behavior;
 import bpmn.model.core.common.Visualization;
 
 @SuppressWarnings("serial")
-public class PreferencesDialog extends JDialog {
-
-	private static final int GAP = 10;
+public class PreferencesDialog
+		extends AbstractDialog {
 
 	private final LocaleComboBox selectLanguage = new LocaleComboBox();
+
 	private final JTextField editExternalEditor = new JTextField(); 
 
 	private final JCheckBox checkKeepEvents
@@ -88,33 +86,19 @@ public class PreferencesDialog extends JDialog {
 	private final ColorSelector colorDataStorageBackground
 			= new ColorSelector(Messages.getString("Preferences.backgroundColor")); //$NON-NLS-1$
 
-	public PreferencesDialog() {
-		super((Frame)null, Messages.getString("Preferences.preferences"), true); //$NON-NLS-1$
+	public PreferencesDialog(final JFrame parent) {
+		super(parent, Messages.getString("Preferences.preferences")); //$NON-NLS-1$
 
 		create();
 
-		setResizable(false);
-		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-
 		load();
-
-		pack();
 	}
 
-	private static void setButtonWidth(final JButton button) {
-		setButtonWidth(button, 100);
-	}
-
-	private static void setButtonWidth(final JButton button, final int width) {
-		final Dimension dimension = button.getPreferredSize();
-		dimension.width = width;
-		button.setPreferredSize(dimension);
-	}
-
+	@Override
 	protected void create() {
-		getContentPane().setLayout(new BorderLayout());
+		super.create();
+
 		getContentPane().add(createPreferencesPane(), BorderLayout.CENTER);
-		getContentPane().add(createButtonPanel(), BorderLayout.PAGE_END);
 	}
 
 	protected JTabbedPane createPreferencesPane() {
@@ -127,33 +111,31 @@ public class PreferencesDialog extends JDialog {
 		return tabbedPane;
 	}
 
-	private static Border createGapBorder() {
-		return BorderFactory.createEmptyBorder(GAP, GAP, GAP, GAP);
-	}
-
 	protected JPanel createGeneralPanel() {
 		final JPanel panel = new JPanel(new GridBagLayout());
 		panel.setBorder(createGapBorder());
 		final GridBagConstraints c = new GridBagConstraints();
 		c.insets = new Insets(4, 4, 4, 4);
 
+		c.gridy = 0;
+
 		final StringBuilder textLanguage = new StringBuilder(Messages.getString("Preferences.language")); //$NON-NLS-1$
 		textLanguage.append(": *"); //$NON-NLS-1$
 		final JLabel labelLanguage = new JLabel(textLanguage.toString());
 		labelLanguage.setLabelFor(selectLanguage);
 		c.gridx = 0;
-		c.gridy = 0;
 		c.gridwidth = 1;
 		c.fill = GridBagConstraints.NONE;
 		c.anchor = GridBagConstraints.BASELINE_LEADING;
 		panel.add(labelLanguage, c);
 		c.gridx = 1;
-		c.gridy = 0;
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.gridwidth = 2;
 		panel.add(selectLanguage, c);
-		c.gridx = 0;
+
 		c.gridy = 1;
+
+		c.gridx = 0;
 		c.gridwidth = 1;
 		c.fill = GridBagConstraints.NONE;
 		final StringBuilder textExternalEditor = new StringBuilder(Messages.getString("Preferences.externalEditor")); //$NON-NLS-1$
@@ -162,10 +144,11 @@ public class PreferencesDialog extends JDialog {
 		labelExternalEditor.setLabelFor(editExternalEditor);
 		panel.add(labelExternalEditor, c);
 		c.gridx = 1;
-		c.gridy = 1;
 		c.gridwidth = 2;
 		c.fill = GridBagConstraints.HORIZONTAL;
 		panel.add(editExternalEditor, c);
+
+		c.gridy = 2;
 
 		final StringBuilder textRestart = new StringBuilder("* "); //$NON-NLS-1$
 		textRestart.append(Messages.getString("Preferences.requiresRestart")); //$NON-NLS-1$
@@ -244,15 +227,12 @@ public class PreferencesDialog extends JDialog {
 		return panel;
 	}
 
+	@Override
 	protected JPanel createButtonPanel() {
-		final JPanel panel = new JPanel();
-		panel.setLayout(new BoxLayout(panel, BoxLayout.LINE_AXIS));
-		panel.setBorder(createGapBorder());
+		final JPanel panel = super.createButtonPanel();
 
-		panel.add(Box.createHorizontalGlue());
-
-		final JButton buttonCancel = new JButton(Messages.getString("Preferences.cancel")); //$NON-NLS-1$
-		setButtonWidth(buttonCancel);
+		final JButton buttonCancel = new JButton(Messages.getString("cancel")); //$NON-NLS-1$
+		setComponentWidth(buttonCancel, DEFAULT_BUTTON_WIDTH);
 		buttonCancel.setMnemonic(KeyEvent.VK_C);
 		buttonCancel.addActionListener(new ActionListener() {
 			@Override
@@ -264,8 +244,8 @@ public class PreferencesDialog extends JDialog {
 
 		panel.add(Box.createHorizontalStrut(10));
 
-		final JButton buttonOk = new JButton(Messages.getString("Preferences.ok"));  //$NON-NLS-1$
-		setButtonWidth(buttonOk);
+		final JButton buttonOk = new JButton(Messages.getString("ok"));  //$NON-NLS-1$
+		setComponentWidth(buttonOk, DEFAULT_BUTTON_WIDTH);
 		buttonOk.setMnemonic(KeyEvent.VK_O);
 		buttonOk.addActionListener(new ActionListener() {
 			@Override

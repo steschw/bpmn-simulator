@@ -61,7 +61,7 @@ public class LogFrame
 		getContentPane().add(listLog, BorderLayout.CENTER);
 
 		final JPanel panel = new JPanel();
-		final JButton buttonClose = new JButton(Messages.getString("Log.close")); //$NON-NLS-1$
+		final JButton buttonClose = new JButton(Messages.getString("close")); //$NON-NLS-1$
 		buttonClose.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(final ActionEvent event) {

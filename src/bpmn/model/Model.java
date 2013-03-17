@@ -31,6 +31,8 @@ import bpmn.trigger.TriggerCatchingElement;
 public interface Model
 		extends Definitions {
 
+	String getEncoding();
+
 	Collection<TriggerCatchingElement> getCatchEvents();
 
 	void sendMessages(AbstractFlowElement sourceElement, Instance sourceInstance);

@@ -91,10 +91,14 @@ public class BPMNSimulatorFrame
 		setTitle(title.toString());
 	}
 
+	protected void showPropertiesDialog() {
+		final PropertiesDialog dialog = new PropertiesDialog(this, model);
+		dialog.showDialog();
+	}
+
 	protected void showPreferencesDialog() {
-		final PreferencesDialog frame = new PreferencesDialog();
-		frame.setLocationRelativeTo(BPMNSimulatorFrame.this);
-		frame.setVisible(true);
+		final PreferencesDialog dialog = new PreferencesDialog(this);
+		dialog.showDialog();
 	}
 
 	private void create() {
@@ -111,7 +115,7 @@ public class BPMNSimulatorFrame
 	protected JMenu createMenuFile() {
 		final JMenu menuFile = new JMenu(Messages.getString("Menu.file")); //$NON-NLS-1$
 
-		final JMenuItem menuFileOpen = new JMenuItem(Messages.getString("Menu.open")); //$NON-NLS-1$
+		final JMenuItem menuFileOpen = new JMenuItem(Messages.getString("Menu.fileOpen")); //$NON-NLS-1$
 		menuFileOpen.setMnemonic(KeyEvent.VK_O);
 		menuFileOpen.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, KeyEvent.ALT_MASK));
 		menuFileOpen.addActionListener(new ActionListener() {
@@ -122,7 +126,7 @@ public class BPMNSimulatorFrame
 		});
 		menuFile.add(menuFileOpen);
 
-		final JMenuItem menuFileReload = new JMenuItem(Messages.getString("Menu.reload")); //$NON-NLS-1$
+		final JMenuItem menuFileReload = new JMenuItem(Messages.getString("Menu.fileReload")); //$NON-NLS-1$
 		menuFileReload.setMnemonic(KeyEvent.VK_R);
 		menuFileReload.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R, KeyEvent.ALT_MASK));
 		menuFileReload.addActionListener(new ActionListener() {
@@ -133,7 +137,7 @@ public class BPMNSimulatorFrame
 		});
 		menuFile.add(menuFileReload);
 
-		final JMenuItem menuFileClose = new JMenuItem(Messages.getString("Menu.close")); //$NON-NLS-1$
+		final JMenuItem menuFileClose = new JMenuItem(Messages.getString("Menu.fileClose")); //$NON-NLS-1$
 		menuFileClose.setMnemonic(KeyEvent.VK_C);
 		menuFileClose.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, KeyEvent.ALT_MASK));
 		menuFileClose.addActionListener(new ActionListener() {
@@ -146,9 +150,20 @@ public class BPMNSimulatorFrame
 
 		menuFile.addSeparator();
 
+		final JMenuItem menuFileProperties = new JMenuItem(Messages.getString("Menu.properties")); //$NON-NLS-1$
+		menuFileProperties.setMnemonic(KeyEvent.VK_P);
+		menuFileProperties.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P, KeyEvent.ALT_MASK));
+		menuFileProperties.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(final ActionEvent e) {
+				showPropertiesDialog();
+			}
+		});
+		menuFile.add(menuFileProperties);
+
+		menuFile.addSeparator();
+
 		final JMenuItem menuFilePreferences = new JMenuItem(Messages.getString("Menu.preferences")); //$NON-NLS-1$
-		menuFilePreferences.setMnemonic(KeyEvent.VK_P);
-		menuFilePreferences.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P, KeyEvent.ALT_MASK));
 		menuFilePreferences.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(final ActionEvent e) {
@@ -179,6 +194,7 @@ public class BPMNSimulatorFrame
 			public void menuSelected(final MenuEvent e) {
 				menuFileReload.setEnabled(isModelOpen());
 				menuFileClose.setEnabled(isModelOpen());
+				menuFileProperties.setEnabled(isModelOpen());
 			}
 			
 			@Override
@@ -248,6 +264,12 @@ public class BPMNSimulatorFrame
 		return menuExtra;
 	}
 
+	protected void showAboutDialog() {
+		final AboutDialog frame = new AboutDialog();
+		frame.setLocationRelativeTo(BPMNSimulatorFrame.this);
+		frame.setVisible(true);
+	}
+
 	protected JMenu createMenuHelp() {
 		final JMenu menuHelp = new JMenu(Messages.getString("Menu.help")); //$NON-NLS-1$
 
@@ -257,9 +279,7 @@ public class BPMNSimulatorFrame
 		menuHelpAbout.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(final ActionEvent e) {
-				final AboutDialog frame = new AboutDialog();
-				frame.setLocationRelativeTo(BPMNSimulatorFrame.this);
-				frame.setVisible(true);
+				showAboutDialog();
 			}
 		});
 		menuHelp.add(menuHelpAbout);

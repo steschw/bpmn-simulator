@@ -44,10 +44,17 @@ import bpmn.exception.StructureException;
 import bpmn.exception.StructureExceptionListener;
 
 public abstract class AbstractXmlModel
-	implements Model, ErrorHandler {
+		implements Model, ErrorHandler {
 
 	private final Collection<StructureExceptionListener> structureExceptionListeners
-		= new ArrayList<StructureExceptionListener>();
+			= new ArrayList<StructureExceptionListener>();
+
+	private String encoding; 
+
+	@Override
+	public String getEncoding() {
+		return encoding;
+	}
 
 	public void addStructureExceptionListener(final StructureExceptionListener listener) {
 		synchronized (structureExceptionListeners) {
@@ -57,7 +64,7 @@ public abstract class AbstractXmlModel
 
 	protected void notifyStructureExceptionListeners(final StructureException exception) {
 		synchronized (structureExceptionListeners) {
-			for (StructureExceptionListener listener : structureExceptionListeners) {
+			for (final StructureExceptionListener listener : structureExceptionListeners) {
 				listener.onStructureException(exception);
 			}
 		}
@@ -158,6 +165,7 @@ public abstract class AbstractXmlModel
 			final DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder(); 
 			documentBuilder.setErrorHandler(this);
 			final Document document = documentBuilder.parse(file);
+			encoding = document.getInputEncoding();
 			loadData(document.getDocumentElement());
 		} catch (IOException e) {
 			notifyStructureExceptionListeners(new StructureException(this, e));

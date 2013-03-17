@@ -132,7 +132,7 @@ public class AboutDialog extends JDialog {
 
 		getContentPane().add(createTabbedPane(), BorderLayout.CENTER);
 
-		final JButton buttonClose = new JButton(Messages.getString("About.close")); //$NON-NLS-1$
+		final JButton buttonClose = new JButton(Messages.getString("close")); //$NON-NLS-1$
 		buttonClose.setMnemonic(KeyEvent.VK_C);
 		buttonClose.addActionListener(new ActionListener() {
 			@Override

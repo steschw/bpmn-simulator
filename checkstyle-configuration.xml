@@ -94,6 +94,9 @@
 		<module name="ImportOrder">
 			<property name="groups" value="java.,javax.,org.,com."/>
 		</module>
+		<module name="ImportControl">
+			<property name="file" value="import-control.xml"/>
+		</module>
 
 		<!-- METRICS -->
 		<module name="BooleanExpressionComplexity" />

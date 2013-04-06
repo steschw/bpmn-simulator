@@ -23,7 +23,7 @@ package com.google.code.bpmn_simulator.bpmn.model.core.common.events;
 import javax.swing.Icon;
 
 import com.google.code.bpmn_simulator.bpmn.model.core.common.Visualization;
-import com.google.code.bpmn_simulator.framework.ElementRef;
+import com.google.code.bpmn_simulator.framework.element.ElementRef;
 import com.google.code.bpmn_simulator.framework.token.Token;
 
 

@@ -18,7 +18,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.bpmn_simulator.framework;
+package com.google.code.bpmn_simulator.framework.element;
 
 import java.awt.Component;
 import java.awt.Container;

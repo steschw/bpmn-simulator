@@ -23,7 +23,7 @@ package com.google.code.bpmn_simulator.bpmn.model.core.common.gateways;
 import java.awt.BasicStroke;
 
 import com.google.code.bpmn_simulator.bpmn.Messages;
-import com.google.code.bpmn_simulator.framework.Graphics;
+import com.google.code.bpmn_simulator.framework.element.GraphicsLayer;
 import com.google.code.bpmn_simulator.framework.instance.Instance;
 import com.google.code.bpmn_simulator.framework.token.Token;
 
@@ -45,7 +45,7 @@ public final class ExclusiveGateway
 	}
 
 	@Override
-	protected void paintElement(final Graphics g) {
+	protected void paintElement(final GraphicsLayer g) {
 		super.paintElement(g);
 
 		if (getVisualization().getShowExclusiveGatewaySymbol()) {

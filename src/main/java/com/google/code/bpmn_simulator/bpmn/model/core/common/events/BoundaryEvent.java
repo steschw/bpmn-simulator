@@ -35,9 +35,9 @@ import com.google.code.bpmn_simulator.bpmn.model.process.activities.AbstractActi
 import com.google.code.bpmn_simulator.bpmn.model.process.activities.Activity;
 import com.google.code.bpmn_simulator.bpmn.trigger.Trigger;
 import com.google.code.bpmn_simulator.bpmn.trigger.TriggerCatchingElement;
-import com.google.code.bpmn_simulator.framework.ElementRef;
+import com.google.code.bpmn_simulator.framework.element.ElementRef;
+import com.google.code.bpmn_simulator.framework.gui.InstancePopupMenu;
 import com.google.code.bpmn_simulator.framework.instance.Instance;
-import com.google.code.bpmn_simulator.framework.instance.InstancePopupMenu;
 
 
 

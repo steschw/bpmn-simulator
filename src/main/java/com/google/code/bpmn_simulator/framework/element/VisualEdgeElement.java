@@ -18,26 +18,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.bpmn_simulator.framework.instance;
+package com.google.code.bpmn_simulator.framework.element;
 
-import java.awt.Color;
+import com.google.code.bpmn_simulator.framework.element.geometry.Waypoint;
 
-import javax.swing.JMenuItem;
+public interface VisualEdgeElement {
 
-@SuppressWarnings("serial")
-public class InstanceMenuItem
-		extends JMenuItem {
-
-	private final Instance instance;
-
-	public InstanceMenuItem(final Instance instance) {
-		super("Instance");
-		this.instance = instance;
-	}
-
-	@Override
-	public Color getForeground() {
-		return (instance == null) ? super.getForeground() : instance.getColor();
-	}
+	void addWaypoint(Waypoint point);
 
 }

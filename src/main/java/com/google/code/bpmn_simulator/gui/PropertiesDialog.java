@@ -34,16 +34,16 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import com.google.code.bpmn_simulator.bpmn.model.Model;
+import com.google.code.bpmn_simulator.bpmn.model.BPMNModel;
 
 
 @SuppressWarnings("serial")
 public class PropertiesDialog
 		extends AbstractDialog {
 
-	private final Model model;
+	private final BPMNModel model;
 
-	public PropertiesDialog(final JFrame parent, final Model model) {
+	public PropertiesDialog(final JFrame parent, final BPMNModel model) {
 		super(parent, Messages.getString("Properties.properties")); //$NON-NLS-1$
 
 		this.model = model;

@@ -23,8 +23,8 @@ package com.google.code.bpmn_simulator.bpmn.model.core.common.gateways;
 import java.awt.Point;
 
 import com.google.code.bpmn_simulator.bpmn.model.core.common.SequenceFlow;
-import com.google.code.bpmn_simulator.framework.Graphics;
-import com.google.code.bpmn_simulator.framework.Rectangle;
+import com.google.code.bpmn_simulator.framework.element.GraphicsLayer;
+import com.google.code.bpmn_simulator.framework.element.geometry.Bounds;
 import com.google.code.bpmn_simulator.framework.instance.Instance;
 import com.google.code.bpmn_simulator.framework.token.Token;
 import com.google.code.bpmn_simulator.framework.token.TokenCollection;
@@ -57,8 +57,8 @@ public abstract class AbstractMergingGateway
 	}
 
 	@Override
-	protected void paintTokens(final Graphics g) {
-		final Rectangle bounds = getElementInnerBounds();
+	protected void paintTokens(final GraphicsLayer g) {
+		final Bounds bounds = getElementInnerBounds();
 		int y = bounds.y;
 		for (Instance tokenInstance : getInnerTokens().getInstances()) {
 			int x = bounds.x + (int)bounds.getWidth();

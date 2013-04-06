@@ -32,11 +32,11 @@ import java.awt.event.MouseEvent;
 
 import javax.swing.JComponent;
 
-import com.google.code.bpmn_simulator.bpmn.model.Model;
+import com.google.code.bpmn_simulator.bpmn.model.BPMNModel;
 import com.google.code.bpmn_simulator.bpmn.model.core.foundation.Documentation;
 import com.google.code.bpmn_simulator.bpmn.model.process.activities.AbstractContainerActivity;
-import com.google.code.bpmn_simulator.framework.Graphics;
-import com.google.code.bpmn_simulator.framework.Rectangle;
+import com.google.code.bpmn_simulator.framework.element.GraphicsLayer;
+import com.google.code.bpmn_simulator.framework.element.geometry.Bounds;
 
 
 @SuppressWarnings("serial")
@@ -170,7 +170,7 @@ public abstract class AbstractFlowElement
 	}
 
 	@Override
-	public Model getModel() {
+	public BPMNModel getModel() {
 		return (parentActivity == null) ? null : parentActivity.getModel();
 	}
 
@@ -190,30 +190,30 @@ public abstract class AbstractFlowElement
 		return fullName.toString();
 	}
 
-	public void setInnerBounds(final Rectangle bounds) {
+	public void setInnerBounds(final Bounds bounds) {
 		bounds.grow(MARGIN, MARGIN);
 		setBounds(bounds);
 	}
 
-	public Rectangle getInnerBounds() {
-		final Rectangle bounds = new Rectangle(getBounds());
+	public Bounds getInnerBounds() {
+		final Bounds bounds = new Bounds(getBounds());
 		bounds.grow(-MARGIN, -MARGIN);
 		return bounds;
 	}
 
-	public Rectangle getElementInnerBounds() {
-		final Rectangle bounds = new Rectangle(getBounds());
-		return new Rectangle(MARGIN, MARGIN,
+	public Bounds getElementInnerBounds() {
+		final Bounds bounds = new Bounds(getBounds());
+		return new Bounds(MARGIN, MARGIN,
 				bounds.width - (2 * MARGIN), bounds.height - (2 * MARGIN));
 	}
 
-	public Rectangle getElementOuterBounds() {
-		return new Rectangle(0, 0, getWidth(), getHeight());
+	public Bounds getElementOuterBounds() {
+		return new Bounds(0, 0, getWidth(), getHeight());
 	}
 
 	@Override
 	public final void paint(final java.awt.Graphics g) {
-		final Graphics graphics = new Graphics((Graphics2D)g);
+		final GraphicsLayer graphics = new GraphicsLayer((Graphics2D)g);
 
 		synchronized (this) {
 
@@ -262,7 +262,7 @@ public abstract class AbstractFlowElement
 	protected Paint getBackgroundPaint() {
 		final Color color = getElementBackground();
 		if (color != null) {
-			final Rectangle size = new Rectangle(getBounds());
+			final Bounds size = new Bounds(getBounds());
 			return new RadialGradientPaint(0.f, 0.f, size.min(),
 					new float[] {
 							0.f,
@@ -284,18 +284,18 @@ public abstract class AbstractFlowElement
 		return getVisualization().createStrokeSolid(getBorderWidth());
 	}
 
-	protected void paintBackground(final Graphics g) {
+	protected void paintBackground(final GraphicsLayer g) {
 	}
 
-	protected abstract void paintElement(final Graphics g);
+	protected abstract void paintElement(final GraphicsLayer g);
 
-	protected void paintException(final Graphics g) {
+	protected void paintException(final GraphicsLayer g) {
 		g.drawIcon(
 				getVisualization().getIcon(Visualization.ICON_EXCEPTION),
 				new Point(0, 0));
 	}
 
-	protected void paintTokens(final Graphics g) {
+	protected void paintTokens(final GraphicsLayer g) {
 	}
 
 	protected Point getElementCenter() {

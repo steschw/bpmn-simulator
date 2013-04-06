@@ -20,7 +20,7 @@
  */
 package com.google.code.bpmn_simulator.bpmn.model.core.common;
 
-import com.google.code.bpmn_simulator.framework.ElementRef;
+import com.google.code.bpmn_simulator.framework.element.ElementRef;
 import com.google.code.bpmn_simulator.framework.instance.Instance;
 import com.google.code.bpmn_simulator.framework.token.Token;
 

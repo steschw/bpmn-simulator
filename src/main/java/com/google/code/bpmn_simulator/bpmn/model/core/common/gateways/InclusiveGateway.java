@@ -24,7 +24,7 @@ import java.awt.BasicStroke;
 
 import com.google.code.bpmn_simulator.bpmn.Messages;
 import com.google.code.bpmn_simulator.bpmn.model.core.common.SequenceFlow;
-import com.google.code.bpmn_simulator.framework.Graphics;
+import com.google.code.bpmn_simulator.framework.element.GraphicsLayer;
 import com.google.code.bpmn_simulator.framework.instance.Instance;
 import com.google.code.bpmn_simulator.framework.token.Token;
 import com.google.code.bpmn_simulator.framework.token.TokenCollection;
@@ -47,7 +47,7 @@ public final class InclusiveGateway
 	}
 
 	@Override
-	protected void paintElement(final Graphics g) {
+	protected void paintElement(final GraphicsLayer g) {
 		super.paintElement(g);
 
 		g.setStroke(new BasicStroke(3));

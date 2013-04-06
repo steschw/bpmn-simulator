@@ -30,8 +30,8 @@ import com.google.code.bpmn_simulator.bpmn.model.process.activities.AbstractCont
 import com.google.code.bpmn_simulator.bpmn.trigger.InstantiableNotifiyTarget;
 import com.google.code.bpmn_simulator.bpmn.trigger.Trigger;
 import com.google.code.bpmn_simulator.bpmn.trigger.TriggerCatchingElement;
-import com.google.code.bpmn_simulator.framework.ElementRef;
-import com.google.code.bpmn_simulator.framework.Graphics;
+import com.google.code.bpmn_simulator.framework.element.ElementRef;
+import com.google.code.bpmn_simulator.framework.element.GraphicsLayer;
 import com.google.code.bpmn_simulator.framework.instance.Instance;
 import com.google.code.bpmn_simulator.framework.token.Token;
 import com.google.code.bpmn_simulator.framework.token.TokenCollection;
@@ -252,7 +252,7 @@ public abstract class AbstractTokenFlowElement
 	}
 
 	@Override
-	protected void paintTokens(final Graphics g) {
+	protected void paintTokens(final GraphicsLayer g) {
 		getInnerTokens().paintHorizontalRight(g, getElementInnerBounds().getRightTop());
 	}
 

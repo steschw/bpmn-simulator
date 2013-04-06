@@ -24,8 +24,8 @@ import java.awt.Color;
 import java.awt.Point;
 
 import com.google.code.bpmn_simulator.bpmn.Messages;
-import com.google.code.bpmn_simulator.framework.Graphics;
-import com.google.code.bpmn_simulator.framework.Rectangle;
+import com.google.code.bpmn_simulator.framework.element.GraphicsLayer;
+import com.google.code.bpmn_simulator.framework.element.geometry.Bounds;
 
 
 @SuppressWarnings("serial")
@@ -45,16 +45,16 @@ public final class Message
 	}
 
 	@Override
-	protected void paintBackground(final Graphics g) {
+	protected void paintBackground(final GraphicsLayer g) {
 		super.paintBackground(g);
 
-		final Rectangle bounds = getElementInnerBounds();
+		final Bounds bounds = getElementInnerBounds();
 		g.fillRect(bounds);
 	}
 
 	@Override
-	protected void paintElement(final Graphics g) {
-		final Rectangle bounds = getElementInnerBounds();
+	protected void paintElement(final GraphicsLayer g) {
+		final Bounds bounds = getElementInnerBounds();
 		g.drawRect(bounds);
 		final Point center = bounds.getCenter();
 		g.drawLine(bounds.getLeftTop(), center);

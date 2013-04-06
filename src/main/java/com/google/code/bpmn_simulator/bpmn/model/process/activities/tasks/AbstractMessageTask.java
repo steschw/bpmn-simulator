@@ -21,7 +21,7 @@
 package com.google.code.bpmn_simulator.bpmn.model.process.activities.tasks;
 
 import com.google.code.bpmn_simulator.bpmn.model.core.common.Message;
-import com.google.code.bpmn_simulator.framework.ElementRef;
+import com.google.code.bpmn_simulator.framework.element.ElementRef;
 
 @SuppressWarnings("serial")
 public abstract class AbstractMessageTask

@@ -42,7 +42,7 @@ import javax.swing.event.MenuListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import com.google.code.bpmn_simulator.bpmn.di.BPMNDiagram;
-import com.google.code.bpmn_simulator.bpmn.model.DiagramInterchangeModel;
+import com.google.code.bpmn_simulator.bpmn.di.DiagramInterchangeModel;
 import com.google.code.bpmn_simulator.gui.instances.InstancesFrame;
 import com.google.code.bpmn_simulator.gui.log.LogFrame;
 import com.google.code.bpmn_simulator.gui.preferences.Config;

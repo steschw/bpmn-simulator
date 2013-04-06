@@ -20,42 +20,37 @@
  */
 package com.google.code.bpmn_simulator.framework.exception;
 
-import com.google.code.bpmn_simulator.bpmn.model.Model;
 import com.google.code.bpmn_simulator.bpmn.model.core.foundation.BaseElement;
+import com.google.code.bpmn_simulator.framework.element.Model;
 
 @SuppressWarnings("serial")
 public class StructureException
-		extends Exception {
+		extends SimulationException {
 
-	private BaseElement element;
-	private final Model model;
+	private final BaseElement element;
 
 	public StructureException(final Model model, final String message) {
-		super(message);
-		this.model = model;
+		super(model, message);
+		this.element = null;
 	}
 
 	public StructureException(final Model model, final Throwable cause) {
-		super(cause);
-		this.model = model;
+		super(model, cause);
+		this.element = null;
 	}
 
 	public StructureException(final BaseElement element, final String message) {
-		this(element.getModel(), message);
+		super(element.getModel(), message);
 		this.element = element;
 	}
 
 	public StructureException(final BaseElement element, final Throwable cause) {
-		this(element.getModel(), cause);
+		super(element.getModel(), cause);
 		this.element = element;
 	}
 
 	public final BaseElement getElement() {
 		return element;
-	}
-
-	public final Model getModel() {
-		return model;
 	}
 
 }

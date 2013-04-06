@@ -18,7 +18,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.bpmn_simulator.framework;
+package com.google.code.bpmn_simulator.framework.element;
 
 import java.awt.Color;
 import java.awt.FontMetrics;
@@ -36,14 +36,15 @@ import java.awt.geom.Rectangle2D;
 
 import javax.swing.Icon;
 
+import com.google.code.bpmn_simulator.framework.element.geometry.Bounds;
+import com.google.code.bpmn_simulator.framework.element.geometry.GeometryUtil;
+import com.google.code.bpmn_simulator.framework.element.geometry.Waypoint;
 
 
-public class Graphics {
 
-	private static final double RAD_FULL = 2. * Math.PI;
-	private static final double RAD_30 = RAD_FULL / 12.;
+public class GraphicsLayer {
 
-	private static final int PENTAGON_CORNERS = 5;
+	private static final double RAD_30 = GeometryUtil.RAD_FULL / 12.;
 
 	private static final double CONNECTING_SYMBOL_LENGTH = 12.;
 
@@ -73,7 +74,7 @@ public class Graphics {
 		*/
 	}
 
-	public Graphics(final Graphics2D graphics) {
+	public GraphicsLayer(final Graphics2D graphics) {
 		super();
 		this.graphics = graphics;
 	}
@@ -130,48 +131,39 @@ public class Graphics {
 		graphics.fill(shape);
 	}
 
-	public void drawRoundRect(final Rectangle rect, final int arcWidth, final int arcHeight) {
+	public void drawRoundRect(final Bounds rect, final int arcWidth, final int arcHeight) {
 		graphics.drawRoundRect(rect.x, rect.y, rect.width, rect.height, arcWidth, arcHeight);
 	}
 
-	public void fillRoundRect(final Rectangle rect, final int arcWidth, final int arcHeight) {
+	public void fillRoundRect(final Bounds rect, final int arcWidth, final int arcHeight) {
 		graphics.fillRoundRect(rect.x, rect.y, rect.width, rect.height, arcWidth, arcHeight);
 	}
 
-	public void fillOval(final Rectangle size) {
+	public void fillOval(final Bounds size) {
 		graphics.fillOval(size.x, size.y, size.width, size.height);
 	}
 
-	public void drawOval(final Rectangle size) {
+	public void drawOval(final Bounds size) {
 		graphics.drawOval(size.x, size.y, size.width, size.height);
 	}
 
-	public void fillRect(final Rectangle rect) {
+	public void fillRect(final Bounds rect) {
 		graphics.fillRect(rect.x, rect.y, rect.width, rect.height);
 	}
 
-	public void drawRect(final Rectangle rect) {
+	public void drawRect(final Bounds rect) {
 		graphics.drawRect(rect.x, rect.y, rect.width, rect.height);
 	}
 
-	protected static Polygon createDiamond(final Rectangle size) {
-		final Polygon polygon = new Polygon();
-		polygon.addPoint((int)size.getMinX(), (int)size.getCenterY());
-		polygon.addPoint((int)size.getCenterX(), (int)size.getMinY());
-		polygon.addPoint((int)size.getMaxX(), (int)size.getCenterY());
-		polygon.addPoint((int)size.getCenterX(), (int)size.getMaxY());
-		return polygon;
+	public void fillDiamond(final Bounds size) {
+		fill(GeometryUtil.createDiamond(size));
 	}
 
-	public void fillDiamond(final Rectangle size) {
-		fill(createDiamond(size));
+	public void drawDiamond(final Bounds size) {
+		draw(GeometryUtil.createDiamond(size));
 	}
 
-	public void drawDiamond(final Rectangle size) {
-		draw(createDiamond(size));
-	}
-
-	public void drawCross(final Rectangle rect, final boolean rotated) {
+	public void drawCross(final Bounds rect, final boolean rotated) {
 		if (rotated) {
 			graphics.drawLine((int)rect.getMinX(), (int)rect.getMinY(),
 					(int)rect.getMaxX(), (int)rect.getMaxY());
@@ -189,98 +181,46 @@ public class Graphics {
 		graphics.drawLine(from.x, from.y, to.x, to.y);
 	}
 
-	public static final double getAngle(final Point from, final Point to) {
-		return Math.atan2(to.x - from.x, to.y - from.y);
+	public static GeneralPath createArrowPath(final Waypoint from, final Waypoint to) {
+		return GeometryUtil.createArrowPath(from, to, RAD_30, 10.);
 	}
 
-	public static Point polarToCartesian(final Point orgin,
-			final double radius, final double angle) {
-		final int x = (int)Math.round(radius * Math.sin(angle));
-		final int y = (int)Math.round(radius * Math.cos(angle));
-		return new Point(orgin.x + x, orgin.y + y);
-	}
-
-	public static GeneralPath createArrowPath(final Point from, final Point to) {
-		return createArrowPath(from, to, RAD_30, 10.);
-	}
-
-	protected static GeneralPath createArrowPath(final Point from, final Point to,
-			final double d, final double length) {
-		final GeneralPath path = new GeneralPath();
-		final double angle = getAngle(to, from);
-		final Point point1 = polarToCartesian(to, length, angle - d);
-		path.moveTo(point1.x, point1.y);
-		path.lineTo(to.x, to.y);
-		final Point point2 = polarToCartesian(to, length, angle + d);
-		path.lineTo(point2.x, point2.y);
-		return path;
-	}
-
-	public void fillArrow(final Point from, final Point to) {
+	public void fillArrow(final Waypoint from, final Waypoint to) {
 		graphics.fill(createArrowPath(from, to));
 	}
 
-	public void drawArrow(final Point from, final Point to) {
-		final double angle = getAngle(to, from);
-		drawLine(to, polarToCartesian(to, 10., angle - RAD_30));
-		drawLine(to, polarToCartesian(to, 10., angle + RAD_30));
+	public void drawArrow(final Waypoint from, final Waypoint to) {
+		final double angle = GeometryUtil.getAngle(to, from);
+		drawLine(to, GeometryUtil.polarToCartesian(to, 10., angle - RAD_30));
+		drawLine(to, GeometryUtil.polarToCartesian(to, 10., angle + RAD_30));
 	}
 
-	protected static Polygon createStar(final Rectangle size, final int corners) {
-		final Polygon polygon = new Polygon();
-		final Point center = new Point(size.x + size.width / 2, size.y + size.height / 2);
-		final double r = size.width / 2.;
-		Point point = null;
-		for (int i = 0; i < corners; ++i) {
-			point = polarToCartesian(center, r, (RAD_FULL / corners) * i - (RAD_FULL / corners) / 2.);
-			polygon.addPoint(point.x, point.y);
-			point = polarToCartesian(center, r * 0.5, (RAD_FULL / corners) * i);
-			polygon.addPoint(point.x, point.y);
-		}
-		return polygon;
+	public void drawStar(final Bounds size, final int corners) {
+		graphics.drawPolygon(GeometryUtil.createStar(size, corners));
 	}
 
-	public void drawStar(final Rectangle size, final int corners) {
-		graphics.drawPolygon(createStar(size, corners));
+	public void fillStar(final Bounds size, final int corners) {
+		graphics.fillPolygon(GeometryUtil.createStar(size, corners));
 	}
 
-	public void fillStar(final Rectangle size, final int corners) {
-		graphics.fillPolygon(createStar(size, corners));
+	public void drawPentagon(final Bounds size) {
+		graphics.drawPolygon(GeometryUtil.createPentagon(size));
 	}
 
-	protected static Polygon createPentagon(final Rectangle size) {
-		final Polygon polygon = new Polygon();
-		final Point center = new Point(size.x + size.width / 2, size.y + size.height / 2);
-		final double r = size.width / 2.;
-		Point point = null;
-		for (int i = 0; i < 5; ++i) {
-			point = polarToCartesian(
-					center, r,
-					(RAD_FULL / PENTAGON_CORNERS) * i
-							- (RAD_FULL / PENTAGON_CORNERS) / 2.);
-			polygon.addPoint(point.x, point.y);
-		}
-		return polygon;
-	}
-
-	public void drawPentagon(final Rectangle size) {
-		graphics.drawPolygon(createPentagon(size));
-	}
-
-	protected static Polygon createConditionalSymbol(final Point orgin, final double a) {
+	protected static Polygon createConditionalSymbol(final Waypoint orgin, final double a) {
 		final Polygon polygon = new Polygon();
 		polygon.addPoint(orgin.x, orgin.y);
-		Point to = polarToCartesian(orgin, CONNECTING_SYMBOL_LENGTH, a - RAD_30);
+		Waypoint to = GeometryUtil.polarToCartesian(orgin, CONNECTING_SYMBOL_LENGTH, a - RAD_30);
 		polygon.addPoint(to.x, to.y);
-		to = polarToCartesian(to, CONNECTING_SYMBOL_LENGTH, a + RAD_30);
+		to = GeometryUtil.polarToCartesian(to, CONNECTING_SYMBOL_LENGTH, a + RAD_30);
 		polygon.addPoint(to.x, to.y);
-		to = polarToCartesian(orgin, CONNECTING_SYMBOL_LENGTH, a + RAD_30);
+		to = GeometryUtil.polarToCartesian(orgin, CONNECTING_SYMBOL_LENGTH, a + RAD_30);
 		polygon.addPoint(to.x, to.y);
 		return polygon;
 	}
 
-	public void drawConditionalSymbol(final Point from, final Point to) {
-		final Polygon symbol = createConditionalSymbol(from, getAngle(from, to));
+	public void drawConditionalSymbol(final Waypoint from, final Waypoint to) {
+		final Polygon symbol = createConditionalSymbol(from, GeometryUtil.getAngle(from, to));
 
 		graphics.setPaint(Color.WHITE);
 		graphics.fill(symbol);
@@ -288,22 +228,22 @@ public class Graphics {
 		graphics.draw(symbol);
 	}
 
-	public void drawDefaultSymbol(final Point from, final Point to) {
-		final double a = getAngle(from, to);
-		final Point orgin = polarToCartesian(from, 6., a);
+	public void drawDefaultSymbol(final Waypoint from, final Waypoint to) {
+		final double a = GeometryUtil.getAngle(from, to);
+		final Waypoint orgin = GeometryUtil.polarToCartesian(from, 6., a);
 
 		final double angle = Math.PI / 1.5;
-		final Point symbolFrom = polarToCartesian(orgin, CONNECTING_SYMBOL_LENGTH / 2., a - angle);
-		final Point symbolTo = polarToCartesian(symbolFrom, CONNECTING_SYMBOL_LENGTH, a - angle - Math.PI);
+		final Waypoint symbolFrom = GeometryUtil.polarToCartesian(orgin, CONNECTING_SYMBOL_LENGTH / 2., a - angle);
+		final Waypoint symbolTo = GeometryUtil.polarToCartesian(symbolFrom, CONNECTING_SYMBOL_LENGTH, a - angle - Math.PI);
 
 		drawLine(symbolFrom, symbolTo);
 	}
 
-	protected static double getNForDataObjectShape(final Rectangle bounds) {
+	protected static double getNForDataObjectShape(final Bounds bounds) {
 		return Math.min(bounds.getWidth(), bounds.getHeight()) * 0.3;
 	}
 
-	public static Shape createDataObjectShape(final Rectangle bounds) {
+	public static Shape createDataObjectShape(final Bounds bounds) {
 		final double n = getNForDataObjectShape(bounds);
 		final Path2D path = new Path2D.Float();
 
@@ -317,7 +257,7 @@ public class Graphics {
 		return path;
 	}
 
-	public void drawDataObject(final Rectangle bounds) {
+	public void drawDataObject(final Bounds bounds) {
 		final double n = getNForDataObjectShape(bounds);
 		graphics.draw(createDataObjectShape(bounds));
 		graphics.drawLine(
@@ -328,11 +268,11 @@ public class Graphics {
 				(int)(bounds.getMaxX() - n), (int)bounds.getMinY());
 	}
 
-	protected static int getNForDataStoreShape(final Rectangle bounds) {
+	protected static int getNForDataStoreShape(final Bounds bounds) {
 		return (int)(bounds.getHeight() / 6.);
 	}
 
-	public static Shape createDataStoreShape(final Rectangle bounds) {
+	public static Shape createDataStoreShape(final Bounds bounds) {
 		final int n = getNForDataStoreShape(bounds);
 
 		final Path2D path = new Path2D.Float();
@@ -361,7 +301,7 @@ public class Graphics {
 		return path;
 	}
 
-	public void drawDataStore(final Rectangle bounds) {
+	public void drawDataStore(final Bounds bounds) {
 		final int n = getNForDataStoreShape(bounds);
 
 		graphics.draw(createDataStoreShape(bounds));
@@ -389,7 +329,7 @@ public class Graphics {
 				180);
 	}
 
-	public void drawText(final Rectangle bounds, final String text) {
+	public void drawText(final Bounds bounds, final String text) {
 		final FontMetrics metrics = graphics.getFontMetrics();
 		final Rectangle2D textBounds
 			= graphics.getFontMetrics().getStringBounds(text, graphics);

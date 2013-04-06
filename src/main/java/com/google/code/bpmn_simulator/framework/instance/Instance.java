@@ -30,8 +30,8 @@ import java.util.List;
 import java.util.Vector;
 
 import com.google.code.bpmn_simulator.bpmn.model.process.activities.Activity;
-import com.google.code.bpmn_simulator.framework.Graphics;
-import com.google.code.bpmn_simulator.framework.Rectangle;
+import com.google.code.bpmn_simulator.framework.element.GraphicsLayer;
+import com.google.code.bpmn_simulator.framework.element.geometry.Bounds;
 import com.google.code.bpmn_simulator.framework.token.Token;
 import com.google.code.bpmn_simulator.framework.token.TokenCollection;
 import com.google.code.bpmn_simulator.framework.token.TokenFlow;
@@ -321,9 +321,9 @@ public final class Instance
 		return instances;
 	}
 
-	public void paint(final Graphics g, final Point center) {
+	public void paint(final GraphicsLayer g, final Point center) {
 		if (center != null) {
-			final Rectangle size = new Rectangle(center, STAR_SIZE);
+			final Bounds size = new Bounds(center, STAR_SIZE);
 
 			final Color color = getColor();
 			if (color != null) {
@@ -338,13 +338,13 @@ public final class Instance
 		}
 	}
 
-	public void paint(final Graphics g, final Point center, final int count) {
+	public void paint(final GraphicsLayer g, final Point center, final int count) {
 		paint(g, center);
 
 		assert count > 0;
 		if (count > 1) {
-			g.setPaint(Graphics.contrastColor(getColor()));
-			g.drawText(new Rectangle(center, STAR_SIZE), Integer.toString(count));
+			g.setPaint(GraphicsLayer.contrastColor(getColor()));
+			g.drawText(new Bounds(center, STAR_SIZE), Integer.toString(count));
 		}
 	}
 

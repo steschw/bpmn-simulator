@@ -28,8 +28,9 @@ import com.google.code.bpmn_simulator.bpmn.Messages;
 import com.google.code.bpmn_simulator.bpmn.model.core.common.gateways.AbstractGateway;
 import com.google.code.bpmn_simulator.bpmn.model.core.common.gateways.ExclusiveGateway;
 import com.google.code.bpmn_simulator.bpmn.model.core.common.gateways.InclusiveGateway;
-import com.google.code.bpmn_simulator.framework.ElementRef;
-import com.google.code.bpmn_simulator.framework.Graphics;
+import com.google.code.bpmn_simulator.framework.element.ElementRef;
+import com.google.code.bpmn_simulator.framework.element.GraphicsLayer;
+import com.google.code.bpmn_simulator.framework.element.geometry.Waypoint;
 
 
 @SuppressWarnings("serial")
@@ -137,7 +138,7 @@ public final class SequenceFlow
 	}
 
 	@Override
-	protected void paintConnectingStart(final Graphics g, final Point from, final Point start) {
+	protected void paintConnectingStart(final GraphicsLayer g, final Waypoint from, final Waypoint start) {
 		if (isDefault()) {
 			g.drawDefaultSymbol(start, from);
 		} else if (!isSourceElementInclusiveOrExclusiveGatewayAndHasMoreThanOnceOutgoing()
@@ -148,7 +149,7 @@ public final class SequenceFlow
 	}
 
 	@Override
-	protected void paintConnectingEnd(final Graphics g, final Point from, final Point end) {
+	protected void paintConnectingEnd(final GraphicsLayer g, final Waypoint from, final Waypoint end) {
 		g.fillArrow(from, end);
 	}
 

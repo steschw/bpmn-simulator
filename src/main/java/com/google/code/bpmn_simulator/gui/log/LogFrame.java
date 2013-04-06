@@ -29,8 +29,8 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import com.google.code.bpmn_simulator.framework.exception.StructureException;
-import com.google.code.bpmn_simulator.framework.exception.StructureExceptionListener;
+import com.google.code.bpmn_simulator.framework.exception.SimulationException;
+import com.google.code.bpmn_simulator.framework.exception.SimulationExceptionListener;
 import com.google.code.bpmn_simulator.gui.Messages;
 
 
@@ -38,7 +38,7 @@ import com.google.code.bpmn_simulator.gui.Messages;
 @SuppressWarnings("serial")
 public class LogFrame
 		extends JFrame
-		implements StructureExceptionListener {
+		implements SimulationExceptionListener {
 
 	private static final int DEFAULT_WIDTH = 400;
 	private static final int DEFAULT_HEIGHT = 400;
@@ -101,7 +101,7 @@ public class LogFrame
 	}
 
 	@Override
-	public void onStructureException(final StructureException exception) {
+	public void onSimulationException(final SimulationException exception) {
 		addError(exception.getMessage());
 	}
 

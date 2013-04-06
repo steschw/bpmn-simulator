@@ -30,9 +30,9 @@ import com.google.code.bpmn_simulator.bpmn.model.core.common.Visualization;
 import com.google.code.bpmn_simulator.bpmn.trigger.Instantiable;
 import com.google.code.bpmn_simulator.bpmn.trigger.InstantiableNotifiySource;
 import com.google.code.bpmn_simulator.bpmn.trigger.Trigger;
-import com.google.code.bpmn_simulator.framework.ElementRef;
-import com.google.code.bpmn_simulator.framework.Graphics;
-import com.google.code.bpmn_simulator.framework.Rectangle;
+import com.google.code.bpmn_simulator.framework.element.ElementRef;
+import com.google.code.bpmn_simulator.framework.element.GraphicsLayer;
+import com.google.code.bpmn_simulator.framework.element.geometry.Bounds;
 import com.google.code.bpmn_simulator.framework.token.Token;
 
 
@@ -69,11 +69,11 @@ public final class ReceiveTask
 	}
 
 	@Override
-	public void paintTypeIcon(final Graphics g, final Icon icon, final Point position) {
+	public void paintTypeIcon(final GraphicsLayer g, final Icon icon, final Point position) {
 		super.paintTypeIcon(g, icon, position);
 
 		if (isInstantiable()) {
-			final Rectangle rect = new Rectangle(position,
+			final Bounds rect = new Bounds(position,
 					new Dimension(icon.getIconWidth(), icon.getIconWidth()));
 			rect.grow(INSTANTIATE_MARGIN, INSTANTIATE_MARGIN);
 			g.drawOval(rect);

@@ -20,7 +20,7 @@
  */
 package com.google.code.bpmn_simulator.bpmn.model.core.common.events;
 
-import com.google.code.bpmn_simulator.bpmn.model.Model;
+import com.google.code.bpmn_simulator.bpmn.model.BPMNModel;
 import com.google.code.bpmn_simulator.bpmn.model.core.common.InvisibleElement;
 
 public final class Signal
@@ -28,7 +28,7 @@ public final class Signal
 
 	private final String name;
 
-	public Signal(final Model model, final String id, final String name) {
+	public Signal(final BPMNModel model, final String id, final String name) {
 		super(model, id);
 		this.name = name;
 	}

@@ -28,8 +28,8 @@ import javax.swing.Icon;
 import com.google.code.bpmn_simulator.bpmn.Messages;
 import com.google.code.bpmn_simulator.bpmn.model.core.common.AbstractFlowElement;
 import com.google.code.bpmn_simulator.bpmn.model.core.common.Visualization;
-import com.google.code.bpmn_simulator.framework.Graphics;
-import com.google.code.bpmn_simulator.framework.Rectangle;
+import com.google.code.bpmn_simulator.framework.element.GraphicsLayer;
+import com.google.code.bpmn_simulator.framework.element.geometry.Bounds;
 
 
 @SuppressWarnings("serial")
@@ -63,15 +63,15 @@ public class DataObject
 	}
 
 	@Override
-	protected void paintBackground(final Graphics g) {
+	protected void paintBackground(final GraphicsLayer g) {
 		super.paintBackground(g);
 
-		g.fill(Graphics.createDataObjectShape(getElementInnerBounds()));
+		g.fill(GraphicsLayer.createDataObjectShape(getElementInnerBounds()));
 	}
 
 	@Override
-	protected void paintElement(final Graphics g) {
-		final Rectangle bounds = getElementInnerBounds();
+	protected void paintElement(final GraphicsLayer g) {
+		final Bounds bounds = getElementInnerBounds();
 		g.drawDataObject(bounds);
 
 		if (isCollection()) {

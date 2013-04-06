@@ -26,7 +26,7 @@ import java.util.Collection;
 import com.google.code.bpmn_simulator.bpmn.Messages;
 import com.google.code.bpmn_simulator.bpmn.model.collaboration.AbstractTitledFlowElement;
 import com.google.code.bpmn_simulator.bpmn.model.core.common.AbstractFlowElement;
-import com.google.code.bpmn_simulator.framework.ElementRef;
+import com.google.code.bpmn_simulator.framework.element.ElementRef;
 
 
 @SuppressWarnings("serial")

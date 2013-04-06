@@ -22,7 +22,7 @@ package com.google.code.bpmn_simulator.bpmn.model.process;
 
 import com.google.code.bpmn_simulator.bpmn.Messages;
 import com.google.code.bpmn_simulator.bpmn.model.core.common.AbstractFlowElement;
-import com.google.code.bpmn_simulator.framework.Graphics;
+import com.google.code.bpmn_simulator.framework.element.GraphicsLayer;
 
 @SuppressWarnings("serial")
 public class LaneSet
@@ -40,7 +40,7 @@ public class LaneSet
 	}
 
 	@Override
-	protected void paintElement(final Graphics g) {
+	protected void paintElement(final GraphicsLayer g) {
 	}
 
 }

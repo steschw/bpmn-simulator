@@ -30,7 +30,7 @@ import java.awt.geom.AffineTransform;
 import javax.swing.JLabel;
 import javax.swing.text.View;
 
-import com.google.code.bpmn_simulator.framework.ClickThroughMouseListener;
+import com.google.code.bpmn_simulator.framework.element.ClickThroughMouseListener;
 
 
 @SuppressWarnings("serial")

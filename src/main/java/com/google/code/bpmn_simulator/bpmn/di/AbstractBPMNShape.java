@@ -18,10 +18,34 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.bpmn_simulator.framework.exception;
+package com.google.code.bpmn_simulator.bpmn.di;
 
-public interface StructureExceptionListener {
+import com.google.code.bpmn_simulator.framework.element.AbstractVisualNodeElement;
+import com.google.code.bpmn_simulator.framework.element.LogicalElement;
 
-	void onStructureException(StructureException exception);
+@SuppressWarnings("serial")
+public abstract class AbstractBPMNShape
+		extends AbstractVisualNodeElement
+		implements BPMNShape {
+
+	private final boolean horizontal;
+	private final boolean expanded;
+
+	public AbstractBPMNShape(final LogicalElement element,
+			final boolean horizontal, final boolean expanded) {
+		super(element);
+		this.horizontal = horizontal;
+		this.expanded = expanded;
+	}
+
+	@Override
+	public boolean isHorizontal() {
+		return horizontal;
+	}
+
+	@Override
+	public boolean isExpanded() {
+		return expanded;
+	}
 
 }

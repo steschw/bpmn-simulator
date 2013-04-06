@@ -18,27 +18,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.bpmn_simulator.bpmn.model;
+package com.google.code.bpmn_simulator.bpmn.di;
 
-import java.util.Collection;
+public interface BPMNShape {
 
-import com.google.code.bpmn_simulator.bpmn.model.core.common.AbstractFlowElement;
-import com.google.code.bpmn_simulator.bpmn.model.core.infrastructure.Definitions;
-import com.google.code.bpmn_simulator.bpmn.trigger.TriggerCatchingElement;
-import com.google.code.bpmn_simulator.framework.instance.Instance;
-import com.google.code.bpmn_simulator.framework.instance.InstanceManager;
-
-
-
-public interface Model
-		extends Definitions {
-
-	String getEncoding();
-
-	Collection<TriggerCatchingElement> getCatchEvents();
-
-	void sendMessages(AbstractFlowElement sourceElement, Instance sourceInstance);
-
-	InstanceManager getInstanceManager();
+	boolean isHorizontal();
+	boolean isExpanded();
 
 }

@@ -27,8 +27,8 @@ import com.google.code.bpmn_simulator.bpmn.model.core.common.AbstractTokenFlowEl
 import com.google.code.bpmn_simulator.bpmn.model.core.common.Label;
 import com.google.code.bpmn_simulator.bpmn.model.core.common.SequenceFlow;
 import com.google.code.bpmn_simulator.bpmn.model.core.common.Visualization;
-import com.google.code.bpmn_simulator.framework.Graphics;
-import com.google.code.bpmn_simulator.framework.Rectangle;
+import com.google.code.bpmn_simulator.framework.element.GraphicsLayer;
+import com.google.code.bpmn_simulator.framework.element.geometry.Bounds;
 import com.google.code.bpmn_simulator.framework.instance.Instance;
 import com.google.code.bpmn_simulator.framework.token.Token;
 
@@ -55,19 +55,19 @@ public abstract class AbstractGateway
 	}
 
 	@Override
-	protected void paintBackground(final Graphics g) {
+	protected void paintBackground(final GraphicsLayer g) {
 		super.paintBackground(g);
 
 		g.fillDiamond(getElementInnerBounds());
 	}
 
 	@Override
-	protected void paintElement(final Graphics g) {
+	protected void paintElement(final GraphicsLayer g) {
 		g.drawDiamond(getElementInnerBounds());
 	}
 
-	protected Rectangle getSymbolBounds() {
-		final Rectangle bounds = getElementInnerBounds();
+	protected Bounds getSymbolBounds() {
+		final Bounds bounds = getElementInnerBounds();
 		bounds.grow(-SYMBOL_MARGIN, -SYMBOL_MARGIN);
 		return bounds;
 	}
@@ -94,7 +94,7 @@ public abstract class AbstractGateway
 
 	@Override
 	public void updateElementLabelPosition() {
-		final Rectangle innerBounds = getInnerBounds();
+		final Bounds innerBounds = getInnerBounds();
 		final Point position = innerBounds.getRightBottom();
 		position.translate(
 				-(int)(innerBounds.getWidth() / 4),

@@ -20,7 +20,7 @@
  */
 package com.google.code.bpmn_simulator.bpmn.model.core.common;
 
-import com.google.code.bpmn_simulator.bpmn.model.Model;
+import com.google.code.bpmn_simulator.bpmn.model.BPMNModel;
 
 public final class Error
 		extends InvisibleElement {
@@ -28,7 +28,7 @@ public final class Error
 	private final String code;
 	private final String name;
 
-	public Error(final Model model, final String id, final String code, final String name) {
+	public Error(final BPMNModel model, final String id, final String code, final String name) {
 		super(model, id);
 		this.code = code;
 		this.name = name;

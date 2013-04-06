@@ -30,28 +30,30 @@ import java.util.LinkedList;
 
 import javax.swing.SwingUtilities;
 
-import com.google.code.bpmn_simulator.framework.ClickThroughMouseListener;
-import com.google.code.bpmn_simulator.framework.Graphics;
-import com.google.code.bpmn_simulator.framework.Rectangle;
+import com.google.code.bpmn_simulator.framework.element.ClickThroughMouseListener;
+import com.google.code.bpmn_simulator.framework.element.GraphicsLayer;
+import com.google.code.bpmn_simulator.framework.element.geometry.Bounds;
+import com.google.code.bpmn_simulator.framework.element.geometry.GeometryUtil;
+import com.google.code.bpmn_simulator.framework.element.geometry.Waypoint;
 
 
 @SuppressWarnings("serial")
 public abstract class AbstractConnectingElement
 		extends AbstractFlowElement {
 
-	private final Deque<Point> waypoints = new LinkedList<Point>();
+	private final Deque<Waypoint> waypoints = new LinkedList<Waypoint>();
 
 	public AbstractConnectingElement(final String id, final String name) {
 		super(id, name);
 		addMouseListener(new ClickThroughMouseListener());
 	}
 
-	public void addWaypoint(final Point point) {
+	public void addWaypoint(final Waypoint point) {
 		waypoints.add(point);
 		updateBounds();
 	}
 
-	protected Collection<Point> getWaypoints() {
+	protected Collection<Waypoint> getWaypoints() {
 		return waypoints;
 	}
 
@@ -80,7 +82,7 @@ public abstract class AbstractConnectingElement
 		}
 		final int width = maxX - minX;
 		final int height = maxY - minY;
-		setInnerBounds(new Rectangle(minX, minY, width, height));
+		setInnerBounds(new Bounds(minX, minY, width, height));
 	}
 
 	@Override
@@ -88,22 +90,22 @@ public abstract class AbstractConnectingElement
 		return 2;
 	}
 
-	protected Point waypointToRelative(final Point point) {
-		return SwingUtilities.convertPoint(getParent(), point, this);
+	protected Waypoint waypointToRelative(final Waypoint point) {
+		return new Waypoint(SwingUtilities.convertPoint(getParent(), point, this));
 	}
 
 	@Override
-	protected void paintElement(final Graphics g) {
-		Point lastPoint = null;
-		final Iterator<Point> i = getWaypoints().iterator();
-		Point currentPoint = null;
+	protected void paintElement(final GraphicsLayer g) {
+		Waypoint lastPoint = null;
+		final Iterator<Waypoint> i = getWaypoints().iterator();
+		Waypoint currentPoint = null;
 		if (i.hasNext()) {
 			lastPoint = i.next();
 			boolean first = true;
 			while (i.hasNext()) {
 				currentPoint = i.next();
-				final Point fromPoint = waypointToRelative(lastPoint);
-				final Point toPoint = waypointToRelative(currentPoint);
+				final Waypoint fromPoint = waypointToRelative(lastPoint);
+				final Waypoint toPoint = waypointToRelative(currentPoint);
 				g.drawLine(fromPoint, toPoint);
 				if (first) {
 					g.setStroke(getStartEndStroke());
@@ -125,9 +127,9 @@ public abstract class AbstractConnectingElement
 		return new BasicStroke(getBorderWidth());
 	}
 
-	protected abstract void paintConnectingStart(final Graphics g, final Point from, final Point start);
+	protected abstract void paintConnectingStart(final GraphicsLayer g, final Waypoint from, final Waypoint start);
 
-	protected abstract void paintConnectingEnd(final Graphics g, final Point from, final Point end);
+	protected abstract void paintConnectingEnd(final GraphicsLayer g, final Waypoint from, final Waypoint end);
 
 	protected int getLength() {
 		int steps = 0;
@@ -141,17 +143,17 @@ public abstract class AbstractConnectingElement
 		return steps;
 	}
 
-	protected Point getPosition(final int length) {
+	protected Waypoint getPosition(final int length) {
 		int position = 0;
-		Point last = null;
-		for (final Point current : getWaypoints()) {
+		Waypoint last = null;
+		for (final Waypoint current : getWaypoints()) {
 			if (last != null) {
 				final int distance = (int)last.distance(current);
 				if ((position + distance) >= length) {
-					return Graphics.polarToCartesian(
+					return GeometryUtil.polarToCartesian(
 							last,
 							position - length,
-							Graphics.getAngle(current, last));
+							GeometryUtil.getAngle(current, last));
 				}
 				position += distance;
 			}

@@ -24,7 +24,7 @@ import java.util.Collection;
 
 import javax.swing.Icon;
 
-import com.google.code.bpmn_simulator.bpmn.model.Model;
+import com.google.code.bpmn_simulator.bpmn.model.BPMNModel;
 import com.google.code.bpmn_simulator.bpmn.model.core.common.AbstractFlowElement;
 import com.google.code.bpmn_simulator.bpmn.model.core.common.Visualization;
 import com.google.code.bpmn_simulator.bpmn.model.process.activities.AbstractContainerActivity;
@@ -62,7 +62,7 @@ public abstract class EventDefinition
 	}
 
 	protected void throwTriggerToEqualEvents(final Token token) {
-		final Model model = getContainerActivityByToken(token).getModel();
+		final BPMNModel model = getContainerActivityByToken(token).getModel();
 		final Collection<TriggerCatchingElement> catchEvents =  model.getCatchEvents();
 		for (final TriggerCatchingElement catchEvent : catchEvents) {
 			if (catchEvent instanceof Event) {

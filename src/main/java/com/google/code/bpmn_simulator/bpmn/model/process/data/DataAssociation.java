@@ -20,14 +20,14 @@
  */
 package com.google.code.bpmn_simulator.bpmn.model.process.data;
 
-import java.awt.Point;
 import java.awt.Stroke;
 
 import com.google.code.bpmn_simulator.bpmn.Messages;
 import com.google.code.bpmn_simulator.bpmn.model.core.common.AbstractTokenConnectingElement;
 import com.google.code.bpmn_simulator.bpmn.model.core.common.AbstractTokenFlowElement;
-import com.google.code.bpmn_simulator.framework.ElementRef;
-import com.google.code.bpmn_simulator.framework.Graphics;
+import com.google.code.bpmn_simulator.framework.element.ElementRef;
+import com.google.code.bpmn_simulator.framework.element.GraphicsLayer;
+import com.google.code.bpmn_simulator.framework.element.geometry.Waypoint;
 
 
 @SuppressWarnings("serial")
@@ -58,13 +58,13 @@ public class DataAssociation
 	}
 
 	@Override
-	protected void paintConnectingEnd(final Graphics g, final Point from,
-			final Point end) {
+	protected void paintConnectingEnd(final GraphicsLayer g, final Waypoint from,
+			final Waypoint end) {
 		g.drawArrow(from, end);
 	}
 
 	@Override
-	protected void paintConnectingStart(Graphics g, Point from, Point start) {
+	protected void paintConnectingStart(GraphicsLayer g, Waypoint from, Waypoint start) {
 	}
 
 }

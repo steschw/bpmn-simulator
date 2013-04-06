@@ -25,9 +25,9 @@ import java.awt.Point;
 import com.google.code.bpmn_simulator.bpmn.Messages;
 import com.google.code.bpmn_simulator.bpmn.model.core.common.AbstractFlowElement;
 import com.google.code.bpmn_simulator.bpmn.model.core.common.Label;
-import com.google.code.bpmn_simulator.framework.ClickThroughMouseListener;
-import com.google.code.bpmn_simulator.framework.Graphics;
-import com.google.code.bpmn_simulator.framework.Rectangle;
+import com.google.code.bpmn_simulator.framework.element.ClickThroughMouseListener;
+import com.google.code.bpmn_simulator.framework.element.GraphicsLayer;
+import com.google.code.bpmn_simulator.framework.element.geometry.Bounds;
 
 
 @SuppressWarnings("serial")
@@ -76,7 +76,7 @@ public class TextAnnotation
 
 	@Override
 	public void updateElementLabelPosition() {
-		final Rectangle innerBounds = getInnerBounds();
+		final Bounds innerBounds = getInnerBounds();
 		innerBounds.shrinkLeft(4);
 		getElementLabel().setBounds(innerBounds);
 	}
@@ -87,8 +87,8 @@ public class TextAnnotation
 	}
 
 	@Override
-	protected void paintElement(final Graphics g) {
-		final Rectangle bounds = getElementInnerBounds();
+	protected void paintElement(final GraphicsLayer g) {
+		final Bounds bounds = getElementInnerBounds();
 		final int x = (int)bounds.getMinX();
 		final int y = (int)bounds.getMinY();
 		g.drawLine(new Point(x, y), new Point(x + BRACKET_WIDTH, y));

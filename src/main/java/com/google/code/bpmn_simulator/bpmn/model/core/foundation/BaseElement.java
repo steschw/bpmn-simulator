@@ -20,7 +20,7 @@
  */
 package com.google.code.bpmn_simulator.bpmn.model.core.foundation;
 
-import com.google.code.bpmn_simulator.bpmn.model.Model;
+import com.google.code.bpmn_simulator.bpmn.model.BPMNModel;
 
 public interface BaseElement {
 
@@ -32,7 +32,7 @@ public interface BaseElement {
 
 	Documentation getDocumentation();
 
-	Model getModel();
+	BPMNModel getModel();
 
 
 	String getFullName();

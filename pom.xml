@@ -111,6 +111,16 @@
 				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-release-plugin</artifactId>
+					<version>2.4.1</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-antrun-plugin</artifactId>
+					<version>1.7</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-site-plugin</artifactId>
 					<version>3.2</version>
 				</plugin>
@@ -271,13 +281,13 @@
 						<artifactId>findbugs-maven-plugin</artifactId>
 						<version>2.5.2</version>
 						<configuration>
-						    <plugins>
+							<plugins>
 								<plugin>
 									<groupId>com.mebigfatguy.fb-contrib</groupId>
 									<artifactId>fb-contrib</artifactId>
 									<version>4.8.2</version>
 								</plugin>
-						    </plugins>
+							</plugins>
 						</configuration>
 					</plugin>
 					<plugin>

@@ -22,15 +22,15 @@ package com.google.code.bpmn_simulator.bpmn.model.collaboration;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
-import java.awt.Point;
 import java.awt.Stroke;
 
 import com.google.code.bpmn_simulator.bpmn.Messages;
 import com.google.code.bpmn_simulator.bpmn.model.core.common.AbstractTokenConnectingElement;
 import com.google.code.bpmn_simulator.bpmn.model.core.common.AbstractTokenFlowElement;
-import com.google.code.bpmn_simulator.framework.ElementRef;
-import com.google.code.bpmn_simulator.framework.Graphics;
-import com.google.code.bpmn_simulator.framework.Rectangle;
+import com.google.code.bpmn_simulator.framework.element.ElementRef;
+import com.google.code.bpmn_simulator.framework.element.GraphicsLayer;
+import com.google.code.bpmn_simulator.framework.element.geometry.Bounds;
+import com.google.code.bpmn_simulator.framework.element.geometry.Waypoint;
 
 
 @SuppressWarnings("serial")
@@ -57,10 +57,10 @@ public final class MessageFlow
 	}
 
 	@Override
-	protected void paintConnectingStart(final Graphics g, final Point from, final Point start) {
+	protected void paintConnectingStart(final GraphicsLayer g, final Waypoint from, final Waypoint start) {
 		g.setStroke(new BasicStroke(1));
 		g.setPaint(getElementBackground());
-		final Rectangle point = new Rectangle(start);
+		final Bounds point = new Bounds(start);
 		point.grow(3, 3);
 		g.fillOval(point);
 		g.setPaint(getForeground());
@@ -68,7 +68,7 @@ public final class MessageFlow
 	}
 
 	@Override
-	protected void paintConnectingEnd(final Graphics g, final Point from, final Point end) {
+	protected void paintConnectingEnd(final GraphicsLayer g, final Waypoint from, final Waypoint end) {
 		g.setStroke(new BasicStroke(1));
 		g.setPaint(getElementBackground());
 		g.fillArrow(from, end);

@@ -34,7 +34,7 @@ import com.google.code.bpmn_simulator.bpmn.trigger.Instantiable;
 import com.google.code.bpmn_simulator.bpmn.trigger.InstantiableNotifiySource;
 import com.google.code.bpmn_simulator.bpmn.trigger.Trigger;
 import com.google.code.bpmn_simulator.bpmn.trigger.TriggerCatchingElement;
-import com.google.code.bpmn_simulator.framework.Graphics;
+import com.google.code.bpmn_simulator.framework.element.GraphicsLayer;
 import com.google.code.bpmn_simulator.framework.instance.Instance;
 
 
@@ -170,7 +170,7 @@ public class Collaboration
 	}
 
 	@Override
-	protected void paintElement(final Graphics g) {
+	protected void paintElement(final GraphicsLayer g) {
 	}
 
 }

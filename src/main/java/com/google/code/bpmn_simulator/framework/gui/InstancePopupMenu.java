@@ -18,7 +18,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.bpmn_simulator.framework.instance;
+package com.google.code.bpmn_simulator.framework.gui;
 
 import java.awt.Component;
 import java.awt.event.ActionEvent;
@@ -30,6 +30,7 @@ import javax.swing.JPopupMenu;
 
 import com.google.code.bpmn_simulator.bpmn.trigger.Trigger;
 import com.google.code.bpmn_simulator.bpmn.trigger.TriggerCatchingElement;
+import com.google.code.bpmn_simulator.framework.instance.Instance;
 
 
 @SuppressWarnings("serial")

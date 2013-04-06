@@ -34,8 +34,8 @@ import com.google.code.bpmn_simulator.bpmn.model.process.activities.AbstractActi
 import com.google.code.bpmn_simulator.bpmn.trigger.StoringTriggerCatchingElement;
 import com.google.code.bpmn_simulator.bpmn.trigger.Trigger;
 import com.google.code.bpmn_simulator.bpmn.trigger.TriggerCollection;
-import com.google.code.bpmn_simulator.framework.Graphics;
-import com.google.code.bpmn_simulator.framework.Rectangle;
+import com.google.code.bpmn_simulator.framework.element.GraphicsLayer;
+import com.google.code.bpmn_simulator.framework.element.geometry.Bounds;
 import com.google.code.bpmn_simulator.framework.instance.Instance;
 import com.google.code.bpmn_simulator.framework.instance.InstanceListener;
 import com.google.code.bpmn_simulator.framework.token.Token;
@@ -132,7 +132,7 @@ public class Task
 	}
 
 	@Override
-	protected void paintBackground(final Graphics g) {
+	protected void paintBackground(final GraphicsLayer g) {
 		g.fillRoundRect(getElementInnerBounds(), ARC_LENGTH, ARC_LENGTH);
 	}
 
@@ -140,13 +140,13 @@ public class Task
 		return null;
 	}
 
-	public void paintTypeIcon(final Graphics g, final Icon icon, final Point position) {
+	public void paintTypeIcon(final GraphicsLayer g, final Icon icon, final Point position) {
 		g.drawIcon(icon, position);
 	}
 
 	@Override
-	protected void paintElement(final Graphics g) {
-		final Rectangle innerBounds = getElementInnerBounds();
+	protected void paintElement(final GraphicsLayer g) {
+		final Bounds innerBounds = getElementInnerBounds();
 
 		g.drawRoundRect(innerBounds, ARC_LENGTH, ARC_LENGTH);
 
@@ -164,7 +164,7 @@ public class Task
 	protected void updateElementLabelPosition() {
 		final Label label = getElementLabel();
 		if (label != null) {
-			final Rectangle bounds = getElementInnerBounds();
+			final Bounds bounds = getElementInnerBounds();
 			label.setMaxWidth(bounds.width);
 		}
 		super.updateElementLabelPosition();

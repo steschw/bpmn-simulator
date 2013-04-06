@@ -51,6 +51,10 @@
 
 	<subpackage name="framework">
 
+		<subpackage name="element">
+			<allow pkg="com.google.code.bpmn_simulator.framework.element.geometry" />
+		</subpackage>
+
 		<subpackage name="execution">
 			<allow pkg="com.google.code.bpmn_simulator.framework.instance" />
 		</subpackage>

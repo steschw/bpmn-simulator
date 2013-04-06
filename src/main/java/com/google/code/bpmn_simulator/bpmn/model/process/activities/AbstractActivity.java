@@ -23,7 +23,7 @@ package com.google.code.bpmn_simulator.bpmn.model.process.activities;
 import java.util.Collection;
 
 import com.google.code.bpmn_simulator.bpmn.model.core.common.AbstractTokenFlowElementWithDefault;
-import com.google.code.bpmn_simulator.framework.Graphics;
+import com.google.code.bpmn_simulator.framework.element.GraphicsLayer;
 import com.google.code.bpmn_simulator.framework.instance.Instance;
 import com.google.code.bpmn_simulator.framework.token.Token;
 import com.google.code.bpmn_simulator.framework.token.TokenCollection;
@@ -152,20 +152,20 @@ public abstract class AbstractActivity
 				|| !getOutgoingTokens().byInstance(instance).isEmpty();
 	}
 
-	protected void paintIncomingTokens(final Graphics g) {
+	protected void paintIncomingTokens(final GraphicsLayer g) {
 		getIncomingTokens().paintVertical(g, getElementInnerBounds().getLeftCenter());
 	}
 
-	protected void paintInnerTokens(final Graphics g) {
+	protected void paintInnerTokens(final GraphicsLayer g) {
 		getInnerTokens().paintHorizontal(g, getElementInnerBounds().getCenterTop());
 	}
 
-	protected void paintOutgoingTokens(final Graphics g) {
+	protected void paintOutgoingTokens(final GraphicsLayer g) {
 		getOutgoingTokens().paintVertical(g, getElementInnerBounds().getRightCenter());
 	}
 
 	@Override
-	protected void paintTokens(final Graphics g) {
+	protected void paintTokens(final GraphicsLayer g) {
 		paintIncomingTokens(g);
 		paintInnerTokens(g);
 		paintOutgoingTokens(g);

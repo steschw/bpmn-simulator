@@ -25,8 +25,8 @@ import java.awt.Point;
 import javax.swing.Icon;
 
 import com.google.code.bpmn_simulator.bpmn.model.core.common.AbstractTokenFlowElement;
-import com.google.code.bpmn_simulator.framework.Graphics;
-import com.google.code.bpmn_simulator.framework.Rectangle;
+import com.google.code.bpmn_simulator.framework.element.GraphicsLayer;
+import com.google.code.bpmn_simulator.framework.element.geometry.Bounds;
 import com.google.code.bpmn_simulator.framework.instance.InstanceManager;
 
 
@@ -81,15 +81,15 @@ public abstract class AbstractEvent
 	}
 
 	@Override
-	protected void paintBackground(final Graphics g) {
+	protected void paintBackground(final GraphicsLayer g) {
 		super.paintBackground(g);
 
 		g.fillOval(getElementInnerBounds());
 	}
 
 	@Override
-	protected void paintElement(final Graphics g) {
-		final Rectangle innerBounds = getElementInnerBounds();
+	protected void paintElement(final GraphicsLayer g) {
+		final Bounds innerBounds = getElementInnerBounds();
 		g.drawOval(innerBounds);
 
 		final int innerMargin = getInnerBorderMargin();
@@ -105,7 +105,7 @@ public abstract class AbstractEvent
 
 	protected abstract Icon getTypeIcon();
 
-	protected void paintIcon(final Graphics g) {
+	protected void paintIcon(final GraphicsLayer g) {
 		final Icon icon = getTypeIcon();
 		if (icon != null) {
 			final Point position = getElementInnerBounds().getCenter();

@@ -24,8 +24,8 @@ import java.awt.Stroke;
 
 import com.google.code.bpmn_simulator.bpmn.Messages;
 import com.google.code.bpmn_simulator.bpmn.model.core.common.AbstractFlowElement;
-import com.google.code.bpmn_simulator.framework.ClickThroughMouseListener;
-import com.google.code.bpmn_simulator.framework.Graphics;
+import com.google.code.bpmn_simulator.framework.element.ClickThroughMouseListener;
+import com.google.code.bpmn_simulator.framework.element.GraphicsLayer;
 
 
 @SuppressWarnings("serial")
@@ -57,7 +57,7 @@ public class Group
 	}
 
 	@Override
-	protected void paintElement(final Graphics g) {
+	protected void paintElement(final GraphicsLayer g) {
 
 		g.drawRoundRect(getElementInnerBounds(), ARC_LENGTH, ARC_LENGTH);
 	}

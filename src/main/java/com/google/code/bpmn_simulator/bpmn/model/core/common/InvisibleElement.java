@@ -20,27 +20,27 @@
  */
 package com.google.code.bpmn_simulator.bpmn.model.core.common;
 
-import com.google.code.bpmn_simulator.bpmn.model.Model;
+import com.google.code.bpmn_simulator.bpmn.model.BPMNModel;
 import com.google.code.bpmn_simulator.bpmn.model.core.foundation.BaseElement;
 import com.google.code.bpmn_simulator.bpmn.model.core.foundation.Documentation;
 
 public class InvisibleElement
 		implements BaseElement {
 
-	private final Model model;
+	private final BPMNModel model;
 
 	private final String id;
 
 	private Documentation documentation;
 
-	public InvisibleElement(final Model model, final String id) {
+	public InvisibleElement(final BPMNModel model, final String id) {
 		super();
 		this.model = model;
 		this.id = id;
 	}
 
 	@Override
-	public Model getModel() {
+	public BPMNModel getModel() {
 		return model;
 	}
 

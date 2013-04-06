@@ -29,8 +29,8 @@ import javax.swing.Icon;
 import com.google.code.bpmn_simulator.bpmn.Messages;
 import com.google.code.bpmn_simulator.bpmn.model.core.common.AbstractFlowElement;
 import com.google.code.bpmn_simulator.bpmn.model.core.common.Visualization;
-import com.google.code.bpmn_simulator.framework.Graphics;
-import com.google.code.bpmn_simulator.framework.Rectangle;
+import com.google.code.bpmn_simulator.framework.element.GraphicsLayer;
+import com.google.code.bpmn_simulator.framework.element.geometry.Bounds;
 
 
 @SuppressWarnings("serial")
@@ -76,14 +76,14 @@ public class CollapsedSubprocess
 	}
 
 	@Override
-	protected void paintBackground(final Graphics g) {
+	protected void paintBackground(final GraphicsLayer g) {
 		g.fillRoundRect(getElementInnerBounds(), ARC_LENGTH, ARC_LENGTH);
 	}
 
 	@Override
-	protected void paintElement(final Graphics g) {
+	protected void paintElement(final GraphicsLayer g) {
 
-		final Rectangle innerBounds = getElementInnerBounds();
+		final Bounds innerBounds = getElementInnerBounds();
 		g.drawRoundRect(innerBounds, ARC_LENGTH, ARC_LENGTH);
 
 		final int innerMargin = getInnerBorderMargin();
@@ -95,7 +95,7 @@ public class CollapsedSubprocess
 		drawSymbol(g);
 	}
 
-	protected void drawSymbol(final Graphics g) {
+	protected void drawSymbol(final GraphicsLayer g) {
 		final Icon icon = getVisualization().getIcon(Visualization.ICON_COLLAPSED);
 		if (icon != null) {
 			final Point position = getElementInnerBounds().getCenterBottom();
@@ -107,7 +107,7 @@ public class CollapsedSubprocess
 	}
 
 	@Override
-	protected void paintTokens(final Graphics g) {
+	protected void paintTokens(final GraphicsLayer g) {
 		super.paintTokens(g);
 
 		expandedSubprocess.getIncomingTokens().paintVertical(g, getElementInnerBounds().getLeftCenter());

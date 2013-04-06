@@ -20,12 +20,12 @@
  */
 package com.google.code.bpmn_simulator.bpmn.model.core.common.artifacts;
 
-import java.awt.Point;
 import java.awt.Stroke;
 
 import com.google.code.bpmn_simulator.bpmn.Messages;
 import com.google.code.bpmn_simulator.bpmn.model.core.common.AbstractConnectingElement;
-import com.google.code.bpmn_simulator.framework.Graphics;
+import com.google.code.bpmn_simulator.framework.element.GraphicsLayer;
+import com.google.code.bpmn_simulator.framework.element.geometry.Waypoint;
 
 
 @SuppressWarnings("serial")
@@ -83,16 +83,16 @@ public class Association
 	}
 
 	@Override
-	protected void paintConnectingStart(final Graphics g, final Point from,
-			final Point start) {
+	protected void paintConnectingStart(final GraphicsLayer g, final Waypoint from,
+			final Waypoint start) {
 		if (Direction.BOTH.equals(getDirection())) {
 			g.drawArrow(from, start);
 		}
 	}
 
 	@Override
-	protected void paintConnectingEnd(final Graphics g, final Point from,
-			final Point end) {
+	protected void paintConnectingEnd(final GraphicsLayer g, final Waypoint from,
+			final Waypoint end) {
 		final Direction direction = getDirection();
 		if (Direction.ONE.equals(direction) || Direction.BOTH.equals(direction)) {
 			g.drawArrow(from, end);

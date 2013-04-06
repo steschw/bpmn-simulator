@@ -28,8 +28,8 @@ import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import com.google.code.bpmn_simulator.framework.Graphics;
-import com.google.code.bpmn_simulator.framework.Rectangle;
+import com.google.code.bpmn_simulator.framework.element.GraphicsLayer;
+import com.google.code.bpmn_simulator.framework.element.geometry.Bounds;
 import com.google.code.bpmn_simulator.framework.instance.Instance;
 
 
@@ -82,11 +82,11 @@ public class TriggerCollection {
 		}
 	}
 
-	public void paint(final Graphics graphics, final Point point) {
+	public void paint(final GraphicsLayer graphics, final Point point) {
 		final Point instancePosition = point;
 		for (final Instance instance : triggers.keySet()) {
 			final Color color = instance.getColor();
-			final Rectangle rect = new Rectangle(instancePosition, 8);
+			final Bounds rect = new Bounds(instancePosition, 8);
 			graphics.setPaint(color);
 			graphics.fillOval(rect);
 			graphics.setPaint(Trigger.HIGHLIGHT_COLOR);
@@ -94,7 +94,7 @@ public class TriggerCollection {
 			final Set<Trigger> instanceTriggers = triggers.get(instance);
 			assert instanceTriggers != null;
 			if (instanceTriggers != null) {
-				graphics.setPaint(Graphics.contrastColor(color));
+				graphics.setPaint(GraphicsLayer.contrastColor(color));
 				graphics.drawText(rect, Integer.toString(instanceTriggers.size()));
 			}
 			instancePosition.translate(-5, 0);

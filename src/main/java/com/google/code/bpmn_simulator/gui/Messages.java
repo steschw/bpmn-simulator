@@ -25,7 +25,7 @@ import java.util.ResourceBundle;
 
 public final class Messages {
 
-	private static final String BUNDLE_NAME = "gui.messages"; //$NON-NLS-1$
+	private static final String BUNDLE_NAME = "com.google.code.bpmn_simulator.gui.messages"; //$NON-NLS-1$
 
 	private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle
 			.getBundle(BUNDLE_NAME);

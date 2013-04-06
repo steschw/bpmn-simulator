@@ -20,15 +20,15 @@
  */
 package com.google.code.bpmn_simulator.bpmn.model.process.activities;
 
-import com.google.code.bpmn_simulator.bpmn.model.Model;
-import com.google.code.bpmn_simulator.framework.Graphics;
-import com.google.code.bpmn_simulator.framework.Rectangle;
+import com.google.code.bpmn_simulator.bpmn.model.BPMNModel;
+import com.google.code.bpmn_simulator.framework.element.GraphicsLayer;
+import com.google.code.bpmn_simulator.framework.element.geometry.Bounds;
 
 @SuppressWarnings("serial")
 public final class Transaction
 		extends Subprocess {
 
-	public Transaction(final Model model, final String id, final String name,
+	public Transaction(final BPMNModel model, final String id, final String name,
 			final boolean triggeredByEvent) {
 		super(model, id, name, triggeredByEvent);
 	}
@@ -39,10 +39,10 @@ public final class Transaction
 	}
 
 	@Override
-	protected void paintElement(final Graphics g) {
+	protected void paintElement(final GraphicsLayer g) {
 		super.paintElement(g);
 
-		final Rectangle rect = getElementInnerBounds();
+		final Bounds rect = getElementInnerBounds();
 		final int innerMargin = getInnerBorderMargin();
 		rect.grow(-innerMargin, -innerMargin);
 		g.drawRoundRect(rect, ARC_LENGTH, ARC_LENGTH);

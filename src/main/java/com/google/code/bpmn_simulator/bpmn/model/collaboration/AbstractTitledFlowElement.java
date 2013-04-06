@@ -22,8 +22,8 @@ package com.google.code.bpmn_simulator.bpmn.model.collaboration;
 
 import com.google.code.bpmn_simulator.bpmn.model.core.common.AbstractFlowElement;
 import com.google.code.bpmn_simulator.bpmn.model.core.common.Label;
-import com.google.code.bpmn_simulator.framework.Graphics;
-import com.google.code.bpmn_simulator.framework.Rectangle;
+import com.google.code.bpmn_simulator.framework.element.GraphicsLayer;
+import com.google.code.bpmn_simulator.framework.element.geometry.Bounds;
 
 @SuppressWarnings("serial")
 public abstract class AbstractTitledFlowElement
@@ -49,22 +49,22 @@ public abstract class AbstractTitledFlowElement
 	}
 
 	@Override
-	protected void paintBackground(final Graphics g) {
+	protected void paintBackground(final GraphicsLayer g) {
 		g.fillRect(getElementInnerBounds());
 	}
 
 	@Override
-	protected void paintElement(final Graphics g) {
+	protected void paintElement(final GraphicsLayer g) {
 		g.drawRect(getElementInnerBounds());
 	}
 
-	protected Rectangle getInnerTitleBounds() {
-		final Rectangle innerBounds = getElementInnerBounds();
+	protected Bounds getInnerTitleBounds() {
+		final Bounds innerBounds = getElementInnerBounds();
 		if (isHorizontal()) {
-			return new Rectangle((int)innerBounds.getMinX(), (int)innerBounds.getMinY(),
+			return new Bounds((int)innerBounds.getMinX(), (int)innerBounds.getMinY(),
 					HEADER_SIZE, (int)innerBounds.getHeight());
 		} else {
-			return new Rectangle((int)innerBounds.getMinX(), (int)innerBounds.getMinY(),
+			return new Bounds((int)innerBounds.getMinX(), (int)innerBounds.getMinY(),
 					(int)innerBounds.getWidth(), HEADER_SIZE);
 		}
 	}
@@ -81,7 +81,7 @@ public abstract class AbstractTitledFlowElement
 
 	@Override
 	public void updateElementLabelPosition() {
-		final Rectangle titleBounds = getInnerBounds();
+		final Bounds titleBounds = getInnerBounds();
 		if (isHorizontal()) {
 			titleBounds.shrink(LABEL_MARGIN, 0, 0, LABEL_MARGIN);
 			getElementLabel().setLeftBottomPosition(titleBounds.getLeftBottom());

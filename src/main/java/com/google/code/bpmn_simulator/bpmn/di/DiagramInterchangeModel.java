@@ -18,13 +18,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.bpmn_simulator.bpmn.model;
+package com.google.code.bpmn_simulator.bpmn.di;
 
 import java.awt.Dimension;
-import java.awt.Point;
 import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.LinkedList;
 
 import javax.swing.JComponent;
 
@@ -32,7 +31,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import com.google.code.bpmn_simulator.bpmn.Messages;
-import com.google.code.bpmn_simulator.bpmn.di.BPMNDiagram;
+import com.google.code.bpmn_simulator.bpmn.model.AbstractBPMNModel;
 import com.google.code.bpmn_simulator.bpmn.model.collaboration.AbstractTitledFlowElement;
 import com.google.code.bpmn_simulator.bpmn.model.collaboration.Collaboration;
 import com.google.code.bpmn_simulator.bpmn.model.core.common.AbstractConnectingElement;
@@ -40,7 +39,8 @@ import com.google.code.bpmn_simulator.bpmn.model.core.common.AbstractFlowElement
 import com.google.code.bpmn_simulator.bpmn.model.core.common.Label;
 import com.google.code.bpmn_simulator.bpmn.model.process.activities.Process;
 import com.google.code.bpmn_simulator.bpmn.model.process.activities.Subprocess;
-import com.google.code.bpmn_simulator.framework.Rectangle;
+import com.google.code.bpmn_simulator.framework.element.geometry.Bounds;
+import com.google.code.bpmn_simulator.framework.element.geometry.Waypoint;
 import com.google.code.bpmn_simulator.framework.exception.StructureException;
 
 
@@ -51,7 +51,7 @@ public class DiagramInterchangeModel
 	protected static final String DC = "http://www.omg.org/spec/DD/20100524/DC"; //$NON-NLS-1$
 	protected static final String DI = "http://www.omg.org/spec/DD/20100524/DI"; //$NON-NLS-1$
 
-	private final Collection<BPMNDiagram> diagrams = new LinkedList<BPMNDiagram>();
+	private final Collection<BPMNDiagram> diagrams = new ArrayList<BPMNDiagram>();
 
 	public DiagramInterchangeModel() {
 		super();
@@ -73,14 +73,14 @@ public class DiagramInterchangeModel
 		return new Dimension(width, height);
 	}
 
-	protected Point getPointAttribute(final Node node) {
-		return new Point(
+	protected Waypoint getPointAttribute(final Node node) {
+		return new Waypoint(
 				(int)getAttributeFloat(node, "x"), //$NON-NLS-1$
 				(int)getAttributeFloat(node, "y")); //$NON-NLS-1$
 	}
 
-	protected Rectangle getRectangleAttribute(final Node node) {
-		return new Rectangle(getPointAttribute(node), getDimensionAttribute(node));
+	protected Bounds getRectangleAttribute(final Node node) {
+		return new Bounds(getPointAttribute(node), getDimensionAttribute(node));
 	}
 
 	protected boolean getIsExpandedAttribute(final Node node) {

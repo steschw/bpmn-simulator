@@ -23,7 +23,7 @@ package com.google.code.bpmn_simulator.bpmn.model.process.activities;
 import java.awt.Stroke;
 
 import com.google.code.bpmn_simulator.bpmn.Messages;
-import com.google.code.bpmn_simulator.bpmn.model.Model;
+import com.google.code.bpmn_simulator.bpmn.model.BPMNModel;
 
 
 @SuppressWarnings("serial")
@@ -36,7 +36,7 @@ public class Subprocess
 
 	private CollapsedSubprocess collapsedProcess;
 
-	public Subprocess(final Model model, final String id, final String name,
+	public Subprocess(final BPMNModel model, final String id, final String name,
 			final boolean triggeredByEvent) {
 		super(model, id, name);
 		this.triggeredByEvent = triggeredByEvent;

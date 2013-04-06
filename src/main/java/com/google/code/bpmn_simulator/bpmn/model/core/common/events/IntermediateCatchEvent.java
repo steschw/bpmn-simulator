@@ -32,10 +32,10 @@ import com.google.code.bpmn_simulator.bpmn.trigger.InstantiableNotifiySource;
 import com.google.code.bpmn_simulator.bpmn.trigger.StoringTriggerCatchingElement;
 import com.google.code.bpmn_simulator.bpmn.trigger.Trigger;
 import com.google.code.bpmn_simulator.bpmn.trigger.TriggerCollection;
-import com.google.code.bpmn_simulator.framework.Graphics;
+import com.google.code.bpmn_simulator.framework.element.GraphicsLayer;
+import com.google.code.bpmn_simulator.framework.gui.InstancePopupMenu;
 import com.google.code.bpmn_simulator.framework.instance.Instance;
 import com.google.code.bpmn_simulator.framework.instance.InstanceListener;
-import com.google.code.bpmn_simulator.framework.instance.InstancePopupMenu;
 import com.google.code.bpmn_simulator.framework.token.Token;
 
 
@@ -188,7 +188,7 @@ public final class IntermediateCatchEvent
 	}
 
 	@Override
-	protected void paintElement(final Graphics g) {
+	protected void paintElement(final GraphicsLayer g) {
 		super.paintElement(g);
 
 		triggers.paint(g, getElementInnerBounds().getRightTop());

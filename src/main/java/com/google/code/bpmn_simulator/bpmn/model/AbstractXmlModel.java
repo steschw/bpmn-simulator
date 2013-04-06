@@ -41,14 +41,14 @@ import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 
 import com.google.code.bpmn_simulator.framework.exception.StructureException;
-import com.google.code.bpmn_simulator.framework.exception.StructureExceptionListener;
+import com.google.code.bpmn_simulator.framework.exception.SimulationExceptionListener;
 
 
 public abstract class AbstractXmlModel
-		implements Model, ErrorHandler {
+		implements BPMNModel, ErrorHandler {
 
-	private final Collection<StructureExceptionListener> structureExceptionListeners
-			= new ArrayList<StructureExceptionListener>();
+	private final Collection<SimulationExceptionListener> structureExceptionListeners
+			= new ArrayList<SimulationExceptionListener>();
 
 	private String encoding;
 
@@ -57,7 +57,7 @@ public abstract class AbstractXmlModel
 		return encoding;
 	}
 
-	public void addStructureExceptionListener(final StructureExceptionListener listener) {
+	public void addStructureExceptionListener(final SimulationExceptionListener listener) {
 		synchronized (structureExceptionListeners) {
 			structureExceptionListeners.add(listener);
 		}
@@ -65,8 +65,8 @@ public abstract class AbstractXmlModel
 
 	protected void notifyStructureExceptionListeners(final StructureException exception) {
 		synchronized (structureExceptionListeners) {
-			for (final StructureExceptionListener listener : structureExceptionListeners) {
-				listener.onStructureException(exception);
+			for (final SimulationExceptionListener listener : structureExceptionListeners) {
+				listener.onSimulationException(exception);
 			}
 		}
 	}

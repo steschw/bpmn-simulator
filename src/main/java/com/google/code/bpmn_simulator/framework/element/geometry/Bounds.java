@@ -18,32 +18,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.bpmn_simulator.framework;
+package com.google.code.bpmn_simulator.framework.element.geometry;
 
 import java.awt.Dimension;
 import java.awt.Point;
 
 @SuppressWarnings("serial")
-public class Rectangle
+public class Bounds
 		extends java.awt.Rectangle {
 
-	public Rectangle(final int x, final int y, final int width, final int height) {
+	public Bounds(final int x, final int y, final int width, final int height) {
 		super(x, y, width, height);
 	}
 
-	public Rectangle(final java.awt.Rectangle r) {
+	public Bounds(final java.awt.Rectangle r) {
 		super(r);
 	}
 
-	public Rectangle(final Point p, final Dimension d) {
+	public Bounds(final Point p, final Dimension d) {
 		super(p, d);
 	}
 
-	public Rectangle(final Point p) {
+	public Bounds(final Point p) {
 		super(p);
 	}
 
-	public Rectangle(final Point center, final int size) {
+	public Bounds(final Point center, final int size) {
 		super(center.x - size, center.y - size, size + size, size + size);
 	}
 

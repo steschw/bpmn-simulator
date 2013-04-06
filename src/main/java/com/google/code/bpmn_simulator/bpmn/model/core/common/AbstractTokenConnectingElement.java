@@ -22,8 +22,8 @@ package com.google.code.bpmn_simulator.bpmn.model.core.common;
 
 import java.awt.Color;
 
-import com.google.code.bpmn_simulator.framework.ElementRef;
-import com.google.code.bpmn_simulator.framework.Graphics;
+import com.google.code.bpmn_simulator.framework.element.ElementRef;
+import com.google.code.bpmn_simulator.framework.element.GraphicsLayer;
 import com.google.code.bpmn_simulator.framework.instance.Instance;
 import com.google.code.bpmn_simulator.framework.token.Token;
 import com.google.code.bpmn_simulator.framework.token.TokenCollection;
@@ -156,10 +156,10 @@ public abstract class AbstractTokenConnectingElement
 	}
 
 	@Override
-	protected void paintTokens(final Graphics g) {
+	protected void paintTokens(final GraphicsLayer g) {
 		final TokenCollection tokens = getTokens();
 		synchronized (tokens) {
-			for (Token token : tokens) {
+			for (final Token token : tokens) {
 				token.getInstance().paint(g, waypointToRelative(getPosition(token.getSteps())));
 			}
 		}

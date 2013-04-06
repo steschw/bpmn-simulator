@@ -25,7 +25,7 @@ import java.awt.Color;
 import com.google.code.bpmn_simulator.bpmn.Messages;
 import com.google.code.bpmn_simulator.bpmn.model.core.common.AbstractFlowElement;
 import com.google.code.bpmn_simulator.bpmn.model.core.common.Visualization;
-import com.google.code.bpmn_simulator.framework.Graphics;
+import com.google.code.bpmn_simulator.framework.element.GraphicsLayer;
 
 
 @SuppressWarnings("serial")
@@ -54,14 +54,14 @@ public class DataStore
 	}
 
 	@Override
-	protected void paintBackground(final Graphics g) {
+	protected void paintBackground(final GraphicsLayer g) {
 		super.paintBackground(g);
 
-		g.fill(Graphics.createDataStoreShape(getElementInnerBounds()));
+		g.fill(GraphicsLayer.createDataStoreShape(getElementInnerBounds()));
 	}
 
 	@Override
-	protected void paintElement(final Graphics g) {
+	protected void paintElement(final GraphicsLayer g) {
 		g.drawDataStore(getElementInnerBounds());
 	}
 

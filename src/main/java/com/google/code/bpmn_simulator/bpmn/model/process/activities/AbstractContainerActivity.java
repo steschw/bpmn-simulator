@@ -29,7 +29,7 @@ import java.util.Collection;
 
 import javax.swing.Scrollable;
 
-import com.google.code.bpmn_simulator.bpmn.model.Model;
+import com.google.code.bpmn_simulator.bpmn.model.BPMNModel;
 import com.google.code.bpmn_simulator.bpmn.model.core.common.AbstractFlowElement;
 import com.google.code.bpmn_simulator.bpmn.model.core.common.AbstractTokenFlowElement;
 import com.google.code.bpmn_simulator.bpmn.model.core.common.Label;
@@ -38,7 +38,7 @@ import com.google.code.bpmn_simulator.bpmn.model.core.common.events.AbstractEven
 import com.google.code.bpmn_simulator.bpmn.model.core.common.events.StartEvent;
 import com.google.code.bpmn_simulator.bpmn.model.core.common.gateways.AbstractGateway;
 import com.google.code.bpmn_simulator.bpmn.model.core.foundation.BaseElement;
-import com.google.code.bpmn_simulator.framework.Graphics;
+import com.google.code.bpmn_simulator.framework.element.GraphicsLayer;
 import com.google.code.bpmn_simulator.framework.instance.Instance;
 import com.google.code.bpmn_simulator.framework.token.Token;
 import com.google.code.bpmn_simulator.framework.token.TokenCollection;
@@ -56,9 +56,9 @@ public abstract class AbstractContainerActivity
 
 	private final Collection<BaseElement> elements = new ArrayList<BaseElement>();
 
-	private final Model model;
+	private final BPMNModel model;
 
-	public AbstractContainerActivity(final Model model, final String id,
+	public AbstractContainerActivity(final BPMNModel model, final String id,
 			final String name) {
 		super(id, name);
 		this.model = model;
@@ -66,7 +66,7 @@ public abstract class AbstractContainerActivity
 	}
 
 	@Override
-	public Model getModel() {
+	public BPMNModel getModel() {
 		return (model == null) ? super.getModel() : model;
 	}
 
@@ -227,14 +227,14 @@ public abstract class AbstractContainerActivity
 	}
 
 	@Override
-	protected void paintBackground(final Graphics g) {
+	protected void paintBackground(final GraphicsLayer g) {
 		super.paintBackground(g);
 
 		g.fillRoundRect(getElementInnerBounds(), ARC_LENGTH, ARC_LENGTH);
 	}
 
 	@Override
-	protected void paintElement(final Graphics g) {
+	protected void paintElement(final GraphicsLayer g) {
 		g.drawRoundRect(getElementInnerBounds(), ARC_LENGTH, ARC_LENGTH);
 	}
 

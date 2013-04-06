@@ -27,8 +27,8 @@ import com.google.code.bpmn_simulator.bpmn.trigger.InstantiableNotifiyTarget;
 import com.google.code.bpmn_simulator.bpmn.trigger.StoringTriggerCatchingElement;
 import com.google.code.bpmn_simulator.bpmn.trigger.Trigger;
 import com.google.code.bpmn_simulator.bpmn.trigger.TriggerCatchingElement;
-import com.google.code.bpmn_simulator.framework.Graphics;
-import com.google.code.bpmn_simulator.framework.Rectangle;
+import com.google.code.bpmn_simulator.framework.element.GraphicsLayer;
+import com.google.code.bpmn_simulator.framework.element.geometry.Bounds;
 import com.google.code.bpmn_simulator.framework.instance.Instance;
 import com.google.code.bpmn_simulator.framework.token.Token;
 import com.google.code.bpmn_simulator.framework.token.TokenCollection;
@@ -60,10 +60,10 @@ public final class EventBasedGateway
 	}
 
 	@Override
-	protected void paintElement(final Graphics g) {
+	protected void paintElement(final GraphicsLayer g) {
 		super.paintElement(g);
 
-		final Rectangle bounds = getElementInnerBounds();
+		final Bounds bounds = getElementInnerBounds();
 		bounds.shrinkHalf();
 		g.drawOval(bounds);
 		if (!isInstantiable()) {

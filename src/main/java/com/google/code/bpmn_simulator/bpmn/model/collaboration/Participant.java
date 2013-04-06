@@ -24,9 +24,9 @@ import java.awt.Point;
 
 import com.google.code.bpmn_simulator.bpmn.Messages;
 import com.google.code.bpmn_simulator.bpmn.model.process.activities.Subprocess;
-import com.google.code.bpmn_simulator.framework.ElementRef;
-import com.google.code.bpmn_simulator.framework.Graphics;
-import com.google.code.bpmn_simulator.framework.Rectangle;
+import com.google.code.bpmn_simulator.framework.element.ElementRef;
+import com.google.code.bpmn_simulator.framework.element.GraphicsLayer;
+import com.google.code.bpmn_simulator.framework.element.geometry.Bounds;
 
 
 @SuppressWarnings("serial")
@@ -51,10 +51,10 @@ public class Participant
 	}
 
 	@Override
-	protected void paintElement(final Graphics g) {
+	protected void paintElement(final GraphicsLayer g) {
 		super.paintElement(g);
 
-		final Rectangle bounds = getInnerTitleBounds();
+		final Bounds bounds = getInnerTitleBounds();
 		if (isHorizontal()) {
 			g.drawLine(new Point((int)bounds.getMaxX(), (int)bounds.getMinY()),
 					new Point((int)bounds.getMaxX(), (int)bounds.getMaxY()));

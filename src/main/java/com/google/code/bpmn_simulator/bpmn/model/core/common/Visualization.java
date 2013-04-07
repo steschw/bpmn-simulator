@@ -186,7 +186,7 @@ public class Visualization {
 	}
 
 	public Stroke createStrokeSolid(final int width) {
-		return new BasicStroke(1.f);
+		return new BasicStroke(width);
 	}
 
 	public Stroke createStrokeDotted(final int width) {

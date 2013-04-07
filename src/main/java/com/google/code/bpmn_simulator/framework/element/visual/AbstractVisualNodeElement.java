@@ -18,8 +18,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.bpmn_simulator.framework.element;
+package com.google.code.bpmn_simulator.framework.element.visual;
 
-public interface Zoomable {
+import com.google.code.bpmn_simulator.framework.element.logical.LogicalElement;
+import com.google.code.bpmn_simulator.framework.element.visual.geometry.Bounds;
+
+@SuppressWarnings("serial")
+public abstract class AbstractVisualNodeElement<E extends LogicalElement>
+		extends AbstractVisualElement<E>
+		implements VisualNodeElement<E> {
+
+	public AbstractVisualNodeElement(final E element) {
+		super(element);
+	}
+
+	@Override
+	public void setBounds(final Bounds bounds) {
+		setInnerBounds(bounds);
+	}
 
 }

@@ -18,24 +18,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.bpmn_simulator.framework.element;
+package com.google.code.bpmn_simulator.framework.element.visual;
 
 import java.util.Collection;
 
 import javax.swing.SwingUtilities;
 
-import com.google.code.bpmn_simulator.framework.element.geometry.Bounds;
-import com.google.code.bpmn_simulator.framework.element.geometry.Waypoint;
-import com.google.code.bpmn_simulator.framework.element.geometry.Waypoints;
+import com.google.code.bpmn_simulator.framework.element.logical.LogicalElement;
+import com.google.code.bpmn_simulator.framework.element.visual.geometry.Bounds;
+import com.google.code.bpmn_simulator.framework.element.visual.geometry.Waypoint;
+import com.google.code.bpmn_simulator.framework.element.visual.geometry.Waypoints;
 
 @SuppressWarnings("serial")
-public abstract class AbstractVisualEdgeElement
-		extends AbstractVisualElement
-		implements VisualEdgeElement {
+public abstract class AbstractVisualEdgeElement<E extends LogicalElement>
+		extends AbstractVisualElement<E>
+		implements VisualEdgeElement<E> {
 
 	private final Waypoints waypoints = new Waypoints();
 
-	public AbstractVisualEdgeElement(final LogicalElement element) {
+	public AbstractVisualEdgeElement(final E element) {
 		super(element);
 	}
 

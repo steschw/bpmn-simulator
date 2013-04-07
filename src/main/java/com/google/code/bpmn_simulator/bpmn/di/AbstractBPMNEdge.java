@@ -20,15 +20,15 @@
  */
 package com.google.code.bpmn_simulator.bpmn.di;
 
-import com.google.code.bpmn_simulator.framework.element.AbstractVisualEdgeElement;
-import com.google.code.bpmn_simulator.framework.element.LogicalElement;
+import com.google.code.bpmn_simulator.framework.element.logical.LogicalElement;
+import com.google.code.bpmn_simulator.framework.element.visual.AbstractVisualEdgeElement;
 
 @SuppressWarnings("serial")
-public abstract class AbstractBPMNEdge
-		extends AbstractVisualEdgeElement
+public abstract class AbstractBPMNEdge<E extends LogicalElement>
+		extends AbstractVisualEdgeElement<E>
 		implements BPMNEdge {
 
-	public AbstractBPMNEdge(final LogicalElement element) {
+	public AbstractBPMNEdge(final E element) {
 		super(element);
 	}
 

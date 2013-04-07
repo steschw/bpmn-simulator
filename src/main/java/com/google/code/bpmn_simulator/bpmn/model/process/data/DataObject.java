@@ -28,8 +28,8 @@ import javax.swing.Icon;
 import com.google.code.bpmn_simulator.bpmn.Messages;
 import com.google.code.bpmn_simulator.bpmn.model.core.common.AbstractFlowElement;
 import com.google.code.bpmn_simulator.bpmn.model.core.common.Visualization;
-import com.google.code.bpmn_simulator.framework.element.GraphicsLayer;
-import com.google.code.bpmn_simulator.framework.element.geometry.Bounds;
+import com.google.code.bpmn_simulator.framework.element.visual.GraphicsLayer;
+import com.google.code.bpmn_simulator.framework.element.visual.geometry.Bounds;
 
 
 @SuppressWarnings("serial")

@@ -39,8 +39,8 @@ import com.google.code.bpmn_simulator.bpmn.model.core.common.AbstractFlowElement
 import com.google.code.bpmn_simulator.bpmn.model.core.common.Label;
 import com.google.code.bpmn_simulator.bpmn.model.process.activities.Process;
 import com.google.code.bpmn_simulator.bpmn.model.process.activities.Subprocess;
-import com.google.code.bpmn_simulator.framework.element.geometry.Bounds;
-import com.google.code.bpmn_simulator.framework.element.geometry.Waypoint;
+import com.google.code.bpmn_simulator.framework.element.visual.geometry.Bounds;
+import com.google.code.bpmn_simulator.framework.element.visual.geometry.Waypoint;
 import com.google.code.bpmn_simulator.framework.exception.StructureException;
 
 

@@ -29,8 +29,8 @@ import com.google.code.bpmn_simulator.bpmn.model.core.common.gateways.AbstractGa
 import com.google.code.bpmn_simulator.bpmn.model.core.common.gateways.ExclusiveGateway;
 import com.google.code.bpmn_simulator.bpmn.model.core.common.gateways.InclusiveGateway;
 import com.google.code.bpmn_simulator.framework.element.ElementRef;
-import com.google.code.bpmn_simulator.framework.element.GraphicsLayer;
-import com.google.code.bpmn_simulator.framework.element.geometry.Waypoint;
+import com.google.code.bpmn_simulator.framework.element.visual.GraphicsLayer;
+import com.google.code.bpmn_simulator.framework.element.visual.geometry.Waypoint;
 
 
 @SuppressWarnings("serial")

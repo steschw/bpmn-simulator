@@ -154,7 +154,10 @@ public class LogList
 			@Override
 			public void run() {
 				final DefaultTableModel model = (DefaultTableModel)getModel();
-				model.addRow(new Object[] { icon, message });
+				model.addRow(new Object[] {
+						icon,
+						message,
+						});
 			}
 
 		}

@@ -18,10 +18,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.bpmn_simulator.framework.element;
+package com.google.code.bpmn_simulator.framework.element.visual;
 
-public interface LogicalElement {
+import com.google.code.bpmn_simulator.framework.element.logical.LogicalElement;
+import com.google.code.bpmn_simulator.framework.element.visual.geometry.Waypoint;
 
-	void addVisualElement(VisualElement element);
+public interface VisualEdgeElement<E extends LogicalElement>
+		extends VisualElement<E> {
+
+	void addWaypoint(Waypoint point);
 
 }

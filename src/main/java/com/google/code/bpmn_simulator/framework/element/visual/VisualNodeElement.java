@@ -18,29 +18,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.bpmn_simulator.framework.element;
+package com.google.code.bpmn_simulator.framework.element.visual;
 
-import java.awt.Component;
-import java.util.ArrayList;
-import java.util.List;
+import com.google.code.bpmn_simulator.framework.element.logical.LogicalElement;
+import com.google.code.bpmn_simulator.framework.element.visual.geometry.Bounds;
 
-import javax.swing.JComponent;
+public interface VisualNodeElement<E extends LogicalElement>
+		extends VisualElement<E> {
 
-@SuppressWarnings("serial")
-public abstract class AbstractDiagram
-		extends JComponent
-		implements Diagram, Zoomable {
-
-	private List<VisualElement> elements = new ArrayList<VisualElement>();
-
-	@Override
-	public void addElement(final VisualElement element) {
-		elements.add(element);
-		if (element instanceof Component) {
-			add((Component)element);
-		} else {
-			assert false;
-		}
-	}
+	void setBounds(Bounds bounds);
 
 }

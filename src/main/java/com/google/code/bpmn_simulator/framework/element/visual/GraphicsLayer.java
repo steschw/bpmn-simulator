@@ -18,7 +18,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.bpmn_simulator.framework.element;
+package com.google.code.bpmn_simulator.framework.element.visual;
 
 import java.awt.Color;
 import java.awt.FontMetrics;
@@ -36,10 +36,9 @@ import java.awt.geom.Rectangle2D;
 
 import javax.swing.Icon;
 
-import com.google.code.bpmn_simulator.framework.element.geometry.Bounds;
-import com.google.code.bpmn_simulator.framework.element.geometry.GeometryUtil;
-import com.google.code.bpmn_simulator.framework.element.geometry.Waypoint;
-
+import com.google.code.bpmn_simulator.framework.element.visual.geometry.Bounds;
+import com.google.code.bpmn_simulator.framework.element.visual.geometry.GeometryUtil;
+import com.google.code.bpmn_simulator.framework.element.visual.geometry.Waypoint;
 
 
 public class GraphicsLayer {

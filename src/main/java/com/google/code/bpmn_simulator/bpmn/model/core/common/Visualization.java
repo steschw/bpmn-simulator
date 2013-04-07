@@ -62,6 +62,23 @@ public class Visualization {
 
 	private static final Color DEFAULT_BACKGROUNDCOLOR = Color.WHITE;
 
+	private static final float[] DASH_DOTTED = new float[] {
+			1.f,
+			6.f,
+			};
+
+	private static final float[] DASH_DASHED = new float[] {
+			3.f,
+			6.f,
+			};
+
+	private static final float[] DASH_DASHEDDOTTED = new float[] {
+			8.f,
+			5.f,
+			1.f,
+			5.f,
+			};
+
 	private final Map<String, Icon> icons = new IdentityHashMap<String, Icon>();
 
 	public enum Element {
@@ -177,7 +194,7 @@ public class Visualization {
 				BasicStroke.CAP_SQUARE,
 				BasicStroke.JOIN_MITER,
 				1.f,
-				new float[] { 1.f, 6.f },
+				DASH_DOTTED,
 				0);
 	}
 
@@ -186,7 +203,7 @@ public class Visualization {
 				BasicStroke.CAP_SQUARE,
 				BasicStroke.JOIN_MITER,
 				1.f,
-				new float[] { 3.f, 6.f },
+				DASH_DASHED,
 				0);
 	}
 
@@ -195,7 +212,7 @@ public class Visualization {
 				BasicStroke.CAP_SQUARE,
 				BasicStroke.JOIN_MITER,
 				1.f,
-				new float[] { 8.f, 5.f, 1.f, 5.f },
+				DASH_DASHEDDOTTED,
 				0);
 	}
 

@@ -35,8 +35,8 @@ import javax.swing.JComponent;
 import com.google.code.bpmn_simulator.bpmn.model.BPMNModel;
 import com.google.code.bpmn_simulator.bpmn.model.core.foundation.Documentation;
 import com.google.code.bpmn_simulator.bpmn.model.process.activities.AbstractContainerActivity;
-import com.google.code.bpmn_simulator.framework.element.GraphicsLayer;
-import com.google.code.bpmn_simulator.framework.element.geometry.Bounds;
+import com.google.code.bpmn_simulator.framework.element.visual.GraphicsLayer;
+import com.google.code.bpmn_simulator.framework.element.visual.geometry.Bounds;
 
 
 @SuppressWarnings("serial")

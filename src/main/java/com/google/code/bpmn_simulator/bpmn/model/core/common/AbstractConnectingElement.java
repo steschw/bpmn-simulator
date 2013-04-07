@@ -30,11 +30,11 @@ import java.util.LinkedList;
 
 import javax.swing.SwingUtilities;
 
-import com.google.code.bpmn_simulator.framework.element.ClickThroughMouseListener;
-import com.google.code.bpmn_simulator.framework.element.GraphicsLayer;
-import com.google.code.bpmn_simulator.framework.element.geometry.Bounds;
-import com.google.code.bpmn_simulator.framework.element.geometry.GeometryUtil;
-import com.google.code.bpmn_simulator.framework.element.geometry.Waypoint;
+import com.google.code.bpmn_simulator.framework.element.visual.ClickThroughMouseListener;
+import com.google.code.bpmn_simulator.framework.element.visual.GraphicsLayer;
+import com.google.code.bpmn_simulator.framework.element.visual.geometry.Bounds;
+import com.google.code.bpmn_simulator.framework.element.visual.geometry.GeometryUtil;
+import com.google.code.bpmn_simulator.framework.element.visual.geometry.Waypoint;
 
 
 @SuppressWarnings("serial")

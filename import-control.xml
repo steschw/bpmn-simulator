@@ -52,7 +52,17 @@
 	<subpackage name="framework">
 
 		<subpackage name="element">
-			<allow pkg="com.google.code.bpmn_simulator.framework.element.geometry" />
+
+			<subpackage name="visual">
+				<allow
+					pkg="com.google.code.bpmn_simulator.framework.element.visual.geometry" />
+				<allow pkg="com.google.code.bpmn_simulator.framework.element.logical" />
+			</subpackage>
+
+			<subpackage name="logical">
+				<allow pkg="com.google.code.bpmn_simulator.framework.element.visual" />
+			</subpackage>
+
 		</subpackage>
 
 		<subpackage name="execution">

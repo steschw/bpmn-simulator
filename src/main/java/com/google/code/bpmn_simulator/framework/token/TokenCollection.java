@@ -25,7 +25,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.Vector;
 
-import com.google.code.bpmn_simulator.framework.element.GraphicsLayer;
+import com.google.code.bpmn_simulator.framework.element.visual.GraphicsLayer;
 import com.google.code.bpmn_simulator.framework.instance.Instance;
 
 

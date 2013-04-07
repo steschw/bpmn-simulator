@@ -26,7 +26,7 @@ import com.google.code.bpmn_simulator.framework.element.Model;
 public class SimulationException
 		extends Exception {
 
-	protected final Model model;
+	private final Model model;
 
 	public SimulationException(final Model model) {
 		super();

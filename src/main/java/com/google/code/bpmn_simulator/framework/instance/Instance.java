@@ -30,8 +30,8 @@ import java.util.List;
 import java.util.Vector;
 
 import com.google.code.bpmn_simulator.bpmn.model.process.activities.Activity;
-import com.google.code.bpmn_simulator.framework.element.GraphicsLayer;
-import com.google.code.bpmn_simulator.framework.element.geometry.Bounds;
+import com.google.code.bpmn_simulator.framework.element.visual.GraphicsLayer;
+import com.google.code.bpmn_simulator.framework.element.visual.geometry.Bounds;
 import com.google.code.bpmn_simulator.framework.token.Token;
 import com.google.code.bpmn_simulator.framework.token.TokenCollection;
 import com.google.code.bpmn_simulator.framework.token.TokenFlow;

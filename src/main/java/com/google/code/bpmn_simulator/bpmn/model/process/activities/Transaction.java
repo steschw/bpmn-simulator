@@ -21,8 +21,8 @@
 package com.google.code.bpmn_simulator.bpmn.model.process.activities;
 
 import com.google.code.bpmn_simulator.bpmn.model.BPMNModel;
-import com.google.code.bpmn_simulator.framework.element.GraphicsLayer;
-import com.google.code.bpmn_simulator.framework.element.geometry.Bounds;
+import com.google.code.bpmn_simulator.framework.element.visual.GraphicsLayer;
+import com.google.code.bpmn_simulator.framework.element.visual.geometry.Bounds;
 
 @SuppressWarnings("serial")
 public final class Transaction

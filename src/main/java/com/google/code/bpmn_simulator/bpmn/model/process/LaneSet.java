@@ -22,7 +22,7 @@ package com.google.code.bpmn_simulator.bpmn.model.process;
 
 import com.google.code.bpmn_simulator.bpmn.Messages;
 import com.google.code.bpmn_simulator.bpmn.model.core.common.AbstractFlowElement;
-import com.google.code.bpmn_simulator.framework.element.GraphicsLayer;
+import com.google.code.bpmn_simulator.framework.element.visual.GraphicsLayer;
 
 @SuppressWarnings("serial")
 public class LaneSet

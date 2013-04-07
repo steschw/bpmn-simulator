@@ -28,9 +28,9 @@ import com.google.code.bpmn_simulator.bpmn.Messages;
 import com.google.code.bpmn_simulator.bpmn.model.core.common.AbstractTokenConnectingElement;
 import com.google.code.bpmn_simulator.bpmn.model.core.common.AbstractTokenFlowElement;
 import com.google.code.bpmn_simulator.framework.element.ElementRef;
-import com.google.code.bpmn_simulator.framework.element.GraphicsLayer;
-import com.google.code.bpmn_simulator.framework.element.geometry.Bounds;
-import com.google.code.bpmn_simulator.framework.element.geometry.Waypoint;
+import com.google.code.bpmn_simulator.framework.element.visual.GraphicsLayer;
+import com.google.code.bpmn_simulator.framework.element.visual.geometry.Bounds;
+import com.google.code.bpmn_simulator.framework.element.visual.geometry.Waypoint;
 
 
 @SuppressWarnings("serial")

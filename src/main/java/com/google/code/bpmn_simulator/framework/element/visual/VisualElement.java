@@ -18,14 +18,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.bpmn_simulator.framework.element;
+package com.google.code.bpmn_simulator.framework.element.visual;
 
-import com.google.code.bpmn_simulator.framework.element.geometry.Bounds;
+import com.google.code.bpmn_simulator.framework.element.logical.LogicalElement;
+import com.google.code.bpmn_simulator.framework.element.visual.geometry.Bounds;
 
-public interface VisualElement
+public interface VisualElement<E extends LogicalElement>
 		extends Zoomable {
 
-	LogicalElement getLogicalElement();
+	E getLogicalElement();
 
 	Bounds getInnerBounds();
 

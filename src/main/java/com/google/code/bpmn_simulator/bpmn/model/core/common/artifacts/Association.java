@@ -24,8 +24,8 @@ import java.awt.Stroke;
 
 import com.google.code.bpmn_simulator.bpmn.Messages;
 import com.google.code.bpmn_simulator.bpmn.model.core.common.AbstractConnectingElement;
-import com.google.code.bpmn_simulator.framework.element.GraphicsLayer;
-import com.google.code.bpmn_simulator.framework.element.geometry.Waypoint;
+import com.google.code.bpmn_simulator.framework.element.visual.GraphicsLayer;
+import com.google.code.bpmn_simulator.framework.element.visual.geometry.Waypoint;
 
 
 @SuppressWarnings("serial")

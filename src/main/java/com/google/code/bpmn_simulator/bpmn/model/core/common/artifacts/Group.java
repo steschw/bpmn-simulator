@@ -24,8 +24,8 @@ import java.awt.Stroke;
 
 import com.google.code.bpmn_simulator.bpmn.Messages;
 import com.google.code.bpmn_simulator.bpmn.model.core.common.AbstractFlowElement;
-import com.google.code.bpmn_simulator.framework.element.ClickThroughMouseListener;
-import com.google.code.bpmn_simulator.framework.element.GraphicsLayer;
+import com.google.code.bpmn_simulator.framework.element.visual.ClickThroughMouseListener;
+import com.google.code.bpmn_simulator.framework.element.visual.GraphicsLayer;
 
 
 @SuppressWarnings("serial")

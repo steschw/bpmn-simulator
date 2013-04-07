@@ -18,34 +18,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.bpmn_simulator.framework.element;
+package com.google.code.bpmn_simulator.framework.element.visual;
 
-import java.util.HashSet;
-import java.util.Set;
 
-public abstract class AbstractLogicalElement
-		implements LogicalElement {
+public interface Diagram<E extends VisualElement<?>> {
 
-	private final Set<VisualElement> visualElements
-			= new HashSet<VisualElement>();
-
-	public AbstractLogicalElement() {
-		super();
-	}
-
-	@Override
-	public void addVisualElement(final VisualElement element) {
-		synchronized (visualElements) {
-			visualElements.add(element);
-		}
-	}
-
-	protected void repaint() {
-		synchronized (visualElements) {
-			for (final VisualElement element : visualElements) {
-				element.repaint();
-			}
-		}
-	}
+	void addElement(E element);
 
 }

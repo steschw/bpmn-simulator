@@ -20,18 +20,18 @@
  */
 package com.google.code.bpmn_simulator.bpmn.di;
 
-import com.google.code.bpmn_simulator.framework.element.AbstractVisualNodeElement;
-import com.google.code.bpmn_simulator.framework.element.LogicalElement;
+import com.google.code.bpmn_simulator.framework.element.logical.LogicalElement;
+import com.google.code.bpmn_simulator.framework.element.visual.AbstractVisualNodeElement;
 
 @SuppressWarnings("serial")
-public abstract class AbstractBPMNShape
-		extends AbstractVisualNodeElement
+public abstract class AbstractBPMNShape<E extends LogicalElement>
+		extends AbstractVisualNodeElement<E>
 		implements BPMNShape {
 
 	private final boolean horizontal;
 	private final boolean expanded;
 
-	public AbstractBPMNShape(final LogicalElement element,
+	public AbstractBPMNShape(final E element,
 			final boolean horizontal, final boolean expanded) {
 		super(element);
 		this.horizontal = horizontal;

@@ -18,36 +18,37 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.bpmn_simulator.framework.element;
+package com.google.code.bpmn_simulator.framework.element.visual;
 
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 
 import javax.swing.JComponent;
 
-import com.google.code.bpmn_simulator.framework.element.geometry.Bounds;
+import com.google.code.bpmn_simulator.framework.element.logical.LogicalElement;
+import com.google.code.bpmn_simulator.framework.element.visual.geometry.Bounds;
 
 @SuppressWarnings("serial")
-public abstract class AbstractVisualElement
+public abstract class AbstractVisualElement<E extends LogicalElement>
 		extends JComponent
-		implements VisualElement {
+		implements VisualElement<E> {
 
 	protected static final int MARGIN = 10;
 
-	private LogicalElement logicalElement;
+	private E logicalElement;
 
-	public AbstractVisualElement(final LogicalElement element) {
+	public AbstractVisualElement(final E element) {
 		super();
 		setLogicalElement(element);
 	}
 
-	private void setLogicalElement(final LogicalElement element) {
+	private void setLogicalElement(final E element) {
 		logicalElement = element;
 		logicalElement.addVisualElement(this);
 	}
 
 	@Override
-	public LogicalElement getLogicalElement() {
+	public E getLogicalElement() {
 		return logicalElement;
 	}
 

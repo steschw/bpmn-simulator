@@ -38,7 +38,7 @@ import com.google.code.bpmn_simulator.bpmn.model.core.common.events.AbstractEven
 import com.google.code.bpmn_simulator.bpmn.model.core.common.events.StartEvent;
 import com.google.code.bpmn_simulator.bpmn.model.core.common.gateways.AbstractGateway;
 import com.google.code.bpmn_simulator.bpmn.model.core.foundation.BaseElement;
-import com.google.code.bpmn_simulator.framework.element.GraphicsLayer;
+import com.google.code.bpmn_simulator.framework.element.visual.GraphicsLayer;
 import com.google.code.bpmn_simulator.framework.instance.Instance;
 import com.google.code.bpmn_simulator.framework.token.Token;
 import com.google.code.bpmn_simulator.framework.token.TokenCollection;

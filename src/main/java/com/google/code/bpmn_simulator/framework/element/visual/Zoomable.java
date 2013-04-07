@@ -18,20 +18,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.bpmn_simulator.framework.element.geometry;
+package com.google.code.bpmn_simulator.framework.element.visual;
 
-import java.awt.Point;
-
-@SuppressWarnings("serial")
-public class Waypoint
-		extends Point {
-
-	public Waypoint(final int x, final int y) {
-		super(x, y);
-	}
-
-	public Waypoint(final Point point) {
-		super(point.x, point.y);
-	}
+public interface Zoomable {
 
 }

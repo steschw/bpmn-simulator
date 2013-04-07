@@ -18,7 +18,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.bpmn_simulator.framework.element.geometry;
+package com.google.code.bpmn_simulator.framework.element.visual.geometry;
 
 import java.awt.Polygon;
 import java.awt.geom.GeneralPath;

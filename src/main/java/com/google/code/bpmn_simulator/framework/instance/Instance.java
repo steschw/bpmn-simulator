@@ -36,11 +36,11 @@ import com.google.code.bpmn_simulator.framework.token.Token;
 import com.google.code.bpmn_simulator.framework.token.TokenCollection;
 import com.google.code.bpmn_simulator.framework.token.TokenFlow;
 import com.google.code.bpmn_simulator.framework.token.TokenListener;
-
-
+import com.google.code.bpmn_simulator.framework.token.TokenNotifier;
 
 public final class Instance
-	extends AbstractChildinstancesContainer {
+		extends AbstractChildinstancesContainer
+		implements TokenNotifier {
 
 	private static final int STAR_SIZE = 10;
 
@@ -56,7 +56,8 @@ public final class Instance
 
 	private final TokenCollection tokens = new TokenCollection();
 
-	private final Collection<TokenListener> tokenListeners = new LinkedList<TokenListener>();
+	private final Collection<TokenListener> tokenListeners =
+			new LinkedList<TokenListener>();
 
 	private Color color;
 
@@ -69,8 +70,8 @@ public final class Instance
 		this(null, parent, activity, null);
 	}
 
-	protected Instance(final InstanceManager manager,
-			final Instance parent, final Activity activity, final Color color) {
+	protected Instance(final InstanceManager manager, final Instance parent,
+			final Activity activity, final Color color) {
 		super();
 		this.manager = manager;
 		this.parent = parent;
@@ -79,12 +80,14 @@ public final class Instance
 		this.color = color;
 	}
 
+	@Override
 	public void addTokenListener(final TokenListener listener) {
 		synchronized (tokenListeners) {
 			tokenListeners.add(listener);
 		}
 	}
 
+	@Override
 	public void removeTokenListener(final TokenListener listener) {
 		synchronized (tokenListeners) {
 			tokenListeners.remove(listener);
@@ -132,7 +135,8 @@ public final class Instance
 		return activity;
 	}
 
-	public Instance getCorrelationInstance(final Collection<Instance> instances) {
+	public Instance
+			getCorrelationInstance(final Collection<Instance> instances) {
 		for (final Instance correlationInstance : instances) {
 			if (correlations.contains(correlationInstance)) {
 				return correlationInstance;
@@ -154,7 +158,7 @@ public final class Instance
 		correlations.add(instance);
 	}
 
-	///XXX: removeCorrelationTo(...)
+	// /XXX: removeCorrelationTo(...)
 
 	public TokenCollection getTokens() {
 		return tokens;
@@ -237,7 +241,7 @@ public final class Instance
 
 	public void removeToken(final Token token) {
 		synchronized (tokens) {
-//			assert(tokens.contains(token));
+			// assert(tokens.contains(token));
 			notifyTokenRemoved(token);
 			tokens.remove(token);
 		}
@@ -250,7 +254,8 @@ public final class Instance
 				snapshotToken.remove();
 			}
 		}
-		final Collection<Instance> instanceSnapshot = new Vector<Instance>(getChildInstances());
+		final Collection<Instance> instanceSnapshot =
+				new Vector<Instance>(getChildInstances());
 		for (final Instance childInstance : instanceSnapshot) {
 			childInstance.removeAllOtherTokens(token);
 		}
@@ -261,7 +266,8 @@ public final class Instance
 		for (final Token token : tokenSnapshot) {
 			token.remove();
 		}
-		final Collection<Instance> instanceSnapshot = new Vector<Instance>(getChildInstances());
+		final Collection<Instance> instanceSnapshot =
+				new Vector<Instance>(getChildInstances());
 		for (final Instance childInstance : instanceSnapshot) {
 			childInstance.removeAllTokens();
 		}
@@ -276,7 +282,8 @@ public final class Instance
 
 	protected void executeAllInstanceTokens(final int stepCount) {
 		/*
-		 * Möglicherweise wurden einige Token beim Durchlaufen bereits gelöscht (z.B. durch merge)
+		 * Möglicherweise wurden einige Token beim Durchlaufen bereits gelöscht
+		 * (z.B. durch merge)
 		 */
 		final TokenCollection tokenSnapshot = new TokenCollection(tokens);
 		for (final Token token : tokenSnapshot) {
@@ -315,7 +322,8 @@ public final class Instance
 			instances.add(this);
 		} else {
 			for (final Instance childInstance : getChildInstances()) {
-				instances.addAll(childInstance.getInstancesByActivity(activity));
+				instances
+						.addAll(childInstance.getInstancesByActivity(activity));
 			}
 		}
 		return instances;
@@ -338,7 +346,8 @@ public final class Instance
 		}
 	}
 
-	public void paint(final GraphicsLayer g, final Point center, final int count) {
+	public void
+			paint(final GraphicsLayer g, final Point center, final int count) {
 		paint(g, center);
 
 		assert count > 0;
@@ -365,7 +374,7 @@ public final class Instance
 	}
 
 	public boolean isEnded() {
-		for (final Token token: getTokens()) {
+		for (final Token token : getTokens()) {
 			if (!token.hasEndNodeReached()) {
 				return false;
 			}

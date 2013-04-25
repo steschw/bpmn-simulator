@@ -32,8 +32,8 @@ public class ClickThroughMouseListener
 		implements MouseListener {
 
 	private static boolean isComponentBetween(final Container parent,
-			final Component component,
-			final Component higher, final Component lower) {
+			final Component component, final Component higher,
+			final Component lower) {
 		final int componentZIndex = parent.getComponentZOrder(component);
 		final int higherZIndex = parent.getComponentZOrder(higher);
 		final int lowerZIndex = parent.getComponentZOrder(lower);
@@ -42,32 +42,37 @@ public class ClickThroughMouseListener
 				&& ((componentZIndex < lowerZIndex) || (lowerZIndex == -1));
 	}
 
-	private static void dispatchEventToUnderlyingComponent(final MouseEvent event) {
+	private static void dispatchEventToUnderlyingComponent(
+			final MouseEvent event) {
 		final Component sourceComponent = event.getComponent();
 		Component targetComponent = null;
 		final Container parent = sourceComponent.getParent();
-		final Point point = SwingUtilities.convertPoint(sourceComponent, event.getPoint(), parent);
-		//final int sourceComponentZOrder = parent.getComponentZOrder(sourceComponent); 
+		final Point point =
+				SwingUtilities.convertPoint(sourceComponent, event.getPoint(),
+						parent);
+		// final int sourceComponentZOrder =
+		// parent.getComponentZOrder(sourceComponent);
 		for (final Component component : parent.getComponents()) {
 			if (!component.equals(sourceComponent)
 					&& component.getBounds().contains(point)) {
 				/*
-				final int componentZOrder = parent.getComponentZOrder(component); 
-				final int targetComponentZOrder = parent.getComponentZOrder(targetComponent); 
-				if ((targetComponent == null)
-						|| ((componentZOrder > sourceComponentZOrder)
-						&& (componentZOrder < targetComponentZOrder))) {
-					targetComponent = component;
-				}
-				*/
-				if (isComponentBetween(parent, component, sourceComponent, targetComponent)) {
+				 * final int componentZOrder =
+				 * parent.getComponentZOrder(component); final int
+				 * targetComponentZOrder =
+				 * parent.getComponentZOrder(targetComponent); if
+				 * ((targetComponent == null) || ((componentZOrder >
+				 * sourceComponentZOrder) && (componentZOrder <
+				 * targetComponentZOrder))) { targetComponent = component; }
+				 */
+				if (isComponentBetween(parent, component, sourceComponent,
+						targetComponent)) {
 					targetComponent = component;
 				}
 			}
 		}
 		if (targetComponent != null) {
-			targetComponent.dispatchEvent(
-					SwingUtilities.convertMouseEvent(event.getComponent(), event, targetComponent));
+			targetComponent.dispatchEvent(SwingUtilities.convertMouseEvent(
+					event.getComponent(), event, targetComponent));
 		}
 	}
 

@@ -40,12 +40,16 @@ import com.google.code.bpmn_simulator.framework.element.visual.geometry.Bounds;
 import com.google.code.bpmn_simulator.framework.element.visual.geometry.GeometryUtil;
 import com.google.code.bpmn_simulator.framework.element.visual.geometry.Waypoint;
 
-
 public class GraphicsLayer {
 
 	private static final double RAD_30 = GeometryUtil.RAD_FULL / 12.;
 
+	private static final double ARROW_TRIANGLE_LENGTH = 10.;
+
 	private static final double CONNECTING_SYMBOL_LENGTH = 12.;
+
+	private static final double DEFAULT_SYMBOL_ANGLE =
+			GeometryUtil.RAD_FULL / 3.;
 
 	private static final RenderingHints QUALITY = new RenderingHints(null);
 
@@ -68,22 +72,23 @@ public class GraphicsLayer {
 		QUALITY.put(RenderingHints.KEY_ALPHA_INTERPOLATION,
 				RenderingHints.VALUE_ALPHA_INTERPOLATION_QUALITY);
 		/*
-		QUALITY.put(RenderingHints.KEY_STROKE_CONTROL,
-				RenderingHints.VALUE_STROKE_PURE);
-		*/
+		 * QUALITY.put(RenderingHints.KEY_STROKE_CONTROL,
+		 * RenderingHints.VALUE_STROKE_PURE);
+		 */
 	}
 
-	public GraphicsLayer(final Graphics2D graphics) {
+	public GraphicsLayer(final Graphics2D g) {
 		super();
-		this.graphics = graphics;
+		this.graphics = g;
 	}
 
 	public static Color contrastColor(final Color from) {
 		if (from == null) {
 			return Color.BLACK;
 		} else {
-			final float[] hsbvals
-				= Color.RGBtoHSB(from.getRed(), from.getBlue(), from.getGreen(), null);
+			final float[] hsbvals =
+					Color.RGBtoHSB(from.getRed(), from.getBlue(),
+							from.getGreen(), null);
 			if (hsbvals[2] < CONTRAST_BIRGHTNESS_THRESHOLD) {
 				return Color.WHITE;
 			} else {
@@ -130,12 +135,16 @@ public class GraphicsLayer {
 		graphics.fill(shape);
 	}
 
-	public void drawRoundRect(final Bounds rect, final int arcWidth, final int arcHeight) {
-		graphics.drawRoundRect(rect.x, rect.y, rect.width, rect.height, arcWidth, arcHeight);
+	public void drawRoundRect(final Bounds rect, final int arcWidth,
+			final int arcHeight) {
+		graphics.drawRoundRect(rect.x, rect.y, rect.width, rect.height,
+				arcWidth, arcHeight);
 	}
 
-	public void fillRoundRect(final Bounds rect, final int arcWidth, final int arcHeight) {
-		graphics.fillRoundRect(rect.x, rect.y, rect.width, rect.height, arcWidth, arcHeight);
+	public void fillRoundRect(final Bounds rect, final int arcWidth,
+			final int arcHeight) {
+		graphics.fillRoundRect(rect.x, rect.y, rect.width, rect.height,
+				arcWidth, arcHeight);
 	}
 
 	public void fillOval(final Bounds size) {
@@ -180,8 +189,10 @@ public class GraphicsLayer {
 		graphics.drawLine(from.x, from.y, to.x, to.y);
 	}
 
-	public static GeneralPath createArrowPath(final Waypoint from, final Waypoint to) {
-		return GeometryUtil.createArrowPath(from, to, RAD_30, 10.);
+	public static GeneralPath createArrowPath(final Waypoint from,
+			final Waypoint to) {
+		return GeometryUtil.createArrowPath(from, to, RAD_30,
+				ARROW_TRIANGLE_LENGTH);
 	}
 
 	public void fillArrow(final Waypoint from, final Waypoint to) {
@@ -190,8 +201,14 @@ public class GraphicsLayer {
 
 	public void drawArrow(final Waypoint from, final Waypoint to) {
 		final double angle = GeometryUtil.getAngle(to, from);
-		drawLine(to, GeometryUtil.polarToCartesian(to, 10., angle - RAD_30));
-		drawLine(to, GeometryUtil.polarToCartesian(to, 10., angle + RAD_30));
+		drawLine(
+				to,
+				GeometryUtil.polarToCartesian(to, ARROW_TRIANGLE_LENGTH, angle
+						- RAD_30));
+		drawLine(
+				to,
+				GeometryUtil.polarToCartesian(to, ARROW_TRIANGLE_LENGTH, angle
+						+ RAD_30));
 	}
 
 	public void drawStar(final Bounds size, final int corners) {
@@ -206,20 +223,28 @@ public class GraphicsLayer {
 		graphics.drawPolygon(GeometryUtil.createPentagon(size));
 	}
 
-	protected static Polygon createConditionalSymbol(final Waypoint orgin, final double a) {
+	protected static Polygon createConditionalSymbol(final Waypoint orgin,
+			final double a) {
 		final Polygon polygon = new Polygon();
 		polygon.addPoint(orgin.x, orgin.y);
-		Waypoint to = GeometryUtil.polarToCartesian(orgin, CONNECTING_SYMBOL_LENGTH, a - RAD_30);
+		Waypoint to =
+				GeometryUtil.polarToCartesian(orgin, CONNECTING_SYMBOL_LENGTH,
+						a - RAD_30);
 		polygon.addPoint(to.x, to.y);
-		to = GeometryUtil.polarToCartesian(to, CONNECTING_SYMBOL_LENGTH, a + RAD_30);
+		to =
+				GeometryUtil.polarToCartesian(to, CONNECTING_SYMBOL_LENGTH, a
+						+ RAD_30);
 		polygon.addPoint(to.x, to.y);
-		to = GeometryUtil.polarToCartesian(orgin, CONNECTING_SYMBOL_LENGTH, a + RAD_30);
+		to =
+				GeometryUtil.polarToCartesian(orgin, CONNECTING_SYMBOL_LENGTH,
+						a + RAD_30);
 		polygon.addPoint(to.x, to.y);
 		return polygon;
 	}
 
 	public void drawConditionalSymbol(final Waypoint from, final Waypoint to) {
-		final Polygon symbol = createConditionalSymbol(from, GeometryUtil.getAngle(from, to));
+		final Polygon symbol =
+				createConditionalSymbol(from, GeometryUtil.getAngle(from, to));
 
 		graphics.setPaint(Color.WHITE);
 		graphics.fill(symbol);
@@ -229,11 +254,18 @@ public class GraphicsLayer {
 
 	public void drawDefaultSymbol(final Waypoint from, final Waypoint to) {
 		final double a = GeometryUtil.getAngle(from, to);
-		final Waypoint orgin = GeometryUtil.polarToCartesian(from, 6., a);
+		final double halfConnectingSymbolLength = CONNECTING_SYMBOL_LENGTH / 2;
+		final Waypoint orgin =
+				GeometryUtil.polarToCartesian(from, halfConnectingSymbolLength,
+						a);
 
-		final double angle = Math.PI / 1.5;
-		final Waypoint symbolFrom = GeometryUtil.polarToCartesian(orgin, CONNECTING_SYMBOL_LENGTH / 2., a - angle);
-		final Waypoint symbolTo = GeometryUtil.polarToCartesian(symbolFrom, CONNECTING_SYMBOL_LENGTH, a - angle - Math.PI);
+		final Waypoint symbolFrom =
+				GeometryUtil.polarToCartesian(orgin,
+						halfConnectingSymbolLength, a - DEFAULT_SYMBOL_ANGLE);
+		final Waypoint symbolTo =
+				GeometryUtil.polarToCartesian(symbolFrom,
+						CONNECTING_SYMBOL_LENGTH, a - DEFAULT_SYMBOL_ANGLE
+								- Math.PI);
 
 		drawLine(symbolFrom, symbolTo);
 	}
@@ -259,12 +291,12 @@ public class GraphicsLayer {
 	public void drawDataObject(final Bounds bounds) {
 		final double n = getNForDataObjectShape(bounds);
 		graphics.draw(createDataObjectShape(bounds));
-		graphics.drawLine(
-				(int)(bounds.getMaxX() - n), (int)(bounds.getMinY() + n),
-				(int)bounds.getMaxX(), (int)(bounds.getMinY() + n));
-		graphics.drawLine(
-				(int)(bounds.getMaxX() - n), (int)(bounds.getMinY() + n),
-				(int)(bounds.getMaxX() - n), (int)bounds.getMinY());
+		graphics.drawLine((int)(bounds.getMaxX() - n),
+				(int)(bounds.getMinY() + n), (int)bounds.getMaxX(),
+				(int)(bounds.getMinY() + n));
+		graphics.drawLine((int)(bounds.getMaxX() - n),
+				(int)(bounds.getMinY() + n), (int)(bounds.getMaxX() - n),
+				(int)bounds.getMinY());
 	}
 
 	protected static int getNForDataStoreShape(final Bounds bounds) {
@@ -275,26 +307,11 @@ public class GraphicsLayer {
 		final int n = getNForDataStoreShape(bounds);
 
 		final Path2D path = new Path2D.Float();
+		path.append(new Arc2D.Double(bounds.getMinX(), bounds.getMaxY() - n,
+				bounds.getWidth(), n, 180, 180, Arc2D.OPEN), true);
 		path.append(
-				new Arc2D.Double(
-						bounds.getMinX(),
-						bounds.getMaxY() - n,
-						bounds.getWidth(),
-						n,
-						180,
-						180,
-						Arc2D.OPEN),
-				true);
-		path.append(
-				new Arc2D.Double(
-						bounds.getMinX(),
-						bounds.getMinY(),
-						bounds.getWidth(),
-						n,
-						0,
-						180,
-						Arc2D.OPEN),
-				true);
+				new Arc2D.Double(bounds.getMinX(), bounds.getMinY(), bounds
+						.getWidth(), n, 0, 180, Arc2D.OPEN), true);
 		path.closePath();
 
 		return path;
@@ -305,34 +322,20 @@ public class GraphicsLayer {
 
 		graphics.draw(createDataStoreShape(bounds));
 
-		graphics.drawArc(
-				(int)bounds.getMinX(),
-				(int)bounds.getMinY(),
-				(int)bounds.getWidth(),
-				n,
-				180,
-				180);
-		graphics.drawArc(
-				(int)bounds.getMinX(),
-				(int)bounds.getMinY() + n / 2,
-				(int)bounds.getWidth(),
-				n,
-				180,
-				180);
-		graphics.drawArc(
-				(int)bounds.getMinX(),
-				(int)bounds.getMinY() + n,
-				(int)bounds.getWidth(),
-				n,
-				180,
-				180);
+		graphics.drawArc((int)bounds.getMinX(), (int)bounds.getMinY(),
+				(int)bounds.getWidth(), n, 180, 180);
+		graphics.drawArc((int)bounds.getMinX(), (int)bounds.getMinY() + n / 2,
+				(int)bounds.getWidth(), n, 180, 180);
+		graphics.drawArc((int)bounds.getMinX(), (int)bounds.getMinY() + n,
+				(int)bounds.getWidth(), n, 180, 180);
 	}
 
 	public void drawText(final Bounds bounds, final String text) {
 		final FontMetrics metrics = graphics.getFontMetrics();
-		final Rectangle2D textBounds
-			= graphics.getFontMetrics().getStringBounds(text, graphics);
-		final int x = bounds.x + (bounds.width - (int)textBounds.getWidth()) / 2;
+		final Rectangle2D textBounds =
+				graphics.getFontMetrics().getStringBounds(text, graphics);
+		final int x =
+				bounds.x + (bounds.width - (int)textBounds.getWidth()) / 2;
 		final int textHeight = (int)textBounds.getHeight();
 		final int yOffset = (bounds.height - textHeight) / 2;
 		final int y = bounds.y + yOffset + metrics.getAscent();

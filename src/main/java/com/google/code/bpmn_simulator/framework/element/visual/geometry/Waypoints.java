@@ -72,10 +72,8 @@ public class Waypoints
 			if (last != null) {
 				final int distance = (int)last.distance(current);
 				if ((position + distance) >= length) {
-					return GeometryUtil.polarToCartesian(
-							last,
-							position - length,
-							GeometryUtil.getAngle(current, last));
+					return GeometryUtil.polarToCartesian(last, position
+							- length, GeometryUtil.getAngle(current, last));
 				}
 				position += distance;
 			}

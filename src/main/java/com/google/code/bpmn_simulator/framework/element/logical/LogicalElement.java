@@ -20,10 +20,9 @@
  */
 package com.google.code.bpmn_simulator.framework.element.logical;
 
-import com.google.code.bpmn_simulator.framework.element.visual.VisualElement;
+import com.google.code.bpmn_simulator.framework.token.TokenNotifier;
 
-public interface LogicalElement {
-
-	void addVisualElement(VisualElement<?> element);
+public interface LogicalElement
+		extends TokenNotifier {
 
 }

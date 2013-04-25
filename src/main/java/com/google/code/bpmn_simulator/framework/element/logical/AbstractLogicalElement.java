@@ -23,29 +23,45 @@ package com.google.code.bpmn_simulator.framework.element.logical;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.google.code.bpmn_simulator.framework.element.visual.VisualElement;
+import com.google.code.bpmn_simulator.framework.token.Token;
+import com.google.code.bpmn_simulator.framework.token.TokenListener;
 
 public abstract class AbstractLogicalElement
 		implements LogicalElement {
 
-	private final Set<VisualElement<?>> visualElements
-			= new HashSet<VisualElement<?>>();
+	private final Set<TokenListener> tokenListeners =
+			new HashSet<TokenListener>();
 
 	public AbstractLogicalElement() {
 		super();
 	}
 
 	@Override
-	public void addVisualElement(final VisualElement<?> element) {
-		synchronized (visualElements) {
-			visualElements.add(element);
+	public void addTokenListener(final TokenListener listener) {
+		synchronized (tokenListeners) {
+			tokenListeners.add(listener);
 		}
 	}
 
-	protected void repaint() {
-		synchronized (visualElements) {
-			for (final VisualElement<?> element : visualElements) {
-				element.repaint();
+	@Override
+	public void removeTokenListener(final TokenListener listener) {
+		synchronized (tokenListeners) {
+			tokenListeners.remove(listener);
+		}
+	}
+
+	protected void notifyTokenAdded(final Token token) {
+		synchronized (tokenListeners) {
+			for (final TokenListener listener : tokenListeners) {
+				listener.tokenAdded(token);
+			}
+		}
+	}
+
+	protected void notifyTokenRemoved(final Token token) {
+		synchronized (tokenListeners) {
+			for (final TokenListener listener : tokenListeners) {
+				listener.tokenRemoved(token);
 			}
 		}
 	}

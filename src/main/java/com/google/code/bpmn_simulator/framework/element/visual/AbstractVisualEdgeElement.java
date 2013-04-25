@@ -57,7 +57,8 @@ public abstract class AbstractVisualEdgeElement<E extends LogicalElement>
 	}
 
 	protected Waypoint waypointToRelative(final Waypoint point) {
-		return new Waypoint(SwingUtilities.convertPoint(getParent(), point, this));
+		return new Waypoint(SwingUtilities.convertPoint(getParent(), point,
+				this));
 	}
 
 }

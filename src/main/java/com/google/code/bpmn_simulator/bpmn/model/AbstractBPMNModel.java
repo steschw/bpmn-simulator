@@ -100,11 +100,14 @@ import com.google.code.bpmn_simulator.framework.instance.InstanceManager;
 public abstract class AbstractBPMNModel
 		extends AbstractXmlModel {
 
-	protected static final String BPMN = "http://www.omg.org/spec/BPMN/20100524/MODEL";  //$NON-NLS-1$
+	protected static final String BPMN =
+			"http://www.omg.org/spec/BPMN/20100524/MODEL";  //$NON-NLS-1$
 
-	protected static final String EXTENSION_SIGNAVIO = "http://www.signavio.com"; //$NON-NLS-1$
+	protected static final String EXTENSION_SIGNAVIO =
+			"http://www.signavio.com"; //$NON-NLS-1$
 
-	private static final String SCHEMA_FILENAME = "bpmn/xsd/BPMN20.xsd"; //$NON-NLS-1$
+	private static final String SCHEMA_FILENAME =
+			"com/google/code/bpmn_simulator/bpmn/xsd/BPMN20.xsd"; //$NON-NLS-1$
 
 	private final ElementRefCollection<AbstractFlowElement> elements
 			= new ElementRefCollection<AbstractFlowElement>();

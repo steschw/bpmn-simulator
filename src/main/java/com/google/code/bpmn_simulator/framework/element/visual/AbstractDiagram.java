@@ -26,7 +26,6 @@ import java.util.List;
 
 import javax.swing.JComponent;
 
-
 @SuppressWarnings("serial")
 public abstract class AbstractDiagram<E extends VisualElement<?>>
 		extends JComponent

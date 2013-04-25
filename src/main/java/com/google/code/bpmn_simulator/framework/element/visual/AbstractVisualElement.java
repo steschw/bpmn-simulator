@@ -27,11 +27,13 @@ import javax.swing.JComponent;
 
 import com.google.code.bpmn_simulator.framework.element.logical.LogicalElement;
 import com.google.code.bpmn_simulator.framework.element.visual.geometry.Bounds;
+import com.google.code.bpmn_simulator.framework.token.Token;
+import com.google.code.bpmn_simulator.framework.token.TokenListener;
 
 @SuppressWarnings("serial")
 public abstract class AbstractVisualElement<E extends LogicalElement>
 		extends JComponent
-		implements VisualElement<E> {
+		implements VisualElement<E>, TokenListener {
 
 	protected static final int MARGIN = 10;
 
@@ -44,7 +46,17 @@ public abstract class AbstractVisualElement<E extends LogicalElement>
 
 	private void setLogicalElement(final E element) {
 		logicalElement = element;
-		logicalElement.addVisualElement(this);
+		logicalElement.addTokenListener(this);
+	}
+
+	@Override
+	public void tokenAdded(final Token token) {
+		repaint();
+	}
+
+	@Override
+	public void tokenRemoved(final Token token) {
+		repaint();
 	}
 
 	@Override

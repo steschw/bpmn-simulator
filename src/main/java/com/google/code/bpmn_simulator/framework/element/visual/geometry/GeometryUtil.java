@@ -20,54 +20,60 @@
  */
 package com.google.code.bpmn_simulator.framework.element.visual.geometry;
 
+import java.awt.Point;
 import java.awt.Polygon;
+import java.awt.Rectangle;
 import java.awt.geom.GeneralPath;
-
 
 public final class GeometryUtil {
 
 	public static final double RAD_FULL = 2. * Math.PI;
+
 	public static final int PENTAGON_CORNERS = 5;
 
 	private GeometryUtil() {
 		super();
 	}
 
-	public static Waypoint polarToCartesian(final Waypoint orgin,
+	public static Waypoint polarToCartesian(final Point orgin,
 			final double radius, final double angle) {
 		final int x = (int)Math.round(radius * Math.sin(angle));
 		final int y = (int)Math.round(radius * Math.cos(angle));
 		return new Waypoint(orgin.x + x, orgin.y + y);
 	}
 
-	public static double getAngle(final Waypoint from, final Waypoint to) {
+	public static double getAngle(final Point from, final Point to) {
 		return Math.atan2(to.x - from.x, to.y - from.y);
 	}
 
-	public static Polygon createPentagon(final Bounds size) {
+	public static Polygon createPentagon(final Rectangle size) {
 		final Polygon polygon = new Polygon();
-		final Waypoint center = new Waypoint(size.x + size.width / 2, size.y + size.height / 2);
+		final Point center =
+				new Point((int)size.getCenterX(), (int)size.getCenterY());
 		final double r = size.width / 2.;
+		final double radPerCorner = RAD_FULL / PENTAGON_CORNERS;
 		Waypoint point = null;
-		for (int i = 0; i < 5; ++i) {
-			point = polarToCartesian(
-					center, r,
-					(RAD_FULL / GeometryUtil.PENTAGON_CORNERS) * i
-							- (RAD_FULL / GeometryUtil.PENTAGON_CORNERS) / 2.);
+		for (int i = 0; i < PENTAGON_CORNERS; ++i) {
+			point =
+					polarToCartesian(center, r, radPerCorner * i - radPerCorner
+							/ 2.);
 			polygon.addPoint(point.x, point.y);
 		}
 		return polygon;
 	}
 
-	public static Polygon createStar(final Bounds size, final int corners) {
+	public static Polygon createStar(final Rectangle size, final int corners) {
 		final Polygon polygon = new Polygon();
-		final Waypoint center = new Waypoint(size.x + size.width / 2, size.y + size.height / 2);
+		final Point center =
+				new Point((int)size.getCenterX(), (int)size.getCenterY());
 		final double r = size.width / 2.;
+		final double radPerCorner = RAD_FULL / corners;
 		Waypoint point = null;
 		for (int i = 0; i < corners; ++i) {
-			point = polarToCartesian(center, r, (RAD_FULL / corners) * i - (RAD_FULL / corners) / 2.);
+			final double rad = radPerCorner * i;
+			point = polarToCartesian(center, r, rad - radPerCorner / 2.);
 			polygon.addPoint(point.x, point.y);
-			point = polarToCartesian(center, r * 0.5, (RAD_FULL / corners) * i);
+			point = polarToCartesian(center, r * 0.5, rad);
 			polygon.addPoint(point.x, point.y);
 		}
 		return polygon;
@@ -82,8 +88,8 @@ public final class GeometryUtil {
 		return polygon;
 	}
 
-	public static GeneralPath createArrowPath(final Waypoint from, final Waypoint to,
-			final double d, final double length) {
+	public static GeneralPath createArrowPath(final Waypoint from,
+			final Waypoint to, final double d, final double length) {
 		final GeneralPath path = new GeneralPath();
 		final double angle = getAngle(to, from);
 		final Waypoint point1 = polarToCartesian(to, length, angle - d);

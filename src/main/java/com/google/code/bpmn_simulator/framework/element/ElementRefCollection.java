@@ -26,11 +26,10 @@ import java.util.TreeMap;
 
 import com.google.code.bpmn_simulator.bpmn.model.core.foundation.BaseElement;
 
-
 public class ElementRefCollection<T extends BaseElement> {
 
-	private final Map<String, ElementRef<T>> data
-			= new TreeMap<String, ElementRef<T>>();
+	private final Map<String, ElementRef<T>> data =
+			new TreeMap<String, ElementRef<T>>();
 
 	public Collection<ElementRef<T>> values() {
 		return data.values();

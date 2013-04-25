@@ -32,6 +32,4 @@ public interface VisualElement<E extends LogicalElement>
 
 	Bounds getOuterBounds();
 
-	void repaint();
-
 }

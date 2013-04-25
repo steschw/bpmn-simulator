@@ -52,6 +52,7 @@
 	<subpackage name="framework">
 
 		<subpackage name="element">
+			<allow pkg="com.google.code.bpmn_simulator.framework.token" />
 
 			<subpackage name="visual">
 				<allow

@@ -20,7 +20,6 @@
  */
 package com.google.code.bpmn_simulator.framework.element.visual;
 
-
 public interface Diagram<E extends VisualElement<?>> {
 
 	void addElement(E element);

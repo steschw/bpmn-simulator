@@ -22,16 +22,17 @@ package com.google.code.bpmn_simulator.framework.element.visual.geometry;
 
 import java.awt.Dimension;
 import java.awt.Point;
+import java.awt.Rectangle;
 
 @SuppressWarnings("serial")
 public class Bounds
-		extends java.awt.Rectangle {
+		extends Rectangle {
 
 	public Bounds(final int x, final int y, final int width, final int height) {
 		super(x, y, width, height);
 	}
 
-	public Bounds(final java.awt.Rectangle r) {
+	public Bounds(final Rectangle r) {
 		super(r);
 	}
 

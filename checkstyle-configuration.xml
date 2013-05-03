@@ -4,22 +4,22 @@
 		"http://www.puppycrawl.com/dtds/configuration_1_3.dtd">
 <module name="Checker">
 
-    <!-- <module name="StrictDuplicateCode" /> -->
+	<!-- <module name="StrictDuplicateCode" /> -->
 	<module name="Translation" />
 	<module name="NewlineAtEndOfFile">
 		<property name="fileExtensions" value="java,properties" />
 	</module>
 	<module name="RegexpSingleline">
-		<property name="format" value="^[^#].*[^\x00-\x7F]|^[^\x00-\x7F]"/>
-		<property name="message" value="Line contains non-ASCII char."/>
-		<property name="fileExtensions" value=".properties"/>
+		<property name="format" value="^[^#].*[^\x00-\x7F]|^[^\x00-\x7F]" />
+		<property name="message" value="Line contains non-ASCII char." />
+		<property name="fileExtensions" value=".properties" />
 	</module>
 
 	<module name="TreeWalker">
 
 		<property name="tabWidth" value="4" />
 
-	    <!-- BLOCK CHECKS -->
+		<!-- BLOCK CHECKS -->
 		<module name="EmptyBlock" />
 		<module name="LeftCurly" />
 		<module name="NeedBraces" />
@@ -92,10 +92,10 @@
 		<module name="RedundantImport" />
 		<module name="UnusedImports" />
 		<module name="ImportOrder">
-			<property name="groups" value="java.,javax.,org.,com."/>
+			<property name="groups" value="java.,javax.,org.,com." />
 		</module>
 		<module name="ImportControl">
-			<property name="file" value="import-control.xml"/>
+			<property name="file" value="import-control.xml" />
 		</module>
 
 		<!-- METRICS -->
@@ -111,7 +111,9 @@
 		<module name="ArrayTypeStyle" />
 		<module name="FinalParameters" />
 		<!-- <module name="Indentation" /> -->
-		<!-- <module name="TrailingComment" /> -->
+		<module name="TrailingComment">
+			<property name="legalComment" value="\$NON\-NLS\-\d+\$" />
+		</module>
 		<module name="OuterTypeFilename" />
 
 		<!-- MODIFIERS -->
@@ -164,8 +166,8 @@
 		<module name="ExecutableStatementCount" />
 		<module name="LineLength">
 			<property name="max" value="120" />
-			<property name="tabWidth" value="4"/>
-    	</module>
+			<property name="tabWidth" value="4" />
+		</module>
 		<module name="MethodLength" />
 		<module name="AnonInnerLength" />
 		<module name="ParameterNumber" />

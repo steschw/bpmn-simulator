@@ -31,6 +31,7 @@ import javax.swing.JLabel;
 import javax.swing.text.View;
 
 import com.google.code.bpmn_simulator.framework.element.visual.ClickThroughMouseListener;
+import com.google.code.bpmn_simulator.framework.utils.HtmlUtils;
 
 
 @SuppressWarnings("serial")
@@ -87,17 +88,15 @@ public class Label
 
 	@Override
 	public String getText() {
-		final StringBuilder text = new StringBuilder("<html>");
-		text.append("<body>");
-		text.append("<div");
+		final StringBuilder text = new StringBuilder("<html><body>"); //$NON-NLS-1$
+		text.append("<div"); //$NON-NLS-1$
 		if (isAlignCenter()) {
-			text.append(" style=\"text-align:center;\"");
+			text.append(" style=\"text-align:center;\""); //$NON-NLS-1$
 		}
 		text.append('>');
-		text.append(super.getText().replaceAll("\n", "<br>"));
-		text.append("</div>");
-		text.append("</body>");
-		text.append("</html>");
+		text.append(HtmlUtils.nl2br(super.getText()));
+		text.append("</div>"); //$NON-NLS-1$
+		text.append("</body></html>"); //$NON-NLS-1$
 		return text.toString();
 	}
 

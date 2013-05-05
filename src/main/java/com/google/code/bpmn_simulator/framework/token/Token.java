@@ -155,11 +155,11 @@ public class Token
 	public String toString() {
 		final StringBuilder buffer = new StringBuilder('[');
 		buffer.append(super.toString());
-		buffer.append(", ");
+		buffer.append(", "); //$NON-NLS-1$
 		buffer.append(instance);
-		buffer.append(", ");
+		buffer.append(", "); //$NON-NLS-1$
 		buffer.append(currentFlow);
-		buffer.append(", ");
+		buffer.append(", "); //$NON-NLS-1$
 		buffer.append(previousFlow);
 		buffer.append(']');
 		return buffer.toString();

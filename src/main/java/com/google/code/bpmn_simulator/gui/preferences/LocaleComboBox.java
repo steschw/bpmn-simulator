@@ -28,37 +28,50 @@ import javax.swing.JComboBox;
 import javax.swing.JList;
 import javax.swing.plaf.basic.BasicComboBoxRenderer;
 
+import com.google.code.bpmn_simulator.gui.Messages;
+
 @SuppressWarnings("serial")
 public class LocaleComboBox
 		extends JComboBox {
 
-	private static final Locale[] LOCALES = new Locale[] {
-		new Locale("en"), //$NON-NLS-1$
-		new Locale("de"), //$NON-NLS-1$
+	private static final Locale[] LOCALES = {
+			Locale.ENGLISH,
+			Locale.GERMAN,
 	};
 
 	public LocaleComboBox() {
 		super(new DefaultComboBoxModel(LOCALES));
-		setRenderer(new BasicComboBoxRenderer() {
-			@Override
-			public Component getListCellRendererComponent(final JList list,
-					final Object value, final int index,
-					final boolean isSelected, final boolean cellHasFocus) {
-				final Component component
-						= super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-				if (value == null) {
-					final StringBuilder string = new StringBuilder("Default");
-					string.append(" (");
-					string.append(Locale.getDefault().getDisplayName());
-					string.append(')');
-					setText(string.toString());
-				} else {
-					final Locale locale = (Locale)value;
-					setText(locale.getDisplayName(locale));
-				}
-				return component;
+		setRenderer(new LocaleComboBoxRenderer());
+	}
+
+	private class LocaleComboBoxRenderer
+			extends BasicComboBoxRenderer {
+
+		private String getDefaultText() {
+			final StringBuilder string =
+					new StringBuilder(Messages.getString("Locale.default")); //$NON-NLS-1$
+			string.append(" ("); //$NON-NLS-1$
+			string.append(Locale.getDefault().getDisplayName());
+			string.append(')');
+			return string.toString();
+		}
+
+		@Override
+		public Component getListCellRendererComponent(final JList list,
+				final Object value, final int index, final boolean isSelected,
+				final boolean cellHasFocus) {
+			final Component component =
+					super.getListCellRendererComponent(list, value, index,
+							isSelected, cellHasFocus);
+			if (value == null) {
+				setText(getDefaultText());
+			} else {
+				final Locale locale = (Locale)value;
+				setText(locale.getDisplayName(locale));
 			}
-		});
+			return component;
+		}
+
 	}
 
 }

@@ -36,6 +36,8 @@ public class Config {
 
 	private static final String LANGUAGE = "language"; //$NON-NLS-1$
 
+	private static final String DEFAULT_LANGUAGE = ""; //$NON-NLS-1$
+
 	private static final String KEEP_EVENTS = "keepEvents"; //$NON-NLS-1$
 
 	private static final String SHOW_EXCLUSIVEGATEWAYSYMBOL = "showExclusiveGatewaySymbol"; //$NON-NLS-1$
@@ -48,6 +50,8 @@ public class Config {
 	private static final Color DEFAULT_BACKGROUND = Color.WHITE;
 
 	private static final String EXTERNAL_EDITOR = "externalEditor"; //$NON-NLS-1$
+
+	private static final String DEFAULT_EXTERNAL_EDITOR = ""; //$NON-NLS-1$
 
 	private static final String LAST_DIRECTORY = "lastDirectory"; //$NON-NLS-1$
 
@@ -136,7 +140,7 @@ public class Config {
 	}
 
 	public Locale getLocale() {
-		return getLocaleFromString(getRootNode().get(LANGUAGE, ""));
+		return getLocaleFromString(getRootNode().get(LANGUAGE, DEFAULT_LANGUAGE));
 	}
 
 	public void setLocale(final Locale locale) {
@@ -148,7 +152,7 @@ public class Config {
 	}
 
 	public String getExternalEditor() {
-		return getRootNode().get(EXTERNAL_EDITOR, "");
+		return getRootNode().get(EXTERNAL_EDITOR, DEFAULT_EXTERNAL_EDITOR);
 	}
 
 	public void setExternalEditor(final String filename) {

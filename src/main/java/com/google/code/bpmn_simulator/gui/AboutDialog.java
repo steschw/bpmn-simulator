@@ -63,7 +63,8 @@ public class AboutDialog
 
 		panel.add(Box.createVerticalStrut(20));
 
-		final StringBuilder applicationInfo = new StringBuilder(BPMNSimulatorApplication.NAME);
+		final StringBuilder applicationInfo =
+				new StringBuilder(BPMNSimulatorApplication.NAME);
 		final String version = BPMNSimulatorApplication.getVersion();
 		if (version != null) {
 			applicationInfo.append(' ');
@@ -77,7 +78,8 @@ public class AboutDialog
 		panel.add(Box.createVerticalStrut(20));
 
 		try {
-			final Hyperlink hyperlink = new Hyperlink(new URI(BPMNSimulatorApplication.URL));
+			final Hyperlink hyperlink =
+					new Hyperlink(new URI(BPMNSimulatorApplication.URL));
 			hyperlink.setAlignmentX(CENTER_ALIGNMENT);
 			panel.add(hyperlink);
 		} catch (URISyntaxException e) {
@@ -86,11 +88,13 @@ public class AboutDialog
 
 		panel.add(Box.createVerticalStrut(40));
 
-		final StringBuilder javaInfo = new StringBuilder("Java: ");
+		final StringBuilder javaInfo =
+				new StringBuilder(Messages.getString("About.java")); //$NON-NLS-1$
+		javaInfo.append(": "); //$NON-NLS-1$
 		javaInfo.append(System.getProperty("java.vendor")); //$NON-NLS-1$
 		javaInfo.append(' ');
 		javaInfo.append(System.getProperty("java.version")); //$NON-NLS-1$
-		javaInfo.append(" (");
+		javaInfo.append(" ("); //$NON-NLS-1$
 		javaInfo.append(System.getProperty("java.home")); //$NON-NLS-1$
 		javaInfo.append(')');
 		final JLabel labelJava = new JLabel(javaInfo.toString());
@@ -99,7 +103,9 @@ public class AboutDialog
 
 		panel.add(Box.createVerticalStrut(20));
 
-		final StringBuilder systemInfo = new StringBuilder("System: ");
+		final StringBuilder systemInfo =
+				new StringBuilder(Messages.getString("About.system")); //$NON-NLS-1$
+		systemInfo.append(": "); //$NON-NLS-1$
 		systemInfo.append(System.getProperty("os.name")); //$NON-NLS-1$
 		systemInfo.append(' ');
 		systemInfo.append(System.getProperty("os.version")); //$NON-NLS-1$
@@ -114,7 +120,8 @@ public class AboutDialog
 
 	protected JPanel createTabLicence() {
 		final JPanel panel = new JPanel(new BorderLayout());
-		final JTextArea textArea = new JTextArea(BPMNSimulatorApplication.NOTICE);
+		final JTextArea textArea =
+				new JTextArea(BPMNSimulatorApplication.NOTICE);
 		textArea.setEditable(false);
 		textArea.setFont(new Font("Courier New", Font.PLAIN, 11)); //$NON-NLS-1$
 		panel.add(new JScrollPane(textArea), BorderLayout.CENTER);

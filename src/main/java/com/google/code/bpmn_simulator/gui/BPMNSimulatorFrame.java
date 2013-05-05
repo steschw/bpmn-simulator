@@ -83,7 +83,6 @@ public class BPMNSimulatorFrame
 
 		setSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
-		setVisible(true);
 	}
 
 	protected void updateFrameTitle() {

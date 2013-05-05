@@ -76,7 +76,7 @@ public abstract class AbstractXmlModel
 		message.append(exception.getLineNumber());
 		message.append(':');
 		message.append(exception.getColumnNumber());
-		message.append("] ");
+		message.append("] "); //$NON-NLS-1$
 		message.append(exception.getLocalizedMessage());
 		notifyStructureExceptionListeners(new StructureException(this, message.toString()));
 	}

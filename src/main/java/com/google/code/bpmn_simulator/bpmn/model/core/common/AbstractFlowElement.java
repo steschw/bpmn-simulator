@@ -37,6 +37,7 @@ import com.google.code.bpmn_simulator.bpmn.model.core.foundation.Documentation;
 import com.google.code.bpmn_simulator.bpmn.model.process.activities.AbstractContainerActivity;
 import com.google.code.bpmn_simulator.framework.element.visual.GraphicsLayer;
 import com.google.code.bpmn_simulator.framework.element.visual.geometry.Bounds;
+import com.google.code.bpmn_simulator.bpmn.Messages;
 
 
 @SuppressWarnings("serial")
@@ -97,21 +98,27 @@ public abstract class AbstractFlowElement
 	@Override
 	public String getToolTipText(final MouseEvent event) {
 		final StringBuilder tooltipText = new StringBuilder();
-		tooltipText.append("<html><table>");
-		tooltipText.append("<tr><td><b>ID:</b></td><td>");
+		tooltipText.append("<html><table>"); //$NON-NLS-1$
+		tooltipText.append("<tr><td><b>"); //$NON-NLS-1$
+		tooltipText.append(Messages.getString("baseElement.id")); //$NON-NLS-1$
+		tooltipText.append(":</b></td><td>"); //$NON-NLS-1$
 		tooltipText.append(getId());
-		tooltipText.append("</td></tr>");
+		tooltipText.append("</td></tr>"); //$NON-NLS-1$
 		if (hasName()) {
-			tooltipText.append("<tr><td><b>Name:</b></td><td>");
+			tooltipText.append("<tr><td><b>"); //$NON-NLS-1$
+			tooltipText.append(Messages.getString("flowElement.name")); //$NON-NLS-1$
+			tooltipText.append(":</b></td><td>"); //$NON-NLS-1$
 			tooltipText.append(getName());
-			tooltipText.append("</td></tr>");
+			tooltipText.append("</td></tr>"); //$NON-NLS-1$
 		}
 		if (hasDocumentation()) {
-			tooltipText.append("<tr><td><b>Documentation:</b></td><td>");
+			tooltipText.append("<tr><td><b>"); //$NON-NLS-1$
+			tooltipText.append(Messages.getString("baseElement.documentation")); //$NON-NLS-1$
+			tooltipText.append(":</b></td><td>"); //$NON-NLS-1$
 			tooltipText.append(getDocumentation().toHtml());
-			tooltipText.append("</td></tr>");
+			tooltipText.append("</td></tr>"); //$NON-NLS-1$
 		}
-		tooltipText.append("</table></html>");
+		tooltipText.append("</table></html>"); //$NON-NLS-1$
 		return tooltipText.toString();
 	}
 
@@ -179,7 +186,7 @@ public abstract class AbstractFlowElement
 	@Override
 	public String getFullName() {
 		final StringBuilder fullName = new StringBuilder(getElementName());
-		fullName.append(": ");
+		fullName.append(": "); //$NON-NLS-1$
 		if (hasName()) {
 			fullName.append('"');
 			fullName.append(getName());
@@ -360,9 +367,9 @@ public abstract class AbstractFlowElement
 	public String toString() {
 		final StringBuilder string = new StringBuilder('[');
 		string.append(this.getClass().toString());
-		string.append(", ");
+		string.append(", "); //$NON-NLS-1$
 		string.append(getId());
-		string.append(", ");
+		string.append(", "); //$NON-NLS-1$
 		string.append(getName());
 		string.append(']');
 		return string.toString();

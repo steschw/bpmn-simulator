@@ -28,6 +28,8 @@ import java.awt.event.ItemListener;
 import javax.swing.JCheckBox;
 import javax.swing.SwingConstants;
 
+import com.google.code.bpmn_simulator.framework.utils.HtmlUtils;
+
 @SuppressWarnings("serial")
 public class Expression
 		extends JCheckBox
@@ -64,9 +66,9 @@ public class Expression
 	public String getText() {
 		final String text = super.getText();
 		if (text != null) {
-			final StringBuilder html = new StringBuilder("<html>");
-			html.append(text.replaceAll("\n", "<br>"));
-			html.append("</html>");
+			final StringBuilder html = new StringBuilder("<html>"); //$NON-NLS-1$
+			html.append(HtmlUtils.nl2br(text));
+			html.append("</html>"); //$NON-NLS-1$
 			return html.toString();
 		}
 		return null;

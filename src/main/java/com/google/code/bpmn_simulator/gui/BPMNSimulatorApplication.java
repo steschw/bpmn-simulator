@@ -80,7 +80,8 @@ public final class BPMNSimulatorApplication {
 
 		initLookAndFeel();
 
-		new BPMNSimulatorFrame();
+		final BPMNSimulatorFrame frame = new BPMNSimulatorFrame();
+		frame.setVisible(true);
 	}
 
 }

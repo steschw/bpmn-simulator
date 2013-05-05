@@ -361,13 +361,13 @@ public final class Instance
 	public String toString() {
 		final StringBuilder buffer = new StringBuilder('[');
 		buffer.append(super.toString());
-		buffer.append(", ");
+		buffer.append(", "); //$NON-NLS-1$
 		buffer.append(activity);
-		buffer.append(", ");
-		buffer.append("childs:");
+		buffer.append(", "); //$NON-NLS-1$
+		buffer.append("childs:"); //$NON-NLS-1$
 		buffer.append(getChildInstanceCount());
-		buffer.append(", ");
-		buffer.append("token:");
+		buffer.append(", "); //$NON-NLS-1$
+		buffer.append("token:"); //$NON-NLS-1$
 		buffer.append(getTokenCount());
 		buffer.append(']');
 		return buffer.toString();

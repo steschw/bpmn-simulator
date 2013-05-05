@@ -28,6 +28,8 @@ import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JColorChooser;
 
+import com.google.code.bpmn_simulator.gui.Messages;
+
 @SuppressWarnings("serial")
 public class ColorSelector
 		extends JButton
@@ -35,6 +37,7 @@ public class ColorSelector
 
 	public ColorSelector(final String text) {
 		super(text);
+
 		setBorder(BorderFactory.createRaisedBevelBorder());
 
 		addActionListener(this);
@@ -53,34 +56,43 @@ public class ColorSelector
 
 	@Override
 	public void actionPerformed(final ActionEvent e) {
-		final Color color = JColorChooser.showDialog(this, null, getSelectedColor());
-		setSelectedColor(color);
+		final Color color =
+				JColorChooser.showDialog(this, null, getSelectedColor());
+		if (color != null) {
+			setSelectedColor(color);
+		}
+	}
+
+	protected String getColorToolTipText() {
+		final StringBuilder html = new StringBuilder("<html><body>"); //$NON-NLS-1$
+
+		html.append("<b>"); //$NON-NLS-1$
+		html.append(getText());
+		html.append("</b>"); //$NON-NLS-1$
+
+		final Color color = getSelectedColor();
+		final int r = color.getRed();
+		final int g = color.getGreen();
+		final int b = color.getBlue();
+		html.append("<table>"); //$NON-NLS-1$
+		html.append("<tr><td>"); //$NON-NLS-1$
+		html.append(Messages.getString("Color.hex")); //$NON-NLS-1$
+		html.append(":</td><td>"); //$NON-NLS-1$
+		html.append(String.format("%X%X%X", r, g, b)); //$NON-NLS-1$
+		html.append("</td></tr>"); //$NON-NLS-1$
+		html.append("<tr><td>"); //$NON-NLS-1$
+		html.append(Messages.getString("Color.rgb")); //$NON-NLS-1$
+		html.append(":</td><td>"); //$NON-NLS-1$
+		html.append(String.format("%d, %d, %d", r, g, b)); //$NON-NLS-1$
+		html.append("</td></tr>"); //$NON-NLS-1$
+		html.append("</table>"); //$NON-NLS-1$
+
+		html.append("</body></html>"); //$NON-NLS-1$
+		return html.toString();
 	}
 
 	protected void updateTooltip() {
-		final StringBuilder html = new StringBuilder();
-		html.append("<html>");
-		html.append("<body>");
-		html.append("<b>");
-		html.append(getText());
-		html.append(":</b>");
-		final Color color = getSelectedColor();
-		html.append("<table>");
-		html.append("<tr>");
-		html.append("<td>HEX</td><td>");
-		html.append(String.format("%X", color.getRGB()));
-		html.append("</td>");
-		html.append("</tr>");
-		html.append("<tr>");
-		html.append("<td>RGB</td><td>");
-		html.append(String.format("%d, %d, %d",
-				color.getRed(), color.getBlue(), color.getBlue()));
-		html.append("</td>");
-		html.append("</tr>");
-		html.append("</table>");
-		html.append("</body>");
-		html.append("</html>");
-		setToolTipText(html.toString());
+		setToolTipText(getColorToolTipText());
 	}
 
 }

@@ -158,6 +158,10 @@ public class InstancesTree
 		});
 	}
 
+	@Override
+	public void tokenMoved(final Token token) {
+	}
+
 	private static class InstancesTreeCellRenderer
 			extends DefaultTreeCellRenderer {
 

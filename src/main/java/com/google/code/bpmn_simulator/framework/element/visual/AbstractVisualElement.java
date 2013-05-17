@@ -60,6 +60,11 @@ public abstract class AbstractVisualElement<E extends LogicalElement>
 	}
 
 	@Override
+	public void tokenMoved(final Token token) {
+		repaint();
+	}
+
+	@Override
 	public E getLogicalElement() {
 		return logicalElement;
 	}

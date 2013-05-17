@@ -26,4 +26,6 @@ public interface TokenListener {
 
 	void tokenRemoved(Token token);
 
+	void tokenMoved(Token token);
+
 }

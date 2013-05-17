@@ -66,4 +66,12 @@ public abstract class AbstractLogicalElement
 		}
 	}
 
+	protected void notifyTokenMoved(final Token token) {
+		synchronized (tokenListeners) {
+			for (final TokenListener listener : tokenListeners) {
+				listener.tokenMoved(token);
+			}
+		}
+	}
+
 }

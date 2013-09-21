@@ -31,7 +31,7 @@ import javax.swing.SpinnerListModel;
 public class SpeedSpinner
 		extends JSpinner {
 
-	enum Speed {
+	public enum Speed {
 		HALF("x\u00BD", 0.5f),
 		NORMAL("x1", 1.0f),
 		DOUBLE("x2", 2.0f),

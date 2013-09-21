@@ -69,7 +69,7 @@ public class Label
 		 * wenn der neu zu setzende Text dem alten entspricht.
 		 * Die Methode setAlignCenter benötigt dieses Verhalten aber.
 		 */
-		super.setText("");
+		super.setText(null);
 		super.setText(text);
 	}
 

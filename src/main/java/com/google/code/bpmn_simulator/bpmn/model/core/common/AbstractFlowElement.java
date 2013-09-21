@@ -76,7 +76,7 @@ public abstract class AbstractFlowElement
 		setName(name);
 		setFocusable(false);
 		setDoubleBuffered(true);
-		setToolTipText("");
+		setToolTipText(null);
 	}
 
 	public static void setDefaultVisualization(final Visualization visualization) {

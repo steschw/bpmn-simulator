@@ -21,6 +21,7 @@
 package com.google.code.bpmn_simulator.gui.instances;
 
 import java.awt.Component;
+import java.text.MessageFormat;
 import java.util.Enumeration;
 
 import javax.swing.JLabel;
@@ -38,7 +39,6 @@ import com.google.code.bpmn_simulator.framework.instance.InstanceManager;
 import com.google.code.bpmn_simulator.framework.token.Token;
 import com.google.code.bpmn_simulator.framework.token.TokenFlow;
 import com.google.code.bpmn_simulator.framework.token.TokenListener;
-
 
 
 @SuppressWarnings("serial")
@@ -166,21 +166,17 @@ public class InstancesTree
 			extends DefaultTreeCellRenderer {
 
 		private static void createInstanceComponent(final JLabel component, final Instance instance) {
-			final StringBuilder text = new StringBuilder("Instance of ");
-			text.append(instance.getActivity().getFullName());
-			text.append(" (");
-			text.append(instance.getTokenCount(false));
-			text.append(" token)");
-			component.setText(text.toString());
+			component.setText(MessageFormat.format("Instance of {0} ({1} token)",
+					instance.getActivity().getFullName(),
+					instance.getTokenCount(false)));
 			component.setOpaque(true);
 			component.setBackground(instance.getColor());
 		}
 
 		private static void createTokenComponent(final JLabel component, final Token token) {
-			final StringBuilder text = new StringBuilder("Token in ");
-			final TokenFlow currentFlow = token.getCurrentFlow();
-			text.append((currentFlow == null) ? "null" : currentFlow.getFullName());
-			component.setText(text.toString());
+			final TokenFlow tokenFlow = token.getCurrentFlow();
+			component.setText(MessageFormat.format("Token in {0}",
+					(tokenFlow == null) ? tokenFlow : tokenFlow.getFullName()));
 			final Instance instance = token.getInstance();
 			if (instance != null) {
 				component.setOpaque(true);

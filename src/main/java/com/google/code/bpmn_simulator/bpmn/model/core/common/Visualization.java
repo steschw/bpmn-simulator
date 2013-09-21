@@ -58,7 +58,7 @@ public class Visualization {
 	public static final String ICON_ERROR_INVERSE = "error_inverse.png"; //$NON-NLS-1$
 	public static final String ICON_CONDITIONAL = "conditional.png"; //$NON-NLS-1$
 
-	private static final String ICONPATH = "bpmn/icons/"; //$NON-NLS-1$
+	private static final String ICONPATH = "com/google/code/bpmn_simulator/bpmn/icons/"; //$NON-NLS-1$
 
 	private static final Color DEFAULT_BACKGROUNDCOLOR = Color.WHITE;
 

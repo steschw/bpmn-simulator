@@ -169,7 +169,7 @@ public class LogList
 			public void setValue(final Object value) {
 				if (value instanceof Icon) {
 					setIcon((Icon)value);
-					setText("");
+					setText(null);
 				} else {
 					setIcon(null);
 					super.setValue(value);

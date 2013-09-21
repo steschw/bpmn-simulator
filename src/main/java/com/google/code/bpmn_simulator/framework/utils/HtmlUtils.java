@@ -20,14 +20,23 @@
  */
 package com.google.code.bpmn_simulator.framework.utils;
 
+import java.util.regex.Pattern;
+
 public final class HtmlUtils {
+
+	private static final String TAG_BR = "<br />"; //$NON-NLS-1$
+
+	private static final Pattern REGEX_LINEBREAK = Pattern.compile("\r?\n"); //$NON-NLS-1$
 
 	private HtmlUtils() {
 		super();
 	}
 
 	public static String nl2br(final String text) {
-		return text.replaceAll("\n", "<br>"); //$NON-NLS-1$ //$NON-NLS-2$
+		if (text == null) {
+			return null;
+		}
+		return REGEX_LINEBREAK.matcher(text).replaceAll(TAG_BR);
 	}
 
 }

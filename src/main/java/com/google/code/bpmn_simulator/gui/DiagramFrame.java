@@ -31,6 +31,7 @@ import javax.swing.JScrollPane;
 import com.google.code.bpmn_simulator.bpmn.di.BPMNDiagram;
 import com.google.code.bpmn_simulator.bpmn.model.collaboration.Collaboration;
 import com.google.code.bpmn_simulator.bpmn.model.core.foundation.BaseElement;
+import com.google.code.bpmn_simulator.bpmn.model.process.activities.Process;
 import com.google.code.bpmn_simulator.bpmn.model.process.activities.Subprocess;
 
 
@@ -65,11 +66,13 @@ public class DiagramFrame
 	protected void updateFrameIcon() {
 		Icon icon = null;
 		final BaseElement plane = diagram.getPlane();
-		if (plane instanceof Subprocess) {
+		if ((plane instanceof Process)
+				||(plane instanceof Subprocess)) {
 			icon = ICON_PROCESS;
 		} else if (plane instanceof Collaboration) {
 			icon = ICON_COLLABORATION;
 		}
+		assert icon != null;
 		setFrameIcon(icon);
 	}
 

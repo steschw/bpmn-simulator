@@ -18,7 +18,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.bpmn_simulator.gui;
+package com.google.code.bpmn_simulator.gui.mdi;
 
 import java.awt.Color;
 import java.awt.Component;
@@ -42,7 +42,7 @@ public class ScrollDesktop
 		getViewport().add(desktopPane);
 	}
 
-	protected ScrollDesktopPane getDesktopPane() {
+	public ScrollDesktopPane getDesktopPane() {
 		return desktopPane;
 	}
 

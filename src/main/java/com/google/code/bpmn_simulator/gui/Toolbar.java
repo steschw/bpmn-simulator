@@ -121,7 +121,7 @@ public class Toolbar
 		buttonOpen.setToolTipText(Messages.getString("Toolbar.open")); //$NON-NLS-1$
 		add(buttonOpen);
 
-		addSeparator();
+		addSeparator(new Dimension(24, 32));
 
 		buttonStart = new StartButton(ICON_START);
 		buttonStart.setToolTipText(Messages.getString("Toolbar.start")); //$NON-NLS-1$
@@ -137,7 +137,7 @@ public class Toolbar
 		});
 		add(buttonReset);
 
-		addSeparator(new Dimension(32, 32));
+		addSeparator(new Dimension(24, 32));
 
 		buttonPauseContinue = new JButton();
 		buttonPauseContinue.addActionListener(new ActionListener() {

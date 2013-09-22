@@ -31,7 +31,6 @@ import java.io.IOException;
 import java.util.Collection;
 
 import javax.swing.JFileChooser;
-import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -45,24 +44,20 @@ import com.google.code.bpmn_simulator.bpmn.di.BPMNDiagram;
 import com.google.code.bpmn_simulator.bpmn.di.DiagramInterchangeModel;
 import com.google.code.bpmn_simulator.gui.instances.InstancesFrame;
 import com.google.code.bpmn_simulator.gui.log.LogFrame;
+import com.google.code.bpmn_simulator.gui.mdi.MdiFrame;
+import com.google.code.bpmn_simulator.gui.mdi.ScrollDesktop.ScrollDesktopPane;
 import com.google.code.bpmn_simulator.gui.preferences.Config;
 import com.google.code.bpmn_simulator.gui.preferences.PreferencesDialog;
 
-
-
 @SuppressWarnings("serial")
 public class BPMNSimulatorFrame
-		extends JFrame {
+		extends MdiFrame {
 
 	private static final int DEFAULT_WIDTH = 800;
 	private static final int DEFAULT_HEIGHT = 600;
 
 	private static final String BPMN_DESCRIPTION = "BPMN 2.0 XML"; //$NON-NLS-1$
 	private static final String[] BPMN_EXTENSIONS = {"bpmn", "xml"}; //$NON-NLS-1$ //$NON-NLS-2$
-
-	private ScrollDesktop desktop;
-
-	private final WindowMenu menuWindow = new WindowMenu();
 
 	private final LogFrame logFrame = new LogFrame();
 
@@ -105,14 +100,9 @@ public class BPMNSimulatorFrame
 	}
 
 	private void create() {
-		setLayout(new BorderLayout());
-
 		setJMenuBar(createMenuBar());
 
-		add(createToolbar(), BorderLayout.PAGE_START);
-
-		desktop = new ScrollDesktop();
-		add(desktop, BorderLayout.CENTER);
+		getContentPane().add(createToolbar(), BorderLayout.PAGE_START);
 	}
 
 	protected JMenu createMenuFile() {
@@ -297,7 +287,7 @@ public class BPMNSimulatorFrame
 
 		menubar.add(createMenuExtra());
 
-		menubar.add(menuWindow);
+		menubar.add(createWindowMenu());
 
 		menubar.add(createMenuHelp());
 
@@ -334,7 +324,6 @@ public class BPMNSimulatorFrame
 			model.addStructureExceptionListener(logFrame);
 			model.load(file);
 			frameInstances.setInstanceManager(model.getInstanceManager());
-			menuWindow.setDesktopPane(desktop.getDesktopPane());
 			toolbar.setModel(model);
 			final Collection<BPMNDiagram> diagrams = model.getDiagrams();
 			if (diagrams.isEmpty()) {
@@ -343,6 +332,7 @@ public class BPMNSimulatorFrame
 						Messages.getString("information"), //$NON-NLS-1$
 						JOptionPane.INFORMATION_MESSAGE);
 			} else {
+				final ScrollDesktopPane desktop = getDesktop();
 				for (final BPMNDiagram diagram : diagrams) {
 					final DiagramFrame frame = new DiagramFrame(diagram);
 					desktop.add(frame);
@@ -355,9 +345,8 @@ public class BPMNSimulatorFrame
 
 	private void closeModel() {
 		if (model != null) {
-			desktop.removeAll();
+			getDesktop().removeAll();
 			toolbar.setModel(null);
-			menuWindow.setDesktopPane(null);
 			frameInstances.setInstanceManager(null);
 			model.close();
 			model = null;

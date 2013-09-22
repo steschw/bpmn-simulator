@@ -18,7 +18,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.code.bpmn_simulator.gui;
+package com.google.code.bpmn_simulator.gui.mdi;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -35,6 +35,8 @@ import javax.swing.JMenu;
 import javax.swing.JRadioButtonMenuItem;
 import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
+
+import com.google.code.bpmn_simulator.gui.Messages;
 
 @SuppressWarnings("serial")
 public class WindowMenu

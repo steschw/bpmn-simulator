@@ -23,10 +23,16 @@ package com.google.code.bpmn_simulator.gui;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Desktop;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.font.TextAttribute;
 import java.io.IOException;
 import java.net.URI;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.swing.JButton;
 
@@ -38,10 +44,10 @@ public class Hyperlink
 	private URI uri;
 
 	public Hyperlink(final URI uri) {
-		this(uri.toString(), uri);
+		this(uri, null);
 	}
 
-	public Hyperlink(final String text, final URI uri) {
+	public Hyperlink(final URI uri, final String text) {
 		super(text);
 
 		setURI(uri);
@@ -53,6 +59,7 @@ public class Hyperlink
 		setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 
 		addActionListener(this);
+		addMouseListener(new HoverAdapter());
 	}
 
 	public void setURI(final URI uri) {
@@ -62,6 +69,23 @@ public class Hyperlink
 
 	public URI getURI() {
 		return uri;
+	}
+
+	@Override
+	public String getText() {
+		final String text = super.getText();
+		if ((text == null) || text.isEmpty()) {
+			return getURIText();
+		}
+		return text;
+	}
+
+	protected String getURIText() {
+		final URI uri = getURI();
+		if (uri == null) {
+			return null;
+		}
+		return uri.toString();
 	}
 
 	protected void openURI() {
@@ -77,6 +101,31 @@ public class Hyperlink
 	@Override
 	public void actionPerformed(final ActionEvent e) {
 		openURI();
+	}
+
+	private static class HoverAdapter
+			extends MouseAdapter {
+
+		private static final Map<TextAttribute, Integer> HOVER_ATTRIBUTES
+				= new HashMap<TextAttribute, Integer>();
+
+		private Font defaultFont;
+
+		static {
+			HOVER_ATTRIBUTES.put(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON);
+		}
+
+		@Override
+		public void mouseEntered(final MouseEvent e) {
+			defaultFont = e.getComponent().getFont();
+			e.getComponent().setFont(defaultFont.deriveFont(HOVER_ATTRIBUTES));
+		}
+
+		@Override
+		public void mouseExited(final MouseEvent e) {
+			e.getComponent().setFont(defaultFont);
+		}
+
 	}
 
 }

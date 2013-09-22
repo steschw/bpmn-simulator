@@ -31,7 +31,6 @@ import java.awt.event.KeyEvent;
 import java.util.Locale;
 
 import javax.swing.BorderFactory;
-import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -46,8 +45,6 @@ import com.google.code.bpmn_simulator.bpmn.model.core.common.Behavior;
 import com.google.code.bpmn_simulator.bpmn.model.core.common.Visualization;
 import com.google.code.bpmn_simulator.gui.AbstractDialog;
 import com.google.code.bpmn_simulator.gui.Messages;
-
-
 
 @SuppressWarnings("serial")
 public class PreferencesDialog
@@ -243,8 +240,6 @@ public class PreferencesDialog
 			}
 		});
 		panel.add(buttonCancel);
-
-		panel.add(Box.createHorizontalStrut(10));
 
 		final JButton buttonOk = new JButton(Messages.getString("ok"));  //$NON-NLS-1$
 		setComponentWidth(buttonOk, DEFAULT_BUTTON_WIDTH);

@@ -21,8 +21,8 @@
 package com.google.code.bpmn_simulator.gui;
 
 import java.awt.BorderLayout;
+import java.awt.FlowLayout;
 import java.awt.Font;
-import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -32,7 +32,7 @@ import java.net.URISyntaxException;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
-import javax.swing.JDialog;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -41,20 +41,20 @@ import javax.swing.JTextArea;
 
 @SuppressWarnings("serial")
 public class AboutDialog
-		extends JDialog {
+		extends AbstractDialog {
 
-	private static final int DIALOG_WIDTH = 400;
-	private static final int DIALOG_HEIGHT = 300;
-
-	public AboutDialog() {
-		super((Frame)null, Messages.getString("About.about"), true); //$NON-NLS-1$
-
-		setResizable(false);
-		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-
-		setSize(DIALOG_WIDTH, DIALOG_HEIGHT);
+	public AboutDialog(final JFrame owner) {
+		super(owner, Messages.getString("About.about")); //$NON-NLS-1$
 
 		create();
+	}
+
+	@Override
+	protected void create() {
+		setLayout(new BorderLayout());
+
+		getContentPane().add(createTabbedPane(), BorderLayout.CENTER);
+		getContentPane().add(createActionPanel(), BorderLayout.PAGE_END);
 	}
 
 	protected JPanel createTabInfo() {
@@ -135,20 +135,22 @@ public class AboutDialog
 		return pane;
 	}
 
-	protected void create() {
-		setLayout(new BorderLayout(10, 10));
-
-		getContentPane().add(createTabbedPane(), BorderLayout.CENTER);
+	protected JPanel createActionPanel() {
+		final JPanel panel = new JPanel(new FlowLayout(FlowLayout.TRAILING));
 
 		final JButton buttonClose = new JButton(Messages.getString("close")); //$NON-NLS-1$
 		buttonClose.setMnemonic(KeyEvent.VK_C);
 		buttonClose.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(final ActionEvent e) {
-				AboutDialog.this.dispose();
+				dispose();
 			}
 		});
-		getContentPane().add(buttonClose, BorderLayout.PAGE_END);
+		getRootPane().setDefaultButton(buttonClose);
+
+		panel.add(buttonClose);
+
+		return panel;
 	}
 
 }

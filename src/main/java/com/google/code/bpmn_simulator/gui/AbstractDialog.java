@@ -22,10 +22,9 @@ package com.google.code.bpmn_simulator.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 
 import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.BoxLayout;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
@@ -46,8 +45,6 @@ public abstract class AbstractDialog
 		setResizable(false);
 
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-
-		setLocationRelativeTo(parent);
 	}
 
 	protected static Border createGapBorder() {
@@ -62,6 +59,7 @@ public abstract class AbstractDialog
 
 	public void showDialog() {
 		pack();
+		setLocationRelativeTo(getParent());
 		setVisible(true);
 	}
 
@@ -72,11 +70,7 @@ public abstract class AbstractDialog
 	}
 
 	protected JPanel createButtonPanel() {
-		final JPanel panel = new JPanel();
-		panel.setLayout(new BoxLayout(panel, BoxLayout.LINE_AXIS));
-		panel.setBorder(createGapBorder());
-
-		panel.add(Box.createHorizontalGlue());
+		final JPanel panel = new JPanel(new FlowLayout(FlowLayout.TRAILING));
 		return panel;
 	}
 

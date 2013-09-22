@@ -44,10 +44,10 @@ public class LocaleComboBox
 		setRenderer(new LocaleComboBoxRenderer());
 	}
 
-	private class LocaleComboBoxRenderer
+	private static class LocaleComboBoxRenderer
 			extends BasicComboBoxRenderer {
 
-		private String getDefaultText() {
+		private static String getDefaultText() {
 			final StringBuilder string =
 					new StringBuilder(Messages.getString("Locale.default")); //$NON-NLS-1$
 			string.append(" ("); //$NON-NLS-1$
@@ -67,7 +67,7 @@ public class LocaleComboBox
 				setText(getDefaultText());
 			} else {
 				final Locale locale = (Locale)value;
-				setText(locale.getDisplayName(locale));
+				setText(locale.getDisplayName());
 			}
 			return component;
 		}

@@ -269,9 +269,8 @@ public class BPMNSimulatorFrame
 	}
 
 	protected void showAboutDialog() {
-		final AboutDialog frame = new AboutDialog();
-		frame.setLocationRelativeTo(BPMNSimulatorFrame.this);
-		frame.setVisible(true);
+		final AboutDialog frame = new AboutDialog(this);
+		frame.showDialog();
 	}
 
 	protected JMenu createMenuHelp() {

@@ -20,6 +20,7 @@
  */
 package com.googlecode.bpmn_simulator.gui;
 
+import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
@@ -80,8 +81,13 @@ public final class BPMNSimulatorApplication {
 
 		initLookAndFeel();
 
-		final BPMNSimulatorFrame frame = new BPMNSimulatorFrame();
-		frame.setVisible(true);
+		SwingUtilities.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				final BPMNSimulatorFrame frame = new BPMNSimulatorFrame();
+				frame.setVisible(true);
+			}
+		});
 	}
 
 }

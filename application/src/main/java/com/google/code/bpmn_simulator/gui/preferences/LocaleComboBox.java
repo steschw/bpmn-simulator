@@ -24,15 +24,15 @@ import java.awt.Component;
 import java.util.Locale;
 
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.DefaultListCellRenderer;
 import javax.swing.JComboBox;
 import javax.swing.JList;
-import javax.swing.plaf.basic.BasicComboBoxRenderer;
 
 import com.google.code.bpmn_simulator.gui.Messages;
 
 @SuppressWarnings("serial")
 public class LocaleComboBox
-		extends JComboBox {
+		extends JComboBox<Locale> {
 
 	private static final Locale[] LOCALES = {
 			Locale.ENGLISH,
@@ -40,12 +40,12 @@ public class LocaleComboBox
 	};
 
 	public LocaleComboBox() {
-		super(new DefaultComboBoxModel(LOCALES));
+		super(new DefaultComboBoxModel<Locale>(LOCALES));
 		setRenderer(new LocaleComboBoxRenderer());
 	}
 
 	private static class LocaleComboBoxRenderer
-			extends BasicComboBoxRenderer {
+			extends DefaultListCellRenderer {
 
 		private static String getDefaultText() {
 			final StringBuilder string =
@@ -57,7 +57,7 @@ public class LocaleComboBox
 		}
 
 		@Override
-		public Component getListCellRendererComponent(final JList list,
+		public Component getListCellRendererComponent(final JList<?> list,
 				final Object value, final int index, final boolean isSelected,
 				final boolean cellHasFocus) {
 			final Component component =

@@ -38,12 +38,12 @@ import com.googlecode.bpmn_simulator.bpmn.model.BPMNModel;
 
 
 @SuppressWarnings("serial")
-public class PropertiesDialog
+public class ModelPropertiesDialog
 		extends AbstractDialog {
 
 	private final BPMNModel model;
 
-	public PropertiesDialog(final JFrame parent, final BPMNModel model) {
+	public ModelPropertiesDialog(final JFrame parent, final BPMNModel model) {
 		super(parent, Messages.getString("Properties.properties")); //$NON-NLS-1$
 
 		this.model = model;
@@ -119,7 +119,7 @@ public class PropertiesDialog
 		buttonClose.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(final ActionEvent e) {
-				PropertiesDialog.this.dispose();
+				ModelPropertiesDialog.this.dispose();
 			}
 		});
 		panel.add(buttonClose, BorderLayout.LINE_END);

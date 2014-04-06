@@ -90,7 +90,7 @@ public class BPMNSimulatorFrame
 	}
 
 	protected void showPropertiesDialog() {
-		final PropertiesDialog dialog = new PropertiesDialog(this, model);
+		final ModelPropertiesDialog dialog = new ModelPropertiesDialog(this, model);
 		dialog.showDialog();
 	}
 

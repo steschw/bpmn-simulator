@@ -49,7 +49,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-		<surefire.version>2.16</surefire.version>
+		<surefire.version>2.17</surefire.version>
 		<dependency.version>2.8</dependency.version>
 	</properties>
 
@@ -109,6 +109,11 @@
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-surefire-plugin</artifactId>
 					<version>${surefire.version}</version>
+					<configuration>
+						<includes>
+							<include>**/*Tests.java</include>
+						</includes>
+					</configuration>
 				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
@@ -139,6 +144,9 @@
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-site-plugin</artifactId>
 					<version>3.3</version>
+					<configuration>
+						<locales>en,de</locales>
+					</configuration>
 				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
@@ -224,6 +232,7 @@
 				<activeByDefault>false</activeByDefault>
 			</activation>
 			<properties>
+				<linkXRef>false</linkXRef>
 				<checkstyle.version>2.12</checkstyle.version>
 				<pmd.version>3.1</pmd.version>
 			</properties>
@@ -243,9 +252,12 @@
 						<artifactId>maven-pmd-plugin</artifactId>
 						<version>${pmd.version}</version>
 						<configuration>
+							<aggregate>true</aggregate>
+							<!--
 							<rulesets>
 								<ruleset>pmd-ruleset.xml</ruleset>
 							</rulesets>
+							-->
 						</configuration>
 					</plugin>
 					<plugin>
@@ -259,7 +271,7 @@
 								<plugin>
 									<groupId>com.mebigfatguy.fb-contrib</groupId>
 									<artifactId>fb-contrib</artifactId>
-									<version>4.8.4</version>
+									<version>5.2.0</version>
 								</plugin>
 							</plugins>
 						</configuration>

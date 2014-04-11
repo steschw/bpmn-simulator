@@ -107,7 +107,7 @@ public abstract class AbstractBPMNModel
 			"http://www.signavio.com"; //$NON-NLS-1$
 
 	private static final String SCHEMA_FILENAME =
-			"com/google/code/bpmn_simulator/bpmn/xsd/BPMN20.xsd"; //$NON-NLS-1$
+			"com/googlecode/bpmn_simulator/bpmn/xsd/BPMN20.xsd"; //$NON-NLS-1$
 
 	private final ElementRefCollection<AbstractFlowElement> elements
 			= new ElementRefCollection<AbstractFlowElement>();

@@ -31,6 +31,7 @@ import java.io.IOException;
 import java.util.Collection;
 
 import javax.swing.JFileChooser;
+import javax.swing.JInternalFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -42,6 +43,8 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 import com.googlecode.bpmn_simulator.bpmn.di.BPMNDiagram;
 import com.googlecode.bpmn_simulator.bpmn.di.DiagramInterchangeModel;
+import com.googlecode.bpmn_simulator.gui.dialogs.ExceptionDialog;
+import com.googlecode.bpmn_simulator.gui.dialogs.ImageExportChooser;
 import com.googlecode.bpmn_simulator.gui.instances.InstancesFrame;
 import com.googlecode.bpmn_simulator.gui.log.LogFrame;
 import com.googlecode.bpmn_simulator.gui.mdi.MdiFrame;
@@ -63,11 +66,11 @@ public class BPMNSimulatorFrame
 
 	private final Toolbar toolbar = new Toolbar(logFrame);
 
-	private DiagramInterchangeModel model;
-
-	private File file;
-
 	private final InstancesFrame frameInstances = new InstancesFrame();
+
+	private DiagramInterchangeModel currentModel;
+
+	private File currentFile;
 
 	public BPMNSimulatorFrame() {
 		super();
@@ -82,15 +85,15 @@ public class BPMNSimulatorFrame
 
 	protected void updateFrameTitle() {
 		final StringBuilder title = new StringBuilder(BPMNSimulatorApplication.NAME);
-		if (file != null) {
+		if (currentFile != null) {
 			title.append(" - "); //$NON-NLS-1$
-			title.append(file.getAbsolutePath());
+			title.append(currentFile.getAbsolutePath());
 		}
 		setTitle(title.toString());
 	}
 
 	protected void showPropertiesDialog() {
-		final ModelPropertiesDialog dialog = new ModelPropertiesDialog(this, model);
+		final ModelPropertiesDialog dialog = new ModelPropertiesDialog(this, currentModel);
 		dialog.showDialog();
 	}
 
@@ -103,6 +106,28 @@ public class BPMNSimulatorFrame
 		setJMenuBar(createMenuBar());
 
 		getContentPane().add(createToolbar(), BorderLayout.PAGE_START);
+	}
+
+	protected JMenu createMenuFileExport() {
+		final JMenu menuExport = new JMenu("Export as");
+
+		final JMenuItem asImageItem = new JMenuItem("Image");
+		asImageItem.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(final ActionEvent e) {
+				final JInternalFrame frame = getDesktop().getSelectedFrame();
+				if (frame instanceof DiagramFrame) {
+					final DiagramFrame diagramFrame = (DiagramFrame) frame;
+					final ImageExportChooser fileChooser = new ImageExportChooser();
+					if (fileChooser.showExportDialog(diagramFrame)) {
+						diagramFrame.exportImage(fileChooser.getSelectedFile(), fileChooser.getSelectedImageFormat());
+					}
+				}
+			}
+		});
+		menuExport.add(asImageItem);
+
+		return menuExport;
 	}
 
 	protected JMenu createMenuFile() {
@@ -156,6 +181,11 @@ public class BPMNSimulatorFrame
 
 		menuFile.addSeparator();
 
+		final JMenuItem menuFileExport = createMenuFileExport();
+		menuFile.add(menuFileExport);
+
+		menuFile.addSeparator();
+
 		final JMenuItem menuFilePreferences = new JMenuItem(Messages.getString("Menu.preferences")); //$NON-NLS-1$
 		menuFilePreferences.addActionListener(new ActionListener() {
 			@Override
@@ -188,6 +218,7 @@ public class BPMNSimulatorFrame
 				menuFileReload.setEnabled(isModelOpen());
 				menuFileClose.setEnabled(isModelOpen());
 				menuFileProperties.setEnabled(isModelOpen());
+				menuFileExport.setEnabled(isModelOpen());
 			}
 
 			@Override
@@ -221,18 +252,15 @@ public class BPMNSimulatorFrame
 		menuExtraOpenExternalEditor.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(final ActionEvent event) {
-				if (file != null) {
+				if (currentFile != null) {
 					final String externalEditor = Config.getInstance().getExternalEditor();
 					if ((externalEditor == null) || externalEditor.isEmpty()) {
 						showPreferencesDialog();
 					} else {
 						try {
-							Runtime.getRuntime().exec(new String[] {externalEditor, file.getAbsolutePath()});
-						} catch (final IOException exception) {
-							JOptionPane.showMessageDialog(BPMNSimulatorFrame.this,
-									exception.getLocalizedMessage(),
-									Messages.getString("error"), //$NON-NLS-1$
-									JOptionPane.ERROR_MESSAGE);
+							Runtime.getRuntime().exec(new String[] {externalEditor, currentFile.getAbsolutePath()});
+						} catch (final IOException e) {
+							ExceptionDialog.showExceptionDialog(BPMNSimulatorFrame.this, e);
 						}
 					}
 				}
@@ -312,20 +340,32 @@ public class BPMNSimulatorFrame
 		if (fileChoser.showOpenDialog(this) == 	JFileChooser.APPROVE_OPTION) {
 			config.setLastDirectory(fileChoser.getCurrentDirectory().getAbsolutePath());
 			closeFile();
-			file = fileChoser.getSelectedFile();
+			currentFile = fileChoser.getSelectedFile();
 			updateFrameTitle();
 			createModel();
 		}
 	}
 
+	private void closeFile() {
+		closeModel();
+		if (isFileOpen()) {
+			currentFile = null;
+			updateFrameTitle();
+		}
+	}
+
+	public boolean isFileOpen() {
+		return currentFile != null;
+	}
+
 	private void createModel() {
-		if (file != null) {
-			model = new DiagramInterchangeModel();
-			model.addStructureExceptionListener(logFrame);
-			model.load(file);
-			frameInstances.setInstanceManager(model.getInstanceManager());
-			toolbar.setModel(model);
-			final Collection<BPMNDiagram> diagrams = model.getDiagrams();
+		if (isFileOpen()) {
+			currentModel = new DiagramInterchangeModel();
+			currentModel.addStructureExceptionListener(logFrame);
+			currentModel.load(currentFile);
+			frameInstances.setInstanceManager(currentModel.getInstanceManager());
+			toolbar.setModel(currentModel);
+			final Collection<BPMNDiagram> diagrams = currentModel.getDiagrams();
 			if (diagrams.isEmpty()) {
 				JOptionPane.showMessageDialog(this,
 						Messages.getString("containsNoDiagrams"), //$NON-NLS-1$
@@ -343,32 +383,24 @@ public class BPMNSimulatorFrame
 		}
 	}
 
+	private boolean isModelOpen() {
+		return currentModel != null;
+	}
+
 	private void closeModel() {
-		if (model != null) {
+		if (isModelOpen()) {
 			getDesktop().removeAll();
 			toolbar.setModel(null);
 			frameInstances.setInstanceManager(null);
-			model.close();
-			model = null;
+			currentModel.close();
+			currentModel = null;
 			logFrame.clear();
-		}
-	}
-
-	private void closeFile() {
-		closeModel();
-		if (file != null) {
-			file = null;
-			updateFrameTitle();
 		}
 	}
 
 	private void reloadModel() {
 		closeModel();
 		createModel();
-	}
-
-	private boolean isModelOpen() {
-		return model != null;
 	}
 
 }

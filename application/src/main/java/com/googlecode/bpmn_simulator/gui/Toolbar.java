@@ -23,11 +23,8 @@ package com.googlecode.bpmn_simulator.gui;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.net.URL;
 
 import javax.swing.Box;
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JToolBar;
@@ -39,24 +36,10 @@ import com.googlecode.bpmn_simulator.framework.execution.AbstractAnimator;
 import com.googlecode.bpmn_simulator.framework.execution.AnimationListener;
 import com.googlecode.bpmn_simulator.gui.log.LogFrame;
 
-
-
 @SuppressWarnings("serial")
 public class Toolbar
 		extends JToolBar
 		implements AnimationListener {
-
-	private static final Icon ICON_OPEN = loadIcon("open.png"); //$NON-NLS-1$
-
-	private static final Icon ICON_START = loadIcon("start.png"); //$NON-NLS-1$;
-	private static final Icon ICON_RESET = loadIcon("stop.png"); //$NON-NLS-1$;
-
-	private static final Icon ICON_PAUSE = loadIcon("pause.png"); //$NON-NLS-1$
-	private static final Icon ICON_PLAY = loadIcon("play.png"); //$NON-NLS-1$
-	private static final Icon ICON_STEP = loadIcon("step.png"); //$NON-NLS-1$
-	private static final Icon ICON_SPEED = loadIcon("speed.png"); //$NON-NLS-1$
-	private static final Icon ICON_MESSAGES = loadIcon("messages.png"); //$NON-NLS-1$
-	private static final Icon ICON_MESSAGESERROR = loadIcon("messagesError.png"); //$NON-NLS-1$
 
 	private JButton buttonOpen;
 
@@ -81,14 +64,6 @@ public class Toolbar
 		this.logFrame = logFrame;
 
 		create();
-	}
-
-	protected static ImageIcon loadIcon(final String filename) {
-		final URL url = Toolbar.class.getResource(filename);
-		if (url != null) {
-			return new ImageIcon(url);
-		}
-		return null;
 	}
 
 	public void setModel(final AbstractBPMNModel model) {
@@ -117,17 +92,17 @@ public class Toolbar
 
 	protected void create() {
 
-		buttonOpen = new JButton(ICON_OPEN);
+		buttonOpen = new JButton(Theme.ICON_OPEN);
 		buttonOpen.setToolTipText(Messages.getString("Toolbar.open")); //$NON-NLS-1$
 		add(buttonOpen);
 
 		addSeparator(new Dimension(24, 32));
 
-		buttonStart = new StartButton(ICON_START);
+		buttonStart = new StartButton(Theme.ICON_START);
 		buttonStart.setToolTipText(Messages.getString("Toolbar.start")); //$NON-NLS-1$
 		add(buttonStart);
 
-		buttonReset = new JButton(ICON_RESET);
+		buttonReset = new JButton(Theme.ICON_RESET);
 		buttonReset.setToolTipText(Messages.getString("Toolbar.reset")); //$NON-NLS-1$
 		buttonReset.addActionListener(new ActionListener() {
 			@Override
@@ -153,7 +128,7 @@ public class Toolbar
 		});
 		add(buttonPauseContinue);
 
-		buttonStep = new JButton(ICON_STEP);
+		buttonStep = new JButton(Theme.ICON_STEP);
 		buttonStep.setToolTipText(Messages.getString("Toolbar.step")); //$NON-NLS-1$
 		buttonStep.addActionListener(new ActionListener() {
 			@Override
@@ -165,7 +140,7 @@ public class Toolbar
 
 		addSeparator(new Dimension(32, 32));
 
-		labelSpeed = new JLabel(ICON_SPEED);
+		labelSpeed = new JLabel(Theme.ICON_SPEED);
 		labelSpeed.setToolTipText(Messages.getString("Toolbar.frameRate")); //$NON-NLS-1$
 		add(labelSpeed);
 
@@ -204,10 +179,10 @@ public class Toolbar
 		} else {
 			buttonMessages.setVisible(logFrame.hasMessages());
 			if (logFrame.hasErrors()) {
-				buttonMessages.setIcon(ICON_MESSAGESERROR);
+				buttonMessages.setIcon(Theme.ICON_MESSAGESERROR);
 				buttonMessages.setToolTipText(Messages.getString("Toolbar.hintErrors")); //$NON-NLS-1$
 			} else {
-				buttonMessages.setIcon(ICON_MESSAGES);
+				buttonMessages.setIcon(Theme.ICON_MESSAGES);
 				buttonMessages.setToolTipText(Messages.getString("Toolbar.hintMessages")); //$NON-NLS-1$
 			}
 		}
@@ -226,7 +201,7 @@ public class Toolbar
 		spinnerSpeed.setEnabled(animator != null);
 		labelSpeed.setEnabled(animator != null);
 
-		buttonPauseContinue.setIcon(isPaused ? ICON_PLAY : ICON_PAUSE);
+		buttonPauseContinue.setIcon(isPaused ? Theme.ICON_PLAY : Theme.ICON_PAUSE);
 		buttonPauseContinue.setToolTipText(
 				isPaused
 						? Messages.getString("Toolbar.play") //$NON-NLS-1$

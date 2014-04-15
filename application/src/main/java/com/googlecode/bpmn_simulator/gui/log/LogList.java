@@ -21,28 +21,22 @@
 package com.googlecode.bpmn_simulator.gui.log;
 
 import java.awt.Dimension;
-import java.awt.Image;
 
 import javax.swing.BorderFactory;
 import javax.swing.Icon;
-import javax.swing.ImageIcon;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
-import javax.swing.UIManager;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 
+import com.googlecode.bpmn_simulator.gui.Theme;
+
 @SuppressWarnings("serial")
 public class LogList
 		extends JScrollPane {
-
-	private static final Icon ICON_ERROR
-			= loadResizedIcon(UIManager.getIcon("OptionPane.errorIcon")); //$NON-NLS-1$
-	private static final Icon ICON_WARNING
-			= loadResizedIcon(UIManager.getIcon("OptionPane.warningIcon")); //$NON-NLS-1$
 
 	public LogList() {
 		super(new LogListContent());
@@ -50,27 +44,16 @@ public class LogList
 		setPreferredSize(new Dimension(100, 80));
 	}
 
-	protected static final Icon loadResizedIcon(final Icon icon) {
-		if ((icon != null) && (icon instanceof ImageIcon)) {
-			final Image image
-					= ((ImageIcon)icon).getImage().getScaledInstance(16, 16, Image.SCALE_SMOOTH);
-			if (image != null) {
-				return new ImageIcon(image);
-			}
-		}
-		return null;
-	}
-
 	protected LogListContent getContent() {
 		return (LogListContent)this.getViewport().getView();
 	}
 
 	public void addError(final String message) {
-		getContent().addMessage(ICON_ERROR, message);
+		getContent().addMessage(Theme.ICON_ERROR, message);
 	}
 
 	public void addWarning(final String message) {
-		getContent().addMessage(ICON_WARNING, message);
+		getContent().addMessage(Theme.ICON_WARNING, message);
 	}
 
 	public void clear() {

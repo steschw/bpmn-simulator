@@ -48,6 +48,8 @@ import com.googlecode.bpmn_simulator.gui.dialogs.ExceptionDialog;
 public class DiagramFrame
 		extends JInternalFrame {
 
+	private static final Color BACKGROUND_COLOR = Color.WHITE;
+
 	private static final Icon ICON_PROCESS = loadFrameIcon("process.png"); //$NON-NLS-1$
 	private static final Icon ICON_COLLABORATION = loadFrameIcon("collaboration.png"); //$NON-NLS-1$
 
@@ -58,7 +60,7 @@ public class DiagramFrame
 		this.diagram = diagram;
 
 		final JScrollPane scrollPane = new JScrollPane(diagram.getPlane());
-		scrollPane.getViewport().setBackground(Color.WHITE);
+		scrollPane.getViewport().setBackground(BACKGROUND_COLOR);
 		setContentPane(scrollPane);
 
 		updateFrameIcon();
@@ -97,7 +99,7 @@ public class DiagramFrame
 		final int height = plane.getHeight();
 		final BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_3BYTE_BGR);
 		final Graphics graphics = image.getGraphics();
-		graphics.setColor(Color.WHITE);
+		graphics.setColor(BACKGROUND_COLOR);
 		graphics.fillRect(0, 0, width, height);
 		plane.paintAll(graphics);
 		return image;

@@ -23,6 +23,7 @@ package com.googlecode.bpmn_simulator.gui;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -32,6 +33,7 @@ import java.net.URISyntaxException;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -86,52 +88,31 @@ public class AboutDialog
 			e.printStackTrace();
 		}
 
-		panel.add(Box.createVerticalStrut(40));
-
-		final StringBuilder javaInfo =
-				new StringBuilder(Messages.getString("About.java")); //$NON-NLS-1$
-		javaInfo.append(": "); //$NON-NLS-1$
-		javaInfo.append(System.getProperty("java.vendor")); //$NON-NLS-1$
-		javaInfo.append(' ');
-		javaInfo.append(System.getProperty("java.version")); //$NON-NLS-1$
-		javaInfo.append(" ("); //$NON-NLS-1$
-		javaInfo.append(System.getProperty("java.home")); //$NON-NLS-1$
-		javaInfo.append(')');
-		final JLabel labelJava = new JLabel(javaInfo.toString());
-		labelJava.setAlignmentX(CENTER_ALIGNMENT);
-		panel.add(labelJava);
-
-		panel.add(Box.createVerticalStrut(20));
-
-		final StringBuilder systemInfo =
-				new StringBuilder(Messages.getString("About.system")); //$NON-NLS-1$
-		systemInfo.append(": "); //$NON-NLS-1$
-		systemInfo.append(System.getProperty("os.name")); //$NON-NLS-1$
-		systemInfo.append(' ');
-		systemInfo.append(System.getProperty("os.version")); //$NON-NLS-1$
-		systemInfo.append(' ');
-		systemInfo.append(System.getProperty("os.arch")); //$NON-NLS-1$
-		final JLabel labelSystem = new JLabel(systemInfo.toString());
-		labelSystem.setAlignmentX(CENTER_ALIGNMENT);
-		panel.add(labelSystem);
-
 		return panel;
 	}
 
-	protected JPanel createTabLicence() {
-		final JPanel panel = new JPanel(new BorderLayout());
+	protected JComponent createTabLicence() {
 		final JTextArea textArea =
 				new JTextArea(BPMNSimulatorApplication.NOTICE);
 		textArea.setEditable(false);
 		textArea.setFont(new Font("Courier New", Font.PLAIN, 11)); //$NON-NLS-1$
-		panel.add(new JScrollPane(textArea), BorderLayout.CENTER);
-		return panel;
+		textArea.setMargin(new Insets(8, 8, 8, 8));
+		final JScrollPane scrollPane = new JScrollPane(textArea);
+		scrollPane.setBorder(null);
+		return scrollPane;
+	}
+
+	protected JComponent createTabProperties() {
+		final PropertiesTable propertiesTable = new PropertiesTable();
+		propertiesTable.setProperties(System.getProperties());
+		return new JScrollPane(propertiesTable);
 	}
 
 	protected JTabbedPane createTabbedPane() {
 		final JTabbedPane pane = new JTabbedPane();
 		pane.addTab(Messages.getString("About.info"), createTabInfo()); //$NON-NLS-1$
 		pane.addTab(Messages.getString("About.licence"), createTabLicence()); //$NON-NLS-1$
+		pane.addTab(Messages.getString("About.properties"), createTabProperties());
 		return pane;
 	}
 

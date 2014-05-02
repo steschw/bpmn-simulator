@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Stefan Schweitzer
+ * Copyright (C) 2014 Stefan Schweitzer
  *
  * This software was created by Stefan Schweitzer as a student's project at
  * Fachhochschule Kaiserslautern (University of Applied Sciences).
@@ -19,9 +19,6 @@
  * limitations under the License.
  */
 package com.googlecode.bpmn_simulator.animation.token;
-
-import com.googlecode.bpmn_simulator.animation.token.Instance;
-import com.googlecode.bpmn_simulator.animation.token.TokenFlow;
 
 public class Token
 		implements Cloneable {

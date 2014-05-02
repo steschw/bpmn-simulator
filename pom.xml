@@ -240,7 +240,7 @@
 			</activation>
 			<properties>
 				<linkXRef>false</linkXRef>
-				<checkstyle.version>2.12</checkstyle.version>
+				<checkstyle.version>2.12.1</checkstyle.version>
 				<pmd.version>3.1</pmd.version>
 			</properties>
 			<reporting>
@@ -251,7 +251,7 @@
 						<version>${checkstyle.version}</version>
 						<configuration>
 							<configLocation>checkstyle-configuration.xml</configLocation>
-							<headerLocation>NOTICE.txt</headerLocation>
+							<headerLocation>../NOTICE.txt</headerLocation>
 						</configuration>
 					</plugin>
 					<plugin>
@@ -259,12 +259,11 @@
 						<artifactId>maven-pmd-plugin</artifactId>
 						<version>${pmd.version}</version>
 						<configuration>
+							<typeResolution>true</typeResolution>
 							<aggregate>true</aggregate>
-							<!--
 							<rulesets>
-								<ruleset>pmd-ruleset.xml</ruleset>
+								<ruleset>../pmd-ruleset.xml</ruleset>
 							</rulesets>
-							-->
 						</configuration>
 					</plugin>
 					<plugin>

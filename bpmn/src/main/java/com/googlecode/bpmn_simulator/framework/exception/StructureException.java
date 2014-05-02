@@ -20,8 +20,8 @@
  */
 package com.googlecode.bpmn_simulator.framework.exception;
 
+import com.googlecode.bpmn_simulator.animation.element.logical.Model;
 import com.googlecode.bpmn_simulator.bpmn.model.core.foundation.BaseElement;
-import com.googlecode.bpmn_simulator.framework.element.Model;
 
 @SuppressWarnings("serial")
 public class StructureException

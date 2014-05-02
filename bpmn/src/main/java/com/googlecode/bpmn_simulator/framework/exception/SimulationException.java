@@ -20,7 +20,7 @@
  */
 package com.googlecode.bpmn_simulator.framework.exception;
 
-import com.googlecode.bpmn_simulator.framework.element.Model;
+import com.googlecode.bpmn_simulator.animation.element.logical.Model;
 
 @SuppressWarnings("serial")
 public class SimulationException

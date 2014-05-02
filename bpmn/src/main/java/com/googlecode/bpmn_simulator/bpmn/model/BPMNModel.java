@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Stefan Schweitzer
+ * Copyright (C) 2014 Stefan Schweitzer
  *
  * This software was created by Stefan Schweitzer as a student's project at
  * Fachhochschule Kaiserslautern (University of Applied Sciences).
@@ -22,12 +22,11 @@ package com.googlecode.bpmn_simulator.bpmn.model;
 
 import java.util.Collection;
 
+import com.googlecode.bpmn_simulator.animation.element.logical.Model;
 import com.googlecode.bpmn_simulator.animation.token.Instance;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.AbstractFlowElement;
 import com.googlecode.bpmn_simulator.bpmn.model.core.infrastructure.Definitions;
 import com.googlecode.bpmn_simulator.bpmn.trigger.TriggerCatchingElement;
-import com.googlecode.bpmn_simulator.framework.element.Model;
-
 
 public interface BPMNModel
 		extends Model, Definitions {

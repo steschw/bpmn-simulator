@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Stefan Schweitzer
+ * Copyright (C) 2014 Stefan Schweitzer
  *
  * This software was created by Stefan Schweitzer as a student's project at
  * Fachhochschule Kaiserslautern (University of Applied Sciences).
@@ -18,14 +18,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.bpmn_simulator.framework.element;
+package com.googlecode.bpmn_simulator.animation.element.logical;
 
-import com.googlecode.bpmn_simulator.framework.instance.InstanceManager;
+import java.util.Collection;
 
 public interface Model {
 
-	InstanceManager getInstanceManager();
-
 	String getEncoding();
+
+	Collection<LogicalElement> getStartElements();
 
 }

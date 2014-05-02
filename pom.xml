@@ -70,8 +70,10 @@
 
 	<modules>
 		<module>animation</module>
-		<module>animation-bpmn</module>
 		<module>test-animation</module>
+		<module>animation-swing</module>
+		<module>bpmn</module>
+		<module>bpmn-swing</module>
 		<module>application</module>
 	</modules>
 

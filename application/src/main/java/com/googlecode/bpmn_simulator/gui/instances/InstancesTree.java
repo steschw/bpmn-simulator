@@ -33,18 +33,18 @@ import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreePath;
 
-import com.googlecode.bpmn_simulator.framework.instance.Instance;
-import com.googlecode.bpmn_simulator.framework.instance.InstanceListener;
+import com.googlecode.bpmn_simulator.animation.token.Instance;
+import com.googlecode.bpmn_simulator.animation.token.InstancesListener;
+import com.googlecode.bpmn_simulator.animation.token.Token;
+import com.googlecode.bpmn_simulator.animation.token.TokenFlow;
+import com.googlecode.bpmn_simulator.animation.token.TokenFlowListener;
 import com.googlecode.bpmn_simulator.framework.instance.InstanceManager;
-import com.googlecode.bpmn_simulator.framework.token.Token;
-import com.googlecode.bpmn_simulator.framework.token.TokenFlow;
-import com.googlecode.bpmn_simulator.framework.token.TokenListener;
 
 
 @SuppressWarnings("serial")
 public class InstancesTree
 		extends JTree
-		implements InstanceListener, TokenListener {
+		implements InstancesListener, TokenFlowListener {
 
 	private static final String ROOT_NODE_TITLE = "Instances";
 
@@ -119,11 +119,11 @@ public class InstancesTree
 	@Override
 	public void instanceAdded(final Instance instance) {
 		instance.addInstanceListener(this);
-		instance.addTokenListener(this);
+		instance.addTokenFlowListener(this);
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
-				addAndExpandNode(getNodeByUserObject(instance.getParent()), instance);
+				addAndExpandNode(getNodeByUserObject(instance.getParentInstance()), instance);
 			}
 		});
 	}

@@ -31,13 +31,13 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
+import com.googlecode.bpmn_simulator.animation.token.Instance;
 import com.googlecode.bpmn_simulator.bpmn.model.AbstractBPMNModel;
 import com.googlecode.bpmn_simulator.bpmn.trigger.Instantiable;
 import com.googlecode.bpmn_simulator.bpmn.trigger.InstantiableNotifiySource;
 import com.googlecode.bpmn_simulator.bpmn.trigger.Trigger;
 import com.googlecode.bpmn_simulator.bpmn.trigger.TriggerCatchingElement;
 import com.googlecode.bpmn_simulator.framework.gui.InstanceMenuItem;
-import com.googlecode.bpmn_simulator.framework.instance.Instance;
 
 
 

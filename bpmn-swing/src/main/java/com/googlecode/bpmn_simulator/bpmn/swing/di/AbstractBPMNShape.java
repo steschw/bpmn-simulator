@@ -18,18 +18,35 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.bpmn_simulator.bpmn.di;
+package com.googlecode.bpmn_simulator.bpmn.swing.di;
 
-import com.googlecode.bpmn_simulator.animation.element.logical.LogicalEdgeElement;
-import com.googlecode.bpmn_simulator.animation.element.visual.swing.AbstractVisualEdgeElement;
+import com.googlecode.bpmn_simulator.animation.element.logical.LogicalNodeElement;
+import com.googlecode.bpmn_simulator.animation.element.visual.swing.AbstractVisualNodeElement;
+import com.googlecode.bpmn_simulator.bpmn.di.BPMNShape;
 
 @SuppressWarnings("serial")
-public abstract class AbstractBPMNEdge<E extends LogicalEdgeElement>
-		extends AbstractVisualEdgeElement<E>
-		implements BPMNEdge {
+public abstract class AbstractBPMNShape<E extends LogicalNodeElement>
+		extends AbstractVisualNodeElement<E>
+		implements BPMNShape {
 
-	public AbstractBPMNEdge(final E element) {
+	private final boolean horizontal;
+	private final boolean expanded;
+
+	public AbstractBPMNShape(final E element,
+			final boolean horizontal, final boolean expanded) {
 		super(element);
+		this.horizontal = horizontal;
+		this.expanded = expanded;
+	}
+
+	@Override
+	public boolean isHorizontal() {
+		return horizontal;
+	}
+
+	@Override
+	public boolean isExpanded() {
+		return expanded;
 	}
 
 }

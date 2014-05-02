@@ -41,8 +41,8 @@ import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-import com.googlecode.bpmn_simulator.bpmn.di.BPMNDiagram;
-import com.googlecode.bpmn_simulator.bpmn.di.DiagramInterchangeModel;
+import com.googlecode.bpmn_simulator.bpmn.swing.di.BPMNDiagram;
+import com.googlecode.bpmn_simulator.bpmn.swing.di.DiagramInterchangeModel;
 import com.googlecode.bpmn_simulator.gui.dialogs.ExceptionDialog;
 import com.googlecode.bpmn_simulator.gui.dialogs.ImageExportChooser;
 import com.googlecode.bpmn_simulator.gui.instances.InstancesFrame;

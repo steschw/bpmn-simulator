@@ -18,7 +18,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.bpmn_simulator.bpmn.di;
+package com.googlecode.bpmn_simulator.bpmn.swing.di;
 
 import java.awt.Dimension;
 import java.text.MessageFormat;

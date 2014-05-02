@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Stefan Schweitzer
+ * Copyright (C) 2014 Stefan Schweitzer
  *
  * This software was created by Stefan Schweitzer as a student's project at
  * Fachhochschule Kaiserslautern (University of Applied Sciences).
@@ -20,16 +20,32 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.di;
 
-import com.googlecode.bpmn_simulator.animation.element.logical.LogicalElement;
-import com.googlecode.bpmn_simulator.framework.element.visual.AbstractVisualEdgeElement;
+import com.googlecode.bpmn_simulator.animation.element.logical.LogicalNodeElement;
+import com.googlecode.bpmn_simulator.animation.element.visual.swing.AbstractVisualNodeElement;
 
 @SuppressWarnings("serial")
-public abstract class AbstractBPMNEdge<E extends LogicalElement>
-		extends AbstractVisualEdgeElement<E>
-		implements BPMNEdge {
+public abstract class AbstractBPMNShape<E extends LogicalNodeElement>
+		extends AbstractVisualNodeElement<E>
+		implements BPMNShape {
 
-	public AbstractBPMNEdge(final E element) {
+	private final boolean horizontal;
+	private final boolean expanded;
+
+	public AbstractBPMNShape(final E element,
+			final boolean horizontal, final boolean expanded) {
 		super(element);
+		this.horizontal = horizontal;
+		this.expanded = expanded;
+	}
+
+	@Override
+	public boolean isHorizontal() {
+		return horizontal;
+	}
+
+	@Override
+	public boolean isExpanded() {
+		return expanded;
 	}
 
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Stefan Schweitzer
+ * Copyright (C) 2014 Stefan Schweitzer
  *
  * This software was created by Stefan Schweitzer as a student's project at
  * Fachhochschule Kaiserslautern (University of Applied Sciences).
@@ -20,9 +20,16 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.di;
 
-public interface BPMNShape {
+import com.googlecode.bpmn_simulator.animation.element.logical.LogicalEdgeElement;
+import com.googlecode.bpmn_simulator.animation.element.visual.swing.AbstractVisualEdgeElement;
 
-	boolean isHorizontal();
-	boolean isExpanded();
+@SuppressWarnings("serial")
+public abstract class AbstractBPMNEdge<E extends LogicalEdgeElement>
+		extends AbstractVisualEdgeElement<E>
+		implements BPMNEdge {
+
+	public AbstractBPMNEdge(final E element) {
+		super(element);
+	}
 
 }

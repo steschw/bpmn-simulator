@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Stefan Schweitzer
+ * Copyright (C) 2014 Stefan Schweitzer
  *
  * This software was created by Stefan Schweitzer as a student's project at
  * Fachhochschule Kaiserslautern (University of Applied Sciences).
@@ -20,30 +20,8 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.di;
 
-import com.googlecode.bpmn_simulator.bpmn.model.core.common.AbstractFlowElement;
+public interface BPMNDiagram {
 
-public final class BPMNDiagram {
-
-	private final AbstractFlowElement plane;
-	private final String name;
-
-	public BPMNDiagram(final AbstractFlowElement plane, final String name) {
-		super();
-		this.plane = plane;
-		this.name = name;
-	}
-
-	public AbstractFlowElement getPlane() {
-		return plane;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public String getTitle() {
-		final String name = getName();
-		return (name == null) ? plane.getFullName() : name;
-	}
+	BPMNPlane getPlane();
 
 }

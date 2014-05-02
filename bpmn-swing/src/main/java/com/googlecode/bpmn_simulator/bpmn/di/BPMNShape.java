@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Stefan Schweitzer
+ * Copyright (C) 2014 Stefan Schweitzer
  *
  * This software was created by Stefan Schweitzer as a student's project at
  * Fachhochschule Kaiserslautern (University of Applied Sciences).
@@ -20,6 +20,10 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.di;
 
-public interface BPMNEdge {
+public interface BPMNShape {
+
+	boolean isHorizontal();
+
+	boolean isExpanded();
 
 }

@@ -28,7 +28,7 @@ import com.googlecode.bpmn_simulator.animation.token.Token;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.AbstractTokenFlowElementWithDefault;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.Label;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.SequenceFlow;
-import com.googlecode.bpmn_simulator.bpmn.model.core.common.Visualization;
+import com.googlecode.bpmn_simulator.bpmn.swing.di.Visualization;
 import com.googlecode.bpmn_simulator.framework.element.visual.GraphicsLayer;
 import com.googlecode.bpmn_simulator.framework.element.visual.geometry.Bounds;
 

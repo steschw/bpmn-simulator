@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Stefan Schweitzer
+ * Copyright (C) 2014 Stefan Schweitzer
  *
  * This software was created by Stefan Schweitzer as a student's project at
  * Fachhochschule Kaiserslautern (University of Applied Sciences).
@@ -18,7 +18,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.bpmn_simulator.bpmn.model.core.common;
+package com.googlecode.bpmn_simulator.bpmn.swing.di;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -58,7 +58,7 @@ public class Visualization {
 	public static final String ICON_ERROR_INVERSE = "error_inverse.png"; //$NON-NLS-1$
 	public static final String ICON_CONDITIONAL = "conditional.png"; //$NON-NLS-1$
 
-	private static final String ICONPATH = "com/google/code/bpmn_simulator/bpmn/icons/"; //$NON-NLS-1$
+	private static final String ICONPATH = "com/googlecode/bpmn_simulator/bpmn/icons/"; //$NON-NLS-1$
 
 	private static final Color DEFAULT_BACKGROUNDCOLOR = Color.WHITE;
 
@@ -80,18 +80,6 @@ public class Visualization {
 			};
 
 	private final Map<String, Icon> icons = new IdentityHashMap<String, Icon>();
-
-	public enum Element {
-		GATEWAY,
-		TASK,
-		PROCESS,
-		EVENT_START,
-		EVENT_END,
-		EVENT_INTERMEDIATE,
-		EVENT_BOUNDARY,
-		DATA_OBJECT,
-		DATA_STORAGE,
-	}
 
 	private final Map<Element, Color> backgroundColors = new EnumMap<Element, Color>(Element.class);
 
@@ -152,9 +140,10 @@ public class Visualization {
 	}
 
 	public Color getBackground(final Element element) {
-		return backgroundColors.containsKey(element)
-				? backgroundColors.get(element)
-				: DEFAULT_BACKGROUNDCOLOR;
+		if (backgroundColors.containsKey(element)) {
+			return backgroundColors.get(element);
+		}
+		return DEFAULT_BACKGROUNDCOLOR;
 	}
 
 	public void setBackground(final Element element, final Color color) {
@@ -214,6 +203,18 @@ public class Visualization {
 				1.f,
 				DASH_DASHEDDOTTED,
 				0);
+	}
+
+	public enum Element {
+		GATEWAY,
+		TASK,
+		PROCESS,
+		EVENT_START,
+		EVENT_END,
+		EVENT_INTERMEDIATE,
+		EVENT_BOUNDARY,
+		DATA_OBJECT,
+		DATA_STORAGE,
 	}
 
 }

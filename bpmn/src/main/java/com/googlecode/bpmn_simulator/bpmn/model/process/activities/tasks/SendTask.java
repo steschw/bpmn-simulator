@@ -23,7 +23,7 @@ package com.googlecode.bpmn_simulator.bpmn.model.process.activities.tasks;
 import javax.swing.Icon;
 
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.Message;
-import com.googlecode.bpmn_simulator.bpmn.model.core.common.Visualization;
+import com.googlecode.bpmn_simulator.bpmn.swing.di.Visualization;
 import com.googlecode.bpmn_simulator.framework.element.ElementRef;
 
 

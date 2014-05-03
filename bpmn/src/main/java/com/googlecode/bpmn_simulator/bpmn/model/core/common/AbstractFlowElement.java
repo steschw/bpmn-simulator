@@ -36,6 +36,7 @@ import com.googlecode.bpmn_simulator.bpmn.Messages;
 import com.googlecode.bpmn_simulator.bpmn.model.BPMNModel;
 import com.googlecode.bpmn_simulator.bpmn.model.core.foundation.Documentation;
 import com.googlecode.bpmn_simulator.bpmn.model.process.activities.AbstractContainerActivity;
+import com.googlecode.bpmn_simulator.bpmn.swing.di.Visualization;
 import com.googlecode.bpmn_simulator.framework.element.visual.GraphicsLayer;
 import com.googlecode.bpmn_simulator.framework.element.visual.geometry.Bounds;
 

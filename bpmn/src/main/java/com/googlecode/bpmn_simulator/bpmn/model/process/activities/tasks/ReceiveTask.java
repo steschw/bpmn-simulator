@@ -27,7 +27,7 @@ import javax.swing.Icon;
 
 import com.googlecode.bpmn_simulator.animation.token.Token;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.Message;
-import com.googlecode.bpmn_simulator.bpmn.model.core.common.Visualization;
+import com.googlecode.bpmn_simulator.bpmn.swing.di.Visualization;
 import com.googlecode.bpmn_simulator.bpmn.trigger.Instantiable;
 import com.googlecode.bpmn_simulator.bpmn.trigger.InstantiableNotifiySource;
 import com.googlecode.bpmn_simulator.bpmn.trigger.Trigger;

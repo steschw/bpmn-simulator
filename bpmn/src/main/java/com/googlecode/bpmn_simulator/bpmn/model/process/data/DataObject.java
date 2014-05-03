@@ -27,7 +27,7 @@ import javax.swing.Icon;
 
 import com.googlecode.bpmn_simulator.bpmn.Messages;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.AbstractFlowElement;
-import com.googlecode.bpmn_simulator.bpmn.model.core.common.Visualization;
+import com.googlecode.bpmn_simulator.bpmn.swing.di.Visualization;
 import com.googlecode.bpmn_simulator.framework.element.visual.GraphicsLayer;
 import com.googlecode.bpmn_simulator.framework.element.visual.geometry.Bounds;
 

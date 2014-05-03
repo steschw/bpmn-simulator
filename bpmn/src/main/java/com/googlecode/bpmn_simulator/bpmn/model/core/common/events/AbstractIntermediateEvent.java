@@ -22,7 +22,7 @@ package com.googlecode.bpmn_simulator.bpmn.model.core.common.events;
 
 import java.awt.Color;
 
-import com.googlecode.bpmn_simulator.bpmn.model.core.common.Visualization;
+import com.googlecode.bpmn_simulator.bpmn.swing.di.Visualization;
 
 
 @SuppressWarnings("serial")

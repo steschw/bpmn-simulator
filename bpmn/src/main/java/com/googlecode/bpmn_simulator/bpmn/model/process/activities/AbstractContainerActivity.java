@@ -37,11 +37,11 @@ import com.googlecode.bpmn_simulator.bpmn.model.BPMNModel;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.AbstractFlowElement;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.AbstractTokenFlowElement;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.Label;
-import com.googlecode.bpmn_simulator.bpmn.model.core.common.Visualization;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.events.AbstractEvent;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.events.StartEvent;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.gateways.AbstractGateway;
 import com.googlecode.bpmn_simulator.bpmn.model.core.foundation.BaseElement;
+import com.googlecode.bpmn_simulator.bpmn.swing.di.Visualization;
 import com.googlecode.bpmn_simulator.framework.element.visual.GraphicsLayer;
 
 

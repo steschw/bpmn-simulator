@@ -30,8 +30,8 @@ import javax.swing.Icon;
 
 import com.googlecode.bpmn_simulator.animation.token.Instance;
 import com.googlecode.bpmn_simulator.bpmn.Messages;
-import com.googlecode.bpmn_simulator.bpmn.model.core.common.Visualization;
 import com.googlecode.bpmn_simulator.bpmn.model.process.activities.AbstractContainerActivity;
+import com.googlecode.bpmn_simulator.bpmn.swing.di.Visualization;
 import com.googlecode.bpmn_simulator.bpmn.trigger.Instantiable;
 import com.googlecode.bpmn_simulator.bpmn.trigger.Trigger;
 import com.googlecode.bpmn_simulator.bpmn.trigger.TriggerCatchingElement;

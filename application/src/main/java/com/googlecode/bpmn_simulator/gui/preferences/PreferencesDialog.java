@@ -42,7 +42,7 @@ import javax.swing.JTextField;
 
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.AbstractFlowElement;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.Behavior;
-import com.googlecode.bpmn_simulator.bpmn.swing.di.Visualization;
+import com.googlecode.bpmn_simulator.bpmn.swing.di.Appearance;
 import com.googlecode.bpmn_simulator.gui.AbstractDialog;
 import com.googlecode.bpmn_simulator.gui.Messages;
 
@@ -268,27 +268,27 @@ public class PreferencesDialog
 		behavior.setKeepTriggers(checkKeepEvents.isSelected());
 		config.setBehavior(behavior);
 
-		final Visualization visualization = AbstractFlowElement.getDefaultVisualization();
+		final Appearance visualization = AbstractFlowElement.getDefaultVisualization();
 		visualization.setAntialiasing(checkAntialiasing.isSelected());
 		visualization.setShowExclusiveGatewaySymbol(checkShowExclusiveSymbol.isSelected());
-		visualization.setIgnoreColors(checkIgnoreModelerColors.isSelected());
-		visualization.setBackground(Visualization.Element.EVENT_START,
+		visualization.setIgnoreExplicitColors(checkIgnoreModelerColors.isSelected());
+		visualization.setBackground(Appearance.Element.EVENT_START,
 				colorStartEventBackground.getSelectedColor());
-		visualization.setBackground(Visualization.Element.EVENT_INTERMEDIATE,
+		visualization.setBackground(Appearance.Element.EVENT_INTERMEDIATE,
 				colorIntermediateEventBackground.getSelectedColor());
-		visualization.setBackground(Visualization.Element.EVENT_END,
+		visualization.setBackground(Appearance.Element.EVENT_END,
 				colorEndEventBackground.getSelectedColor());
-		visualization.setBackground(Visualization.Element.EVENT_BOUNDARY,
+		visualization.setBackground(Appearance.Element.EVENT_BOUNDARY,
 				colorBoundaryEventBackground.getSelectedColor());
-		visualization.setBackground(Visualization.Element.GATEWAY,
+		visualization.setBackground(Appearance.Element.GATEWAY,
 				colorGatewayBackground.getSelectedColor());
-		visualization.setBackground(Visualization.Element.TASK,
+		visualization.setBackground(Appearance.Element.TASK,
 				colorTaskBackground.getSelectedColor());
-		visualization.setBackground(Visualization.Element.PROCESS,
+		visualization.setBackground(Appearance.Element.PROCESS,
 				colorProcessBackground.getSelectedColor());
-		visualization.setBackground(Visualization.Element.DATA_OBJECT,
+		visualization.setBackground(Appearance.Element.DATA_OBJECT,
 				colorDataObjectBackground.getSelectedColor());
-		visualization.setBackground(Visualization.Element.DATA_STORAGE,
+		visualization.setBackground(Appearance.Element.DATA_STORAGE,
 				colorDataStorageBackground.getSelectedColor());
 		config.setVisualization(visualization);
 
@@ -304,28 +304,28 @@ public class PreferencesDialog
 		final Behavior behavior = AbstractFlowElement.getDefaultBehavior();
 		checkKeepEvents.setSelected(behavior.getKeepTriggers());
 
-		final Visualization visualization = AbstractFlowElement.getDefaultVisualization();
+		final Appearance visualization = AbstractFlowElement.getDefaultVisualization();
 		checkAntialiasing.setSelected(visualization.isAntialiasing());
 		checkShowExclusiveSymbol.setSelected(visualization.getShowExclusiveGatewaySymbol());
-		checkIgnoreModelerColors.setSelected(visualization.getIgnoreColors());
+		checkIgnoreModelerColors.setSelected(visualization.getIgnoreExplicitColors());
 		colorStartEventBackground.setSelectedColor(
-				visualization.getBackground(Visualization.Element.EVENT_START));
+				visualization.getBackground(Appearance.Element.EVENT_START));
 		colorIntermediateEventBackground.setSelectedColor(
-				visualization.getBackground(Visualization.Element.EVENT_INTERMEDIATE));
+				visualization.getBackground(Appearance.Element.EVENT_INTERMEDIATE));
 		colorEndEventBackground.setSelectedColor(
-				visualization.getBackground(Visualization.Element.EVENT_END));
+				visualization.getBackground(Appearance.Element.EVENT_END));
 		colorBoundaryEventBackground.setSelectedColor(
-				visualization.getBackground(Visualization.Element.EVENT_BOUNDARY));
+				visualization.getBackground(Appearance.Element.EVENT_BOUNDARY));
 		colorGatewayBackground.setSelectedColor(
-				visualization.getBackground(Visualization.Element.GATEWAY));
+				visualization.getBackground(Appearance.Element.GATEWAY));
 		colorTaskBackground.setSelectedColor(
-				visualization.getBackground(Visualization.Element.TASK));
+				visualization.getBackground(Appearance.Element.TASK));
 		colorProcessBackground.setSelectedColor(
-				visualization.getBackground(Visualization.Element.PROCESS));
+				visualization.getBackground(Appearance.Element.PROCESS));
 		colorDataObjectBackground.setSelectedColor(
-				visualization.getBackground(Visualization.Element.DATA_OBJECT));
+				visualization.getBackground(Appearance.Element.DATA_OBJECT));
 		colorDataStorageBackground.setSelectedColor(
-				visualization.getBackground(Visualization.Element.DATA_STORAGE));
+				visualization.getBackground(Appearance.Element.DATA_STORAGE));
 	}
 
 }

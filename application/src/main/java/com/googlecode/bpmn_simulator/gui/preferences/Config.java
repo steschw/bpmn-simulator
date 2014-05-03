@@ -27,7 +27,7 @@ import java.util.prefs.Preferences;
 
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.AbstractFlowElement;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.Behavior;
-import com.googlecode.bpmn_simulator.bpmn.swing.di.Visualization;
+import com.googlecode.bpmn_simulator.bpmn.swing.di.Appearance;
 
 
 public class Config {
@@ -72,33 +72,33 @@ public class Config {
 		return Preferences.userRoot().node(NODE);
 	}
 
-	protected static Preferences getElementNode(final Visualization.Element element) {
+	protected static Preferences getElementNode(final Appearance.Element element) {
 		return getRootNode().node(element.name().toLowerCase());
 	}
 
-	public void setVisualization(final Visualization visualization) {
+	public void setVisualization(final Appearance visualization) {
 		final Preferences preferences = getRootNode();
 
 		preferences.putBoolean(ANTIALIASING, visualization.isAntialiasing());
-		preferences.putBoolean(IGNORE_COLORS, visualization.getIgnoreColors());
+		preferences.putBoolean(IGNORE_COLORS, visualization.getIgnoreExplicitColors());
 		preferences.putBoolean(SHOW_EXCLUSIVEGATEWAYSYMBOL, visualization.getShowExclusiveGatewaySymbol());
 
-		for (Visualization.Element element : Visualization.Element.values()) {
+		for (Appearance.Element element : Appearance.Element.values()) {
 			final Preferences elementPreferences = getElementNode(element);
 			final Color color = visualization.getBackground(element);
 			setBackground(elementPreferences, color);
 		}
 	}
 
-	public Visualization getVisualization() {
-		final Visualization visualization = new Visualization();
+	public Appearance getVisualization() {
+		final Appearance visualization = new Appearance();
 		final Preferences preferences = getRootNode();
 
 		visualization.setAntialiasing(preferences.getBoolean(ANTIALIASING, true));
-		visualization.setIgnoreColors(preferences.getBoolean(IGNORE_COLORS, false));
+		visualization.setIgnoreExplicitColors(preferences.getBoolean(IGNORE_COLORS, false));
 		visualization.setShowExclusiveGatewaySymbol(preferences.getBoolean(SHOW_EXCLUSIVEGATEWAYSYMBOL, true));
 
-		for (Visualization.Element element : Visualization.Element.values()) {
+		for (Appearance.Element element : Appearance.Element.values()) {
 			final Color color = getBackground(getElementNode(element));
 			visualization.setBackground(element, color);
 		}

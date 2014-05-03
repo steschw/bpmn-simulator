@@ -12,7 +12,7 @@ abstract class AbstractVisualElement<E extends LogicalElement>
 
 	private final E logicalElement;
 
-	private static final PresentationDrawer presentationDrawer = new PresentationDrawer();
+	private static final Presentation presentation = new Presentation();
 
 	public AbstractVisualElement(final E element) {
 		super();
@@ -24,8 +24,8 @@ abstract class AbstractVisualElement<E extends LogicalElement>
 		return logicalElement;
 	}
 
-	public PresentationDrawer getPresentationDrawer() {
-		return presentationDrawer;
+	public Presentation getPresentation() {
+		return presentation;
 	}
 
 }

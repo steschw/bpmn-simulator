@@ -22,6 +22,7 @@ package com.googlecode.bpmn_simulator.bpmn.swing.di;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.Paint;
 import java.awt.Stroke;
 import java.net.URL;
 import java.util.EnumMap;
@@ -31,7 +32,7 @@ import java.util.Map;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 
-public class Visualization {
+public class Appearance {
 
 	public static final String ICON_BUSSINESRULE = "businessrule.png"; //$NON-NLS-1$
 	public static final String ICON_COLLAPSED = "collapsed.png"; //$NON-NLS-1$
@@ -81,35 +82,38 @@ public class Visualization {
 
 	private final Map<String, Icon> icons = new IdentityHashMap<String, Icon>();
 
-	private final Map<Element, Color> backgroundColors = new EnumMap<Element, Color>(Element.class);
+	private final Map<Element, Paint> backgrounds = new EnumMap<Element, Paint>(Element.class);
 
-	private boolean ignoreColors;
+	private boolean ignoreExplicitColors;
 
-	private boolean antialiasing = true;
 	private boolean showExclusiveGatewaySymbol = true;
 
-	public Visualization() {
+	public Appearance() {
 		super();
 		loadIcons();
 	}
 
-	protected static Icon loadIconFromRessource(final String name) {
-		final ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-		final URL url = classLoader.getResource(ICONPATH + name);
-		assert url != null;
-		Icon icon = null;
-		if (url != null) {
-			icon = new ImageIcon(url);
+	private static Icon loadIconFromRessource(final String name) {
+		ClassLoader cl = Thread.currentThread().getContextClassLoader();
+		if (cl == null) {
+			cl = ClassLoader.getSystemClassLoader();
 		}
-		assert icon != null;
-		return icon;
+		if (cl != null) {
+			final URL url = cl.getResource(ICONPATH + name);
+			if (url != null) {
+				return new ImageIcon(url);
+			}
+			assert false;
+			
+		}
+		return null;
 	}
 
-	protected void loadIcon(final String name) {
+	private void loadIcon(final String name) {
 		icons.put(name, loadIconFromRessource(name));
 	}
 
-	public void loadIcons() {
+	public final void loadIcons() {
 		loadIcon(ICON_BUSSINESRULE);
 		loadIcon(ICON_COLLAPSED);
 		loadIcon(ICON_COLLECTION);
@@ -139,23 +143,15 @@ public class Visualization {
 		return icons.get(name);
 	}
 
-	public Color getBackground(final Element element) {
-		if (backgroundColors.containsKey(element)) {
-			return backgroundColors.get(element);
+	public Paint getBackground(final Element element) {
+		if (backgrounds.containsKey(element)) {
+			return backgrounds.get(element);
 		}
 		return DEFAULT_BACKGROUNDCOLOR;
 	}
 
 	public void setBackground(final Element element, final Color color) {
-		backgroundColors.put(element, color);
-	}
-
-	public void setAntialiasing(final boolean antialiasing) {
-		this.antialiasing = antialiasing;
-	}
-
-	public boolean isAntialiasing() {
-		return antialiasing;
+		backgrounds.put(element, color);
 	}
 
 	public void setShowExclusiveGatewaySymbol(final boolean show) {
@@ -166,12 +162,12 @@ public class Visualization {
 		return showExclusiveGatewaySymbol;
 	}
 
-	public void setIgnoreColors(final boolean ignore) {
-		this.ignoreColors = ignore;
+	public void setIgnoreExplicitColors(final boolean ignore) {
+		this.ignoreExplicitColors = ignore;
 	}
 
-	public boolean getIgnoreColors() {
-		return ignoreColors;
+	public boolean getIgnoreExplicitColors() {
+		return ignoreExplicitColors;
 	}
 
 	public Stroke createStrokeSolid(final int width) {

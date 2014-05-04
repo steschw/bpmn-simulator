@@ -20,23 +20,22 @@
  */
 package com.googlecode.bpmn_simulator.animation.element.visual.swing;
 
-import java.util.regex.Pattern;
+import javax.swing.JLabel;
 
-public final class HtmlUtils {
+import com.googlecode.bpmn_simulator.animation.element.visual.Bounds;
+import com.googlecode.bpmn_simulator.animation.element.visual.Label;
 
-	private static final String TAG_BR = "<br />"; //$NON-NLS-1$
+@SuppressWarnings("serial")
+public abstract class AbstractLabel
+		extends JLabel
+		implements Label {
 
-	private static final Pattern REGEX_LINEBREAK = Pattern.compile("\r?\n"); //$NON-NLS-1$
-
-	private HtmlUtils() {
-		super();
+	public AbstractLabel(final String text) {
+		super(text);
 	}
 
-	public static String nl2br(final String text) {
-		if (text == null) {
-			return null;
-		}
-		return REGEX_LINEBREAK.matcher(text).replaceAll(TAG_BR);
+	@Override
+	public void setBounds(Bounds bounds) {
 	}
 
 }

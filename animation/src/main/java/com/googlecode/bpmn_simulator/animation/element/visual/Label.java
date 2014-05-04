@@ -18,25 +18,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.bpmn_simulator.animation.element.visual.swing;
+package com.googlecode.bpmn_simulator.animation.element.visual;
 
-import java.util.regex.Pattern;
+public interface Label {
 
-public final class HtmlUtils {
-
-	private static final String TAG_BR = "<br />"; //$NON-NLS-1$
-
-	private static final Pattern REGEX_LINEBREAK = Pattern.compile("\r?\n"); //$NON-NLS-1$
-
-	private HtmlUtils() {
-		super();
-	}
-
-	public static String nl2br(final String text) {
-		if (text == null) {
-			return null;
-		}
-		return REGEX_LINEBREAK.matcher(text).replaceAll(TAG_BR);
-	}
+	void setBounds(Bounds bounds);
 
 }

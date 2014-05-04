@@ -20,7 +20,11 @@
  */
 package com.googlecode.bpmn_simulator.animation.execution;
 
+import java.util.Iterator;
+
+import com.googlecode.bpmn_simulator.animation.token.Instance;
 import com.googlecode.bpmn_simulator.animation.token.RootInstances;
+import com.googlecode.bpmn_simulator.animation.token.Token;
 
 public class Animator
 		extends AbstractAnimator {
@@ -33,14 +37,54 @@ public class Animator
 		start();
 	}
 
-	@Override
-	public void reset() {
-		// remove token
-		super.reset();
+	private void resetToken(final Token token) {
+		token.getInstance().removeToken(token);
+	}
+
+	private void resetInstance(final Instance instance) {
+		for (final Instance childInstance : instance) {
+			for (final Token token : instance.getTokens(false)) {
+				resetToken(token);
+			}
+			resetInstance(childInstance);
+		}
 	}
 
 	@Override
-	public void step(final int count) {
+	public synchronized void reset() {
+		final Iterator<Instance> i = instances.iterator();
+		while (i.hasNext()) {
+			final Instance instance = i.next();
+			resetInstance(instance);
+			i.remove();
+		}
+		super.reset();
+	}
+
+	private void stepToken(final Token token, final int count) {
+		token.getCurrentTokenFlow().tokenDispatch(token);
+	}
+
+	private void stepInstance(final Instance instance, final int count) {
+		final Iterator<Instance> childInstances = instance.iterator();
+		while (childInstances.hasNext()) {
+			final Instance childInstance = childInstances.next();
+			final Iterator<Token> tokens = childInstance.getTokens(false).iterator();
+			while (tokens.hasNext()) {
+				final Token token = tokens.next();
+				stepToken(token, count);
+			}
+			stepInstance(childInstance, count);
+		}
+	}
+
+	@Override
+	public synchronized void step(final int count) {
+		final Iterator<Instance> i = instances.iterator();
+		while (i.hasNext()) {
+			final Instance instance = i.next();
+			stepInstance(instance, count);
+		}
 	}
 
 }

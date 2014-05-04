@@ -25,11 +25,7 @@ import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.RenderingHints;
 import java.awt.geom.Path2D;
-import java.io.IOException;
-import java.net.URL;
 import java.util.Iterator;
-
-import javax.imageio.ImageIO;
 
 import com.googlecode.bpmn_simulator.animation.element.visual.Bounds;
 import com.googlecode.bpmn_simulator.animation.element.visual.Waypoint;

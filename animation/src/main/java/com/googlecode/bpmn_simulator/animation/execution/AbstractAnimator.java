@@ -32,7 +32,7 @@ abstract class AbstractAnimator
 
 	private Thread thread;
 
-	private boolean paused;
+	private volatile boolean paused;
 
 	private float speedFactor = 1.0f;
 

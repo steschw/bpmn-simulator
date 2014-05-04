@@ -80,6 +80,8 @@ public class Appearance {
 			5.f,
 			};
 
+	private static Appearance instance;
+
 	private final Map<String, Icon> icons = new IdentityHashMap<String, Icon>();
 
 	private final Map<Element, Paint> backgrounds = new EnumMap<Element, Paint>(Element.class);
@@ -88,9 +90,20 @@ public class Appearance {
 
 	private boolean showExclusiveGatewaySymbol = true;
 
-	public Appearance() {
+	private Appearance() {
 		super();
 		loadIcons();
+	}
+
+	public static Appearance getDefault() {
+		if (instance == null) {
+			synchronized (Appearance.class) {
+				if (instance == null) {
+					instance = new Appearance();
+				}
+			}
+		}
+		return instance;
 	}
 
 	private static Icon loadIconFromRessource(final String name) {

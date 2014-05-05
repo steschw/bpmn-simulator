@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Stefan Schweitzer
+ * Copyright (C) 2014 Stefan Schweitzer
  *
  * This software was created by Stefan Schweitzer as a student's project at
  * Fachhochschule Kaiserslautern (University of Applied Sciences).
@@ -18,21 +18,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.bpmn_simulator.bpmn.model;
+package com.googlecode.bpmn_simulator.animation.input;
 
 import java.awt.Color;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
+import java.net.URL;
+import java.text.MessageFormat;
 
 import javax.activation.MimeType;
 import javax.activation.MimeTypeParseException;
 import javax.swing.text.html.StyleSheet;
+import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.validation.Schema;
+import javax.xml.validation.SchemaFactory;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
@@ -40,35 +42,23 @@ import org.xml.sax.ErrorHandler;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 
-import com.googlecode.bpmn_simulator.framework.exception.SimulationExceptionListener;
-import com.googlecode.bpmn_simulator.framework.exception.StructureException;
+import com.googlecode.bpmn_simulator.animation.element.visual.Diagram;
 
+public abstract class AbstractXmlDefinition<E extends Diagram>
+		extends AbstractDefinition<E>
+		implements ErrorHandler {
 
-public abstract class AbstractXmlModel
-		implements BPMNModel, ErrorHandler {
-
-	private final Collection<SimulationExceptionListener> structureExceptionListeners
-			= new ArrayList<SimulationExceptionListener>();
+	private final String schema;
 
 	private String encoding;
 
-	@Override
+	public AbstractXmlDefinition(final String schema) {
+		super();
+		this.schema = schema;
+	}
+
 	public String getEncoding() {
 		return encoding;
-	}
-
-	public void addStructureExceptionListener(final SimulationExceptionListener listener) {
-		synchronized (structureExceptionListeners) {
-			structureExceptionListeners.add(listener);
-		}
-	}
-
-	protected void notifyStructureExceptionListeners(final StructureException exception) {
-		synchronized (structureExceptionListeners) {
-			for (final SimulationExceptionListener listener : structureExceptionListeners) {
-				listener.onSimulationException(exception);
-			}
-		}
 	}
 
 	protected void showSAXParseException(final SAXParseException exception) {
@@ -78,7 +68,7 @@ public abstract class AbstractXmlModel
 		message.append(exception.getColumnNumber());
 		message.append("] "); //$NON-NLS-1$
 		message.append(exception.getLocalizedMessage());
-		notifyStructureExceptionListeners(new StructureException(this, message.toString()));
+		notifyError(message.toString(), exception);
 	}
 
 	@Override
@@ -114,24 +104,26 @@ public abstract class AbstractXmlModel
 		return attributeNode.getNodeValue();
 	}
 
-	protected static float getAttributeFloat(final Node node, final String name) {
+	protected float getAttributeFloat(final Node node,
+			final String name, final float defaultValue) {
+		final String value = getAttributeString(node, name);
 		try {
-			return Float.parseFloat(getAttributeString(node, name));
+			return Float.parseFloat(value);
 		} catch (NumberFormatException exception) {
-			return 0;
 		}
+		notifyWarning(MessageFormat.format("Invalid value {0} for float. Using {1} instead.", value, defaultValue));
+		return defaultValue;
 	}
 
-	private static boolean convertStringToBool(final String string,
+	private boolean convertStringToBool(final String string,
 			final boolean defaultValue) {
-		if ((string == null) || string.isEmpty()) {
-			return defaultValue;
-		} else {
+		if ((string != null) && !string.isEmpty()) {
 			return Boolean.parseBoolean(string);
 		}
+		return defaultValue;
 	}
 
-	protected static boolean getAttributeBoolean(final Node node,
+	protected boolean getAttributeBoolean(final Node node,
 			final String name, final boolean defaultValue) {
 		return convertStringToBool(getAttributeString(node, name), defaultValue);
 	}
@@ -142,7 +134,7 @@ public abstract class AbstractXmlModel
 			try {
 				return new MimeType(value);
 			} catch (MimeTypeParseException e) {
-				notifyStructureExceptionListeners(new StructureException(this, e));
+				notifyError(null, e);
 			}
 		}
 		return null;
@@ -153,8 +145,25 @@ public abstract class AbstractXmlModel
 		return stylesheet.stringToColor(value);
 	}
 
-	protected abstract Schema loadSchema()
-			throws SAXException;
+	protected Schema loadSchema()
+			throws SAXException {
+		if ((schema == null) || schema.isEmpty()) {
+			return null;
+		}
+		ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+		if (classLoader == null) {
+			classLoader = ClassLoader.getSystemClassLoader();
+		}
+		if (classLoader != null) {
+			final URL url = classLoader.getResource(schema);
+			if (url != null) {	
+				final SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+				return factory.newSchema(url);
+			}
+		}
+		notifyError(MessageFormat.format("Couldn''t load schema {0}", schema), null);
+		return null;
+	}
 
 	protected abstract void loadData(final Node node);
 
@@ -173,11 +182,11 @@ public abstract class AbstractXmlModel
 			encoding = document.getInputEncoding();
 			loadData(document.getDocumentElement());
 		} catch (IOException e) {
-			notifyStructureExceptionListeners(new StructureException(this, e));
+			notifyError(null, e);
 		} catch (ParserConfigurationException e) {
-			notifyStructureExceptionListeners(new StructureException(this, e));
+			notifyError(null, e);
 		} catch (SAXException e) {
-			notifyStructureExceptionListeners(new StructureException(this, e));
+			notifyError(null, e);
 		}
 	}
 

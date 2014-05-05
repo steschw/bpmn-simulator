@@ -41,7 +41,7 @@ import com.googlecode.bpmn_simulator.bpmn.model.core.common.AbstractFlowElement;
 import com.googlecode.bpmn_simulator.bpmn.model.core.foundation.BaseElement;
 import com.googlecode.bpmn_simulator.bpmn.model.process.activities.Process;
 import com.googlecode.bpmn_simulator.bpmn.model.process.activities.Subprocess;
-import com.googlecode.bpmn_simulator.bpmn.swing.di.BPMNDiagram;
+import com.googlecode.bpmn_simulator.bpmn.swing.di.SwingBPMNDiagram;
 import com.googlecode.bpmn_simulator.gui.dialogs.ExceptionDialog;
 
 @SuppressWarnings("serial")
@@ -53,9 +53,9 @@ public class DiagramFrame
 	private static final Icon ICON_PROCESS = loadFrameIcon("process.png"); //$NON-NLS-1$
 	private static final Icon ICON_COLLABORATION = loadFrameIcon("collaboration.png"); //$NON-NLS-1$
 
-	private final BPMNDiagram diagram;
+	private final SwingBPMNDiagram diagram;
 
-	public DiagramFrame(final BPMNDiagram diagram) {
+	public DiagramFrame(final SwingBPMNDiagram diagram) {
 		super(diagram.getTitle(), true, false, true);
 		this.diagram = diagram;
 

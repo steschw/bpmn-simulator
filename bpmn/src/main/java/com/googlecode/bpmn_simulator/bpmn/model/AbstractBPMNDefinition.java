@@ -36,6 +36,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+import com.googlecode.bpmn_simulator.animation.input.AbstractXmlDefinition;
 import com.googlecode.bpmn_simulator.animation.token.Instance;
 import com.googlecode.bpmn_simulator.bpmn.Messages;
 import com.googlecode.bpmn_simulator.bpmn.model.collaboration.Collaboration;
@@ -97,17 +98,17 @@ import com.googlecode.bpmn_simulator.framework.exception.StructureException;
 import com.googlecode.bpmn_simulator.framework.execution.InstanceAnimator;
 import com.googlecode.bpmn_simulator.framework.instance.InstanceManager;
 
-public abstract class AbstractBPMNModel
-		extends AbstractXmlModel {
+public abstract class AbstractBPMNDefinition
+		extends AbstractXmlDefinition {
+
+	private static final String SCHEMA_FILENAME =
+			"com/googlecode/bpmn_simulator/bpmn/xsd/BPMN20.xsd"; //$NON-NLS-1$
 
 	protected static final String BPMN =
 			"http://www.omg.org/spec/BPMN/20100524/MODEL";  //$NON-NLS-1$
 
 	protected static final String EXTENSION_SIGNAVIO =
 			"http://www.signavio.com"; //$NON-NLS-1$
-
-	private static final String SCHEMA_FILENAME =
-			"com/googlecode/bpmn_simulator/bpmn/xsd/BPMN20.xsd"; //$NON-NLS-1$
 
 	private final ElementRefCollection<AbstractFlowElement> elements
 			= new ElementRefCollection<AbstractFlowElement>();
@@ -124,32 +125,17 @@ public abstract class AbstractBPMNModel
 	private final Collection<Collaboration> collaborations
 			= new ArrayList<Collaboration>();
 
-	private final InstanceManager instanceManager = new InstanceManager();
-
-	private final InstanceAnimator tokenAnimator;
-
 	private String exporter;
 	private String exporterVersion;
 
-	public AbstractBPMNModel() {
-		super();
-		tokenAnimator = new InstanceAnimator(getInstanceManager());
-	}
-
-	@Override
-	public InstanceManager getInstanceManager() {
-		return instanceManager;
-	}
-
-	public InstanceAnimator getAnimator() {
-		return tokenAnimator;
+	public AbstractBPMNDefinition() {
+		super(SCHEMA_FILENAME);
 	}
 
 	protected void setExporter(final String exporter) {
 		this.exporter = exporter;
 	}
 
-	@Override
 	public String getExporter() {
 		return exporter;
 	}
@@ -158,25 +144,14 @@ public abstract class AbstractBPMNModel
 		this.exporterVersion = exporterVersion;
 	}
 
-	@Override
 	public String getExporterVersion() {
 		return exporterVersion;
 	}
 
-	@Override
 	public Collection<Collaboration> getCollaborations() {
 		return collaborations;
 	}
 
-	@Override
-	public void sendMessages(final AbstractFlowElement sourceElement,
-			final Instance sourceInstance) {
-		for (final Collaboration collaboration : collaborations) {
-			collaboration.sendMessages(sourceElement, sourceInstance);
-		}
-	}
-
-	@Override
 	public Collection<Process> getProcesses() {
 		return processes;
 	}
@@ -193,7 +168,6 @@ public abstract class AbstractBPMNModel
 		return events;
 	}
 
-	@Override
 	public Collection<TriggerCatchingElement> getCatchEvents() {
 		return getElements(TriggerCatchingElement.class);
 	}
@@ -1085,22 +1059,8 @@ public abstract class AbstractBPMNModel
 	}
 
 	@Override
-	protected Schema loadSchema()
-			throws SAXException {
-		final ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-		final URL url = classLoader.getResource(SCHEMA_FILENAME);
-		assert url != null;
-		final SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-		return factory.newSchema(url);
-	}
-
-	@Override
 	protected void loadData(final Node node) {
 		readDefinitions(node);
-	}
-
-	public void close() {
-		tokenAnimator.end();
 	}
 
 	public Collection<TriggerCatchingElement> getManuallStartEvents() {

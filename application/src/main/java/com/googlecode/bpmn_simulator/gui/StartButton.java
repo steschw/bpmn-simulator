@@ -32,7 +32,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
 import com.googlecode.bpmn_simulator.animation.token.Instance;
-import com.googlecode.bpmn_simulator.bpmn.model.AbstractBPMNModel;
+import com.googlecode.bpmn_simulator.bpmn.model.AbstractBPMNDefinition;
 import com.googlecode.bpmn_simulator.bpmn.trigger.Instantiable;
 import com.googlecode.bpmn_simulator.bpmn.trigger.InstantiableNotifiySource;
 import com.googlecode.bpmn_simulator.bpmn.trigger.Trigger;
@@ -46,14 +46,14 @@ public class StartButton
 		extends JButton
 		implements ActionListener {
 
-	private AbstractBPMNModel model;
+	private AbstractBPMNDefinition model;
 
 	public StartButton(final Icon icon) {
 		super(icon);
 		addActionListener(this);
 	}
 
-	public void setModel(final AbstractBPMNModel model) {
+	public void setModel(final AbstractBPMNDefinition model) {
 		this.model = model;
 		setEnabled(model != null);
 	}

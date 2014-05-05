@@ -41,7 +41,7 @@ import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-import com.googlecode.bpmn_simulator.bpmn.swing.di.BPMNDiagram;
+import com.googlecode.bpmn_simulator.bpmn.swing.di.SwingBPMNDiagram;
 import com.googlecode.bpmn_simulator.bpmn.swing.di.DiagramInterchangeModel;
 import com.googlecode.bpmn_simulator.gui.dialogs.ExceptionDialog;
 import com.googlecode.bpmn_simulator.gui.dialogs.ImageExportChooser;
@@ -361,11 +361,11 @@ public class BPMNSimulatorFrame
 	private void createModel() {
 		if (isFileOpen()) {
 			currentModel = new DiagramInterchangeModel();
-			currentModel.addStructureExceptionListener(logFrame);
+			currentModel.addDefinitionListener(logFrame);
 			currentModel.load(currentFile);
 			frameInstances.setInstanceManager(currentModel.getInstanceManager());
 			toolbar.setModel(currentModel);
-			final Collection<BPMNDiagram> diagrams = currentModel.getDiagrams();
+			final Collection<SwingBPMNDiagram> diagrams = currentModel.getDiagrams();
 			if (diagrams.isEmpty()) {
 				JOptionPane.showMessageDialog(this,
 						Messages.getString("containsNoDiagrams"), //$NON-NLS-1$
@@ -373,7 +373,7 @@ public class BPMNSimulatorFrame
 						JOptionPane.INFORMATION_MESSAGE);
 			} else {
 				final ScrollDesktopPane desktop = getDesktop();
-				for (final BPMNDiagram diagram : diagrams) {
+				for (final SwingBPMNDiagram diagram : diagrams) {
 					final DiagramFrame frame = new DiagramFrame(diagram);
 					desktop.add(frame);
 					frame.showFrame();

@@ -18,21 +18,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.bpmn_simulator.bpmn.model;
+package com.googlecode.bpmn_simulator.animation.element.visual.swing;
 
-import java.util.Collection;
+import javax.swing.JComponent;
 
-import com.googlecode.bpmn_simulator.animation.element.logical.Model;
-import com.googlecode.bpmn_simulator.animation.token.Instance;
-import com.googlecode.bpmn_simulator.bpmn.model.core.common.AbstractFlowElement;
-import com.googlecode.bpmn_simulator.bpmn.model.core.infrastructure.Definitions;
-import com.googlecode.bpmn_simulator.bpmn.trigger.TriggerCatchingElement;
+import com.googlecode.bpmn_simulator.animation.element.visual.Diagram;
 
-public interface BPMNModel
-		extends Model, Definitions {
-
-	Collection<TriggerCatchingElement> getCatchEvents();
-
-	void sendMessages(AbstractFlowElement sourceElement, Instance sourceInstance);
+@SuppressWarnings("serial")
+public abstract class AbstractDiagram
+		extends JComponent
+		implements Diagram {
 
 }

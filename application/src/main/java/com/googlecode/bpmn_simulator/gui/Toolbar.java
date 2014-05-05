@@ -31,7 +31,7 @@ import javax.swing.JToolBar;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import com.googlecode.bpmn_simulator.bpmn.model.AbstractBPMNModel;
+import com.googlecode.bpmn_simulator.bpmn.model.AbstractBPMNDefinition;
 import com.googlecode.bpmn_simulator.framework.execution.AbstractAnimator;
 import com.googlecode.bpmn_simulator.framework.execution.AnimationListener;
 import com.googlecode.bpmn_simulator.gui.log.LogFrame;
@@ -56,7 +56,7 @@ public class Toolbar
 
 	private final LogFrame logFrame;
 
-	private AbstractBPMNModel model;
+	private AbstractBPMNDefinition model;
 
 	public Toolbar(final LogFrame logFrame) {
 		super();
@@ -66,7 +66,7 @@ public class Toolbar
 		create();
 	}
 
-	public void setModel(final AbstractBPMNModel model) {
+	public void setModel(final AbstractBPMNDefinition model) {
 		AbstractAnimator animator = getAnimator();
 		if (animator != null) {
 			animator.removeAnimationListener(this);

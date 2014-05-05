@@ -21,12 +21,14 @@
 package com.googlecode.bpmn_simulator.bpmn.swing.di;
 
 import com.googlecode.bpmn_simulator.animation.element.visual.swing.AbstractLabel;
+import com.googlecode.bpmn_simulator.bpmn.di.BPMNLabel;
 
 @SuppressWarnings("serial")
-public class BPMNLabel
-		extends AbstractLabel {
+public class SwingBPMNLabel
+		extends AbstractLabel
+		implements BPMNLabel {
 
-	public BPMNLabel(final String text) {
+	public SwingBPMNLabel(final String text) {
 		super(text);
 	}
 

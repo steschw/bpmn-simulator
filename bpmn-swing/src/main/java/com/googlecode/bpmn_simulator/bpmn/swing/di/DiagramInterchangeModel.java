@@ -31,7 +31,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import com.googlecode.bpmn_simulator.bpmn.Messages;
-import com.googlecode.bpmn_simulator.bpmn.model.AbstractBPMNModel;
+import com.googlecode.bpmn_simulator.bpmn.model.AbstractBPMNDefinition;
 import com.googlecode.bpmn_simulator.bpmn.model.collaboration.AbstractTitledFlowElement;
 import com.googlecode.bpmn_simulator.bpmn.model.collaboration.Collaboration;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.AbstractConnectingElement;
@@ -45,19 +45,19 @@ import com.googlecode.bpmn_simulator.framework.exception.StructureException;
 
 
 public class DiagramInterchangeModel
-		extends AbstractBPMNModel {
+		extends AbstractBPMNDefinition {
 
 	protected static final String BPMNDI = "http://www.omg.org/spec/BPMN/20100524/DI"; //$NON-NLS-1$
 	protected static final String DC = "http://www.omg.org/spec/DD/20100524/DC"; //$NON-NLS-1$
 	protected static final String DI = "http://www.omg.org/spec/DD/20100524/DI"; //$NON-NLS-1$
 
-	private final Collection<BPMNDiagram> diagrams = new ArrayList<BPMNDiagram>();
+	private final Collection<SwingBPMNDiagram> diagrams = new ArrayList<SwingBPMNDiagram>();
 
 	public DiagramInterchangeModel() {
 		super();
 	}
 
-	public final Collection<BPMNDiagram> getDiagrams() {
+	public final Collection<SwingBPMNDiagram> getDiagrams() {
 		return diagrams;
 	}
 
@@ -179,7 +179,7 @@ public class DiagramInterchangeModel
 							notifyStructureExceptionListeners(exception);
 						}
 					}
-					diagrams.add(new BPMNDiagram(planeElement, name));
+					diagrams.add(new SwingBPMNDiagram(planeElement, name));
 				} else {
 					final StructureException exception = new StructureException(planeElement,
 						MessageFormat.format(

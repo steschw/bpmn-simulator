@@ -23,9 +23,28 @@ package com.googlecode.bpmn_simulator.animation.token;
 public class RootInstances
 		extends AbstractInstancesContainer {
 
+	private static final int[] COLORS = {
+			0xff5c26,
+			0x2626ff,
+			0xffff26,
+			0xc926ff,
+			0x5cff26,
+			0x26ff93,
+			0xff2692,
+			0x26c9ff,
+	};
+
+	private int colorIndex;
+
+	private synchronized int nextColor() {
+		if (colorIndex >= COLORS.length) {
+			colorIndex = 0;
+		}
+		return COLORS[colorIndex++];
+	}
 	@Override
 	protected Instance createNewChildInstance() {
-		return new Instance();
+		return new Instance(nextColor());
 	}
 
 }

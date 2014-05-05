@@ -32,13 +32,16 @@ public final class Instance
 
 	private final Set<TokensListener> tokensListeners = new HashSet<TokensListener>();
 
-	protected Instance() {
-		this(null);
-	}
+	private int color;
 
-	private Instance(final Instance parent) {
+	private Instance(final Instance parent, final int color) {
 		super();
 		this.parent = parent;
+		this.color = color;
+	}
+
+	protected Instance(final int color) {
+		this(null, color);
 	}
 
 	public void addTokensListener(final TokensListener listener) {
@@ -83,7 +86,7 @@ public final class Instance
 	}
 
 	protected Instance createNewChildInstance() {
-		return new Instance(this);
+		return new Instance(this, color);
 	}
 
 	public Tokens getTokens(final boolean recursive) {

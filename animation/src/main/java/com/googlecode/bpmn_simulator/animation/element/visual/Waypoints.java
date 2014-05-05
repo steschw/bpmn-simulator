@@ -75,7 +75,39 @@ public class Waypoints
 			}
 			return new Bounds(minX, minY, maxX - minX, maxY - minY);
 		}
-		throw new IllegalStateException();
+		return null;
+	}
+
+	public int getLength() {
+		float length = 0;
+		Waypoint last = null;
+		for (final Waypoint current : this) {
+			if (last != null) {
+				length += last.distanceTo(current);
+			}
+			last = current;
+		}
+		return (int) length;
+	}
+
+	public Point getWaypoint(final float length) {
+		int currentLength = 0;
+		Waypoint last = null;
+		for (final Waypoint current : this) {
+			if (last != null) {
+				final double distance = last.distanceTo(current);
+				if ((currentLength + distance) >= length) {
+					return GeometryUtils.polarToCartesian(
+							last,
+							currentLength - length,
+							current.angleTo(last));
+				}
+				currentLength += distance;
+			}
+			last = current;
+		}
+		assert last != null;
+		return last; ///XXX
 	}
 
 }

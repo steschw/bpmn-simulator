@@ -30,10 +30,10 @@ import java.util.LinkedList;
 
 import javax.swing.SwingUtilities;
 
+import com.googlecode.bpmn_simulator.animation.element.visual.GeometryUtils;
 import com.googlecode.bpmn_simulator.animation.element.visual.swing.ClickThroughMouseListener;
 import com.googlecode.bpmn_simulator.framework.element.visual.GraphicsLayer;
 import com.googlecode.bpmn_simulator.framework.element.visual.geometry.Bounds;
-import com.googlecode.bpmn_simulator.framework.element.visual.geometry.GeometryUtil;
 import com.googlecode.bpmn_simulator.framework.element.visual.geometry.Waypoint;
 
 
@@ -150,10 +150,10 @@ public abstract class AbstractConnectingElement
 			if (last != null) {
 				final int distance = (int)last.distance(current);
 				if ((position + distance) >= length) {
-					return GeometryUtil.polarToCartesian(
+					return GeometryUtils.polarToCartesian(
 							last,
 							position - length,
-							GeometryUtil.getAngle(current, last));
+							GeometryUtils.getAngle(current, last));
 				}
 				position += distance;
 			}

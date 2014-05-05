@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Stefan Schweitzer
+ * Copyright (C) 2014 Stefan Schweitzer
  *
  * This software was created by Stefan Schweitzer as a student's project at
  * Fachhochschule Kaiserslautern (University of Applied Sciences).
@@ -18,20 +18,35 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.bpmn_simulator.framework.element.visual.geometry;
+package com.googlecode.bpmn_simulator.animation.element.visual;
 
-import java.awt.Point;
+public class Point {
 
-@SuppressWarnings("serial")
-public class Waypoint
-		extends Point {
+	private final int x;
+	private final int y;
 
-	public Waypoint(final int x, final int y) {
-		super(x, y);
+	public Point(final int x, final int y) {
+		super();
+		this.x = x;
+		this.y = y;
 	}
 
-	public Waypoint(final Point point) {
-		super(point.x, point.y);
+	public int getX() {
+		return x;
+	}
+
+	public int getY() {
+		return y;
+	}
+
+	public double distanceTo(final Point point) {
+		final int h = getX() - point.getX();
+		final int v = getY() - point.getY();
+		return Math.sqrt((h * h) + (v * v));
+	}
+
+	public double angleTo(final Point point) {
+		return Math.atan2(point.getX() - getX(), point.getY() - getY());
 	}
 
 }

@@ -18,10 +18,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.bpmn_simulator.framework.exception;
+package com.googlecode.bpmn_simulator.gui;
 
-public interface SimulationExceptionListener {
+import java.awt.Color;
 
-	void onSimulationException(SimulationException exception);
+import javax.swing.JMenuItem;
+
+import com.googlecode.bpmn_simulator.animation.token.Instance;
+
+@SuppressWarnings("serial")
+public class InstanceMenuItem
+		extends JMenuItem {
+
+	private final Instance instance;
+
+	public InstanceMenuItem(final Instance instance) {
+		super("Instance");
+		this.instance = instance;
+	}
+
+	@Override
+	public Color getForeground() {
+		return (instance == null) ? super.getForeground() : instance.getColor();
+	}
 
 }

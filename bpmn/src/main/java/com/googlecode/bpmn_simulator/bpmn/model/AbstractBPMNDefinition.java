@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Stefan Schweitzer
+ * Copyright (C) 2014 Stefan Schweitzer
  *
  * This software was created by Stefan Schweitzer as a student's project at
  * Fachhochschule Kaiserslautern (University of Applied Sciences).
@@ -36,6 +36,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+import com.googlecode.bpmn_simulator.animation.element.visual.Diagram;
 import com.googlecode.bpmn_simulator.animation.input.AbstractXmlDefinition;
 import com.googlecode.bpmn_simulator.animation.token.Instance;
 import com.googlecode.bpmn_simulator.bpmn.Messages;
@@ -98,8 +99,8 @@ import com.googlecode.bpmn_simulator.framework.exception.StructureException;
 import com.googlecode.bpmn_simulator.framework.execution.InstanceAnimator;
 import com.googlecode.bpmn_simulator.framework.instance.InstanceManager;
 
-public abstract class AbstractBPMNDefinition
-		extends AbstractXmlDefinition {
+public abstract class AbstractBPMNDefinition<E extends Diagram>
+		extends AbstractXmlDefinition<E> {
 
 	private static final String SCHEMA_FILENAME =
 			"com/googlecode/bpmn_simulator/bpmn/xsd/BPMN20.xsd"; //$NON-NLS-1$

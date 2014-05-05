@@ -36,20 +36,20 @@ import java.awt.geom.Rectangle2D;
 
 import javax.swing.Icon;
 
+import com.googlecode.bpmn_simulator.animation.element.visual.GeometryUtils;
 import com.googlecode.bpmn_simulator.framework.element.visual.geometry.Bounds;
-import com.googlecode.bpmn_simulator.framework.element.visual.geometry.GeometryUtil;
 import com.googlecode.bpmn_simulator.framework.element.visual.geometry.Waypoint;
 
 public class GraphicsLayer {
 
-	private static final double RAD_30 = GeometryUtil.RAD_FULL / 12.;
+	private static final double RAD_30 = GeometryUtils.RAD_FULL / 12.;
 
 	private static final double ARROW_TRIANGLE_LENGTH = 10.;
 
 	private static final double CONNECTING_SYMBOL_LENGTH = 12.;
 
 	private static final double DEFAULT_SYMBOL_ANGLE =
-			GeometryUtil.RAD_FULL / 3.;
+			GeometryUtils.RAD_FULL / 3.;
 
 	private static final RenderingHints QUALITY = new RenderingHints(null);
 
@@ -164,11 +164,11 @@ public class GraphicsLayer {
 	}
 
 	public void fillDiamond(final Bounds size) {
-		fill(GeometryUtil.createDiamond(size));
+		fill(GeometryUtils.createDiamond(size));
 	}
 
 	public void drawDiamond(final Bounds size) {
-		draw(GeometryUtil.createDiamond(size));
+		draw(GeometryUtils.createDiamond(size));
 	}
 
 	public void drawCross(final Bounds rect, final boolean rotated) {
@@ -191,7 +191,7 @@ public class GraphicsLayer {
 
 	public static GeneralPath createArrowPath(final Waypoint from,
 			final Waypoint to) {
-		return GeometryUtil.createArrowPath(from, to, RAD_30,
+		return GeometryUtils.createArrowPath(from, to, RAD_30,
 				ARROW_TRIANGLE_LENGTH);
 	}
 
@@ -200,27 +200,27 @@ public class GraphicsLayer {
 	}
 
 	public void drawArrow(final Waypoint from, final Waypoint to) {
-		final double angle = GeometryUtil.getAngle(to, from);
+		final double angle = GeometryUtils.getAngle(to, from);
 		drawLine(
 				to,
-				GeometryUtil.polarToCartesian(to, ARROW_TRIANGLE_LENGTH, angle
+				GeometryUtils.polarToCartesian(to, ARROW_TRIANGLE_LENGTH, angle
 						- RAD_30));
 		drawLine(
 				to,
-				GeometryUtil.polarToCartesian(to, ARROW_TRIANGLE_LENGTH, angle
+				GeometryUtils.polarToCartesian(to, ARROW_TRIANGLE_LENGTH, angle
 						+ RAD_30));
 	}
 
 	public void drawStar(final Bounds size, final int corners) {
-		graphics.drawPolygon(GeometryUtil.createStar(size, corners));
+		graphics.drawPolygon(GeometryUtils.createStar(size, corners));
 	}
 
 	public void fillStar(final Bounds size, final int corners) {
-		graphics.fillPolygon(GeometryUtil.createStar(size, corners));
+		graphics.fillPolygon(GeometryUtils.createStar(size, corners));
 	}
 
 	public void drawPentagon(final Bounds size) {
-		graphics.drawPolygon(GeometryUtil.createPentagon(size));
+		graphics.drawPolygon(GeometryUtils.createPentagon(size));
 	}
 
 	protected static Polygon createConditionalSymbol(final Waypoint orgin,
@@ -228,15 +228,15 @@ public class GraphicsLayer {
 		final Polygon polygon = new Polygon();
 		polygon.addPoint(orgin.x, orgin.y);
 		Waypoint to =
-				GeometryUtil.polarToCartesian(orgin, CONNECTING_SYMBOL_LENGTH,
+				GeometryUtils.polarToCartesian(orgin, CONNECTING_SYMBOL_LENGTH,
 						a - RAD_30);
 		polygon.addPoint(to.x, to.y);
 		to =
-				GeometryUtil.polarToCartesian(to, CONNECTING_SYMBOL_LENGTH, a
+				GeometryUtils.polarToCartesian(to, CONNECTING_SYMBOL_LENGTH, a
 						+ RAD_30);
 		polygon.addPoint(to.x, to.y);
 		to =
-				GeometryUtil.polarToCartesian(orgin, CONNECTING_SYMBOL_LENGTH,
+				GeometryUtils.polarToCartesian(orgin, CONNECTING_SYMBOL_LENGTH,
 						a + RAD_30);
 		polygon.addPoint(to.x, to.y);
 		return polygon;
@@ -244,7 +244,7 @@ public class GraphicsLayer {
 
 	public void drawConditionalSymbol(final Waypoint from, final Waypoint to) {
 		final Polygon symbol =
-				createConditionalSymbol(from, GeometryUtil.getAngle(from, to));
+				createConditionalSymbol(from, GeometryUtils.getAngle(from, to));
 
 		graphics.setPaint(Color.WHITE);
 		graphics.fill(symbol);
@@ -253,17 +253,17 @@ public class GraphicsLayer {
 	}
 
 	public void drawDefaultSymbol(final Waypoint from, final Waypoint to) {
-		final double a = GeometryUtil.getAngle(from, to);
+		final double a = GeometryUtils.getAngle(from, to);
 		final double halfConnectingSymbolLength = CONNECTING_SYMBOL_LENGTH / 2;
 		final Waypoint orgin =
-				GeometryUtil.polarToCartesian(from, halfConnectingSymbolLength,
+				GeometryUtils.polarToCartesian(from, halfConnectingSymbolLength,
 						a);
 
 		final Waypoint symbolFrom =
-				GeometryUtil.polarToCartesian(orgin,
+				GeometryUtils.polarToCartesian(orgin,
 						halfConnectingSymbolLength, a - DEFAULT_SYMBOL_ANGLE);
 		final Waypoint symbolTo =
-				GeometryUtil.polarToCartesian(symbolFrom,
+				GeometryUtils.polarToCartesian(symbolFrom,
 						CONNECTING_SYMBOL_LENGTH, a - DEFAULT_SYMBOL_ANGLE
 								- Math.PI);
 

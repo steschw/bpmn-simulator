@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Stefan Schweitzer
+ * Copyright (C) 2014 Stefan Schweitzer
  *
  * This software was created by Stefan Schweitzer as a student's project at
  * Fachhochschule Kaiserslautern (University of Applied Sciences).
@@ -18,7 +18,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.bpmn_simulator.bpmn.swing.di;
+package com.googlecode.bpmn_simulator.bpmn.model;
 
 import java.awt.Dimension;
 import java.text.MessageFormat;
@@ -30,8 +30,9 @@ import javax.swing.JComponent;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import com.googlecode.bpmn_simulator.animation.element.visual.Diagram;
 import com.googlecode.bpmn_simulator.bpmn.Messages;
-import com.googlecode.bpmn_simulator.bpmn.model.AbstractBPMNDefinition;
+import com.googlecode.bpmn_simulator.bpmn.di.BPMNDiagram;
 import com.googlecode.bpmn_simulator.bpmn.model.collaboration.AbstractTitledFlowElement;
 import com.googlecode.bpmn_simulator.bpmn.model.collaboration.Collaboration;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.AbstractConnectingElement;
@@ -43,21 +44,23 @@ import com.googlecode.bpmn_simulator.framework.element.visual.geometry.Bounds;
 import com.googlecode.bpmn_simulator.framework.element.visual.geometry.Waypoint;
 import com.googlecode.bpmn_simulator.framework.exception.StructureException;
 
+public abstract class AbstractDiagramInterchangeDefinition<E extends BPMNDiagram>
+		extends AbstractBPMNDefinition<E> {
 
-public class DiagramInterchangeModel
-		extends AbstractBPMNDefinition {
+	private static final String BPMNDI = "http://www.omg.org/spec/BPMN/20100524/DI"; //$NON-NLS-1$
 
-	protected static final String BPMNDI = "http://www.omg.org/spec/BPMN/20100524/DI"; //$NON-NLS-1$
-	protected static final String DC = "http://www.omg.org/spec/DD/20100524/DC"; //$NON-NLS-1$
-	protected static final String DI = "http://www.omg.org/spec/DD/20100524/DI"; //$NON-NLS-1$
+	private static final String DC = "http://www.omg.org/spec/DD/20100524/DC"; //$NON-NLS-1$
 
-	private final Collection<SwingBPMNDiagram> diagrams = new ArrayList<SwingBPMNDiagram>();
+	private static final String DI = "http://www.omg.org/spec/DD/20100524/DI"; //$NON-NLS-1$
 
-	public DiagramInterchangeModel() {
+	private final Collection<E> diagrams = new ArrayList<E>();
+
+	public AbstractDiagramInterchangeDefinition() {
 		super();
 	}
 
-	public final Collection<SwingBPMNDiagram> getDiagrams() {
+	@Override
+	public final Collection<E> getDiagrams() {
 		return diagrams;
 	}
 

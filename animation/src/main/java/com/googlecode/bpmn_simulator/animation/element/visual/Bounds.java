@@ -79,6 +79,10 @@ public class Bounds {
 		return getY() + getHeight();
 	}
 
+	public Point getCenter() {
+		return new Point((int) getCenterX(), (int) getCenterY());
+	}
+
 	public Bounds enlarge(final int n) {
 		return new Bounds(getX() - n, getY() - n,
 				getWidth() + (2 * n), getHeight() + (2 * n));

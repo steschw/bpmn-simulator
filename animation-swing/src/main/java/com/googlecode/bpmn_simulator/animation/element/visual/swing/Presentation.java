@@ -23,16 +23,22 @@ package com.googlecode.bpmn_simulator.animation.element.visual.swing;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.Polygon;
 import java.awt.RenderingHints;
+import java.awt.Shape;
 import java.awt.geom.Path2D;
 import java.util.Iterator;
 
 import com.googlecode.bpmn_simulator.animation.element.visual.Bounds;
+import com.googlecode.bpmn_simulator.animation.element.visual.GeometryUtils;
+import com.googlecode.bpmn_simulator.animation.element.visual.Point;
 import com.googlecode.bpmn_simulator.animation.element.visual.Waypoint;
 import com.googlecode.bpmn_simulator.animation.element.visual.Waypoints;
 import com.googlecode.bpmn_simulator.animation.token.Token;
 
 public class Presentation {
+
+	private static final int PENTAGON_CORNERS = 5;
 
 	private static final RenderingHints QUALITY = new RenderingHints(null);
 	private static final RenderingHints SPEED = new RenderingHints(null);
@@ -77,7 +83,7 @@ public class Presentation {
 		g.drawLine(from.getX(), from.getY(), to.getX(), to.getY());
 	}
 
-	public void drawPolyline(final Graphics g, final Waypoints points) {
+	public void drawLine(final Graphics g, final Waypoints points) {
 		Waypoint from;
 		Waypoint to = null;
 		final Iterator<Waypoint> i = points.iterator();
@@ -116,18 +122,64 @@ public class Presentation {
 	}
 
 	public void drawDiamond(final Graphics2D g, final Bounds bounds) {
-		final float centerX = bounds.getCenterX();
-		final float centerY = bounds.getCenterY();
-		final Path2D diamond = new Path2D.Float();
-		diamond.moveTo(bounds.getMinX(), centerY);
-		diamond.lineTo(centerX, bounds.getMinY());
-		diamond.lineTo(bounds.getMaxX(), centerY);
-		diamond.lineTo(centerX, bounds.getMaxY());
-		g.draw(diamond);
+		g.draw(createDiamond(bounds));
 	}
 
 	public void drawToken(final Graphics g, final Token token, final int centerX, final int centerY) {
 		
+	}
+
+	public static Shape createPentagon(final Bounds bounds) {
+		final Polygon polygon = new Polygon();
+		final Point center = bounds.getCenter();
+		final double r = bounds.getWidth() / 2.;
+		final double radPerCorner = GeometryUtils.RAD_FULL / PENTAGON_CORNERS;
+		Point point = null;
+		for (int i = 0; i < PENTAGON_CORNERS; ++i) {
+			point = GeometryUtils.polarToCartesian(
+					center, r,
+					radPerCorner * i - radPerCorner / 2.);
+			polygon.addPoint(point.getX(), point.getY());
+		}
+		return polygon;
+	}
+
+	public static Shape createStar(final Bounds bounds, final int cornerCount) {
+		final Polygon polygon = new Polygon();
+		final Point center = bounds.getCenter();
+		final double r = bounds.getWidth() / 2.;
+		final double radPerCorner = GeometryUtils.RAD_FULL / cornerCount;
+		Point point = null;
+		for (int i = 0; i < cornerCount; ++i) {
+			final double rad = radPerCorner * i;
+			point = GeometryUtils.polarToCartesian(center, r, rad - radPerCorner / 2.);
+			polygon.addPoint(point.getX(), point.getY());
+			point = GeometryUtils.polarToCartesian(center, r * 0.5, rad);
+			polygon.addPoint(point.getX(), point.getY());
+		}
+		return polygon;
+	}
+
+	public static Shape createDiamond(final Bounds bounds) {
+		final Polygon polygon = new Polygon();
+		polygon.addPoint((int) bounds.getMinX(), (int) bounds.getCenterY());
+		polygon.addPoint((int) bounds.getCenterX(), (int) bounds.getMinY());
+		polygon.addPoint((int) bounds.getMaxX(), (int) bounds.getCenterY());
+		polygon.addPoint((int) bounds.getCenterX(), (int) bounds.getMaxY());
+		return polygon;
+	}
+
+	public static Shape createArrowPath(
+			final Waypoint from, final Waypoint to,
+			final double d, final double length) {
+		final Path2D.Float path = new Path2D.Float();
+		final double angle = to.angleTo(from);
+		final Point point1 = GeometryUtils.polarToCartesian(to, length, angle - d);
+		path.moveTo(point1.getX(), point1.getY());
+		path.lineTo(to.getX(), to.getY());
+		final Point point2 = GeometryUtils.polarToCartesian(to, length, angle + d);
+		path.lineTo(point2.getX(), point2.getY());
+		return path;
 	}
 
 }

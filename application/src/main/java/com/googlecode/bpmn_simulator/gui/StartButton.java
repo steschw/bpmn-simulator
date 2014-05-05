@@ -37,7 +37,6 @@ import com.googlecode.bpmn_simulator.bpmn.trigger.Instantiable;
 import com.googlecode.bpmn_simulator.bpmn.trigger.InstantiableNotifiySource;
 import com.googlecode.bpmn_simulator.bpmn.trigger.Trigger;
 import com.googlecode.bpmn_simulator.bpmn.trigger.TriggerCatchingElement;
-import com.googlecode.bpmn_simulator.framework.gui.InstanceMenuItem;
 
 
 

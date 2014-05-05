@@ -18,7 +18,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.bpmn_simulator.framework.gui;
+package com.googlecode.bpmn_simulator.gui;
 
 import java.awt.Component;
 import java.awt.event.ActionEvent;

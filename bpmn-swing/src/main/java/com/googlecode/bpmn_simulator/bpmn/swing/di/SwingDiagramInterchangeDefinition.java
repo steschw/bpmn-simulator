@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Stefan Schweitzer
+ * Copyright (C) 2014 Stefan Schweitzer
  *
  * This software was created by Stefan Schweitzer as a student's project at
  * Fachhochschule Kaiserslautern (University of Applied Sciences).
@@ -18,10 +18,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.bpmn_simulator.framework.element.visual;
+package com.googlecode.bpmn_simulator.bpmn.swing.di;
 
-public interface Diagram<E extends VisualElement<?>> {
+import java.util.Collection;
 
-	void addElement(E element);
+import com.googlecode.bpmn_simulator.animation.element.logical.LogicalElement;
+import com.googlecode.bpmn_simulator.bpmn.model.AbstractDiagramInterchangeDefinition;
+
+public class SwingDiagramInterchangeDefinition
+		extends AbstractDiagramInterchangeDefinition<SwingBPMNDiagram> {
 
 }

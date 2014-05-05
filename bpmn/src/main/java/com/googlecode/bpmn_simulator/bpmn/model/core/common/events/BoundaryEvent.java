@@ -37,7 +37,7 @@ import com.googlecode.bpmn_simulator.bpmn.swing.di.Visualization;
 import com.googlecode.bpmn_simulator.bpmn.trigger.Trigger;
 import com.googlecode.bpmn_simulator.bpmn.trigger.TriggerCatchingElement;
 import com.googlecode.bpmn_simulator.framework.element.ElementRef;
-import com.googlecode.bpmn_simulator.framework.gui.InstancePopupMenu;
+import com.googlecode.bpmn_simulator.gui.InstancePopupMenu;
 
 
 

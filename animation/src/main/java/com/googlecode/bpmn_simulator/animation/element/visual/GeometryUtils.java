@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Stefan Schweitzer
+ * Copyright (C) 2014 Stefan Schweitzer
  *
  * This software was created by Stefan Schweitzer as a student's project at
  * Fachhochschule Kaiserslautern (University of Applied Sciences).
@@ -18,36 +18,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.bpmn_simulator.framework.execution;
+package com.googlecode.bpmn_simulator.animation.element.visual;
 
-import com.googlecode.bpmn_simulator.animation.execution.AbstractAnimator;
-import com.googlecode.bpmn_simulator.framework.instance.InstanceManager;
+public final class GeometryUtils {
 
+	public static final double RAD_FULL = 2. * Math.PI;
 
-public class InstanceAnimator
-		extends AbstractAnimator {
-
-	private final InstanceManager instanceManager;
-
-	public InstanceAnimator(final InstanceManager instanceManager) {
+	private GeometryUtils() {
 		super();
-		this.instanceManager = instanceManager;
-		start();
 	}
 
-	public InstanceManager getInstanceManager() {
-		return instanceManager;
-	}
-
-	@Override
-	public synchronized void step(final int count) {
-		getInstanceManager().executeAllChildInstances(count);
-	}
-
-	@Override
-	public void reset() {
-		getInstanceManager().removeAllChildInstances();
-		super.reset();
+	public static Point polarToCartesian(
+			final Point orgin, final double radius, final double angle) {
+		final int x = (int) Math.round(radius * Math.sin(angle));
+		final int y = (int) Math.round(radius * Math.cos(angle));
+		return new Waypoint(orgin.getX() + x, orgin.getY() + y);
 	}
 
 }

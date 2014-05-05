@@ -20,7 +20,10 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.di;
 
-public interface BPMNDiagram {
+import com.googlecode.bpmn_simulator.animation.element.visual.Diagram;
+
+public interface BPMNDiagram
+		extends Diagram {
 
 	BPMNPlane getPlane();
 

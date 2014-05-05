@@ -23,13 +23,26 @@ package com.googlecode.bpmn_simulator.animation.element.visual.swing;
 import javax.swing.JComponent;
 
 import com.googlecode.bpmn_simulator.animation.element.logical.LogicalElement;
+import com.googlecode.bpmn_simulator.animation.element.visual.Bounds;
 import com.googlecode.bpmn_simulator.animation.element.visual.Label;
 import com.googlecode.bpmn_simulator.animation.element.visual.VisualElement;
 
+/**
+ * +-------------------------------------+
+ * |  outer bounds (=JComponent:bounds)  |
+ * |  +-------------------------------+  |
+ * |  |          inner bounds         |  |
+ * |  +-------------------------------+  |
+ * |                                     |
+ * +-------------------------------------+
+ * @param E Edge element
+ */
 @SuppressWarnings("serial")
 abstract class AbstractVisualElement<E extends LogicalElement>
 		extends JComponent
 		implements VisualElement {
+
+	private static final int MARGIN = 10;
 
 	private final E logicalElement;
 
@@ -58,6 +71,12 @@ abstract class AbstractVisualElement<E extends LogicalElement>
 
 	public Label getLabel() {
 		return label;
+	}
+
+	protected void setInnerBounds(final Bounds bounds) {
+		final Bounds outerBounds = bounds.enlarge(MARGIN);
+		setBounds(outerBounds.getX(), outerBounds.getY(),
+				outerBounds.getWidth(), outerBounds.getHeight());
 	}
 
 }

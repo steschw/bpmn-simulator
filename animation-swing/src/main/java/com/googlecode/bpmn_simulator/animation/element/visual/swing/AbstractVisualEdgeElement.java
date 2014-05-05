@@ -20,7 +20,10 @@
  */
 package com.googlecode.bpmn_simulator.animation.element.visual.swing;
 
+import javax.swing.SwingUtilities;
+
 import com.googlecode.bpmn_simulator.animation.element.logical.LogicalEdgeElement;
+import com.googlecode.bpmn_simulator.animation.element.visual.Point;
 import com.googlecode.bpmn_simulator.animation.element.visual.VisualEdgeElement;
 import com.googlecode.bpmn_simulator.animation.element.visual.Waypoints;
 
@@ -37,11 +40,17 @@ public abstract class AbstractVisualEdgeElement<E extends LogicalEdgeElement>
 
 	public void setElementWaypoints(final Waypoints waypoints) {
 		this.waypoints = waypoints;
+		setInnerBounds(waypoints.getBounds());
 	}
 
 	@Override
 	public Waypoints getElementWaypoints() {
 		return waypoints;
+	}
+
+	protected Point pointToRelative(final Point point) {
+		final java.awt.Point p = SwingUtilities.convertPoint(getParent(), point.getX(), point.getY(), this);
+		return new Point(p.x, p.y);
 	}
 
 }

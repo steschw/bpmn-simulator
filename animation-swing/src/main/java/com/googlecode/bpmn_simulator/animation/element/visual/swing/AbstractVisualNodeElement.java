@@ -37,6 +37,7 @@ public abstract class AbstractVisualNodeElement<E extends LogicalNodeElement>
 
 	public void setElementBounds(final Bounds bounds) {
 		this.bounds = bounds;
+		setInnerBounds(bounds);
 	}
 
 	@Override

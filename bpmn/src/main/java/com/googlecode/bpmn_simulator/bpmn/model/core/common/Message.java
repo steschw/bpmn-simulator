@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Stefan Schweitzer
+ * Copyright (C) 2014 Stefan Schweitzer
  *
  * This software was created by Stefan Schweitzer as a student's project at
  * Fachhochschule Kaiserslautern (University of Applied Sciences).
@@ -20,45 +20,23 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.model.core.common;
 
-import java.awt.Color;
-import java.awt.Point;
+import com.googlecode.bpmn_simulator.bpmn.model.NamedElement;
+import com.googlecode.bpmn_simulator.bpmn.model.core.foundation.AbstractRootElement;
 
-import com.googlecode.bpmn_simulator.bpmn.Messages;
-import com.googlecode.bpmn_simulator.framework.element.visual.GraphicsLayer;
-import com.googlecode.bpmn_simulator.framework.element.visual.geometry.Bounds;
-
-
-@SuppressWarnings("serial")
 public final class Message
-		extends AbstractFlowElement {
+		extends AbstractRootElement
+		implements NamedElement {
 
-	public static final String ELEMENT_NAME = Messages.getString("message"); //$NON-NLS-1$
+	private final String name;
 
 	public Message(final String id, final String name) {
-		super(id, name);
-		setElementBackground(Color.WHITE);
+		super(id);
+		this.name = name;
 	}
 
 	@Override
-	public String getElementName() {
-		return ELEMENT_NAME;
-	}
-
-	@Override
-	protected void paintBackground(final GraphicsLayer g) {
-		super.paintBackground(g);
-
-		final Bounds bounds = getElementInnerBounds();
-		g.fillRect(bounds);
-	}
-
-	@Override
-	protected void paintElement(final GraphicsLayer g) {
-		final Bounds bounds = getElementInnerBounds();
-		g.drawRect(bounds);
-		final Point center = bounds.getCenter();
-		g.drawLine(bounds.getLeftTop(), center);
-		g.drawLine(bounds.getRightTop(), center);
+	public String getName() {
+		return name;
 	}
 
 }

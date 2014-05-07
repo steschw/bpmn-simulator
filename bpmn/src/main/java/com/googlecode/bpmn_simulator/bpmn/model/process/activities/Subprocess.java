@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Stefan Schweitzer
+ * Copyright (C) 2014 Stefan Schweitzer
  *
  * This software was created by Stefan Schweitzer as a student's project at
  * Fachhochschule Kaiserslautern (University of Applied Sciences).
@@ -20,25 +20,19 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.model.process.activities;
 
-import java.awt.Stroke;
-
 import com.googlecode.bpmn_simulator.bpmn.Messages;
-import com.googlecode.bpmn_simulator.bpmn.model.BPMNModel;
+import com.googlecode.bpmn_simulator.bpmn.model.core.common.FlowElementsContainer;
 
-
-@SuppressWarnings("serial")
-public class Subprocess
-		extends AbstractContainerActivity {
+public final class Subprocess
+		extends AbstractActivity
+		implements FlowElementsContainer {
 
 	public static final String ELEMENT_NAME = Messages.getString("subprocess"); //$NON-NLS-1$
 
 	private final boolean triggeredByEvent;
 
-	private CollapsedSubprocess collapsedProcess;
-
-	public Subprocess(final BPMNModel model, final String id, final String name,
-			final boolean triggeredByEvent) {
-		super(model, id, name);
+	public Subprocess(final String id, final String name, final boolean triggeredByEvent) {
+		super(id, name);
 		this.triggeredByEvent = triggeredByEvent;
 	}
 
@@ -49,29 +43,6 @@ public class Subprocess
 
 	public boolean isTriggeredByEvent() {
 		return triggeredByEvent;
-	}
-
-	public CollapsedSubprocess createCollapsed() {
-		assert collapsedProcess == null;
-		collapsedProcess = new CollapsedSubprocess(this);
-		return collapsedProcess;
-	}
-
-	@Override
-	protected Stroke getStroke() {
-		if (isTriggeredByEvent()) {
-			return getVisualization().createStrokeDotted(getBorderWidth());
-		} else {
-			return super.getStroke();
-		}
-	}
-
-	@Override
-	public void repaint() {
-		super.repaint();
-		if (collapsedProcess != null) {
-			collapsedProcess.repaint();
-		}
 	}
 
 }

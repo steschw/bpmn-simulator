@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Stefan Schweitzer
+ * Copyright (C) 2014 Stefan Schweitzer
  *
  * This software was created by Stefan Schweitzer as a student's project at
  * Fachhochschule Kaiserslautern (University of Applied Sciences).
@@ -18,29 +18,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.bpmn_simulator.bpmn.model.process;
+package com.googlecode.bpmn_simulator.bpmn.model.core.common.events;
 
-import com.googlecode.bpmn_simulator.bpmn.Messages;
-import com.googlecode.bpmn_simulator.bpmn.model.core.common.AbstractFlowElement;
-import com.googlecode.bpmn_simulator.framework.element.visual.GraphicsLayer;
+abstract class AbstractCatchEvent
+		extends AbstractEvent {
 
-@SuppressWarnings("serial")
-public class LaneSet
-		extends AbstractFlowElement {
-
-	public static final String ELEMENT_NAME = Messages.getString("laneSet"); //$NON-NLS-1$
-
-	public LaneSet(final String id) {
-		super(id, null);
-	}
-
-	@Override
-	public String getElementName() {
-		return ELEMENT_NAME;
-	}
-
-	@Override
-	protected void paintElement(final GraphicsLayer g) {
+	public AbstractCatchEvent(final String id, final String name) {
+		super(id, name);
 	}
 
 }

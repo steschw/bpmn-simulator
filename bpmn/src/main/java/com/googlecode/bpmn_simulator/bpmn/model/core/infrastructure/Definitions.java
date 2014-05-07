@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Stefan Schweitzer
+ * Copyright (C) 2014 Stefan Schweitzer
  *
  * This software was created by Stefan Schweitzer as a student's project at
  * Fachhochschule Kaiserslautern (University of Applied Sciences).
@@ -22,18 +22,18 @@ package com.googlecode.bpmn_simulator.bpmn.model.core.infrastructure;
 
 import java.util.Collection;
 
-import com.googlecode.bpmn_simulator.bpmn.model.collaboration.Collaboration;
-import com.googlecode.bpmn_simulator.bpmn.model.process.activities.Process;
+import com.googlecode.bpmn_simulator.bpmn.di.BPMNDiagram;
+import com.googlecode.bpmn_simulator.bpmn.model.NamedElement;
+import com.googlecode.bpmn_simulator.bpmn.model.core.foundation.BaseElement;
+import com.googlecode.bpmn_simulator.bpmn.model.core.foundation.AbstractRootElement;
 
-
-public interface Definitions {
+public interface Definitions<E extends BPMNDiagram>
+		extends BaseElement, NamedElement {
 
 	String getExporter();
 
 	String getExporterVersion();
 
-	Collection<Collaboration> getCollaborations();
-
-	Collection<Process> getProcesses();
+	Collection<AbstractRootElement> getRootElements();
 
 }

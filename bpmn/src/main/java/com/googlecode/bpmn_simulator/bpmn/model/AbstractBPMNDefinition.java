@@ -36,16 +36,13 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+import com.googlecode.bpmn_simulator.animation.element.logical.ref.NamedElements;
 import com.googlecode.bpmn_simulator.animation.element.visual.Diagram;
 import com.googlecode.bpmn_simulator.animation.input.AbstractXmlDefinition;
 import com.googlecode.bpmn_simulator.animation.token.Instance;
+import com.googlecode.bpmn_simulator.animation.token.TokenFlow;
 import com.googlecode.bpmn_simulator.bpmn.Messages;
-import com.googlecode.bpmn_simulator.bpmn.model.collaboration.Collaboration;
-import com.googlecode.bpmn_simulator.bpmn.model.collaboration.MessageFlow;
-import com.googlecode.bpmn_simulator.bpmn.model.collaboration.Participant;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.AbstractFlowElement;
-import com.googlecode.bpmn_simulator.bpmn.model.core.common.AbstractTokenFlowElement;
-import com.googlecode.bpmn_simulator.bpmn.model.core.common.ElementWithDefaultSequenceFlow;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.Error;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.Expression;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.Message;
@@ -53,51 +50,27 @@ import com.googlecode.bpmn_simulator.bpmn.model.core.common.SequenceFlow;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.artifacts.Association;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.artifacts.Group;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.artifacts.TextAnnotation;
-import com.googlecode.bpmn_simulator.bpmn.model.core.common.events.AbstractEvent;
-import com.googlecode.bpmn_simulator.bpmn.model.core.common.events.BoundaryEvent;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.events.ConditionalEventDefinition;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.events.EndEvent;
-import com.googlecode.bpmn_simulator.bpmn.model.core.common.events.ErrorEventDefinition;
-import com.googlecode.bpmn_simulator.bpmn.model.core.common.events.IntermediateCatchEvent;
-import com.googlecode.bpmn_simulator.bpmn.model.core.common.events.IntermediateThrowEvent;
-import com.googlecode.bpmn_simulator.bpmn.model.core.common.events.LinkEventDefinition;
-import com.googlecode.bpmn_simulator.bpmn.model.core.common.events.MessageEventDefinition;
-import com.googlecode.bpmn_simulator.bpmn.model.core.common.events.Signal;
-import com.googlecode.bpmn_simulator.bpmn.model.core.common.events.SignalEventDefinition;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.events.StartEvent;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.events.TerminateEventDefinition;
-import com.googlecode.bpmn_simulator.bpmn.model.core.common.events.TimerEventDefinition;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.gateways.AbstractGateway;
-import com.googlecode.bpmn_simulator.bpmn.model.core.common.gateways.EventBasedGateway;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.gateways.ExclusiveGateway;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.gateways.InclusiveGateway;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.gateways.ParallelGateway;
 import com.googlecode.bpmn_simulator.bpmn.model.core.foundation.BaseElement;
 import com.googlecode.bpmn_simulator.bpmn.model.core.foundation.Documentation;
-import com.googlecode.bpmn_simulator.bpmn.model.process.Lane;
-import com.googlecode.bpmn_simulator.bpmn.model.process.LaneSet;
 import com.googlecode.bpmn_simulator.bpmn.model.process.activities.AbstractActivity;
-import com.googlecode.bpmn_simulator.bpmn.model.process.activities.AbstractContainerActivity;
 import com.googlecode.bpmn_simulator.bpmn.model.process.activities.Process;
 import com.googlecode.bpmn_simulator.bpmn.model.process.activities.Subprocess;
-import com.googlecode.bpmn_simulator.bpmn.model.process.activities.Transaction;
 import com.googlecode.bpmn_simulator.bpmn.model.process.activities.tasks.BusinessRuleTask;
 import com.googlecode.bpmn_simulator.bpmn.model.process.activities.tasks.ManualTask;
-import com.googlecode.bpmn_simulator.bpmn.model.process.activities.tasks.ReceiveTask;
 import com.googlecode.bpmn_simulator.bpmn.model.process.activities.tasks.ScriptTask;
-import com.googlecode.bpmn_simulator.bpmn.model.process.activities.tasks.SendTask;
 import com.googlecode.bpmn_simulator.bpmn.model.process.activities.tasks.ServiceTask;
-import com.googlecode.bpmn_simulator.bpmn.model.process.activities.tasks.Task;
 import com.googlecode.bpmn_simulator.bpmn.model.process.activities.tasks.UserTask;
 import com.googlecode.bpmn_simulator.bpmn.model.process.data.DataAssociation;
 import com.googlecode.bpmn_simulator.bpmn.model.process.data.DataObject;
 import com.googlecode.bpmn_simulator.bpmn.model.process.data.DataStore;
-import com.googlecode.bpmn_simulator.bpmn.trigger.TriggerCatchingElement;
-import com.googlecode.bpmn_simulator.framework.element.ElementRef;
-import com.googlecode.bpmn_simulator.framework.element.ElementRefCollection;
-import com.googlecode.bpmn_simulator.framework.exception.StructureException;
-import com.googlecode.bpmn_simulator.framework.execution.InstanceAnimator;
-import com.googlecode.bpmn_simulator.framework.instance.InstanceManager;
 
 public abstract class AbstractBPMNDefinition<E extends Diagram>
 		extends AbstractXmlDefinition<E> {
@@ -111,20 +84,8 @@ public abstract class AbstractBPMNDefinition<E extends Diagram>
 	protected static final String EXTENSION_SIGNAVIO =
 			"http://www.signavio.com"; //$NON-NLS-1$
 
-	private final ElementRefCollection<AbstractFlowElement> elements
-			= new ElementRefCollection<AbstractFlowElement>();
-
-	private final Collection<Process> processes
-			= new ArrayList<Process>();
-
-	private final ElementRefCollection<Signal> signals
-			= new ElementRefCollection<Signal>();
-
-	private final ElementRefCollection<Error> errors
-			= new ElementRefCollection<Error>();
-
-	private final Collection<Collaboration> collaborations
-			= new ArrayList<Collaboration>();
+	private final NamedElements<TokenFlow> elements
+			= new NamedElements<TokenFlow>();
 
 	private String exporter;
 	private String exporterVersion;
@@ -149,46 +110,6 @@ public abstract class AbstractBPMNDefinition<E extends Diagram>
 		return exporterVersion;
 	}
 
-	public Collection<Collaboration> getCollaborations() {
-		return collaborations;
-	}
-
-	public Collection<Process> getProcesses() {
-		return processes;
-	}
-
-	@SuppressWarnings("unchecked")
-	protected <E> Collection<E> getElements(final Class<E> type) {
-		final Collection<E> events = new LinkedList<E>();
-		for (final ElementRef<? extends AbstractFlowElement> elementRef : elements.values()) {
-			final BaseElement element = elementRef.getElement();
-			if ((element != null) && type.isAssignableFrom(element.getClass())) {
-				events.add((E)element);
-			}
-		}
-		return events;
-	}
-
-	public Collection<TriggerCatchingElement> getCatchEvents() {
-		return getElements(TriggerCatchingElement.class);
-	}
-
-	protected void addElementToContainer(final AbstractFlowElement element,
-			final AbstractContainerActivity container) {
-		elements.set(element);
-		if (container != null) {
-			container.addElement(element);
-		}
-	}
-
-	protected void showUnknowNode(final Node node) {
-		final StructureException exception = new StructureException(this,
-				MessageFormat.format(
-					Messages.getString("Protocol.unknownElement"), //$NON-NLS-1$
-					node.getNodeName()));
-		notifyStructureExceptionListeners(exception);
-	}
-
 	protected <E extends BaseElement> ElementRef<E> getNodeElementRef(
 			final Node node, final String namespace, final String name) {
 		final NodeList childNodes = node.getChildNodes();
@@ -202,30 +123,6 @@ public abstract class AbstractBPMNDefinition<E extends Diagram>
 		return null;
 	}
 
-	protected void throwInvalidElementType(final Class<?> type, final Class<?> expectedType)
-			throws StructureException {
-		throw new StructureException(this,
-				MessageFormat.format(
-						Messages.getString("Protocol.invalidElementType"), //$NON-NLS-1$
-						(type == null) ? null : type.getSimpleName(),
-						(expectedType == null) ? null : expectedType.getSimpleName()));
-	}
-
-	@SuppressWarnings("unchecked")
-	protected <E extends BaseElement> E getElement(final String id, final Class<E> type)
-			throws StructureException {
-		final AbstractFlowElement element = elements.get(id);
-		if (element == null) {
-			throw new StructureException(this,
-					MessageFormat.format(
-							Messages.getString("Protocol.elementNotFound"), //$NON-NLS-1$
-							id));
-		} else if (!type.isAssignableFrom(element.getClass())) {
-			throwInvalidElementType(type, element.getClass());
-		}
-		return (E)element;
-	}
-
 	protected <E extends BaseElement> E getAttributeElement(final Node node,
 			final String name, final Class<E> type)
 			throws StructureException {
@@ -237,27 +134,9 @@ public abstract class AbstractBPMNDefinition<E extends Diagram>
 		return (ElementRef<T>)elements.getRef(id);
 	}
 
-	protected ElementRef<Signal> getSignalRef(final String id) {
-		return signals.getRef(id);
-	}
-
-	protected ElementRef<Error> getErrorRef(final String id) {
-		return errors.getRef(id);
-	}
-
 	protected <T extends AbstractFlowElement> ElementRef<T> getAttributeElementRef(
 			final Node node, final String name) {
 		return getElementRef(getAttributeString(node, name));
-	}
-
-	protected ElementRef<Signal> getAttributeSignalRef(
-			final Node node, final String name) {
-		return getSignalRef(getAttributeString(node, name));
-	}
-
-	protected ElementRef<Error> getAttributeErrorRef(
-			final Node node, final String name) {
-		return getErrorRef(getAttributeString(node, name));
 	}
 
 	protected String getIdAttribute(final Node node) {
@@ -276,20 +155,6 @@ public abstract class AbstractBPMNDefinition<E extends Diagram>
 		return getAttributeElementRef(node, "targetRef"); //$NON-NLS-1$
 	}
 
-	protected String getErrorCodeAttribute(final Node node) {
-		return getAttributeString(node, "errorCode"); //$NON-NLS-1$
-	}
-
-	protected boolean readElementError(final Node node) {
-		if (isElementNode(node, BPMN, "error")) { //$NON-NLS-1$
-			errors.set(new Error(this, getIdAttribute(node),
-					getErrorCodeAttribute(node), getNameAttribute(node)));
-			return true;
-		} else {
-			return false;
-		}
-	}
-
 	protected boolean readArtifacts(final Node node) {
 		return readElementAssociation(node)
 				|| readElementGroup(node)
@@ -299,7 +164,6 @@ public abstract class AbstractBPMNDefinition<E extends Diagram>
 	protected boolean readElementsForDefinitionsElement(final Node node) {
 		return readElementMessage(node)
 				|| readElementSignal(node)
-				|| readElementError(node)
 				|| readElementDataStore(node)
 				|| readElementProcess(node)
 				|| readElementCollaboration(node);
@@ -325,10 +189,7 @@ public abstract class AbstractBPMNDefinition<E extends Diagram>
 				}
 			}
 		} else {
-			final StructureException exception
-				= new StructureException(this,
-					Messages.getString("Protocol.noDefinitions")); //$NON-NLS-1$
-			notifyStructureExceptionListeners(exception);
+			notifyWarning("there a no definitions")
 		}
 	}
 
@@ -338,18 +199,6 @@ public abstract class AbstractBPMNDefinition<E extends Diagram>
 					getNameAttribute(node));
 			readBaseElement(node, message);
 			elements.set(message);
-			return true;
-		} else {
-			return false;
-		}
-	}
-
-	protected boolean readElementSignal(final Node node) {
-		if (isElementNode(node, BPMN, "signal")) { //$NON-NLS-1$
-			final Signal signal = new Signal(this, getIdAttribute(node),
-					getNameAttribute(node));
-			readBaseElement(node, signal);
-			signals.set(signal);
 			return true;
 		} else {
 			return false;
@@ -387,27 +236,6 @@ public abstract class AbstractBPMNDefinition<E extends Diagram>
 		}
 	}
 
-	protected boolean readElementCollaboration(final Node node) {
-		if (isElementNode(node, BPMN, "collaboration")) { //$NON-NLS-1$
-			final Collaboration collaboration = new Collaboration(getIdAttribute(node));
-			final NodeList childNodes = node.getChildNodes();
-			for (int i = 0; i < childNodes.getLength(); ++i) {
-				final Node childNode = childNodes.item(i);
-				if (!readElementDocumentation(childNode, collaboration)
-						&& !readArtifacts(childNode)
-						&& !readElementParticipant(childNode, collaboration)
-						&& !readElementMessageFlow(childNode, collaboration)) {
-					showUnknowNode(childNode);
-				}
-			}
-			collaborations.add(collaboration);
-			elements.set(collaboration);
-			return true;
-		} else {
-			return false;
-		}
-	}
-
 	protected void readExtensionElementsPropertySignavio(final Node node,
 			final BaseElement element) {
 		final String keyNode = getAttributeString(node, "metaKey"); //$NON-NLS-1$
@@ -429,12 +257,7 @@ public abstract class AbstractBPMNDefinition<E extends Diagram>
 			if (isElementNode(childNode, EXTENSION_SIGNAVIO, "signavioMetaData")) { //$NON-NLS-1$
 				readExtensionElementsPropertySignavio(childNode, element);
 			} else {
-				final StructureException exception
-					= new StructureException(this,
-						MessageFormat.format(
-							Messages.getString("Protocol.unknownExtensionProperty"), //$NON-NLS-1$
-							childNode.getNodeName()));
-				notifyStructureExceptionListeners(exception);
+				notifyWarning("unknow extension property");
 			}
 		}
 	}
@@ -697,10 +520,10 @@ public abstract class AbstractBPMNDefinition<E extends Diagram>
 		readFlowElement(node, gateway);
 	}
 
-	protected Association.Direction getParameterAssociationDirection(final Node node) {
+	protected Direction getParameterAssociationDirection(final Node node) {
 		final String value = getAttributeString(node, "associationDirection"); //$NON-NLS-1$
-		final Association.Direction direction = Association.Direction.byValue(value);
-		return (direction == null) ? Association.Direction.NONE : direction;
+		final Direction direction = Direction.byValue(value);
+		return (direction == null) ? Direction.NONE : direction;
 	}
 
 	protected MimeType getTextFormatAttribute(final Node node) {

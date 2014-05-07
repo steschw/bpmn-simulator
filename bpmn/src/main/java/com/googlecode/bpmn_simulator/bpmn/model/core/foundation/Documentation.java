@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Stefan Schweitzer
+ * Copyright (C) 2014 Stefan Schweitzer
  *
  * This software was created by Stefan Schweitzer as a student's project at
  * Fachhochschule Kaiserslautern (University of Applied Sciences).
@@ -23,7 +23,11 @@ package com.googlecode.bpmn_simulator.bpmn.model.core.foundation;
 import javax.activation.MimeType;
 import javax.activation.MimeTypeParseException;
 
-public class Documentation {
+import com.googlecode.bpmn_simulator.bpmn.model.TextElement;
+
+public class Documentation
+		extends AbstractBaseElement
+		implements TextElement {
 
 	private static final MimeType TEXT_PLAIN = newMimeType("text", "plain"); //$NON-NLS-1$ //$NON-NLS-2$
 	private static final MimeType TEXT_HTML = newMimeType("text", "html"); //$NON-NLS-1$ //$NON-NLS-2$
@@ -34,12 +38,12 @@ public class Documentation {
 
 	private MimeType textFormat;
 
-	public Documentation(final String text) {
-		this(text, null);
+	public Documentation(final String id, final String text) {
+		this(id, text, null);
 	}
 
-	public Documentation(final String text, final MimeType textFormat) {
-		super();
+	public Documentation(final String id, final String text, final MimeType textFormat) {
+		super(id);
 		setText(text);
 		setTextFormat(textFormat);
 	}
@@ -57,22 +61,24 @@ public class Documentation {
 		return text.replaceAll("\r?\n", System.getProperty("line.separator")); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
-	public void setText(final String text) {
+	public final void setText(final String text) {
 		assert (text != null) && !text.isEmpty();
 		this.text = transformLineEnding(text);
 	}
 
+	@Override
 	public final String getText() {
 		return text;
 	}
 
-	public void setTextFormat(final MimeType textFormat) {
+	public final void setTextFormat(final MimeType textFormat) {
 		assert (textFormat == null)
 				|| textFormat.match(TEXT_PLAIN)
 				|| textFormat.match(TEXT_HTML);
 		this.textFormat = textFormat;
 	}
 
+	@Override
 	public MimeType getTextFormat() {
 		return (textFormat == null) ? DEFAULT_TEXTFORMAT : textFormat;
 	}

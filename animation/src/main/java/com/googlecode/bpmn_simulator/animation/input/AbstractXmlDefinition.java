@@ -104,6 +104,10 @@ public abstract class AbstractXmlDefinition<E extends Diagram>
 		return attributeNode.getNodeValue();
 	}
 
+	protected float getAttributeFloat(final Node node, final String name) {
+		return getAttributeFloat(node, name, 0.f);
+	}
+
 	protected float getAttributeFloat(final Node node,
 			final String name, final float defaultValue) {
 		final String value = getAttributeString(node, name);

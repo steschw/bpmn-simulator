@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Stefan Schweitzer
+ * Copyright (C) 2014 Stefan Schweitzer
  *
  * This software was created by Stefan Schweitzer as a student's project at
  * Fachhochschule Kaiserslautern (University of Applied Sciences).
@@ -20,51 +20,13 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.model.process.data;
 
-import java.awt.Stroke;
+import com.googlecode.bpmn_simulator.bpmn.model.core.foundation.AbstractBaseElement;
 
-import com.googlecode.bpmn_simulator.bpmn.Messages;
-import com.googlecode.bpmn_simulator.bpmn.model.core.common.AbstractTokenConnectingElement;
-import com.googlecode.bpmn_simulator.bpmn.model.core.common.AbstractTokenFlowElement;
-import com.googlecode.bpmn_simulator.framework.element.ElementRef;
-import com.googlecode.bpmn_simulator.framework.element.visual.GraphicsLayer;
-import com.googlecode.bpmn_simulator.framework.element.visual.geometry.Waypoint;
+public final class DataAssociation
+		extends AbstractBaseElement {
 
-
-@SuppressWarnings("serial")
-public class DataAssociation
-		extends AbstractTokenConnectingElement {
-
-	public static final String ELEMENT_NAME = Messages.getString("dataAssociation"); //$NON-NLS-1$
-
-	public DataAssociation(final String id,
-			final ElementRef<AbstractTokenFlowElement> source,
-			final ElementRef<AbstractTokenFlowElement> target) {
-		super(id, null, source, target);
-	}
-
-	@Override
-	public String getElementName() {
-		return ELEMENT_NAME;
-	}
-
-	@Override
-	protected int getBorderWidth() {
-		return 2;
-	}
-
-	@Override
-	protected Stroke getStroke() {
-		return getVisualization().createStrokeDotted(getBorderWidth());
-	}
-
-	@Override
-	protected void paintConnectingEnd(final GraphicsLayer g, final Waypoint from,
-			final Waypoint end) {
-		g.drawArrow(from, end);
-	}
-
-	@Override
-	protected void paintConnectingStart(GraphicsLayer g, Waypoint from, Waypoint start) {
+	public DataAssociation(final String id) {
+		super(id);
 	}
 
 }

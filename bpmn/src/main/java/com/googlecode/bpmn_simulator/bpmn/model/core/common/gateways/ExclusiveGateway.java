@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Stefan Schweitzer
+ * Copyright (C) 2014 Stefan Schweitzer
  *
  * This software was created by Stefan Schweitzer as a student's project at
  * Fachhochschule Kaiserslautern (University of Applied Sciences).
@@ -20,16 +20,8 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.model.core.common.gateways;
 
-import java.awt.BasicStroke;
-
-import com.googlecode.bpmn_simulator.animation.token.Instance;
-import com.googlecode.bpmn_simulator.animation.token.Token;
 import com.googlecode.bpmn_simulator.bpmn.Messages;
-import com.googlecode.bpmn_simulator.framework.element.visual.GraphicsLayer;
 
-
-
-@SuppressWarnings("serial")
 public final class ExclusiveGateway
 		extends AbstractGateway {
 
@@ -42,27 +34,6 @@ public final class ExclusiveGateway
 	@Override
 	public String getElementName() {
 		return ELEMENT_NAME;
-	}
-
-	@Override
-	protected void paintElement(final GraphicsLayer g) {
-		super.paintElement(g);
-
-		if (getVisualization().getShowExclusiveGatewaySymbol()) {
-			g.setStroke(new BasicStroke(3));
-			g.drawCross(getSymbolBounds(), true);
-		}
-	}
-
-	@Override
-	protected void tokenForwardToNextElement(final Token token,
-			final Instance instance) {
-		if (passTokenToFirstOutgoing(token, instance)) {
-			setException(false);
-			token.remove();
-		} else {
-			setException(true);
-		}
 	}
 
 }

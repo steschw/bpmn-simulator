@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Stefan Schweitzer
+ * Copyright (C) 2014 Stefan Schweitzer
  *
  * This software was created by Stefan Schweitzer as a student's project at
  * Fachhochschule Kaiserslautern (University of Applied Sciences).
@@ -20,31 +20,10 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.model.core.common.events;
 
-import javax.swing.Icon;
-
-import com.googlecode.bpmn_simulator.animation.token.Token;
-import com.googlecode.bpmn_simulator.bpmn.swing.di.Visualization;
-
-
-
 public final class TerminateEventDefinition
 		extends EventDefinition {
 
-	public TerminateEventDefinition(final AbstractEvent event) {
-		super(event);
-	}
-
-	@Override
-	public Icon getIcon(final Visualization visualization, final boolean inverse) {
-		assert inverse;
-		return visualization.getIcon(Visualization.ICON_TERMINATE);
-	}
-
-	@Override
-	public void throwTrigger(final Token token) {
-		super.throwTrigger(token);
-
-		token.getInstance().removeAllOtherTokens(token);
+	public TerminateEventDefinition() {
 	}
 
 }

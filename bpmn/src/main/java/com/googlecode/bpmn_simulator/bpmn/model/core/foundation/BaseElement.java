@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Stefan Schweitzer
+ * Copyright (C) 2014 Stefan Schweitzer
  *
  * This software was created by Stefan Schweitzer as a student's project at
  * Fachhochschule Kaiserslautern (University of Applied Sciences).
@@ -20,21 +20,12 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.model.core.foundation;
 
-import com.googlecode.bpmn_simulator.bpmn.model.BPMNModel;
+import java.util.Collection;
 
 public interface BaseElement {
 
 	String getId();
 
-	void setDocumentation(final Documentation documentation);
-
-	boolean hasDocumentation();
-
-	Documentation getDocumentation();
-
-	BPMNModel getModel();
-
-
-	String getFullName();
+	Collection<Documentation> getDocumentation();
 
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Stefan Schweitzer
+ * Copyright (C) 2014 Stefan Schweitzer
  *
  * This software was created by Stefan Schweitzer as a student's project at
  * Fachhochschule Kaiserslautern (University of Applied Sciences).
@@ -18,29 +18,36 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.bpmn_simulator.bpmn.model.core.common.events;
+package com.googlecode.bpmn_simulator.bpmn.model.core.foundation;
 
-import java.awt.Color;
+import java.util.ArrayList;
+import java.util.Collection;
 
-import com.googlecode.bpmn_simulator.bpmn.swing.di.Visualization;
+public abstract class AbstractBaseElement
+		implements BaseElement {
 
+	private final String id;
 
-@SuppressWarnings("serial")
-public abstract class AbstractIntermediateEvent
-		extends AbstractEvent {
+	private Collection<Documentation> documentations
+			= new ArrayList<Documentation>();
 
-	public AbstractIntermediateEvent(final String id, final String name) {
-		super(id, name, null);
+	public AbstractBaseElement(final String id) {
+		super();
+		this.id = id;
 	}
 
 	@Override
-	protected Color getElementDefaultBackground() {
-		return getVisualization().getBackground(Visualization.Element.EVENT_INTERMEDIATE);
+	public String getId() {
+		return id;
+	}
+
+	public void addDocumentation(final Documentation documentation) {
+		documentations.add(documentation);
 	}
 
 	@Override
-	public int getInnerBorderMargin() {
-		return DEFAULT_INNER_MARGIN;
+	public Collection<Documentation> getDocumentation() {
+		return documentations;
 	}
 
 }

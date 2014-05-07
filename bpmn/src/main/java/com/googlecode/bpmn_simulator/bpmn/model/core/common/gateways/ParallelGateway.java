@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Stefan Schweitzer
+ * Copyright (C) 2014 Stefan Schweitzer
  *
  * This software was created by Stefan Schweitzer as a student's project at
  * Fachhochschule Kaiserslautern (University of Applied Sciences).
@@ -20,18 +20,8 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.model.core.common.gateways;
 
-import java.awt.BasicStroke;
-
-import com.googlecode.bpmn_simulator.animation.token.Instance;
-import com.googlecode.bpmn_simulator.animation.token.Token;
-import com.googlecode.bpmn_simulator.animation.token.Tokens;
 import com.googlecode.bpmn_simulator.bpmn.Messages;
-import com.googlecode.bpmn_simulator.bpmn.model.core.common.SequenceFlow;
-import com.googlecode.bpmn_simulator.framework.element.visual.GraphicsLayer;
 
-
-
-@SuppressWarnings("serial")
 public final class ParallelGateway
 		extends AbstractMergingGateway {
 
@@ -44,28 +34,6 @@ public final class ParallelGateway
 	@Override
 	public String getElementName() {
 		return ELEMENT_NAME;
-	}
-
-	@Override
-	protected void paintElement(final GraphicsLayer g) {
-		super.paintElement(g);
-
-		g.setStroke(new BasicStroke(3));
-		g.drawCross(getSymbolBounds(), false);
-	}
-
-	@Override
-	protected synchronized void forwardTokenParallel(final Instance instance) {
-		final Tokens popTokens = new Tokens();
-		for (final SequenceFlow incoming : getIncoming()) {
-			final Token incomingToken = getFirstTokenForIncoming(incoming, instance);
-			if (incomingToken == null) {
-				// es sind nicht für jeden eingang ein token vorhanden
-				return;
-			}
-			popTokens.add(incomingToken);
-		}
-		forwardMergedTokensToAllOutgoing(popTokens);
 	}
 
 }

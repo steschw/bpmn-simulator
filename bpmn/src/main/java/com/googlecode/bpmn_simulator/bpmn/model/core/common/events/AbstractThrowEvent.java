@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Stefan Schweitzer
+ * Copyright (C) 2014 Stefan Schweitzer
  *
  * This software was created by Stefan Schweitzer as a student's project at
  * Fachhochschule Kaiserslautern (University of Applied Sciences).
@@ -18,16 +18,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.bpmn_simulator.bpmn.model.core.common;
+package com.googlecode.bpmn_simulator.bpmn.model.core.common.events;
 
-import com.googlecode.bpmn_simulator.framework.element.ElementRef;
+abstract class AbstractThrowEvent
+		extends AbstractEvent {
 
-public interface ElementWithDefaultSequenceFlow {
-
-	void setDefaultSequenceFlowRef(final ElementRef<SequenceFlow> sequenceFlowRef);
-
-	ElementRef<SequenceFlow> getDefaultSequenceFlowRef();
-
-	SequenceFlow getDefaultSequenceFlow();
+	public AbstractThrowEvent(final String id, final String name) {
+		super(id, name);
+	}
 
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Stefan Schweitzer
+ * Copyright (C) 2014 Stefan Schweitzer
  *
  * This software was created by Stefan Schweitzer as a student's project at
  * Fachhochschule Kaiserslautern (University of Applied Sciences).
@@ -20,49 +20,14 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.model.process.data;
 
-import java.awt.Color;
-
 import com.googlecode.bpmn_simulator.bpmn.Messages;
-import com.googlecode.bpmn_simulator.bpmn.model.core.common.AbstractFlowElement;
-import com.googlecode.bpmn_simulator.bpmn.swing.di.Visualization;
-import com.googlecode.bpmn_simulator.framework.element.visual.GraphicsLayer;
+import com.googlecode.bpmn_simulator.bpmn.model.core.foundation.AbstractBaseElement;
 
+public final class DataStore
+		extends AbstractBaseElement {
 
-@SuppressWarnings("serial")
-public class DataStore
-		extends AbstractFlowElement {
-
-	public static final String ELEMENT_NAME = Messages.getString("dataStore"); //$NON-NLS-1$
-
-	public DataStore(final String id, final String name) {
-		super(id, name);
-	}
-
-	@Override
-	public String getElementName() {
-		return ELEMENT_NAME;
-	}
-
-	@Override
-	protected void updateElementLabelPosition() {
-		getElementLabel().setCenterTopPosition(getInnerBounds().getCenterBottom());
-	}
-
-	@Override
-	protected Color getElementDefaultBackground() {
-		return getVisualization().getBackground(Visualization.Element.DATA_STORAGE);
-	}
-
-	@Override
-	protected void paintBackground(final GraphicsLayer g) {
-		super.paintBackground(g);
-
-		g.fill(GraphicsLayer.createDataStoreShape(getElementInnerBounds()));
-	}
-
-	@Override
-	protected void paintElement(final GraphicsLayer g) {
-		g.drawDataStore(getElementInnerBounds());
+	public DataStore(final String id) {
+		super(id);
 	}
 
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Stefan Schweitzer
+ * Copyright (C) 2014 Stefan Schweitzer
  *
  * This software was created by Stefan Schweitzer as a student's project at
  * Fachhochschule Kaiserslautern (University of Applied Sciences).
@@ -20,137 +20,21 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.model.core.common;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Point;
-
-import com.googlecode.bpmn_simulator.bpmn.Messages;
-import com.googlecode.bpmn_simulator.bpmn.model.core.common.gateways.AbstractGateway;
-import com.googlecode.bpmn_simulator.bpmn.model.core.common.gateways.ExclusiveGateway;
-import com.googlecode.bpmn_simulator.bpmn.model.core.common.gateways.InclusiveGateway;
-import com.googlecode.bpmn_simulator.framework.element.ElementRef;
-import com.googlecode.bpmn_simulator.framework.element.visual.GraphicsLayer;
-import com.googlecode.bpmn_simulator.framework.element.visual.geometry.Waypoint;
-
-
-@SuppressWarnings("serial")
 public final class SequenceFlow
-		extends AbstractTokenConnectingElement {
+		extends AbstractFlowElement {
 
-	public static final String ELEMENT_NAME = Messages.getString("sequenceFlow"); //$NON-NLS-1$
+	private Expression conditionExpression;
 
-	private Expression condition;
-
-	public SequenceFlow(final String id, final String name,
-			final ElementRef<AbstractTokenFlowElement> source,
-			final ElementRef<AbstractTokenFlowElement> target) {
-		super(id, name, source, target);
+	public SequenceFlow(final String id, final String name) {
+		super(id, name);
 	}
 
-	@Override
-	public String getElementName() {
-		return ELEMENT_NAME;
-	}
-
-	public void setCondition(final Expression condition) {
-		this.condition = condition;
-		if (condition != null) {
-			add(condition);
-			updateConditionPosition();
-		}
+	public void setConditionExpression(final Expression expression) {
+		this.conditionExpression = expression;
 	}
 
 	protected Expression getCondition() {
-		return condition;
-	}
-
-	protected boolean hasCondition() {
-		return getCondition() != null;
-	}
-
-	public boolean isConditional() {
-		return (hasCondition()
-				|| isSourceElementInclusiveOrExclusiveGatewayAndHasMoreThanOnceOutgoing())
-					&& !isDefault();
-	}
-
-	public boolean acceptsToken() {
-		return !isConditional() || getCondition().isTrue();
-	}
-
-	@Override
-	public void initSubElements() {
-		super.initSubElements();
-		initExpressionControl();
-	}
-
-	protected void initExpressionControl() {
-		if (isConditional()) {
-			if (!hasCondition()) {
-				setCondition(new Expression());
-			}
-		}
-	}
-
-	private void updateConditionPosition() {
-		assert hasCondition();
-		if (getParent() != null) {
-			final Point center = getElementCenter();
-			if (center != null) {
-				final Point position = center; //waypointToRelative(center);
-				final Dimension preferredSize = getCondition().getPreferredSize();
-				getCondition().setBounds(
-						position.x - (preferredSize.width / 2),
-						position.y - (int)((preferredSize.height / 3.) * 2.),
-						preferredSize.width, preferredSize.height);
-				getParent().setComponentZOrder(getCondition(), 0);
-			}
-		}
-	}
-
-	@Override
-	protected void updateBounds() {
-		super.updateBounds();
-		if (hasCondition()) {
-			updateConditionPosition();
-		}
-	}
-
-	public boolean isDefault() {
-		final AbstractFlowElement flowElement = getSource();
-		if (flowElement instanceof ElementWithDefaultSequenceFlow) {
-			final ElementWithDefaultSequenceFlow element = (ElementWithDefaultSequenceFlow)flowElement;
-			final ElementRef<SequenceFlow> defaultElementFlowRef = element.getDefaultSequenceFlowRef();
-			if (defaultElementFlowRef != null) {
-				return defaultElementFlowRef.equalsElement(this);
-			}
-		}
-		return false;
-	}
-
-	protected boolean isSourceElementInclusiveOrExclusiveGatewayAndHasMoreThanOnceOutgoing() {
-		final AbstractFlowElement sourceElement = getSource();
-		if ((sourceElement instanceof InclusiveGateway)
-				|| (sourceElement instanceof ExclusiveGateway)) {
-			return ((AbstractGateway)sourceElement).getOutgoing().size() > 1;
-		}
-		return false;
-	}
-
-	@Override
-	protected void paintConnectingStart(final GraphicsLayer g, final Waypoint from, final Waypoint start) {
-		if (isDefault()) {
-			g.drawDefaultSymbol(start, from);
-		} else if (!isSourceElementInclusiveOrExclusiveGatewayAndHasMoreThanOnceOutgoing()
-				&& isConditional()) {
-			g.setPaint(Color.red);
-			g.drawConditionalSymbol(start, from);
-		}
-	}
-
-	@Override
-	protected void paintConnectingEnd(final GraphicsLayer g, final Waypoint from, final Waypoint end) {
-		g.fillArrow(from, end);
+		return conditionExpression;
 	}
 
 }

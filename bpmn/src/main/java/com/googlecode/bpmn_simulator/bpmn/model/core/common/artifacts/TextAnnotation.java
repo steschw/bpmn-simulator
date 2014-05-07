@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Stefan Schweitzer
+ * Copyright (C) 2014 Stefan Schweitzer
  *
  * This software was created by Stefan Schweitzer as a student's project at
  * Fachhochschule Kaiserslautern (University of Applied Sciences).
@@ -20,80 +20,35 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.model.core.common.artifacts;
 
-import java.awt.Point;
+import javax.activation.MimeType;
 
-import com.googlecode.bpmn_simulator.animation.element.visual.swing.ClickThroughMouseListener;
-import com.googlecode.bpmn_simulator.bpmn.Messages;
-import com.googlecode.bpmn_simulator.bpmn.model.core.common.AbstractFlowElement;
-import com.googlecode.bpmn_simulator.bpmn.model.core.common.Label;
-import com.googlecode.bpmn_simulator.framework.element.visual.GraphicsLayer;
-import com.googlecode.bpmn_simulator.framework.element.visual.geometry.Bounds;
+import com.googlecode.bpmn_simulator.bpmn.model.TextElement;
 
-
-@SuppressWarnings("serial")
-public class TextAnnotation
-		extends AbstractFlowElement {
-
-	public static final String ELEMENT_NAME = Messages.getString("textAnnotation"); //$NON-NLS-1$
-
-	private static final int BRACKET_WIDTH = 10;
+public final class TextAnnotation
+		extends AbstractArtifact
+		implements TextElement {
 
 	private String text;
-
-	public TextAnnotation(final String id) {
-		this(id, null);
-	}
+	private MimeType textFormat;
 
 	public TextAnnotation(final String id, final String text) {
-		super(id, null);
-		setText(text);
-		addMouseListener(new ClickThroughMouseListener());
+		this(id, text, null);
+	}
+
+	public TextAnnotation(final String id, final String text, final MimeType textFormat) {
+		super(id);
+		this.text = text;
+		this.textFormat = textFormat;
 	}
 
 	@Override
-	public String getElementName() {
-		return ELEMENT_NAME;
-	}
-
-	public final void setText(final String text) {
-		this.text = text;
-	}
-
-	public final String getText() {
+	public String getText() {
 		return text;
 	}
 
 	@Override
-	public Label createElementLabel() {
-		final String text = getText();
-		Label label = null;
-		if ((text != null) && !text.isEmpty()) {
-			label = new Label(this, text);
-			label.setAlignCenter(false);
-		}
-		return label;
-	}
-
-	@Override
-	public void updateElementLabelPosition() {
-		final Bounds innerBounds = getInnerBounds();
-		innerBounds.shrinkLeft(4);
-		getElementLabel().setBounds(innerBounds);
-	}
-
-	@Override
-	protected int getBorderWidth() {
-		return 2;
-	}
-
-	@Override
-	protected void paintElement(final GraphicsLayer g) {
-		final Bounds bounds = getElementInnerBounds();
-		final int x = (int)bounds.getMinX();
-		final int y = (int)bounds.getMinY();
-		g.drawLine(new Point(x, y), new Point(x + BRACKET_WIDTH, y));
-		g.drawLine(new Point(x, y), new Point(x, y + bounds.height));
-		g.drawLine(new Point(x, y + bounds.height), new Point(x + BRACKET_WIDTH, y + bounds.height));
+	public MimeType getTextFormat() {
+		return textFormat;
 	}
 
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Stefan Schweitzer
+ * Copyright (C) 2014 Stefan Schweitzer
  *
  * This software was created by Stefan Schweitzer as a student's project at
  * Fachhochschule Kaiserslautern (University of Applied Sciences).
@@ -20,68 +20,20 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.model.process.data;
 
-import java.awt.Color;
-import java.awt.Point;
+import com.googlecode.bpmn_simulator.bpmn.model.core.foundation.AbstractBaseElement;
 
-import javax.swing.Icon;
-
-import com.googlecode.bpmn_simulator.bpmn.Messages;
-import com.googlecode.bpmn_simulator.bpmn.model.core.common.AbstractFlowElement;
-import com.googlecode.bpmn_simulator.bpmn.swing.di.Visualization;
-import com.googlecode.bpmn_simulator.framework.element.visual.GraphicsLayer;
-import com.googlecode.bpmn_simulator.framework.element.visual.geometry.Bounds;
-
-
-@SuppressWarnings("serial")
-public class DataObject
-		extends AbstractFlowElement {
-
-	public static final String ELEMENT_NAME = Messages.getString("dataObject"); //$NON-NLS-1$
+public final class DataObject
+		extends AbstractBaseElement {
 
 	private boolean isCollection;
 
-	public DataObject(final String id, final String name) {
-		super(id, name);
-	}
-
-	@Override
-	public String getElementName() {
-		return ELEMENT_NAME;
-	}
-
-	public void setCollection(final boolean isCollection) {
+	public DataObject(final String id, final boolean isCollection) {
+		super(id);
 		this.isCollection = isCollection;
 	}
 
 	public boolean isCollection() {
 		return isCollection;
-	}
-
-	@Override
-	protected Color getElementDefaultBackground() {
-		return getVisualization().getBackground(Visualization.Element.DATA_OBJECT);
-	}
-
-	@Override
-	protected void paintBackground(final GraphicsLayer g) {
-		super.paintBackground(g);
-
-		g.fill(GraphicsLayer.createDataObjectShape(getElementInnerBounds()));
-	}
-
-	@Override
-	protected void paintElement(final GraphicsLayer g) {
-		final Bounds bounds = getElementInnerBounds();
-		g.drawDataObject(bounds);
-
-		if (isCollection()) {
-			final Icon icon = getVisualization().getIcon(Visualization.ICON_COLLECTION);
-			final Point position = bounds.getCenterBottom();
-			position.translate(
-					-icon.getIconWidth() / 2,
-					-icon.getIconHeight());
-			g.drawIcon(icon, position);
-		}
 	}
 
 }

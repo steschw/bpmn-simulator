@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Stefan Schweitzer
+ * Copyright (C) 2014 Stefan Schweitzer
  *
  * This software was created by Stefan Schweitzer as a student's project at
  * Fachhochschule Kaiserslautern (University of Applied Sciences).
@@ -18,10 +18,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.bpmn_simulator.bpmn.trigger;
+package com.googlecode.bpmn_simulator.bpmn.model.core.foundation;
 
-public interface TriggerCatching {
+public abstract class AbstractRootElement
+		extends AbstractBaseElement {
 
-	void catchTrigger(Trigger trigger);
+	public AbstractRootElement(final String id) {
+		super(id);
+	}
 
 }

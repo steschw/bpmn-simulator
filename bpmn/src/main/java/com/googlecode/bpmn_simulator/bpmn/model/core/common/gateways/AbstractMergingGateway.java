@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Stefan Schweitzer
+ * Copyright (C) 2014 Stefan Schweitzer
  *
  * This software was created by Stefan Schweitzer as a student's project at
  * Fachhochschule Kaiserslautern (University of Applied Sciences).
@@ -20,58 +20,11 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.model.core.common.gateways;
 
-import java.awt.Point;
-
-import com.googlecode.bpmn_simulator.animation.token.Instance;
-import com.googlecode.bpmn_simulator.animation.token.Token;
-import com.googlecode.bpmn_simulator.animation.token.Tokens;
-import com.googlecode.bpmn_simulator.bpmn.model.core.common.SequenceFlow;
-import com.googlecode.bpmn_simulator.framework.element.visual.GraphicsLayer;
-import com.googlecode.bpmn_simulator.framework.element.visual.geometry.Bounds;
-
-
-
-@SuppressWarnings("serial")
 public abstract class AbstractMergingGateway
 		extends AbstractGateway {
 
-	protected static final int TOKEN_MARGIN = 5;
-
 	public AbstractMergingGateway(final String id, final String name) {
 		super(id, name);
-	}
-
-	@Override
-	protected void tokenForwardToNextElement(final Token token, final Instance instance) {
-		forwardTokenParallel(instance);
-	}
-
-	protected abstract void forwardTokenParallel(final Instance instance);
-
-	protected final void forwardMergedTokensToAllOutgoing(final Tokens tokens) {
-		final Token mergedToken = tokens.merge();
-		if (mergedToken != null) {
-			passTokenToAllNextElements(mergedToken);
-			mergedToken.remove();
-		}
-	}
-
-	@Override
-	protected void paintTokens(final GraphicsLayer g) {
-		final Bounds bounds = getElementInnerBounds();
-		int y = bounds.y;
-		for (Instance tokenInstance : getInnerTokens().getInstances()) {
-			int x = bounds.x + (int)bounds.getWidth();
-			final Tokens instanceTokens = getInnerTokens().byInstance(tokenInstance);
-			for (final SequenceFlow incoming : getIncoming()) {
-				final int count = instanceTokens.byPreviousFlow(incoming).getCount();
-				if (count > 0) {
-					tokenInstance.paint(g, new Point(x, y), count);
-				}
-				x -= TOKEN_MARGIN;
-			}
-			y += TOKEN_MARGIN;
-		}
 	}
 
 }

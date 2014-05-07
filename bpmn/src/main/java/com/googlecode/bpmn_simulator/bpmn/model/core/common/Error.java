@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Stefan Schweitzer
+ * Copyright (C) 2014 Stefan Schweitzer
  *
  * This software was created by Stefan Schweitzer as a student's project at
  * Fachhochschule Kaiserslautern (University of Applied Sciences).
@@ -20,16 +20,19 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.model.core.common;
 
-import com.googlecode.bpmn_simulator.bpmn.model.BPMNModel;
+import com.googlecode.bpmn_simulator.bpmn.model.NamedElement;
+import com.googlecode.bpmn_simulator.bpmn.model.core.foundation.AbstractRootElement;
 
 public final class Error
-		extends InvisibleElement {
+		extends AbstractRootElement
+		implements NamedElement {
 
-	private final String code;
 	private final String name;
 
-	public Error(final BPMNModel model, final String id, final String code, final String name) {
-		super(model, id);
+	private final String code;
+
+	public Error(final String id, final String code, final String name) {
+		super(id);
 		this.code = code;
 		this.name = name;
 	}
@@ -38,6 +41,7 @@ public final class Error
 		return code;
 	}
 
+	@Override
 	public String getName() {
 		return name;
 	}

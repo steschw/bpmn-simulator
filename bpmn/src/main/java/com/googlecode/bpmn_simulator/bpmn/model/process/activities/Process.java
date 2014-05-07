@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Stefan Schweitzer
+ * Copyright (C) 2014 Stefan Schweitzer
  *
  * This software was created by Stefan Schweitzer as a student's project at
  * Fachhochschule Kaiserslautern (University of Applied Sciences).
@@ -20,22 +20,20 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.model.process.activities;
 
+import java.util.Collection;
+
 import com.googlecode.bpmn_simulator.bpmn.Messages;
-import com.googlecode.bpmn_simulator.bpmn.model.BPMNModel;
+import com.googlecode.bpmn_simulator.bpmn.model.core.common.FlowElement;
+import com.googlecode.bpmn_simulator.bpmn.model.core.common.FlowElementsContainer;
+import com.googlecode.bpmn_simulator.bpmn.model.core.foundation.AbstractRootElement;
+import com.googlecode.bpmn_simulator.bpmn.model.core.foundation.Documentation;
 
-@SuppressWarnings("serial")
 public final class Process
-		extends AbstractContainerActivity {
+		extends AbstractRootElement
+		implements FlowElementsContainer {
 
-	public static final String ELEMENT_NAME = Messages.getString("process"); //$NON-NLS-1$
-
-	public Process(final BPMNModel model, final String id, final String name) {
-		super(model, id, name);
-	}
-
-	@Override
-	public String getElementName() {
-		return ELEMENT_NAME;
+	public Process(final String id) {
+		super(id);
 	}
 
 }

@@ -20,7 +20,6 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.model;
 
-import java.awt.Dimension;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -30,6 +29,7 @@ import javax.swing.JComponent;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import com.googlecode.bpmn_simulator.animation.element.visual.Bounds;
 import com.googlecode.bpmn_simulator.animation.element.visual.Diagram;
 import com.googlecode.bpmn_simulator.bpmn.Messages;
 import com.googlecode.bpmn_simulator.bpmn.di.BPMNDiagram;
@@ -40,9 +40,6 @@ import com.googlecode.bpmn_simulator.bpmn.model.core.common.AbstractFlowElement;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.Label;
 import com.googlecode.bpmn_simulator.bpmn.model.process.activities.Process;
 import com.googlecode.bpmn_simulator.bpmn.model.process.activities.Subprocess;
-import com.googlecode.bpmn_simulator.framework.element.visual.geometry.Bounds;
-import com.googlecode.bpmn_simulator.framework.element.visual.geometry.Waypoint;
-import com.googlecode.bpmn_simulator.framework.exception.StructureException;
 
 public abstract class AbstractDiagramInterchangeDefinition<E extends BPMNDiagram>
 		extends AbstractBPMNDefinition<E> {
@@ -70,20 +67,12 @@ public abstract class AbstractDiagramInterchangeDefinition<E extends BPMNDiagram
 				|| readElementBPMNDiagram(node);
 	}
 
-	protected Dimension getDimensionAttribute(final Node node) {
+	protected Bounds getRectangleAttribute(final Node node) {
+		final int x = (int) getAttributeFloat(node, "x"); //$NON-NLS-1$
+		final int y = (int) getAttributeFloat(node, "y"); //$NON-NLS-1$
 		final int width = (int)getAttributeFloat(node, "width"); //$NON-NLS-1$
 		final int height = (int)getAttributeFloat(node, "height"); //$NON-NLS-1$
-		return new Dimension(width, height);
-	}
-
-	protected Waypoint getPointAttribute(final Node node) {
-		return new Waypoint(
-				(int)getAttributeFloat(node, "x"), //$NON-NLS-1$
-				(int)getAttributeFloat(node, "y")); //$NON-NLS-1$
-	}
-
-	protected Bounds getRectangleAttribute(final Node node) {
-		return new Bounds(getPointAttribute(node), getDimensionAttribute(node));
+		return new Bounds(x, y, width, height);
 	}
 
 	protected boolean getIsExpandedAttribute(final Node node) {
@@ -98,11 +87,6 @@ public abstract class AbstractDiagramInterchangeDefinition<E extends BPMNDiagram
 			final Node node, final Class<E> type)
 			throws StructureException {
 		return getAttributeElement(node, "bpmnElement", type); //$NON-NLS-1$
-	}
-
-	private static boolean isValidPlaneElement(final AbstractFlowElement planeElement) {
-		return (planeElement instanceof Process)
-				|| (planeElement instanceof Collaboration);
 	}
 
 	protected boolean readElementBPMNShape(final Node node, final AbstractFlowElement plane)

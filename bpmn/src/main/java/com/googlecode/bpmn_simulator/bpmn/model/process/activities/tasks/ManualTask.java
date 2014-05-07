@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Stefan Schweitzer
+ * Copyright (C) 2014 Stefan Schweitzer
  *
  * This software was created by Stefan Schweitzer as a student's project at
  * Fachhochschule Kaiserslautern (University of Applied Sciences).
@@ -20,22 +20,11 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.model.process.activities.tasks;
 
-import javax.swing.Icon;
-
-import com.googlecode.bpmn_simulator.bpmn.swing.di.Visualization;
-
-
-@SuppressWarnings("serial")
 public final class ManualTask
-		extends Task {
+		extends AbstractTask {
 
 	public ManualTask(final String id, final String name) {
 		super(id, name);
-	}
-
-	@Override
-	protected Icon getTypeIcon() {
-		return getVisualization().getIcon(Visualization.ICON_MANUAL);
 	}
 
 }

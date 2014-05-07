@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Stefan Schweitzer
+ * Copyright (C) 2014 Stefan Schweitzer
  *
  * This software was created by Stefan Schweitzer as a student's project at
  * Fachhochschule Kaiserslautern (University of Applied Sciences).
@@ -20,46 +20,11 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.model.core.common.artifacts;
 
-import java.awt.Stroke;
-
-import com.googlecode.bpmn_simulator.animation.element.visual.swing.ClickThroughMouseListener;
-import com.googlecode.bpmn_simulator.bpmn.Messages;
-import com.googlecode.bpmn_simulator.bpmn.model.core.common.AbstractFlowElement;
-import com.googlecode.bpmn_simulator.framework.element.visual.GraphicsLayer;
-
-
-@SuppressWarnings("serial")
-public class Group
-		extends AbstractFlowElement {
-
-	public static final String ELEMENT_NAME = Messages.getString("group"); //$NON-NLS-1$
-
-	protected static final int ARC_LENGTH = 20;
+public final class Group
+		extends AbstractArtifact {
 
 	public Group(final String id) {
-		super(id, null);
-		addMouseListener(new ClickThroughMouseListener());
-	}
-
-	@Override
-	public String getElementName() {
-		return ELEMENT_NAME;
-	}
-
-	@Override
-	protected int getBorderWidth() {
-		return 2;
-	}
-
-	@Override
-	protected Stroke getStroke() {
-		return getVisualization().createStrokeDashedDotted(getBorderWidth());
-	}
-
-	@Override
-	protected void paintElement(final GraphicsLayer g) {
-
-		g.drawRoundRect(getElementInnerBounds(), ARC_LENGTH, ARC_LENGTH);
+		super(id);
 	}
 
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Stefan Schweitzer
+ * Copyright (C) 2014 Stefan Schweitzer
  *
  * This software was created by Stefan Schweitzer as a student's project at
  * Fachhochschule Kaiserslautern (University of Applied Sciences).
@@ -18,27 +18,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.bpmn_simulator.bpmn.model.core.common.events;
+package com.googlecode.bpmn_simulator.bpmn.model.process.activities.tasks;
 
-import com.googlecode.bpmn_simulator.bpmn.model.BPMNModel;
-import com.googlecode.bpmn_simulator.bpmn.model.core.common.InvisibleElement;
+import com.googlecode.bpmn_simulator.bpmn.Messages;
+import com.googlecode.bpmn_simulator.bpmn.model.process.activities.AbstractActivity;
 
-public final class Signal
-		extends InvisibleElement {
+public abstract class AbstractTask
+		extends AbstractActivity {
 
-	private final String name;
+	public static final String ELEMENT_NAME = Messages.getString("task"); //$NON-NLS-1$
 
-	public Signal(final BPMNModel model, final String id, final String name) {
-		super(model, id);
-		this.name = name;
+	public AbstractTask(final String id, final String name) {
+		super(id, name);
 	}
 
-	public boolean hasName() {
-		return (name != null) && !name.isEmpty();
-	}
-
-	public String getName() {
-		return name;
+	@Override
+	public String getElementName() {
+		return ELEMENT_NAME;
 	}
 
 }

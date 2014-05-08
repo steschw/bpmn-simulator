@@ -42,6 +42,16 @@ public class NamedElements<E> {
 		return element;
 	}
 
+	public <F extends E> F getElement(final String name, final Class<F> clazz) {
+		final E element = getElement(name);
+		if (element != null) {
+			if (clazz.isAssignableFrom(element.getClass())) {
+				return clazz.cast(element);
+			}
+		}
+		return null;
+	}
+
 	public boolean hasElement(final String name) {
 		return elements.containsKey(name);
 	}

@@ -31,7 +31,7 @@ abstract class AbstractReferences<E>
 
 	private final Set<Reference<E>> references = new HashSet<Reference<E>>();
 
-	protected void add(final Reference<E> reference) {
+	public void add(final Reference<E> reference) {
 		references.add(reference);
 	}
 

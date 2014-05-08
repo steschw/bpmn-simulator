@@ -41,7 +41,6 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.AbstractFlowElement;
-import com.googlecode.bpmn_simulator.bpmn.model.core.common.Behavior;
 import com.googlecode.bpmn_simulator.bpmn.swing.di.Appearance;
 import com.googlecode.bpmn_simulator.gui.AbstractDialog;
 import com.googlecode.bpmn_simulator.gui.Messages;

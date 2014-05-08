@@ -21,7 +21,7 @@
 package com.googlecode.bpmn_simulator.bpmn.model.process.activities.tasks;
 
 public final class ScriptTask
-		extends AbstractTask {
+		extends Task {
 
 	public ScriptTask(final String id, final String name) {
 		super(id, name);

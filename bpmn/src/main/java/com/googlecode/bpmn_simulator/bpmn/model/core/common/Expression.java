@@ -20,7 +20,14 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.model.core.common;
 
-public final class Expression {
+import com.googlecode.bpmn_simulator.bpmn.model.core.foundation.AbstractBaseElement;
+
+public final class Expression
+		extends AbstractBaseElement {
+
+	public Expression(final String id) {
+		super(id);
+	}
 
 	private boolean value;
 

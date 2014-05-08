@@ -20,20 +20,32 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.model.process.activities;
 
-import java.util.Collection;
-
-import com.googlecode.bpmn_simulator.bpmn.Messages;
+import com.googlecode.bpmn_simulator.animation.element.logical.ref.References;
+import com.googlecode.bpmn_simulator.bpmn.model.NamedElement;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.FlowElement;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.FlowElementsContainer;
 import com.googlecode.bpmn_simulator.bpmn.model.core.foundation.AbstractRootElement;
-import com.googlecode.bpmn_simulator.bpmn.model.core.foundation.Documentation;
 
 public final class Process
 		extends AbstractRootElement
-		implements FlowElementsContainer {
+		implements FlowElementsContainer, NamedElement {
 
-	public Process(final String id) {
+	private References<FlowElement> flowElements;
+
+	private String name;
+
+	public Process(final String id, final String name) {
 		super(id);
+	}
+
+	@Override
+	public String getName() {
+		return name;
+	}
+
+	@Override
+	public void setFlowElements(final References<FlowElement> flowElements) {
+		this.flowElements = flowElements;
 	}
 
 }

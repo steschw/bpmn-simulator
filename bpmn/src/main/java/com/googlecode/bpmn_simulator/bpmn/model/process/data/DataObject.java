@@ -20,15 +20,18 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.model.process.data;
 
-import com.googlecode.bpmn_simulator.bpmn.model.core.foundation.AbstractBaseElement;
+import com.googlecode.bpmn_simulator.bpmn.model.core.common.AbstractFlowElement;
 
 public final class DataObject
-		extends AbstractBaseElement {
+		extends AbstractFlowElement {
 
 	private boolean isCollection;
 
-	public DataObject(final String id, final boolean isCollection) {
-		super(id);
+	public DataObject(final String id, final String name) {
+		super(id, name);
+	}
+
+	public void setIsCollection(final boolean isCollection) {
 		this.isCollection = isCollection;
 	}
 

@@ -20,19 +20,24 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.swing.di;
 
+import com.googlecode.bpmn_simulator.animation.element.visual.Label;
+import com.googlecode.bpmn_simulator.animation.element.visual.VisualElement;
 import com.googlecode.bpmn_simulator.animation.element.visual.swing.AbstractDiagram;
 import com.googlecode.bpmn_simulator.bpmn.di.BPMNDiagram;
 import com.googlecode.bpmn_simulator.bpmn.di.BPMNPlane;
 
-@SuppressWarnings("serial")
 public class SwingBPMNDiagram
 		extends AbstractDiagram
 		implements BPMNDiagram {
 
-	private final BPMNPlane plane;
+	private BPMNPlane plane;
 
-	public SwingBPMNDiagram(final SwingBPMNPlane plane) {
+	public SwingBPMNDiagram() {
 		super();
+	}
+
+	@Override
+	public void setPlane(BPMNPlane plane) {
 		this.plane = plane;
 	}
 

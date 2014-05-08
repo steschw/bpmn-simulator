@@ -20,11 +20,21 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.model.process.activities.tasks;
 
-public final class ServiceTask
-		extends Task {
+import com.googlecode.bpmn_simulator.bpmn.Messages;
+import com.googlecode.bpmn_simulator.bpmn.model.process.activities.AbstractActivity;
 
-	public ServiceTask(final String id, final String name) {
+public class Task
+		extends AbstractActivity {
+
+	public static final String ELEMENT_NAME = Messages.getString("task"); //$NON-NLS-1$
+
+	public Task(final String id, final String name) {
 		super(id, name);
+	}
+
+	@Override
+	public String getElementName() {
+		return ELEMENT_NAME;
 	}
 
 }

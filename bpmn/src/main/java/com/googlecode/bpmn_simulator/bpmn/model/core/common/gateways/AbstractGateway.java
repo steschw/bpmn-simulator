@@ -22,8 +22,9 @@ package com.googlecode.bpmn_simulator.bpmn.model.core.common.gateways;
 
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.AbstractFlowNode;
 
-public abstract class AbstractGateway
-		extends AbstractFlowNode {
+abstract class AbstractGateway
+		extends AbstractFlowNode
+		implements Gateway {
 
 	public AbstractGateway(final String id, final String name) {
 		super(id, name);

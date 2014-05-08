@@ -20,11 +20,12 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.model.core.common;
 
+import com.googlecode.bpmn_simulator.animation.element.logical.ref.References;
 import com.googlecode.bpmn_simulator.bpmn.model.core.foundation.BaseElement;
 
 public interface FlowElementsContainer
 		extends BaseElement {
 
-	public void addFlowElement(final FlowElement flowElement);
+	void setFlowElements(References<FlowElement> flowElements);
 
 }

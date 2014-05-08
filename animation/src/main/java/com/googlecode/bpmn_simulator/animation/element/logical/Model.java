@@ -25,7 +25,7 @@ import java.util.Collection;
 public interface Model {
 
 	String getEncoding();
-
+/*
 	Collection<LogicalElement> getStartElements();
-
+*/
 }

@@ -20,9 +20,16 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.di;
 
-public interface BPMNShape {
+import com.googlecode.bpmn_simulator.animation.element.visual.VisualNodeElement;
+
+public interface BPMNShape
+		extends VisualNodeElement {
+
+	void setHorizontal(boolean isHorizontal);
 
 	boolean isHorizontal();
+
+	void setExpanded(boolean isExpanded);
 
 	boolean isExpanded();
 

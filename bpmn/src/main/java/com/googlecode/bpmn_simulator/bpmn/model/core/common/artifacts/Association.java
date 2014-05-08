@@ -29,4 +29,12 @@ public final class Association
 		super(id);
 	}
 
+	public void setDirection(AssociationDirection direction) {
+		this.direction = direction;
+	}
+
+	public AssociationDirection getDirection() {
+		return direction;
+	}
+
 }

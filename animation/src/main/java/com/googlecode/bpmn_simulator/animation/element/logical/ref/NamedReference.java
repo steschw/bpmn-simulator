@@ -20,18 +20,22 @@
  */
 package com.googlecode.bpmn_simulator.animation.element.logical.ref;
 
-public class NamedReference<E>
+public class NamedReference<E extends F, F>
 		implements Reference<E> {
 
-	private final NamedElements<E> elements;
+	private final NamedElements<F> elements;
+
+	private final Class<E> clazz;
 
 	private final String name;
 
-	public NamedReference(final NamedElements<E> elements,
-			final String name) {
+	public NamedReference(final NamedElements<F> elements,
+			final String name,
+			final Class<E> clazz) {
 		super();
 		this.elements = elements;
 		this.name = name;
+		this.clazz = clazz;
 	}
 
 	private boolean hasName() {
@@ -44,10 +48,19 @@ public class NamedReference<E>
 				&& elements.hasElement(name);
 	}
 
+	private boolean hasType(final F referenced) {
+		return clazz.isAssignableFrom(referenced.getClass());
+	}
+
 	@Override
 	public E getReferenced() {
 		if (hasName()) {
-			return elements.getElement(name);
+			final F referenced = elements.getElement(name);
+			if (referenced != null) {
+				if (hasType(referenced)) {
+					return clazz.cast(referenced);
+				}
+			}
 		}
 		return null;
 	}

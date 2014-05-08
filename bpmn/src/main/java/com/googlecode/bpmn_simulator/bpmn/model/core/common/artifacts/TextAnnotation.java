@@ -28,17 +28,21 @@ public final class TextAnnotation
 		extends AbstractArtifact
 		implements TextElement {
 
-	private String text;
 	private MimeType textFormat;
 
-	public TextAnnotation(final String id, final String text) {
-		this(id, text, null);
+	private String text;
+
+	public TextAnnotation(final String id) {
+		this(id, null);
 	}
 
-	public TextAnnotation(final String id, final String text, final MimeType textFormat) {
+	public TextAnnotation(final String id, final MimeType textFormat) {
 		super(id);
-		this.text = text;
 		this.textFormat = textFormat;
+	}
+
+	public void setText(final String text) {
+		this.text = text;
 	}
 
 	@Override

@@ -29,16 +29,13 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import com.googlecode.bpmn_simulator.framework.exception.SimulationException;
-import com.googlecode.bpmn_simulator.framework.exception.SimulationExceptionListener;
+import com.googlecode.bpmn_simulator.animation.input.DefinitionListener;
 import com.googlecode.bpmn_simulator.gui.Messages;
-
-
 
 @SuppressWarnings("serial")
 public class LogFrame
 		extends JFrame
-		implements SimulationExceptionListener {
+		implements DefinitionListener {
 
 	private static final int DEFAULT_WIDTH = 400;
 	private static final int DEFAULT_HEIGHT = 400;
@@ -88,8 +85,8 @@ public class LogFrame
 		toFront();
 	}
 
-	protected void addException(final Exception exception) {
-		addError(exception.toString());
+	protected void addException(final Throwable throwable) {
+		addError(throwable.toString());
 	}
 
 	public boolean hasMessages() {
@@ -100,15 +97,24 @@ public class LogFrame
 		return errorCount > 0;
 	}
 
-	@Override
-	public void onSimulationException(final SimulationException exception) {
-		addError(exception.getMessage());
-	}
-
 	public void clear() {
 		listLog.clear();
 		warningCount = 0;
 		errorCount = 0;
+	}
+
+	@Override
+	public void warning(final String message) {
+		addWarning(message);
+	}
+
+	@Override
+	public void error(final String message, final Throwable throwable) {
+		if (throwable == null) {
+			addError(message);
+		} else {
+			addException(throwable);
+		}
 	}
 
 }

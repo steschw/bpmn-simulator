@@ -20,58 +20,54 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.model;
 
-import java.awt.Color;
-import java.net.URL;
-import java.text.MessageFormat;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.LinkedList;
-
 import javax.activation.MimeType;
-import javax.xml.XMLConstants;
-import javax.xml.validation.Schema;
-import javax.xml.validation.SchemaFactory;
 
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
 
 import com.googlecode.bpmn_simulator.animation.element.logical.ref.NamedElements;
+import com.googlecode.bpmn_simulator.animation.element.logical.ref.NamedReference;
+import com.googlecode.bpmn_simulator.animation.element.logical.ref.Reference;
 import com.googlecode.bpmn_simulator.animation.element.visual.Diagram;
 import com.googlecode.bpmn_simulator.animation.input.AbstractXmlDefinition;
-import com.googlecode.bpmn_simulator.animation.token.Instance;
-import com.googlecode.bpmn_simulator.animation.token.TokenFlow;
-import com.googlecode.bpmn_simulator.bpmn.Messages;
-import com.googlecode.bpmn_simulator.bpmn.model.core.common.AbstractFlowElement;
-import com.googlecode.bpmn_simulator.bpmn.model.core.common.Error;
+import com.googlecode.bpmn_simulator.bpmn.model.core.common.DefaultSequenceFlowElement;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.Expression;
+import com.googlecode.bpmn_simulator.bpmn.model.core.common.FlowElement;
+import com.googlecode.bpmn_simulator.bpmn.model.core.common.FlowElementsContainer;
+import com.googlecode.bpmn_simulator.bpmn.model.core.common.FlowNode;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.Message;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.SequenceFlow;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.artifacts.Association;
+import com.googlecode.bpmn_simulator.bpmn.model.core.common.artifacts.AssociationDirection;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.artifacts.Group;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.artifacts.TextAnnotation;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.events.ConditionalEventDefinition;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.events.EndEvent;
+import com.googlecode.bpmn_simulator.bpmn.model.core.common.events.Event;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.events.StartEvent;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.events.TerminateEventDefinition;
-import com.googlecode.bpmn_simulator.bpmn.model.core.common.gateways.AbstractGateway;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.gateways.ExclusiveGateway;
+import com.googlecode.bpmn_simulator.bpmn.model.core.common.gateways.Gateway;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.gateways.InclusiveGateway;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.gateways.ParallelGateway;
 import com.googlecode.bpmn_simulator.bpmn.model.core.foundation.BaseElement;
 import com.googlecode.bpmn_simulator.bpmn.model.core.foundation.Documentation;
-import com.googlecode.bpmn_simulator.bpmn.model.process.activities.AbstractActivity;
+import com.googlecode.bpmn_simulator.bpmn.model.process.activities.Activity;
 import com.googlecode.bpmn_simulator.bpmn.model.process.activities.Process;
 import com.googlecode.bpmn_simulator.bpmn.model.process.activities.Subprocess;
 import com.googlecode.bpmn_simulator.bpmn.model.process.activities.tasks.BusinessRuleTask;
 import com.googlecode.bpmn_simulator.bpmn.model.process.activities.tasks.ManualTask;
 import com.googlecode.bpmn_simulator.bpmn.model.process.activities.tasks.ScriptTask;
 import com.googlecode.bpmn_simulator.bpmn.model.process.activities.tasks.ServiceTask;
+import com.googlecode.bpmn_simulator.bpmn.model.process.activities.tasks.Task;
 import com.googlecode.bpmn_simulator.bpmn.model.process.activities.tasks.UserTask;
 import com.googlecode.bpmn_simulator.bpmn.model.process.data.DataAssociation;
 import com.googlecode.bpmn_simulator.bpmn.model.process.data.DataObject;
 import com.googlecode.bpmn_simulator.bpmn.model.process.data.DataStore;
 
+/**
+ * Diagram Interchange (DI) Definition
+ */
 public abstract class AbstractBPMNDefinition<E extends Diagram>
 		extends AbstractXmlDefinition<E> {
 
@@ -81,11 +77,8 @@ public abstract class AbstractBPMNDefinition<E extends Diagram>
 	protected static final String BPMN =
 			"http://www.omg.org/spec/BPMN/20100524/MODEL";  //$NON-NLS-1$
 
-	protected static final String EXTENSION_SIGNAVIO =
-			"http://www.signavio.com"; //$NON-NLS-1$
-
-	private final NamedElements<TokenFlow> elements
-			= new NamedElements<TokenFlow>();
+	private final NamedElements<BaseElement> elements
+			= new NamedElements<BaseElement>();
 
 	private String exporter;
 	private String exporterVersion;
@@ -110,33 +103,12 @@ public abstract class AbstractBPMNDefinition<E extends Diagram>
 		return exporterVersion;
 	}
 
-	protected <E extends BaseElement> ElementRef<E> getNodeElementRef(
-			final Node node, final String namespace, final String name) {
-		final NodeList childNodes = node.getChildNodes();
-		for (int i = 0; i < childNodes.getLength(); ++i) {
-			final Node childNode = childNodes.item(i);
-			if (isElementNode(childNode, namespace, name)) {
-				final String elementId = getNodeText(childNode);
-				return getElementRef(elementId);
-			}
-		}
-		return null;
+	protected void registerElement(final BaseElement element) {
+		elements.setElement(element.getId(), element);
 	}
 
-	protected <E extends BaseElement> E getAttributeElement(final Node node,
-			final String name, final Class<E> type)
-			throws StructureException {
-		return getElement(getAttributeString(node, name), type);
-	}
-
-	@SuppressWarnings("unchecked")
-	protected <T extends BaseElement> ElementRef<T> getElementRef(final String id) {
-		return (ElementRef<T>)elements.getRef(id);
-	}
-
-	protected <T extends AbstractFlowElement> ElementRef<T> getAttributeElementRef(
-			final Node node, final String name) {
-		return getElementRef(getAttributeString(node, name));
+	protected BaseElement getElement(final String id) {
+		return elements.getElement(id);
 	}
 
 	protected String getIdAttribute(final Node node) {
@@ -147,14 +119,6 @@ public abstract class AbstractBPMNDefinition<E extends Diagram>
 		return getAttributeString(node, "name"); //$NON-NLS-1$
 	}
 
-	protected <E extends AbstractTokenFlowElement> ElementRef<E> getSourceRefAttribute(final Node node) {
-		return getAttributeElementRef(node, "sourceRef"); //$NON-NLS-1$
-	}
-
-	protected <E extends AbstractTokenFlowElement> ElementRef<E> getTargetRefAttribute(final Node node) {
-		return getAttributeElementRef(node, "targetRef"); //$NON-NLS-1$
-	}
-
 	protected boolean readArtifacts(final Node node) {
 		return readElementAssociation(node)
 				|| readElementGroup(node)
@@ -163,10 +127,8 @@ public abstract class AbstractBPMNDefinition<E extends Diagram>
 
 	protected boolean readElementsForDefinitionsElement(final Node node) {
 		return readElementMessage(node)
-				|| readElementSignal(node)
 				|| readElementDataStore(node)
-				|| readElementProcess(node)
-				|| readElementCollaboration(node);
+				|| readElementProcess(node);
 	}
 
 	protected String getExporterAttribute(final Node node) {
@@ -189,158 +151,17 @@ public abstract class AbstractBPMNDefinition<E extends Diagram>
 				}
 			}
 		} else {
-			notifyWarning("there a no definitions")
+			notifyWarning("there a no definitions");
 		}
 	}
 
 	protected boolean readElementMessage(final Node node) {
 		if (isElementNode(node, BPMN, "message")) { //$NON-NLS-1$
+			final String name = getNameAttribute(node);
 			final Message message = new Message(getIdAttribute(node),
-					getNameAttribute(node));
+					name);
 			readBaseElement(node, message);
-			elements.set(message);
-			return true;
-		} else {
-			return false;
-		}
-	}
-
-	protected boolean readElementParticipant(final Node node,
-			final Collaboration collaboration) {
-		if (isElementNode(node, BPMN, "participant")) { //$NON-NLS-1$
-			final ElementRef<Subprocess> processRef
-				= getAttributeElementRef(node, "processRef"); //$NON-NLS-1$
-			final Participant participant = new Participant(getIdAttribute(node),
-					getNameAttribute(node), processRef);
-			readBaseElement(node, participant);
-			elements.set(participant);
-			collaboration.addParticipant(participant);
-			return true;
-		} else {
-			return false;
-		}
-	}
-
-	protected boolean readElementMessageFlow(final Node node,
-			final Collaboration collaboration) {
-		if (isElementNode(node, BPMN, "messageFlow")) { //$NON-NLS-1$
-			final MessageFlow messageFlow = new MessageFlow(
-					getIdAttribute(node), getNameAttribute(node),
-					getSourceRefAttribute(node), getTargetRefAttribute(node));
-			readBaseElement(node, messageFlow);
-			elements.set(messageFlow);
-			collaboration.addMessageFlow(messageFlow);
-			return true;
-		} else {
-			return false;
-		}
-	}
-
-	protected void readExtensionElementsPropertySignavio(final Node node,
-			final BaseElement element) {
-		final String keyNode = getAttributeString(node, "metaKey"); //$NON-NLS-1$
-		final String valueNode = getAttributeString(node, "metaValue"); //$NON-NLS-1$
-		if ("bgcolor".equals(keyNode) //$NON-NLS-1$
-				&& ((valueNode != null) && !valueNode.isEmpty())) {
-			final Color color = convertStringToColor(valueNode);
-			if ((color != null) && (element instanceof AbstractFlowElement)) {
-				((AbstractFlowElement)element).setElementBackground(color);
-			}
-		}
-	}
-
-	protected void readExtensionElementsProperties(final Node node,
-			final BaseElement element) {
-		final NodeList childNodes = node.getChildNodes();
-		for (int i = 0; i < childNodes.getLength(); ++i) {
-			final Node childNode = childNodes.item(i);
-			if (isElementNode(childNode, EXTENSION_SIGNAVIO, "signavioMetaData")) { //$NON-NLS-1$
-				readExtensionElementsPropertySignavio(childNode, element);
-			} else {
-				notifyWarning("unknow extension property");
-			}
-		}
-	}
-
-	protected boolean readElementFlowNodeRef(final Node node, final Lane lane) {
-		if (isElementNode(node, BPMN, "flowNodeRef")) { //$NON-NLS-1$
-			final String elementId = node.getTextContent();
-			final ElementRef<AbstractFlowElement> elementRef = getElementRef(elementId);
-			lane.addFlowNodeRef(elementRef);
-			return true;
-		} else {
-			return false;
-		}
-	}
-
-	protected boolean readElementLane(final Node node,
-			final AbstractContainerActivity activity, final LaneSet laneSet) {
-		if (isElementNode(node, BPMN, "lane")) { //$NON-NLS-1$
-			final Lane lane = new Lane(getIdAttribute(node), getNameAttribute(node));
-			final NodeList childNodes = node.getChildNodes();
-			for (int i = 0; i < childNodes.getLength(); ++i) {
-				final Node childNode = childNodes.item(i);
-				if (!readElementsForBaseElement(childNode, lane)
-						&& !readElementLaneSet(childNode, activity, lane)
-						&& !readElementFlowNodeRef(childNode, lane)) {
-					showUnknowNode(childNode);
-				}
-			}
-			addElementToContainer(lane, activity);
-			return true;
-		} else {
-			return false;
-		}
-	}
-
-	protected boolean readElementLaneSet(final Node node,
-			final AbstractContainerActivity activity, final Lane lane) {
-		final boolean isChild = isElementNode(node, BPMN, "childLaneSet"); //$NON-NLS-1$
-		if (isChild || isElementNode(node, BPMN, "laneSet")) { //$NON-NLS-1$
-			final LaneSet laneSet = new LaneSet(getIdAttribute(node));
-			final NodeList childNodes = node.getChildNodes();
-			for (int i = 0; i < childNodes.getLength(); ++i) {
-				final Node childNode = childNodes.item(i);
-				if (!readElementsForBaseElement(childNode, lane)
-						&& !readElementLane(childNode, activity, laneSet)) {
-					showUnknowNode(childNode);
-				}
-			}
-			addElementToContainer(laneSet, activity);
-			return true;
-		} else {
-			return false;
-		}
-	}
-
-	protected boolean readElementsIncomingOutgoing(final Node node,
-			final AbstractTokenFlowElement element) {
-		if (isElementNode(node, BPMN, "incoming")) { //$NON-NLS-1$
-			final String elementId = node.getTextContent();
-			final ElementRef<SequenceFlow> elementRef = getElementRef(elementId);
-			element.addIncomingRef(elementRef);
-			return true;
-		} else if (isElementNode(node, BPMN, "outgoing")) { //$NON-NLS-1$
-			final String elementId = node.getTextContent();
-			final ElementRef<SequenceFlow> elementRef = getElementRef(elementId);
-			element.addOutgoingRef(elementRef);
-			return true;
-		} else {
-			return false;
-		}
-	}
-
-	protected void readDefaultSequenceFlowAttribute(final Node node,
-			final ElementWithDefaultSequenceFlow element) {
-		final ElementRef<SequenceFlow> elementRef = getAttributeElementRef(node, "default"); //$NON-NLS-1$
-		if (elementRef != null) {
-			element.setDefaultSequenceFlowRef(elementRef);
-		}
-	}
-
-	protected boolean readElementExtensionElements(final Node node, final BaseElement element) {
-		if (isElementNode(node, BPMN, "extensionElements")) { //$NON-NLS-1$
-			readExtensionElementsProperties(node, element);
+			elements.setElement(name, message);
 			return true;
 		} else {
 			return false;
@@ -348,8 +169,7 @@ public abstract class AbstractBPMNDefinition<E extends Diagram>
 	}
 
 	protected boolean readElementsForBaseElement(final Node node, final BaseElement element) {
-		return readElementExtensionElements(node, element)
-				|| readElementDocumentation(node, element);
+		return readElementDocumentation(node, element);
 	}
 
 	protected void readBaseElement(final Node node, final BaseElement element) {
@@ -362,13 +182,11 @@ public abstract class AbstractBPMNDefinition<E extends Diagram>
 		}
 	}
 
-	protected boolean readElementsForFlowElement(final Node node, final AbstractTokenFlowElement element) {
-		return readElementsForBaseElement(node, element)
-				|| readElementsIncomingOutgoing(node, element)
-				|| readElementExtensionElements(node, element);
+	protected boolean readElementsForFlowElement(final Node node, final FlowElement element) {
+		return readElementsForBaseElement(node, element);
 	}
 
-	protected void readFlowElement(final Node node, final AbstractTokenFlowElement element) {
+	protected void readFlowElement(final Node node, final FlowElement element) {
 		final NodeList childNodes = node.getChildNodes();
 		for (int i = 0; i < childNodes.getLength(); ++i) {
 			final Node childNode = childNodes.item(i);
@@ -378,34 +196,19 @@ public abstract class AbstractBPMNDefinition<E extends Diagram>
 		}
 	}
 
-	protected boolean readEventDefinitions(final Node node, final AbstractEvent event) {
+	protected boolean readEventDefinitions(final Node node, final Event event) {
 		if (isElementNode(node, BPMN, "terminateEventDefinition")) { //$NON-NLS-1$
-			event.setDefinition(new TerminateEventDefinition(event));
-		} else if (isElementNode(node, BPMN, "errorEventDefinition")) { //$NON-NLS-1$
-			event.setDefinition(new ErrorEventDefinition(event,
-					getAttributeErrorRef(node, "errorRef"))); //$NON-NLS-1$
+			event.setEventDefinition(new TerminateEventDefinition());
 		} else if (isElementNode(node, BPMN, "conditionalEventDefinition")) { //$NON-NLS-1$
-			event.setDefinition(new ConditionalEventDefinition(event));
-		} else if (isElementNode(node, BPMN, "timerEventDefinition")) { //$NON-NLS-1$
-			event.setDefinition(new TimerEventDefinition(event));
-		} else if (isElementNode(node, BPMN, "messageEventDefinition")) { //$NON-NLS-1$
-			final MessageEventDefinition definition =
-					new MessageEventDefinition(event, getElementRefAttribute(node));
-			event.setDefinition(definition);
-		} else if (isElementNode(node, BPMN, "linkEventDefinition")) { //$NON-NLS-1$
-			final LinkEventDefinition definition =
-					new LinkEventDefinition(event, getNameAttribute(node));
-			event.setDefinition(definition);
-		} else if (isElementNode(node, BPMN, "signalEventDefinition")) { //$NON-NLS-1$
-			final ElementRef<Signal> signalRef = getAttributeSignalRef(node, "signalRef"); //$NON-NLS-1$
-			event.setDefinition(new SignalEventDefinition(event, signalRef));
+			event.setEventDefinition(new ConditionalEventDefinition());
 		} else {
+			showUnknowNode(node);
 			return false;
 		}
 		return true;
 	}
 
-	protected void readEvent(final Node node, final AbstractEvent event) {
+	protected void readEvent(final Node node, final Event event) {
 		final NodeList childNodes = node.getChildNodes();
 		for (int i = 0; i < childNodes.getLength(); ++i) {
 			final Node childNode = childNodes.item(i);
@@ -418,39 +221,12 @@ public abstract class AbstractBPMNDefinition<E extends Diagram>
 	}
 
 	protected boolean readElementStartEvent(final Node node,
-			final AbstractContainerActivity activity) {
+			final FlowElementsContainer activity) {
 		if (isElementNode(node, BPMN, "startEvent")) { //$NON-NLS-1$
 			final StartEvent event = new StartEvent(
-					getIdAttribute(node), getNameAttribute(node),
-					getAnimator().getInstanceManager());
-			addElementToContainer(event, activity);
-			readEvent(node, event);
-			return true;
-		} else {
-			return false;
-		}
-	}
-
-	protected boolean readElementIntermediateThrowEvent(final Node node,
-			final AbstractContainerActivity activity) {
-		if (isElementNode(node, BPMN, "intermediateThrowEvent")) { //$NON-NLS-1$
-			final IntermediateThrowEvent event = new IntermediateThrowEvent(
 					getIdAttribute(node), getNameAttribute(node));
+			registerElement(event);
 			readEvent(node, event);
-			addElementToContainer(event, activity);
-			return true;
-		} else {
-			return false;
-		}
-	}
-
-	protected boolean readElementIntermediateCatchEvent(final Node node,
-			final AbstractContainerActivity activity) {
-		if (isElementNode(node, BPMN, "intermediateCatchEvent")) { //$NON-NLS-1$
-			final IntermediateCatchEvent event = new IntermediateCatchEvent(
-					getIdAttribute(node), getNameAttribute(node));
-			readEvent(node, event);
-			addElementToContainer(event, activity);
 			return true;
 		} else {
 			return false;
@@ -461,32 +237,13 @@ public abstract class AbstractBPMNDefinition<E extends Diagram>
 		return getAttributeBoolean(node, "cancelActivity", true); //$NON-NLS-1$
 	}
 
-	protected ElementRef<AbstractActivity> getAttachedToRefAttribute(final Node node) {
-		return getAttributeElementRef(node, "attachedToRef");		 //$NON-NLS-1$
-	}
-
-	protected boolean readElementBoundaryEvent(final Node node,
-			final AbstractContainerActivity activity) {
-		if (isElementNode(node, BPMN, "boundaryEvent")) { //$NON-NLS-1$
-			final BoundaryEvent event = new BoundaryEvent(getIdAttribute(node),
-					getNameAttribute(node),
-					getCancelActivityAttribute(node),
-					getAttachedToRefAttribute(node));
-			readEvent(node, event);
-			addElementToContainer(event, activity);
-			return true;
-		} else {
-			return false;
-		}
-	}
-
 	protected boolean readElementEndEvent(final Node node,
-			final AbstractContainerActivity activity) {
+			final FlowElementsContainer activity) {
 		if (isElementNode(node, BPMN, "endEvent")) { //$NON-NLS-1$
 			final EndEvent element = new EndEvent(getIdAttribute(node),
-					getNameAttribute(node), getAnimator().getInstanceManager());
+					getNameAttribute(node));
 			readEvent(node, element);
-			addElementToContainer(element, activity);
+			registerElement(element);
 			return true;
 		} else {
 			return false;
@@ -496,34 +253,45 @@ public abstract class AbstractBPMNDefinition<E extends Diagram>
 	protected boolean readElementsDataAssociations(final Node node) {
 		if (isElementNode(node, BPMN, "dataInputAssociation") //$NON-NLS-1$
 				|| isElementNode(node, BPMN, "dataOutputAssociation")) { //$NON-NLS-1$
-			final ElementRef<AbstractTokenFlowElement> sourceRef
-					= getNodeElementRef(node, BPMN, "sourceRef"); //$NON-NLS-1$
-			final ElementRef<AbstractTokenFlowElement> targetRef
-					= getNodeElementRef(node, BPMN, "targetRef"); //$NON-NLS-1$
 			final DataAssociation dataAssociation
-					= new DataAssociation(getIdAttribute(node),
-							sourceRef, targetRef);
-			elements.set(dataAssociation);
+					= new DataAssociation(getIdAttribute(node));
+			registerElement(dataAssociation);
 			return true;
 		} else {
 			return false;
 		}
 	}
 
-	protected boolean readElementsForActivity(final Node node, final AbstractActivity activity) {
+	protected boolean readElementsForActivity(final Node node, final Activity activity) {
 		return readElementsForFlowElement(node, activity)
 				|| readElementsDataAssociations(node);
 	}
 
-	protected void readGateway(final Node node, final AbstractGateway gateway) {
-		readDefaultSequenceFlowAttribute(node, gateway);
+	protected Reference<SequenceFlow> getDefaultAttribute(final Node node) {
+		return new NamedReference<SequenceFlow, BaseElement>(
+				elements, getAttributeString(node, "default"), SequenceFlow.class);
+	}
+
+	protected void readDefaultSequenceFlowAttribute(
+			final Node node, final DefaultSequenceFlowElement element) {
+		element.setDefaultSequenceFlow(getDefaultAttribute(node));
+	}
+
+	protected void readGateway(final Node node, final Gateway gateway) {
+		if (gateway instanceof DefaultSequenceFlowElement) {
+			readDefaultSequenceFlowAttribute(node, (DefaultSequenceFlowElement) gateway);
+		}
 		readFlowElement(node, gateway);
 	}
 
-	protected Direction getParameterAssociationDirection(final Node node) {
+	protected AssociationDirection getParameterAssociationDirection(final Node node) {
 		final String value = getAttributeString(node, "associationDirection"); //$NON-NLS-1$
-		final Direction direction = Direction.byValue(value);
-		return (direction == null) ? Direction.NONE : direction;
+		final AssociationDirection direction = AssociationDirection.byValue(value);
+		if (direction == null) {
+			return AssociationDirection.NONE;
+		} else {
+			return direction;
+		}
 	}
 
 	protected MimeType getTextFormatAttribute(final Node node) {
@@ -535,8 +303,9 @@ public abstract class AbstractBPMNDefinition<E extends Diagram>
 		if (isElementNode(node, BPMN, "documentation")) { //$NON-NLS-1$
 			final String text = node.getTextContent();
 			if ((text != null) && !text.isEmpty()) {
-				element.setDocumentation(new Documentation(text,
-						getTextFormatAttribute(node)));
+				element.addDocumentation(new Documentation(
+						getIdAttribute(node),
+						text, getTextFormatAttribute(node)));
 			}
 			return true;
 		} else {
@@ -548,8 +317,8 @@ public abstract class AbstractBPMNDefinition<E extends Diagram>
 			final SequenceFlow sequenceFlow) {
 		if (isElementNode(node, BPMN, "conditionExpression")) { //$NON-NLS-1$
 			final String text = node.getTextContent();
-			if (text != null && !text.isEmpty()) {
-				sequenceFlow.setCondition(new Expression(text));
+			if (text != null && !text.isEmpty()) { ///XXX:
+				sequenceFlow.setConditionExpression(new Expression(getIdAttribute(node)));
 			}
 			return true;
 		} else {
@@ -557,8 +326,21 @@ public abstract class AbstractBPMNDefinition<E extends Diagram>
 		}
 	}
 
+	protected <T extends BaseElement> Reference<T> getAttributeIDREF(
+			final Node node, final String name, final Class<T> clazz) {
+		return new NamedReference<T, BaseElement>(elements, getAttributeString(node, name), clazz);
+	}
+
+	protected Reference<FlowNode> getSourceRefAttribute(final Node node) {
+		return getAttributeIDREF(node, "sourceRef", FlowNode.class);
+	}
+
+	protected Reference<FlowNode> getTargetRefAttribute(final Node node) {
+		return getAttributeIDREF(node, "targetRef", FlowNode.class);
+	}
+
 	protected boolean readElementSequenceflow(final Node node,
-			final AbstractContainerActivity activity) {
+			final FlowElementsContainer activity) {
 		if (isElementNode(node, BPMN, "sequenceFlow")) { //$NON-NLS-1$
 			final SequenceFlow sequenceFlow = new SequenceFlow(
 					getIdAttribute(node), getNameAttribute(node),
@@ -571,16 +353,7 @@ public abstract class AbstractBPMNDefinition<E extends Diagram>
 					showUnknowNode(childNode);
 				}
 			}
-			addElementToContainer(sequenceFlow, activity);
-			// Es ist möglich des der Modeller keine Incoming/Outgoing-Elemente
-			// für FlowElemente exportiert (z.B. BonitaStudio).
-			// Deshalb werden diese jetzt noch einmal anhand des ConnectingElement
-			// hinzugefügt.
-			try {
-				assignFlowElementsToSequenceFlow(sequenceFlow);
-			} catch (StructureException e) {
-				notifyStructureExceptionListeners(e);
-			}
+			registerElement(sequenceFlow);
 			return true;
 		} else {
 			return false;
@@ -598,67 +371,37 @@ public abstract class AbstractBPMNDefinition<E extends Diagram>
 		}
 	}
 
-	protected ElementRef<Message> getElementRefAttribute(final Node node) {
-		return getAttributeElementRef(node, "elementRef"); //$NON-NLS-1$
-	}
-
 	protected boolean getInstantiateAttribute(final Node node) {
 		return getAttributeBoolean(node, "instantiate", false); //$NON-NLS-1$
 	}
 
 	protected boolean readElementTask(final Node node,
-			final AbstractContainerActivity activity) {
+			final FlowElementsContainer activity) {
+		final Task task;
 		if (isElementNode(node, BPMN, "manualTask")) { //$NON-NLS-1$
-			final ManualTask task = new ManualTask(getIdAttribute(node),
+			task = new ManualTask(getIdAttribute(node),
 					getNameAttribute(node));
-			readTask(node, task);
-			addElementToContainer(task, activity);
 		} else if (isElementNode(node, BPMN, "userTask")) { //$NON-NLS-1$
-			final UserTask task = new UserTask(getIdAttribute(node),
+			task = new UserTask(getIdAttribute(node),
 					getNameAttribute(node));
-			readTask(node, task);
-			addElementToContainer(task, activity);
 		} else if (isElementNode(node, BPMN, "businessRuleTask")) { //$NON-NLS-1$
-			final BusinessRuleTask task = new BusinessRuleTask(getIdAttribute(node),
+			task = new BusinessRuleTask(getIdAttribute(node),
 					getNameAttribute(node));
-			readTask(node, task);
-			addElementToContainer(task, activity);
 		} else if (isElementNode(node, BPMN, "scriptTask")) { //$NON-NLS-1$
-			final ScriptTask task = new ScriptTask(getIdAttribute(node),
+			task = new ScriptTask(getIdAttribute(node),
 					getNameAttribute(node));
-			readTask(node, task);
-			addElementToContainer(task, activity);
 		} else if (isElementNode(node, BPMN, "serviceTask")) { //$NON-NLS-1$
-			final ServiceTask task = new ServiceTask(getIdAttribute(node),
+			task = new ServiceTask(getIdAttribute(node),
 					getNameAttribute(node));
-			readTask(node, task);
-			addElementToContainer(task, activity);
-		} else if (isElementNode(node, BPMN, "sendTask")) { //$NON-NLS-1$
-			final SendTask task = new SendTask(getIdAttribute(node),
-					getNameAttribute(node), getElementRefAttribute(node));
-			readTask(node, task);
-			addElementToContainer(task, activity);
-		} else if (isElementNode(node, BPMN, "receiveTask")) { //$NON-NLS-1$
-			final ReceiveTask task = new ReceiveTask(getIdAttribute(node),
-					getNameAttribute(node), getInstantiateAttribute(node),
-					getElementRefAttribute(node));
-			readTask(node, task);
-			addElementToContainer(task, activity);
 		} else if (isElementNode(node, BPMN, "task")) { //$NON-NLS-1$
-			final Task task = new Task(getIdAttribute(node),
+			task = new Task(getIdAttribute(node),
 					getNameAttribute(node));
-			readTask(node, task);
-			addElementToContainer(task, activity);
 		} else {
 			return false;
 		}
+		readTask(node, task);
+		registerElement(task);
 		return true;
-	}
-
-	public static String getNodeText(final Node node) {
-		final String text = node.getTextContent();
-		assert text != null && !text.isEmpty();
-		return text;
 	}
 
 	protected static boolean readElementText(final Node node,
@@ -682,7 +425,7 @@ public abstract class AbstractBPMNDefinition<E extends Diagram>
 					showUnknowNode(childNode);
 				}
 			}
-			elements.set(textAnnotation);
+			registerElement(textAnnotation);
 			return true;
 		} else {
 			return false;
@@ -694,7 +437,7 @@ public abstract class AbstractBPMNDefinition<E extends Diagram>
 			final Association association = new Association(getIdAttribute(node));
 			association.setDirection(getParameterAssociationDirection(node));
 			readBaseElement(node, association);
-			elements.set(association);
+			registerElement(association);
 			return true;
 		} else {
 			return false;
@@ -705,7 +448,7 @@ public abstract class AbstractBPMNDefinition<E extends Diagram>
 		if (isElementNode(node, BPMN, "group")) { //$NON-NLS-1$
 			final Group group = new Group(getIdAttribute(node));
 			readBaseElement(node, group);
-			elements.set(group);
+			registerElement(group);
 			return true;
 		} else {
 			return false;
@@ -713,45 +456,36 @@ public abstract class AbstractBPMNDefinition<E extends Diagram>
 	}
 
 	protected boolean readElementGateway(final Node node,
-			final AbstractContainerActivity activity) {
+			final FlowElementsContainer activity) {
+		final Gateway gateway;
 		if (isElementNode(node, BPMN, "parallelGateway")) { //$NON-NLS-1$
-			final ParallelGateway element = new ParallelGateway(
+			gateway = new ParallelGateway(
 					getIdAttribute(node), getNameAttribute(node));
-			readGateway(node, element);
-			addElementToContainer(element, activity);
 		} else if (isElementNode(node, BPMN, "inclusiveGateway")) { //$NON-NLS-1$
-			final InclusiveGateway element = new InclusiveGateway(
+			gateway = new InclusiveGateway(
 					getIdAttribute(node), getNameAttribute(node));
-			readGateway(node, element);
-			addElementToContainer(element, activity);
 		} else if (isElementNode(node, BPMN, "exclusiveGateway")) { //$NON-NLS-1$
-			final ExclusiveGateway element = new ExclusiveGateway(
+			gateway = new ExclusiveGateway(
 					getIdAttribute(node), getNameAttribute(node));
-			readGateway(node, element);
-			addElementToContainer(element, activity);
-		} else if (isElementNode(node, BPMN, "eventBasedGateway")) { //$NON-NLS-1$
-			final EventBasedGateway element = new EventBasedGateway(
-					getIdAttribute(node), getNameAttribute(node),
-					getInstantiateAttribute(node));
-			readGateway(node, element);
-			addElementToContainer(element, activity);
 		} else {
 			return false;
 		}
+		readGateway(node, gateway);
+		registerElement(gateway);
 		return true;
 	}
 
 	protected boolean readElementDataObject(final Node node,
-			final AbstractContainerActivity activity) {
+			final FlowElementsContainer activity) {
 		final boolean isReference = isElementNode(node, BPMN, "dataObjectReference"); //$NON-NLS-1$
 		if (isReference || isElementNode(node, BPMN, "dataObject")) { //$NON-NLS-1$
 			final DataObject dataObject = new DataObject(
 					getIdAttribute(node), getNameAttribute(node));
 			if (!isReference) {
-				dataObject.setCollection(getAttributeBoolean(node, "isCollection", false)); //$NON-NLS-1$
+				dataObject.setIsCollection(getAttributeBoolean(node, "isCollection", false)); //$NON-NLS-1$
 			}
 			readBaseElement(node, dataObject);
-			addElementToContainer(dataObject, activity);
+			registerElement(dataObject);
 			return true;
 		} else {
 			return false;
@@ -761,22 +495,9 @@ public abstract class AbstractBPMNDefinition<E extends Diagram>
 	protected boolean readElementDataStore(final Node node) {
 		if (isElementNode(node, BPMN, "dataStore")) { //$NON-NLS-1$
 			final DataStore dataStore = new DataStore(
-					getIdAttribute(node), getNameAttribute(node));
+					getIdAttribute(node));
 			readBaseElement(node, dataStore);
-			elements.set(dataStore);
-			return true;
-		} else {
-			return false;
-		}
-	}
-
-	protected boolean readElementDataStoreReference(final Node node,
-			final AbstractContainerActivity activity) {
-		if (isElementNode(node, BPMN, "dataStoreReference")) { //$NON-NLS-1$
-			final DataStore dataStore = new DataStore(
-					getIdAttribute(node), getNameAttribute(node));
-			readBaseElement(node, dataStore);
-			addElementToContainer(dataStore, activity);
+			registerElement(dataStore);
 			return true;
 		} else {
 			return false;
@@ -784,26 +505,19 @@ public abstract class AbstractBPMNDefinition<E extends Diagram>
 	}
 
 	protected void readFlowElementsContainer(final Node node,
-			final AbstractContainerActivity container) {
+			final FlowElementsContainer container) {
 		final NodeList childNodes = node.getChildNodes();
 		for (int i = 0; i < childNodes.getLength(); ++i) {
 			final Node childNode = childNodes.item(i);
 			if (!readElementSubprocess(childNode, container)
-					&& !readElementTransaction(childNode, container)
-					&& !readElementsForFlowElement(childNode, container)
 					&& !readElementStartEvent(childNode, container)
-					&& !readElementIntermediateThrowEvent(childNode, container)
-					&& !readElementIntermediateCatchEvent(childNode, container)
-					&& !readElementBoundaryEvent(childNode, container)
 					&& !readElementEndEvent(childNode, container)
 					&& !readElementTask(childNode, container)
 					&& !readElementGateway(childNode, container)
 					&& !readElementSequenceflow(childNode, container)
 					&& !readArtifacts(childNode)
 					&& !readElementDataObject(childNode, container)
-					&& !readElementDataStoreReference(childNode, container)
-					&& !readElementsDataAssociations(childNode)
-					&& !readElementLaneSet(childNode, container, null)) {
+					&& !readElementsDataAssociations(childNode)) {
 				showUnknowNode(childNode);
 			}
 		}
@@ -813,29 +527,12 @@ public abstract class AbstractBPMNDefinition<E extends Diagram>
 		return getAttributeBoolean(node, "triggeredByEvent", false); //$NON-NLS-1$
 	}
 
-	protected boolean readElementTransaction(final Node node,
-			final AbstractContainerActivity parentActivity) {
-		if (isElementNode(node, BPMN, "transaction")) { //$NON-NLS-1$
-			final Transaction transaction = new Transaction(this,
-					getIdAttribute(node), getNameAttribute(node),
-					getTriggeredByEventAttribute(node));
-			readDefaultSequenceFlowAttribute(node, transaction);
-			readFlowElementsContainer(node, transaction);
-			addElementToContainer(transaction, parentActivity);
-			return true;
-		} else {
-			return false;
-		}
-	}
-
 	protected boolean readElementProcess(final Node node) {
 		if (isElementNode(node, BPMN, "process")) { //$NON-NLS-1$
-			final Process process = new Process(this,
+			final Process process = new Process(
 					getIdAttribute(node), getNameAttribute(node));
-			readDefaultSequenceFlowAttribute(node, process);
 			readFlowElementsContainer(node, process);
-			processes.add(process);
-			addElementToContainer(process, null);
+			registerElement(process);
 			return true;
 		} else {
 			return false;
@@ -843,58 +540,23 @@ public abstract class AbstractBPMNDefinition<E extends Diagram>
 	}
 
 	protected boolean readElementSubprocess(final Node node,
-			final AbstractContainerActivity parentActivity) {
+			final FlowElementsContainer parentActivity) {
 		if (isElementNode(node, BPMN, "subProcess")) { //$NON-NLS-1$
-			final Subprocess process = new Subprocess(this,
+			final Subprocess process = new Subprocess(
 					getIdAttribute(node), getNameAttribute(node),
 					getTriggeredByEventAttribute(node));
 			readDefaultSequenceFlowAttribute(node, process);
 			readFlowElementsContainer(node, process);
-			addElementToContainer(process, parentActivity);
+			readElementsForFlowElement(node, process);
 			return true;
 		} else {
 			return false;
 		}
 	}
 
-	protected void assignFlowElementsToSequenceFlow(final SequenceFlow sequenceFlow)
-			throws StructureException {
-		final ElementRef<SequenceFlow> sequenceFlowRef = getElementRef(sequenceFlow.getId());
-		if (sequenceFlowRef != null) {
-			AbstractTokenFlowElement source = null;
-			try {
-				source = sequenceFlow.getSource();
-			} catch (ClassCastException exception) {
-				throwInvalidElementType(null, AbstractFlowElement.class);
-			}
-			if (source != null) {
-				source.addOutgoingRef(sequenceFlowRef);
-			}
-			AbstractTokenFlowElement target = null;
-			try {
-				target = sequenceFlow.getTarget();
-			} catch (ClassCastException exception) {
-				throwInvalidElementType(null, AbstractFlowElement.class);
-			}
-			if (target != null) {
-				target.addIncomingRef(sequenceFlowRef);
-			}
-		}
-	}
-
 	@Override
 	protected void loadData(final Node node) {
 		readDefinitions(node);
-	}
-
-	public Collection<TriggerCatchingElement> getManuallStartEvents() {
-		final Collection<TriggerCatchingElement> events = new ArrayList<TriggerCatchingElement>();
-		for (final TriggerCatchingElement event : getElements(TriggerCatchingElement.class)) {
-			if (event.canTriggerManual()) {
-				events.add(event);
-			}
-		}
-		return events;
 	}
 
 }

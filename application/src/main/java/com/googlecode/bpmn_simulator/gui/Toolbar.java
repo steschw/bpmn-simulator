@@ -32,14 +32,12 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import com.googlecode.bpmn_simulator.bpmn.model.AbstractBPMNDefinition;
-import com.googlecode.bpmn_simulator.framework.execution.AbstractAnimator;
-import com.googlecode.bpmn_simulator.framework.execution.AnimationListener;
 import com.googlecode.bpmn_simulator.gui.log.LogFrame;
 
 @SuppressWarnings("serial")
 public class Toolbar
 		extends JToolBar
-		implements AnimationListener {
+		implements com.googlecode.bpmn_simulator.animation.execution.AnimationListener {
 
 	private JButton buttonOpen;
 

@@ -33,12 +33,6 @@ import javax.swing.JPopupMenu;
 
 import com.googlecode.bpmn_simulator.animation.token.Instance;
 import com.googlecode.bpmn_simulator.bpmn.model.AbstractBPMNDefinition;
-import com.googlecode.bpmn_simulator.bpmn.trigger.Instantiable;
-import com.googlecode.bpmn_simulator.bpmn.trigger.InstantiableNotifiySource;
-import com.googlecode.bpmn_simulator.bpmn.trigger.Trigger;
-import com.googlecode.bpmn_simulator.bpmn.trigger.TriggerCatchingElement;
-
-
 
 @SuppressWarnings("serial")
 public class StartButton

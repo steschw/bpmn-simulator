@@ -36,7 +36,6 @@ import javax.swing.JInternalFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 
-import com.googlecode.bpmn_simulator.bpmn.model.collaboration.Collaboration;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.AbstractFlowElement;
 import com.googlecode.bpmn_simulator.bpmn.model.core.foundation.BaseElement;
 import com.googlecode.bpmn_simulator.bpmn.model.process.activities.Process;

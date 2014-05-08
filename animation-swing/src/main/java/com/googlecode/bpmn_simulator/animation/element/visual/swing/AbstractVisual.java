@@ -18,13 +18,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.bpmn_simulator.bpmn.model.process.activities.tasks;
+package com.googlecode.bpmn_simulator.animation.element.visual.swing;
 
-public final class ServiceTask
-		extends Task {
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 
-	public ServiceTask(final String id, final String name) {
-		super(id, name);
+import javax.swing.JComponent;
+
+@SuppressWarnings("serial")
+public abstract class AbstractVisual
+		extends JComponent {
+
+	private static final Presentation presentation = new Presentation();
+
+	public Presentation getPresentation() {
+		return presentation;
 	}
+
+	@Override
+	public void paint(final Graphics g) {
+		super.paint(g);
+		paintElement((Graphics2D) g, getPresentation());
+	}
+
+	protected abstract void paintElement(Graphics2D g, Presentation presentation);
 
 }

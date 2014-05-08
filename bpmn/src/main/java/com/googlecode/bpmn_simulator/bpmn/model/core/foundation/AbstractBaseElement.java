@@ -41,6 +41,7 @@ public abstract class AbstractBaseElement
 		return id;
 	}
 
+	@Override
 	public void addDocumentation(final Documentation documentation) {
 		documentations.add(documentation);
 	}

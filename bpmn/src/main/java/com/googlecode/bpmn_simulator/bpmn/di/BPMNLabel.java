@@ -20,6 +20,9 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.di;
 
-public interface BPMNLabel {
+import com.googlecode.bpmn_simulator.animation.element.visual.Label;
+
+public interface BPMNLabel
+		extends Label {
 
 }

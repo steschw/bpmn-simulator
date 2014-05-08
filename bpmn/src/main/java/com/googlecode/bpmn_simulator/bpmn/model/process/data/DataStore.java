@@ -20,7 +20,6 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.model.process.data;
 
-import com.googlecode.bpmn_simulator.bpmn.Messages;
 import com.googlecode.bpmn_simulator.bpmn.model.core.foundation.AbstractBaseElement;
 
 public final class DataStore

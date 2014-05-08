@@ -57,6 +57,7 @@ public abstract class AbstractXmlDefinition<E extends Diagram>
 		this.schema = schema;
 	}
 
+	@Override
 	public String getEncoding() {
 		return encoding;
 	}
@@ -87,6 +88,10 @@ public abstract class AbstractXmlDefinition<E extends Diagram>
 	public void warning(final SAXParseException exception)
 			throws SAXException {
 		showSAXParseException(exception);
+	}
+
+	protected void showUnknowNode(final Node node) {
+		notifyWarning(MessageFormat.format("Unknown element node ''{0}''", node.getNodeName()));
 	}
 
 	protected static boolean isElementNode(final Node node,
@@ -142,6 +147,12 @@ public abstract class AbstractXmlDefinition<E extends Diagram>
 			}
 		}
 		return null;
+	}
+
+	public static String getNodeText(final Node node) {
+		final String text = node.getTextContent();
+		assert text != null && !text.isEmpty();
+		return text;
 	}
 
 	protected static Color convertStringToColor(final String value) {

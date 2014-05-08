@@ -20,28 +20,35 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.swing.di;
 
-import com.googlecode.bpmn_simulator.animation.element.logical.LogicalNodeElement;
+import com.googlecode.bpmn_simulator.animation.element.logical.LogicalElement;
 import com.googlecode.bpmn_simulator.animation.element.visual.swing.AbstractVisualNodeElement;
 import com.googlecode.bpmn_simulator.bpmn.di.BPMNShape;
 
 @SuppressWarnings("serial")
-public abstract class AbstractBPMNShape<E extends LogicalNodeElement>
+public abstract class AbstractBPMNShape<E extends LogicalElement>
 		extends AbstractVisualNodeElement<E>
 		implements BPMNShape {
 
-	private final boolean horizontal;
-	private final boolean expanded;
+	private boolean horizontal;
+	private boolean expanded;
 
-	public AbstractBPMNShape(final E element,
-			final boolean horizontal, final boolean expanded) {
+	public AbstractBPMNShape(final E element) {
 		super(element);
-		this.horizontal = horizontal;
-		this.expanded = expanded;
+	}
+
+	@Override
+	public void setHorizontal(final boolean isHorizontal) {
+		horizontal = isHorizontal;
 	}
 
 	@Override
 	public boolean isHorizontal() {
 		return horizontal;
+	}
+
+	@Override
+	public void setExpanded(final boolean isExpanded) {
+		horizontal = isExpanded;
 	}
 
 	@Override

@@ -20,12 +20,15 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.model.core.common;
 
+import com.googlecode.bpmn_simulator.animation.element.logical.ref.Reference;
+
 public final class SequenceFlow
 		extends AbstractFlowElement {
 
 	private Expression conditionExpression;
 
-	public SequenceFlow(final String id, final String name) {
+	public SequenceFlow(final String id, final String name,
+			Reference<FlowNode> sourceRef, Reference<FlowNode> targetRef) {
 		super(id, name);
 	}
 

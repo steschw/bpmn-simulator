@@ -18,14 +18,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.bpmn_simulator.bpmn.swing.di;
+package com.googlecode.bpmn_simulator.bpmn.model.core.common.gateways;
 
-import java.util.Collection;
+import com.googlecode.bpmn_simulator.bpmn.model.core.common.FlowNode;
 
-import com.googlecode.bpmn_simulator.animation.element.logical.LogicalElement;
-import com.googlecode.bpmn_simulator.bpmn.model.AbstractDiagramInterchangeDefinition;
-
-public class SwingDiagramInterchangeDefinition
-		extends AbstractDiagramInterchangeDefinition<SwingBPMNDiagram> {
+public interface Gateway
+		extends FlowNode {
 
 }

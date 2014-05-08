@@ -20,9 +20,11 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.model.core.common;
 
+import com.googlecode.bpmn_simulator.animation.element.logical.LogicalElement;
 import com.googlecode.bpmn_simulator.bpmn.model.NamedElement;
+import com.googlecode.bpmn_simulator.bpmn.model.core.foundation.BaseElement;
 
 public interface FlowElement
-		extends NamedElement {
+		extends BaseElement, NamedElement, LogicalElement {
 
 }

@@ -18,28 +18,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.bpmn_simulator.bpmn.model.core.common.events;
+package com.googlecode.bpmn_simulator.bpmn.swing.di.model.process.activities;
 
-import com.googlecode.bpmn_simulator.bpmn.model.core.common.AbstractFlowNode;
+import java.awt.Color;
+import java.awt.Graphics2D;
 
-abstract class AbstractEvent
-		extends AbstractFlowNode
-		implements Event {
+import com.googlecode.bpmn_simulator.animation.element.visual.Bounds;
+import com.googlecode.bpmn_simulator.animation.element.visual.swing.Presentation;
+import com.googlecode.bpmn_simulator.bpmn.model.process.activities.Process;
+import com.googlecode.bpmn_simulator.bpmn.swing.di.AbstractBPMNPlane;
 
-	private EventDefinition definition;
+@SuppressWarnings("serial")
+public class ProcessPlane
+		extends AbstractBPMNPlane<Process> {
 
-	public AbstractEvent(final String id, final String name) {
-		super(id, name);
+	private static final int ARC_SIZE = 10;
+
+	public ProcessPlane(final Process element) {
+		super(element);
 	}
 
 	@Override
-	public void setEventDefinition(final EventDefinition definition) {
-		this.definition = definition;
-	}
-
-	@Override
-	public EventDefinition getEventDefinition() {
-		return definition;
+	protected void paintElement(final Graphics2D g, final Presentation presentation) {
+		g.setPaint(Color.RED);
+		final Bounds bounds = new Bounds(0, 0, getWidth(), getHeight());
+		presentation.drawRoundRect(g, bounds.shrink(MARGIN), ARC_SIZE);
 	}
 
 }

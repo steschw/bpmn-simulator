@@ -28,4 +28,6 @@ public interface BaseElement {
 
 	Collection<Documentation> getDocumentation();
 
+	void addDocumentation(Documentation documentation);
+
 }

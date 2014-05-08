@@ -29,9 +29,6 @@ import java.util.Iterator;
 import javax.swing.JPopupMenu;
 
 import com.googlecode.bpmn_simulator.animation.token.Instance;
-import com.googlecode.bpmn_simulator.bpmn.trigger.Trigger;
-import com.googlecode.bpmn_simulator.bpmn.trigger.TriggerCatchingElement;
-
 
 @SuppressWarnings("serial")
 public class InstancePopupMenu

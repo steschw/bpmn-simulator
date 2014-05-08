@@ -18,23 +18,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.bpmn_simulator.bpmn.model.process.activities.tasks;
+package com.googlecode.bpmn_simulator.bpmn.model.core.common;
 
-import com.googlecode.bpmn_simulator.bpmn.Messages;
-import com.googlecode.bpmn_simulator.bpmn.model.process.activities.AbstractActivity;
+import com.googlecode.bpmn_simulator.animation.element.logical.ref.Reference;
 
-public abstract class AbstractTask
-		extends AbstractActivity {
+public interface DefaultSequenceFlowElement {
 
-	public static final String ELEMENT_NAME = Messages.getString("task"); //$NON-NLS-1$
+	void setDefaultSequenceFlow(Reference<SequenceFlow> sequenceFlow);
 
-	public AbstractTask(final String id, final String name) {
-		super(id, name);
-	}
-
-	@Override
-	public String getElementName() {
-		return ELEMENT_NAME;
-	}
+	SequenceFlow getDefaultSequenceFlow();
 
 }

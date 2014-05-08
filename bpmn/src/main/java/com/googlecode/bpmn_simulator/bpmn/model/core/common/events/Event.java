@@ -27,4 +27,6 @@ public interface Event
 
 	EventDefinition getEventDefinition();
 
+	void setEventDefinition(EventDefinition definition);
+
 }

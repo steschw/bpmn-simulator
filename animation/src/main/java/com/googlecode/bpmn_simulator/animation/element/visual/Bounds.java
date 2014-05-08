@@ -88,4 +88,8 @@ public class Bounds {
 				getWidth() + (2 * n), getHeight() + (2 * n));
 	}
 
+	public Bounds shrink(final int n) {
+		return enlarge(-n);
+	}
+
 }

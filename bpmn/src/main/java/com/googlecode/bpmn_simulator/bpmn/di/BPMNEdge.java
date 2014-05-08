@@ -20,6 +20,9 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.di;
 
-public interface BPMNEdge {
+import com.googlecode.bpmn_simulator.animation.element.visual.VisualEdgeElement;
+
+public interface BPMNEdge
+		extends VisualEdgeElement {
 
 }

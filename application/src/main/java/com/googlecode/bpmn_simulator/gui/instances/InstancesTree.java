@@ -38,7 +38,6 @@ import com.googlecode.bpmn_simulator.animation.token.InstancesListener;
 import com.googlecode.bpmn_simulator.animation.token.Token;
 import com.googlecode.bpmn_simulator.animation.token.TokenFlow;
 import com.googlecode.bpmn_simulator.animation.token.TokenFlowListener;
-import com.googlecode.bpmn_simulator.framework.instance.InstanceManager;
 
 
 @SuppressWarnings("serial")

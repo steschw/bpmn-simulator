@@ -20,7 +20,9 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.model.process.activities;
 
+import com.googlecode.bpmn_simulator.animation.element.logical.ref.References;
 import com.googlecode.bpmn_simulator.bpmn.Messages;
+import com.googlecode.bpmn_simulator.bpmn.model.core.common.FlowElement;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.FlowElementsContainer;
 
 public final class Subprocess
@@ -30,6 +32,8 @@ public final class Subprocess
 	public static final String ELEMENT_NAME = Messages.getString("subprocess"); //$NON-NLS-1$
 
 	private final boolean triggeredByEvent;
+
+	private References<FlowElement> flowElements;
 
 	public Subprocess(final String id, final String name, final boolean triggeredByEvent) {
 		super(id, name);
@@ -43,6 +47,11 @@ public final class Subprocess
 
 	public boolean isTriggeredByEvent() {
 		return triggeredByEvent;
+	}
+
+	@Override
+	public void setFlowElements(final References<FlowElement> flowElements) {
+		this.flowElements = flowElements;
 	}
 
 }

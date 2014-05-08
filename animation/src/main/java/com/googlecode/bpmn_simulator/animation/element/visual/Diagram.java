@@ -22,4 +22,8 @@ package com.googlecode.bpmn_simulator.animation.element.visual;
 
 public interface Diagram {
 
+	void add(VisualElement element);
+
+	void add(Label label);
+
 }

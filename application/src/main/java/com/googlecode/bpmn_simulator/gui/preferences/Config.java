@@ -26,7 +26,6 @@ import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.AbstractFlowElement;
-import com.googlecode.bpmn_simulator.bpmn.model.core.common.Behavior;
 import com.googlecode.bpmn_simulator.bpmn.swing.di.Appearance;
 
 

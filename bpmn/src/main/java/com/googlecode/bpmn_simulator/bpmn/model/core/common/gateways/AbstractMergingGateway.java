@@ -20,7 +20,7 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.model.core.common.gateways;
 
-public abstract class AbstractMergingGateway
+abstract class AbstractMergingGateway
 		extends AbstractGateway {
 
 	public AbstractMergingGateway(final String id, final String name) {

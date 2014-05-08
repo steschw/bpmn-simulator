@@ -34,16 +34,15 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import com.googlecode.bpmn_simulator.bpmn.model.BPMNModel;
-
+import com.googlecode.bpmn_simulator.animation.element.logical.Model;
 
 @SuppressWarnings("serial")
 public class ModelPropertiesDialog
 		extends AbstractDialog {
 
-	private final BPMNModel model;
+	private final Model model;
 
-	public ModelPropertiesDialog(final JFrame parent, final BPMNModel model) {
+	public ModelPropertiesDialog(final JFrame parent, final Model model) {
 		super(parent, Messages.getString("Properties.properties")); //$NON-NLS-1$
 
 		this.model = model;
@@ -85,7 +84,7 @@ public class ModelPropertiesDialog
 		c.gridx = 1;
 		c.gridwidth = 2;
 		panel.add(createField(model.getEncoding(), 260), c);
-
+/*
 		c.gridy = 1;
 
 		c.gridx = 0;
@@ -105,7 +104,7 @@ public class ModelPropertiesDialog
 		c.gridx = 2;
 		c.gridwidth = 1;
 		panel.add(createField(model.getExporterVersion(), 120), c);
-
+*/
 		return panel;
 	}
 

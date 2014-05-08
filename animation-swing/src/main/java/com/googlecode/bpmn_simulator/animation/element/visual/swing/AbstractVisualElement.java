@@ -20,12 +20,11 @@
  */
 package com.googlecode.bpmn_simulator.animation.element.visual.swing;
 
-import javax.swing.JComponent;
-
 import com.googlecode.bpmn_simulator.animation.element.logical.LogicalElement;
 import com.googlecode.bpmn_simulator.animation.element.visual.Bounds;
 import com.googlecode.bpmn_simulator.animation.element.visual.Label;
 import com.googlecode.bpmn_simulator.animation.element.visual.VisualElement;
+import com.googlecode.bpmn_simulator.animation.token.Token;
 
 /**
  * +-------------------------------------+
@@ -35,11 +34,10 @@ import com.googlecode.bpmn_simulator.animation.element.visual.VisualElement;
  * |  +-------------------------------+  |
  * |                                     |
  * +-------------------------------------+
- * @param E Edge element
  */
 @SuppressWarnings("serial")
 abstract class AbstractVisualElement<E extends LogicalElement>
-		extends JComponent
+		extends AbstractVisual
 		implements VisualElement {
 
 	private static final int MARGIN = 10;
@@ -47,8 +45,6 @@ abstract class AbstractVisualElement<E extends LogicalElement>
 	private final E logicalElement;
 
 	private Label label;
-
-	private static final Presentation presentation = new Presentation();
 
 	public AbstractVisualElement(final E element) {
 		super();
@@ -58,10 +54,6 @@ abstract class AbstractVisualElement<E extends LogicalElement>
 
 	public E getLogicalElement() {
 		return logicalElement;
-	}
-
-	public Presentation getPresentation() {
-		return presentation;
 	}
 
 	@Override
@@ -77,6 +69,16 @@ abstract class AbstractVisualElement<E extends LogicalElement>
 		final Bounds outerBounds = bounds.enlarge(MARGIN);
 		setBounds(outerBounds.getX(), outerBounds.getY(),
 				outerBounds.getWidth(), outerBounds.getHeight());
+	}
+
+	protected Bounds getInnerBoundsRelative() {
+		return new Bounds(MARGIN, MARGIN,
+				getWidth() - (MARGIN * 2), getHeight() - (MARGIN * 2));
+	}
+
+	@Override
+	public void tokenChanged(final Token token) {
+		repaint();
 	}
 
 }

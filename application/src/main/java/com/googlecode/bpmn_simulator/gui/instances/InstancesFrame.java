@@ -23,10 +23,7 @@ package com.googlecode.bpmn_simulator.gui.instances;
 import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 
-import com.googlecode.bpmn_simulator.framework.instance.InstanceManager;
 import com.googlecode.bpmn_simulator.gui.Messages;
-
-
 
 @SuppressWarnings("serial")
 public class InstancesFrame

@@ -18,13 +18,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.bpmn_simulator.bpmn.model.process.activities.tasks;
+package com.googlecode.bpmn_simulator.bpmn.swing.di;
 
-public final class ServiceTask
-		extends Task {
+import com.googlecode.bpmn_simulator.animation.element.visual.swing.AbstractVisual;
+import com.googlecode.bpmn_simulator.bpmn.di.BPMNPlane;
 
-	public ServiceTask(final String id, final String name) {
-		super(id, name);
+@SuppressWarnings("serial")
+public abstract class AbstractBPMNPlane<E>
+		extends AbstractVisual
+		implements BPMNPlane {
+
+	protected static final int MARGIN = 10;
+
+	public AbstractBPMNPlane(final E element) {
+		super();
 	}
 
 }

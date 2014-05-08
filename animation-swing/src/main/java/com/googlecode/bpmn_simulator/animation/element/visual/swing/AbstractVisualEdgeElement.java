@@ -25,6 +25,7 @@ import javax.swing.SwingUtilities;
 import com.googlecode.bpmn_simulator.animation.element.logical.LogicalEdgeElement;
 import com.googlecode.bpmn_simulator.animation.element.visual.Point;
 import com.googlecode.bpmn_simulator.animation.element.visual.VisualEdgeElement;
+import com.googlecode.bpmn_simulator.animation.element.visual.Waypoint;
 import com.googlecode.bpmn_simulator.animation.element.visual.Waypoints;
 
 @SuppressWarnings("serial")
@@ -38,14 +39,9 @@ public abstract class AbstractVisualEdgeElement<E extends LogicalEdgeElement>
 		super(element);
 	}
 
-	public void setElementWaypoints(final Waypoints waypoints) {
-		this.waypoints = waypoints;
-		setInnerBounds(waypoints.getBounds());
-	}
-
 	@Override
-	public Waypoints getElementWaypoints() {
-		return waypoints;
+	public void addElementWaypoint(final Waypoint waypoint) {
+		waypoints.add(waypoint);
 	}
 
 	protected Point pointToRelative(final Point point) {

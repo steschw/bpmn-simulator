@@ -30,8 +30,8 @@ public class NamedReferences<E>
 		this.elements = elements;
 	}
 
-	public NamedReference<E> add(final String referencedElementName) {
-		final NamedReference<E> reference = new NamedReference<E>(elements, referencedElementName);
+	public Reference<E> add(final String referencedElementName) {
+		final Reference<E> reference = new NamedReference<E, E>(elements, referencedElementName, null);
 		super.add(reference);
 		return reference;
 	}

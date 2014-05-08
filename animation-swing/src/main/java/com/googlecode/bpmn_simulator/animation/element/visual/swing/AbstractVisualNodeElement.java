@@ -20,12 +20,12 @@
  */
 package com.googlecode.bpmn_simulator.animation.element.visual.swing;
 
-import com.googlecode.bpmn_simulator.animation.element.logical.LogicalNodeElement;
+import com.googlecode.bpmn_simulator.animation.element.logical.LogicalElement;
 import com.googlecode.bpmn_simulator.animation.element.visual.Bounds;
 import com.googlecode.bpmn_simulator.animation.element.visual.VisualNodeElement;
 
 @SuppressWarnings("serial")
-public abstract class AbstractVisualNodeElement<E extends LogicalNodeElement>
+public abstract class AbstractVisualNodeElement<E extends LogicalElement>
 		extends AbstractVisualElement<E>
 		implements VisualNodeElement {
 
@@ -35,14 +35,10 @@ public abstract class AbstractVisualNodeElement<E extends LogicalNodeElement>
 		super(element);
 	}
 
+	@Override
 	public void setElementBounds(final Bounds bounds) {
 		this.bounds = bounds;
 		setInnerBounds(bounds);
-	}
-
-	@Override
-	public Bounds getElementBounds() {
-		return bounds;
 	}
 
 }

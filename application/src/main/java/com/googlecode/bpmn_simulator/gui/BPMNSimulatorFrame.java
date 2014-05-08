@@ -41,7 +41,7 @@ import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-import com.googlecode.bpmn_simulator.bpmn.model.AbstractDiagramInterchangeDefinition;
+import com.googlecode.bpmn_simulator.bpmn.model.AbstractDIDefinition;
 import com.googlecode.bpmn_simulator.bpmn.swing.di.SwingBPMNDiagram;
 import com.googlecode.bpmn_simulator.gui.dialogs.ExceptionDialog;
 import com.googlecode.bpmn_simulator.gui.dialogs.ImageExportChooser;
@@ -68,7 +68,7 @@ public class BPMNSimulatorFrame
 
 	private final InstancesFrame frameInstances = new InstancesFrame();
 
-	private AbstractDiagramInterchangeDefinition currentModel;
+	private AbstractDIDefinition currentModel;
 
 	private File currentFile;
 
@@ -360,7 +360,7 @@ public class BPMNSimulatorFrame
 
 	private void createModel() {
 		if (isFileOpen()) {
-			currentModel = new AbstractDiagramInterchangeDefinition();
+			currentModel = new AbstractDIDefinition();
 			currentModel.addDefinitionListener(logFrame);
 			currentModel.load(currentFile);
 			frameInstances.setInstanceManager(currentModel.getInstanceManager());

@@ -20,12 +20,18 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.model.core.common.gateways;
 
+import com.googlecode.bpmn_simulator.animation.element.logical.ref.Reference;
 import com.googlecode.bpmn_simulator.bpmn.Messages;
+import com.googlecode.bpmn_simulator.bpmn.model.core.common.DefaultSequenceFlowElement;
+import com.googlecode.bpmn_simulator.bpmn.model.core.common.SequenceFlow;
 
 public final class ExclusiveGateway
-		extends AbstractGateway {
+		extends AbstractGateway
+		implements DefaultSequenceFlowElement {
 
 	public static final String ELEMENT_NAME = Messages.getString("exclusiveGateway"); //$NON-NLS-1$
+
+	private Reference<SequenceFlow> defaultSequenceFlow;
 
 	public ExclusiveGateway(final String id, final String name) {
 		super(id, name);
@@ -34,6 +40,19 @@ public final class ExclusiveGateway
 	@Override
 	public String getElementName() {
 		return ELEMENT_NAME;
+	}
+
+	@Override
+	public void setDefaultSequenceFlow(final Reference<SequenceFlow> sequenceFlow) {
+		defaultSequenceFlow = sequenceFlow;
+	}
+
+	@Override
+	public SequenceFlow getDefaultSequenceFlow() {
+		if (defaultSequenceFlow != null) {
+			return defaultSequenceFlow.getReferenced();
+		}
+		return null;
 	}
 
 }

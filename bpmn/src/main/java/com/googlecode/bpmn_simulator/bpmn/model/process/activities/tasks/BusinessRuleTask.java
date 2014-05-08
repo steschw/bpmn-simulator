@@ -21,7 +21,7 @@
 package com.googlecode.bpmn_simulator.bpmn.model.process.activities.tasks;
 
 public final class BusinessRuleTask
-		extends AbstractTask {
+		extends Task {
 
 	public BusinessRuleTask(final String id, final String name) {
 		super(id, name);

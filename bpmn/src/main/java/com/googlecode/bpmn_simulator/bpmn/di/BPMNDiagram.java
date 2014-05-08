@@ -25,6 +25,8 @@ import com.googlecode.bpmn_simulator.animation.element.visual.Diagram;
 public interface BPMNDiagram
 		extends Diagram {
 
+	void setPlane(BPMNPlane plane);
+
 	BPMNPlane getPlane();
 
 }

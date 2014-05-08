@@ -18,13 +18,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.bpmn_simulator.bpmn.model.process.activities.tasks;
+package com.googlecode.bpmn_simulator.bpmn.model.process.activities;
 
-public final class ServiceTask
-		extends Task {
+import com.googlecode.bpmn_simulator.bpmn.model.core.common.DefaultSequenceFlowElement;
+import com.googlecode.bpmn_simulator.bpmn.model.core.common.FlowNode;
 
-	public ServiceTask(final String id, final String name) {
-		super(id, name);
-	}
+public interface Activity
+		extends FlowNode, DefaultSequenceFlowElement {
 
 }

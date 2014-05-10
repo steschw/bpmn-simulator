@@ -21,8 +21,8 @@
 package com.googlecode.bpmn_simulator.animation.input;
 
 import java.awt.Color;
-import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.text.MessageFormat;
 
@@ -44,7 +44,7 @@ import org.xml.sax.SAXParseException;
 
 import com.googlecode.bpmn_simulator.animation.element.visual.Diagram;
 
-public abstract class AbstractXmlDefinition<E extends Diagram>
+public abstract class AbstractXmlDefinition<E extends Diagram<?>>
 		extends AbstractDefinition<E>
 		implements ErrorHandler {
 
@@ -182,7 +182,8 @@ public abstract class AbstractXmlDefinition<E extends Diagram>
 
 	protected abstract void loadData(final Node node);
 
-	public void load(final File file) {
+	@Override
+	public void load(final InputStream input) {
 		try {
 			final DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
 			documentBuilderFactory.setNamespaceAware(true);
@@ -193,7 +194,7 @@ public abstract class AbstractXmlDefinition<E extends Diagram>
 			documentBuilderFactory.setValidating(false);
 			final DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
 			documentBuilder.setErrorHandler(this);
-			final Document document = documentBuilder.parse(file);
+			final Document document = documentBuilder.parse(input);
 			encoding = document.getInputEncoding();
 			loadData(document.getDocumentElement());
 		} catch (IOException e) {

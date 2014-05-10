@@ -20,30 +20,67 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.swing.di;
 
-import com.googlecode.bpmn_simulator.animation.element.visual.Label;
-import com.googlecode.bpmn_simulator.animation.element.visual.VisualElement;
-import com.googlecode.bpmn_simulator.animation.element.visual.swing.AbstractDiagram;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.Rectangle;
+
+import javax.swing.JComponent;
+import javax.swing.Scrollable;
+
+import com.googlecode.bpmn_simulator.animation.element.visual.swing.AbstractSwingDiagram;
 import com.googlecode.bpmn_simulator.bpmn.di.BPMNDiagram;
-import com.googlecode.bpmn_simulator.bpmn.di.BPMNPlane;
 
+@SuppressWarnings("serial")
 public class SwingBPMNDiagram
-		extends AbstractDiagram
-		implements BPMNDiagram {
+		extends AbstractSwingDiagram
+		implements BPMNDiagram<JComponent>, Scrollable {
 
-	private BPMNPlane plane;
+	private JComponent diagramPlane;
 
-	public SwingBPMNDiagram() {
+	protected SwingBPMNDiagram(final String name) {
 		super();
+		setName(name);
 	}
 
 	@Override
-	public void setPlane(BPMNPlane plane) {
-		this.plane = plane;
+	public void setPlane(final JComponent plane) {
+		if (diagramPlane != null) {
+			remove(diagramPlane);
+		}
+		diagramPlane = plane;
+		add(diagramPlane);
 	}
 
 	@Override
-	public BPMNPlane getPlane() {
-		return plane;
+	public void add(final JComponent element) {
+		super.add((Component) element);
+	}
+
+	@Override
+	public Dimension getPreferredScrollableViewportSize() {
+		return super.getPreferredSize();
+	}
+
+	@Override
+	public int getScrollableUnitIncrement(Rectangle visibleRect,
+			int orientation, int direction) {
+		return 0;
+	}
+
+	@Override
+	public int getScrollableBlockIncrement(Rectangle visibleRect,
+			int orientation, int direction) {
+		return 0;
+	}
+
+	@Override
+	public boolean getScrollableTracksViewportWidth() {
+		return false;
+	}
+
+	@Override
+	public boolean getScrollableTracksViewportHeight() {
+		return false;
 	}
 
 }

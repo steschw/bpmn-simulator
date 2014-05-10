@@ -27,7 +27,7 @@ import com.googlecode.bpmn_simulator.bpmn.model.NamedElement;
 import com.googlecode.bpmn_simulator.bpmn.model.core.foundation.BaseElement;
 import com.googlecode.bpmn_simulator.bpmn.model.core.foundation.AbstractRootElement;
 
-public interface Definitions<E extends BPMNDiagram>
+public interface Definitions<E extends BPMNDiagram<?>>
 		extends BaseElement, NamedElement {
 
 	String getExporter();

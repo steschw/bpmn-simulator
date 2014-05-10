@@ -22,11 +22,9 @@ package com.googlecode.bpmn_simulator.bpmn.di;
 
 import com.googlecode.bpmn_simulator.animation.element.visual.Diagram;
 
-public interface BPMNDiagram
-		extends Diagram {
+public interface BPMNDiagram<E>
+		extends Diagram<E> {
 
-	void setPlane(BPMNPlane plane);
-
-	BPMNPlane getPlane();
+	void setPlane(E plane);
 
 }

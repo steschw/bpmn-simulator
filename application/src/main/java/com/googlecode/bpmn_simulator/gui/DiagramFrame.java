@@ -26,21 +26,14 @@ import java.awt.image.BufferedImage;
 import java.awt.image.RenderedImage;
 import java.io.File;
 import java.io.IOException;
-import java.net.URL;
 import java.text.MessageFormat;
 
 import javax.imageio.ImageIO;
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
 import javax.swing.JInternalFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 
-import com.googlecode.bpmn_simulator.bpmn.model.core.common.AbstractFlowElement;
-import com.googlecode.bpmn_simulator.bpmn.model.core.foundation.BaseElement;
-import com.googlecode.bpmn_simulator.bpmn.model.process.activities.Process;
-import com.googlecode.bpmn_simulator.bpmn.model.process.activities.Subprocess;
-import com.googlecode.bpmn_simulator.bpmn.swing.di.SwingBPMNDiagram;
+import com.googlecode.bpmn_simulator.animation.element.visual.swing.AbstractSwingDiagram;
 import com.googlecode.bpmn_simulator.gui.dialogs.ExceptionDialog;
 
 @SuppressWarnings("serial")
@@ -49,41 +42,15 @@ public class DiagramFrame
 
 	private static final Color BACKGROUND_COLOR = Color.WHITE;
 
-	private static final Icon ICON_PROCESS = loadFrameIcon("process.png"); //$NON-NLS-1$
-	private static final Icon ICON_COLLABORATION = loadFrameIcon("collaboration.png"); //$NON-NLS-1$
+	private final AbstractSwingDiagram diagram;
 
-	private final SwingBPMNDiagram diagram;
-
-	public DiagramFrame(final SwingBPMNDiagram diagram) {
-		super(diagram.getTitle(), true, false, true);
+	public DiagramFrame(final AbstractSwingDiagram diagram) {
+		super(diagram.getName(), true, false, true);
 		this.diagram = diagram;
 
-		final JScrollPane scrollPane = new JScrollPane(diagram.getPlane());
+		final JScrollPane scrollPane = new JScrollPane(diagram);
 		scrollPane.getViewport().setBackground(BACKGROUND_COLOR);
 		setContentPane(scrollPane);
-
-		updateFrameIcon();
-	}
-
-	private static Icon loadFrameIcon(final String filename) {
-		final URL url = DiagramFrame.class.getResource(filename);
-		if (url != null) {
-			return new ImageIcon(url);
-		}
-		return null;
-	}
-
-	protected void updateFrameIcon() {
-		Icon icon = null;
-		final BaseElement plane = diagram.getPlane();
-		if ((plane instanceof Process)
-				||(plane instanceof Subprocess)) {
-			icon = ICON_PROCESS;
-		} else if (plane instanceof Collaboration) {
-			icon = ICON_COLLABORATION;
-		}
-		assert icon != null;
-		setFrameIcon(icon);
 	}
 
 	public void showFrame() {
@@ -93,14 +60,13 @@ public class DiagramFrame
 	}
 
 	private RenderedImage createImage() {
-		final AbstractFlowElement plane = diagram.getPlane();
-		final int width = plane.getWidth();
-		final int height = plane.getHeight();
+		final int width = diagram.getWidth();
+		final int height = diagram.getHeight();
 		final BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_3BYTE_BGR);
 		final Graphics graphics = image.getGraphics();
 		graphics.setColor(BACKGROUND_COLOR);
 		graphics.fillRect(0, 0, width, height);
-		plane.paintAll(graphics);
+		diagram.paintAll(graphics);
 		return image;
 	}
 

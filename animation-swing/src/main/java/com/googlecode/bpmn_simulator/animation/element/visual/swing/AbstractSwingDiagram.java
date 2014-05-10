@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Stefan Schweitzer
+ * Copyright (C) 2014 Stefan Schweitzer
  *
  * This software was created by Stefan Schweitzer as a student's project at
  * Fachhochschule Kaiserslautern (University of Applied Sciences).
@@ -18,28 +18,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.bpmn_simulator.gui;
+package com.googlecode.bpmn_simulator.animation.element.visual.swing;
 
-import java.awt.Color;
+import javax.swing.JComponent;
 
-import javax.swing.JMenuItem;
-
-import com.googlecode.bpmn_simulator.animation.token.Instance;
+import com.googlecode.bpmn_simulator.animation.element.visual.Diagram;
 
 @SuppressWarnings("serial")
-public class InstanceMenuItem
-		extends JMenuItem {
-
-	private final Instance instance;
-
-	public InstanceMenuItem(final Instance instance) {
-		super("Instance");
-		this.instance = instance;
-	}
-
-	@Override
-	public Color getForeground() {
-		return (instance == null) ? super.getForeground() : instance.getColor();
-	}
+public abstract class AbstractSwingDiagram
+		extends JComponent
+		implements Diagram<JComponent> {
 
 }

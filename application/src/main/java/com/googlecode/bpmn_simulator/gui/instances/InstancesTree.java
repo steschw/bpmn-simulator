@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Stefan Schweitzer
+ * Copyright (C) 2014 Stefan Schweitzer
  *
  * This software was created by Stefan Schweitzer as a student's project at
  * Fachhochschule Kaiserslautern (University of Applied Sciences).
@@ -20,49 +20,40 @@
  */
 package com.googlecode.bpmn_simulator.gui.instances;
 
-import java.awt.Component;
-import java.text.MessageFormat;
 import java.util.Enumeration;
 
-import javax.swing.JLabel;
 import javax.swing.JTree;
-import javax.swing.SwingUtilities;
 import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreePath;
 
 import com.googlecode.bpmn_simulator.animation.token.Instance;
 import com.googlecode.bpmn_simulator.animation.token.InstancesListener;
-import com.googlecode.bpmn_simulator.animation.token.Token;
-import com.googlecode.bpmn_simulator.animation.token.TokenFlow;
-import com.googlecode.bpmn_simulator.animation.token.TokenFlowListener;
-
+import com.googlecode.bpmn_simulator.animation.token.RootInstances;
 
 @SuppressWarnings("serial")
 public class InstancesTree
 		extends JTree
-		implements InstancesListener, TokenFlowListener {
+		implements InstancesListener {
 
 	private static final String ROOT_NODE_TITLE = "Instances";
 
-	private InstanceManager instanceManager;
+	private RootInstances instances;
 
 	public InstancesTree() {
 		super(new DefaultMutableTreeNode(ROOT_NODE_TITLE));
 		setRootVisible(false);
-		setCellRenderer(new InstancesTreeCellRenderer());
 	}
 
-	public void setInstanceManager(final InstanceManager instanceManager) {
-		if (this.instanceManager != null) {
-			this.instanceManager.removeInstanceListener(this);
+	public void setInstances(final RootInstances instances) {
+		if (this.instances != null) {
+			this.instances.removeInstancesListener(this);
 		}
-		this.instanceManager = instanceManager;
+		this.instances = instances;
 		clear();
-		if (this.instanceManager != null) {
-			this.instanceManager.addInstanceListener(this);
+		if (this.instances != null) {
+			this.instances.addInstancesListener(this);
 		}
 	}
 
@@ -117,97 +108,10 @@ public class InstancesTree
 
 	@Override
 	public void instanceAdded(final Instance instance) {
-		instance.addInstanceListener(this);
-		instance.addTokenFlowListener(this);
-		SwingUtilities.invokeLater(new Runnable() {
-			@Override
-			public void run() {
-				addAndExpandNode(getNodeByUserObject(instance.getParentInstance()), instance);
-			}
-		});
 	}
 
 	@Override
 	public void instanceRemoved(final Instance instance) {
-		SwingUtilities.invokeLater(new Runnable() {
-			@Override
-			public void run() {
-				removeNode(instance);
-			}
-		});
-	}
-
-	@Override
-	public void tokenAdded(final Token token) {
-		SwingUtilities.invokeLater(new Runnable() {
-			@Override
-			public void run() {
-				addAndExpandNode(getNodeByUserObject(token.getInstance()), token);
-			}
-		});
-	}
-
-	@Override
-	public void tokenRemoved(final Token token) {
-		SwingUtilities.invokeLater(new Runnable() {
-			@Override
-			public void run() {
-				removeNode(token);
-			}
-		});
-	}
-
-	@Override
-	public void tokenMoved(final Token token) {
-	}
-
-	private static class InstancesTreeCellRenderer
-			extends DefaultTreeCellRenderer {
-
-		private static void createInstanceComponent(final JLabel component, final Instance instance) {
-			component.setText(MessageFormat.format("Instance of {0} ({1} token)",
-					instance.getActivity().getFullName(),
-					instance.getTokenCount(false)));
-			component.setOpaque(true);
-			component.setBackground(instance.getColor());
-		}
-
-		private static void createTokenComponent(final JLabel component, final Token token) {
-			final TokenFlow tokenFlow = token.getCurrentFlow();
-			component.setText(MessageFormat.format("Token in {0}",
-					(tokenFlow == null) ? tokenFlow : tokenFlow.getFullName()));
-			final Instance instance = token.getInstance();
-			if (instance != null) {
-				component.setOpaque(true);
-				component.setBackground(instance.getColor());
-			}
-		}
-
-		@Override
-		public Component getTreeCellRendererComponent(final JTree tree,
-				final Object value, final boolean sel, final boolean expanded,
-				final boolean leaf, final int row, final boolean hasFocus) {
-			final Component component = super.getTreeCellRendererComponent(tree,
-					value, sel, expanded, leaf, row, hasFocus);
-			if (value instanceof DefaultMutableTreeNode) {
-				final JLabel label = (JLabel)component;
-				final DefaultMutableTreeNode node = (DefaultMutableTreeNode)value;
-				final Object userObject = node.getUserObject();
-				if (userObject instanceof Instance) {
-					createInstanceComponent(label, (Instance)userObject);
-				} else if (userObject instanceof Token) {
-					createTokenComponent(label, (Token)userObject);
-				} else {
-					if (!userObject.equals(ROOT_NODE_TITLE)) {
-						assert false;
-					}
-				}
-			} else {
-				assert false;
-			}
-			return component;
-		}
-
 	}
 
 }

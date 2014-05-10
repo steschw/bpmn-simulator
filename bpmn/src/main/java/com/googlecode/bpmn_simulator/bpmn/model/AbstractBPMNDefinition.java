@@ -68,7 +68,7 @@ import com.googlecode.bpmn_simulator.bpmn.model.process.data.DataStore;
 /**
  * Diagram Interchange (DI) Definition
  */
-public abstract class AbstractBPMNDefinition<E extends Diagram>
+public abstract class AbstractBPMNDefinition<E extends Diagram<?>>
 		extends AbstractXmlDefinition<E> {
 
 	private static final String SCHEMA_FILENAME =

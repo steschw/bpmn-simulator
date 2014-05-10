@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Stefan Schweitzer
+ * Copyright (C) 2014 Stefan Schweitzer
  *
  * This software was created by Stefan Schweitzer as a student's project at
  * Fachhochschule Kaiserslautern (University of Applied Sciences).
@@ -25,9 +25,7 @@ import java.util.Locale;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 
-import com.googlecode.bpmn_simulator.bpmn.model.core.common.AbstractFlowElement;
 import com.googlecode.bpmn_simulator.bpmn.swing.di.Appearance;
-
 
 public class Config {
 
@@ -36,8 +34,6 @@ public class Config {
 	private static final String LANGUAGE = "language"; //$NON-NLS-1$
 
 	private static final String DEFAULT_LANGUAGE = ""; //$NON-NLS-1$
-
-	private static final String KEEP_EVENTS = "keepEvents"; //$NON-NLS-1$
 
 	private static final String SHOW_EXCLUSIVEGATEWAYSYMBOL = "showExclusiveGatewaySymbol"; //$NON-NLS-1$
 	private static final String ANTIALIASING = "antialiasing"; //$NON-NLS-1$
@@ -71,38 +67,18 @@ public class Config {
 		return Preferences.userRoot().node(NODE);
 	}
 
-	protected static Preferences getElementNode(final Appearance.Element element) {
-		return getRootNode().node(element.name().toLowerCase());
-	}
-
-	public void setVisualization(final Appearance visualization) {
+	public void storeAppearance(final Appearance appearance) {
 		final Preferences preferences = getRootNode();
 
-		preferences.putBoolean(ANTIALIASING, visualization.isAntialiasing());
-		preferences.putBoolean(IGNORE_COLORS, visualization.getIgnoreExplicitColors());
-		preferences.putBoolean(SHOW_EXCLUSIVEGATEWAYSYMBOL, visualization.getShowExclusiveGatewaySymbol());
-
-		for (Appearance.Element element : Appearance.Element.values()) {
-			final Preferences elementPreferences = getElementNode(element);
-			final Color color = visualization.getBackground(element);
-			setBackground(elementPreferences, color);
-		}
+		preferences.putBoolean(IGNORE_COLORS, appearance.getIgnoreExplicitColors());
+		preferences.putBoolean(SHOW_EXCLUSIVEGATEWAYSYMBOL, appearance.getShowExclusiveGatewaySymbol());
 	}
 
-	public Appearance getVisualization() {
-		final Appearance visualization = new Appearance();
+	public void loadAppearance(final Appearance appearance) {
 		final Preferences preferences = getRootNode();
 
-		visualization.setAntialiasing(preferences.getBoolean(ANTIALIASING, true));
-		visualization.setIgnoreExplicitColors(preferences.getBoolean(IGNORE_COLORS, false));
-		visualization.setShowExclusiveGatewaySymbol(preferences.getBoolean(SHOW_EXCLUSIVEGATEWAYSYMBOL, true));
-
-		for (Appearance.Element element : Appearance.Element.values()) {
-			final Color color = getBackground(getElementNode(element));
-			visualization.setBackground(element, color);
-		}
-
-		return visualization;
+		appearance.setIgnoreExplicitColors(preferences.getBoolean(IGNORE_COLORS, false));
+		appearance.setShowExclusiveGatewaySymbol(preferences.getBoolean(SHOW_EXCLUSIVEGATEWAYSYMBOL, true));
 	}
 
 	protected static Color getBackground(final Preferences preferences) {
@@ -112,21 +88,6 @@ public class Config {
 	protected static void setBackground(final Preferences preferences,
 			final Color value) {
 		preferences.putInt(BACKGROUND_COLOR, value.getRGB());
-	}
-
-	public Behavior getBehavior() {
-		final Behavior behavior = new Behavior();
-		final Preferences preferences = getRootNode();
-
-		behavior.setKeepTriggers(preferences.getBoolean(KEEP_EVENTS, behavior.getKeepTriggers()));
-
-		return behavior;
-	}
-
-	public void setBehavior(final Behavior behavior) {
-		final Preferences preferences = getRootNode();
-
-		preferences.putBoolean(KEEP_EVENTS, behavior.getKeepTriggers());
 	}
 
 	protected Locale getLocaleFromString(final String string) {
@@ -171,10 +132,6 @@ public class Config {
 		if (locale != null) {
 			Locale.setDefault(locale);
 		}
-
-		AbstractFlowElement.setDefaultBehavior(getBehavior());
-
-		AbstractFlowElement.setDefaultVisualization(getVisualization());
 	}
 
 	public void store() {

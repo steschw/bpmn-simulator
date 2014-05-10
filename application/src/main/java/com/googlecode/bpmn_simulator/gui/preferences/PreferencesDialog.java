@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Stefan Schweitzer
+ * Copyright (C) 2014 Stefan Schweitzer
  *
  * This software was created by Stefan Schweitzer as a student's project at
  * Fachhochschule Kaiserslautern (University of Applied Sciences).
@@ -40,7 +40,6 @@ import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 
-import com.googlecode.bpmn_simulator.bpmn.model.core.common.AbstractFlowElement;
 import com.googlecode.bpmn_simulator.bpmn.swing.di.Appearance;
 import com.googlecode.bpmn_simulator.gui.AbstractDialog;
 import com.googlecode.bpmn_simulator.gui.Messages;
@@ -63,25 +62,6 @@ public class PreferencesDialog
 
 	private final JCheckBox checkIgnoreModelerColors
 			= new JCheckBox(Messages.getString("Preferences.ignoreModelerColors")); //$NON-NLS-1$
-
-	private final ColorSelector colorStartEventBackground
-			= new ColorSelector(Messages.getString("Preferences.backgroundColor")); //$NON-NLS-1$
-	private final ColorSelector colorIntermediateEventBackground
-			= new ColorSelector(Messages.getString("Preferences.backgroundColor")); //$NON-NLS-1$
-	private final ColorSelector colorEndEventBackground
-			= new ColorSelector(Messages.getString("Preferences.backgroundColor")); //$NON-NLS-1$
-	private final ColorSelector colorBoundaryEventBackground
-			= new ColorSelector(Messages.getString("Preferences.backgroundColor")); //$NON-NLS-1$
-	private final ColorSelector colorGatewayBackground
-			= new ColorSelector(Messages.getString("Preferences.backgroundColor")); //$NON-NLS-1$
-	private final ColorSelector colorTaskBackground
-			= new ColorSelector(Messages.getString("Preferences.backgroundColor")); //$NON-NLS-1$
-	private final ColorSelector colorProcessBackground
-			= new ColorSelector(Messages.getString("Preferences.backgroundColor")); //$NON-NLS-1$
-	private final ColorSelector colorDataObjectBackground
-			= new ColorSelector(Messages.getString("Preferences.backgroundColor")); //$NON-NLS-1$
-	private final ColorSelector colorDataStorageBackground
-			= new ColorSelector(Messages.getString("Preferences.backgroundColor")); //$NON-NLS-1$
 
 	public PreferencesDialog(final JFrame parent) {
 		super(parent, Messages.getString("Preferences.preferences")); //$NON-NLS-1$
@@ -192,35 +172,12 @@ public class PreferencesDialog
 		return panel;
 	}
 
+	protected void addElementPreferences(final Class<?> elementClass) {
+		
+	}
+
 	protected JPanel createElementsDefaultsPanel() {
 		final JPanel panel = new JPanel(new GridLayout(0, 2, GAP, GAP));
-
-		panel.add(new JLabel(Messages.getString("Preferences.startEvent"))); //$NON-NLS-1$
-		panel.add(colorStartEventBackground);
-
-		panel.add(new JLabel(Messages.getString("Preferences.intermediateEvent"))); //$NON-NLS-1$
-		panel.add(colorIntermediateEventBackground);
-
-		panel.add(new JLabel(Messages.getString("Preferences.endEvent"))); //$NON-NLS-1$
-		panel.add(colorEndEventBackground);
-
-		panel.add(new JLabel(Messages.getString("Preferences.boundaryEvent"))); //$NON-NLS-1$
-		panel.add(colorBoundaryEventBackground);
-
-		panel.add(new JLabel(Messages.getString("Preferences.gateway"))); //$NON-NLS-1$
-		panel.add(colorGatewayBackground);
-
-		panel.add(new JLabel(Messages.getString("Preferences.task"))); //$NON-NLS-1$
-		panel.add(colorTaskBackground);
-
-		panel.add(new JLabel(Messages.getString("Preferences.process"))); //$NON-NLS-1$
-		panel.add(colorProcessBackground);
-
-		panel.add(new JLabel(Messages.getString("Preferences.dataObject"))); //$NON-NLS-1$
-		panel.add(colorDataObjectBackground);
-
-		panel.add(new JLabel(Messages.getString("Preferences.dataStorage"))); //$NON-NLS-1$
-		panel.add(colorDataStorageBackground);
 
 		return panel;
 	}
@@ -260,36 +217,12 @@ public class PreferencesDialog
 	protected void store() {
 		final Config config = Config.getInstance();
 
-		config.setLocale((Locale)selectLanguage.getSelectedItem());
+		config.setLocale((Locale) selectLanguage.getSelectedItem());
 		config.setExternalEditor(editExternalEditor.getText());
 
-		final Behavior behavior = AbstractFlowElement.getDefaultBehavior();
-		behavior.setKeepTriggers(checkKeepEvents.isSelected());
-		config.setBehavior(behavior);
-
-		final Appearance visualization = AbstractFlowElement.getDefaultVisualization();
-		visualization.setAntialiasing(checkAntialiasing.isSelected());
-		visualization.setShowExclusiveGatewaySymbol(checkShowExclusiveSymbol.isSelected());
-		visualization.setIgnoreExplicitColors(checkIgnoreModelerColors.isSelected());
-		visualization.setBackground(Appearance.Element.EVENT_START,
-				colorStartEventBackground.getSelectedColor());
-		visualization.setBackground(Appearance.Element.EVENT_INTERMEDIATE,
-				colorIntermediateEventBackground.getSelectedColor());
-		visualization.setBackground(Appearance.Element.EVENT_END,
-				colorEndEventBackground.getSelectedColor());
-		visualization.setBackground(Appearance.Element.EVENT_BOUNDARY,
-				colorBoundaryEventBackground.getSelectedColor());
-		visualization.setBackground(Appearance.Element.GATEWAY,
-				colorGatewayBackground.getSelectedColor());
-		visualization.setBackground(Appearance.Element.TASK,
-				colorTaskBackground.getSelectedColor());
-		visualization.setBackground(Appearance.Element.PROCESS,
-				colorProcessBackground.getSelectedColor());
-		visualization.setBackground(Appearance.Element.DATA_OBJECT,
-				colorDataObjectBackground.getSelectedColor());
-		visualization.setBackground(Appearance.Element.DATA_STORAGE,
-				colorDataStorageBackground.getSelectedColor());
-		config.setVisualization(visualization);
+		final Appearance appearance = Appearance.getDefault();
+		appearance.setShowExclusiveGatewaySymbol(checkShowExclusiveSymbol.isSelected());
+		appearance.setIgnoreExplicitColors(checkIgnoreModelerColors.isSelected());
 
 		config.store();
 	}
@@ -300,31 +233,9 @@ public class PreferencesDialog
 		selectLanguage.setSelectedItem(config.getLocale());
 		editExternalEditor.setText(config.getExternalEditor());
 
-		final Behavior behavior = AbstractFlowElement.getDefaultBehavior();
-		checkKeepEvents.setSelected(behavior.getKeepTriggers());
-
-		final Appearance visualization = AbstractFlowElement.getDefaultVisualization();
-		checkAntialiasing.setSelected(visualization.isAntialiasing());
-		checkShowExclusiveSymbol.setSelected(visualization.getShowExclusiveGatewaySymbol());
-		checkIgnoreModelerColors.setSelected(visualization.getIgnoreExplicitColors());
-		colorStartEventBackground.setSelectedColor(
-				visualization.getBackground(Appearance.Element.EVENT_START));
-		colorIntermediateEventBackground.setSelectedColor(
-				visualization.getBackground(Appearance.Element.EVENT_INTERMEDIATE));
-		colorEndEventBackground.setSelectedColor(
-				visualization.getBackground(Appearance.Element.EVENT_END));
-		colorBoundaryEventBackground.setSelectedColor(
-				visualization.getBackground(Appearance.Element.EVENT_BOUNDARY));
-		colorGatewayBackground.setSelectedColor(
-				visualization.getBackground(Appearance.Element.GATEWAY));
-		colorTaskBackground.setSelectedColor(
-				visualization.getBackground(Appearance.Element.TASK));
-		colorProcessBackground.setSelectedColor(
-				visualization.getBackground(Appearance.Element.PROCESS));
-		colorDataObjectBackground.setSelectedColor(
-				visualization.getBackground(Appearance.Element.DATA_OBJECT));
-		colorDataStorageBackground.setSelectedColor(
-				visualization.getBackground(Appearance.Element.DATA_STORAGE));
+		final Appearance appearance = Appearance.getDefault();
+		checkShowExclusiveSymbol.setSelected(appearance.getShowExclusiveGatewaySymbol());
+		checkIgnoreModelerColors.setSelected(appearance.getIgnoreExplicitColors());
 	}
 
 }

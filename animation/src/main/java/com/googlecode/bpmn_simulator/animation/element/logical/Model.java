@@ -20,8 +20,6 @@
  */
 package com.googlecode.bpmn_simulator.animation.element.logical;
 
-import java.util.Collection;
-
 public interface Model {
 
 	String getEncoding();

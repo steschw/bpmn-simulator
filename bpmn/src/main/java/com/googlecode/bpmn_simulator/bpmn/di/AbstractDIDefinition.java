@@ -18,7 +18,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.bpmn_simulator.bpmn.model;
+package com.googlecode.bpmn_simulator.bpmn.di;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
@@ -29,15 +29,11 @@ import org.w3c.dom.NodeList;
 
 import com.googlecode.bpmn_simulator.animation.element.visual.Bounds;
 import com.googlecode.bpmn_simulator.animation.element.visual.Waypoint;
-import com.googlecode.bpmn_simulator.bpmn.di.BPMNDiagram;
-import com.googlecode.bpmn_simulator.bpmn.di.BPMNEdge;
-import com.googlecode.bpmn_simulator.bpmn.di.BPMNLabel;
-import com.googlecode.bpmn_simulator.bpmn.di.BPMNPlane;
-import com.googlecode.bpmn_simulator.bpmn.di.BPMNShape;
+import com.googlecode.bpmn_simulator.bpmn.model.AbstractBPMNDefinition;
 import com.googlecode.bpmn_simulator.bpmn.model.core.foundation.BaseElement;
 
-public abstract class AbstractDIDefinition<E extends BPMNDiagram>
-		extends AbstractBPMNDefinition<E> {
+public abstract class AbstractDIDefinition<DIAGRAM extends BPMNDiagram<?>>
+		extends AbstractBPMNDefinition<DIAGRAM> {
 
 	private static final String BPMNDI = "http://www.omg.org/spec/BPMN/20100524/DI"; //$NON-NLS-1$
 
@@ -45,22 +41,22 @@ public abstract class AbstractDIDefinition<E extends BPMNDiagram>
 
 	private static final String DI = "http://www.omg.org/spec/DD/20100524/DI"; //$NON-NLS-1$
 
-	private final Collection<E> diagrams = new ArrayList<E>();
+	private final Collection<DIAGRAM> diagrams = new ArrayList<DIAGRAM>();
 
 	@Override
-	public final Collection<E> getDiagrams() {
+	public final Collection<DIAGRAM> getDiagrams() {
 		return diagrams;
 	}
 
-	protected abstract BPMNShape createShapeFor(BaseElement element);
+	protected abstract DIAGRAM createDiagram(String name);
 
-	protected abstract BPMNEdge createEdgeFor(BaseElement element);
+	protected abstract BPMNPlane createPlaneFor(DIAGRAM diagram, BaseElement element);
 
-	protected abstract BPMNPlane createPlaneFor(BaseElement element);
+	protected abstract BPMNShape createShapeFor(DIAGRAM diagram, BaseElement element);
 
-	protected abstract BPMNLabel createLabelFor(BaseElement element);
+	protected abstract BPMNEdge createEdgeFor(DIAGRAM diagram, BaseElement element);
 
-	protected abstract E createDiagram(String name);
+	protected abstract BPMNLabel createLabelFor(DIAGRAM diagram, BaseElement element);
 
 	@Override
 	protected boolean readElementsForDefinitionsElement(final Node node) {
@@ -103,11 +99,11 @@ public abstract class AbstractDIDefinition<E extends BPMNDiagram>
 		return getAttributeElement(node, "bpmnElement"); //$NON-NLS-1$
 	}
 
-	protected boolean readElementBPMNShape(final Node node, final BPMNDiagram diagram) {
+	protected boolean readElementBPMNShape(final Node node, final DIAGRAM diagram) {
 		if (isElementNode(node, BPMNDI, "BPMNShape")) { //$NON-NLS-1$
 			final BaseElement element = getBPMNElementAttribute(node);
 			if (element != null) {
-				final BPMNShape shape = createShapeFor(element);
+				final BPMNShape shape = createShapeFor(diagram, element);
 				if (shape != null) {
 					final NodeList childNodes = node.getChildNodes();
 					for (int i = 0; i < childNodes.getLength(); ++i) {
@@ -117,7 +113,6 @@ public abstract class AbstractDIDefinition<E extends BPMNDiagram>
 							showUnknowNode(childNode);
 						}
 					}
-					diagram.add(shape);
 				} else {
 					notifyError(MessageFormat.format("can''t create shape for {0}", element), null);
 				}
@@ -130,11 +125,11 @@ public abstract class AbstractDIDefinition<E extends BPMNDiagram>
 		}
 	}
 
-	protected boolean readElementBPMNEdge(final Node node, final BPMNDiagram diagram) {
+	protected boolean readElementBPMNEdge(final Node node, final DIAGRAM diagram) {
 		if (isElementNode(node, BPMNDI, "BPMNEdge")) { //$NON-NLS-1$
 			final BaseElement element = getBPMNElementAttribute(node);
 			if (element != null) {
-				final BPMNEdge edge = createEdgeFor(element);
+				final BPMNEdge edge = createEdgeFor(diagram, element);
 				if (edge != null) {
 					final NodeList childNodes = node.getChildNodes();
 					for (int i = 0; i < childNodes.getLength(); ++i) {
@@ -144,8 +139,6 @@ public abstract class AbstractDIDefinition<E extends BPMNDiagram>
 							showUnknowNode(childNode);
 						}
 					}
-					
-					diagram.add(edge);
 				} else {
 					notifyError(MessageFormat.format("can''t create shape for {0}", element), null);
 				}
@@ -158,11 +151,32 @@ public abstract class AbstractDIDefinition<E extends BPMNDiagram>
 		}
 	}
 
-	protected boolean readElementBPMNPlane(final Node node, final BPMNDiagram diagram) {
+	protected boolean readElementLabel(final Node node,
+			final DIAGRAM diagram, final BaseElement element) {
+		if (isElementNode(node, BPMNDI, "BPMNLabel")) { //$NON-NLS-1$
+			final BPMNLabel label = createLabelFor(diagram, element);
+			if (label != null) {
+				final NodeList childNodes = node.getChildNodes();
+				for (int i = 0; i < childNodes.getLength(); ++i) {
+					final Node childNode = childNodes.item(i);
+					if (!readElementBounds(childNode, label)) {
+						showUnknowNode(childNode);
+					}
+				}
+			} else {
+				notifyError(MessageFormat.format("can''t create label for {0}", element), null);
+			}
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	protected boolean readElementBPMNPlane(final Node node, final DIAGRAM diagram) {
 		if (isElementNode(node, BPMNDI, "BPMNPlane")) { //$NON-NLS-1$
 			final BaseElement element = getBPMNElementAttribute(node);
 			if (element != null) {
-				final BPMNPlane plane = createPlaneFor(element);
+				final BPMNPlane plane = createPlaneFor(diagram, element);
 				if (plane != null) {
 					final NodeList childNodes = node.getChildNodes();
 					for (int i = 0; i < childNodes.getLength(); ++i) {
@@ -172,7 +186,6 @@ public abstract class AbstractDIDefinition<E extends BPMNDiagram>
 							showUnknowNode(childNode);
 						}
 					}
-					diagram.setPlane(plane);
 				} else {
 					notifyError(MessageFormat.format("can''t create plane for {0}", element), null);
 				}
@@ -188,7 +201,7 @@ public abstract class AbstractDIDefinition<E extends BPMNDiagram>
 	protected boolean readElementBPMNDiagram(final Node node) {
 		if (isElementNode(node, BPMNDI, "BPMNDiagram")) { //$NON-NLS-1$
 			final String name = getNameAttribute(node);
-			final E diagram = createDiagram(name);
+			final DIAGRAM diagram = createDiagram(name);
 			final NodeList childNodes = node.getChildNodes();
 			for (int i = 0; i < childNodes.getLength(); ++i) {
 				final Node childNode = childNodes.item(i);
@@ -227,28 +240,6 @@ public abstract class AbstractDIDefinition<E extends BPMNDiagram>
 			final BPMNLabel label) {
 		if (isElementNode(node, DC, "Bounds")) { //$NON-NLS-1$
 			label.setBounds(getBoundsAttribute(node));
-			return true;
-		} else {
-			return false;
-		}
-	}
-
-	protected boolean readElementLabel(final Node node,
-			final BPMNDiagram diagram, final BaseElement element) {
-		if (isElementNode(node, BPMNDI, "BPMNLabel")) { //$NON-NLS-1$
-			final BPMNLabel label = createLabelFor(element);
-			if (label != null) {
-				final NodeList childNodes = node.getChildNodes();
-				for (int i = 0; i < childNodes.getLength(); ++i) {
-					final Node childNode = childNodes.item(i);
-					if (!readElementBounds(childNode, label)) {
-						showUnknowNode(childNode);
-					}
-				}
-				diagram.add(label);
-			} else {
-				
-			}
 			return true;
 		} else {
 			return false;

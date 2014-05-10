@@ -20,47 +20,47 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.swing.di;
 
-import java.util.Collection;
-
-import com.googlecode.bpmn_simulator.animation.element.logical.LogicalElement;
+import com.googlecode.bpmn_simulator.bpmn.di.AbstractDIDefinition;
 import com.googlecode.bpmn_simulator.bpmn.di.BPMNEdge;
 import com.googlecode.bpmn_simulator.bpmn.di.BPMNLabel;
 import com.googlecode.bpmn_simulator.bpmn.di.BPMNPlane;
 import com.googlecode.bpmn_simulator.bpmn.di.BPMNShape;
-import com.googlecode.bpmn_simulator.bpmn.model.AbstractDIDefinition;
 import com.googlecode.bpmn_simulator.bpmn.model.core.foundation.BaseElement;
-import com.googlecode.bpmn_simulator.bpmn.swing.di.model.process.activities.ProcessPlane;
+import com.googlecode.bpmn_simulator.bpmn.model.process.activities.Process;
+import com.googlecode.bpmn_simulator.bpmn.swing.model.process.activities.ProcessPlane;
 
 public class SwingDIDefinition
 		extends AbstractDIDefinition<SwingBPMNDiagram> {
 
 	@Override
-	protected BPMNShape createShapeFor(final BaseElement element) {
+	protected BPMNShape createShapeFor(final SwingBPMNDiagram diagram, final BaseElement element) {
 		return null;
 	}
 
 	@Override
-	protected BPMNEdge createEdgeFor(final BaseElement element) {
+	protected BPMNEdge createEdgeFor(final SwingBPMNDiagram diagram, final BaseElement element) {
 		return null;
 	}
 
 	@Override
-	protected BPMNPlane createPlaneFor(final BaseElement element) {
+	protected BPMNPlane createPlaneFor(final SwingBPMNDiagram diagram, final BaseElement element) {
 		if (element instanceof Process) {
-			return new ProcessPlane((Process) element);
+			final ProcessPlane plane = new ProcessPlane((Process) element);
+			diagram.add(plane);
+			return plane;
 		}
 		return null;
 	}
 
 	@Override
-	protected BPMNLabel createLabelFor(final BaseElement element) {
+	protected BPMNLabel createLabelFor(final SwingBPMNDiagram diagram, final BaseElement element) {
 		final SwingBPMNLabel label = new SwingBPMNLabel(element.getId());
 		return label;
 	}
 
 	@Override
 	protected SwingBPMNDiagram createDiagram(final String name) {
-		final SwingBPMNDiagram diagram = new SwingBPMNDiagram();
+		final SwingBPMNDiagram diagram = new SwingBPMNDiagram(name);
 		diagram.setName(name);
 		return diagram;
 	}

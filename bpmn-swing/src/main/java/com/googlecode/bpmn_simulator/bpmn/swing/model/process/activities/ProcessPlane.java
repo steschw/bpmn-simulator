@@ -18,15 +18,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.bpmn_simulator.animation.element.visual.swing;
+package com.googlecode.bpmn_simulator.bpmn.swing.model.process.activities;
 
-import javax.swing.JComponent;
+import java.awt.Color;
+import java.awt.Graphics2D;
 
-import com.googlecode.bpmn_simulator.animation.element.visual.Diagram;
+import com.googlecode.bpmn_simulator.animation.element.visual.Bounds;
+import com.googlecode.bpmn_simulator.animation.element.visual.swing.Presentation;
+import com.googlecode.bpmn_simulator.bpmn.model.process.activities.Process;
+import com.googlecode.bpmn_simulator.bpmn.swing.di.AbstractBPMNPlane;
 
 @SuppressWarnings("serial")
-public abstract class AbstractDiagram
-		extends JComponent
-		implements Diagram {
+public class ProcessPlane
+		extends AbstractBPMNPlane<Process> {
+
+	private static final int ARC_SIZE = 10;
+
+	public ProcessPlane(final Process element) {
+		super(element);
+	}
+
+	@Override
+	protected void paintElement(final Graphics2D g, final Presentation presentation) {
+		g.setPaint(Color.RED);
+		final Bounds bounds = new Bounds(0, 0, getWidth(), getHeight());
+		presentation.drawRoundRect(g, bounds.shrink(MARGIN), ARC_SIZE);
+	}
 
 }

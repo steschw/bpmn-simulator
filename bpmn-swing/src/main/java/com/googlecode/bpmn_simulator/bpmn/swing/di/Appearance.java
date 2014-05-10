@@ -22,10 +22,9 @@ package com.googlecode.bpmn_simulator.bpmn.swing.di;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
-import java.awt.Paint;
 import java.awt.Stroke;
 import java.net.URL;
-import java.util.EnumMap;
+import java.util.HashMap;
 import java.util.IdentityHashMap;
 import java.util.Map;
 
@@ -61,8 +60,6 @@ public class Appearance {
 
 	private static final String ICONPATH = "com/googlecode/bpmn_simulator/bpmn/icons/"; //$NON-NLS-1$
 
-	private static final Color DEFAULT_BACKGROUNDCOLOR = Color.WHITE;
-
 	private static final float[] DASH_DOTTED = new float[] {
 			1.f,
 			6.f,
@@ -84,7 +81,7 @@ public class Appearance {
 
 	private final Map<String, Icon> icons = new IdentityHashMap<String, Icon>();
 
-	private final Map<Element, Paint> backgrounds = new EnumMap<Element, Paint>(Element.class);
+	private final Map<Class<?>, ElementAppearance> elements = new HashMap<Class<?>, ElementAppearance>();
 
 	private boolean ignoreExplicitColors;
 
@@ -156,15 +153,13 @@ public class Appearance {
 		return icons.get(name);
 	}
 
-	public Paint getBackground(final Element element) {
-		if (backgrounds.containsKey(element)) {
-			return backgrounds.get(element);
+	public ElementAppearance getForElement(final Class<?> elementClass) {
+		ElementAppearance elementAppearance = elements.get(elementClass);
+		if (elementAppearance == null) {
+			elementAppearance = new ElementAppearance();
+			elements.put(elementClass, elementAppearance);
 		}
-		return DEFAULT_BACKGROUNDCOLOR;
-	}
-
-	public void setBackground(final Element element, final Color color) {
-		backgrounds.put(element, color);
+		return elementAppearance;
 	}
 
 	public void setShowExclusiveGatewaySymbol(final boolean show) {
@@ -214,16 +209,30 @@ public class Appearance {
 				0);
 	}
 
-	public enum Element {
-		GATEWAY,
-		TASK,
-		PROCESS,
-		EVENT_START,
-		EVENT_END,
-		EVENT_INTERMEDIATE,
-		EVENT_BOUNDARY,
-		DATA_OBJECT,
-		DATA_STORAGE,
+	public static class ElementAppearance {
+
+		private static final Color DEFAULT_BACKGROUNDCOLOR = Color.WHITE;
+		private static final Color DEFAULT_FOREGROUNDCOLOR = Color.BLACK;
+
+		private Color background = DEFAULT_BACKGROUNDCOLOR;
+		private Color foreground = DEFAULT_FOREGROUNDCOLOR;
+
+		public void setBackground(final Color color) {
+			background = color;
+		}
+
+		public Color getBackground() {
+			return background;
+		}
+
+		public void setForeground(final Color color) {
+			foreground = color;
+		}
+
+		public Color getForeground() {
+			return foreground;
+		}
+
 	}
 
 }

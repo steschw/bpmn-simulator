@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Stefan Schweitzer
+ * Copyright (C) 2014 Stefan Schweitzer
  *
  * This software was created by Stefan Schweitzer as a student's project at
  * Fachhochschule Kaiserslautern (University of Applied Sciences).
@@ -23,6 +23,7 @@ package com.googlecode.bpmn_simulator.gui.instances;
 import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 
+import com.googlecode.bpmn_simulator.animation.token.RootInstances;
 import com.googlecode.bpmn_simulator.gui.Messages;
 
 @SuppressWarnings("serial")
@@ -46,8 +47,8 @@ public class InstancesFrame
 		create();
 	}
 
-	public void setInstanceManager(final InstanceManager instanceManager) {
-		treeInstances.setInstanceManager(instanceManager);
+	public void setInstanceManager(final RootInstances instances) {
+		treeInstances.setInstances(instances);
 	}
 
 	protected void create() {

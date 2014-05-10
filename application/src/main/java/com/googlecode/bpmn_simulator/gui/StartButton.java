@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Stefan Schweitzer
+ * Copyright (C) 2014 Stefan Schweitzer
  *
  * This software was created by Stefan Schweitzer as a student's project at
  * Fachhochschule Kaiserslautern (University of Applied Sciences).
@@ -22,97 +22,31 @@ package com.googlecode.bpmn_simulator.gui;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Collection;
-import java.util.Iterator;
 
 import javax.swing.Icon;
 import javax.swing.JButton;
-import javax.swing.JMenu;
-import javax.swing.JMenuItem;
-import javax.swing.JPopupMenu;
 
-import com.googlecode.bpmn_simulator.animation.token.Instance;
-import com.googlecode.bpmn_simulator.bpmn.model.AbstractBPMNDefinition;
+import com.googlecode.bpmn_simulator.animation.input.Definition;
 
 @SuppressWarnings("serial")
 public class StartButton
 		extends JButton
 		implements ActionListener {
 
-	private AbstractBPMNDefinition model;
+	private Definition<?> definition;
 
 	public StartButton(final Icon icon) {
 		super(icon);
 		addActionListener(this);
 	}
 
-	public void setModel(final AbstractBPMNDefinition model) {
-		this.model = model;
-		setEnabled(model != null);
-	}
-
-	public JMenuItem createInstancelessElementSelection(final TriggerCatchingElement element) {
-		final JMenuItem menuItem = new JMenuItem(element.getFullName());
-		menuItem.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(final ActionEvent e) {
-				element.catchTrigger(new Trigger(null, null));
-			}
-		});
-		return menuItem;
-	}
-
-	public JMenu createInstanciatedElementSelection(final TriggerCatchingElement element) {
-		final Collection<Instance> instances
-				= element.getTriggerDestinationInstances();
-		if (!instances.isEmpty()) {
-			final JMenu subMenu = new JMenu(element.getFullName());
-			for (final Instance instance : instances) {
-				final InstanceMenuItem menuItem = new InstanceMenuItem(instance);
-				menuItem.addActionListener(new ActionListener() {
-					@Override
-					public void actionPerformed(final ActionEvent e) {
-						element.catchTrigger(new Trigger(null, instance));
-					}
-				});
-				subMenu.add(menuItem);
-			}
-			return subMenu;
-		}
-		return null;
-	}
-
-	private static boolean requiresInstanciatedCall(final TriggerCatchingElement catchingElement) {
-		final boolean instantiable = (catchingElement instanceof Instantiable)
-				&& ((Instantiable)catchingElement).isInstantiable();
-		final boolean instantiableNotifing = (catchingElement instanceof InstantiableNotifiySource)
-				&& ((InstantiableNotifiySource)catchingElement).isInstantiableNotifying();
-		return !(instantiable || instantiableNotifing);
+	public void setDefinition(final Definition<?> definition) {
+		this.definition = definition;
+		setEnabled(definition != null);
 	}
 
 	@Override
 	public void actionPerformed(final ActionEvent e) {
-		if (model != null) {
-			final Collection<TriggerCatchingElement> startEvents = model.getManuallStartEvents();
-			final Iterator<TriggerCatchingElement> iterator = startEvents.iterator();
-			if (startEvents.size() == 1) {
-				iterator.next().catchTrigger(new Trigger(null, null));
-			} else {
-				final JPopupMenu menu = new JPopupMenu();
-				while (iterator.hasNext()) {
-					final TriggerCatchingElement element = iterator.next();
-					if (requiresInstanciatedCall(element)) {
-						final JMenu submenu = createInstanciatedElementSelection(element);
-						if (submenu != null) {
-							menu.add(submenu);
-						}
-					} else {
-						menu.add(createInstancelessElementSelection(element));
-					}
-				}
-				menu.show(this, 0, getHeight());
-			}
-		}
 	}
 
 }

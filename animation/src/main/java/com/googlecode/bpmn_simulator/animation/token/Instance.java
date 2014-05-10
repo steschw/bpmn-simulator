@@ -44,6 +44,10 @@ public final class Instance
 		this(null, color);
 	}
 
+	public int getColor() {
+		return color;
+	}
+
 	public void addTokensListener(final TokensListener listener) {
 		synchronized (tokensListeners) {
 			tokensListeners.add(listener);

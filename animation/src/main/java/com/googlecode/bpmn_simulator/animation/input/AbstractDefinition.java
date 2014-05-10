@@ -25,7 +25,7 @@ import java.util.Set;
 
 import com.googlecode.bpmn_simulator.animation.element.visual.Diagram;
 
-public abstract class AbstractDefinition<E extends Diagram>
+public abstract class AbstractDefinition<E extends Diagram<?>>
 		implements Definition<E> {
 
 	private final Set<DefinitionListener> definitionListeners

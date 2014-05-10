@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Stefan Schweitzer
+ * Copyright (C) 2014 Stefan Schweitzer
  *
  * This software was created by Stefan Schweitzer as a student's project at
  * Fachhochschule Kaiserslautern (University of Applied Sciences).
@@ -27,7 +27,10 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Collection;
 
 import javax.swing.JFileChooser;
@@ -41,8 +44,10 @@ import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-import com.googlecode.bpmn_simulator.bpmn.model.AbstractDIDefinition;
+import com.googlecode.bpmn_simulator.animation.element.visual.swing.AbstractSwingDiagram;
+import com.googlecode.bpmn_simulator.animation.input.Definition;
 import com.googlecode.bpmn_simulator.bpmn.swing.di.SwingBPMNDiagram;
+import com.googlecode.bpmn_simulator.bpmn.swing.di.SwingDIDefinition;
 import com.googlecode.bpmn_simulator.gui.dialogs.ExceptionDialog;
 import com.googlecode.bpmn_simulator.gui.dialogs.ImageExportChooser;
 import com.googlecode.bpmn_simulator.gui.instances.InstancesFrame;
@@ -68,7 +73,7 @@ public class BPMNSimulatorFrame
 
 	private final InstancesFrame frameInstances = new InstancesFrame();
 
-	private AbstractDIDefinition currentModel;
+	private Definition<SwingBPMNDiagram> currentDefinition;
 
 	private File currentFile;
 
@@ -93,7 +98,7 @@ public class BPMNSimulatorFrame
 	}
 
 	protected void showPropertiesDialog() {
-		final ModelPropertiesDialog dialog = new ModelPropertiesDialog(this, currentModel);
+		final ModelPropertiesDialog dialog = new ModelPropertiesDialog(this, currentDefinition);
 		dialog.showDialog();
 	}
 
@@ -360,12 +365,14 @@ public class BPMNSimulatorFrame
 
 	private void createModel() {
 		if (isFileOpen()) {
-			currentModel = new AbstractDIDefinition();
-			currentModel.addDefinitionListener(logFrame);
-			currentModel.load(currentFile);
-			frameInstances.setInstanceManager(currentModel.getInstanceManager());
-			toolbar.setModel(currentModel);
-			final Collection<SwingBPMNDiagram> diagrams = currentModel.getDiagrams();
+			currentDefinition = new SwingDIDefinition();
+			currentDefinition.addDefinitionListener(logFrame);
+			try (final InputStream input = new FileInputStream(currentFile)) {
+				currentDefinition.load(input);
+			} catch (FileNotFoundException e) {
+			} catch (IOException e) {
+			}
+			final Collection<SwingBPMNDiagram> diagrams = currentDefinition.getDiagrams();
 			if (diagrams.isEmpty()) {
 				JOptionPane.showMessageDialog(this,
 						Messages.getString("containsNoDiagrams"), //$NON-NLS-1$
@@ -373,7 +380,7 @@ public class BPMNSimulatorFrame
 						JOptionPane.INFORMATION_MESSAGE);
 			} else {
 				final ScrollDesktopPane desktop = getDesktop();
-				for (final SwingBPMNDiagram diagram : diagrams) {
+				for (final AbstractSwingDiagram diagram : diagrams) {
 					final DiagramFrame frame = new DiagramFrame(diagram);
 					desktop.add(frame);
 					frame.showFrame();
@@ -384,16 +391,13 @@ public class BPMNSimulatorFrame
 	}
 
 	private boolean isModelOpen() {
-		return currentModel != null;
+		return currentDefinition != null;
 	}
 
 	private void closeModel() {
 		if (isModelOpen()) {
 			getDesktop().removeAll();
-			toolbar.setModel(null);
-			frameInstances.setInstanceManager(null);
-			currentModel.close();
-			currentModel = null;
+			currentDefinition = null;
 			logFrame.clear();
 		}
 	}

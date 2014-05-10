@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Stefan Schweitzer
+ * Copyright (C) 2014 Stefan Schweitzer
  *
  * This software was created by Stefan Schweitzer as a student's project at
  * Fachhochschule Kaiserslautern (University of Applied Sciences).
@@ -31,13 +31,18 @@ import javax.swing.JToolBar;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import com.googlecode.bpmn_simulator.bpmn.model.AbstractBPMNDefinition;
+import com.googlecode.bpmn_simulator.animation.execution.AnimationListener;
+import com.googlecode.bpmn_simulator.animation.execution.Animator;
 import com.googlecode.bpmn_simulator.gui.log.LogFrame;
 
 @SuppressWarnings("serial")
 public class Toolbar
 		extends JToolBar
-		implements com.googlecode.bpmn_simulator.animation.execution.AnimationListener {
+		implements AnimationListener {
+
+	private final LogFrame logFrame;
+
+	private Animator animator;
 
 	private JButton buttonOpen;
 
@@ -52,10 +57,6 @@ public class Toolbar
 
 	private JButton buttonMessages;
 
-	private final LogFrame logFrame;
-
-	private AbstractBPMNDefinition model;
-
 	public Toolbar(final LogFrame logFrame) {
 		super();
 
@@ -64,24 +65,14 @@ public class Toolbar
 		create();
 	}
 
-	public void setModel(final AbstractBPMNDefinition model) {
-		AbstractAnimator animator = getAnimator();
-		if (animator != null) {
-			animator.removeAnimationListener(this);
+	public void setAnimator(final Animator animator) {
+		if (this.animator != null) {
+			this.animator.removeAnimationListener(this);
 		}
-		this.model = model;
-		buttonStart.setModel(model);
-		animator = getAnimator();
-		if (animator != null) {
-			animator.addAnimationListener(this);
-			animator.setSpeed(spinnerSpeed.getSpeedFactor());
+		this.animator = animator;
+		if (this.animator != null) {
+			this.animator.addAnimationListener(this);
 		}
-		updateControls();
-		updateMessages();
-	}
-
-	protected AbstractAnimator getAnimator() {
-		return (model == null) ? null : model.getAnimator();
 	}
 
 	public JButton getOpenButton() {
@@ -105,7 +96,7 @@ public class Toolbar
 		buttonReset.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(final ActionEvent event) {
-				getAnimator().reset();
+				animator.reset();
 			}
 		});
 		add(buttonReset);
@@ -116,7 +107,6 @@ public class Toolbar
 		buttonPauseContinue.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(final ActionEvent event) {
-				final AbstractAnimator animator = getAnimator();
 				if (animator.isPaused()) {
 					animator.play();
 				} else {
@@ -131,7 +121,7 @@ public class Toolbar
 		buttonStep.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(final ActionEvent event) {
-				getAnimator().step(3);
+				animator.step(3);
 			}
 		});
 		add(buttonStep);
@@ -146,7 +136,7 @@ public class Toolbar
 		spinnerSpeed.addChangeListener(new ChangeListener() {
 			@Override
 			public void stateChanged(final ChangeEvent event) {
-				getAnimator().setSpeed(((SpeedSpinner)event.getSource()).getSpeedFactor());
+				animator.setSpeed(((SpeedSpinner)event.getSource()).getSpeedFactor());
 			}
 		});
 		labelSpeed.setLabelFor(spinnerSpeed);
@@ -171,24 +161,17 @@ public class Toolbar
 	}
 
 	protected void updateMessages() {
-		if (model == null) {
-			buttonMessages.setVisible(false);
-			buttonMessages.setToolTipText(null);
+		buttonMessages.setVisible(logFrame.hasMessages());
+		if (logFrame.hasErrors()) {
+			buttonMessages.setIcon(Theme.ICON_MESSAGESERROR);
+			buttonMessages.setToolTipText(Messages.getString("Toolbar.hintErrors")); //$NON-NLS-1$
 		} else {
-			buttonMessages.setVisible(logFrame.hasMessages());
-			if (logFrame.hasErrors()) {
-				buttonMessages.setIcon(Theme.ICON_MESSAGESERROR);
-				buttonMessages.setToolTipText(Messages.getString("Toolbar.hintErrors")); //$NON-NLS-1$
-			} else {
-				buttonMessages.setIcon(Theme.ICON_MESSAGES);
-				buttonMessages.setToolTipText(Messages.getString("Toolbar.hintMessages")); //$NON-NLS-1$
-			}
+			buttonMessages.setIcon(Theme.ICON_MESSAGES);
+			buttonMessages.setToolTipText(Messages.getString("Toolbar.hintMessages")); //$NON-NLS-1$
 		}
 	}
 
 	protected void updateControls() {
-		final AbstractAnimator animator = getAnimator();
-
 		final boolean isPaused = (animator != null) && animator.isPaused();
 
 		buttonStart.setEnabled(animator != null);

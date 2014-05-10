@@ -20,10 +20,10 @@
  */
 package com.googlecode.bpmn_simulator.animation.element.visual;
 
-public interface Diagram {
+public interface Diagram<E> {
 
-	void add(VisualElement element);
+	String getName();
 
-	void add(Label label);
+	void add(E element);
 
 }

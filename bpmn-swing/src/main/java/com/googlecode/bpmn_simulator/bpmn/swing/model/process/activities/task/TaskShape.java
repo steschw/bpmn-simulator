@@ -18,15 +18,39 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.bpmn_simulator.bpmn.swing.di;
+package com.googlecode.bpmn_simulator.bpmn.swing.model.process.activities.task;
 
-import javax.swing.JComponent;
+import java.awt.Graphics2D;
 
-import com.googlecode.bpmn_simulator.bpmn.di.BPMNPlane;
+import com.googlecode.bpmn_simulator.bpmn.model.process.activities.tasks.Task;
+import com.googlecode.bpmn_simulator.bpmn.swing.di.AbstractBPMNShape;
 
 @SuppressWarnings("serial")
-public class SwingBPMNPlane
-		extends JComponent
-		implements BPMNPlane {
+public class TaskShape
+		extends AbstractBPMNShape<Task> {
+
+	private static final int ARC_SIZE = 10;
+
+	public TaskShape(final Task element) {
+		super(element);
+	}
+
+	@Override
+	protected void paintElementBackground(final Graphics2D g) {
+		super.paintElementBackground(g);
+		getPresentation().fillRoundRect(g, getInnerBoundsRelative(), ARC_SIZE);
+	}
+
+	@Override
+	protected void paintElementForeground(final Graphics2D g) {
+		super.paintElementForeground(g);
+		getPresentation().drawRoundRect(g, getInnerBoundsRelative(), ARC_SIZE);
+	}
+
+	@Override
+	protected void paintTokens(final Graphics2D g) {
+		// TODO Auto-generated method stub
+		
+	}
 
 }

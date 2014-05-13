@@ -20,11 +20,9 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.swing.model.process.activities;
 
-import java.awt.Color;
 import java.awt.Graphics2D;
 
 import com.googlecode.bpmn_simulator.animation.element.visual.Bounds;
-import com.googlecode.bpmn_simulator.animation.element.visual.swing.Presentation;
 import com.googlecode.bpmn_simulator.bpmn.model.process.activities.Process;
 import com.googlecode.bpmn_simulator.bpmn.swing.di.AbstractBPMNPlane;
 
@@ -39,10 +37,17 @@ public class ProcessPlane
 	}
 
 	@Override
-	protected void paintElement(final Graphics2D g, final Presentation presentation) {
-		g.setPaint(Color.RED);
+	protected void paintElementBackground(final Graphics2D g) {
+		super.paintElementBackground(g);
 		final Bounds bounds = new Bounds(0, 0, getWidth(), getHeight());
-		presentation.drawRoundRect(g, bounds.shrink(MARGIN), ARC_SIZE);
+		getPresentation().fillRoundRect(g, bounds.shrink(MARGIN), ARC_SIZE);
+	}
+
+	@Override
+	protected void paintElementForeground(final Graphics2D g) {
+		super.paintElementForeground(g);
+		final Bounds bounds = new Bounds(0, 0, getWidth(), getHeight());
+		getPresentation().drawRoundRect(g, bounds.shrink(MARGIN), ARC_SIZE);
 	}
 
 }

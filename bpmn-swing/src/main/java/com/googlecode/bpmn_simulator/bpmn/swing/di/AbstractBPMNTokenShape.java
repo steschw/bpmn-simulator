@@ -18,31 +18,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.bpmn_simulator.animation.element.visual.swing;
+package com.googlecode.bpmn_simulator.bpmn.swing.di;
 
 import com.googlecode.bpmn_simulator.animation.element.logical.LogicalElement;
-import com.googlecode.bpmn_simulator.animation.element.visual.Bounds;
-import com.googlecode.bpmn_simulator.animation.element.visual.VisualNodeElement;
 
 @SuppressWarnings("serial")
-public abstract class AbstractVisualNodeElement<E extends LogicalElement>
-		extends AbstractVisualElement<E>
-		implements VisualNodeElement {
+public abstract class AbstractBPMNTokenShape<E extends LogicalElement>
+		extends AbstractBPMNShape<E> {
 
-	private Bounds bounds;
-
-	public AbstractVisualNodeElement(final E element) {
+	public AbstractBPMNTokenShape(final E element) {
 		super(element);
-	}
-
-	@Override
-	public void setElementBounds(final Bounds bounds) {
-		this.bounds = bounds;
-		setInnerBounds(bounds);
-	}
-
-	protected Bounds getElementBounds() {
-		return bounds;
 	}
 
 }

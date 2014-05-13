@@ -48,12 +48,13 @@ public class SwingBPMNDiagram
 			remove(diagramPlane);
 		}
 		diagramPlane = plane;
+		setLayout(new PlaneLayout(diagramPlane));
 		add(diagramPlane);
 	}
 
 	@Override
 	public void add(final JComponent element) {
-		super.add((Component) element);
+		super.add((Component) element, 0);
 	}
 
 	@Override

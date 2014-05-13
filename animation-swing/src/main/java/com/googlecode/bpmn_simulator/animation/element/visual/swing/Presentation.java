@@ -113,8 +113,16 @@ public class Presentation {
 		g.drawRoundRect(bounds.getX(), bounds.getY(), bounds.getWidth(), bounds.getHeight(), arcSize, arcSize);
 	}
 
+	public void fillRoundRect(final Graphics g, final Bounds bounds, final int arcSize) {
+		g.fillRoundRect(bounds.getX(), bounds.getY(), bounds.getWidth(), bounds.getHeight(), arcSize, arcSize);
+	}
+
 	public void drawOval(final Graphics g, final Bounds bounds) {
 		g.drawOval(bounds.getX(), bounds.getY(), bounds.getWidth(), bounds.getHeight());
+	}
+
+	public void fillOval(final Graphics g, final Bounds bounds) {
+		g.fillOval(bounds.getX(), bounds.getY(), bounds.getWidth(), bounds.getHeight());
 	}
 
 	public void drawArc(final Graphics g, final Bounds bounds, final int startAngle, final int arcAngle) {

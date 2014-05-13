@@ -20,18 +20,37 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.swing.di;
 
+import java.awt.Graphics2D;
+
 import com.googlecode.bpmn_simulator.animation.element.visual.swing.AbstractVisual;
 import com.googlecode.bpmn_simulator.bpmn.di.BPMNPlane;
+import com.googlecode.bpmn_simulator.bpmn.model.core.foundation.BaseElement;
+import com.googlecode.bpmn_simulator.bpmn.swing.di.Appearance.ElementAppearance;
 
 @SuppressWarnings("serial")
-public abstract class AbstractBPMNPlane<E>
+public abstract class AbstractBPMNPlane<E extends BaseElement>
 		extends AbstractVisual
 		implements BPMNPlane {
+
+	private final E bpmnElement;
 
 	protected static final int MARGIN = 10;
 
 	public AbstractBPMNPlane(final E element) {
 		super();
+		bpmnElement = element;
+	}
+
+	@Override
+	protected void paintElementBackground(final Graphics2D g) {
+		final ElementAppearance appearance = Appearance.getDefault().getForElement(getClass());
+		g.setPaint(appearance.getBackground());
+	}
+
+	@Override
+	protected void paintElementForeground(final Graphics2D g) {
+		final ElementAppearance appearance = Appearance.getDefault().getForElement(getClass());
+		g.setPaint(appearance.getForeground());
 	}
 
 }

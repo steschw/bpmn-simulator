@@ -25,15 +25,39 @@ import com.googlecode.bpmn_simulator.bpmn.di.BPMNEdge;
 import com.googlecode.bpmn_simulator.bpmn.di.BPMNLabel;
 import com.googlecode.bpmn_simulator.bpmn.di.BPMNPlane;
 import com.googlecode.bpmn_simulator.bpmn.di.BPMNShape;
+import com.googlecode.bpmn_simulator.bpmn.model.core.common.events.EndEvent;
+import com.googlecode.bpmn_simulator.bpmn.model.core.common.events.Event;
+import com.googlecode.bpmn_simulator.bpmn.model.core.common.events.StartEvent;
 import com.googlecode.bpmn_simulator.bpmn.model.core.foundation.BaseElement;
 import com.googlecode.bpmn_simulator.bpmn.model.process.activities.Process;
+import com.googlecode.bpmn_simulator.bpmn.model.process.activities.tasks.Task;
+import com.googlecode.bpmn_simulator.bpmn.swing.model.core.common.events.EndEventShape;
+import com.googlecode.bpmn_simulator.bpmn.swing.model.core.common.events.EventShape;
+import com.googlecode.bpmn_simulator.bpmn.swing.model.core.common.events.StartEventShape;
 import com.googlecode.bpmn_simulator.bpmn.swing.model.process.activities.ProcessPlane;
+import com.googlecode.bpmn_simulator.bpmn.swing.model.process.activities.task.TaskShape;
 
 public class SwingDIDefinition
 		extends AbstractDIDefinition<SwingBPMNDiagram> {
 
 	@Override
 	protected BPMNShape createShapeFor(final SwingBPMNDiagram diagram, final BaseElement element) {
+		if (element instanceof Task) {
+			final TaskShape task = new TaskShape((Task) element);
+			diagram.add(task);
+			return task;
+		} else if (element instanceof Event) {
+			final EventShape<?> event;
+			if (element instanceof StartEvent) {
+				event = new StartEventShape((StartEvent) element);
+			} else if (element instanceof EndEvent) {
+				event = new EndEventShape((EndEvent) element);
+			} else {
+				event = new EventShape<Event>((Event) element);
+			}
+			diagram.add(event);
+			return event;
+		}
 		return null;
 	}
 
@@ -46,7 +70,7 @@ public class SwingDIDefinition
 	protected BPMNPlane createPlaneFor(final SwingBPMNDiagram diagram, final BaseElement element) {
 		if (element instanceof Process) {
 			final ProcessPlane plane = new ProcessPlane((Process) element);
-			diagram.add(plane);
+			diagram.setPlane(plane);
 			return plane;
 		}
 		return null;

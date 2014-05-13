@@ -38,9 +38,18 @@ public abstract class AbstractVisual
 	@Override
 	public void paint(final Graphics g) {
 		super.paint(g);
-		paintElement((Graphics2D) g, getPresentation());
+		final Graphics2D g2d = (Graphics2D) g;
+		getPresentation().init(g2d);
+		paintElement(g2d);
 	}
 
-	protected abstract void paintElement(Graphics2D g, Presentation presentation);
+	protected void paintElement(final Graphics2D g) {
+		paintElementBackground(g);
+		paintElementForeground(g);
+	}
+
+	protected abstract void paintElementBackground(Graphics2D g);
+
+	protected abstract void paintElementForeground(Graphics2D g);
 
 }

@@ -20,9 +20,12 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.swing.di;
 
+import java.awt.Graphics2D;
+
 import com.googlecode.bpmn_simulator.animation.element.logical.LogicalElement;
 import com.googlecode.bpmn_simulator.animation.element.visual.swing.AbstractVisualNodeElement;
 import com.googlecode.bpmn_simulator.bpmn.di.BPMNShape;
+import com.googlecode.bpmn_simulator.bpmn.swing.di.Appearance.ElementAppearance;
 
 @SuppressWarnings("serial")
 public abstract class AbstractBPMNShape<E extends LogicalElement>
@@ -55,5 +58,25 @@ public abstract class AbstractBPMNShape<E extends LogicalElement>
 	public boolean isExpanded() {
 		return expanded;
 	}
+
+	@Override
+	protected void paintElement(final Graphics2D g) {
+		super.paintElement(g);
+		paintTokens(g);
+	}
+
+	@Override
+	protected void paintElementBackground(final Graphics2D g) {
+		final ElementAppearance appearance = Appearance.getDefault().getForElement(getClass());
+		g.setPaint(appearance.getBackground());
+	}
+
+	@Override
+	protected void paintElementForeground(final Graphics2D g) {
+		final ElementAppearance appearance = Appearance.getDefault().getForElement(getClass());
+		g.setPaint(appearance.getForeground());
+	}
+
+	protected abstract void paintTokens(Graphics2D g);
 
 }

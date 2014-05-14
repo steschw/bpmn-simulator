@@ -23,11 +23,11 @@ package com.googlecode.bpmn_simulator.bpmn.swing.model.process.activities.task;
 import java.awt.Graphics2D;
 
 import com.googlecode.bpmn_simulator.bpmn.model.process.activities.tasks.Task;
-import com.googlecode.bpmn_simulator.bpmn.swing.di.AbstractBPMNShape;
+import com.googlecode.bpmn_simulator.bpmn.swing.di.AbstractBPMNTokenShape;
 
 @SuppressWarnings("serial")
 public class TaskShape
-		extends AbstractBPMNShape<Task> {
+		extends AbstractBPMNTokenShape<Task> {
 
 	private static final int ARC_SIZE = 10;
 

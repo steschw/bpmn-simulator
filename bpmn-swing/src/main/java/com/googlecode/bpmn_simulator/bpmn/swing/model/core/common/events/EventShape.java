@@ -3,11 +3,11 @@ package com.googlecode.bpmn_simulator.bpmn.swing.model.core.common.events;
 import java.awt.Graphics2D;
 
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.events.Event;
-import com.googlecode.bpmn_simulator.bpmn.swing.di.AbstractBPMNShape;
+import com.googlecode.bpmn_simulator.bpmn.swing.di.AbstractBPMNTokenShape;
 
 @SuppressWarnings("serial")
 public class EventShape<E extends Event>
-		extends AbstractBPMNShape<E> {
+		extends AbstractBPMNTokenShape<E> {
 
 	public EventShape(final E element) {
 		super(element);

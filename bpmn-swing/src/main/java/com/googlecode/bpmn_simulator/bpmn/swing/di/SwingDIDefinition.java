@@ -33,12 +33,15 @@ import com.googlecode.bpmn_simulator.bpmn.di.BPMNLabel;
 import com.googlecode.bpmn_simulator.bpmn.di.BPMNPlane;
 import com.googlecode.bpmn_simulator.bpmn.di.BPMNShape;
 import com.googlecode.bpmn_simulator.bpmn.model.NamedElement;
+import com.googlecode.bpmn_simulator.bpmn.model.TextElement;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.SequenceFlow;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.artifacts.Association;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.artifacts.Group;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.artifacts.TextAnnotation;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.events.EndEvent;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.events.StartEvent;
+import com.googlecode.bpmn_simulator.bpmn.model.core.common.gateways.ExclusiveGateway;
+import com.googlecode.bpmn_simulator.bpmn.model.core.common.gateways.InclusiveGateway;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.gateways.ParallelGateway;
 import com.googlecode.bpmn_simulator.bpmn.model.core.foundation.BaseElement;
 import com.googlecode.bpmn_simulator.bpmn.model.process.activities.Process;
@@ -49,6 +52,8 @@ import com.googlecode.bpmn_simulator.bpmn.swing.model.core.common.artifacts.Grou
 import com.googlecode.bpmn_simulator.bpmn.swing.model.core.common.artifacts.TextAnnotationShape;
 import com.googlecode.bpmn_simulator.bpmn.swing.model.core.common.events.EndEventShape;
 import com.googlecode.bpmn_simulator.bpmn.swing.model.core.common.events.StartEventShape;
+import com.googlecode.bpmn_simulator.bpmn.swing.model.core.common.gateways.ExclusiveGatewayShape;
+import com.googlecode.bpmn_simulator.bpmn.swing.model.core.common.gateways.InclusiveGatewayShape;
 import com.googlecode.bpmn_simulator.bpmn.swing.model.core.common.gateways.ParallelGatewayShape;
 import com.googlecode.bpmn_simulator.bpmn.swing.model.process.activities.ProcessPlane;
 import com.googlecode.bpmn_simulator.bpmn.swing.model.process.activities.task.TaskShape;
@@ -77,6 +82,8 @@ public class SwingDIDefinition
 		SHAPE_MAPPERS.put(EndEvent.class, EndEventShape.class);
 		// Gateways
 		SHAPE_MAPPERS.put(ParallelGateway.class, ParallelGatewayShape.class);
+		SHAPE_MAPPERS.put(ExclusiveGateway.class, ExclusiveGatewayShape.class);
+		SHAPE_MAPPERS.put(InclusiveGateway.class, InclusiveGatewayShape.class);
 		// Process
 		SHAPE_MAPPERS.put(Task.class, TaskShape.class);
 
@@ -142,7 +149,9 @@ public class SwingDIDefinition
 	@Override
 	protected BPMNLabel createLabelFor(final SwingBPMNDiagram diagram, final BaseElement element) {
 		final String text;
-		if (element instanceof NamedElement) {
+		if (element instanceof TextElement) {
+			text = ((TextElement) element).getText(); ///XXX: textFormat
+		} else if (element instanceof NamedElement) {
 			text = ((NamedElement) element).getName();
 		} else {
 			text = element.getId();

@@ -83,9 +83,19 @@ public class Bounds {
 		return new Point((int) getCenterX(), (int) getCenterY());
 	}
 
+	public Bounds enlarge(final int lr, final int tb) {
+		return new Bounds(getX() - lr, getY() - tb,
+				getWidth() + (2 * lr), getHeight() + (2 * tb));
+	}
+
 	public Bounds enlarge(final int n) {
-		return new Bounds(getX() - n, getY() - n,
-				getWidth() + (2 * n), getHeight() + (2 * n));
+		return enlarge(n, n);
+	}
+
+	public Bounds scaleSize(final float factor) {
+		final int lr = Math.round(((getWidth() * factor) - getWidth()) / 2.f);
+		final int tb = Math.round(((getHeight() * factor) - getHeight()) / 2.f);
+		return enlarge(lr, tb);
 	}
 
 	public Bounds shrink(final int n) {

@@ -18,37 +18,35 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.bpmn_simulator.bpmn.swing.di;
+package com.googlecode.bpmn_simulator.bpmn.swing.model.core.common.gateways;
 
+import java.awt.BasicStroke;
+import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Stroke;
 
-import com.googlecode.bpmn_simulator.animation.element.logical.LogicalElement;
-import com.googlecode.bpmn_simulator.animation.token.Token;
-import com.googlecode.bpmn_simulator.animation.token.TokenFlowListener;
+import com.googlecode.bpmn_simulator.bpmn.model.core.common.gateways.InclusiveGateway;
+import com.googlecode.bpmn_simulator.bpmn.swing.di.Appearance;
 
 @SuppressWarnings("serial")
-public abstract class AbstractBPMNTokenEdge<E extends LogicalElement>
-		extends AbstractBPMNEdge<E>
-		implements TokenFlowListener {
+public class InclusiveGatewayShape
+		extends AbstractGatewayShape<InclusiveGateway> {
 
-	public AbstractBPMNTokenEdge(final E element) {
+	private static final Stroke SYMBOL_STROKE = new BasicStroke(2.f);
+
+	static {
+		Appearance.getDefault().getForElement(InclusiveGatewayShape.class).setBackground(new Color(0xFFCEA2));
+	}
+
+	public InclusiveGatewayShape(final InclusiveGateway element) {
 		super(element);
-		element.addTokenFlowListener(this);
 	}
 
 	@Override
-	public void tokenChanged(final Token token) {
-		repaint();
-	}
-
-	@Override
-	protected void paintElement(final Graphics2D g) {
-		super.paintElement(g);
-		paintTokens(g);
-	}
-
-	protected void paintTokens(final Graphics2D g) {
-		// TODO Auto-generated method stub
+	protected void paintElementForeground(final Graphics2D g) {
+		super.paintElementForeground(g);
+		g.setStroke(SYMBOL_STROKE);
+		getPresentation().drawOval(g, getInnerBoundsRelative().scaleSize(0.5f));
 	}
 
 }

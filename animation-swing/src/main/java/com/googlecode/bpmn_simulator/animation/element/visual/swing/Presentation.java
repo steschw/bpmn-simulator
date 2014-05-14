@@ -43,7 +43,7 @@ public class Presentation {
 	private static final RenderingHints QUALITY = new RenderingHints(null);
 	private static final RenderingHints SPEED = new RenderingHints(null);
 
-	private static final double ARROW_ANGLE = 30.;
+	private static final double ARROW_ANGLE = 10.;
 	private static final int ARROW_LENGTH = 10;
 
 	static {
@@ -96,13 +96,14 @@ public class Presentation {
 		}
 	}
 
-	public void drawArrowEnd(final Graphics g, final Waypoints points) {
+	public void drawArrowEnd(final Graphics2D g, final Waypoints points) {
 		if (points.isValid()) {
 			drawArrowEnd(g, points.nextToLast(), points.last());
 		}
 	}
 
-	public void drawArrowEnd(final Graphics g, final Waypoint from, final Waypoint to) {
+	public void drawArrowEnd(final Graphics2D g, final Waypoint from, final Waypoint to) {
+		g.fill(createArrowPath(from, to, ARROW_ANGLE, ARROW_LENGTH));
 	}
 
 	public void drawRect(final Graphics g, final Bounds bounds) {
@@ -189,7 +190,7 @@ public class Presentation {
 			final Waypoint from, final Waypoint to,
 			final double d, final double length) {
 		final Path2D.Float path = new Path2D.Float();
-		final double angle = to.angleTo(from);
+		final double angle = from.angleTo(to);
 		final Point point1 = GeometryUtils.polarToCartesian(to, length, angle - d);
 		path.moveTo(point1.getX(), point1.getY());
 		path.lineTo(to.getX(), to.getY());

@@ -65,16 +65,16 @@ public abstract class AbstractDIDefinition<DIAGRAM extends BPMNDiagram<?>>
 	}
 
 	protected Bounds getBoundsAttribute(final Node node) {
-		final int x = (int) getAttributeFloat(node, "x"); //$NON-NLS-1$
-		final int y = (int) getAttributeFloat(node, "y"); //$NON-NLS-1$
-		final int width = (int) getAttributeFloat(node, "width"); //$NON-NLS-1$
-		final int height = (int) getAttributeFloat(node, "height"); //$NON-NLS-1$
+		final int x = Math.round(getAttributeFloat(node, "x")); //$NON-NLS-1$
+		final int y = Math.round(getAttributeFloat(node, "y")); //$NON-NLS-1$
+		final int width = (int) Math.floor(getAttributeFloat(node, "width")); //$NON-NLS-1$
+		final int height = (int) Math.floor(getAttributeFloat(node, "height")); //$NON-NLS-1$
 		return new Bounds(x, y, width, height);
 	}
 
 	protected Waypoint getPointAttribute(final Node node) {
-		final int x = (int) getAttributeFloat(node, "x"); //$NON-NLS-1$
-		final int y = (int) getAttributeFloat(node, "y"); //$NON-NLS-1$
+		final int x = Math.round(getAttributeFloat(node, "x")); //$NON-NLS-1$
+		final int y = Math.round(getAttributeFloat(node, "y")); //$NON-NLS-1$
 		return new Waypoint(x, y);
 	}
 

@@ -9,7 +9,7 @@ import com.googlecode.bpmn_simulator.bpmn.swing.di.Appearance;
 
 @SuppressWarnings("serial")
 public class EndEventShape
-		extends EventShape<EndEvent> {
+		extends AbstractEventShape<EndEvent> {
 
 	static {
 		Appearance.getDefault().getForElement(EndEventShape.class).setBackground(new Color(0xFFA4A4));

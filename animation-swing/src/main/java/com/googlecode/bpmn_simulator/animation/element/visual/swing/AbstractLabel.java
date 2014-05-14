@@ -32,10 +32,12 @@ public abstract class AbstractLabel
 
 	public AbstractLabel(final String text) {
 		super(text);
+		setFont(getFont().deriveFont(10.f));
 	}
 
 	@Override
 	public void setBounds(Bounds bounds) {
+		setBounds(bounds.getMinX(), bounds.getMinY(), bounds.getWidth(), bounds.getHeight());
 	}
 
 }

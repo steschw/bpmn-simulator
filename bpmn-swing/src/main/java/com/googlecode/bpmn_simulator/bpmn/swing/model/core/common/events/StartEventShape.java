@@ -7,7 +7,7 @@ import com.googlecode.bpmn_simulator.bpmn.swing.di.Appearance;
 
 @SuppressWarnings("serial")
 public class StartEventShape
-		extends EventShape<StartEvent> {
+		extends AbstractEventShape<StartEvent> {
 
 	static {
 		Appearance.getDefault().getForElement(StartEventShape.class).setBackground(new Color(0xA4F0B7));

@@ -6,10 +6,10 @@ import com.googlecode.bpmn_simulator.bpmn.model.core.common.events.Event;
 import com.googlecode.bpmn_simulator.bpmn.swing.di.AbstractBPMNTokenShape;
 
 @SuppressWarnings("serial")
-class EventShape<E extends Event>
+abstract class AbstractEventShape<E extends Event>
 		extends AbstractBPMNTokenShape<E> {
 
-	public EventShape(final E element) {
+	public AbstractEventShape(final E element) {
 		super(element);
 	}
 

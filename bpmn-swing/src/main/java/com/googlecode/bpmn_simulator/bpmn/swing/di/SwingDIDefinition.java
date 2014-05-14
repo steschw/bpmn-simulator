@@ -32,6 +32,7 @@ import com.googlecode.bpmn_simulator.bpmn.di.BPMNEdge;
 import com.googlecode.bpmn_simulator.bpmn.di.BPMNLabel;
 import com.googlecode.bpmn_simulator.bpmn.di.BPMNPlane;
 import com.googlecode.bpmn_simulator.bpmn.di.BPMNShape;
+import com.googlecode.bpmn_simulator.bpmn.model.NamedElement;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.SequenceFlow;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.artifacts.Association;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.artifacts.Group;
@@ -140,7 +141,14 @@ public class SwingDIDefinition
 
 	@Override
 	protected BPMNLabel createLabelFor(final SwingBPMNDiagram diagram, final BaseElement element) {
-		final SwingBPMNLabel label = new SwingBPMNLabel(element.getId());
+		final String text;
+		if (element instanceof NamedElement) {
+			text = ((NamedElement) element).getName();
+		} else {
+			text = element.getId();
+		}
+		final SwingBPMNLabel label = new SwingBPMNLabel(text);
+		diagram.add(label);
 		return label;
 	}
 

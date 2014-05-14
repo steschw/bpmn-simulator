@@ -20,57 +20,119 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.swing.di;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.swing.JComponent;
+
 import com.googlecode.bpmn_simulator.bpmn.di.AbstractDIDefinition;
 import com.googlecode.bpmn_simulator.bpmn.di.BPMNEdge;
 import com.googlecode.bpmn_simulator.bpmn.di.BPMNLabel;
 import com.googlecode.bpmn_simulator.bpmn.di.BPMNPlane;
 import com.googlecode.bpmn_simulator.bpmn.di.BPMNShape;
+import com.googlecode.bpmn_simulator.bpmn.model.core.common.SequenceFlow;
+import com.googlecode.bpmn_simulator.bpmn.model.core.common.artifacts.Association;
+import com.googlecode.bpmn_simulator.bpmn.model.core.common.artifacts.Group;
+import com.googlecode.bpmn_simulator.bpmn.model.core.common.artifacts.TextAnnotation;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.events.EndEvent;
-import com.googlecode.bpmn_simulator.bpmn.model.core.common.events.Event;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.events.StartEvent;
+import com.googlecode.bpmn_simulator.bpmn.model.core.common.gateways.ParallelGateway;
 import com.googlecode.bpmn_simulator.bpmn.model.core.foundation.BaseElement;
 import com.googlecode.bpmn_simulator.bpmn.model.process.activities.Process;
 import com.googlecode.bpmn_simulator.bpmn.model.process.activities.tasks.Task;
+import com.googlecode.bpmn_simulator.bpmn.swing.model.core.common.SequenceFlowEdge;
+import com.googlecode.bpmn_simulator.bpmn.swing.model.core.common.artifacts.AssociationEdge;
+import com.googlecode.bpmn_simulator.bpmn.swing.model.core.common.artifacts.GroupShape;
+import com.googlecode.bpmn_simulator.bpmn.swing.model.core.common.artifacts.TextAnnotationShape;
 import com.googlecode.bpmn_simulator.bpmn.swing.model.core.common.events.EndEventShape;
-import com.googlecode.bpmn_simulator.bpmn.swing.model.core.common.events.EventShape;
 import com.googlecode.bpmn_simulator.bpmn.swing.model.core.common.events.StartEventShape;
+import com.googlecode.bpmn_simulator.bpmn.swing.model.core.common.gateways.ParallelGatewayShape;
 import com.googlecode.bpmn_simulator.bpmn.swing.model.process.activities.ProcessPlane;
 import com.googlecode.bpmn_simulator.bpmn.swing.model.process.activities.task.TaskShape;
 
 public class SwingDIDefinition
 		extends AbstractDIDefinition<SwingBPMNDiagram> {
 
+	private static final Map<Class<? extends BaseElement>, Class<? extends BPMNEdge>> EDGE_MAPPERS
+			= new HashMap<Class<? extends BaseElement>, Class<? extends BPMNEdge>>();
+
+	private static final Map<Class<? extends BaseElement>, Class<? extends BPMNShape>> SHAPE_MAPPERS
+			= new HashMap<Class<? extends BaseElement>, Class<? extends BPMNShape>>();
+
+	private static final Map<Class<? extends BaseElement>, Class<? extends BPMNPlane>> PLANE_MAPPERS
+			= new HashMap<Class<? extends BaseElement>, Class<? extends BPMNPlane>>();
+
+	static {
+		EDGE_MAPPERS.put(Association.class, AssociationEdge.class);
+		EDGE_MAPPERS.put(SequenceFlow.class, SequenceFlowEdge.class);
+
+		// Artifacts
+		SHAPE_MAPPERS.put(TextAnnotation.class, TextAnnotationShape.class);
+		SHAPE_MAPPERS.put(Group.class, GroupShape.class);
+		// Events
+		SHAPE_MAPPERS.put(StartEvent.class, StartEventShape.class);
+		SHAPE_MAPPERS.put(EndEvent.class, EndEventShape.class);
+		// Gateways
+		SHAPE_MAPPERS.put(ParallelGateway.class, ParallelGatewayShape.class);
+		// Process
+		SHAPE_MAPPERS.put(Task.class, TaskShape.class);
+
+		PLANE_MAPPERS.put(Process.class, ProcessPlane.class);
+	};
+
+	private static <E> E createFor(
+			Map<Class<? extends BaseElement>, Class<? extends E>> map,
+			final SwingBPMNDiagram diagram,
+			final BaseElement element) {
+		final Class<? extends E> edgeClass = map.get(element.getClass());
+		if (edgeClass != null) {
+			try {
+				final Constructor<? extends E> constructor = edgeClass.getConstructor(element.getClass());
+				return constructor.newInstance(element);
+			} catch (NoSuchMethodException e) {
+				e.printStackTrace();
+			} catch (SecurityException e) {
+				e.printStackTrace();
+			} catch (InstantiationException e) {
+				e.printStackTrace();
+			} catch (IllegalAccessException e) {
+				e.printStackTrace();
+			} catch (IllegalArgumentException e) {
+				e.printStackTrace();
+			} catch (InvocationTargetException e) {
+				e.printStackTrace();
+			}
+		}
+		return null;
+	}
+
 	@Override
 	protected BPMNShape createShapeFor(final SwingBPMNDiagram diagram, final BaseElement element) {
-		if (element instanceof Task) {
-			final TaskShape task = new TaskShape((Task) element);
-			diagram.add(task);
-			return task;
-		} else if (element instanceof Event) {
-			final EventShape<?> event;
-			if (element instanceof StartEvent) {
-				event = new StartEventShape((StartEvent) element);
-			} else if (element instanceof EndEvent) {
-				event = new EndEventShape((EndEvent) element);
-			} else {
-				event = new EventShape<Event>((Event) element);
-			}
-			diagram.add(event);
-			return event;
+		final BPMNShape shape = createFor(SHAPE_MAPPERS, diagram, element);
+		if (shape instanceof JComponent) {
+			diagram.add((JComponent) shape);
+			return shape;
 		}
 		return null;
 	}
 
 	@Override
 	protected BPMNEdge createEdgeFor(final SwingBPMNDiagram diagram, final BaseElement element) {
+		final BPMNEdge edge = createFor(EDGE_MAPPERS, diagram, element);
+		if (edge instanceof JComponent) {
+			diagram.add((JComponent) edge);
+			return edge;
+		}
 		return null;
 	}
 
 	@Override
 	protected BPMNPlane createPlaneFor(final SwingBPMNDiagram diagram, final BaseElement element) {
-		if (element instanceof Process) {
-			final ProcessPlane plane = new ProcessPlane((Process) element);
-			diagram.setPlane(plane);
+		final BPMNPlane plane = createFor(PLANE_MAPPERS, diagram, element);
+		if (plane instanceof JComponent) {
+			diagram.setPlane((JComponent) plane);
 			return plane;
 		}
 		return null;

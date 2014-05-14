@@ -43,6 +43,19 @@ public abstract class AbstractBPMNEdge<E>
 	protected void paintElementForeground(final Graphics2D g) {
 		final ElementAppearance appearance = Appearance.getDefault().getForElement(getClass());
 		g.setPaint(appearance.getForeground());
+		paintElementLine(g);
+		paintElementStart(g);
+		paintElementEnd(g);
+	}
+
+	protected void paintElementStart(final Graphics2D g) {
+	}
+
+	protected void paintElementLine(final Graphics2D g) {
+		getPresentation().drawLine(g, getWaypointsRelative());
+	}
+
+	protected void paintElementEnd(final Graphics2D g) {
 	}
 
 }

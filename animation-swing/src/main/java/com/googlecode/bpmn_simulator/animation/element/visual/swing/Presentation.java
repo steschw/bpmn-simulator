@@ -79,7 +79,7 @@ public class Presentation {
 		g.drawImage(image, bounds.getX(), bounds.getY(), bounds.getWidth(), bounds.getHeight(), null);
 	}
 
-	public void drawLine(final Graphics g, final Waypoint from, final Waypoint to) {
+	public void drawLine(final Graphics g, final Point from, final Point to) {
 		g.drawLine(from.getX(), from.getY(), to.getX(), to.getY());
 	}
 
@@ -109,6 +109,10 @@ public class Presentation {
 		g.drawRect(bounds.getX(), bounds.getY(), bounds.getWidth(), bounds.getHeight());
 	}
 
+	public void fillRect(final Graphics g, final Bounds bounds) {
+		g.fillRect(bounds.getX(), bounds.getY(), bounds.getWidth(), bounds.getHeight());
+	}
+
 	public void drawRoundRect(final Graphics g, final Bounds bounds, final int arcSize) {
 		g.drawRoundRect(bounds.getX(), bounds.getY(), bounds.getWidth(), bounds.getHeight(), arcSize, arcSize);
 	}
@@ -127,6 +131,10 @@ public class Presentation {
 
 	public void drawArc(final Graphics g, final Bounds bounds, final int startAngle, final int arcAngle) {
 		g.drawArc(bounds.getX(), bounds.getY(), bounds.getWidth(), bounds.getHeight(), startAngle, arcAngle);
+	}
+
+	public void fillDiamond(final Graphics2D g, final Bounds bounds) {
+		g.fill(createDiamond(bounds));
 	}
 
 	public void drawDiamond(final Graphics2D g, final Bounds bounds) {

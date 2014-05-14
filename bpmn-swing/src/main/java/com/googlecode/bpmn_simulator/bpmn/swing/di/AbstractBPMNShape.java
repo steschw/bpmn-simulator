@@ -59,12 +59,6 @@ public abstract class AbstractBPMNShape<E>
 	}
 
 	@Override
-	protected void paintElement(final Graphics2D g) {
-		super.paintElement(g);
-		paintTokens(g);
-	}
-
-	@Override
 	protected void paintElementBackground(final Graphics2D g) {
 		final ElementAppearance appearance = Appearance.getDefault().getForElement(getClass());
 		g.setPaint(appearance.getBackground());
@@ -75,7 +69,5 @@ public abstract class AbstractBPMNShape<E>
 		final ElementAppearance appearance = Appearance.getDefault().getForElement(getClass());
 		g.setPaint(appearance.getForeground());
 	}
-
-	protected abstract void paintTokens(Graphics2D g);
 
 }

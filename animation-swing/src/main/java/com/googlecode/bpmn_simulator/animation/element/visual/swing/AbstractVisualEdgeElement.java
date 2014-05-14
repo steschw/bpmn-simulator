@@ -32,7 +32,7 @@ public abstract class AbstractVisualEdgeElement<E>
 		extends AbstractVisualElement<E>
 		implements VisualEdgeElement {
 
-	private Waypoints waypoints;
+	private Waypoints waypoints = new Waypoints();
 
 	public AbstractVisualEdgeElement(final E element) {
 		super(element);
@@ -41,11 +41,20 @@ public abstract class AbstractVisualEdgeElement<E>
 	@Override
 	public void addElementWaypoint(final Waypoint waypoint) {
 		waypoints.add(waypoint);
+		setInnerBounds(waypoints.getBounds());
 	}
 
-	protected Point pointToRelative(final Point point) {
+	protected Waypoint relativeWaypoint(final Point point) {
 		final java.awt.Point p = SwingUtilities.convertPoint(getParent(), point.getX(), point.getY(), this);
-		return new Point(p.x, p.y);
+		return new Waypoint(p.x, p.y);
+	}
+
+	protected Waypoints getWaypointsRelative() {
+		final Waypoints relativeWaypoints = new Waypoints();
+		for (final Waypoint waypoint : waypoints) {
+			relativeWaypoints.add(relativeWaypoint(waypoint));
+		}
+		return relativeWaypoints;
 	}
 
 }

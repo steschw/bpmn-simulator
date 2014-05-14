@@ -20,16 +20,20 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.swing.model.process.activities.task;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
 
 import com.googlecode.bpmn_simulator.bpmn.model.process.activities.tasks.Task;
 import com.googlecode.bpmn_simulator.bpmn.swing.di.AbstractBPMNTokenShape;
+import com.googlecode.bpmn_simulator.bpmn.swing.di.Appearance;
 
 @SuppressWarnings("serial")
 public class TaskShape
 		extends AbstractBPMNTokenShape<Task> {
 
-	private static final int ARC_SIZE = 10;
+	static {
+		Appearance.getDefault().getForElement(TaskShape.class).setBackground(new Color(0xFFFFB5));
+	}
 
 	public TaskShape(final Task element) {
 		super(element);
@@ -38,19 +42,18 @@ public class TaskShape
 	@Override
 	protected void paintElementBackground(final Graphics2D g) {
 		super.paintElementBackground(g);
-		getPresentation().fillRoundRect(g, getInnerBoundsRelative(), ARC_SIZE);
+		getPresentation().fillRoundRect(g, getInnerBoundsRelative(), Appearance.getDefault().getArcSize());
 	}
 
 	@Override
 	protected void paintElementForeground(final Graphics2D g) {
 		super.paintElementForeground(g);
-		getPresentation().drawRoundRect(g, getInnerBoundsRelative(), ARC_SIZE);
+		getPresentation().drawRoundRect(g, getInnerBoundsRelative(), Appearance.getDefault().getArcSize());
 	}
 
 	@Override
 	protected void paintTokens(final Graphics2D g) {
 		// TODO Auto-generated method stub
-		
 	}
 
 }

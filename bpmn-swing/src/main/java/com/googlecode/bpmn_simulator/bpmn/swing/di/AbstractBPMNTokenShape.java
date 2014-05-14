@@ -20,6 +20,8 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.swing.di;
 
+import java.awt.Graphics2D;
+
 import com.googlecode.bpmn_simulator.animation.element.logical.LogicalElement;
 import com.googlecode.bpmn_simulator.animation.token.Token;
 import com.googlecode.bpmn_simulator.animation.token.TokenFlowListener;
@@ -38,5 +40,13 @@ public abstract class AbstractBPMNTokenShape<E extends LogicalElement>
 	public void tokenChanged(final Token token) {
 		repaint();
 	}
+
+	@Override
+	protected void paintElement(final Graphics2D g) {
+		super.paintElement(g);
+		paintTokens(g);
+	}
+
+	protected abstract void paintTokens(Graphics2D g);
 
 }

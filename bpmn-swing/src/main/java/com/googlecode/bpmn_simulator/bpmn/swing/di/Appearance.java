@@ -77,6 +77,8 @@ public class Appearance {
 			5.f,
 			};
 
+	private static final int ARC_SIZE = 20;
+
 	private static Appearance instance;
 
 	private final Map<String, Icon> icons = new IdentityHashMap<String, Icon>();
@@ -160,6 +162,10 @@ public class Appearance {
 			elements.put(elementClass, elementAppearance);
 		}
 		return elementAppearance;
+	}
+
+	public int getArcSize() {
+		return ARC_SIZE;
 	}
 
 	public void setShowExclusiveGatewaySymbol(final boolean show) {

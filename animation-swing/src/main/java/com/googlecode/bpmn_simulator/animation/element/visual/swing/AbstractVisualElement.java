@@ -20,11 +20,9 @@
  */
 package com.googlecode.bpmn_simulator.animation.element.visual.swing;
 
-import com.googlecode.bpmn_simulator.animation.element.logical.LogicalElement;
 import com.googlecode.bpmn_simulator.animation.element.visual.Bounds;
 import com.googlecode.bpmn_simulator.animation.element.visual.Label;
 import com.googlecode.bpmn_simulator.animation.element.visual.VisualElement;
-import com.googlecode.bpmn_simulator.animation.token.Token;
 
 /**
  * +-------------------------------------+
@@ -36,7 +34,7 @@ import com.googlecode.bpmn_simulator.animation.token.Token;
  * +-------------------------------------+
  */
 @SuppressWarnings("serial")
-abstract class AbstractVisualElement<E extends LogicalElement>
+abstract class AbstractVisualElement<E>
 		extends AbstractVisual
 		implements VisualElement {
 
@@ -49,7 +47,6 @@ abstract class AbstractVisualElement<E extends LogicalElement>
 	public AbstractVisualElement(final E element) {
 		super();
 		logicalElement = element;
-		logicalElement.addTokenFlowListener(this);
 	}
 
 	public E getLogicalElement() {
@@ -65,20 +62,21 @@ abstract class AbstractVisualElement<E extends LogicalElement>
 		return label;
 	}
 
+	/*
+	 * sets the inner bounds of this element absolute to its parent component
+	 */
 	protected void setInnerBounds(final Bounds bounds) {
 		final Bounds outerBounds = bounds.enlarge(MARGIN);
 		setBounds(outerBounds.getX(), outerBounds.getY(),
 				outerBounds.getWidth(), outerBounds.getHeight());
 	}
 
+	/*
+	 * gets the inner bounds of this element relative to it self
+	 */
 	protected Bounds getInnerBoundsRelative() {
 		return new Bounds(MARGIN, MARGIN,
 				getWidth() - (MARGIN * 2), getHeight() - (MARGIN * 2));
-	}
-
-	@Override
-	public void tokenChanged(final Token token) {
-		repaint();
 	}
 
 }

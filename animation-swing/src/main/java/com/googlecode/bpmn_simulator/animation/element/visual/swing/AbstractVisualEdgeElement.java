@@ -22,14 +22,13 @@ package com.googlecode.bpmn_simulator.animation.element.visual.swing;
 
 import javax.swing.SwingUtilities;
 
-import com.googlecode.bpmn_simulator.animation.element.logical.LogicalEdgeElement;
 import com.googlecode.bpmn_simulator.animation.element.visual.Point;
 import com.googlecode.bpmn_simulator.animation.element.visual.VisualEdgeElement;
 import com.googlecode.bpmn_simulator.animation.element.visual.Waypoint;
 import com.googlecode.bpmn_simulator.animation.element.visual.Waypoints;
 
 @SuppressWarnings("serial")
-public abstract class AbstractVisualEdgeElement<E extends LogicalEdgeElement>
+public abstract class AbstractVisualEdgeElement<E>
 		extends AbstractVisualElement<E>
 		implements VisualEdgeElement {
 

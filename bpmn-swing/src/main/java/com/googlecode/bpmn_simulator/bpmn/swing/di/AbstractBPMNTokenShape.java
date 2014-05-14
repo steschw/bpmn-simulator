@@ -21,13 +21,22 @@
 package com.googlecode.bpmn_simulator.bpmn.swing.di;
 
 import com.googlecode.bpmn_simulator.animation.element.logical.LogicalElement;
+import com.googlecode.bpmn_simulator.animation.token.Token;
+import com.googlecode.bpmn_simulator.animation.token.TokenFlowListener;
 
 @SuppressWarnings("serial")
 public abstract class AbstractBPMNTokenShape<E extends LogicalElement>
-		extends AbstractBPMNShape<E> {
+		extends AbstractBPMNShape<E>
+		implements TokenFlowListener {
 
 	public AbstractBPMNTokenShape(final E element) {
 		super(element);
+		element.addTokenFlowListener(this);
+	}
+
+	@Override
+	public void tokenChanged(final Token token) {
+		repaint();
 	}
 
 }

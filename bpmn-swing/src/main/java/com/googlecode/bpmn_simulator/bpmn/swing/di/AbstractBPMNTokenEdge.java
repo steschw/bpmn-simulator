@@ -18,30 +18,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.bpmn_simulator.animation.element.visual.swing;
+package com.googlecode.bpmn_simulator.bpmn.swing.di;
 
-import com.googlecode.bpmn_simulator.animation.element.visual.Bounds;
-import com.googlecode.bpmn_simulator.animation.element.visual.VisualNodeElement;
+import com.googlecode.bpmn_simulator.animation.element.logical.LogicalElement;
+import com.googlecode.bpmn_simulator.animation.token.Token;
+import com.googlecode.bpmn_simulator.animation.token.TokenFlowListener;
 
 @SuppressWarnings("serial")
-public abstract class AbstractVisualNodeElement<E>
-		extends AbstractVisualElement<E>
-		implements VisualNodeElement {
+public abstract class AbstractBPMNTokenEdge<E extends LogicalElement>
+		extends AbstractBPMNEdge<E>
+		implements TokenFlowListener {
 
-	private Bounds bounds;
-
-	public AbstractVisualNodeElement(final E element) {
+	public AbstractBPMNTokenEdge(final E element) {
 		super(element);
+		element.addTokenFlowListener(this);
 	}
 
 	@Override
-	public void setElementBounds(final Bounds bounds) {
-		this.bounds = bounds;
-		setInnerBounds(bounds);
-	}
-
-	protected Bounds getElementBounds() {
-		return bounds;
+	public void tokenChanged(final Token token) {
+		repaint();
 	}
 
 }

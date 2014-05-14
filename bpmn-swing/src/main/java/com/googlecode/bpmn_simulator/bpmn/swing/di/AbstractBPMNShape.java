@@ -22,13 +22,12 @@ package com.googlecode.bpmn_simulator.bpmn.swing.di;
 
 import java.awt.Graphics2D;
 
-import com.googlecode.bpmn_simulator.animation.element.logical.LogicalElement;
 import com.googlecode.bpmn_simulator.animation.element.visual.swing.AbstractVisualNodeElement;
 import com.googlecode.bpmn_simulator.bpmn.di.BPMNShape;
 import com.googlecode.bpmn_simulator.bpmn.swing.di.Appearance.ElementAppearance;
 
 @SuppressWarnings("serial")
-public abstract class AbstractBPMNShape<E extends LogicalElement>
+public abstract class AbstractBPMNShape<E>
 		extends AbstractVisualNodeElement<E>
 		implements BPMNShape {
 

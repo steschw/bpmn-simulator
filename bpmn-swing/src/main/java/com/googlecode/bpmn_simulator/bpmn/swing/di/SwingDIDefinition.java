@@ -45,7 +45,12 @@ import com.googlecode.bpmn_simulator.bpmn.model.core.common.gateways.InclusiveGa
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.gateways.ParallelGateway;
 import com.googlecode.bpmn_simulator.bpmn.model.core.foundation.BaseElement;
 import com.googlecode.bpmn_simulator.bpmn.model.process.activities.Process;
+import com.googlecode.bpmn_simulator.bpmn.model.process.activities.tasks.BusinessRuleTask;
+import com.googlecode.bpmn_simulator.bpmn.model.process.activities.tasks.ManualTask;
+import com.googlecode.bpmn_simulator.bpmn.model.process.activities.tasks.ScriptTask;
+import com.googlecode.bpmn_simulator.bpmn.model.process.activities.tasks.ServiceTask;
 import com.googlecode.bpmn_simulator.bpmn.model.process.activities.tasks.Task;
+import com.googlecode.bpmn_simulator.bpmn.model.process.activities.tasks.UserTask;
 import com.googlecode.bpmn_simulator.bpmn.swing.model.core.common.SequenceFlowEdge;
 import com.googlecode.bpmn_simulator.bpmn.swing.model.core.common.artifacts.AssociationEdge;
 import com.googlecode.bpmn_simulator.bpmn.swing.model.core.common.artifacts.GroupShape;
@@ -56,7 +61,12 @@ import com.googlecode.bpmn_simulator.bpmn.swing.model.core.common.gateways.Exclu
 import com.googlecode.bpmn_simulator.bpmn.swing.model.core.common.gateways.InclusiveGatewayShape;
 import com.googlecode.bpmn_simulator.bpmn.swing.model.core.common.gateways.ParallelGatewayShape;
 import com.googlecode.bpmn_simulator.bpmn.swing.model.process.activities.ProcessPlane;
+import com.googlecode.bpmn_simulator.bpmn.swing.model.process.activities.task.BusinessRuleTaskShape;
+import com.googlecode.bpmn_simulator.bpmn.swing.model.process.activities.task.ManualTaskShape;
+import com.googlecode.bpmn_simulator.bpmn.swing.model.process.activities.task.ScriptTaskShape;
+import com.googlecode.bpmn_simulator.bpmn.swing.model.process.activities.task.ServiceTaskShape;
 import com.googlecode.bpmn_simulator.bpmn.swing.model.process.activities.task.TaskShape;
+import com.googlecode.bpmn_simulator.bpmn.swing.model.process.activities.task.UserTaskShape;
 
 public class SwingDIDefinition
 		extends AbstractDIDefinition<SwingBPMNDiagram> {
@@ -85,7 +95,12 @@ public class SwingDIDefinition
 		SHAPE_MAPPERS.put(ExclusiveGateway.class, ExclusiveGatewayShape.class);
 		SHAPE_MAPPERS.put(InclusiveGateway.class, InclusiveGatewayShape.class);
 		// Process
+		SHAPE_MAPPERS.put(BusinessRuleTask.class, BusinessRuleTaskShape.class);
+		SHAPE_MAPPERS.put(ManualTask.class, ManualTaskShape.class);
+		SHAPE_MAPPERS.put(ScriptTask.class, ScriptTaskShape.class);
+		SHAPE_MAPPERS.put(ServiceTask.class, ServiceTaskShape.class);
 		SHAPE_MAPPERS.put(Task.class, TaskShape.class);
+		SHAPE_MAPPERS.put(UserTask.class, UserTaskShape.class);
 
 		PLANE_MAPPERS.put(Process.class, ProcessPlane.class);
 	};

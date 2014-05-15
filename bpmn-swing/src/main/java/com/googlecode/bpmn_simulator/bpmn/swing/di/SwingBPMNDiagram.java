@@ -54,7 +54,7 @@ public class SwingBPMNDiagram
 
 	@Override
 	public void add(final JComponent element) {
-		super.add((Component) element, 0);
+		add((Component) element, 0);
 	}
 
 	@Override

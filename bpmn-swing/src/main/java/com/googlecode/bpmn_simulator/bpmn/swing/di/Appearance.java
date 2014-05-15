@@ -22,41 +22,42 @@ package com.googlecode.bpmn_simulator.bpmn.swing.di;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.Image;
 import java.awt.Stroke;
+import java.io.IOException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.IdentityHashMap;
 import java.util.Map;
 
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
+import javax.imageio.ImageIO;
 
 public class Appearance {
 
-	public static final String ICON_BUSSINESRULE = "businessrule.png"; //$NON-NLS-1$
-	public static final String ICON_COLLAPSED = "collapsed.png"; //$NON-NLS-1$
-	public static final String ICON_COLLECTION = "collection.png"; //$NON-NLS-1$
-	public static final String ICON_EXCEPTION = "exception.png"; //$NON-NLS-1$
-	public static final String ICON_LOOP = "loop.png"; //$NON-NLS-1$
-	public static final String ICON_MANUAL = "manual.png"; //$NON-NLS-1$
-	public static final String ICON_PARALLEL = "parallel.png"; //$NON-NLS-1$
-	public static final String ICON_RECEIVE = "receive.png"; //$NON-NLS-1$
-	public static final String ICON_SCRIPT = "script.png"; //$NON-NLS-1$
-	public static final String ICON_SEND = "send.png"; //$NON-NLS-1$
-	public static final String ICON_SEQUENTIAL = "sequential.png"; //$NON-NLS-1$
-	public static final String ICON_SERVICE = "service.png"; //$NON-NLS-1$
-	public static final String ICON_TIMER = "timer.png"; //$NON-NLS-1$
-	public static final String ICON_USER = "user.png"; //$NON-NLS-1$
-	public static final String ICON_TERMINATE = "terminate.png"; //$NON-NLS-1$
-	public static final String ICON_LINK = "link.png"; //$NON-NLS-1$
-	public static final String ICON_LINK_INVERSE = "link_inverse.png"; //$NON-NLS-1$
-	public static final String ICON_MESSAGE = "send.png"; //$NON-NLS-1$
-	public static final String ICON_MESSAGE_INVERSE = "receive.png"; //$NON-NLS-1$
-	public static final String ICON_SIGNAL = "signal.png"; //$NON-NLS-1$
-	public static final String ICON_SIGNAL_INVERSE = "signal_inverse.png"; //$NON-NLS-1$
-	public static final String ICON_ERROR = "error.png"; //$NON-NLS-1$
-	public static final String ICON_ERROR_INVERSE = "error_inverse.png"; //$NON-NLS-1$
-	public static final String ICON_CONDITIONAL = "conditional.png"; //$NON-NLS-1$
+	public static final String IMAGE_BUSSINESRULE = "businessrule.png"; //$NON-NLS-1$
+	public static final String IMAGE_COLLAPSED = "collapsed.png"; //$NON-NLS-1$
+	public static final String IMAGE_COLLECTION = "collection.png"; //$NON-NLS-1$
+	public static final String IMAGE_EXCEPTION = "exception.png"; //$NON-NLS-1$
+	public static final String IMAGE_LOOP = "loop.png"; //$NON-NLS-1$
+	public static final String IMAGE_MANUAL = "manual.png"; //$NON-NLS-1$
+	public static final String IMAGE_PARALLEL = "parallel.png"; //$NON-NLS-1$
+	public static final String IMAGE_RECEIVE = "receive.png"; //$NON-NLS-1$
+	public static final String IMAGE_SCRIPT = "script.png"; //$NON-NLS-1$
+	public static final String IMAGE_SEND = "send.png"; //$NON-NLS-1$
+	public static final String IMAGE_SEQUENTIAL = "sequential.png"; //$NON-NLS-1$
+	public static final String IMAGE_SERVICE = "service.png"; //$NON-NLS-1$
+	public static final String IMAGE_TIMER = "timer.png"; //$NON-NLS-1$
+	public static final String IMAGE_USER = "user.png"; //$NON-NLS-1$
+	public static final String IMAGE_TERMINATE = "terminate.png"; //$NON-NLS-1$
+	public static final String IMAGE_LINK = "link.png"; //$NON-NLS-1$
+	public static final String IMAGE_LINK_INVERSE = "link_inverse.png"; //$NON-NLS-1$
+	public static final String IMAGE_MESSAGE = "send.png"; //$NON-NLS-1$
+	public static final String IMAGE_MESSAGE_INVERSE = "receive.png"; //$NON-NLS-1$
+	public static final String IMAGE_SIGNAL = "signal.png"; //$NON-NLS-1$
+	public static final String IMAGE_SIGNAL_INVERSE = "signal_inverse.png"; //$NON-NLS-1$
+	public static final String IMAGE_ERROR = "error.png"; //$NON-NLS-1$
+	public static final String IMAGE_ERROR_INVERSE = "error_inverse.png"; //$NON-NLS-1$
+	public static final String IMAGE_CONDITIONAL = "conditional.png"; //$NON-NLS-1$
 
 	private static final String ICONPATH = "com/googlecode/bpmn_simulator/bpmn/icons/"; //$NON-NLS-1$
 
@@ -81,7 +82,7 @@ public class Appearance {
 
 	private static Appearance instance;
 
-	private final Map<String, Icon> icons = new IdentityHashMap<String, Icon>();
+	private final Map<String, Image> images = new IdentityHashMap<String, Image>();
 
 	private final Map<Class<?>, ElementAppearance> elements = new HashMap<Class<?>, ElementAppearance>();
 
@@ -91,7 +92,7 @@ public class Appearance {
 
 	private Appearance() {
 		super();
-		loadIcons();
+		loadImages();
 	}
 
 	public static Appearance getDefault() {
@@ -105,7 +106,7 @@ public class Appearance {
 		return instance;
 	}
 
-	private static Icon loadIconFromRessource(final String name) {
+	private static Image loadImageFromRessource(final String name) {
 		ClassLoader cl = Thread.currentThread().getContextClassLoader();
 		if (cl == null) {
 			cl = ClassLoader.getSystemClassLoader();
@@ -113,7 +114,11 @@ public class Appearance {
 		if (cl != null) {
 			final URL url = cl.getResource(ICONPATH + name);
 			if (url != null) {
-				return new ImageIcon(url);
+				try {
+					return ImageIO.read(url);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 			}
 			assert false;
 			
@@ -121,38 +126,38 @@ public class Appearance {
 		return null;
 	}
 
-	private void loadIcon(final String name) {
-		icons.put(name, loadIconFromRessource(name));
+	private void loadImage(final String name) {
+		images.put(name, loadImageFromRessource(name));
 	}
 
-	public final void loadIcons() {
-		loadIcon(ICON_BUSSINESRULE);
-		loadIcon(ICON_COLLAPSED);
-		loadIcon(ICON_COLLECTION);
-		loadIcon(ICON_EXCEPTION);
-		loadIcon(ICON_LOOP);
-		loadIcon(ICON_MANUAL);
-		loadIcon(ICON_PARALLEL);
-		loadIcon(ICON_RECEIVE);
-		loadIcon(ICON_SCRIPT);
-		loadIcon(ICON_SEND);
-		loadIcon(ICON_SEQUENTIAL);
-		loadIcon(ICON_SERVICE);
-		loadIcon(ICON_TIMER);
-		loadIcon(ICON_USER);
-		loadIcon(ICON_TERMINATE);
-		loadIcon(ICON_LINK);
-		loadIcon(ICON_LINK_INVERSE);
-		loadIcon(ICON_SIGNAL);
-		loadIcon(ICON_SIGNAL_INVERSE);
-		loadIcon(ICON_ERROR);
-		loadIcon(ICON_ERROR_INVERSE);
-		loadIcon(ICON_CONDITIONAL);
+	public final void loadImages() {
+		loadImage(IMAGE_BUSSINESRULE);
+		loadImage(IMAGE_COLLAPSED);
+		loadImage(IMAGE_COLLECTION);
+		loadImage(IMAGE_EXCEPTION);
+		loadImage(IMAGE_LOOP);
+		loadImage(IMAGE_MANUAL);
+		loadImage(IMAGE_PARALLEL);
+		loadImage(IMAGE_RECEIVE);
+		loadImage(IMAGE_SCRIPT);
+		loadImage(IMAGE_SEND);
+		loadImage(IMAGE_SEQUENTIAL);
+		loadImage(IMAGE_SERVICE);
+		loadImage(IMAGE_TIMER);
+		loadImage(IMAGE_USER);
+		loadImage(IMAGE_TERMINATE);
+		loadImage(IMAGE_LINK);
+		loadImage(IMAGE_LINK_INVERSE);
+		loadImage(IMAGE_SIGNAL);
+		loadImage(IMAGE_SIGNAL_INVERSE);
+		loadImage(IMAGE_ERROR);
+		loadImage(IMAGE_ERROR_INVERSE);
+		loadImage(IMAGE_CONDITIONAL);
 	}
 
-	public Icon getIcon(final String name) {
-		assert icons.containsKey(name);
-		return icons.get(name);
+	public Image getImage(final String name) {
+		assert images.containsKey(name);
+		return images.get(name);
 	}
 
 	public ElementAppearance getForElement(final Class<?> elementClass) {

@@ -21,10 +21,12 @@
 package com.googlecode.bpmn_simulator.gui.preferences;
 
 import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JColorChooser;
 
@@ -35,23 +37,52 @@ public class ColorSelector
 		extends JButton
 		implements ActionListener {
 
+	private static final Dimension DEFAULT_SIZE = new Dimension(80, 26);
+
+	private Color selectedColor;
+
+	public ColorSelector() {
+		this(null);
+	}
+
 	public ColorSelector(final String text) {
 		super(text);
-
-		setBorder(BorderFactory.createRaisedBevelBorder());
 
 		addActionListener(this);
 
 		updateTooltip();
+
+		if (text == null) {
+			setPreferredSize(DEFAULT_SIZE);
+		}
+		setMinimumSize(DEFAULT_SIZE);
+	}
+
+	private boolean isSelectedColorTransparent() {
+		return getSelectedColor() == null;
 	}
 
 	public void setSelectedColor(final Color color) {
-		setBackground(color);
+		selectedColor = color;
+		repaint();
 		updateTooltip();
 	}
 
 	public Color getSelectedColor() {
-		return getBackground();
+		return selectedColor;
+	}
+
+	@Override
+	protected void paintComponent(final Graphics g) {
+		super.paintComponent(g);
+		final Color color = getSelectedColor();
+		if (color != null) {
+			g.setColor(color);
+			final Insets insets = getBorder().getBorderInsets(this);
+			g.fillRect(insets.left,  insets.top,
+					getWidth() - insets.left - insets.right,
+					getHeight() - insets.top - insets.bottom);
+		}
 	}
 
 	@Override
@@ -70,22 +101,26 @@ public class ColorSelector
 		html.append(getText());
 		html.append("</b>"); //$NON-NLS-1$
 
-		final Color color = getSelectedColor();
-		final int r = color.getRed();
-		final int g = color.getGreen();
-		final int b = color.getBlue();
-		html.append("<table>"); //$NON-NLS-1$
-		html.append("<tr><td>"); //$NON-NLS-1$
-		html.append(Messages.getString("Color.hex")); //$NON-NLS-1$
-		html.append(":</td><td>"); //$NON-NLS-1$
-		html.append(String.format("%X%X%X", r, g, b)); //$NON-NLS-1$
-		html.append("</td></tr>"); //$NON-NLS-1$
-		html.append("<tr><td>"); //$NON-NLS-1$
-		html.append(Messages.getString("Color.rgb")); //$NON-NLS-1$
-		html.append(":</td><td>"); //$NON-NLS-1$
-		html.append(String.format("%d, %d, %d", r, g, b)); //$NON-NLS-1$
-		html.append("</td></tr>"); //$NON-NLS-1$
-		html.append("</table>"); //$NON-NLS-1$
+		if (isSelectedColorTransparent()) {
+			html.append("transparent");
+		} else {
+			final Color color = getSelectedColor();
+			final int r = color.getRed();
+			final int g = color.getGreen();
+			final int b = color.getBlue();
+			html.append("<table>"); //$NON-NLS-1$
+			html.append("<tr><td>"); //$NON-NLS-1$
+			html.append(Messages.getString("Color.hex")); //$NON-NLS-1$
+			html.append(":</td><td>"); //$NON-NLS-1$
+			html.append(String.format("#%02x%02x%02x", r, g, b)); //$NON-NLS-1$
+			html.append("</td></tr>"); //$NON-NLS-1$
+			html.append("<tr><td>"); //$NON-NLS-1$
+			html.append(Messages.getString("Color.rgb")); //$NON-NLS-1$
+			html.append(":</td><td>"); //$NON-NLS-1$
+			html.append(String.format("%d, %d, %d", r, g, b)); //$NON-NLS-1$
+			html.append("</td></tr>"); //$NON-NLS-1$
+			html.append("</table>"); //$NON-NLS-1$
+		}
 
 		html.append("</body></html>"); //$NON-NLS-1$
 		return html.toString();

@@ -23,7 +23,6 @@ package com.googlecode.bpmn_simulator.gui.preferences;
 import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -41,6 +40,23 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 
 import com.googlecode.bpmn_simulator.bpmn.swing.di.Appearance;
+import com.googlecode.bpmn_simulator.bpmn.swing.di.Appearance.ElementAppearance;
+import com.googlecode.bpmn_simulator.bpmn.swing.model.core.common.SequenceFlowEdge;
+import com.googlecode.bpmn_simulator.bpmn.swing.model.core.common.artifacts.AssociationEdge;
+import com.googlecode.bpmn_simulator.bpmn.swing.model.core.common.artifacts.GroupShape;
+import com.googlecode.bpmn_simulator.bpmn.swing.model.core.common.artifacts.TextAnnotationShape;
+import com.googlecode.bpmn_simulator.bpmn.swing.model.core.common.events.EndEventShape;
+import com.googlecode.bpmn_simulator.bpmn.swing.model.core.common.events.StartEventShape;
+import com.googlecode.bpmn_simulator.bpmn.swing.model.core.common.gateways.ExclusiveGatewayShape;
+import com.googlecode.bpmn_simulator.bpmn.swing.model.core.common.gateways.InclusiveGatewayShape;
+import com.googlecode.bpmn_simulator.bpmn.swing.model.core.common.gateways.ParallelGatewayShape;
+import com.googlecode.bpmn_simulator.bpmn.swing.model.process.activities.ProcessPlane;
+import com.googlecode.bpmn_simulator.bpmn.swing.model.process.activities.task.BusinessRuleTaskShape;
+import com.googlecode.bpmn_simulator.bpmn.swing.model.process.activities.task.ManualTaskShape;
+import com.googlecode.bpmn_simulator.bpmn.swing.model.process.activities.task.ScriptTaskShape;
+import com.googlecode.bpmn_simulator.bpmn.swing.model.process.activities.task.ServiceTaskShape;
+import com.googlecode.bpmn_simulator.bpmn.swing.model.process.activities.task.TaskShape;
+import com.googlecode.bpmn_simulator.bpmn.swing.model.process.activities.task.UserTaskShape;
 import com.googlecode.bpmn_simulator.gui.AbstractDialog;
 import com.googlecode.bpmn_simulator.gui.Messages;
 
@@ -172,12 +188,57 @@ public class PreferencesDialog
 		return panel;
 	}
 
-	protected void addElementPreferences(final Class<?> elementClass) {
-		
-	}
-
 	protected JPanel createElementsDefaultsPanel() {
-		final JPanel panel = new JPanel(new GridLayout(0, 2, GAP, GAP));
+		final JPanel panel = new JPanel(new GridBagLayout());
+
+		final Class<?>[] elements = new Class<?>[] {
+
+				ProcessPlane.class,
+
+				AssociationEdge.class,
+				GroupShape.class,
+				TextAnnotationShape.class,
+
+				StartEventShape.class,
+				EndEventShape.class,
+
+				ExclusiveGatewayShape.class,
+				InclusiveGatewayShape.class,
+				ParallelGatewayShape.class,
+
+				SequenceFlowEdge.class,
+
+				TaskShape.class,
+				BusinessRuleTaskShape.class,
+				ManualTaskShape.class,
+				ScriptTaskShape.class,
+				ServiceTaskShape.class,
+				UserTaskShape.class,
+		};
+
+		final Appearance appearance = Appearance.getDefault();
+		for (int i = 0; i < elements.length; ++i) {
+			final Class<?> element = elements[i];
+			try {
+				Class.forName(element.getCanonicalName());
+			} catch (ClassNotFoundException e) {
+			}
+			final ElementAppearance elementAppearance = appearance.getForElement(element);
+			GridBagConstraints c = new GridBagConstraints();
+			c.gridy = i;
+			c.gridx = 0;
+			c.anchor = GridBagConstraints.LINE_START;
+			panel.add(new JLabel(element.getSimpleName()), c);
+			c.anchor = GridBagConstraints.CENTER;
+			final ColorSelector foregroundSelector = new ColorSelector();
+			foregroundSelector.setSelectedColor(elementAppearance.getForeground());
+			c.gridx = 1;
+			panel.add(foregroundSelector, c);
+			final ColorSelector backgroundSelector = new ColorSelector();
+			backgroundSelector.setSelectedColor(elementAppearance.getBackground());
+			c.gridx = 2;
+			panel.add(backgroundSelector, c);
+		}
 
 		return panel;
 	}

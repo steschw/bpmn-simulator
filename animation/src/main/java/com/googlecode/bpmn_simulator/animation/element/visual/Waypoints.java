@@ -32,16 +32,24 @@ public class Waypoints
 		return size() >= 2;
 	}
 
-	public Waypoint last() {
-		if (size() >= 1)  {
-			return get(size() - 1);
-		}
-		return null;
+	public Waypoint first() {
+		return get(0);
+	}
+
+	public Waypoint second() {
+		return get(1);
 	}
 
 	public Waypoint nextToLast() {
 		if (size() >= 2)  {
 			return get(size() - 2);
+		}
+		return null;
+	}
+
+	public Waypoint last() {
+		if (size() >= 1)  {
+			return get(size() - 1);
 		}
 		return null;
 	}

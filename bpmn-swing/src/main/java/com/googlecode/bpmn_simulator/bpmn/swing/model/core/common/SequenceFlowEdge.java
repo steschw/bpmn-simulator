@@ -22,6 +22,7 @@ package com.googlecode.bpmn_simulator.bpmn.swing.model.core.common;
 
 import java.awt.Graphics2D;
 
+import com.googlecode.bpmn_simulator.animation.element.visual.Waypoints;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.SequenceFlow;
 import com.googlecode.bpmn_simulator.bpmn.swing.di.AbstractBPMNTokenEdge;
 
@@ -42,7 +43,10 @@ public class SequenceFlowEdge
 	@Override
 	protected void paintElementEnd(final Graphics2D g) {
 		super.paintElementEnd(g);
-		getPresentation().fillArrowEnd(g, getWaypointsRelative());
+		final Waypoints waypoints = getWaypointsRelative();
+		if (waypoints.isValid()) {
+			getPresentation().fillArrowhead(g, waypoints.nextToLast(), waypoints.last());
+		}
 	}
 
 }

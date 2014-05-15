@@ -96,24 +96,12 @@ public class Presentation {
 		}
 	}
 
-	public void fillArrowEnd(final Graphics2D g, final Waypoints points) {
-		if (points.isValid()) {
-			fillArrowEnd(g, points.nextToLast(), points.last());
-		}
+	public void drawArrowhead(final Graphics2D g, final Waypoint arrowFrom, final Waypoint arrowTo) {
+		g.draw(createArrowPath(arrowFrom, arrowTo, ARROW_ANGLE, ARROW_LENGTH));
 	}
 
-	public void fillArrowEnd(final Graphics2D g, final Waypoint from, final Waypoint to) {
-		g.fill(createArrowPath(from, to, ARROW_ANGLE, ARROW_LENGTH));
-	}
-
-	public void drawArrowEnd(final Graphics2D g, final Waypoints points) {
-		if (points.isValid()) {
-			drawArrowEnd(g, points.nextToLast(), points.last());
-		}
-	}
-
-	public void drawArrowEnd(final Graphics2D g, final Waypoint from, final Waypoint to) {
-		g.draw(createArrowPath(from, to, ARROW_ANGLE, ARROW_LENGTH));
+	public void fillArrowhead(final Graphics2D g, final Waypoint arrowFrom, final Waypoint arrowTo) {
+		g.fill(createArrowPath(arrowFrom, arrowTo, ARROW_ANGLE, ARROW_LENGTH));
 	}
 
 	public void drawRect(final Graphics g, final Bounds bounds) {

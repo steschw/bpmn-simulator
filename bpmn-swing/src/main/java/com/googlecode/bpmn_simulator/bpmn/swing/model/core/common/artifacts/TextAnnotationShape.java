@@ -38,9 +38,7 @@ public class TextAnnotationShape
 
 	private static int HOR_LINE_LENGTH = 20;
 
-	private static float STROKE_WIDTH = 2.f;
-
-	private static final Stroke STROKE = new BasicStroke(STROKE_WIDTH);
+	private static final Stroke STROKE = new BasicStroke(1);
 
 	static {
 		Appearance.getDefault().getForElement(TextAnnotationShape.class).setBackground(new Color(0xECF4FF));

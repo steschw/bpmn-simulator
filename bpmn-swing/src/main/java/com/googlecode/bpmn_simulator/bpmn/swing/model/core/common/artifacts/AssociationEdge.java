@@ -20,10 +20,13 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.swing.model.core.common.artifacts;
 
+import java.awt.BasicStroke;
 import java.awt.Graphics2D;
 import java.awt.Stroke;
 
+import com.googlecode.bpmn_simulator.animation.element.visual.Waypoints;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.artifacts.Association;
+import com.googlecode.bpmn_simulator.bpmn.model.core.common.artifacts.AssociationDirection;
 import com.googlecode.bpmn_simulator.bpmn.swing.di.AbstractBPMNEdge;
 import com.googlecode.bpmn_simulator.bpmn.swing.di.Appearance;
 
@@ -31,7 +34,8 @@ import com.googlecode.bpmn_simulator.bpmn.swing.di.Appearance;
 public class AssociationEdge
 		extends AbstractBPMNEdge<Association> {
 
-	private static final Stroke STROKE = Appearance.getDefault().createStrokeDashed(1);
+	private static final Stroke LINE_STROKE = Appearance.getDefault().createStrokeDashed(1);
+	private static final Stroke ARROW_STROKE = new BasicStroke(1);
 
 	public AssociationEdge(final Association element) {
 		super(element);
@@ -39,8 +43,33 @@ public class AssociationEdge
 
 	@Override
 	protected void paintElementLine(final Graphics2D g) {
-		g.setStroke(STROKE);
+		g.setStroke(LINE_STROKE);
 		super.paintElementLine(g);
+	}
+
+	@Override
+	protected void paintElementStart(final Graphics2D g) {
+		super.paintElementStart(g);
+		if (AssociationDirection.BOTH.equals(getLogicalElement().getDirection())) {
+			final Waypoints waypoints = getWaypointsRelative();
+			if (waypoints.isValid()) {
+				g.setStroke(ARROW_STROKE);
+				getPresentation().drawArrowhead(g, waypoints.second(), waypoints.first());
+			}
+		}
+	}
+
+	@Override
+	protected void paintElementEnd(final Graphics2D g) {
+		super.paintElementEnd(g);
+		if (AssociationDirection.ONE.equals(getLogicalElement().getDirection())
+				|| AssociationDirection.BOTH.equals(getLogicalElement().getDirection())) {
+			final Waypoints waypoints = getWaypointsRelative();
+			if (waypoints.isValid()) {
+				g.setStroke(ARROW_STROKE);
+				getPresentation().drawArrowhead(g, waypoints.nextToLast(), waypoints.last());
+			}
+		}
 	}
 
 }

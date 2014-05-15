@@ -4,6 +4,7 @@ import java.awt.BasicStroke;
 import java.awt.Graphics2D;
 import java.awt.Stroke;
 
+import com.googlecode.bpmn_simulator.animation.element.visual.Waypoints;
 import com.googlecode.bpmn_simulator.bpmn.model.process.data.DataAssociation;
 import com.googlecode.bpmn_simulator.bpmn.swing.di.AbstractBPMNEdge;
 import com.googlecode.bpmn_simulator.bpmn.swing.di.Appearance;
@@ -28,8 +29,11 @@ public class DataAssociationEdge
 	@Override
 	protected void paintElementEnd(final Graphics2D g) {
 		super.paintElementEnd(g);
-		g.setStroke(ARROW_STROKE);
-		getPresentation().drawArrowEnd(g, getWaypointsRelative());
+		final Waypoints waypoints = getWaypointsRelative();
+		if (waypoints.isValid()) {
+			g.setStroke(ARROW_STROKE);
+			getPresentation().drawArrowhead(g, waypoints.nextToLast(), waypoints.last());
+		}
 	}
 
 }

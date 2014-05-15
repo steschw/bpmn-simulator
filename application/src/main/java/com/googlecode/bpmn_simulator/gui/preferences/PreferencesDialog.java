@@ -39,6 +39,8 @@ import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 
+import com.googlecode.bpmn_simulator.bpmn.model.process.activities.tasks.ReceiveTask;
+import com.googlecode.bpmn_simulator.bpmn.model.process.activities.tasks.SendTask;
 import com.googlecode.bpmn_simulator.bpmn.swing.di.Appearance;
 import com.googlecode.bpmn_simulator.bpmn.swing.di.Appearance.ElementAppearance;
 import com.googlecode.bpmn_simulator.bpmn.swing.model.core.common.SequenceFlowEdge;
@@ -57,6 +59,8 @@ import com.googlecode.bpmn_simulator.bpmn.swing.model.process.activities.task.Sc
 import com.googlecode.bpmn_simulator.bpmn.swing.model.process.activities.task.ServiceTaskShape;
 import com.googlecode.bpmn_simulator.bpmn.swing.model.process.activities.task.TaskShape;
 import com.googlecode.bpmn_simulator.bpmn.swing.model.process.activities.task.UserTaskShape;
+import com.googlecode.bpmn_simulator.bpmn.swing.model.process.data.DataAssociationEdge;
+import com.googlecode.bpmn_simulator.bpmn.swing.model.process.data.DataObjectShape;
 import com.googlecode.bpmn_simulator.gui.AbstractDialog;
 import com.googlecode.bpmn_simulator.gui.Messages;
 
@@ -207,11 +211,16 @@ public class PreferencesDialog
 				ParallelGatewayShape.class,
 
 				SequenceFlowEdge.class,
+				DataAssociationEdge.class,
+
+				DataObjectShape.class,
 
 				TaskShape.class,
 				BusinessRuleTaskShape.class,
 				ManualTaskShape.class,
+				ReceiveTask.class,
 				ScriptTaskShape.class,
+				SendTask.class,
 				ServiceTaskShape.class,
 				UserTaskShape.class,
 		};

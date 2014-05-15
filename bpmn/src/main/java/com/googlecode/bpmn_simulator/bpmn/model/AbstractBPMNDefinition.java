@@ -57,7 +57,9 @@ import com.googlecode.bpmn_simulator.bpmn.model.process.activities.Process;
 import com.googlecode.bpmn_simulator.bpmn.model.process.activities.Subprocess;
 import com.googlecode.bpmn_simulator.bpmn.model.process.activities.tasks.BusinessRuleTask;
 import com.googlecode.bpmn_simulator.bpmn.model.process.activities.tasks.ManualTask;
+import com.googlecode.bpmn_simulator.bpmn.model.process.activities.tasks.ReceiveTask;
 import com.googlecode.bpmn_simulator.bpmn.model.process.activities.tasks.ScriptTask;
+import com.googlecode.bpmn_simulator.bpmn.model.process.activities.tasks.SendTask;
 import com.googlecode.bpmn_simulator.bpmn.model.process.activities.tasks.ServiceTask;
 import com.googlecode.bpmn_simulator.bpmn.model.process.activities.tasks.Task;
 import com.googlecode.bpmn_simulator.bpmn.model.process.activities.tasks.UserTask;
@@ -392,6 +394,12 @@ public abstract class AbstractBPMNDefinition<E extends Diagram<?>>
 					getNameAttribute(node));
 		} else if (isElementNode(node, BPMN, "serviceTask")) { //$NON-NLS-1$
 			task = new ServiceTask(getIdAttribute(node),
+					getNameAttribute(node));
+		} else if (isElementNode(node, BPMN, "sendTask")) { //$NON-NLS-1$
+			task = new SendTask(getIdAttribute(node),
+					getNameAttribute(node));
+		} else if (isElementNode(node, BPMN, "receiveTask")) { //$NON-NLS-1$
+			task = new ReceiveTask(getIdAttribute(node),
 					getNameAttribute(node));
 		} else if (isElementNode(node, BPMN, "task")) { //$NON-NLS-1$
 			task = new Task(getIdAttribute(node),

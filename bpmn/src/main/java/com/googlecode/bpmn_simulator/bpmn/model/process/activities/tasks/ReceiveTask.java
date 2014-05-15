@@ -18,31 +18,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.bpmn_simulator.bpmn.swing.model.core.common;
+package com.googlecode.bpmn_simulator.bpmn.model.process.activities.tasks;
 
-import java.awt.Graphics2D;
+public class ReceiveTask
+		extends Task {
 
-import com.googlecode.bpmn_simulator.bpmn.model.core.common.SequenceFlow;
-import com.googlecode.bpmn_simulator.bpmn.swing.di.AbstractBPMNTokenEdge;
-
-@SuppressWarnings("serial")
-public class SequenceFlowEdge
-		extends AbstractBPMNTokenEdge<SequenceFlow> {
-
-	public SequenceFlowEdge(final SequenceFlow element) {
-		super(element);
-	}
-
-	@Override
-	protected void paintElementStart(final Graphics2D g) {
-		super.paintElementStart(g);
-		///XXX: default, conditional
-	}
-
-	@Override
-	protected void paintElementEnd(final Graphics2D g) {
-		super.paintElementEnd(g);
-		getPresentation().fillArrowEnd(g, getWaypointsRelative());
+	public ReceiveTask(final String id, final String name) {
+		super(id, name);
 	}
 
 }

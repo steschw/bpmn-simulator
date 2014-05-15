@@ -96,6 +96,16 @@ public class Presentation {
 		}
 	}
 
+	public void fillArrowEnd(final Graphics2D g, final Waypoints points) {
+		if (points.isValid()) {
+			fillArrowEnd(g, points.nextToLast(), points.last());
+		}
+	}
+
+	public void fillArrowEnd(final Graphics2D g, final Waypoint from, final Waypoint to) {
+		g.fill(createArrowPath(from, to, ARROW_ANGLE, ARROW_LENGTH));
+	}
+
 	public void drawArrowEnd(final Graphics2D g, final Waypoints points) {
 		if (points.isValid()) {
 			drawArrowEnd(g, points.nextToLast(), points.last());
@@ -103,7 +113,7 @@ public class Presentation {
 	}
 
 	public void drawArrowEnd(final Graphics2D g, final Waypoint from, final Waypoint to) {
-		g.fill(createArrowPath(from, to, ARROW_ANGLE, ARROW_LENGTH));
+		g.draw(createArrowPath(from, to, ARROW_ANGLE, ARROW_LENGTH));
 	}
 
 	public void drawRect(final Graphics g, final Bounds bounds) {
@@ -142,8 +152,26 @@ public class Presentation {
 		g.draw(createDiamond(bounds));
 	}
 
+	public void fillDocument(final Graphics2D g, final Bounds bounds, final int n) {
+		g.fill(createDocument(bounds, n));
+	}
+
+	public void drawDocument(final Graphics2D g, final Bounds bounds, final int n) {
+		g.draw(createDocument(bounds, n));
+	}
+
 	public void drawToken(final Graphics g, final Token token, final int centerX, final int centerY) {
 		
+	}
+
+	public static Shape createDocument(final Bounds bounds, final int n) {
+		final Polygon polygon = new Polygon();
+		polygon.addPoint(bounds.getMaxX() - n, bounds.getMinY());
+		polygon.addPoint(bounds.getMinX(), bounds.getMinY());
+		polygon.addPoint(bounds.getMinX(), bounds.getMaxY());
+		polygon.addPoint(bounds.getMaxX(), bounds.getMaxY());
+		polygon.addPoint(bounds.getMaxX(), bounds.getMinY() +  n);
+		return polygon;
 	}
 
 	public static Shape createPentagon(final Bounds bounds) {

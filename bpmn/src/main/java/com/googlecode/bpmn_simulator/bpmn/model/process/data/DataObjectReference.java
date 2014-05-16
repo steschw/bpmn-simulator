@@ -20,13 +20,17 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.model.process.data;
 
-import com.googlecode.bpmn_simulator.bpmn.model.core.foundation.AbstractRootElement;
+import com.googlecode.bpmn_simulator.animation.element.logical.ref.Reference;
+import com.googlecode.bpmn_simulator.bpmn.model.core.common.AbstractFlowElement;
 
-public final class DataStore
-		extends AbstractRootElement {
+public class DataObjectReference extends AbstractFlowElement {
 
-	public DataStore(final String id) {
-		super(id);
+	private final Reference<DataObject> dataObject;
+
+	public DataObjectReference(final String id, final String name,
+			Reference<DataObject> dataObject) {
+		super(id, name);
+		this.dataObject = dataObject;
 	}
 
 }

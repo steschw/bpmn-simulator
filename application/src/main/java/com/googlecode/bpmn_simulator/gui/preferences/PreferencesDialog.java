@@ -60,7 +60,8 @@ import com.googlecode.bpmn_simulator.bpmn.swing.model.process.activities.task.Se
 import com.googlecode.bpmn_simulator.bpmn.swing.model.process.activities.task.TaskShape;
 import com.googlecode.bpmn_simulator.bpmn.swing.model.process.activities.task.UserTaskShape;
 import com.googlecode.bpmn_simulator.bpmn.swing.model.process.data.DataAssociationEdge;
-import com.googlecode.bpmn_simulator.bpmn.swing.model.process.data.DataObjectShape;
+import com.googlecode.bpmn_simulator.bpmn.swing.model.process.data.DataObjectReferenceShape;
+import com.googlecode.bpmn_simulator.bpmn.swing.model.process.data.DataStoreReferenceShape;
 import com.googlecode.bpmn_simulator.gui.AbstractDialog;
 import com.googlecode.bpmn_simulator.gui.Messages;
 
@@ -213,7 +214,8 @@ public class PreferencesDialog
 				SequenceFlowEdge.class,
 				DataAssociationEdge.class,
 
-				DataObjectShape.class,
+				DataObjectReferenceShape.class,
+				DataStoreReferenceShape.class,
 
 				TaskShape.class,
 				BusinessRuleTaskShape.class,

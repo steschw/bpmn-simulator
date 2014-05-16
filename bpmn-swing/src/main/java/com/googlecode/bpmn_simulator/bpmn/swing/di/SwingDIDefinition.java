@@ -54,7 +54,8 @@ import com.googlecode.bpmn_simulator.bpmn.model.process.activities.tasks.Service
 import com.googlecode.bpmn_simulator.bpmn.model.process.activities.tasks.Task;
 import com.googlecode.bpmn_simulator.bpmn.model.process.activities.tasks.UserTask;
 import com.googlecode.bpmn_simulator.bpmn.model.process.data.DataAssociation;
-import com.googlecode.bpmn_simulator.bpmn.model.process.data.DataObject;
+import com.googlecode.bpmn_simulator.bpmn.model.process.data.DataObjectReference;
+import com.googlecode.bpmn_simulator.bpmn.model.process.data.DataStoreReference;
 import com.googlecode.bpmn_simulator.bpmn.swing.model.core.common.SequenceFlowEdge;
 import com.googlecode.bpmn_simulator.bpmn.swing.model.core.common.artifacts.AssociationEdge;
 import com.googlecode.bpmn_simulator.bpmn.swing.model.core.common.artifacts.GroupShape;
@@ -74,7 +75,8 @@ import com.googlecode.bpmn_simulator.bpmn.swing.model.process.activities.task.Se
 import com.googlecode.bpmn_simulator.bpmn.swing.model.process.activities.task.TaskShape;
 import com.googlecode.bpmn_simulator.bpmn.swing.model.process.activities.task.UserTaskShape;
 import com.googlecode.bpmn_simulator.bpmn.swing.model.process.data.DataAssociationEdge;
-import com.googlecode.bpmn_simulator.bpmn.swing.model.process.data.DataObjectShape;
+import com.googlecode.bpmn_simulator.bpmn.swing.model.process.data.DataObjectReferenceShape;
+import com.googlecode.bpmn_simulator.bpmn.swing.model.process.data.DataStoreReferenceShape;
 
 public class SwingDIDefinition
 		extends AbstractDIDefinition<SwingBPMNDiagram> {
@@ -113,7 +115,8 @@ public class SwingDIDefinition
 		SHAPE_MAPPERS.put(Task.class, TaskShape.class);
 		SHAPE_MAPPERS.put(UserTask.class, UserTaskShape.class);
 		// Data
-		SHAPE_MAPPERS.put(DataObject.class, DataObjectShape.class);
+		SHAPE_MAPPERS.put(DataObjectReference.class, DataObjectReferenceShape.class);
+		SHAPE_MAPPERS.put(DataStoreReference.class, DataStoreReferenceShape.class);
 
 		PLANE_MAPPERS.put(Process.class, ProcessPlane.class);
 	};

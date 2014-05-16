@@ -65,7 +65,9 @@ import com.googlecode.bpmn_simulator.bpmn.model.process.activities.tasks.Task;
 import com.googlecode.bpmn_simulator.bpmn.model.process.activities.tasks.UserTask;
 import com.googlecode.bpmn_simulator.bpmn.model.process.data.DataAssociation;
 import com.googlecode.bpmn_simulator.bpmn.model.process.data.DataObject;
+import com.googlecode.bpmn_simulator.bpmn.model.process.data.DataObjectReference;
 import com.googlecode.bpmn_simulator.bpmn.model.process.data.DataStore;
+import com.googlecode.bpmn_simulator.bpmn.model.process.data.DataStoreReference;
 
 /**
  * Diagram Interchange (DI) Definition
@@ -485,15 +487,26 @@ public abstract class AbstractBPMNDefinition<E extends Diagram<?>>
 
 	protected boolean readElementDataObject(final Node node,
 			final FlowElementsContainer activity) {
-		final boolean isReference = isElementNode(node, BPMN, "dataObjectReference"); //$NON-NLS-1$
-		if (isReference || isElementNode(node, BPMN, "dataObject")) { //$NON-NLS-1$
+		if (isElementNode(node, BPMN, "dataObject")) { //$NON-NLS-1$
 			final DataObject dataObject = new DataObject(
 					getIdAttribute(node), getNameAttribute(node));
-			if (!isReference) {
-				dataObject.setIsCollection(getAttributeBoolean(node, "isCollection", false)); //$NON-NLS-1$
-			}
+			dataObject.setIsCollection(getAttributeBoolean(node, "isCollection", false)); //$NON-NLS-1$
 			readBaseElement(node, dataObject);
 			registerElement(dataObject);
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	protected boolean readElementDataObjectReference(final Node node,
+			final FlowElementsContainer activity) {
+		if (isElementNode(node, BPMN, "dataObjectReference")) { //$NON-NLS-1$
+			final DataObjectReference dataObjectReference = new DataObjectReference(
+					getIdAttribute(node), getNameAttribute(node),
+					getAttributeIDREF(node, "dataObjectRef", DataObject.class)); //$NON-NLS-1$
+			readBaseElement(node, dataObjectReference);
+			registerElement(dataObjectReference);
 			return true;
 		} else {
 			return false;
@@ -506,6 +519,20 @@ public abstract class AbstractBPMNDefinition<E extends Diagram<?>>
 					getIdAttribute(node));
 			readBaseElement(node, dataStore);
 			registerElement(dataStore);
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	protected boolean readElementDataStoreReference(final Node node,
+			final FlowElementsContainer activity) {
+		if (isElementNode(node, BPMN, "dataStoreReference")) { //$NON-NLS-1$
+			final DataStoreReference dataStoreReference = new DataStoreReference(
+					getIdAttribute(node), getNameAttribute(node),
+					getAttributeIDREF(node, "dataObjectRef", DataStore.class)); //$NON-NLS-1$
+			readBaseElement(node, dataStoreReference);
+			registerElement(dataStoreReference);
 			return true;
 		} else {
 			return false;
@@ -525,6 +552,8 @@ public abstract class AbstractBPMNDefinition<E extends Diagram<?>>
 					&& !readElementSequenceflow(childNode, container)
 					&& !readArtifacts(childNode)
 					&& !readElementDataObject(childNode, container)
+					&& !readElementDataObjectReference(childNode, container)
+					&& !readElementDataStoreReference(childNode, container)
 					&& !readElementsDataAssociations(childNode)) {
 				showUnknowNode(childNode);
 			}

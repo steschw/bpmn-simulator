@@ -31,7 +31,9 @@ public class Bounds {
 	public Bounds(final int x, final int y,
 			final int width, final int height) {
 		super();
+		assert x >= 0;
 		this.x = x;
+		assert y >= 0;
 		this.y = y;
 		assert width > 0;
 		this.width = width;
@@ -98,8 +100,20 @@ public class Bounds {
 		return enlarge(lr, tb);
 	}
 
+	public Bounds shrink(final int lr, final int tb) {
+		return enlarge(-lr, -tb);
+	}
+
 	public Bounds shrink(final int n) {
-		return enlarge(-n);
+		return shrink(n, n);
+	}
+
+	public Bounds top(final int size) {
+		return new Bounds(getMinX(), getMinY(), getWidth(), size);
+	}
+
+	public Bounds bottom(final int size) {
+		return new Bounds(getMinX(), getMaxY() - size, getWidth(), size);
 	}
 
 }

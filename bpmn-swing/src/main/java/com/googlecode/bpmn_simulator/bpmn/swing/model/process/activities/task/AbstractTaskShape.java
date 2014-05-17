@@ -25,24 +25,18 @@ import java.awt.Image;
 
 import com.googlecode.bpmn_simulator.animation.element.visual.Bounds;
 import com.googlecode.bpmn_simulator.bpmn.model.process.activities.tasks.Task;
-import com.googlecode.bpmn_simulator.bpmn.swing.di.AbstractBPMNTokenShape;
 import com.googlecode.bpmn_simulator.bpmn.swing.di.Appearance;
+import com.googlecode.bpmn_simulator.bpmn.swing.model.process.activities.AbstractActivityShape;
 
 @SuppressWarnings("serial")
 abstract class AbstractTaskShape<E extends Task>
-		extends AbstractBPMNTokenShape<E> {
+		extends AbstractActivityShape<E> {
 
 	private static final int IMAGE_WIDTH = 16;
 	private static final int IMAGE_HEIGHT = 16;
 
 	public AbstractTaskShape(final E element) {
 		super(element);
-	}
-
-	@Override
-	protected void paintElementBackground(final Graphics2D g) {
-		super.paintElementBackground(g);
-		getPresentation().fillRoundRect(g, getInnerBoundsRelative(), Appearance.getDefault().getArcSize());
 	}
 
 	protected Image getTaskImage() {
@@ -52,23 +46,16 @@ abstract class AbstractTaskShape<E extends Task>
 	@Override
 	protected void paintElementForeground(final Graphics2D g) {
 		super.paintElementForeground(g);
-		final int arcSize = Appearance.getDefault().getArcSize();
-		getPresentation().drawRoundRect(g, getInnerBoundsRelative(), arcSize);
 		final Image image = getTaskImage();
 		if (image != null) {
 			final Bounds bounds = getInnerBoundsRelative();
-			final int imageMargin = arcSize / 2;
+			final int imageMargin = Appearance.getDefault().getArcSize() / 2;
 			final Bounds imageBounds = new Bounds(
 					bounds.getMinX() + imageMargin,
 					bounds.getMinY() + imageMargin,
 					IMAGE_WIDTH, IMAGE_HEIGHT);
 			getPresentation().drawImage(g, image, imageBounds);
 		}
-	}
-
-	@Override
-	protected void paintTokens(final Graphics2D g) {
-		// TODO Auto-generated method stub
 	}
 
 }

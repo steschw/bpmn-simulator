@@ -178,7 +178,8 @@ public abstract class AbstractBPMNDefinition<E extends Diagram<?>>
 	}
 
 	protected boolean readElementsForBaseElement(final Node node, final BaseElement element) {
-		return readElementDocumentation(node, element);
+		return readElementDocumentation(node, element)
+				|| readElementExtensionElements(node, element);
 	}
 
 	protected void readBaseElement(final Node node, final BaseElement element) {
@@ -300,6 +301,16 @@ public abstract class AbstractBPMNDefinition<E extends Diagram<?>>
 			return AssociationDirection.NONE;
 		} else {
 			return direction;
+		}
+	}
+
+	protected boolean readElementExtensionElements(final Node node,
+			final BaseElement element) {
+		if (isElementNode(node, BPMN, "extensionElements")) { //$NON-NLS-1$
+			//TODO
+			return true;
+		} else {
+			return false;
 		}
 	}
 
@@ -544,11 +555,12 @@ public abstract class AbstractBPMNDefinition<E extends Diagram<?>>
 		}
 	}
 
-	protected void readLaneElements(final Node node) {
+	protected void readLaneElements(final Node node, final Lane lane) {
 		final NodeList childNodes = node.getChildNodes();
 		for (int i = 0; i < childNodes.getLength(); ++i) {
 			final Node childNode = childNodes.item(i);
-			if (!readElementChildLaneSet(childNode)) {
+			if (!readElementsForBaseElement(childNode, lane)
+					&& !readElementChildLaneSet(childNode)) {
 				showUnknowNode(childNode);
 			}
 		}
@@ -558,20 +570,20 @@ public abstract class AbstractBPMNDefinition<E extends Diagram<?>>
 		if (isElementNode(node, BPMN, "lane")) { //$NON-NLS-1$
 			final Lane lane = new Lane(
 					getIdAttribute(node), getNameAttribute(node));
-			readBaseElement(node, lane);
 			registerElement(lane);
-			readLaneElements(node);
+			readLaneElements(node, lane);
 			return true;
 		} else {
 			return false;
 		}
 	}
 
-	protected void readLaneSetElements(final Node node) {
+	protected void readLaneSetElements(final Node node, final LaneSet laneSet) {
 		final NodeList childNodes = node.getChildNodes();
 		for (int i = 0; i < childNodes.getLength(); ++i) {
 			final Node childNode = childNodes.item(i);
-			if (!readElementLane(childNode)) {
+			if (!readElementsForBaseElement(childNode, laneSet)
+					&& !readElementLane(childNode)) {
 				showUnknowNode(childNode);
 			}
 		}
@@ -581,9 +593,8 @@ public abstract class AbstractBPMNDefinition<E extends Diagram<?>>
 		if (isElementNode(node, BPMN, "childLaneSet")) { //$NON-NLS-1$
 			final LaneSet laneSet = new LaneSet(
 					getIdAttribute(node), getNameAttribute(node));
-			readBaseElement(node, laneSet);
 			registerElement(laneSet);
-			readLaneSetElements(node);
+			readLaneSetElements(node, laneSet);
 			return true;
 		} else {
 			return false;
@@ -595,9 +606,8 @@ public abstract class AbstractBPMNDefinition<E extends Diagram<?>>
 		if (isElementNode(node, BPMN, "laneSet")) { //$NON-NLS-1$
 			final LaneSet laneSet = new LaneSet(
 					getIdAttribute(node), getNameAttribute(node));
-			readBaseElement(node, laneSet);
 			registerElement(laneSet);
-			readLaneSetElements(node);
+			readLaneSetElements(node, laneSet);
 			return true;
 		} else {
 			return false;
@@ -609,7 +619,8 @@ public abstract class AbstractBPMNDefinition<E extends Diagram<?>>
 		final NodeList childNodes = node.getChildNodes();
 		for (int i = 0; i < childNodes.getLength(); ++i) {
 			final Node childNode = childNodes.item(i);
-			if (!readElementSubprocess(childNode, container)
+			if (!readElementsForBaseElement(childNode, container)
+					&& !readElementSubprocess(childNode, container)
 					&& !readElementStartEvent(childNode, container)
 					&& !readElementEndEvent(childNode, container)
 					&& !readElementTask(childNode, container)
@@ -650,7 +661,8 @@ public abstract class AbstractBPMNDefinition<E extends Diagram<?>>
 		final NodeList childNodes = node.getChildNodes();
 		for (int i = 0; i < childNodes.getLength(); ++i) {
 			final Node childNode = childNodes.item(i);
-			if (!readElementParticipant(childNode, collaboration)) {
+			if (!readElementsForBaseElement(childNode, collaboration)
+					&& !readElementParticipant(childNode, collaboration)) {
 				showUnknowNode(childNode);
 			}
 		}
@@ -661,7 +673,6 @@ public abstract class AbstractBPMNDefinition<E extends Diagram<?>>
 			final Collaboration collaboration = new Collaboration(
 					getIdAttribute(node), getNameAttribute(node),
 					getIsClosedAttribute(node));
-			readBaseElement(node, collaboration);
 			readCollaborationElements(node, collaboration);
 			registerElement(collaboration);
 			return true;
@@ -685,12 +696,13 @@ public abstract class AbstractBPMNDefinition<E extends Diagram<?>>
 	protected boolean readElementSubprocess(final Node node,
 			final FlowElementsContainer parentActivity) {
 		if (isElementNode(node, BPMN, "subProcess")) { //$NON-NLS-1$
-			final Subprocess process = new Subprocess(
+			final Subprocess subprocess = new Subprocess(
 					getIdAttribute(node), getNameAttribute(node),
 					getTriggeredByEventAttribute(node));
-			readDefaultSequenceFlowAttribute(node, process);
-			readFlowElementsContainer(node, process);
-			readElementsForFlowElement(node, process);
+			readDefaultSequenceFlowAttribute(node, subprocess);
+			readFlowElementsContainer(node, subprocess);
+//			readElementsForFlowElement(node, subprocess);
+			registerElement(subprocess);
 			return true;
 		} else {
 			return false;

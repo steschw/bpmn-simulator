@@ -91,7 +91,16 @@ public abstract class AbstractXmlDefinition<E extends Diagram<?>>
 	}
 
 	protected void showUnknowNode(final Node node) {
-		notifyWarning(MessageFormat.format("Unknown element node ''{0}''", node.getNodeName()));
+		final StringBuilder builder = new StringBuilder();
+		Node parentNode = node;
+		while (parentNode != null) {
+			builder.append(parentNode.getNodeName());
+			parentNode = parentNode.getParentNode();
+			if (parentNode != null) {
+				builder.append(" < ");
+			}
+		}
+		notifyWarning(MessageFormat.format("Unknown element node {0}", builder.toString()));
 	}
 
 	protected static boolean isElementNode(final Node node,

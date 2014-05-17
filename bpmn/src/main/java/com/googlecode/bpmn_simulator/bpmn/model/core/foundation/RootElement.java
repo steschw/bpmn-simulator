@@ -20,12 +20,7 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.model.core.foundation;
 
-public abstract class AbstractRootElement
-		extends AbstractBaseElement
-		implements RootElement {
-
-	public AbstractRootElement(final String id) {
-		super(id);
-	}
+public interface RootElement
+		extends BaseElement {
 
 }

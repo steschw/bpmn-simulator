@@ -18,14 +18,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.bpmn_simulator.bpmn.model.core.foundation;
+package com.googlecode.bpmn_simulator.bpmn.swing.model.process.activities;
 
-public abstract class AbstractRootElement
-		extends AbstractBaseElement
-		implements RootElement {
+import com.googlecode.bpmn_simulator.bpmn.model.process.activities.Subprocess;
 
-	public AbstractRootElement(final String id) {
-		super(id);
+@SuppressWarnings("serial")
+public class SubprocessShape
+		extends AbstractActivityShape<Subprocess> {
+
+	public SubprocessShape(final Subprocess element) {
+		super(element);
 	}
 
 }

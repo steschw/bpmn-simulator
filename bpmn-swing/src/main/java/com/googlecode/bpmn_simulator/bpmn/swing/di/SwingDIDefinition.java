@@ -48,6 +48,7 @@ import com.googlecode.bpmn_simulator.bpmn.model.core.common.gateways.ParallelGat
 import com.googlecode.bpmn_simulator.bpmn.model.core.foundation.BaseElement;
 import com.googlecode.bpmn_simulator.bpmn.model.process.Lane;
 import com.googlecode.bpmn_simulator.bpmn.model.process.activities.Process;
+import com.googlecode.bpmn_simulator.bpmn.model.process.activities.Subprocess;
 import com.googlecode.bpmn_simulator.bpmn.model.process.activities.tasks.BusinessRuleTask;
 import com.googlecode.bpmn_simulator.bpmn.model.process.activities.tasks.ManualTask;
 import com.googlecode.bpmn_simulator.bpmn.model.process.activities.tasks.ReceiveTask;
@@ -72,6 +73,8 @@ import com.googlecode.bpmn_simulator.bpmn.swing.model.core.common.gateways.Inclu
 import com.googlecode.bpmn_simulator.bpmn.swing.model.core.common.gateways.ParallelGatewayShape;
 import com.googlecode.bpmn_simulator.bpmn.swing.model.process.LaneShape;
 import com.googlecode.bpmn_simulator.bpmn.swing.model.process.activities.ProcessPlane;
+import com.googlecode.bpmn_simulator.bpmn.swing.model.process.activities.SubprocessPlane;
+import com.googlecode.bpmn_simulator.bpmn.swing.model.process.activities.SubprocessShape;
 import com.googlecode.bpmn_simulator.bpmn.swing.model.process.activities.task.BusinessRuleTaskShape;
 import com.googlecode.bpmn_simulator.bpmn.swing.model.process.activities.task.ManualTaskShape;
 import com.googlecode.bpmn_simulator.bpmn.swing.model.process.activities.task.ReceiveTaskShape;
@@ -120,6 +123,7 @@ public class SwingDIDefinition
 		SHAPE_MAPPERS.put(SendTask.class, SendTaskShape.class);
 		SHAPE_MAPPERS.put(Task.class, TaskShape.class);
 		SHAPE_MAPPERS.put(UserTask.class, UserTaskShape.class);
+		SHAPE_MAPPERS.put(Subprocess.class, SubprocessShape.class);
 		// Data
 		SHAPE_MAPPERS.put(DataObjectReference.class, DataObjectReferenceShape.class);
 		SHAPE_MAPPERS.put(DataStoreReference.class, DataStoreReferenceShape.class);
@@ -128,6 +132,7 @@ public class SwingDIDefinition
 		SHAPE_MAPPERS.put(Lane.class, LaneShape.class);
 
 		PLANE_MAPPERS.put(Process.class, ProcessPlane.class);
+		PLANE_MAPPERS.put(Subprocess.class, SubprocessPlane.class);
 		PLANE_MAPPERS.put(Collaboration.class, CollaborationPlane.class);
 	};
 

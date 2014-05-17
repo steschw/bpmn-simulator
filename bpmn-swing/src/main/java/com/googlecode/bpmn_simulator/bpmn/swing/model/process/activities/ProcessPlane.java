@@ -25,12 +25,11 @@ import java.awt.Graphics2D;
 import com.googlecode.bpmn_simulator.animation.element.visual.Bounds;
 import com.googlecode.bpmn_simulator.bpmn.model.process.activities.Process;
 import com.googlecode.bpmn_simulator.bpmn.swing.di.AbstractBPMNPlane;
+import com.googlecode.bpmn_simulator.bpmn.swing.di.Appearance;
 
 @SuppressWarnings("serial")
 public class ProcessPlane
 		extends AbstractBPMNPlane<Process> {
-
-	private static final int ARC_SIZE = 10;
 
 	public ProcessPlane(final Process element) {
 		super(element);
@@ -40,14 +39,14 @@ public class ProcessPlane
 	protected void paintElementBackground(final Graphics2D g) {
 		super.paintElementBackground(g);
 		final Bounds bounds = new Bounds(0, 0, getWidth(), getHeight());
-		getPresentation().fillRoundRect(g, bounds.shrink(MARGIN), ARC_SIZE);
+		getPresentation().fillRoundRect(g, bounds.shrink(MARGIN), Appearance.getDefault().getArcSize());
 	}
 
 	@Override
 	protected void paintElementForeground(final Graphics2D g) {
 		super.paintElementForeground(g);
 		final Bounds bounds = new Bounds(0, 0, getWidth(), getHeight());
-		getPresentation().drawRoundRect(g, bounds.shrink(MARGIN), ARC_SIZE);
+		getPresentation().drawRoundRect(g, bounds.shrink(MARGIN), Appearance.getDefault().getArcSize());
 	}
 
 }

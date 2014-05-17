@@ -20,14 +20,42 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.swing.model.process.activities;
 
+import java.awt.Graphics2D;
+import java.awt.Image;
+import java.awt.Stroke;
+
+import com.googlecode.bpmn_simulator.animation.element.visual.Bounds;
+import com.googlecode.bpmn_simulator.animation.element.visual.swing.Presentation;
 import com.googlecode.bpmn_simulator.bpmn.model.process.activities.Subprocess;
+import com.googlecode.bpmn_simulator.bpmn.swing.di.Appearance;
 
 @SuppressWarnings("serial")
 public class SubprocessShape
 		extends AbstractActivityShape<Subprocess> {
 
+	private static final Stroke EVENT_STROKE = Appearance.getDefault().createStrokeDotted(1);
+
 	public SubprocessShape(final Subprocess element) {
 		super(element);
+	}
+
+	@Override
+	protected Stroke getStroke() {
+		return getLogicalElement().isTriggeredByEvent()
+				? EVENT_STROKE : super.getStroke();
+	}
+
+	@Override
+	protected void paintElementForeground(final Graphics2D g) {
+		super.paintElementForeground(g);
+		final Presentation presentation = getPresentation();
+		final Appearance appearance = Appearance.getDefault();
+		final Bounds bounds = getInnerBoundsRelative();
+		if (!isExpanded()) {
+			final Image collapsedImage = appearance.getImage(Appearance.IMAGE_COLLAPSED);
+			final Bounds collapsedBounds = bounds.centerBottom(collapsedImage.getWidth(null), collapsedImage.getHeight(null));
+			presentation.drawImage(g, collapsedImage, collapsedBounds);
+		}
 	}
 
 }

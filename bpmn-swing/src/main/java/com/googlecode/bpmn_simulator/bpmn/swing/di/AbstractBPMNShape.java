@@ -20,7 +20,9 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.swing.di;
 
+import java.awt.BasicStroke;
 import java.awt.Graphics2D;
+import java.awt.Stroke;
 
 import com.googlecode.bpmn_simulator.animation.element.visual.swing.AbstractVisualNodeElement;
 import com.googlecode.bpmn_simulator.bpmn.di.BPMNShape;
@@ -30,6 +32,8 @@ import com.googlecode.bpmn_simulator.bpmn.swing.di.Appearance.ElementAppearance;
 public abstract class AbstractBPMNShape<E>
 		extends AbstractVisualNodeElement<E>
 		implements BPMNShape {
+
+	private static final Stroke DEFAULT_STROKE = new BasicStroke(1.f);
 
 	private boolean horizontal;
 	private boolean expanded;
@@ -69,6 +73,10 @@ public abstract class AbstractBPMNShape<E>
 		return markerVisible;
 	}
 
+	protected Stroke getStroke() {
+		return DEFAULT_STROKE;
+	}
+
 	@Override
 	protected void paintElementBackground(final Graphics2D g) {
 		final ElementAppearance appearance = Appearance.getDefault().getForElement(getClass());
@@ -78,6 +86,7 @@ public abstract class AbstractBPMNShape<E>
 	@Override
 	protected void paintElementForeground(final Graphics2D g) {
 		final ElementAppearance appearance = Appearance.getDefault().getForElement(getClass());
+		g.setStroke(getStroke());
 		g.setPaint(appearance.getForeground());
 	}
 

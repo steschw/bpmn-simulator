@@ -116,4 +116,11 @@ public class Bounds {
 		return new Bounds(getMinX(), getMaxY() - size, getWidth(), size);
 	}
 
+	public Bounds centerBottom(final int width, final int height) {
+		return new Bounds(
+				(int) Math.round(getCenterX() - width / 2.),
+				getMaxY() - height,
+				width, height);
+	}
+
 }

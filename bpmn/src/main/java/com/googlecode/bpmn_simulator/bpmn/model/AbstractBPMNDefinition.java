@@ -54,6 +54,8 @@ import com.googlecode.bpmn_simulator.bpmn.model.core.common.gateways.InclusiveGa
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.gateways.ParallelGateway;
 import com.googlecode.bpmn_simulator.bpmn.model.core.foundation.BaseElement;
 import com.googlecode.bpmn_simulator.bpmn.model.core.foundation.Documentation;
+import com.googlecode.bpmn_simulator.bpmn.model.process.Lane;
+import com.googlecode.bpmn_simulator.bpmn.model.process.LaneSet;
 import com.googlecode.bpmn_simulator.bpmn.model.process.activities.Activity;
 import com.googlecode.bpmn_simulator.bpmn.model.process.activities.Process;
 import com.googlecode.bpmn_simulator.bpmn.model.process.activities.Subprocess;
@@ -542,6 +544,66 @@ public abstract class AbstractBPMNDefinition<E extends Diagram<?>>
 		}
 	}
 
+	protected void readLaneElements(final Node node) {
+		final NodeList childNodes = node.getChildNodes();
+		for (int i = 0; i < childNodes.getLength(); ++i) {
+			final Node childNode = childNodes.item(i);
+			if (!readElementChildLaneSet(childNode)) {
+				showUnknowNode(childNode);
+			}
+		}
+	}
+
+	protected boolean readElementLane(final Node node) {
+		if (isElementNode(node, BPMN, "lane")) { //$NON-NLS-1$
+			final Lane lane = new Lane(
+					getIdAttribute(node), getNameAttribute(node));
+			readBaseElement(node, lane);
+			registerElement(lane);
+			readLaneElements(node);
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	protected void readLaneSetElements(final Node node) {
+		final NodeList childNodes = node.getChildNodes();
+		for (int i = 0; i < childNodes.getLength(); ++i) {
+			final Node childNode = childNodes.item(i);
+			if (!readElementLane(childNode)) {
+				showUnknowNode(childNode);
+			}
+		}
+	}
+
+	protected boolean readElementChildLaneSet(final Node node) {
+		if (isElementNode(node, BPMN, "childLaneSet")) { //$NON-NLS-1$
+			final LaneSet laneSet = new LaneSet(
+					getIdAttribute(node), getNameAttribute(node));
+			readBaseElement(node, laneSet);
+			registerElement(laneSet);
+			readLaneSetElements(node);
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	protected boolean readElementLaneSet(final Node node,
+			final FlowElementsContainer container) {
+		if (isElementNode(node, BPMN, "laneSet")) { //$NON-NLS-1$
+			final LaneSet laneSet = new LaneSet(
+					getIdAttribute(node), getNameAttribute(node));
+			readBaseElement(node, laneSet);
+			registerElement(laneSet);
+			readLaneSetElements(node);
+			return true;
+		} else {
+			return false;
+		}
+	}
+
 	protected void readFlowElementsContainer(final Node node,
 			final FlowElementsContainer container) {
 		final NodeList childNodes = node.getChildNodes();
@@ -554,10 +616,11 @@ public abstract class AbstractBPMNDefinition<E extends Diagram<?>>
 					&& !readElementGateway(childNode, container)
 					&& !readElementSequenceflow(childNode, container)
 					&& !readArtifacts(childNode)
+					&& !readElementsDataAssociations(childNode)
 					&& !readElementDataObject(childNode, container)
 					&& !readElementDataObjectReference(childNode, container)
 					&& !readElementDataStoreReference(childNode, container)
-					&& !readElementsDataAssociations(childNode)) {
+					&& !readElementLaneSet(childNode, container)) {
 				showUnknowNode(childNode);
 			}
 		}

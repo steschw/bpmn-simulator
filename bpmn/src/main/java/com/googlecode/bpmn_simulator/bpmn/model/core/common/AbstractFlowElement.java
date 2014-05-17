@@ -25,30 +25,17 @@ import java.util.Set;
 
 import com.googlecode.bpmn_simulator.animation.token.TokenFlowListener;
 import com.googlecode.bpmn_simulator.animation.token.Tokens;
-import com.googlecode.bpmn_simulator.bpmn.model.core.foundation.AbstractBaseElement;
+import com.googlecode.bpmn_simulator.bpmn.model.core.foundation.AbstractBaseElementNamed;
 
 public abstract class AbstractFlowElement
-		extends AbstractBaseElement
+		extends AbstractBaseElementNamed
 		implements FlowElement {
 
 	private final Set<TokenFlowListener> tokenFlowListeners
 			= new HashSet<TokenFlowListener>();
 
-	private final String name;
-
 	public AbstractFlowElement(final String id, final String name) {
-		super(id);
-		this.name = name;
-	}
-
-	@Override
-	public final String getName() {
-		return name;
-	}
-
-	public boolean hasName() {
-		final String name = getName();
-		return (name != null) && !name.isEmpty();
+		super(id, name);
 	}
 
 	@Override

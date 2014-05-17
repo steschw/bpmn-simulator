@@ -46,6 +46,7 @@ import com.googlecode.bpmn_simulator.bpmn.model.core.common.gateways.ExclusiveGa
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.gateways.InclusiveGateway;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.gateways.ParallelGateway;
 import com.googlecode.bpmn_simulator.bpmn.model.core.foundation.BaseElement;
+import com.googlecode.bpmn_simulator.bpmn.model.process.Lane;
 import com.googlecode.bpmn_simulator.bpmn.model.process.activities.Process;
 import com.googlecode.bpmn_simulator.bpmn.model.process.activities.tasks.BusinessRuleTask;
 import com.googlecode.bpmn_simulator.bpmn.model.process.activities.tasks.ManualTask;
@@ -69,6 +70,7 @@ import com.googlecode.bpmn_simulator.bpmn.swing.model.core.common.events.StartEv
 import com.googlecode.bpmn_simulator.bpmn.swing.model.core.common.gateways.ExclusiveGatewayShape;
 import com.googlecode.bpmn_simulator.bpmn.swing.model.core.common.gateways.InclusiveGatewayShape;
 import com.googlecode.bpmn_simulator.bpmn.swing.model.core.common.gateways.ParallelGatewayShape;
+import com.googlecode.bpmn_simulator.bpmn.swing.model.process.LaneShape;
 import com.googlecode.bpmn_simulator.bpmn.swing.model.process.activities.ProcessPlane;
 import com.googlecode.bpmn_simulator.bpmn.swing.model.process.activities.task.BusinessRuleTaskShape;
 import com.googlecode.bpmn_simulator.bpmn.swing.model.process.activities.task.ManualTaskShape;
@@ -123,7 +125,7 @@ public class SwingDIDefinition
 		SHAPE_MAPPERS.put(DataStoreReference.class, DataStoreReferenceShape.class);
 		// Collaboration
 		SHAPE_MAPPERS.put(Participant.class, ParticipantShape.class);
-		
+		SHAPE_MAPPERS.put(Lane.class, LaneShape.class);
 
 		PLANE_MAPPERS.put(Process.class, ProcessPlane.class);
 		PLANE_MAPPERS.put(Collaboration.class, CollaborationPlane.class);

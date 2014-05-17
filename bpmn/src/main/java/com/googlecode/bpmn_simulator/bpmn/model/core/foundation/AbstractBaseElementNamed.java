@@ -18,15 +18,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.bpmn_simulator.bpmn.model.collaboration;
+package com.googlecode.bpmn_simulator.bpmn.model.core.foundation;
 
-import com.googlecode.bpmn_simulator.bpmn.model.core.foundation.AbstractBaseElementNamed;
+import com.googlecode.bpmn_simulator.bpmn.model.NamedElement;
 
-public class Participant
-		extends AbstractBaseElementNamed {
+public abstract class AbstractBaseElementNamed
+		extends AbstractBaseElement
+		implements NamedElement {
 
-	public Participant(final String id, final String name) {
-		super(id, name);
+	private final String name;
+
+	public AbstractBaseElementNamed(final String id, final String name) {
+		super(id);
+		this.name = name;
+	}
+
+	@Override
+	public String getName() {
+		return name;
 	}
 
 }

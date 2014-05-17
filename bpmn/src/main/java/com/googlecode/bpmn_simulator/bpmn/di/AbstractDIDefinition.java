@@ -91,8 +91,8 @@ public abstract class AbstractDIDefinition<DIAGRAM extends BPMNDiagram<?>>
 	}
 
 	protected void showInvalidBPMNElement(final Node node) {
-		notifyError(MessageFormat.format("Unknown BPMN element ''{0}''",
-				getAttributeElement(node, "bpmnElement")), null);
+		notifyError(MessageFormat.format("Unknown BPMN element with id ''{0}''",
+				getAttributeString(node, "bpmnElement")), null);
 	}
 
 	protected BaseElement getBPMNElementAttribute(final Node node) {

@@ -18,14 +18,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.bpmn_simulator.bpmn.model.collaboration;
+package com.googlecode.bpmn_simulator.bpmn.model.process;
 
 import com.googlecode.bpmn_simulator.bpmn.model.core.foundation.AbstractBaseElementNamed;
 
-public class Participant
+public class LaneSet
 		extends AbstractBaseElementNamed {
 
-	public Participant(final String id, final String name) {
+	public LaneSet(final String id, final String name) {
 		super(id, name);
 	}
 

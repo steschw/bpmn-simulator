@@ -20,6 +20,11 @@
  */
 package com.googlecode.bpmn_simulator.animation.element.visual.swing;
 
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.geom.AffineTransform;
+
 import javax.swing.JLabel;
 
 import com.googlecode.bpmn_simulator.animation.element.visual.Bounds;
@@ -30,14 +35,64 @@ public abstract class AbstractLabel
 		extends JLabel
 		implements Label {
 
-	public AbstractLabel(final String text) {
-		super(text);
+	private boolean needsRotate;
+	private boolean vertical;
+
+	public AbstractLabel() {
+		super();
 		setFont(getFont().deriveFont(11.f));
 	}
 
 	@Override
-	public void setBounds(Bounds bounds) {
+	public void setBounds(final Bounds bounds) {
 		setBounds(bounds.getMinX(), bounds.getMinY(), bounds.getWidth(), bounds.getHeight());
+	}
+
+	@Override
+	public void setTextVertical(boolean vertical) {
+		this.vertical = vertical;
+		invalidate();
+	}
+
+	public boolean isTextVertical() {
+		return vertical;
+	}
+
+	@Override
+	public Dimension getPreferredSize() {
+		final Dimension preferredSize = super.getPreferredSize();
+		if (isTextVertical()) {
+			return new Dimension(preferredSize.height, preferredSize.width);
+		}
+		return preferredSize;
+	}
+
+	@Override
+	public int getHeight() {
+		if (isTextVertical() && needsRotate) {
+			return super.getWidth();
+		}
+		return super.getHeight();
+	}
+
+	@Override
+	public int getWidth() {
+		if (isTextVertical() && needsRotate) {
+			return super.getHeight();
+		}
+		return super.getWidth();
+	}
+
+	@Override
+	protected void paintComponent(final Graphics g) {
+		final Graphics2D g2d = (Graphics2D)g.create();
+		if (isTextVertical()) {
+			g2d.translate(0, getHeight());
+			g2d.transform(AffineTransform.getQuadrantRotateInstance(-1));
+		}
+		needsRotate = true;
+		super.paintComponent(g2d);
+		needsRotate = false;
 	}
 
 }

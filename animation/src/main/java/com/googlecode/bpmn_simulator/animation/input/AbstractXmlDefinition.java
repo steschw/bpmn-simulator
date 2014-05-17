@@ -23,6 +23,8 @@ package com.googlecode.bpmn_simulator.animation.input;
 import java.awt.Color;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.text.MessageFormat;
 
@@ -144,6 +146,18 @@ public abstract class AbstractXmlDefinition<E extends Diagram<?>>
 	protected boolean getAttributeBoolean(final Node node,
 			final String name, final boolean defaultValue) {
 		return convertStringToBool(getAttributeString(node, name), defaultValue);
+	}
+
+	protected static URI getAttributeURI(final Node node, final String name, final URI defaultValue) {
+		final Node attributeNode = node.getAttributes().getNamedItem(name);
+		if (attributeNode == null) {
+			return defaultValue;
+		}
+		try {
+			return new URI(attributeNode.getNodeValue());
+		} catch (URISyntaxException e) {
+			return defaultValue;
+		}
 	}
 
 	protected MimeType getAttributeMimeType(final Node node, final String name) {

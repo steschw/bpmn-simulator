@@ -33,6 +33,7 @@ public abstract class AbstractBPMNShape<E>
 
 	private boolean horizontal;
 	private boolean expanded;
+	private boolean markerVisible;
 
 	public AbstractBPMNShape(final E element) {
 		super(element);
@@ -56,6 +57,16 @@ public abstract class AbstractBPMNShape<E>
 	@Override
 	public boolean isExpanded() {
 		return expanded;
+	}
+
+	@Override
+	public void setMarkerVisible(boolean isMarkerVisible) {
+		markerVisible = isMarkerVisible;
+	}
+
+	@Override
+	public boolean isMarkerVisible() {
+		return markerVisible;
 	}
 
 	@Override

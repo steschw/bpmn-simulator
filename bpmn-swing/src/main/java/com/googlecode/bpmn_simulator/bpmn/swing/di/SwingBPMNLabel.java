@@ -28,8 +28,8 @@ public class SwingBPMNLabel
 		extends AbstractLabel
 		implements BPMNLabel {
 
-	public SwingBPMNLabel(final String text) {
-		super(text);
+	public SwingBPMNLabel() {
+		super();
 	}
 
 }

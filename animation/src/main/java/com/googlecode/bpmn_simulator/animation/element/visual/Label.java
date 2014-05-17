@@ -22,6 +22,10 @@ package com.googlecode.bpmn_simulator.animation.element.visual;
 
 public interface Label {
 
+	void setText(String text);
+
 	void setBounds(Bounds bounds);
+
+	void setTextVertical(boolean vertical);
 
 }

@@ -88,8 +88,6 @@ public class Appearance {
 
 	private boolean ignoreExplicitColors;
 
-	private boolean showExclusiveGatewaySymbol = true;
-
 	private Appearance() {
 		super();
 		loadImages();
@@ -171,14 +169,6 @@ public class Appearance {
 
 	public int getArcSize() {
 		return ARC_SIZE;
-	}
-
-	public void setShowExclusiveGatewaySymbol(final boolean show) {
-		this.showExclusiveGatewaySymbol = show;
-	}
-
-	public boolean getShowExclusiveGatewaySymbol() {
-		return showExclusiveGatewaySymbol;
 	}
 
 	public void setIgnoreExplicitColors(final boolean ignore) {

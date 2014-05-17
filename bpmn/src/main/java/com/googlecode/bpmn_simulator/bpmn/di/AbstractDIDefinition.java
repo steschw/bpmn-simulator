@@ -30,6 +30,8 @@ import org.w3c.dom.NodeList;
 import com.googlecode.bpmn_simulator.animation.element.visual.Bounds;
 import com.googlecode.bpmn_simulator.animation.element.visual.Waypoint;
 import com.googlecode.bpmn_simulator.bpmn.model.AbstractBPMNDefinition;
+import com.googlecode.bpmn_simulator.bpmn.model.NamedElement;
+import com.googlecode.bpmn_simulator.bpmn.model.TextElement;
 import com.googlecode.bpmn_simulator.bpmn.model.core.foundation.BaseElement;
 
 public abstract class AbstractDIDefinition<DIAGRAM extends BPMNDiagram<?>>
@@ -86,6 +88,10 @@ public abstract class AbstractDIDefinition<DIAGRAM extends BPMNDiagram<?>>
 		return getAttributeBoolean(node, "isHorizontal", false); //$NON-NLS-1$
 	}
 
+	protected boolean getIsMarkerVisibleAttribute(final Node node) {
+		return getAttributeBoolean(node, "isMarkerVisible", true); //$NON-NLS-1$
+	}
+
 	protected BaseElement getAttributeElement(final Node node, final String name) {
 		return getElement(getAttributeString(node, name));
 	}
@@ -105,11 +111,14 @@ public abstract class AbstractDIDefinition<DIAGRAM extends BPMNDiagram<?>>
 			if (element != null) {
 				final BPMNShape shape = createShapeFor(diagram, element);
 				if (shape != null) {
+					shape.setExpanded(getIsExpandedAttribute(node));
+					shape.setHorizontal(getIsHorizontalAttribute(node));
+					shape.setMarkerVisible(getIsMarkerVisibleAttribute(node));
 					final NodeList childNodes = node.getChildNodes();
 					for (int i = 0; i < childNodes.getLength(); ++i) {
 						final Node childNode = childNodes.item(i);
 						if (!readElementBounds(childNode, shape)
-								&& !readElementLabel(childNode, diagram, element)) {
+								&& !readElementLabel(childNode, diagram, element, shape)) {
 							showUnknowNode(childNode);
 						}
 					}
@@ -135,7 +144,7 @@ public abstract class AbstractDIDefinition<DIAGRAM extends BPMNDiagram<?>>
 					for (int i = 0; i < childNodes.getLength(); ++i) {
 						final Node childNode = childNodes.item(i);
 						if (!readElementWaypoint(childNode, edge)
-								&& !readElementLabel(childNode, diagram, element)) {
+								&& !readElementLabel(childNode, diagram, element, edge)) {
 							showUnknowNode(childNode);
 						}
 					}
@@ -151,20 +160,52 @@ public abstract class AbstractDIDefinition<DIAGRAM extends BPMNDiagram<?>>
 		}
 	}
 
+	protected static String getElementText(final BaseElement element) {
+		final String text;
+		if (element instanceof TextElement) {
+			text = ((TextElement) element).getText(); ///XXX: textFormat
+		} else if (element instanceof NamedElement) {
+			text = ((NamedElement) element).getName();
+		} else {
+			text = element.getId();
+		}
+		return text;
+	}
+
+	private void readLabelElements(final Node node,
+			final DIAGRAM diagram, final BaseElement element, final BPMNLabel label) {
+		if (label != null) {
+			label.setText(getElementText(element));
+			final NodeList childNodes = node.getChildNodes();
+			for (int i = 0; i < childNodes.getLength(); ++i) {
+				final Node childNode = childNodes.item(i);
+				if (!readElementBounds(childNode, label)) {
+					showUnknowNode(childNode);
+				}
+			}
+		} else {
+			notifyError(MessageFormat.format("couldn't create label for {0}", element), null);
+		}
+	}
+
 	protected boolean readElementLabel(final Node node,
-			final DIAGRAM diagram, final BaseElement element) {
+			final DIAGRAM diagram, final BaseElement element, final BPMNEdge edge) {
 		if (isElementNode(node, BPMNDI, "BPMNLabel")) { //$NON-NLS-1$
 			final BPMNLabel label = createLabelFor(diagram, element);
+			readLabelElements(node, diagram, element, label);
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	protected boolean readElementLabel(final Node node,
+			final DIAGRAM diagram, final BaseElement element, final BPMNShape shape) {
+		if (isElementNode(node, BPMNDI, "BPMNLabel")) { //$NON-NLS-1$
+			final BPMNLabel label = createLabelFor(diagram, element);
+			readLabelElements(node, diagram, element, label);
 			if (label != null) {
-				final NodeList childNodes = node.getChildNodes();
-				for (int i = 0; i < childNodes.getLength(); ++i) {
-					final Node childNode = childNodes.item(i);
-					if (!readElementBounds(childNode, label)) {
-						showUnknowNode(childNode);
-					}
-				}
-			} else {
-				notifyError(MessageFormat.format("can''t create label for {0}", element), null);
+				label.setTextVertical(shape.isHorizontal());
 			}
 			return true;
 		} else {

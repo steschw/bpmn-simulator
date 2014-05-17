@@ -20,6 +20,9 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.model;
 
+import java.net.URI;
+import java.net.URISyntaxException;
+
 import javax.activation.MimeType;
 
 import org.w3c.dom.Node;
@@ -79,14 +82,29 @@ import com.googlecode.bpmn_simulator.bpmn.model.process.data.DataStoreReference;
 public abstract class AbstractBPMNDefinition<E extends Diagram<?>>
 		extends AbstractXmlDefinition<E> {
 
+	private static final URI DEFAULT_EXPRESSION_LANGUAGE = uri("http://www.w3.org/1999/XPath");
+	private static final URI DEFAULT_TYPE_LANGUAGE = uri("http://www.w3.org/2001/XMLSchema");
+
 	private static final String SCHEMA_FILENAME =
 			"com/googlecode/bpmn_simulator/bpmn/xsd/BPMN20.xsd"; //$NON-NLS-1$
 
 	protected static final String BPMN =
 			"http://www.omg.org/spec/BPMN/20100524/MODEL";  //$NON-NLS-1$
 
+	private static URI uri(final String uri) {
+		try {
+			return new URI(uri);
+		} catch (NullPointerException e) {
+		} catch (URISyntaxException e) {
+		}
+		return null;
+	}
+
 	private final NamedElements<BaseElement> elements
 			= new NamedElements<BaseElement>();
+
+	private URI expressionLanguage;
+	private URI typeLanguage;
 
 	private String exporter;
 	private String exporterVersion;
@@ -95,20 +113,20 @@ public abstract class AbstractBPMNDefinition<E extends Diagram<?>>
 		super(SCHEMA_FILENAME);
 	}
 
-	protected void setExporter(final String exporter) {
-		this.exporter = exporter;
-	}
-
 	public String getExporter() {
 		return exporter;
 	}
 
-	protected void setExporterVersion(final String exporterVersion) {
-		this.exporterVersion = exporterVersion;
-	}
-
 	public String getExporterVersion() {
 		return exporterVersion;
+	}
+
+	public URI getExpressionLanguage() {
+		return expressionLanguage;
+	}
+
+	public URI getTypeLanguage() {
+		return typeLanguage;
 	}
 
 	protected void registerElement(final BaseElement element) {
@@ -148,10 +166,20 @@ public abstract class AbstractBPMNDefinition<E extends Diagram<?>>
 		return getAttributeString(node, "exporterVersion"); //$NON-NLS-1$
 	}
 
+	protected URI getExpressionLanguageAttribute(final Node node) {
+		return getAttributeURI(node, "expressionLanguage", DEFAULT_EXPRESSION_LANGUAGE);
+	}
+
+	protected URI getTypeLanguageAttribute(final Node node) {
+		return getAttributeURI(node, "typeLanguage", DEFAULT_TYPE_LANGUAGE);
+	}
+
 	protected void readDefinitions(final Node node) {
 		if (isElementNode(node, BPMN, "definitions")) { //$NON-NLS-1$
-			setExporter(getExporterAttribute(node));
-			setExporterVersion(getExporterVersionAttribute(node));
+			exporter = getExporterAttribute(node);
+			exporterVersion = getExporterVersionAttribute(node);
+			expressionLanguage = getExpressionLanguageAttribute(node);
+			typeLanguage = getTypeLanguageAttribute(node);
 			final NodeList childNodes = node.getChildNodes();
 			for (int i = 0; i < childNodes.getLength(); ++i) {
 				final Node childNode = childNodes.item(i);

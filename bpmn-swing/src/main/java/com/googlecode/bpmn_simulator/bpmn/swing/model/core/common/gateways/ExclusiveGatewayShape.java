@@ -47,7 +47,7 @@ public class ExclusiveGatewayShape
 	@Override
 	protected void paintElementForeground(final Graphics2D g) {
 		super.paintElementForeground(g);
-		if (Appearance.getDefault().getShowExclusiveGatewaySymbol()) {
+		if (isMarkerVisible()) {
 			g.setStroke(SYMBOL_STROKE);
 			final Bounds symbolBounds = getInnerBoundsRelative().scaleSize(0.3f);
 			getPresentation().drawLine(g,

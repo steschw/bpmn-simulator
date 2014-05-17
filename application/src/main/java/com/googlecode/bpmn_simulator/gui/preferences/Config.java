@@ -35,7 +35,6 @@ public class Config {
 
 	private static final String DEFAULT_LANGUAGE = ""; //$NON-NLS-1$
 
-	private static final String SHOW_EXCLUSIVEGATEWAYSYMBOL = "showExclusiveGatewaySymbol"; //$NON-NLS-1$
 	private static final String ANTIALIASING = "antialiasing"; //$NON-NLS-1$
 
 	private static final String IGNORE_COLORS = "ignoreColors"; //$NON-NLS-1$
@@ -71,14 +70,12 @@ public class Config {
 		final Preferences preferences = getRootNode();
 
 		preferences.putBoolean(IGNORE_COLORS, appearance.getIgnoreExplicitColors());
-		preferences.putBoolean(SHOW_EXCLUSIVEGATEWAYSYMBOL, appearance.getShowExclusiveGatewaySymbol());
 	}
 
 	public void loadAppearance(final Appearance appearance) {
 		final Preferences preferences = getRootNode();
 
 		appearance.setIgnoreExplicitColors(preferences.getBoolean(IGNORE_COLORS, false));
-		appearance.setShowExclusiveGatewaySymbol(preferences.getBoolean(SHOW_EXCLUSIVEGATEWAYSYMBOL, true));
 	}
 
 	protected static Color getBackground(final Preferences preferences) {

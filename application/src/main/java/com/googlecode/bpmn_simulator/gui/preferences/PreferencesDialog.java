@@ -293,7 +293,6 @@ public class PreferencesDialog
 		config.setExternalEditor(editExternalEditor.getText());
 
 		final Appearance appearance = Appearance.getDefault();
-		appearance.setShowExclusiveGatewaySymbol(checkShowExclusiveSymbol.isSelected());
 		appearance.setIgnoreExplicitColors(checkIgnoreModelerColors.isSelected());
 
 		config.store();
@@ -306,7 +305,6 @@ public class PreferencesDialog
 		editExternalEditor.setText(config.getExternalEditor());
 
 		final Appearance appearance = Appearance.getDefault();
-		checkShowExclusiveSymbol.setSelected(appearance.getShowExclusiveGatewaySymbol());
 		checkIgnoreModelerColors.setSelected(appearance.getIgnoreExplicitColors());
 	}
 

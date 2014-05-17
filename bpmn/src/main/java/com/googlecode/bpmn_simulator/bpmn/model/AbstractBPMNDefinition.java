@@ -30,6 +30,8 @@ import com.googlecode.bpmn_simulator.animation.element.logical.ref.NamedReferenc
 import com.googlecode.bpmn_simulator.animation.element.logical.ref.Reference;
 import com.googlecode.bpmn_simulator.animation.element.visual.Diagram;
 import com.googlecode.bpmn_simulator.animation.input.AbstractXmlDefinition;
+import com.googlecode.bpmn_simulator.bpmn.model.collaboration.Collaboration;
+import com.googlecode.bpmn_simulator.bpmn.model.collaboration.Participant;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.DefaultSequenceFlowElement;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.Expression;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.FlowElement;
@@ -129,10 +131,11 @@ public abstract class AbstractBPMNDefinition<E extends Diagram<?>>
 				|| readElementTextAnnotation(node);
 	}
 
-	protected boolean readElementsForDefinitionsElement(final Node node) {
+	protected boolean readRootElements(final Node node) {
 		return readElementMessage(node)
 				|| readElementDataStore(node)
-				|| readElementProcess(node);
+				|| readElementProcess(node)
+				|| readElementCollaboration(node);
 	}
 
 	protected String getExporterAttribute(final Node node) {
@@ -150,7 +153,7 @@ public abstract class AbstractBPMNDefinition<E extends Diagram<?>>
 			final NodeList childNodes = node.getChildNodes();
 			for (int i = 0; i < childNodes.getLength(); ++i) {
 				final Node childNode = childNodes.item(i);
-				if (!readElementsForDefinitionsElement(childNode)) {
+				if (!readRootElements(childNode)) {
 					showUnknowNode(childNode);
 				}
 			}
@@ -562,6 +565,46 @@ public abstract class AbstractBPMNDefinition<E extends Diagram<?>>
 
 	protected boolean getTriggeredByEventAttribute(final Node node) {
 		return getAttributeBoolean(node, "triggeredByEvent", false); //$NON-NLS-1$
+	}
+
+	protected boolean getIsClosedAttribute(final Node node) {
+		return getAttributeBoolean(node, "isClosed", false); //$NON-NLS-1$
+	}
+
+	protected boolean readElementParticipant(final Node node, final Collaboration collaboration) {
+		if (isElementNode(node, BPMN, "participant")) { //$NON-NLS-1$
+			final Participant participant = new Participant(
+					getIdAttribute(node), getNameAttribute(node));
+			registerElement(participant);
+			collaboration.addParticipant(participant);
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	protected void readCollaborationElements(final Node node, final Collaboration collaboration) {
+		final NodeList childNodes = node.getChildNodes();
+		for (int i = 0; i < childNodes.getLength(); ++i) {
+			final Node childNode = childNodes.item(i);
+			if (!readElementParticipant(childNode, collaboration)) {
+				showUnknowNode(childNode);
+			}
+		}
+	}
+
+	protected boolean readElementCollaboration(final Node node) {
+		if (isElementNode(node, BPMN, "collaboration")) { //$NON-NLS-1$
+			final Collaboration collaboration = new Collaboration(
+					getIdAttribute(node), getNameAttribute(node),
+					getIsClosedAttribute(node));
+			readBaseElement(node, collaboration);
+			readCollaborationElements(node, collaboration);
+			registerElement(collaboration);
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	protected boolean readElementProcess(final Node node) {

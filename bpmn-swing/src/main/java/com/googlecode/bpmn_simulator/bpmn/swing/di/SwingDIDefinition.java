@@ -34,6 +34,8 @@ import com.googlecode.bpmn_simulator.bpmn.di.BPMNPlane;
 import com.googlecode.bpmn_simulator.bpmn.di.BPMNShape;
 import com.googlecode.bpmn_simulator.bpmn.model.NamedElement;
 import com.googlecode.bpmn_simulator.bpmn.model.TextElement;
+import com.googlecode.bpmn_simulator.bpmn.model.collaboration.Collaboration;
+import com.googlecode.bpmn_simulator.bpmn.model.collaboration.Participant;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.SequenceFlow;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.artifacts.Association;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.artifacts.Group;
@@ -56,6 +58,8 @@ import com.googlecode.bpmn_simulator.bpmn.model.process.activities.tasks.UserTas
 import com.googlecode.bpmn_simulator.bpmn.model.process.data.DataAssociation;
 import com.googlecode.bpmn_simulator.bpmn.model.process.data.DataObjectReference;
 import com.googlecode.bpmn_simulator.bpmn.model.process.data.DataStoreReference;
+import com.googlecode.bpmn_simulator.bpmn.swing.model.collaboration.CollaborationPlane;
+import com.googlecode.bpmn_simulator.bpmn.swing.model.collaboration.ParticipantShape;
 import com.googlecode.bpmn_simulator.bpmn.swing.model.core.common.SequenceFlowEdge;
 import com.googlecode.bpmn_simulator.bpmn.swing.model.core.common.artifacts.AssociationEdge;
 import com.googlecode.bpmn_simulator.bpmn.swing.model.core.common.artifacts.GroupShape;
@@ -117,8 +121,12 @@ public class SwingDIDefinition
 		// Data
 		SHAPE_MAPPERS.put(DataObjectReference.class, DataObjectReferenceShape.class);
 		SHAPE_MAPPERS.put(DataStoreReference.class, DataStoreReferenceShape.class);
+		// Collaboration
+		SHAPE_MAPPERS.put(Participant.class, ParticipantShape.class);
+		
 
 		PLANE_MAPPERS.put(Process.class, ProcessPlane.class);
+		PLANE_MAPPERS.put(Collaboration.class, CollaborationPlane.class);
 	};
 
 	private static <E> E createFor(

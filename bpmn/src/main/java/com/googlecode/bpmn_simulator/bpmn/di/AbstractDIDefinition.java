@@ -96,9 +96,9 @@ public abstract class AbstractDIDefinition<DIAGRAM extends BPMNDiagram<?>>
 		return getElement(getAttributeString(node, name));
 	}
 
-	protected void showInvalidBPMNElement(final Node node) {
-		notifyError(MessageFormat.format("Unknown BPMN element with id ''{0}''",
-				getAttributeString(node, "bpmnElement")), null);
+	protected void showUnknownBPMNElement(final Node node, final String forElement) {
+		notifyError(MessageFormat.format("Unknown BPMN element with id ''{0}'' for {1}",
+				getAttributeString(node, "bpmnElement"), forElement), null);
 	}
 
 	protected BaseElement getBPMNElementAttribute(final Node node) {
@@ -126,7 +126,7 @@ public abstract class AbstractDIDefinition<DIAGRAM extends BPMNDiagram<?>>
 					notifyError(MessageFormat.format("can''t create shape for {0}", element), null);
 				}
 			} else {
-				showInvalidBPMNElement(node);
+				showUnknownBPMNElement(node, "shape");
 			}
 			return true;
 		} else {
@@ -152,7 +152,7 @@ public abstract class AbstractDIDefinition<DIAGRAM extends BPMNDiagram<?>>
 					notifyError(MessageFormat.format("can''t create shape for {0}", element), null);
 				}
 			} else {
-				showInvalidBPMNElement(node);
+				showUnknownBPMNElement(node, "edge");
 			}
 			return true;
 		} else {
@@ -172,27 +172,34 @@ public abstract class AbstractDIDefinition<DIAGRAM extends BPMNDiagram<?>>
 		return text;
 	}
 
-	private void readLabelElements(final Node node,
+	private boolean readLabelElements(final Node node,
 			final DIAGRAM diagram, final BaseElement element, final BPMNLabel label) {
 		if (label != null) {
 			label.setText(getElementText(element));
 			final NodeList childNodes = node.getChildNodes();
+			boolean boundsRead = false;
 			for (int i = 0; i < childNodes.getLength(); ++i) {
 				final Node childNode = childNodes.item(i);
-				if (!readElementBounds(childNode, label)) {
+				if (readElementBounds(childNode, label)) {
+					boundsRead = true;
+				} else {
 					showUnknowNode(childNode);
 				}
 			}
+			return boundsRead;
 		} else {
 			notifyError(MessageFormat.format("couldn't create label for {0}", element), null);
 		}
+		return false;
 	}
 
 	protected boolean readElementLabel(final Node node,
 			final DIAGRAM diagram, final BaseElement element, final BPMNEdge edge) {
 		if (isElementNode(node, BPMNDI, "BPMNLabel")) { //$NON-NLS-1$
 			final BPMNLabel label = createLabelFor(diagram, element);
-			readLabelElements(node, diagram, element, label);
+			if (!readLabelElements(node, diagram, element, label)) {
+				//XXX: align label to edge if no bounds are specified
+			}
 			return true;
 		} else {
 			return false;
@@ -203,7 +210,10 @@ public abstract class AbstractDIDefinition<DIAGRAM extends BPMNDiagram<?>>
 			final DIAGRAM diagram, final BaseElement element, final BPMNShape shape) {
 		if (isElementNode(node, BPMNDI, "BPMNLabel")) { //$NON-NLS-1$
 			final BPMNLabel label = createLabelFor(diagram, element);
-			readLabelElements(node, diagram, element, label);
+			if (!readLabelElements(node, diagram, element, label)) {
+				//XXX: align label to shape if no bounds are specified
+				label.setBounds(shape.getElementBounds());
+			}
 			if (label != null) {
 				label.setTextVertical(shape.isHorizontal());
 			}
@@ -231,7 +241,7 @@ public abstract class AbstractDIDefinition<DIAGRAM extends BPMNDiagram<?>>
 					notifyError(MessageFormat.format("can''t create plane for {0}", element), null);
 				}
 			} else {
-				showInvalidBPMNElement(node);
+				showUnknownBPMNElement(node, "plane");
 			}
 			return true;
 		} else {

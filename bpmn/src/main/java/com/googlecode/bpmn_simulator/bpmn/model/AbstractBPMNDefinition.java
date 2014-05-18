@@ -33,6 +33,7 @@ import com.googlecode.bpmn_simulator.animation.element.logical.ref.NamedReferenc
 import com.googlecode.bpmn_simulator.animation.element.logical.ref.Reference;
 import com.googlecode.bpmn_simulator.animation.element.visual.Diagram;
 import com.googlecode.bpmn_simulator.animation.input.AbstractXmlDefinition;
+import com.googlecode.bpmn_simulator.bpmn.model.choreography.Choreography;
 import com.googlecode.bpmn_simulator.bpmn.model.collaboration.Collaboration;
 import com.googlecode.bpmn_simulator.bpmn.model.collaboration.MessageFlow;
 import com.googlecode.bpmn_simulator.bpmn.model.collaboration.Participant;
@@ -157,7 +158,8 @@ public abstract class AbstractBPMNDefinition<E extends Diagram<?>>
 		return readElementMessage(node)
 				|| readElementDataStore(node)
 				|| readElementProcess(node)
-				|| readElementCollaboration(node);
+				|| readElementCollaboration(node)
+				|| readElementChoreography(node);
 	}
 
 	protected String getExporterAttribute(final Node node) {
@@ -719,6 +721,19 @@ public abstract class AbstractBPMNDefinition<E extends Diagram<?>>
 					getIsClosedAttribute(node));
 			readCollaborationElements(node, collaboration);
 			registerElement(collaboration);
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	protected boolean readElementChoreography(final Node node) {
+		if (isElementNode(node, BPMN, "choreography")) { //$NON-NLS-1$
+			final Choreography choreography = new Choreography(
+					getIdAttribute(node), getNameAttribute(node),
+					getIsClosedAttribute(node));
+			readFlowElementsContainer(node, choreography);
+			registerElement(choreography);
 			return true;
 		} else {
 			return false;

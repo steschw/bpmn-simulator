@@ -18,31 +18,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.bpmn_simulator.animation.element.visual.swing;
+package com.googlecode.bpmn_simulator.bpmn.model.choreography;
 
-import com.googlecode.bpmn_simulator.animation.element.visual.Bounds;
-import com.googlecode.bpmn_simulator.animation.element.visual.VisualNodeElement;
+import com.googlecode.bpmn_simulator.animation.element.logical.ref.References;
+import com.googlecode.bpmn_simulator.bpmn.model.collaboration.Collaboration;
+import com.googlecode.bpmn_simulator.bpmn.model.core.common.FlowElement;
+import com.googlecode.bpmn_simulator.bpmn.model.core.common.FlowElementsContainer;
 
-@SuppressWarnings("serial")
-public abstract class AbstractVisualNodeElement<E>
-		extends AbstractVisualElement<E>
-		implements VisualNodeElement {
+public class Choreography
+		extends Collaboration
+		implements FlowElementsContainer {
 
-	private Bounds bounds;
-
-	public AbstractVisualNodeElement(final E element) {
-		super(element);
+	public Choreography(final String id, final String name, final boolean isClosed) {
+		super(id, name, isClosed);
 	}
 
 	@Override
-	public void setElementBounds(final Bounds bounds) {
-		this.bounds = bounds;
-		setInnerBounds(bounds);
-	}
-
-	@Override
-	public Bounds getElementBounds() {
-		return bounds;
+	public void setFlowElements(final References<FlowElement> flowElements) {
 	}
 
 }

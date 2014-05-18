@@ -25,6 +25,6 @@ public interface VisualNodeElement
 
 	void setElementBounds(Bounds bounds);
 
-//	Bounds getElementBounds();
+	Bounds getElementBounds();
 
 }

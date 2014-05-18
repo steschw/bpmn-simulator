@@ -26,16 +26,16 @@ import java.awt.Stroke;
 
 import com.googlecode.bpmn_simulator.animation.element.visual.Bounds;
 import com.googlecode.bpmn_simulator.animation.element.visual.swing.Presentation;
-import com.googlecode.bpmn_simulator.bpmn.model.process.activities.Subprocess;
+import com.googlecode.bpmn_simulator.bpmn.model.process.activities.SubProcess;
 import com.googlecode.bpmn_simulator.bpmn.swing.di.Appearance;
 
 @SuppressWarnings("serial")
-public class SubprocessShape
-		extends AbstractActivityShape<Subprocess> {
+abstract class AbstractSubProcessShape<E extends SubProcess>
+		extends AbstractActivityShape<E> {
 
 	private static final Stroke EVENT_STROKE = Appearance.getDefault().createStrokeDotted(1);
 
-	public SubprocessShape(final Subprocess element) {
+	public AbstractSubProcessShape(final E element) {
 		super(element);
 	}
 

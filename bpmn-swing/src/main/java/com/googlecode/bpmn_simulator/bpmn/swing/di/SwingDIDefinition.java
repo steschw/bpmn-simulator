@@ -33,6 +33,7 @@ import com.googlecode.bpmn_simulator.bpmn.di.BPMNLabel;
 import com.googlecode.bpmn_simulator.bpmn.di.BPMNPlane;
 import com.googlecode.bpmn_simulator.bpmn.di.BPMNShape;
 import com.googlecode.bpmn_simulator.bpmn.model.collaboration.Collaboration;
+import com.googlecode.bpmn_simulator.bpmn.model.collaboration.MessageFlow;
 import com.googlecode.bpmn_simulator.bpmn.model.collaboration.Participant;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.SequenceFlow;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.artifacts.Association;
@@ -46,7 +47,8 @@ import com.googlecode.bpmn_simulator.bpmn.model.core.common.gateways.ParallelGat
 import com.googlecode.bpmn_simulator.bpmn.model.core.foundation.BaseElement;
 import com.googlecode.bpmn_simulator.bpmn.model.process.Lane;
 import com.googlecode.bpmn_simulator.bpmn.model.process.activities.Process;
-import com.googlecode.bpmn_simulator.bpmn.model.process.activities.Subprocess;
+import com.googlecode.bpmn_simulator.bpmn.model.process.activities.SubProcess;
+import com.googlecode.bpmn_simulator.bpmn.model.process.activities.Transaction;
 import com.googlecode.bpmn_simulator.bpmn.model.process.activities.tasks.BusinessRuleTask;
 import com.googlecode.bpmn_simulator.bpmn.model.process.activities.tasks.ManualTask;
 import com.googlecode.bpmn_simulator.bpmn.model.process.activities.tasks.ReceiveTask;
@@ -59,6 +61,7 @@ import com.googlecode.bpmn_simulator.bpmn.model.process.data.DataAssociation;
 import com.googlecode.bpmn_simulator.bpmn.model.process.data.DataObjectReference;
 import com.googlecode.bpmn_simulator.bpmn.model.process.data.DataStoreReference;
 import com.googlecode.bpmn_simulator.bpmn.swing.model.collaboration.CollaborationPlane;
+import com.googlecode.bpmn_simulator.bpmn.swing.model.collaboration.MessageFlowEdge;
 import com.googlecode.bpmn_simulator.bpmn.swing.model.collaboration.ParticipantShape;
 import com.googlecode.bpmn_simulator.bpmn.swing.model.core.common.SequenceFlowEdge;
 import com.googlecode.bpmn_simulator.bpmn.swing.model.core.common.artifacts.AssociationEdge;
@@ -71,8 +74,9 @@ import com.googlecode.bpmn_simulator.bpmn.swing.model.core.common.gateways.Inclu
 import com.googlecode.bpmn_simulator.bpmn.swing.model.core.common.gateways.ParallelGatewayShape;
 import com.googlecode.bpmn_simulator.bpmn.swing.model.process.LaneShape;
 import com.googlecode.bpmn_simulator.bpmn.swing.model.process.activities.ProcessPlane;
-import com.googlecode.bpmn_simulator.bpmn.swing.model.process.activities.SubprocessPlane;
-import com.googlecode.bpmn_simulator.bpmn.swing.model.process.activities.SubprocessShape;
+import com.googlecode.bpmn_simulator.bpmn.swing.model.process.activities.SubProcessPlane;
+import com.googlecode.bpmn_simulator.bpmn.swing.model.process.activities.SubProcessShape;
+import com.googlecode.bpmn_simulator.bpmn.swing.model.process.activities.TransactionShape;
 import com.googlecode.bpmn_simulator.bpmn.swing.model.process.activities.task.BusinessRuleTaskShape;
 import com.googlecode.bpmn_simulator.bpmn.swing.model.process.activities.task.ManualTaskShape;
 import com.googlecode.bpmn_simulator.bpmn.swing.model.process.activities.task.ReceiveTaskShape;
@@ -101,6 +105,7 @@ public class SwingDIDefinition
 		EDGE_MAPPERS.put(Association.class, AssociationEdge.class);
 		EDGE_MAPPERS.put(SequenceFlow.class, SequenceFlowEdge.class);
 		EDGE_MAPPERS.put(DataAssociation.class, DataAssociationEdge.class);
+		EDGE_MAPPERS.put(MessageFlow.class, MessageFlowEdge.class);
 
 		// Artifacts
 		SHAPE_MAPPERS.put(TextAnnotation.class, TextAnnotationShape.class);
@@ -121,7 +126,8 @@ public class SwingDIDefinition
 		SHAPE_MAPPERS.put(SendTask.class, SendTaskShape.class);
 		SHAPE_MAPPERS.put(Task.class, TaskShape.class);
 		SHAPE_MAPPERS.put(UserTask.class, UserTaskShape.class);
-		SHAPE_MAPPERS.put(Subprocess.class, SubprocessShape.class);
+		SHAPE_MAPPERS.put(SubProcess.class, SubProcessShape.class);
+		SHAPE_MAPPERS.put(Transaction.class, TransactionShape.class);
 		// Data
 		SHAPE_MAPPERS.put(DataObjectReference.class, DataObjectReferenceShape.class);
 		SHAPE_MAPPERS.put(DataStoreReference.class, DataStoreReferenceShape.class);
@@ -130,7 +136,7 @@ public class SwingDIDefinition
 		SHAPE_MAPPERS.put(Lane.class, LaneShape.class);
 
 		PLANE_MAPPERS.put(Process.class, ProcessPlane.class);
-		PLANE_MAPPERS.put(Subprocess.class, SubprocessPlane.class);
+		PLANE_MAPPERS.put(SubProcess.class, SubProcessPlane.class);
 		PLANE_MAPPERS.put(Collaboration.class, CollaborationPlane.class);
 	};
 

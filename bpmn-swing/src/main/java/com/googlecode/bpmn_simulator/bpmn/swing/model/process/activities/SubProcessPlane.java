@@ -4,17 +4,17 @@ import java.awt.Graphics2D;
 import java.awt.Stroke;
 
 import com.googlecode.bpmn_simulator.animation.element.visual.Bounds;
-import com.googlecode.bpmn_simulator.bpmn.model.process.activities.Subprocess;
+import com.googlecode.bpmn_simulator.bpmn.model.process.activities.SubProcess;
 import com.googlecode.bpmn_simulator.bpmn.swing.di.AbstractBPMNPlane;
 import com.googlecode.bpmn_simulator.bpmn.swing.di.Appearance;
 
 @SuppressWarnings("serial")
-public class SubprocessPlane
-		extends AbstractBPMNPlane<Subprocess> {
+public class SubProcessPlane
+		extends AbstractBPMNPlane<SubProcess> {
 
 	private static final Stroke EVENT_STROKE = Appearance.getDefault().createStrokeDotted(1);
 
-	public SubprocessPlane(final Subprocess element) {
+	public SubProcessPlane(final SubProcess element) {
 		super(element);
 	}
 

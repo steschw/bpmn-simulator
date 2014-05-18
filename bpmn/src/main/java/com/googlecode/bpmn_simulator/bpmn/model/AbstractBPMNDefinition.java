@@ -34,6 +34,7 @@ import com.googlecode.bpmn_simulator.animation.element.logical.ref.Reference;
 import com.googlecode.bpmn_simulator.animation.element.visual.Diagram;
 import com.googlecode.bpmn_simulator.animation.input.AbstractXmlDefinition;
 import com.googlecode.bpmn_simulator.bpmn.model.collaboration.Collaboration;
+import com.googlecode.bpmn_simulator.bpmn.model.collaboration.MessageFlow;
 import com.googlecode.bpmn_simulator.bpmn.model.collaboration.Participant;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.DefaultSequenceFlowElement;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.Expression;
@@ -61,7 +62,8 @@ import com.googlecode.bpmn_simulator.bpmn.model.process.Lane;
 import com.googlecode.bpmn_simulator.bpmn.model.process.LaneSet;
 import com.googlecode.bpmn_simulator.bpmn.model.process.activities.Activity;
 import com.googlecode.bpmn_simulator.bpmn.model.process.activities.Process;
-import com.googlecode.bpmn_simulator.bpmn.model.process.activities.Subprocess;
+import com.googlecode.bpmn_simulator.bpmn.model.process.activities.SubProcess;
+import com.googlecode.bpmn_simulator.bpmn.model.process.activities.Transaction;
 import com.googlecode.bpmn_simulator.bpmn.model.process.activities.tasks.BusinessRuleTask;
 import com.googlecode.bpmn_simulator.bpmn.model.process.activities.tasks.ManualTask;
 import com.googlecode.bpmn_simulator.bpmn.model.process.activities.tasks.ReceiveTask;
@@ -387,6 +389,18 @@ public abstract class AbstractBPMNDefinition<E extends Diagram<?>>
 		return getAttributeIDREF(node, "targetRef", FlowNode.class);
 	}
 
+	protected boolean readElementMessageFlow(final Node node) {
+		if (isElementNode(node, BPMN, "messageFlow")) { //$NON-NLS-1$
+			final MessageFlow messageFlow = new MessageFlow(
+					getIdAttribute(node), getNameAttribute(node));
+			readElementsForBaseElement(node, messageFlow);
+			registerElement(messageFlow);
+			return true;
+		} else {
+			return false;
+		}
+	}
+
 	protected boolean readElementSequenceflow(final Node node,
 			final FlowElementsContainer activity) {
 		if (isElementNode(node, BPMN, "sequenceFlow")) { //$NON-NLS-1$
@@ -649,6 +663,7 @@ public abstract class AbstractBPMNDefinition<E extends Diagram<?>>
 			final Node childNode = childNodes.item(i);
 			if (!readElementsForBaseElement(childNode, container)
 					&& !readElementSubprocess(childNode, container)
+					&& !readElementTransaction(childNode, container)
 					&& !readElementStartEvent(childNode, container)
 					&& !readElementEndEvent(childNode, container)
 					&& !readElementTask(childNode, container)
@@ -690,7 +705,8 @@ public abstract class AbstractBPMNDefinition<E extends Diagram<?>>
 		for (int i = 0; i < childNodes.getLength(); ++i) {
 			final Node childNode = childNodes.item(i);
 			if (!readElementsForBaseElement(childNode, collaboration)
-					&& !readElementParticipant(childNode, collaboration)) {
+					&& !readElementParticipant(childNode, collaboration)
+					&& !readElementMessageFlow(childNode)) {
 				showUnknowNode(childNode);
 			}
 		}
@@ -724,13 +740,27 @@ public abstract class AbstractBPMNDefinition<E extends Diagram<?>>
 	protected boolean readElementSubprocess(final Node node,
 			final FlowElementsContainer parentActivity) {
 		if (isElementNode(node, BPMN, "subProcess")) { //$NON-NLS-1$
-			final Subprocess subprocess = new Subprocess(
+			final SubProcess subprocess = new SubProcess(
 					getIdAttribute(node), getNameAttribute(node),
 					getTriggeredByEventAttribute(node));
 			readDefaultSequenceFlowAttribute(node, subprocess);
 			readFlowElementsContainer(node, subprocess);
-//			readElementsForFlowElement(node, subprocess);
 			registerElement(subprocess);
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	protected boolean readElementTransaction(final Node node,
+			final FlowElementsContainer parentActivity) {
+		if (isElementNode(node, BPMN, "transaction")) { //$NON-NLS-1$
+			final Transaction transaction = new Transaction(
+					getIdAttribute(node), getNameAttribute(node),
+					getTriggeredByEventAttribute(node));
+			readDefaultSequenceFlowAttribute(node, transaction);
+			readFlowElementsContainer(node, transaction);
+			registerElement(transaction);
 			return true;
 		} else {
 			return false;

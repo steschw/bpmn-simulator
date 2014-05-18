@@ -25,7 +25,7 @@ import com.googlecode.bpmn_simulator.bpmn.Messages;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.FlowElement;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.FlowElementsContainer;
 
-public final class Subprocess
+public class SubProcess
 		extends AbstractActivity
 		implements FlowElementsContainer {
 
@@ -35,7 +35,7 @@ public final class Subprocess
 
 	private References<FlowElement> flowElements;
 
-	public Subprocess(final String id, final String name, final boolean triggeredByEvent) {
+	public SubProcess(final String id, final String name, final boolean triggeredByEvent) {
 		super(id, name);
 		this.triggeredByEvent = triggeredByEvent;
 	}

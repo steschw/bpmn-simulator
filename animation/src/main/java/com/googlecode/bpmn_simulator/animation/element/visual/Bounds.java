@@ -41,6 +41,10 @@ public class Bounds {
 		this.height = height;
 	}
 
+	public Bounds(final Point center, final int size) {
+		this(center.getX() - size, center.getY() - size, size * 2, size * 2);
+	}
+
 	public int getX() {
 		return x;
 	}

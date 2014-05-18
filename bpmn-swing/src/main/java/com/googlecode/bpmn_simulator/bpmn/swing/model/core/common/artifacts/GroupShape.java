@@ -39,8 +39,10 @@ public class GroupShape
 
 	@Override
 	protected void paintElementBackground(final Graphics2D g) {
+		/*XXX: some modeler adding groups in the wrong order, which causes overlapping of the grouped elements
 		super.paintElementBackground(g);
 		getPresentation().fillRoundRect(g, getInnerBoundsRelative(), Appearance.getDefault().getArcSize());
+		*/
 	}
 
 	@Override

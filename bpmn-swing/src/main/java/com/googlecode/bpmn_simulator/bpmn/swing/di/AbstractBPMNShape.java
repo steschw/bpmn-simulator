@@ -55,7 +55,7 @@ public abstract class AbstractBPMNShape<E>
 
 	@Override
 	public void setExpanded(final boolean isExpanded) {
-		horizontal = isExpanded;
+		expanded = isExpanded;
 	}
 
 	@Override

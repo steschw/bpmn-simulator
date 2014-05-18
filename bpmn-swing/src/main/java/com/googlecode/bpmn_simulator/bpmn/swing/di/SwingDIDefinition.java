@@ -40,7 +40,10 @@ import com.googlecode.bpmn_simulator.bpmn.model.core.common.SequenceFlow;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.artifacts.Association;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.artifacts.Group;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.artifacts.TextAnnotation;
+import com.googlecode.bpmn_simulator.bpmn.model.core.common.events.BoundaryEvent;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.events.EndEvent;
+import com.googlecode.bpmn_simulator.bpmn.model.core.common.events.IntermediateCatchEvent;
+import com.googlecode.bpmn_simulator.bpmn.model.core.common.events.IntermediateThrowEvent;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.events.StartEvent;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.gateways.ExclusiveGateway;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.gateways.InclusiveGateway;
@@ -69,7 +72,10 @@ import com.googlecode.bpmn_simulator.bpmn.swing.model.core.common.SequenceFlowEd
 import com.googlecode.bpmn_simulator.bpmn.swing.model.core.common.artifacts.AssociationEdge;
 import com.googlecode.bpmn_simulator.bpmn.swing.model.core.common.artifacts.GroupShape;
 import com.googlecode.bpmn_simulator.bpmn.swing.model.core.common.artifacts.TextAnnotationShape;
+import com.googlecode.bpmn_simulator.bpmn.swing.model.core.common.events.BoundaryEventShape;
 import com.googlecode.bpmn_simulator.bpmn.swing.model.core.common.events.EndEventShape;
+import com.googlecode.bpmn_simulator.bpmn.swing.model.core.common.events.IntermediateCatchEventShape;
+import com.googlecode.bpmn_simulator.bpmn.swing.model.core.common.events.IntermediateThrowEventShape;
 import com.googlecode.bpmn_simulator.bpmn.swing.model.core.common.events.StartEventShape;
 import com.googlecode.bpmn_simulator.bpmn.swing.model.core.common.gateways.ExclusiveGatewayShape;
 import com.googlecode.bpmn_simulator.bpmn.swing.model.core.common.gateways.InclusiveGatewayShape;
@@ -115,6 +121,9 @@ public class SwingDIDefinition
 		// Events
 		SHAPE_MAPPERS.put(StartEvent.class, StartEventShape.class);
 		SHAPE_MAPPERS.put(EndEvent.class, EndEventShape.class);
+		SHAPE_MAPPERS.put(IntermediateThrowEvent.class, IntermediateThrowEventShape.class);
+		SHAPE_MAPPERS.put(IntermediateCatchEvent.class, IntermediateCatchEventShape.class);
+		SHAPE_MAPPERS.put(BoundaryEvent.class, BoundaryEventShape.class);
 		// Gateways
 		SHAPE_MAPPERS.put(ParallelGateway.class, ParallelGatewayShape.class);
 		SHAPE_MAPPERS.put(ExclusiveGateway.class, ExclusiveGatewayShape.class);

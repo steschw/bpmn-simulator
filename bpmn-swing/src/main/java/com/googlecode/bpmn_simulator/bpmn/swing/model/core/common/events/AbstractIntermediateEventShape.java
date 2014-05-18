@@ -18,29 +18,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.bpmn_simulator.bpmn.model.core.common.events;
+package com.googlecode.bpmn_simulator.bpmn.swing.model.core.common.events;
 
-import com.googlecode.bpmn_simulator.bpmn.Messages;
+import java.awt.Graphics2D;
 
-public final class StartEvent
-		extends AbstractCatchEvent {
+import com.googlecode.bpmn_simulator.bpmn.model.core.common.events.Event;
 
-	public static final String ELEMENT_NAME = Messages.getString("startEvent"); //$NON-NLS-1$
+@SuppressWarnings("serial")
+abstract class AbstractIntermediateEventShape<E extends Event>
+		extends AbstractEventShape<E> {
 
-	private boolean interrupting;
-
-	public StartEvent(final String id, final String name, final boolean isInterrupting) {
-		super(id, name);
-		interrupting = isInterrupting;
+	public AbstractIntermediateEventShape(final E element) {
+		super(element);
 	}
 
 	@Override
-	public String getElementName() {
-		return ELEMENT_NAME;
-	}
-
-	public boolean isInterrupting() {
-		return interrupting;
+	protected void paintElementForeground(final Graphics2D g) {
+		super.paintElementForeground(g);
+		getPresentation().drawOval(g, getInnerBoundsRelative().shrink(4));
 	}
 
 }

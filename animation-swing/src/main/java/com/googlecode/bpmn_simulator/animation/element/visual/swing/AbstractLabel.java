@@ -55,9 +55,9 @@ public abstract class AbstractLabel
 
 	@Override
 	public void setText(final String text) {
-		final StringBuilder builder = new StringBuilder("<html><body><center>");
+		final StringBuilder builder = new StringBuilder("<html><body>");
 		builder.append(text);
-		builder.append("</center></body></html>");
+		builder.append("</body></html>");
 		super.setText(builder.toString());
 	}
 

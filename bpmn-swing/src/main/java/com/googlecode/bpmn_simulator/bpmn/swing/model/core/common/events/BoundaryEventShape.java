@@ -18,29 +18,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.bpmn_simulator.bpmn.model.core.common.events;
+package com.googlecode.bpmn_simulator.bpmn.swing.model.core.common.events;
 
-import com.googlecode.bpmn_simulator.bpmn.Messages;
+import java.awt.Color;
 
-public final class StartEvent
-		extends AbstractCatchEvent {
+import com.googlecode.bpmn_simulator.bpmn.model.core.common.events.BoundaryEvent;
+import com.googlecode.bpmn_simulator.bpmn.swing.di.Appearance;
 
-	public static final String ELEMENT_NAME = Messages.getString("startEvent"); //$NON-NLS-1$
+@SuppressWarnings("serial")
+public class BoundaryEventShape
+		extends AbstractEventShape<BoundaryEvent> {
 
-	private boolean interrupting;
-
-	public StartEvent(final String id, final String name, final boolean isInterrupting) {
-		super(id, name);
-		interrupting = isInterrupting;
+	static {
+		Appearance.getDefault().getForElement(BoundaryEventShape.class).setBackground(new Color(0xFFD062));
 	}
 
-	@Override
-	public String getElementName() {
-		return ELEMENT_NAME;
-	}
-
-	public boolean isInterrupting() {
-		return interrupting;
+	public BoundaryEventShape(final BoundaryEvent element) {
+		super(element);
 	}
 
 }

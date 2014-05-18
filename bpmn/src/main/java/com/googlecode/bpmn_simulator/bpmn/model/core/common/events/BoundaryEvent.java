@@ -22,25 +22,18 @@ package com.googlecode.bpmn_simulator.bpmn.model.core.common.events;
 
 import com.googlecode.bpmn_simulator.bpmn.Messages;
 
-public final class StartEvent
+public class BoundaryEvent
 		extends AbstractCatchEvent {
 
-	public static final String ELEMENT_NAME = Messages.getString("startEvent"); //$NON-NLS-1$
+	public static final String ELEMENT_NAME = Messages.getString("boundaryEvent"); //$NON-NLS-1$
 
-	private boolean interrupting;
-
-	public StartEvent(final String id, final String name, final boolean isInterrupting) {
+	public BoundaryEvent(final String id, final String name) {
 		super(id, name);
-		interrupting = isInterrupting;
 	}
 
 	@Override
 	public String getElementName() {
 		return ELEMENT_NAME;
-	}
-
-	public boolean isInterrupting() {
-		return interrupting;
 	}
 
 }

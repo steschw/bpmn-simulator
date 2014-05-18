@@ -22,7 +22,7 @@ package com.googlecode.bpmn_simulator.bpmn.swing.model.core.common.events;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
-import java.awt.Graphics2D;
+import java.awt.Stroke;
 
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.events.EndEvent;
 import com.googlecode.bpmn_simulator.bpmn.swing.di.Appearance;
@@ -30,6 +30,8 @@ import com.googlecode.bpmn_simulator.bpmn.swing.di.Appearance;
 @SuppressWarnings("serial")
 public class EndEventShape
 		extends AbstractEventShape<EndEvent> {
+
+	private static final Stroke STROKE = new BasicStroke(4);
 
 	static {
 		Appearance.getDefault().getForElement(EndEventShape.class).setBackground(new Color(0xFFA4A4));
@@ -40,9 +42,8 @@ public class EndEventShape
 	}
 
 	@Override
-	protected void paintElementForeground(final Graphics2D g) {
-		g.setStroke(new BasicStroke(4));
-		super.paintElementForeground(g);
+	protected Stroke getStroke() {
+		return STROKE;
 	}
 
 }

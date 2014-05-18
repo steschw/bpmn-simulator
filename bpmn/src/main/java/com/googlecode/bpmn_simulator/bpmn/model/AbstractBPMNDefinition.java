@@ -48,9 +48,12 @@ import com.googlecode.bpmn_simulator.bpmn.model.core.common.artifacts.Associatio
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.artifacts.AssociationDirection;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.artifacts.Group;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.artifacts.TextAnnotation;
+import com.googlecode.bpmn_simulator.bpmn.model.core.common.events.BoundaryEvent;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.events.ConditionalEventDefinition;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.events.EndEvent;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.events.Event;
+import com.googlecode.bpmn_simulator.bpmn.model.core.common.events.IntermediateCatchEvent;
+import com.googlecode.bpmn_simulator.bpmn.model.core.common.events.IntermediateThrowEvent;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.events.StartEvent;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.events.TerminateEventDefinition;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.gateways.ExclusiveGateway;
@@ -262,11 +265,16 @@ public abstract class AbstractBPMNDefinition<E extends Diagram<?>>
 		}
 	}
 
+	protected boolean getIsInterruptingAttribute(final Node node) {
+		return getAttributeBoolean(node, "isInterrupting", true); //$NON-NLS-1$
+	}
+
 	protected boolean readElementStartEvent(final Node node,
 			final FlowElementsContainer activity) {
 		if (isElementNode(node, BPMN, "startEvent")) { //$NON-NLS-1$
 			final StartEvent event = new StartEvent(
-					getIdAttribute(node), getNameAttribute(node));
+					getIdAttribute(node), getNameAttribute(node),
+					getIsInterruptingAttribute(node));
 			registerElement(event);
 			readEvent(node, event);
 			return true;
@@ -286,6 +294,45 @@ public abstract class AbstractBPMNDefinition<E extends Diagram<?>>
 					getNameAttribute(node));
 			readEvent(node, element);
 			registerElement(element);
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	protected boolean readElementIntermediateThrowEvent(final Node node,
+			final FlowElementsContainer activity) {
+		if (isElementNode(node, BPMN, "intermediateThrowEvent")) { //$NON-NLS-1$
+			final IntermediateThrowEvent event = new IntermediateThrowEvent(getIdAttribute(node),
+					getNameAttribute(node));
+			readEvent(node, event);
+			registerElement(event);
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	protected boolean readElementIntermediateCatchEvent(final Node node,
+			final FlowElementsContainer activity) {
+		if (isElementNode(node, BPMN, "intermediateCatchEvent")) { //$NON-NLS-1$
+			final IntermediateCatchEvent event = new IntermediateCatchEvent(getIdAttribute(node),
+					getNameAttribute(node));
+			readEvent(node, event);
+			registerElement(event);
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	protected boolean readElementBoundaryEvent(final Node node,
+			final FlowElementsContainer activity) {
+		if (isElementNode(node, BPMN, "boundaryEvent")) { //$NON-NLS-1$
+			final BoundaryEvent event = new BoundaryEvent(getIdAttribute(node),
+					getNameAttribute(node));
+			readEvent(node, event);
+			registerElement(event);
 			return true;
 		} else {
 			return false;
@@ -668,6 +715,9 @@ public abstract class AbstractBPMNDefinition<E extends Diagram<?>>
 					&& !readElementTransaction(childNode, container)
 					&& !readElementStartEvent(childNode, container)
 					&& !readElementEndEvent(childNode, container)
+					&& !readElementIntermediateThrowEvent(childNode, container)
+					&& !readElementIntermediateCatchEvent(childNode, container)
+					&& !readElementBoundaryEvent(childNode, container)
 					&& !readElementTask(childNode, container)
 					&& !readElementGateway(childNode, container)
 					&& !readElementSequenceflow(childNode, container)

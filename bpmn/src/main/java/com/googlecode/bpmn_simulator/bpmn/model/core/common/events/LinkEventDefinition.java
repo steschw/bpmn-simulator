@@ -20,11 +20,22 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.model.core.common.events;
 
-public final class TerminateEventDefinition
-		extends AbstractEventDefinition {
+import com.googlecode.bpmn_simulator.bpmn.model.NamedElement;
 
-	public TerminateEventDefinition(final String id) {
+public class LinkEventDefinition
+		extends AbstractEventDefinition
+		implements NamedElement {
+
+	private final String name;
+
+	public LinkEventDefinition(final String id, final String name) {
 		super(id);
+		this.name = name;
+	}
+
+	@Override
+	public String getName() {
+		return name;
 	}
 
 }

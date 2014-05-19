@@ -22,6 +22,7 @@ package com.googlecode.bpmn_simulator.bpmn.swing.model.core.common.events;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.Image;
 import java.awt.Stroke;
 
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.events.EndEvent;
@@ -44,6 +45,11 @@ public class EndEventShape
 	@Override
 	protected Stroke getStroke() {
 		return STROKE;
+	}
+
+	@Override
+	protected Image getIconImage() {
+		return getIconImage(true);
 	}
 
 }

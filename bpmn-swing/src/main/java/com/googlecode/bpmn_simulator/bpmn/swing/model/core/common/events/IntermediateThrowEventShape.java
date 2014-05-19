@@ -21,6 +21,7 @@
 package com.googlecode.bpmn_simulator.bpmn.swing.model.core.common.events;
 
 import java.awt.Color;
+import java.awt.Image;
 
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.events.IntermediateThrowEvent;
 import com.googlecode.bpmn_simulator.bpmn.swing.di.Appearance;
@@ -30,11 +31,16 @@ public class IntermediateThrowEventShape
 		extends AbstractIntermediateEventShape<IntermediateThrowEvent> {
 
 	static {
-		Appearance.getDefault().getForElement(BoundaryEventShape.class).setBackground(new Color(0xFFD062));
+		Appearance.getDefault().getForElement(IntermediateThrowEventShape.class).setBackground(new Color(0xFFD062));
 	}
 
 	public IntermediateThrowEventShape(final IntermediateThrowEvent element) {
 		super(element);
+	}
+
+	@Override
+	protected Image getIconImage() {
+		return getIconImage(true);
 	}
 
 }

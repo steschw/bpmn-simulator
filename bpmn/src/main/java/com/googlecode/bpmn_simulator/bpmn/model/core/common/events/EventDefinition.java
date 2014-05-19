@@ -20,6 +20,9 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.model.core.common.events;
 
-public class EventDefinition {
+import com.googlecode.bpmn_simulator.bpmn.model.core.foundation.RootElement;
+
+public interface EventDefinition
+		extends RootElement {
 
 }

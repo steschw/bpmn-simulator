@@ -21,9 +21,18 @@
 package com.googlecode.bpmn_simulator.bpmn.swing.model.core.common.events;
 
 import java.awt.Graphics2D;
+import java.awt.Image;
 
+import com.googlecode.bpmn_simulator.bpmn.model.core.common.events.ConditionalEventDefinition;
+import com.googlecode.bpmn_simulator.bpmn.model.core.common.events.ErrorEventDefinition;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.events.Event;
+import com.googlecode.bpmn_simulator.bpmn.model.core.common.events.EventDefinition;
+import com.googlecode.bpmn_simulator.bpmn.model.core.common.events.LinkEventDefinition;
+import com.googlecode.bpmn_simulator.bpmn.model.core.common.events.MessageEventDefinition;
+import com.googlecode.bpmn_simulator.bpmn.model.core.common.events.TerminateEventDefinition;
+import com.googlecode.bpmn_simulator.bpmn.model.core.common.events.TimerEventDefinition;
 import com.googlecode.bpmn_simulator.bpmn.swing.di.AbstractBPMNTokenShape;
+import com.googlecode.bpmn_simulator.bpmn.swing.di.Appearance;
 
 @SuppressWarnings("serial")
 abstract class AbstractEventShape<E extends Event>
@@ -43,6 +52,42 @@ abstract class AbstractEventShape<E extends Event>
 	protected void paintElementForeground(final Graphics2D g) {
 		super.paintElementForeground(g);
 		getPresentation().drawOval(g, getInnerBoundsRelative());
+		paintElementIcon(g);
+	}
+
+	protected Image getIconImage(final boolean inverted) {
+		final EventDefinition definition = getLogicalElement().getEventDefinition();
+		if (definition instanceof ConditionalEventDefinition) {
+			assert !inverted;
+			return Appearance.getDefault().getImage(Appearance.IMAGE_CONDITIONAL);
+		} else if (definition instanceof ErrorEventDefinition) {
+			return Appearance.getDefault().getImage(inverted
+					? Appearance.IMAGE_ERROR_INVERSE : Appearance.IMAGE_ERROR);
+		} else if (definition instanceof LinkEventDefinition) {
+			return Appearance.getDefault().getImage(inverted
+					? Appearance.IMAGE_LINK_INVERSE : Appearance.IMAGE_LINK);
+		} else if (definition instanceof MessageEventDefinition) {
+			return Appearance.getDefault().getImage(inverted
+					? Appearance.IMAGE_MESSAGE_INVERSE : Appearance.IMAGE_MESSAGE);
+		} else if (definition instanceof TerminateEventDefinition) {
+			assert !inverted;
+			return Appearance.getDefault().getImage(Appearance.IMAGE_TERMINATE);
+		} else if (definition instanceof TimerEventDefinition) {
+			assert !inverted;
+			return Appearance.getDefault().getImage(Appearance.IMAGE_TIMER);
+		}
+		return null;
+	}
+
+	protected Image getIconImage() {
+		return getIconImage(false);
+	}
+
+	private void paintElementIcon(final Graphics2D g) {
+		final Image image = getIconImage();
+		if (image != null) {
+			getPresentation().drawImage(g, image, getInnerBoundsRelative().shrink(6));
+		}
 	}
 
 	@Override

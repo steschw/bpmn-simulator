@@ -51,11 +51,15 @@ import com.googlecode.bpmn_simulator.bpmn.model.core.common.artifacts.TextAnnota
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.events.BoundaryEvent;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.events.ConditionalEventDefinition;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.events.EndEvent;
+import com.googlecode.bpmn_simulator.bpmn.model.core.common.events.ErrorEventDefinition;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.events.Event;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.events.IntermediateCatchEvent;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.events.IntermediateThrowEvent;
+import com.googlecode.bpmn_simulator.bpmn.model.core.common.events.LinkEventDefinition;
+import com.googlecode.bpmn_simulator.bpmn.model.core.common.events.MessageEventDefinition;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.events.StartEvent;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.events.TerminateEventDefinition;
+import com.googlecode.bpmn_simulator.bpmn.model.core.common.events.TimerEventDefinition;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.gateways.ExclusiveGateway;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.gateways.Gateway;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.gateways.InclusiveGateway;
@@ -242,10 +246,18 @@ public abstract class AbstractBPMNDefinition<E extends Diagram<?>>
 	}
 
 	protected boolean readEventDefinitions(final Node node, final Event event) {
-		if (isElementNode(node, BPMN, "terminateEventDefinition")) { //$NON-NLS-1$
-			event.setEventDefinition(new TerminateEventDefinition());
-		} else if (isElementNode(node, BPMN, "conditionalEventDefinition")) { //$NON-NLS-1$
-			event.setEventDefinition(new ConditionalEventDefinition());
+		if (isElementNode(node, BPMN, "conditionalEventDefinition")) { //$NON-NLS-1$
+			event.setEventDefinition(new ConditionalEventDefinition(getIdAttribute(node)));
+		} else if (isElementNode(node, BPMN, "errorEventDefinition")) { //$NON-NLS-1$
+			event.setEventDefinition(new ErrorEventDefinition(getIdAttribute(node)));
+		} else if (isElementNode(node, BPMN, "linkEventDefinition")) { //$NON-NLS-1$
+			event.setEventDefinition(new LinkEventDefinition(getIdAttribute(node), getNameAttribute(node)));
+		} else if (isElementNode(node, BPMN, "messageEventDefinition")) { //$NON-NLS-1$
+			event.setEventDefinition(new MessageEventDefinition(getIdAttribute(node)));
+		} else if (isElementNode(node, BPMN, "terminateEventDefinition")) { //$NON-NLS-1$
+				event.setEventDefinition(new TerminateEventDefinition(getIdAttribute(node)));
+		} else if (isElementNode(node, BPMN, "timerEventDefinition")) { //$NON-NLS-1$
+			event.setEventDefinition(new TimerEventDefinition(getIdAttribute(node)));
 		} else {
 			showUnknowNode(node);
 			return false;

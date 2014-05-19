@@ -20,10 +20,13 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.model.core.common.events;
 
-public final class TerminateEventDefinition
-		extends AbstractEventDefinition {
+import com.googlecode.bpmn_simulator.bpmn.model.core.foundation.AbstractRootElement;
 
-	public TerminateEventDefinition(final String id) {
+abstract class AbstractEventDefinition
+		extends AbstractRootElement
+		implements EventDefinition {
+
+	public AbstractEventDefinition(final String id) {
 		super(id);
 	}
 

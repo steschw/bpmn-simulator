@@ -20,10 +20,10 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.model.core.common.events;
 
-public final class TerminateEventDefinition
+public class MessageEventDefinition
 		extends AbstractEventDefinition {
 
-	public TerminateEventDefinition(final String id) {
+	public MessageEventDefinition(final String id) {
 		super(id);
 	}
 

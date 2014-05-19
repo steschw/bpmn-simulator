@@ -21,6 +21,10 @@
 package com.googlecode.bpmn_simulator.bpmn.model.core.common.events;
 
 public final class ConditionalEventDefinition
-		extends EventDefinition {
+		extends AbstractEventDefinition {
+
+	public ConditionalEventDefinition(final String id) {
+		super(id);
+	}
 
 }

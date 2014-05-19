@@ -45,7 +45,6 @@ import javax.swing.event.MenuListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import com.googlecode.bpmn_simulator.animation.element.visual.swing.AbstractSwingDiagram;
-import com.googlecode.bpmn_simulator.animation.input.Definition;
 import com.googlecode.bpmn_simulator.bpmn.swing.di.SwingBPMNDiagram;
 import com.googlecode.bpmn_simulator.bpmn.swing.di.SwingDIDefinition;
 import com.googlecode.bpmn_simulator.gui.dialogs.ExceptionDialog;
@@ -73,7 +72,7 @@ public class BPMNSimulatorFrame
 
 	private final InstancesFrame frameInstances = new InstancesFrame();
 
-	private Definition<SwingBPMNDiagram> currentDefinition;
+	private SwingDIDefinition currentDefinition;
 
 	private File currentFile;
 

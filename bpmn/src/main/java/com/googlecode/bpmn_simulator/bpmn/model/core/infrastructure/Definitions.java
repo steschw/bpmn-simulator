@@ -20,20 +20,25 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.model.core.infrastructure;
 
-import java.util.Collection;
+import java.net.URI;
 
+import com.googlecode.bpmn_simulator.animation.input.Definition;
 import com.googlecode.bpmn_simulator.bpmn.di.BPMNDiagram;
 import com.googlecode.bpmn_simulator.bpmn.model.NamedElement;
 import com.googlecode.bpmn_simulator.bpmn.model.core.foundation.BaseElement;
-import com.googlecode.bpmn_simulator.bpmn.model.core.foundation.AbstractRootElement;
 
 public interface Definitions<E extends BPMNDiagram<?>>
-		extends BaseElement, NamedElement {
+		extends BaseElement, NamedElement, Definition<E> {
 
 	String getExporter();
 
 	String getExporterVersion();
 
-	Collection<AbstractRootElement> getRootElements();
+	URI getExpressionLanguage();
 
+	URI getTypeLanguage();
+
+/*
+	Collection<AbstractRootElement> getRootElements();
+*/
 }

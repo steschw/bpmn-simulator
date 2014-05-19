@@ -22,6 +22,9 @@ package com.googlecode.bpmn_simulator.bpmn.model;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 import javax.activation.MimeType;
 
@@ -31,8 +34,8 @@ import org.w3c.dom.NodeList;
 import com.googlecode.bpmn_simulator.animation.element.logical.ref.NamedElements;
 import com.googlecode.bpmn_simulator.animation.element.logical.ref.NamedReference;
 import com.googlecode.bpmn_simulator.animation.element.logical.ref.Reference;
-import com.googlecode.bpmn_simulator.animation.element.visual.Diagram;
 import com.googlecode.bpmn_simulator.animation.input.AbstractXmlDefinition;
+import com.googlecode.bpmn_simulator.bpmn.di.BPMNDiagram;
 import com.googlecode.bpmn_simulator.bpmn.model.choreography.Choreography;
 import com.googlecode.bpmn_simulator.bpmn.model.collaboration.Collaboration;
 import com.googlecode.bpmn_simulator.bpmn.model.collaboration.MessageFlow;
@@ -66,6 +69,7 @@ import com.googlecode.bpmn_simulator.bpmn.model.core.common.gateways.InclusiveGa
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.gateways.ParallelGateway;
 import com.googlecode.bpmn_simulator.bpmn.model.core.foundation.BaseElement;
 import com.googlecode.bpmn_simulator.bpmn.model.core.foundation.Documentation;
+import com.googlecode.bpmn_simulator.bpmn.model.core.infrastructure.Definitions;
 import com.googlecode.bpmn_simulator.bpmn.model.process.Lane;
 import com.googlecode.bpmn_simulator.bpmn.model.process.LaneSet;
 import com.googlecode.bpmn_simulator.bpmn.model.process.activities.Activity;
@@ -89,8 +93,9 @@ import com.googlecode.bpmn_simulator.bpmn.model.process.data.DataStoreReference;
 /**
  * Diagram Interchange (DI) Definition
  */
-public abstract class AbstractBPMNDefinition<E extends Diagram<?>>
-		extends AbstractXmlDefinition<E> {
+public abstract class AbstractBPMNDefinition<E extends BPMNDiagram<?>>
+		extends AbstractXmlDefinition<E>
+		implements Definitions<E> {
 
 	private static final URI DEFAULT_EXPRESSION_LANGUAGE = uri("http://www.w3.org/1999/XPath");
 	private static final URI DEFAULT_TYPE_LANGUAGE = uri("http://www.w3.org/2001/XMLSchema");
@@ -113,30 +118,59 @@ public abstract class AbstractBPMNDefinition<E extends Diagram<?>>
 	private final NamedElements<BaseElement> elements
 			= new NamedElements<BaseElement>();
 
+	private String id;
+	private String name;
+
 	private URI expressionLanguage;
 	private URI typeLanguage;
 
 	private String exporter;
 	private String exporterVersion;
 
+	private List<Documentation> documentations = new ArrayList<Documentation>();
+
 	public AbstractBPMNDefinition() {
 		super(SCHEMA_FILENAME);
 	}
 
+	@Override
+	public String getId() {
+		return id;
+	}
+
+	@Override
+	public String getName() {
+		return name;
+	}
+
+	@Override
 	public String getExporter() {
 		return exporter;
 	}
 
+	@Override
 	public String getExporterVersion() {
 		return exporterVersion;
 	}
 
+	@Override
 	public URI getExpressionLanguage() {
 		return expressionLanguage;
 	}
 
+	@Override
 	public URI getTypeLanguage() {
 		return typeLanguage;
+	}
+
+	@Override
+	public void addDocumentation(final Documentation documentation) {
+		documentations.add(documentation);
+	}
+
+	@Override
+	public Collection<Documentation> getDocumentation() {
+		return documentations;
 	}
 
 	protected void registerElement(final BaseElement element) {

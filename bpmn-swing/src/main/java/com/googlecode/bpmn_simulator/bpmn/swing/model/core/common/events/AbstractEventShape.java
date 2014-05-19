@@ -58,8 +58,8 @@ abstract class AbstractEventShape<E extends Event>
 	protected Image getIconImage(final boolean inverted) {
 		final EventDefinition definition = getLogicalElement().getEventDefinition();
 		if (definition instanceof ConditionalEventDefinition) {
-			assert !inverted;
-			return Appearance.getDefault().getImage(Appearance.IMAGE_CONDITIONAL);
+			return Appearance.getDefault().getImage(inverted
+					? null : Appearance.IMAGE_CONDITIONAL);
 		} else if (definition instanceof ErrorEventDefinition) {
 			return Appearance.getDefault().getImage(inverted
 					? Appearance.IMAGE_ERROR_INVERSE : Appearance.IMAGE_ERROR);
@@ -70,8 +70,8 @@ abstract class AbstractEventShape<E extends Event>
 			return Appearance.getDefault().getImage(inverted
 					? Appearance.IMAGE_MESSAGE_INVERSE : Appearance.IMAGE_MESSAGE);
 		} else if (definition instanceof TerminateEventDefinition) {
-			assert !inverted;
-			return Appearance.getDefault().getImage(Appearance.IMAGE_TERMINATE);
+			return Appearance.getDefault().getImage(inverted
+					? Appearance.IMAGE_TERMINATE : null);
 		} else if (definition instanceof TimerEventDefinition) {
 			assert !inverted;
 			return Appearance.getDefault().getImage(Appearance.IMAGE_TIMER);

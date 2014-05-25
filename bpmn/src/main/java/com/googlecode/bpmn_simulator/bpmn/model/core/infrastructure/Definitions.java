@@ -38,7 +38,4 @@ public interface Definitions<E extends BPMNDiagram<?>>
 
 	URI getTypeLanguage();
 
-/*
-	Collection<AbstractRootElement> getRootElements();
-*/
 }

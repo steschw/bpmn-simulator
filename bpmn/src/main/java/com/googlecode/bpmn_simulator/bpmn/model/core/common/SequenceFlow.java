@@ -21,15 +21,23 @@
 package com.googlecode.bpmn_simulator.bpmn.model.core.common;
 
 import com.googlecode.bpmn_simulator.animation.element.logical.ref.Reference;
+import com.googlecode.bpmn_simulator.bpmn.Messages;
 
 public final class SequenceFlow
 		extends AbstractFlowElement {
+
+	public static final String ELEMENT_NAME = Messages.getString("sequenceFlow"); //$NON-NLS-1$
 
 	private Expression conditionExpression;
 
 	public SequenceFlow(final String id, final String name,
 			Reference<FlowNode> sourceRef, Reference<FlowNode> targetRef) {
 		super(id, name);
+	}
+
+	@Override
+	public String getElementName() {
+		return ELEMENT_NAME;
 	}
 
 	public void setConditionExpression(final Expression expression) {

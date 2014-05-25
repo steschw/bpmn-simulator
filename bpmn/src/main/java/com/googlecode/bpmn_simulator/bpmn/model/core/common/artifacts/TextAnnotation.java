@@ -22,11 +22,14 @@ package com.googlecode.bpmn_simulator.bpmn.model.core.common.artifacts;
 
 import javax.activation.MimeType;
 
+import com.googlecode.bpmn_simulator.bpmn.Messages;
 import com.googlecode.bpmn_simulator.bpmn.model.TextElement;
 
 public final class TextAnnotation
 		extends AbstractArtifact
 		implements TextElement {
+
+	public static final String ELEMENT_NAME = Messages.getString("textAnnotation"); //$NON-NLS-1$
 
 	private MimeType textFormat;
 
@@ -39,6 +42,11 @@ public final class TextAnnotation
 	public TextAnnotation(final String id, final MimeType textFormat) {
 		super(id);
 		this.textFormat = textFormat;
+	}
+
+	@Override
+	public String getElementName() {
+		return ELEMENT_NAME;
 	}
 
 	public void setText(final String text) {

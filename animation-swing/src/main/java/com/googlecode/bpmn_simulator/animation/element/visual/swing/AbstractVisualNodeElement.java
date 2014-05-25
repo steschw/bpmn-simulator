@@ -20,11 +20,12 @@
  */
 package com.googlecode.bpmn_simulator.animation.element.visual.swing;
 
+import com.googlecode.bpmn_simulator.animation.element.logical.LogicalElement;
 import com.googlecode.bpmn_simulator.animation.element.visual.Bounds;
 import com.googlecode.bpmn_simulator.animation.element.visual.VisualNodeElement;
 
 @SuppressWarnings("serial")
-public abstract class AbstractVisualNodeElement<E>
+public abstract class AbstractVisualNodeElement<E extends LogicalElement>
 		extends AbstractVisualElement<E>
 		implements VisualNodeElement {
 

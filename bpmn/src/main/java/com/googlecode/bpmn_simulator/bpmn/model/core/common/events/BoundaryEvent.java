@@ -22,7 +22,7 @@ package com.googlecode.bpmn_simulator.bpmn.model.core.common.events;
 
 import com.googlecode.bpmn_simulator.bpmn.Messages;
 
-public class BoundaryEvent
+public final class BoundaryEvent
 		extends AbstractCatchEvent {
 
 	public static final String ELEMENT_NAME = Messages.getString("boundaryEvent"); //$NON-NLS-1$

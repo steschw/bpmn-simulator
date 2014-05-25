@@ -20,13 +20,21 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.model.process.data;
 
+import com.googlecode.bpmn_simulator.bpmn.Messages;
 import com.googlecode.bpmn_simulator.bpmn.model.core.foundation.AbstractBaseElement;
 
 public final class DataAssociation
 		extends AbstractBaseElement {
 
+	public static final String ELEMENT_NAME = Messages.getString("dataAssociation"); //$NON-NLS-1$
+
 	public DataAssociation(final String id) {
 		super(id);
+	}
+
+	@Override
+	public String getElementName() {
+		return ELEMENT_NAME;
 	}
 
 }

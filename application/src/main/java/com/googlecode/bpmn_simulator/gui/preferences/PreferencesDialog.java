@@ -21,6 +21,7 @@
 package com.googlecode.bpmn_simulator.gui.preferences;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -33,14 +34,15 @@ import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 
-import com.googlecode.bpmn_simulator.bpmn.model.process.activities.tasks.ReceiveTask;
-import com.googlecode.bpmn_simulator.bpmn.model.process.activities.tasks.SendTask;
+import com.googlecode.bpmn_simulator.animation.element.visual.VisualElement;
 import com.googlecode.bpmn_simulator.bpmn.swing.di.Appearance;
 import com.googlecode.bpmn_simulator.bpmn.swing.di.Appearance.ElementAppearance;
 import com.googlecode.bpmn_simulator.bpmn.swing.model.core.common.SequenceFlowEdge;
@@ -52,10 +54,11 @@ import com.googlecode.bpmn_simulator.bpmn.swing.model.core.common.events.StartEv
 import com.googlecode.bpmn_simulator.bpmn.swing.model.core.common.gateways.ExclusiveGatewayShape;
 import com.googlecode.bpmn_simulator.bpmn.swing.model.core.common.gateways.InclusiveGatewayShape;
 import com.googlecode.bpmn_simulator.bpmn.swing.model.core.common.gateways.ParallelGatewayShape;
-import com.googlecode.bpmn_simulator.bpmn.swing.model.process.activities.ProcessPlane;
 import com.googlecode.bpmn_simulator.bpmn.swing.model.process.activities.task.BusinessRuleTaskShape;
 import com.googlecode.bpmn_simulator.bpmn.swing.model.process.activities.task.ManualTaskShape;
+import com.googlecode.bpmn_simulator.bpmn.swing.model.process.activities.task.ReceiveTaskShape;
 import com.googlecode.bpmn_simulator.bpmn.swing.model.process.activities.task.ScriptTaskShape;
+import com.googlecode.bpmn_simulator.bpmn.swing.model.process.activities.task.SendTaskShape;
 import com.googlecode.bpmn_simulator.bpmn.swing.model.process.activities.task.ServiceTaskShape;
 import com.googlecode.bpmn_simulator.bpmn.swing.model.process.activities.task.TaskShape;
 import com.googlecode.bpmn_simulator.bpmn.swing.model.process.activities.task.UserTaskShape;
@@ -188,68 +191,88 @@ public class PreferencesDialog
 
 		checkIgnoreModelerColors.setBorder(BorderFactory.createEmptyBorder(0, 0, GAP, 0));
 		panel.add(checkIgnoreModelerColors, BorderLayout.PAGE_START);
-		panel.add(createElementsDefaultsPanel(), BorderLayout.CENTER);
+		final JScrollPane elementsDefaultsScrollPane = new JScrollPane(createElementsDefaultsPanel(),
+				JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+				JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		elementsDefaultsScrollPane.setPreferredSize(new Dimension(400, 400));
+		panel.add(elementsDefaultsScrollPane, BorderLayout.CENTER);
 
 		return panel;
+	}
+
+	private void addElementConfig(
+			final JComponent component,
+			final GridBagConstraints constraints,
+			final Class<? extends VisualElement> clazz, final String name) {
+		addElementConfig(component, constraints, clazz, name, true, true);
+	}
+
+	private void addElementConfig(
+			final JComponent component,
+			final GridBagConstraints constraints,
+			final Class<? extends VisualElement> clazz, final String name,
+			final boolean background, final boolean foreground) {
+		++constraints.gridy;
+		constraints.gridx = 0;
+		constraints.anchor = GridBagConstraints.LINE_START;
+		component.add(new JLabel(name), constraints);
+		constraints.anchor = GridBagConstraints.CENTER;
+		try {
+			Class.forName(clazz.getCanonicalName());
+		} catch (ClassNotFoundException e) {
+		}
+		final ElementAppearance elementAppearance = Appearance.getDefault().getForElement(clazz);
+		if (foreground) {
+			constraints.gridx = 1;
+			final ColorSelector colorSelector = new ColorSelector();
+			colorSelector.setSelectedColor(elementAppearance.getForeground());
+			component.add(colorSelector, constraints);
+		}
+		if (background) {
+			constraints.gridx = 2;
+			final ColorSelector colorSelector = new ColorSelector();
+			colorSelector.setSelectedColor(elementAppearance.getBackground());
+			component.add(colorSelector, constraints);
+		}
 	}
 
 	protected JPanel createElementsDefaultsPanel() {
 		final JPanel panel = new JPanel(new GridBagLayout());
 
-		final Class<?>[] elements = new Class<?>[] {
+		final GridBagConstraints constraints = new GridBagConstraints();
+		constraints.gridy = 1;
+		constraints.gridx = 1;
+		panel.add(new JLabel("Foreground"), constraints);
+		constraints.gridx = 2;
+		panel.add(new JLabel("Background"), constraints);
 
-				ProcessPlane.class,
+//		addElementConfig(panel, constraints, ProcessPlane.class, "Process");
 
-				AssociationEdge.class,
-				GroupShape.class,
-				TextAnnotationShape.class,
+		addElementConfig(panel, constraints, AssociationEdge.class, "Association", false, true);
+		addElementConfig(panel, constraints, GroupShape.class, "Group");
+		addElementConfig(panel, constraints, TextAnnotationShape.class, "TextAnnotation");
 
-				StartEventShape.class,
-				EndEventShape.class,
+		addElementConfig(panel, constraints, StartEventShape.class, "StartEvent");
+		addElementConfig(panel, constraints, EndEventShape.class, "EndEvent");
 
-				ExclusiveGatewayShape.class,
-				InclusiveGatewayShape.class,
-				ParallelGatewayShape.class,
+		addElementConfig(panel, constraints, ExclusiveGatewayShape.class, "ExclusiveGateway");
+		addElementConfig(panel, constraints, InclusiveGatewayShape.class, "InclusiveGateway");
+		addElementConfig(panel, constraints, ParallelGatewayShape.class, "ParallelGateway");
 
-				SequenceFlowEdge.class,
-				DataAssociationEdge.class,
+		addElementConfig(panel, constraints, SequenceFlowEdge.class, "SequenceFlow", false, true);
+		addElementConfig(panel, constraints, DataAssociationEdge.class, "DataAssociation", false, true);
 
-				DataObjectReferenceShape.class,
-				DataStoreReferenceShape.class,
+		addElementConfig(panel, constraints, DataObjectReferenceShape.class, "DataObjectReference");
+		addElementConfig(panel, constraints, DataStoreReferenceShape.class, "DataStoreReference");
 
-				TaskShape.class,
-				BusinessRuleTaskShape.class,
-				ManualTaskShape.class,
-				ReceiveTask.class,
-				ScriptTaskShape.class,
-				SendTask.class,
-				ServiceTaskShape.class,
-				UserTaskShape.class,
-		};
-
-		final Appearance appearance = Appearance.getDefault();
-		for (int i = 0; i < elements.length; ++i) {
-			final Class<?> element = elements[i];
-			try {
-				Class.forName(element.getCanonicalName());
-			} catch (ClassNotFoundException e) {
-			}
-			final ElementAppearance elementAppearance = appearance.getForElement(element);
-			GridBagConstraints c = new GridBagConstraints();
-			c.gridy = i;
-			c.gridx = 0;
-			c.anchor = GridBagConstraints.LINE_START;
-			panel.add(new JLabel(element.getSimpleName()), c);
-			c.anchor = GridBagConstraints.CENTER;
-			final ColorSelector foregroundSelector = new ColorSelector();
-			foregroundSelector.setSelectedColor(elementAppearance.getForeground());
-			c.gridx = 1;
-			panel.add(foregroundSelector, c);
-			final ColorSelector backgroundSelector = new ColorSelector();
-			backgroundSelector.setSelectedColor(elementAppearance.getBackground());
-			c.gridx = 2;
-			panel.add(backgroundSelector, c);
-		}
+		addElementConfig(panel, constraints, TaskShape.class, "Task");
+		addElementConfig(panel, constraints, BusinessRuleTaskShape.class, "BusinessRuleTask");
+		addElementConfig(panel, constraints, ManualTaskShape.class, "ManualTask");
+		addElementConfig(panel, constraints, ReceiveTaskShape.class, "ReceiveTask");
+		addElementConfig(panel, constraints, ScriptTaskShape.class, "ScriptTask");
+		addElementConfig(panel, constraints, SendTaskShape.class, "SendTask");
+		addElementConfig(panel, constraints, ServiceTaskShape.class, "ServiceTask");
+		addElementConfig(panel, constraints, UserTaskShape.class, "UserTask");
 
 		return panel;
 	}

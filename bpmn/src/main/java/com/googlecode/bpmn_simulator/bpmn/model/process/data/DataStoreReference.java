@@ -21,10 +21,13 @@
 package com.googlecode.bpmn_simulator.bpmn.model.process.data;
 
 import com.googlecode.bpmn_simulator.animation.element.logical.ref.Reference;
+import com.googlecode.bpmn_simulator.bpmn.Messages;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.AbstractFlowElement;
 
-public class DataStoreReference
+public final class DataStoreReference
 		extends AbstractFlowElement {
+
+	public static final String ELEMENT_NAME = Messages.getString("dataStoreReference"); //$NON-NLS-1$
 
 	private final Reference<DataStore> dataStore;
 
@@ -32,6 +35,11 @@ public class DataStoreReference
 			final Reference<DataStore> dataStore) {
 		super(id, name);
 		this.dataStore = dataStore;
+	}
+
+	@Override
+	public String getElementName() {
+		return ELEMENT_NAME;
 	}
 
 }

@@ -23,12 +23,15 @@ package com.googlecode.bpmn_simulator.bpmn.model.collaboration;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.googlecode.bpmn_simulator.bpmn.Messages;
 import com.googlecode.bpmn_simulator.bpmn.model.NamedElement;
 import com.googlecode.bpmn_simulator.bpmn.model.core.foundation.AbstractRootElement;
 
 public class Collaboration
 		extends AbstractRootElement
 		implements NamedElement {
+
+	public static final String ELEMENT_NAME = Messages.getString("collaboration"); //$NON-NLS-1$
 
 	private String name;
 
@@ -51,6 +54,11 @@ public class Collaboration
 
 	public void addParticipant(final Participant participant) {
 		participiants.add(participant);
+	}
+
+	@Override
+	public String getElementName() {
+		return ELEMENT_NAME;
 	}
 
 }

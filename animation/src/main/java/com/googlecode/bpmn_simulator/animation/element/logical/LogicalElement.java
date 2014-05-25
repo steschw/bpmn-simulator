@@ -20,15 +20,7 @@
  */
 package com.googlecode.bpmn_simulator.animation.element.logical;
 
-import com.googlecode.bpmn_simulator.animation.token.TokenFlowListener;
-import com.googlecode.bpmn_simulator.animation.token.Tokens;
-
-public interface LogicalElement {
-
-	void addTokenFlowListener(TokenFlowListener listener);
-
-	void removeTokenFlowListener(TokenFlowListener listener);
-
-	Tokens getTokens();
+public interface LogicalElement
+		extends ElementInfo {
 
 }

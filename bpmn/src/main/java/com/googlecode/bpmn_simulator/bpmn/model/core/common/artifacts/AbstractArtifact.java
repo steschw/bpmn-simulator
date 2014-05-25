@@ -22,7 +22,7 @@ package com.googlecode.bpmn_simulator.bpmn.model.core.common.artifacts;
 
 import com.googlecode.bpmn_simulator.bpmn.model.core.foundation.AbstractBaseElement;
 
-public abstract class AbstractArtifact
+abstract class AbstractArtifact
 		extends AbstractBaseElement {
 
 	public AbstractArtifact(final String id) {

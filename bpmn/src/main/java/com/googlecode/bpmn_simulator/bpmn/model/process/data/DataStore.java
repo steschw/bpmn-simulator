@@ -20,13 +20,21 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.model.process.data;
 
+import com.googlecode.bpmn_simulator.bpmn.Messages;
 import com.googlecode.bpmn_simulator.bpmn.model.core.foundation.AbstractRootElement;
 
 public final class DataStore
 		extends AbstractRootElement {
 
+	public static final String ELEMENT_NAME = Messages.getString("dataStore"); //$NON-NLS-1$
+
 	public DataStore(final String id) {
 		super(id);
+	}
+
+	@Override
+	public String getElementName() {
+		return ELEMENT_NAME;
 	}
 
 }

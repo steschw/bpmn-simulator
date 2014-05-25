@@ -20,11 +20,20 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.model.core.common.events;
 
+import com.googlecode.bpmn_simulator.bpmn.Messages;
+
 public final class TerminateEventDefinition
 		extends AbstractEventDefinition {
 
+	public static final String ELEMENT_NAME = Messages.getString("terminateEventDefinition"); //$NON-NLS-1$
+
 	public TerminateEventDefinition(final String id) {
 		super(id);
+	}
+
+	@Override
+	public String getElementName() {
+		return ELEMENT_NAME;
 	}
 
 }

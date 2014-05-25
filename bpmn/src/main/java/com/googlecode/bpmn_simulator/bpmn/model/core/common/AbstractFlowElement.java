@@ -23,6 +23,7 @@ package com.googlecode.bpmn_simulator.bpmn.model.core.common;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.googlecode.bpmn_simulator.animation.token.Token;
 import com.googlecode.bpmn_simulator.animation.token.TokenFlowListener;
 import com.googlecode.bpmn_simulator.animation.token.Tokens;
 import com.googlecode.bpmn_simulator.bpmn.model.core.foundation.AbstractBaseElementNamed;
@@ -52,6 +53,11 @@ public abstract class AbstractFlowElement
 	@Override
 	public Tokens getTokens() {
 		return null;
+	}
+
+	@Override
+	public void tokenDispatch(final Token token) {
+		// TODO Auto-generated method stub
 	}
 
 }

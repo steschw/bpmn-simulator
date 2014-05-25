@@ -22,12 +22,13 @@ package com.googlecode.bpmn_simulator.bpmn.swing.di;
 
 import java.awt.Graphics2D;
 
+import com.googlecode.bpmn_simulator.animation.element.logical.LogicalElement;
 import com.googlecode.bpmn_simulator.animation.element.visual.swing.AbstractVisualEdgeElement;
 import com.googlecode.bpmn_simulator.bpmn.di.BPMNEdge;
 import com.googlecode.bpmn_simulator.bpmn.swing.di.Appearance.ElementAppearance;
 
 @SuppressWarnings("serial")
-public abstract class AbstractBPMNEdge<E>
+public abstract class AbstractBPMNEdge<E extends LogicalElement>
 		extends AbstractVisualEdgeElement<E>
 		implements BPMNEdge {
 

@@ -22,7 +22,7 @@ package com.googlecode.bpmn_simulator.bpmn.model.core.common.events;
 
 import com.googlecode.bpmn_simulator.bpmn.Messages;
 
-public class IntermediateThrowEvent
+public final class IntermediateThrowEvent
 		extends AbstractThrowEvent {
 
 	public static final String ELEMENT_NAME = Messages.getString("intermediateThrowEvent"); //$NON-NLS-1$

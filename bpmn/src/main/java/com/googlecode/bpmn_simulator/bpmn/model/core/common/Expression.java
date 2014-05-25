@@ -20,16 +20,24 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.model.core.common;
 
+import com.googlecode.bpmn_simulator.bpmn.Messages;
 import com.googlecode.bpmn_simulator.bpmn.model.core.foundation.AbstractBaseElement;
 
 public final class Expression
 		extends AbstractBaseElement {
 
+	public static final String ELEMENT_NAME = Messages.getString("expression"); //$NON-NLS-1$
+
+	private boolean value;
+
 	public Expression(final String id) {
 		super(id);
 	}
 
-	private boolean value;
+	@Override
+	public String getElementName() {
+		return ELEMENT_NAME;
+	}
 
 	public void setExpressionValue(final boolean value) {
 		synchronized (this) {

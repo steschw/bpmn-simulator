@@ -119,6 +119,15 @@ public class ModelPropertiesDialog
 		c.gridwidth = 1;
 		panel.add(new Hyperlink(definitions.getExpressionLanguage()), c);
 
+		c.gridy = 5;
+
+		c.gridx = 0;
+		c.gridwidth = 1;
+		panel.add(new JLabel(Messages.getString("Properties.name")), c); //$NON-NLS-1$
+		c.gridx = 2;
+		c.gridwidth = 1;
+		panel.add(createField(definitions.getName()), c);
+
 		return panel;
 	}
 

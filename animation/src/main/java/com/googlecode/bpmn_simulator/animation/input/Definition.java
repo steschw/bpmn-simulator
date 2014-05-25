@@ -23,6 +23,7 @@ package com.googlecode.bpmn_simulator.animation.input;
 import java.io.InputStream;
 import java.util.Collection;
 
+import com.googlecode.bpmn_simulator.animation.element.logical.LogicalElement;
 import com.googlecode.bpmn_simulator.animation.element.logical.Model;
 import com.googlecode.bpmn_simulator.animation.element.visual.Diagram;
 
@@ -34,6 +35,8 @@ public interface Definition<DIAGRAM extends Diagram<?>>
 	void removeDefinitionListener(DefinitionListener listener);
 
 	Collection<DIAGRAM> getDiagrams();
+
+	Collection<LogicalElement> getStartElements();
 
 	void load(InputStream input);
 

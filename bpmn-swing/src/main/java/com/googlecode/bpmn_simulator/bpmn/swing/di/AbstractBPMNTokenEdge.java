@@ -22,12 +22,12 @@ package com.googlecode.bpmn_simulator.bpmn.swing.di;
 
 import java.awt.Graphics2D;
 
-import com.googlecode.bpmn_simulator.animation.element.logical.LogicalElement;
+import com.googlecode.bpmn_simulator.animation.element.logical.LogicalFlowElement;
 import com.googlecode.bpmn_simulator.animation.token.Token;
 import com.googlecode.bpmn_simulator.animation.token.TokenFlowListener;
 
 @SuppressWarnings("serial")
-public abstract class AbstractBPMNTokenEdge<E extends LogicalElement>
+public abstract class AbstractBPMNTokenEdge<E extends LogicalFlowElement>
 		extends AbstractBPMNEdge<E>
 		implements TokenFlowListener {
 

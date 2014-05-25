@@ -20,17 +20,17 @@
  */
 package com.googlecode.bpmn_simulator.animation.element.logical;
 
-import com.googlecode.bpmn_simulator.animation.element.logical.ref.Reference;
+import com.googlecode.bpmn_simulator.animation.token.TokenFlow;
+import com.googlecode.bpmn_simulator.animation.token.TokenFlowListener;
+import com.googlecode.bpmn_simulator.animation.token.Tokens;
 
-public interface LogicalEdgeElement
-		extends LogicalElement {
+public interface LogicalFlowElement
+		extends LogicalElement, TokenFlow {
 
-	void setIncoming(Reference<LogicalNodeElement> incoming);
+	void addTokenFlowListener(TokenFlowListener listener);
 
-	LogicalNodeElement getIncoming();
+	void removeTokenFlowListener(TokenFlowListener listener);
 
-	void setOutgoing(Reference<LogicalNodeElement> outgoing);
-
-	LogicalNodeElement getOutgoing();
+	Tokens getTokens();
 
 }

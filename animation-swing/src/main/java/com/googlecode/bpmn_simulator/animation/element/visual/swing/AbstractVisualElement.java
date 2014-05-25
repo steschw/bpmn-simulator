@@ -20,11 +20,12 @@
  */
 package com.googlecode.bpmn_simulator.animation.element.visual.swing;
 
+import com.googlecode.bpmn_simulator.animation.element.logical.LogicalElement;
 import com.googlecode.bpmn_simulator.animation.element.visual.Bounds;
 import com.googlecode.bpmn_simulator.animation.element.visual.Label;
 import com.googlecode.bpmn_simulator.animation.element.visual.VisualElement;
 
-/**
+/*
  * +-------------------------------------+
  * |  outer bounds (=JComponent:bounds)  |
  * |  +-------------------------------+  |
@@ -34,7 +35,7 @@ import com.googlecode.bpmn_simulator.animation.element.visual.VisualElement;
  * +-------------------------------------+
  */
 @SuppressWarnings("serial")
-abstract class AbstractVisualElement<E>
+abstract class AbstractVisualElement<E extends LogicalElement>
 		extends AbstractVisual
 		implements VisualElement {
 

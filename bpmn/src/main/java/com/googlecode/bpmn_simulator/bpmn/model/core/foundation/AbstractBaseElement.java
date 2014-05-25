@@ -23,8 +23,10 @@ package com.googlecode.bpmn_simulator.bpmn.model.core.foundation;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import com.googlecode.bpmn_simulator.animation.element.logical.LogicalElement;
+
 public abstract class AbstractBaseElement
-		implements BaseElement {
+		implements BaseElement, LogicalElement {
 
 	private final String id;
 

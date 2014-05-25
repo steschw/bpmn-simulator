@@ -22,7 +22,10 @@ package com.googlecode.bpmn_simulator.bpmn.model.core.foundation;
 
 import java.util.Collection;
 
-public interface BaseElement {
+import com.googlecode.bpmn_simulator.animation.element.logical.LogicalElement;
+
+public interface BaseElement
+		extends LogicalElement {
 
 	String getId();
 

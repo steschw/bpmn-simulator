@@ -22,6 +22,9 @@ package com.googlecode.bpmn_simulator.bpmn.model.core.common.events;
 
 import com.googlecode.bpmn_simulator.bpmn.model.core.foundation.AbstractRootElement;
 
+/*
+ * Trigger type
+ */
 abstract class AbstractEventDefinition
 		extends AbstractRootElement
 		implements EventDefinition {

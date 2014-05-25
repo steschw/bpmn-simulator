@@ -21,9 +21,13 @@
 package com.googlecode.bpmn_simulator.bpmn.model.process.data;
 
 import com.googlecode.bpmn_simulator.animation.element.logical.ref.Reference;
+import com.googlecode.bpmn_simulator.bpmn.Messages;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.AbstractFlowElement;
 
-public class DataObjectReference extends AbstractFlowElement {
+public final class DataObjectReference
+		extends AbstractFlowElement {
+
+	public static final String ELEMENT_NAME = Messages.getString("dataObjectReference"); //$NON-NLS-1$
 
 	private final Reference<DataObject> dataObject;
 
@@ -31,6 +35,11 @@ public class DataObjectReference extends AbstractFlowElement {
 			Reference<DataObject> dataObject) {
 		super(id, name);
 		this.dataObject = dataObject;
+	}
+
+	@Override
+	public String getElementName() {
+		return ELEMENT_NAME;
 	}
 
 }

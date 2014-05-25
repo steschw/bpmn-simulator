@@ -20,13 +20,21 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.model.collaboration;
 
+import com.googlecode.bpmn_simulator.bpmn.Messages;
 import com.googlecode.bpmn_simulator.bpmn.model.core.foundation.AbstractBaseElementNamed;
 
 public class Participant
 		extends AbstractBaseElementNamed {
 
+	public static final String ELEMENT_NAME = Messages.getString("participant"); //$NON-NLS-1$
+
 	public Participant(final String id, final String name) {
 		super(id, name);
+	}
+
+	@Override
+	public String getElementName() {
+		return ELEMENT_NAME;
 	}
 
 }

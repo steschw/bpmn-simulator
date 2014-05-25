@@ -20,11 +20,20 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.model.core.common.events;
 
+import com.googlecode.bpmn_simulator.bpmn.Messages;
+
 public final class ConditionalEventDefinition
 		extends AbstractEventDefinition {
 
+	public static final String ELEMENT_NAME = Messages.getString("conditionalEventDefinition"); //$NON-NLS-1$
+
 	public ConditionalEventDefinition(final String id) {
 		super(id);
+	}
+
+	@Override
+	public String getElementName() {
+		return ELEMENT_NAME;
 	}
 
 }

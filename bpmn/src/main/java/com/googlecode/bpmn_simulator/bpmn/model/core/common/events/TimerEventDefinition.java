@@ -20,11 +20,20 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.model.core.common.events;
 
-public class TimerEventDefinition
+import com.googlecode.bpmn_simulator.bpmn.Messages;
+
+public final class TimerEventDefinition
 		extends AbstractEventDefinition {
+
+	public static final String ELEMENT_NAME = Messages.getString("timerEventDefinition"); //$NON-NLS-1$
 
 	public TimerEventDefinition(final String id) {
 		super(id);
+	}
+
+	@Override
+	public String getElementName() {
+		return ELEMENT_NAME;
 	}
 
 }

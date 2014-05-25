@@ -22,7 +22,7 @@ package com.googlecode.bpmn_simulator.bpmn.model.process.activities;
 
 import com.googlecode.bpmn_simulator.bpmn.Messages;
 
-public class Transaction
+public final class Transaction
 		extends SubProcess {
 
 	public static final String ELEMENT_NAME = Messages.getString("transaction"); //$NON-NLS-1$

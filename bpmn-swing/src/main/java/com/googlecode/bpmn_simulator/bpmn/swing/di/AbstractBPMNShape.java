@@ -24,12 +24,13 @@ import java.awt.BasicStroke;
 import java.awt.Graphics2D;
 import java.awt.Stroke;
 
+import com.googlecode.bpmn_simulator.animation.element.logical.LogicalElement;
 import com.googlecode.bpmn_simulator.animation.element.visual.swing.AbstractVisualNodeElement;
 import com.googlecode.bpmn_simulator.bpmn.di.BPMNShape;
 import com.googlecode.bpmn_simulator.bpmn.swing.di.Appearance.ElementAppearance;
 
 @SuppressWarnings("serial")
-public abstract class AbstractBPMNShape<E>
+public abstract class AbstractBPMNShape<E extends LogicalElement>
 		extends AbstractVisualNodeElement<E>
 		implements BPMNShape {
 

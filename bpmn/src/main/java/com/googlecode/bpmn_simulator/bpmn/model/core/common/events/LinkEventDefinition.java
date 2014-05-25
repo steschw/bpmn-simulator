@@ -20,11 +20,14 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.model.core.common.events;
 
+import com.googlecode.bpmn_simulator.bpmn.Messages;
 import com.googlecode.bpmn_simulator.bpmn.model.NamedElement;
 
-public class LinkEventDefinition
+public final class LinkEventDefinition
 		extends AbstractEventDefinition
 		implements NamedElement {
+
+	public static final String ELEMENT_NAME = Messages.getString("linkEventDefinition"); //$NON-NLS-1$
 
 	private final String name;
 
@@ -36,6 +39,11 @@ public class LinkEventDefinition
 	@Override
 	public String getName() {
 		return name;
+	}
+
+	@Override
+	public String getElementName() {
+		return ELEMENT_NAME;
 	}
 
 }

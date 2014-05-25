@@ -31,10 +31,12 @@ import javax.activation.MimeType;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import com.googlecode.bpmn_simulator.animation.element.logical.LogicalElement;
 import com.googlecode.bpmn_simulator.animation.element.logical.ref.NamedElements;
 import com.googlecode.bpmn_simulator.animation.element.logical.ref.NamedReference;
 import com.googlecode.bpmn_simulator.animation.element.logical.ref.Reference;
 import com.googlecode.bpmn_simulator.animation.input.AbstractXmlDefinition;
+import com.googlecode.bpmn_simulator.bpmn.Messages;
 import com.googlecode.bpmn_simulator.bpmn.di.BPMNDiagram;
 import com.googlecode.bpmn_simulator.bpmn.model.choreography.Choreography;
 import com.googlecode.bpmn_simulator.bpmn.model.collaboration.Collaboration;
@@ -97,6 +99,8 @@ public abstract class AbstractBPMNDefinition<E extends BPMNDiagram<?>>
 		extends AbstractXmlDefinition<E>
 		implements Definitions<E> {
 
+	public static final String ELEMENT_NAME = Messages.getString("definitions"); //$NON-NLS-1$
+
 	private static final URI DEFAULT_EXPRESSION_LANGUAGE = uri("http://www.w3.org/1999/XPath");
 	private static final URI DEFAULT_TYPE_LANGUAGE = uri("http://www.w3.org/2001/XMLSchema");
 
@@ -129,8 +133,20 @@ public abstract class AbstractBPMNDefinition<E extends BPMNDiagram<?>>
 
 	private List<Documentation> documentations = new ArrayList<Documentation>();
 
+	private Collection<LogicalElement> startElements = new ArrayList<LogicalElement>();
+
+	@Override
+	public Collection<LogicalElement> getStartElements() {
+		return startElements;
+	}
+
 	public AbstractBPMNDefinition() {
 		super(SCHEMA_FILENAME);
+	}
+
+	@Override
+	public String getElementName() {
+		return ELEMENT_NAME;
 	}
 
 	@Override

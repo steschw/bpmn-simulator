@@ -21,6 +21,7 @@
 package com.googlecode.bpmn_simulator.gui;
 
 import java.awt.BorderLayout;
+import java.awt.FlowLayout;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -33,18 +34,23 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collection;
 
+import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JInternalFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JToolBar;
 import javax.swing.KeyStroke;
 import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import com.googlecode.bpmn_simulator.animation.element.visual.swing.AbstractSwingDiagram;
+import com.googlecode.bpmn_simulator.animation.execution.Animator;
 import com.googlecode.bpmn_simulator.bpmn.swing.di.SwingBPMNDiagram;
 import com.googlecode.bpmn_simulator.bpmn.swing.di.SwingDIDefinition;
 import com.googlecode.bpmn_simulator.gui.dialogs.ExceptionDialog;
@@ -68,9 +74,14 @@ public class BPMNSimulatorFrame
 
 	private final LogFrame logFrame = new LogFrame();
 
-	private final Toolbar toolbar = new Toolbar(logFrame);
+	private final JToolBar definitionToolbar = new JToolBar();
+	private final AnimationToolbar animationToolbar = new AnimationToolbar();
+
+	private final JButton messagesButton = new JButton();
 
 	private final InstancesFrame frameInstances = new InstancesFrame();
+
+	private Animator animator;
 
 	private SwingDIDefinition currentDefinition;
 
@@ -109,7 +120,40 @@ public class BPMNSimulatorFrame
 	private void create() {
 		setJMenuBar(createMenuBar());
 
-		getContentPane().add(createToolbar(), BorderLayout.PAGE_START);
+		getContentPane().add(createToolBars(), BorderLayout.PAGE_START);
+	}
+
+	protected JComponent createToolBars() {
+		final JPanel panel = new JPanel(new BorderLayout());
+
+		final JPanel toolbarPanel = new JPanel(new FlowLayout(FlowLayout.LEADING));
+		toolbarPanel.add(createDefinitionToolbar());
+		toolbarPanel.add(animationToolbar);
+		panel.add(toolbarPanel, BorderLayout.CENTER);
+
+		messagesButton.setContentAreaFilled(false);
+		messagesButton.setFocusable(false);
+		messagesButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(final ActionEvent event) {
+				logFrame.setVisible(true);
+			}
+		});
+		panel.add(messagesButton, BorderLayout.LINE_END);
+		updateMessages();
+
+		return panel;
+	}
+
+	protected void updateMessages() {
+		messagesButton.setVisible(logFrame.hasMessages());
+		if (logFrame.hasErrors()) {
+			messagesButton.setIcon(Theme.ICON_MESSAGESERROR);
+			messagesButton.setToolTipText(Messages.getString("Toolbar.hintErrors")); //$NON-NLS-1$
+		} else {
+			messagesButton.setIcon(Theme.ICON_MESSAGES);
+			messagesButton.setToolTipText(Messages.getString("Toolbar.hintMessages")); //$NON-NLS-1$
+		}
 	}
 
 	protected JMenu createMenuFileExport() {
@@ -326,14 +370,18 @@ public class BPMNSimulatorFrame
 		return menubar;
 	}
 
-	public Toolbar createToolbar() {
-		toolbar.getOpenButton().addActionListener(new ActionListener() {
+	public JToolBar createDefinitionToolbar() {
+		final JButton openButton = new JButton(Theme.ICON_OPEN);
+		openButton.setToolTipText(Messages.getString("Toolbar.open")); //$NON-NLS-1$
+		openButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(final ActionEvent event) {
 				openFile();
 			}
 		});
-		return toolbar;
+
+		definitionToolbar.add(openButton);
+		return definitionToolbar;
 	}
 
 	private void openFile() {
@@ -386,6 +434,7 @@ public class BPMNSimulatorFrame
 				}
 				desktop.arrangeFrames();
 			}
+			updateMessages();
 		}
 	}
 

@@ -29,12 +29,20 @@ import com.googlecode.bpmn_simulator.animation.token.Token;
 public class Animator
 		extends AbstractAnimator {
 
-	private final RootInstances instances;
+	private RootInstances instances;
 
 	public Animator(final RootInstances instances) {
 		super();
-		this.instances = instances;
+		setInstances(instances);
 		start();
+	}
+
+	protected synchronized void setInstances(final RootInstances instances) {
+		this.instances = instances;
+	}
+
+	public RootInstances getInstances() {
+		return instances;
 	}
 
 	private void resetToken(final Token token) {
@@ -52,7 +60,7 @@ public class Animator
 
 	@Override
 	public synchronized void reset() {
-		final Iterator<Instance> i = instances.iterator();
+		final Iterator<Instance> i = getInstances().iterator();
 		while (i.hasNext()) {
 			final Instance instance = i.next();
 			resetInstance(instance);
@@ -80,7 +88,7 @@ public class Animator
 
 	@Override
 	public synchronized void step(final int count) {
-		final Iterator<Instance> i = instances.iterator();
+		final Iterator<Instance> i = getInstances().iterator();
 		while (i.hasNext()) {
 			final Instance instance = i.next();
 			stepInstance(instance, count);

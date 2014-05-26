@@ -24,7 +24,6 @@ import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JToolBar;
@@ -33,18 +32,14 @@ import javax.swing.event.ChangeListener;
 
 import com.googlecode.bpmn_simulator.animation.execution.AnimationListener;
 import com.googlecode.bpmn_simulator.animation.execution.Animator;
-import com.googlecode.bpmn_simulator.gui.log.LogFrame;
+import com.googlecode.bpmn_simulator.animation.input.Definition;
 
 @SuppressWarnings("serial")
-public class Toolbar
+public class AnimationToolbar
 		extends JToolBar
 		implements AnimationListener {
 
-	private final LogFrame logFrame;
-
 	private Animator animator;
-
-	private JButton buttonOpen;
 
 	private StartButton buttonStart;
 	private JButton buttonReset;
@@ -55,13 +50,8 @@ public class Toolbar
 	private JLabel labelSpeed;
 	private SpeedSpinner spinnerSpeed;
 
-	private JButton buttonMessages;
-
-	public Toolbar(final LogFrame logFrame) {
+	public AnimationToolbar() {
 		super();
-
-		this.logFrame = logFrame;
-
 		create();
 	}
 
@@ -72,20 +62,17 @@ public class Toolbar
 		this.animator = animator;
 		if (this.animator != null) {
 			this.animator.addAnimationListener(this);
+			buttonStart.setInstances(this.animator.getInstances());
+		} else {
+			buttonStart.setInstances(null);
 		}
 	}
 
-	public JButton getOpenButton() {
-		return buttonOpen;
+	public void setDefinition(final Definition<?> definition) {
+		buttonStart.setDefinition(definition);
 	}
 
-	protected void create() {
-
-		buttonOpen = new JButton(Theme.ICON_OPEN);
-		buttonOpen.setToolTipText(Messages.getString("Toolbar.open")); //$NON-NLS-1$
-		add(buttonOpen);
-
-		addSeparator(new Dimension(24, 32));
+	private void create() {
 
 		buttonStart = new StartButton(Theme.ICON_START);
 		buttonStart.setToolTipText(Messages.getString("Toolbar.start")); //$NON-NLS-1$
@@ -142,33 +129,7 @@ public class Toolbar
 		labelSpeed.setLabelFor(spinnerSpeed);
 		add(spinnerSpeed);
 
-		add(Box.createHorizontalGlue());
-
-		buttonMessages = new JButton();
-		buttonMessages.setBorderPainted(false);
-		buttonMessages.setOpaque(false);
-		buttonMessages.setFocusable(false);
-		buttonMessages.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(final ActionEvent event) {
-				logFrame.setVisible(true);
-			}
-		});
-		add(buttonMessages);
-
 		updateControls();
-		updateMessages();
-	}
-
-	protected void updateMessages() {
-		buttonMessages.setVisible(logFrame.hasMessages());
-		if (logFrame.hasErrors()) {
-			buttonMessages.setIcon(Theme.ICON_MESSAGESERROR);
-			buttonMessages.setToolTipText(Messages.getString("Toolbar.hintErrors")); //$NON-NLS-1$
-		} else {
-			buttonMessages.setIcon(Theme.ICON_MESSAGES);
-			buttonMessages.setToolTipText(Messages.getString("Toolbar.hintMessages")); //$NON-NLS-1$
-		}
 	}
 
 	protected void updateControls() {

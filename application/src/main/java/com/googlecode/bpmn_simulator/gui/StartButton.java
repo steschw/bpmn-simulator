@@ -27,22 +27,35 @@ import javax.swing.Icon;
 import javax.swing.JButton;
 
 import com.googlecode.bpmn_simulator.animation.input.Definition;
+import com.googlecode.bpmn_simulator.animation.token.RootInstances;
 
 @SuppressWarnings("serial")
 public class StartButton
 		extends JButton
 		implements ActionListener {
 
+	private RootInstances instances;
+
 	private Definition<?> definition;
 
 	public StartButton(final Icon icon) {
 		super(icon);
 		addActionListener(this);
+		updateButton();
 	}
 
 	public void setDefinition(final Definition<?> definition) {
 		this.definition = definition;
-		setEnabled(definition != null);
+		updateButton();
+	}
+
+	public void setInstances(final RootInstances instances) {
+		this.instances = instances;
+		updateButton();
+	}
+
+	private void updateButton() {
+		setEnabled((definition != null) && (instances != null));
 	}
 
 	@Override

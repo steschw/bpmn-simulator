@@ -69,8 +69,8 @@ public class BPMNSimulatorFrame
 	private static final int DEFAULT_WIDTH = 800;
 	private static final int DEFAULT_HEIGHT = 600;
 
-	private static final String BPMN_DESCRIPTION = "BPMN 2.0 XML"; //$NON-NLS-1$
-	private static final String[] BPMN_EXTENSIONS = {"bpmn", "xml"}; //$NON-NLS-1$ //$NON-NLS-2$
+	private static final String BPMN_FILE_DESCRIPTION = "BPMN 2.0 XML"; //$NON-NLS-1$
+	private static final String[] BPMN_FILE_EXTENSIONS = {"bpmn", "xml"}; //$NON-NLS-1$ //$NON-NLS-2$
 
 	private final LogFrame logFrame = new LogFrame();
 
@@ -99,11 +99,12 @@ public class BPMNSimulatorFrame
 	}
 
 	protected void updateFrameTitle() {
-		final StringBuilder title = new StringBuilder(BPMNSimulatorApplication.NAME);
+		final StringBuilder title = new StringBuilder();
 		if (currentFile != null) {
-			title.append(" - "); //$NON-NLS-1$
 			title.append(currentFile.getAbsolutePath());
+			title.append(" - "); //$NON-NLS-1$
 		}
+		title.append(BPMNSimulatorApplication.NAME);
 		setTitle(title.toString());
 	}
 
@@ -387,7 +388,7 @@ public class BPMNSimulatorFrame
 	private void openFile() {
 		final Config config = Config.getInstance();
 		final JFileChooser fileChoser = new JFileChooser();
-		fileChoser.setFileFilter(new FileNameExtensionFilter(BPMN_DESCRIPTION, BPMN_EXTENSIONS));
+		fileChoser.setFileFilter(new FileNameExtensionFilter(BPMN_FILE_DESCRIPTION, BPMN_FILE_EXTENSIONS));
 		fileChoser.setCurrentDirectory(new File(config.getLastDirectory()));
 		if (fileChoser.showOpenDialog(this) == 	JFileChooser.APPROVE_OPTION) {
 			config.setLastDirectory(fileChoser.getCurrentDirectory().getAbsolutePath());

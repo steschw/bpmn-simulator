@@ -27,7 +27,7 @@ import com.googlecode.bpmn_simulator.gui.preferences.Config;
 public final class BPMNSimulatorApplication {
 
 	public static final String NOTICE =
-			"Copyright (C) 2012 Stefan Schweitzer\n" //$NON-NLS-1$
+			"Copyright (C) 2014 Stefan Schweitzer\n" //$NON-NLS-1$
 			+ "\n"  //$NON-NLS-1$
 			+ "This software was created by Stefan Schweitzer as a student's project at\n" //$NON-NLS-1$
 			+ "Fachhochschule Kaiserslautern (University of Applied Sciences).\n" //$NON-NLS-1$

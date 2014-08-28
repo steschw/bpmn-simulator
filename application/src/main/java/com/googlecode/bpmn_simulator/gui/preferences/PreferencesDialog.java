@@ -21,6 +21,7 @@
 package com.googlecode.bpmn_simulator.gui.preferences;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -89,17 +90,17 @@ public class PreferencesDialog
 
 	public PreferencesDialog(final JFrame parent) {
 		super(parent, Messages.getString("Preferences.preferences")); //$NON-NLS-1$
+	}
 
-		create();
-
+	@Override
+	public void showDialog() {
+		super.showDialog();
 		load();
 	}
 
 	@Override
-	protected void create() {
-		super.create();
-
-		getContentPane().add(createPreferencesPane(), BorderLayout.CENTER);
+	protected Component createContent() {
+		return createPreferencesPane();
 	}
 
 	protected JTabbedPane createPreferencesPane() {
@@ -278,8 +279,8 @@ public class PreferencesDialog
 	}
 
 	@Override
-	protected JPanel createButtonPanel() {
-		final JPanel panel = super.createButtonPanel();
+	protected JPanel createActionPanel() {
+		final JPanel panel = super.createActionPanel();
 
 		final JButton buttonCancel = new JButton(Messages.getString("cancel")); //$NON-NLS-1$
 		setComponentWidth(buttonCancel, DEFAULT_BUTTON_WIDTH);

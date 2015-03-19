@@ -14,7 +14,7 @@
 		<property name="message" value="Line contains non-ASCII char." />
 		<property name="fileExtensions" value=".properties" />
 	</module>
-	<module name="Header">
+	<module name="RegexpHeader">
 		<property name="headerFile" value="${checkstyle.header.file}" />
 	</module>
 

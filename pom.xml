@@ -7,12 +7,12 @@
 	<version>1.1.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
-	<url>http://code.google.com/p/bpmn-simulator</url>
+	<url>https://github.com/steschw/bpmn-simulator</url>
 	<inceptionYear>2011</inceptionYear>
 
 	<organization>
-		<name>Fachhochschule Kaiserslautern (University of Applied Sciences)</name>
-		<url>http://www.fh-kl.de/</url>
+		<name>Hochschule Kaiserslautern (University of Applied Sciences)</name>
+		<url>http://hs-kl.de/</url>
 	</organization>
 
 	<licenses>
@@ -35,22 +35,28 @@
 	</developers>
 
 	<scm>
-		<connection>scm:svn:http://bpmn-simulator.googlecode.com/svn/trunk</connection>
-		<developerConnection>scm:svn:https://bpmn-simulator.googlecode.com/svn/trunk</developerConnection>
-		<url>${project.url}/source/browse</url>
+		<connection>scm:git:https://github.com/steschw/bpmn-simulator.git</connection>
+		<developerConnection>scm:git:https://github.com/steschw/bpmn-simulator.git</developerConnection>
+		<url>https://github.com/steschw/bpmn-simulator</url>
 	</scm>
 
 	<issueManagement>
-		<system>Google Code</system>
-		<url>${project.url}/issues/list</url>
+		<system>GitHub</system>
+		<url>https://github.com/steschw/bpmn-simulator/issues</url>
 	</issueManagement>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-		<surefire.version>2.17</surefire.version>
-		<dependency.version>2.8</dependency.version>
+		<maven.compiler.source>1.7</maven.compiler.source>
+		<maven.compiler.target>1.7</maven.compiler.target>
+		<maven.compiler.optimize>true</maven.compiler.optimize>
+		<maven.compiler.showDeprecation>true</maven.compiler.showDeprecation>
+		<maven.compiler.showWarnings>true</maven.compiler.showWarnings>
+
+		<surefire.version>2.18.1</surefire.version>
+		<dependency.version>2.10</dependency.version>
 	</properties>
 
 	<dependencyManagement>
@@ -58,7 +64,7 @@
 			<dependency>
 				<groupId>junit</groupId>
 				<artifactId>junit</artifactId>
-				<version>4.11</version>
+				<version>4.12</version>
 			</dependency>
 			<dependency>
 				<groupId>commons-io</groupId>
@@ -83,34 +89,27 @@
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-clean-plugin</artifactId>
-					<version>2.5</version>
+					<version>2.6.1</version>
 				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-compiler-plugin</artifactId>
-					<version>3.1</version>
-					<configuration>
-						<source>1.7</source>
-						<target>1.7</target>
-						<optimize>true</optimize>
-						<showDeprecation>true</showDeprecation>
-						<showWarnings>true</showWarnings>
-					</configuration>
+					<version>3.2</version>
 				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-resources-plugin</artifactId>
-					<version>2.6</version>
+					<version>2.7</version>
 				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-jar-plugin</artifactId>
-					<version>2.4</version>
+					<version>2.6</version>
 				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-install-plugin</artifactId>
-					<version>2.5.1</version>
+					<version>2.5.2</version>
 				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
@@ -130,27 +129,27 @@
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-assembly-plugin</artifactId>
-					<version>2.4</version>
+					<version>2.5.3</version>
 				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-release-plugin</artifactId>
-					<version>2.5</version>
+					<version>2.5.1</version>
 				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-deploy-plugin</artifactId>
-					<version>2.8.1</version>
+					<version>2.8.2</version>
 				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-antrun-plugin</artifactId>
-					<version>1.7</version>
+					<version>1.8</version>
 				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-site-plugin</artifactId>
-					<version>3.3</version>
+					<version>3.4</version>
 					<configuration>
 						<locales>en,de</locales>
 					</configuration>
@@ -169,7 +168,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-project-info-reports-plugin</artifactId>
-				<version>2.7</version>
+				<version>2.8</version>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -196,7 +195,7 @@
 				<activeByDefault>false</activeByDefault>
 			</activation>
 			<properties>
-				<jacoco.version>0.7.0.201403182114</jacoco.version>
+				<jacoco.version>0.7.4.201502262128</jacoco.version>
 			</properties>
 			<build>
 				<pluginManagement>
@@ -240,8 +239,8 @@
 			</activation>
 			<properties>
 				<linkXRef>false</linkXRef>
-				<checkstyle.version>2.12.1</checkstyle.version>
-				<pmd.version>3.1</pmd.version>
+				<checkstyle.version>2.14</checkstyle.version>
+				<pmd.version>3.4</pmd.version>
 			</properties>
 			<reporting>
 				<plugins>
@@ -251,7 +250,7 @@
 						<version>${checkstyle.version}</version>
 						<configuration>
 							<configLocation>checkstyle-configuration.xml</configLocation>
-							<headerLocation>../NOTICE.txt</headerLocation>
+							<headerLocation>NOTICE.txt</headerLocation>
 						</configuration>
 					</plugin>
 					<plugin>
@@ -262,14 +261,14 @@
 							<typeResolution>true</typeResolution>
 							<aggregate>true</aggregate>
 							<rulesets>
-								<ruleset>../pmd-ruleset.xml</ruleset>
+								<ruleset>pmd-ruleset.xml</ruleset>
 							</rulesets>
 						</configuration>
 					</plugin>
 					<plugin>
 						<groupId>org.codehaus.mojo</groupId>
 						<artifactId>findbugs-maven-plugin</artifactId>
-						<version>2.5.3</version>
+						<version>3.0.0</version>
 						<configuration>
 							<effort>Max</effort>
 							<threshold>High</threshold>
@@ -277,7 +276,7 @@
 								<plugin>
 									<groupId>com.mebigfatguy.fb-contrib</groupId>
 									<artifactId>fb-contrib</artifactId>
-									<version>5.2.0</version>
+									<version>6.0.0</version>
 								</plugin>
 							</plugins>
 						</configuration>
@@ -285,7 +284,7 @@
 					<plugin>
 						<groupId>org.codehaus.mojo</groupId>
 						<artifactId>jdepend-maven-plugin</artifactId>
-						<version>2.0-beta-2</version>
+						<version>2.0</version>
 					</plugin>
 					<plugin>
 						<groupId>org.codehaus.mojo</groupId>
@@ -316,15 +315,9 @@
 						</configuration>
 					</plugin>
 					<plugin>
-						<groupId>org.codehaus.mojo</groupId>
+						<groupId>com.googlecode.l10n-maven-plugin</groupId>
 						<artifactId>l10n-maven-plugin</artifactId>
-						<version>1.0-alpha-2</version>
-						<configuration>
-							<locales>
-								<locale>en</locale>
-								<locale>de</locale>
-							</locales>
-						</configuration>
+						<version>1.8</version>
 					</plugin>
 				</plugins>
 			</reporting>

@@ -30,7 +30,6 @@
 
 	<rule ref="rulesets/java/design.xml">
 		<exclude name="GodClass" />
-		<exclude name="DesignForExtension" />
 	</rule>
 
 	<rule ref="rulesets/java/empty.xml" />

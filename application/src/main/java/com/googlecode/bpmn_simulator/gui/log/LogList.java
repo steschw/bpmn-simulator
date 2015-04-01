@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Stefan Schweitzer
+ * Copyright (C) 2015 Stefan Schweitzer
  *
  * This software was created by Stefan Schweitzer as a student's project at
  * Fachhochschule Kaiserslautern (University of Applied Sciences).
@@ -21,13 +21,22 @@
 package com.googlecode.bpmn_simulator.gui.log;
 
 import java.awt.Dimension;
+import java.awt.Toolkit;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.StringSelection;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.Icon;
+import javax.swing.JMenuItem;
+import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
+import javax.swing.event.PopupMenuEvent;
+import javax.swing.event.PopupMenuListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
@@ -45,7 +54,7 @@ public class LogList
 	}
 
 	protected LogListContent getContent() {
-		return (LogListContent)this.getViewport().getView();
+		return (LogListContent) getViewport().getView();
 	}
 
 	public void addError(final String message) {
@@ -63,8 +72,8 @@ public class LogList
 	private static class LogListContent
 			extends JTable {
 
-		private static final String TYPE_COLUMN = "Type";
-		private static final String MESSAGE_COLUMN = "Nachricht";
+		private static final int TYPE_COLUMN_INDEX = 0;
+		private static final int MESSAGE_COLUMN_INDEX = 1;
 
 		private static final int ROW_HEIGHT = 18;
 		private static final int TYPE_COLUMN_WIDTH = 20;
@@ -73,6 +82,7 @@ public class LogList
 			super();
 
 			initColumns();
+			initPopupMenu();
 
 			setShowGrid(false);
 			setFillsViewportHeight(true);
@@ -82,23 +92,64 @@ public class LogList
 			setFocusable(false);
 		}
 
-		protected void initColumns() {
+		@Override
+		public boolean getScrollableTracksViewportWidth() {
+			return getPreferredSize().width < getParent().getWidth();
+		}
+
+		private void initColumns() {
+			setAutoCreateColumnsFromModel(false);
+
 			final DefaultTableModel model = (DefaultTableModel) getModel();
-			model.addColumn(TYPE_COLUMN);
-			model.addColumn(MESSAGE_COLUMN);
+			model.setColumnCount(2);
 
-			ProtocolTableCellRenderer cellRenderer = null;
-			TableColumn column = null;
-
-			column = getColumn(TYPE_COLUMN);
-			column.setResizable(false);
-			column.setWidth(TYPE_COLUMN_WIDTH);
-			column.setMinWidth(TYPE_COLUMN_WIDTH);
-			column.setMaxWidth(TYPE_COLUMN_WIDTH);
-			cellRenderer = new ProtocolTableCellRenderer();
+			final TableColumn typeColumn = new TableColumn(TYPE_COLUMN_INDEX);
+			typeColumn.setResizable(false);
+			typeColumn.setWidth(TYPE_COLUMN_WIDTH);
+			typeColumn.setMinWidth(TYPE_COLUMN_WIDTH);
+			typeColumn.setMaxWidth(TYPE_COLUMN_WIDTH);
+			final LogTableCellRenderer cellRenderer = new LogTableCellRenderer();
 			cellRenderer.setHorizontalAlignment(DefaultTableCellRenderer.CENTER);
 			cellRenderer.setVerticalAlignment(DefaultTableCellRenderer.CENTER);
-			column.setCellRenderer(cellRenderer);
+			typeColumn.setCellRenderer(cellRenderer);
+
+			getColumnModel().addColumn(typeColumn);
+			getColumnModel().addColumn(new AutosizeTableColumn(this, MESSAGE_COLUMN_INDEX));
+		}
+
+		private void copySelectedRowsToClipboard() {
+			final Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+			final StringBuilder content = new StringBuilder();
+			for (int rowIndex : getSelectedRows()) {
+				final String message = (String) getModel().getValueAt(rowIndex, MESSAGE_COLUMN_INDEX);
+				content.append(message).append(System.lineSeparator());
+			}
+			clipboard.setContents(new StringSelection(content.toString()), null);
+		}
+
+		private void initPopupMenu() {
+			final JPopupMenu menu = new JPopupMenu();
+			final JMenuItem copyMenuItem = new JMenuItem("Copy message to clipboard");
+			copyMenuItem.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(final ActionEvent e) {
+					copySelectedRowsToClipboard();
+				}
+			});
+			menu.add(copyMenuItem);
+			menu.addPopupMenuListener(new PopupMenuListener() {
+				@Override
+				public void popupMenuWillBecomeVisible(final PopupMenuEvent e) {
+					copyMenuItem.setEnabled(getSelectedRowCount() > 0);
+				}
+				@Override
+				public void popupMenuWillBecomeInvisible(final PopupMenuEvent e) {
+				}
+				@Override
+				public void popupMenuCanceled(final PopupMenuEvent e) {
+				}
+			});
+			setComponentPopupMenu(menu);
 		}
 
 		@Override
@@ -107,7 +158,7 @@ public class LogList
 		}
 
 		public synchronized void clear() {
-			((DefaultTableModel)getModel()).getDataVector().removeAllElements();
+			((DefaultTableModel) getModel()).getDataVector().removeAllElements();
 			updateUI();
 		}
 
@@ -136,7 +187,7 @@ public class LogList
 
 			@Override
 			public void run() {
-				final DefaultTableModel model = (DefaultTableModel)getModel();
+				final DefaultTableModel model = (DefaultTableModel) getModel();
 				model.addRow(new Object[] {
 						icon,
 						message,
@@ -145,7 +196,7 @@ public class LogList
 
 		}
 
-		private static class ProtocolTableCellRenderer
+		private static class LogTableCellRenderer
 				extends DefaultTableCellRenderer {
 
 			@Override

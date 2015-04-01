@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Stefan Schweitzer
+ * Copyright (C) 2015 Stefan Schweitzer
  *
  * This software was created by Stefan Schweitzer as a student's project at
  * Fachhochschule Kaiserslautern (University of Applied Sciences).
@@ -101,6 +101,10 @@ public class LogFrame
 		listLog.clear();
 		warningCount = 0;
 		errorCount = 0;
+	}
+
+	@Override
+	public void info(String message) {
 	}
 
 	@Override

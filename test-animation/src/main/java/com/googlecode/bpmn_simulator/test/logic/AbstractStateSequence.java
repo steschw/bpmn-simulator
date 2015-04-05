@@ -20,13 +20,30 @@
  */
 package com.googlecode.bpmn_simulator.test.logic;
 
-import org.junit.runner.RunWith;
-import org.junit.runners.Suite;
-import org.junit.runners.Suite.SuiteClasses;
+import java.util.Iterator;
 
-@RunWith(Suite.class)
-@SuiteClasses({ AssertPrimitivesTestcase.class, AttributedElementsTestcase.class,
-		StateSequenceTestcase.class })
-public class BaseTests {
+abstract class AbstractStateSequence<STATE>
+		implements StateSequence<STATE> {
+
+	@Override
+	public String toString() {
+		final StringBuilder builder = new StringBuilder();
+		final Iterator<STATE> stateIterator = iterator();
+		int index = 0;
+		builder.append('{');
+		while (stateIterator.hasNext()) {
+			final STATE state = stateIterator.next();
+			builder.append(index);
+			builder.append(':');
+			builder.append(state);
+			++index;
+			if (stateIterator.hasNext()) {
+				builder.append(',');
+				builder.append(' ');
+			}
+		}
+		builder.append('}');
+		return builder.toString();
+	}
 
 }

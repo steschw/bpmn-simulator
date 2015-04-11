@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014 Stefan Schweitzer
+ * Copyright (C) 2015 Stefan Schweitzer
  *
  * This software was created by Stefan Schweitzer as a student's project at
  * Fachhochschule Kaiserslautern (University of Applied Sciences).
@@ -21,7 +21,6 @@
 package com.googlecode.bpmn_simulator.gui.preferences;
 
 import java.awt.BorderLayout;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -46,15 +45,23 @@ import javax.swing.JTextField;
 import com.googlecode.bpmn_simulator.animation.element.visual.VisualElement;
 import com.googlecode.bpmn_simulator.bpmn.swing.di.Appearance;
 import com.googlecode.bpmn_simulator.bpmn.swing.di.Appearance.ElementAppearance;
+import com.googlecode.bpmn_simulator.bpmn.swing.model.collaboration.MessageFlowEdge;
 import com.googlecode.bpmn_simulator.bpmn.swing.model.core.common.SequenceFlowEdge;
 import com.googlecode.bpmn_simulator.bpmn.swing.model.core.common.artifacts.AssociationEdge;
 import com.googlecode.bpmn_simulator.bpmn.swing.model.core.common.artifacts.GroupShape;
 import com.googlecode.bpmn_simulator.bpmn.swing.model.core.common.artifacts.TextAnnotationShape;
+import com.googlecode.bpmn_simulator.bpmn.swing.model.core.common.events.BoundaryEventShape;
 import com.googlecode.bpmn_simulator.bpmn.swing.model.core.common.events.EndEventShape;
+import com.googlecode.bpmn_simulator.bpmn.swing.model.core.common.events.IntermediateCatchEventShape;
+import com.googlecode.bpmn_simulator.bpmn.swing.model.core.common.events.IntermediateThrowEventShape;
 import com.googlecode.bpmn_simulator.bpmn.swing.model.core.common.events.StartEventShape;
 import com.googlecode.bpmn_simulator.bpmn.swing.model.core.common.gateways.ExclusiveGatewayShape;
 import com.googlecode.bpmn_simulator.bpmn.swing.model.core.common.gateways.InclusiveGatewayShape;
 import com.googlecode.bpmn_simulator.bpmn.swing.model.core.common.gateways.ParallelGatewayShape;
+import com.googlecode.bpmn_simulator.bpmn.swing.model.process.LaneShape;
+import com.googlecode.bpmn_simulator.bpmn.swing.model.process.activities.CallActivityShape;
+import com.googlecode.bpmn_simulator.bpmn.swing.model.process.activities.SubProcessShape;
+import com.googlecode.bpmn_simulator.bpmn.swing.model.process.activities.TransactionShape;
 import com.googlecode.bpmn_simulator.bpmn.swing.model.process.activities.task.BusinessRuleTaskShape;
 import com.googlecode.bpmn_simulator.bpmn.swing.model.process.activities.task.ManualTaskShape;
 import com.googlecode.bpmn_simulator.bpmn.swing.model.process.activities.task.ReceiveTaskShape;
@@ -90,17 +97,17 @@ public class PreferencesDialog
 
 	public PreferencesDialog(final JFrame parent) {
 		super(parent, Messages.getString("Preferences.preferences")); //$NON-NLS-1$
-	}
 
-	@Override
-	public void showDialog() {
-		super.showDialog();
+		create();
+
 		load();
 	}
 
 	@Override
-	protected Component createContent() {
-		return createPreferencesPane();
+	protected void create() {
+		super.create();
+
+		getContentPane().add(createPreferencesPane(), BorderLayout.CENTER);
 	}
 
 	protected JTabbedPane createPreferencesPane() {
@@ -249,18 +256,24 @@ public class PreferencesDialog
 
 //		addElementConfig(panel, constraints, ProcessPlane.class, "Process");
 
+		addElementConfig(panel, constraints, LaneShape.class, "Lane");
+
 		addElementConfig(panel, constraints, AssociationEdge.class, "Association", false, true);
 		addElementConfig(panel, constraints, GroupShape.class, "Group");
 		addElementConfig(panel, constraints, TextAnnotationShape.class, "TextAnnotation");
 
 		addElementConfig(panel, constraints, StartEventShape.class, "StartEvent");
 		addElementConfig(panel, constraints, EndEventShape.class, "EndEvent");
+		addElementConfig(panel, constraints, BoundaryEventShape.class, "BoundaryEvent");
+		addElementConfig(panel, constraints, IntermediateCatchEventShape.class, "IntermediateCatchEvent");
+		addElementConfig(panel, constraints, IntermediateThrowEventShape.class, "IntermediateThrowEvent");
 
 		addElementConfig(panel, constraints, ExclusiveGatewayShape.class, "ExclusiveGateway");
 		addElementConfig(panel, constraints, InclusiveGatewayShape.class, "InclusiveGateway");
 		addElementConfig(panel, constraints, ParallelGatewayShape.class, "ParallelGateway");
 
 		addElementConfig(panel, constraints, SequenceFlowEdge.class, "SequenceFlow", false, true);
+		addElementConfig(panel, constraints, MessageFlowEdge.class, "MessageFlow", false, true);
 		addElementConfig(panel, constraints, DataAssociationEdge.class, "DataAssociation", false, true);
 
 		addElementConfig(panel, constraints, DataObjectReferenceShape.class, "DataObjectReference");
@@ -275,12 +288,17 @@ public class PreferencesDialog
 		addElementConfig(panel, constraints, ServiceTaskShape.class, "ServiceTask");
 		addElementConfig(panel, constraints, UserTaskShape.class, "UserTask");
 
+		addElementConfig(panel, constraints, CallActivityShape.class, "CallActivity");
+
+		addElementConfig(panel, constraints, SubProcessShape.class, "SubProcess");
+		addElementConfig(panel, constraints, TransactionShape.class, "Transaction");
+
 		return panel;
 	}
 
 	@Override
-	protected JPanel createActionPanel() {
-		final JPanel panel = super.createActionPanel();
+	protected JPanel createButtonPanel() {
+		final JPanel panel = super.createButtonPanel();
 
 		final JButton buttonCancel = new JButton(Messages.getString("cancel")); //$NON-NLS-1$
 		setComponentWidth(buttonCancel, DEFAULT_BUTTON_WIDTH);

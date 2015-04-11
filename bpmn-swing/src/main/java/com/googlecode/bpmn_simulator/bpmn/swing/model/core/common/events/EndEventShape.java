@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014 Stefan Schweitzer
+ * Copyright (C) 2015 Stefan Schweitzer
  *
  * This software was created by Stefan Schweitzer as a student's project at
  * Fachhochschule Kaiserslautern (University of Applied Sciences).
@@ -21,10 +21,10 @@
 package com.googlecode.bpmn_simulator.bpmn.swing.model.core.common.events;
 
 import java.awt.BasicStroke;
-import java.awt.Color;
 import java.awt.Image;
 import java.awt.Stroke;
 
+import com.googlecode.bpmn_simulator.animation.element.visual.swing.Colors;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.events.EndEvent;
 import com.googlecode.bpmn_simulator.bpmn.swing.di.Appearance;
 
@@ -35,7 +35,7 @@ public class EndEventShape
 	private static final Stroke STROKE = new BasicStroke(4);
 
 	static {
-		Appearance.getDefault().getForElement(EndEventShape.class).setBackground(new Color(0xFFA4A4));
+		Appearance.setDefaultColor(EndEventShape.class, Colors.RED);
 	}
 
 	public EndEventShape(final EndEvent element) {

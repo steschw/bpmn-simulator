@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014 Stefan Schweitzer
+ * Copyright (C) 2015 Stefan Schweitzer
  *
  * This software was created by Stefan Schweitzer as a student's project at
  * Fachhochschule Kaiserslautern (University of Applied Sciences).
@@ -21,10 +21,10 @@
 package com.googlecode.bpmn_simulator.bpmn.swing.model.core.common.gateways;
 
 import java.awt.BasicStroke;
-import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Stroke;
 
+import com.googlecode.bpmn_simulator.animation.element.visual.swing.Colors;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.gateways.InclusiveGateway;
 import com.googlecode.bpmn_simulator.bpmn.swing.di.Appearance;
 
@@ -35,7 +35,7 @@ public class InclusiveGatewayShape
 	private static final Stroke SYMBOL_STROKE = new BasicStroke(2.f);
 
 	static {
-		Appearance.getDefault().getForElement(InclusiveGatewayShape.class).setBackground(new Color(0xFFCEA2));
+		Appearance.setDefaultColor(InclusiveGatewayShape.class, Colors.ORANGE);
 	}
 
 	public InclusiveGatewayShape(final InclusiveGateway element) {

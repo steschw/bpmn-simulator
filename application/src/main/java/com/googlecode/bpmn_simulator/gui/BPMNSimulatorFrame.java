@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014 Stefan Schweitzer
+ * Copyright (C) 2015 Stefan Schweitzer
  *
  * This software was created by Stefan Schweitzer as a student's project at
  * Fachhochschule Kaiserslautern (University of Applied Sciences).
@@ -29,7 +29,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collection;
@@ -55,6 +54,7 @@ import com.googlecode.bpmn_simulator.bpmn.swing.di.SwingBPMNDiagram;
 import com.googlecode.bpmn_simulator.bpmn.swing.di.SwingDIDefinition;
 import com.googlecode.bpmn_simulator.gui.dialogs.ExceptionDialog;
 import com.googlecode.bpmn_simulator.gui.dialogs.ImageExportChooser;
+import com.googlecode.bpmn_simulator.gui.dialogs.LoadingDialog;
 import com.googlecode.bpmn_simulator.gui.instances.InstancesFrame;
 import com.googlecode.bpmn_simulator.gui.log.LogFrame;
 import com.googlecode.bpmn_simulator.gui.mdi.MdiFrame;
@@ -68,9 +68,6 @@ public class BPMNSimulatorFrame
 
 	private static final int DEFAULT_WIDTH = 800;
 	private static final int DEFAULT_HEIGHT = 600;
-
-	private static final String BPMN_FILE_DESCRIPTION = "BPMN 2.0 XML"; //$NON-NLS-1$
-	private static final String[] BPMN_FILE_EXTENSIONS = {"bpmn", "xml"}; //$NON-NLS-1$ //$NON-NLS-2$
 
 	private final LogFrame logFrame = new LogFrame();
 
@@ -99,12 +96,11 @@ public class BPMNSimulatorFrame
 	}
 
 	protected void updateFrameTitle() {
-		final StringBuilder title = new StringBuilder();
+		final StringBuilder title = new StringBuilder(ApplicationInfo.getName());
 		if (currentFile != null) {
-			title.append(currentFile.getAbsolutePath());
 			title.append(" - "); //$NON-NLS-1$
+			title.append(currentFile.getAbsolutePath());
 		}
-		title.append(BPMNSimulatorApplication.NAME);
 		setTitle(title.toString());
 	}
 
@@ -120,7 +116,6 @@ public class BPMNSimulatorFrame
 
 	private void create() {
 		setJMenuBar(createMenuBar());
-
 		getContentPane().add(createToolBars(), BorderLayout.PAGE_START);
 	}
 
@@ -141,12 +136,12 @@ public class BPMNSimulatorFrame
 			}
 		});
 		panel.add(messagesButton, BorderLayout.LINE_END);
-		updateMessages();
+		updateMessagesInfo();
 
 		return panel;
 	}
 
-	protected void updateMessages() {
+	protected void updateMessagesInfo() {
 		messagesButton.setVisible(logFrame.hasMessages());
 		if (logFrame.hasErrors()) {
 			messagesButton.setIcon(Theme.ICON_MESSAGESERROR);
@@ -385,10 +380,16 @@ public class BPMNSimulatorFrame
 		return definitionToolbar;
 	}
 
+	private void showException(final Exception e) {
+		JOptionPane.showMessageDialog(this, e.toString(),
+				Messages.getString("error"), //$NON-NLS-1$
+				JOptionPane.ERROR_MESSAGE);
+	}
+
 	private void openFile() {
 		final Config config = Config.getInstance();
 		final JFileChooser fileChoser = new JFileChooser();
-		fileChoser.setFileFilter(new FileNameExtensionFilter(BPMN_FILE_DESCRIPTION, BPMN_FILE_EXTENSIONS));
+		fileChoser.setFileFilter(new FileNameExtensionFilter(SwingDIDefinition.FILE_DESCRIPTION, SwingDIDefinition.FILE_EXTENSIONS));
 		fileChoser.setCurrentDirectory(new File(config.getLastDirectory()));
 		if (fileChoser.showOpenDialog(this) == 	JFileChooser.APPROVE_OPTION) {
 			config.setLastDirectory(fileChoser.getCurrentDirectory().getAbsolutePath());
@@ -413,13 +414,21 @@ public class BPMNSimulatorFrame
 
 	private void createModel() {
 		if (isFileOpen()) {
+			final LoadingDialog loadingDialog = new LoadingDialog(this);
 			currentDefinition = new SwingDIDefinition();
 			currentDefinition.addDefinitionListener(logFrame);
-			try (final InputStream input = new FileInputStream(currentFile)) {
-				currentDefinition.load(input);
-			} catch (FileNotFoundException e) {
-			} catch (IOException e) {
-			}
+			currentDefinition.addDefinitionListener(loadingDialog);
+			final Runnable runnable = new Runnable() {
+				@Override
+				public void run() {
+					try (final InputStream input = new FileInputStream(currentFile)) {
+						currentDefinition.load(input);
+					} catch (IOException e) {
+						showException(e);
+					}
+				}
+			};
+			loadingDialog.run(runnable);
 			final Collection<SwingBPMNDiagram> diagrams = currentDefinition.getDiagrams();
 			if (diagrams.isEmpty()) {
 				JOptionPane.showMessageDialog(this,
@@ -435,7 +444,8 @@ public class BPMNSimulatorFrame
 				}
 				desktop.arrangeFrames();
 			}
-			updateMessages();
+			loadingDialog.setVisible(false);
+			updateMessagesInfo();
 		}
 	}
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014 Stefan Schweitzer
+ * Copyright (C) 2015 Stefan Schweitzer
  *
  * This software was created by Stefan Schweitzer as a student's project at
  * Fachhochschule Kaiserslautern (University of Applied Sciences).
@@ -21,13 +21,13 @@
 package com.googlecode.bpmn_simulator.bpmn.swing.model.core.common.artifacts;
 
 import java.awt.BasicStroke;
-import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Stroke;
 
 import com.googlecode.bpmn_simulator.animation.element.visual.Bounds;
 import com.googlecode.bpmn_simulator.animation.element.visual.Waypoint;
 import com.googlecode.bpmn_simulator.animation.element.visual.Waypoints;
+import com.googlecode.bpmn_simulator.animation.element.visual.swing.Colors;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.artifacts.TextAnnotation;
 import com.googlecode.bpmn_simulator.bpmn.swing.di.AbstractBPMNShape;
 import com.googlecode.bpmn_simulator.bpmn.swing.di.Appearance;
@@ -41,7 +41,7 @@ public class TextAnnotationShape
 	private static final Stroke STROKE = new BasicStroke(1);
 
 	static {
-		Appearance.getDefault().getForElement(TextAnnotationShape.class).setBackground(new Color(0xECF4FF));
+		Appearance.setDefaultColor(TextAnnotationShape.class, Colors.BLUE);
 	}
 
 	public TextAnnotationShape(final TextAnnotation element) {

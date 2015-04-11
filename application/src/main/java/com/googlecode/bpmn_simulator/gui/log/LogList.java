@@ -27,7 +27,6 @@ import java.awt.datatransfer.StringSelection;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.BorderFactory;
 import javax.swing.Icon;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
@@ -47,13 +46,14 @@ import com.googlecode.bpmn_simulator.gui.Theme;
 public class LogList
 		extends JScrollPane {
 
+	private boolean autoscroll;
+
 	public LogList() {
 		super(new LogListContent());
-		setBorder(BorderFactory.createLoweredBevelBorder());
 		setPreferredSize(new Dimension(100, 80));
 	}
 
-	protected LogListContent getContent() {
+	private LogListContent getContent() {
 		return (LogListContent) getViewport().getView();
 	}
 
@@ -67,6 +67,14 @@ public class LogList
 
 	public void clear() {
 		getContent().clear();
+	}
+
+	public void setAutoscroll(final boolean autoscroll) {
+		this.autoscroll = autoscroll;
+	}
+
+	public boolean isAutoscroll() {
+		return autoscroll;
 	}
 
 	private static class LogListContent

@@ -1,8 +1,8 @@
 package com.googlecode.bpmn_simulator.bpmn.swing.model.process.activities.task;
 
-import java.awt.Color;
 import java.awt.Image;
 
+import com.googlecode.bpmn_simulator.animation.element.visual.swing.Colors;
 import com.googlecode.bpmn_simulator.bpmn.model.process.activities.tasks.ReceiveTask;
 import com.googlecode.bpmn_simulator.bpmn.swing.di.Appearance;
 
@@ -11,7 +11,7 @@ public class ReceiveTaskShape
 		extends AbstractTaskShape<ReceiveTask> {
 
 	static {
-		Appearance.getDefault().getForElement(ReceiveTaskShape.class).setBackground(new Color(0xFFFFB5));
+		Appearance.setDefaultColor(ReceiveTaskShape.class, Colors.YELLOW);
 	}
 
 	public ReceiveTaskShape(final ReceiveTask element) {

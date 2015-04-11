@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014 Stefan Schweitzer
+ * Copyright (C) 2015 Stefan Schweitzer
  *
  * This software was created by Stefan Schweitzer as a student's project at
  * Fachhochschule Kaiserslautern (University of Applied Sciences).
@@ -34,6 +34,9 @@ import com.googlecode.bpmn_simulator.bpmn.model.NamedElement;
 import com.googlecode.bpmn_simulator.bpmn.model.TextElement;
 import com.googlecode.bpmn_simulator.bpmn.model.core.foundation.BaseElement;
 
+/**
+ * Diagram Interchange (DI) Definition
+ */
 public abstract class AbstractDIDefinition<DIAGRAM extends BPMNDiagram<?>>
 		extends AbstractBPMNDefinition<DIAGRAM> {
 

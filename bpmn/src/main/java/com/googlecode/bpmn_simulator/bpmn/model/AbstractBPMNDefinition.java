@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014 Stefan Schweitzer
+ * Copyright (C) 2015 Stefan Schweitzer
  *
  * This software was created by Stefan Schweitzer as a student's project at
  * Fachhochschule Kaiserslautern (University of Applied Sciences).
@@ -22,6 +22,7 @@ package com.googlecode.bpmn_simulator.bpmn.model;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -75,6 +76,7 @@ import com.googlecode.bpmn_simulator.bpmn.model.core.infrastructure.Definitions;
 import com.googlecode.bpmn_simulator.bpmn.model.process.Lane;
 import com.googlecode.bpmn_simulator.bpmn.model.process.LaneSet;
 import com.googlecode.bpmn_simulator.bpmn.model.process.activities.Activity;
+import com.googlecode.bpmn_simulator.bpmn.model.process.activities.CallActivity;
 import com.googlecode.bpmn_simulator.bpmn.model.process.activities.Process;
 import com.googlecode.bpmn_simulator.bpmn.model.process.activities.SubProcess;
 import com.googlecode.bpmn_simulator.bpmn.model.process.activities.Transaction;
@@ -92,14 +94,14 @@ import com.googlecode.bpmn_simulator.bpmn.model.process.data.DataObjectReference
 import com.googlecode.bpmn_simulator.bpmn.model.process.data.DataStore;
 import com.googlecode.bpmn_simulator.bpmn.model.process.data.DataStoreReference;
 
-/**
- * Diagram Interchange (DI) Definition
- */
 public abstract class AbstractBPMNDefinition<E extends BPMNDiagram<?>>
 		extends AbstractXmlDefinition<E>
 		implements Definitions<E> {
 
 	public static final String ELEMENT_NAME = Messages.getString("definitions"); //$NON-NLS-1$
+
+	public static final String FILE_DESCRIPTION = "BPMN 2.0 XML"; //$NON-NLS-1$
+	public static final String[] FILE_EXTENSIONS = {"bpmn", "xml"}; //$NON-NLS-1$ //$NON-NLS-2$
 
 	private static final URI DEFAULT_EXPRESSION_LANGUAGE = uri("http://www.w3.org/1999/XPath");
 	private static final URI DEFAULT_TYPE_LANGUAGE = uri("http://www.w3.org/2001/XMLSchema");
@@ -205,7 +207,7 @@ public abstract class AbstractBPMNDefinition<E extends BPMNDiagram<?>>
 		return getAttributeString(node, "name"); //$NON-NLS-1$
 	}
 
-	protected boolean readArtifacts(final Node node) {
+	protected boolean readArtifactElements(final Node node) {
 		return readElementAssociation(node)
 				|| readElementGroup(node)
 				|| readElementTextAnnotation(node);
@@ -249,7 +251,7 @@ public abstract class AbstractBPMNDefinition<E extends BPMNDiagram<?>>
 				}
 			}
 		} else {
-			notifyWarning("there a no definitions");
+			notifyWarning("schema doesn''t contains definitions");
 		}
 	}
 
@@ -321,7 +323,7 @@ public abstract class AbstractBPMNDefinition<E extends BPMNDiagram<?>>
 			final Node childNode = childNodes.item(i);
 			if (!readElementsForFlowElement(childNode, event)
 					&& !readEventDefinitions(childNode, event)
-					&& !readElementsDataAssociations(childNode)) {
+					&& !readElementDataAssociations(childNode)) {
 				showUnknowNode(childNode);
 			}
 		}
@@ -401,7 +403,7 @@ public abstract class AbstractBPMNDefinition<E extends BPMNDiagram<?>>
 		}
 	}
 
-	protected boolean readElementsDataAssociations(final Node node) {
+	protected boolean readElementDataAssociations(final Node node) {
 		if (isElementNode(node, BPMN, "dataInputAssociation") //$NON-NLS-1$
 				|| isElementNode(node, BPMN, "dataOutputAssociation")) { //$NON-NLS-1$
 			final DataAssociation dataAssociation
@@ -415,7 +417,7 @@ public abstract class AbstractBPMNDefinition<E extends BPMNDiagram<?>>
 
 	protected boolean readElementsForActivity(final Node node, final Activity activity) {
 		return readElementsForFlowElement(node, activity)
-				|| readElementsDataAssociations(node);
+				|| readElementDataAssociations(node);
 	}
 
 	protected Reference<SequenceFlow> getDefaultAttribute(final Node node) {
@@ -533,12 +535,12 @@ public abstract class AbstractBPMNDefinition<E extends BPMNDiagram<?>>
 		}
 	}
 
-	protected void readTask(final Node node, final Task task) {
-		readDefaultSequenceFlowAttribute(node, task);
+	protected void readActivity(final Node node, final Activity activity) {
+		readDefaultSequenceFlowAttribute(node, activity);
 		final NodeList childNodes = node.getChildNodes();
 		for (int i = 0; i < childNodes.getLength(); ++i) {
 			final Node childNode = childNodes.item(i);
-			if (!readElementsForActivity(childNode, task)) {
+			if (!readElementsForActivity(childNode, activity)) {
 				showUnknowNode(childNode);
 			}
 		}
@@ -546,6 +548,18 @@ public abstract class AbstractBPMNDefinition<E extends BPMNDiagram<?>>
 
 	protected boolean getInstantiateAttribute(final Node node) {
 		return getAttributeBoolean(node, "instantiate", false); //$NON-NLS-1$
+	}
+
+	protected boolean readElementCallActivity(final Node node,
+			final FlowElementsContainer activity) {
+		if (isElementNode(node, BPMN, "callActivity")) { //$NON-NLS-1$
+			final CallActivity callActivity = new CallActivity(getIdAttribute(node),
+					getNameAttribute(node));
+			readActivity(node, callActivity);
+			registerElement(callActivity);
+			return true;
+		}
+		return false;
 	}
 
 	protected boolean readElementTask(final Node node,
@@ -578,7 +592,7 @@ public abstract class AbstractBPMNDefinition<E extends BPMNDiagram<?>>
 		} else {
 			return false;
 		}
-		readTask(node, task);
+		readActivity(node, task);
 		registerElement(task);
 		return true;
 	}
@@ -767,24 +781,30 @@ public abstract class AbstractBPMNDefinition<E extends BPMNDiagram<?>>
 		}
 	}
 
+	protected boolean readActivitiyElements(final Node node,
+			final FlowElementsContainer container) {
+		return readElementSubprocess(node, container)
+				|| readElementTransaction(node, container)
+				|| readElementTask(node, container)
+				|| readElementCallActivity(node, container);
+	}
+
 	protected void readFlowElementsContainer(final Node node,
 			final FlowElementsContainer container) {
 		final NodeList childNodes = node.getChildNodes();
 		for (int i = 0; i < childNodes.getLength(); ++i) {
 			final Node childNode = childNodes.item(i);
 			if (!readElementsForBaseElement(childNode, container)
-					&& !readElementSubprocess(childNode, container)
-					&& !readElementTransaction(childNode, container)
+					&& !readActivitiyElements(childNode, container)
 					&& !readElementStartEvent(childNode, container)
 					&& !readElementEndEvent(childNode, container)
 					&& !readElementIntermediateThrowEvent(childNode, container)
 					&& !readElementIntermediateCatchEvent(childNode, container)
 					&& !readElementBoundaryEvent(childNode, container)
-					&& !readElementTask(childNode, container)
 					&& !readElementGateway(childNode, container)
 					&& !readElementSequenceflow(childNode, container)
-					&& !readArtifacts(childNode)
-					&& !readElementsDataAssociations(childNode)
+					&& !readArtifactElements(childNode)
+					&& !readElementDataAssociations(childNode)
 					&& !readElementDataObject(childNode, container)
 					&& !readElementDataObjectReference(childNode, container)
 					&& !readElementDataStoreReference(childNode, container)
@@ -820,7 +840,8 @@ public abstract class AbstractBPMNDefinition<E extends BPMNDiagram<?>>
 			final Node childNode = childNodes.item(i);
 			if (!readElementsForBaseElement(childNode, collaboration)
 					&& !readElementParticipant(childNode, collaboration)
-					&& !readElementMessageFlow(childNode)) {
+					&& !readElementMessageFlow(childNode)
+					&& !readArtifactElements(childNode)) {
 				showUnknowNode(childNode);
 			}
 		}
@@ -852,10 +873,16 @@ public abstract class AbstractBPMNDefinition<E extends BPMNDiagram<?>>
 		}
 	}
 
+	protected void showElementLoading(BaseElement element) {
+		notifyInfo(MessageFormat.format("Loading {0} ''{1}''",
+				element.getElementName(), element.getId()));
+	}
+
 	protected boolean readElementProcess(final Node node) {
 		if (isElementNode(node, BPMN, "process")) { //$NON-NLS-1$
 			final Process process = new Process(
 					getIdAttribute(node), getNameAttribute(node));
+			showElementLoading(process);
 			readFlowElementsContainer(node, process);
 			registerElement(process);
 			return true;

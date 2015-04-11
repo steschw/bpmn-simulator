@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014 Stefan Schweitzer
+ * Copyright (C) 2015 Stefan Schweitzer
  *
  * This software was created by Stefan Schweitzer as a student's project at
  * Fachhochschule Kaiserslautern (University of Applied Sciences).
@@ -20,8 +20,7 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.swing.model.core.common.events;
 
-import java.awt.Color;
-
+import com.googlecode.bpmn_simulator.animation.element.visual.swing.Colors;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.events.BoundaryEvent;
 import com.googlecode.bpmn_simulator.bpmn.swing.di.Appearance;
 
@@ -30,7 +29,7 @@ public class BoundaryEventShape
 		extends AbstractEventShape<BoundaryEvent> {
 
 	static {
-		Appearance.getDefault().getForElement(BoundaryEventShape.class).setBackground(new Color(0xFFD062));
+		Appearance.setDefaultColor(BoundaryEventShape.class, Colors.ORANGE);
 	}
 
 	public BoundaryEventShape(final BoundaryEvent element) {

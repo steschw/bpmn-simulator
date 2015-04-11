@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014 Stefan Schweitzer
+ * Copyright (C) 2015 Stefan Schweitzer
  *
  * This software was created by Stefan Schweitzer as a student's project at
  * Fachhochschule Kaiserslautern (University of Applied Sciences).
@@ -31,6 +31,9 @@ import java.util.IdentityHashMap;
 import java.util.Map;
 
 import javax.imageio.ImageIO;
+
+import com.googlecode.bpmn_simulator.animation.element.visual.VisualNodeElement;
+import com.googlecode.bpmn_simulator.animation.element.visual.swing.Colors;
 
 public class Appearance {
 
@@ -158,6 +161,10 @@ public class Appearance {
 		return images.get(name);
 	}
 
+	public static void setDefaultColor(final Class<? extends VisualNodeElement> clazz, final Color background) {
+		getDefault().getForElement(clazz).setBackground(background);
+	}
+
 	public ElementAppearance getForElement(final Class<?> elementClass) {
 		ElementAppearance elementAppearance = elements.get(elementClass);
 		if (elementAppearance == null) {
@@ -212,8 +219,8 @@ public class Appearance {
 
 	public static class ElementAppearance {
 
-		private static final Color DEFAULT_BACKGROUNDCOLOR = Color.WHITE;
-		private static final Color DEFAULT_FOREGROUNDCOLOR = Color.BLACK;
+		private static final Color DEFAULT_BACKGROUNDCOLOR = Colors.WHITE;
+		private static final Color DEFAULT_FOREGROUNDCOLOR = Colors.BLACK;
 
 		private Color background = DEFAULT_BACKGROUNDCOLOR;
 		private Color foreground = DEFAULT_FOREGROUNDCOLOR;

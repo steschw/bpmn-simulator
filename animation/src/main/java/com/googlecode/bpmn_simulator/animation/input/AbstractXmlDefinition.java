@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014 Stefan Schweitzer
+ * Copyright (C) 2015 Stefan Schweitzer
  *
  * This software was created by Stefan Schweitzer as a student's project at
  * Fachhochschule Kaiserslautern (University of Applied Sciences).
@@ -135,7 +135,7 @@ public abstract class AbstractXmlDefinition<E extends Diagram<?>>
 		return defaultValue;
 	}
 
-	private boolean convertStringToBool(final String string,
+	private static boolean convertStringToBool(final String string,
 			final boolean defaultValue) {
 		if ((string != null) && !string.isEmpty()) {
 			return Boolean.parseBoolean(string);

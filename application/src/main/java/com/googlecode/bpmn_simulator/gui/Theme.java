@@ -29,8 +29,6 @@ public final class Theme {
 	public static final Icon ICON_WARNING
 			= resizeIcon(UIManager.getIcon("OptionPane.warningIcon")); //$NON-NLS-1$
 
-	private static final int DEFAULT_ICON_SIZE = 16;
-
 	private Theme() {
 	}
 
@@ -43,13 +41,9 @@ public final class Theme {
 	}
 
 	private static Icon resizeIcon(final Icon icon) {
-		return resizeIcon(icon, DEFAULT_ICON_SIZE);
-	}
-
-	private static Icon resizeIcon(final Icon icon, final int size) {
 		if ((icon != null) && (icon instanceof ImageIcon)) {
 			final Image image
-					= ((ImageIcon) icon).getImage().getScaledInstance(size, size, Image.SCALE_SMOOTH);
+					= ((ImageIcon) icon).getImage().getScaledInstance(16, 16, Image.SCALE_SMOOTH);
 			if (image != null) {
 				return new ImageIcon(image);
 			}

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014 Stefan Schweitzer
+ * Copyright (C) 2015 Stefan Schweitzer
  *
  * This software was created by Stefan Schweitzer as a student's project at
  * Fachhochschule Kaiserslautern (University of Applied Sciences).
@@ -20,9 +20,9 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.swing.model.process;
 
-import java.awt.Color;
 import java.awt.Graphics2D;
 
+import com.googlecode.bpmn_simulator.animation.element.visual.swing.Colors;
 import com.googlecode.bpmn_simulator.bpmn.model.process.Lane;
 import com.googlecode.bpmn_simulator.bpmn.swing.di.AbstractBPMNShape;
 import com.googlecode.bpmn_simulator.bpmn.swing.di.Appearance;
@@ -32,7 +32,7 @@ public class LaneShape
 		extends AbstractBPMNShape<Lane> {
 
 	static {
-		Appearance.getDefault().getForElement(LaneShape.class).setBackground(new Color(0xDBF0F7));
+		Appearance.setDefaultColor(LaneShape.class, Colors.BLUE);
 	}
 
 	public LaneShape(final Lane element) {

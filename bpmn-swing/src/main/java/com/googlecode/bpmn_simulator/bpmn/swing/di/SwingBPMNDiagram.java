@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014 Stefan Schweitzer
+ * Copyright (C) 2015 Stefan Schweitzer
  *
  * This software was created by Stefan Schweitzer as a student's project at
  * Fachhochschule Kaiserslautern (University of Applied Sciences).
@@ -20,7 +20,6 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.swing.di;
 
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Rectangle;
 
@@ -54,7 +53,7 @@ public class SwingBPMNDiagram
 
 	@Override
 	public void add(final JComponent element) {
-		add((Component) element, 0);
+		add(element, 0);
 	}
 
 	@Override

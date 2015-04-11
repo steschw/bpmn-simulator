@@ -20,14 +20,19 @@
  */
 package com.googlecode.bpmn_simulator.gui;
 
-import java.awt.Component;
+import java.awt.BorderLayout;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.net.URI;
 import java.net.URISyntaxException;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -42,16 +47,16 @@ public class AboutDialog
 
 	public AboutDialog(final JFrame owner) {
 		super(owner, Messages.getString("About.about")); //$NON-NLS-1$
+
+		create();
 	}
 
 	@Override
-	protected Component createContent() {
-		return createTabbedPane();
-	}
+	protected void create() {
+		setLayout(new BorderLayout());
 
-	@Override
-	protected JPanel createActionPanel() {
-		return createDefaultCloseActionPanel();
+		getContentPane().add(createTabbedPane(), BorderLayout.CENTER);
+		getContentPane().add(createActionPanel(), BorderLayout.PAGE_END);
 	}
 
 	protected JPanel createTabInfo() {
@@ -61,8 +66,8 @@ public class AboutDialog
 		panel.add(Box.createVerticalStrut(20));
 
 		final StringBuilder applicationInfo =
-				new StringBuilder(BPMNSimulatorApplication.NAME);
-		final String version = BPMNSimulatorApplication.getVersion();
+				new StringBuilder(ApplicationInfo.getName());
+		final String version = ApplicationInfo.getVersion();
 		if (version != null) {
 			applicationInfo.append(' ');
 			applicationInfo.append(version);
@@ -76,7 +81,7 @@ public class AboutDialog
 
 		try {
 			final Hyperlink hyperlink =
-					new Hyperlink(new URI(BPMNSimulatorApplication.URL));
+					new Hyperlink(new URI(ApplicationInfo.getUrl()));
 			hyperlink.setAlignmentX(CENTER_ALIGNMENT);
 			panel.add(hyperlink);
 		} catch (URISyntaxException e) {
@@ -88,7 +93,7 @@ public class AboutDialog
 
 	protected JComponent createTabLicence() {
 		final JTextArea textArea =
-				new JTextArea(BPMNSimulatorApplication.NOTICE);
+				new JTextArea(ApplicationInfo.getLicense());
 		textArea.setEditable(false);
 		textArea.setFont(new Font("Courier New", Font.PLAIN, 11)); //$NON-NLS-1$
 		textArea.setMargin(new Insets(8, 8, 8, 8));
@@ -109,6 +114,24 @@ public class AboutDialog
 		pane.addTab(Messages.getString("About.licence"), createTabLicence()); //$NON-NLS-1$
 		pane.addTab(Messages.getString("About.properties"), createTabProperties());
 		return pane;
+	}
+
+	protected JPanel createActionPanel() {
+		final JPanel panel = new JPanel(new FlowLayout(FlowLayout.TRAILING));
+
+		final JButton buttonClose = new JButton(Messages.getString("close")); //$NON-NLS-1$
+		buttonClose.setMnemonic(KeyEvent.VK_C);
+		buttonClose.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(final ActionEvent e) {
+				dispose();
+			}
+		});
+		getRootPane().setDefaultButton(buttonClose);
+
+		panel.add(buttonClose);
+
+		return panel;
 	}
 
 }

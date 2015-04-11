@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014 Stefan Schweitzer
+ * Copyright (C) 2015 Stefan Schweitzer
  *
  * This software was created by Stefan Schweitzer as a student's project at
  * Fachhochschule Kaiserslautern (University of Applied Sciences).
@@ -20,9 +20,9 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.swing.model.core.common.events;
 
-import java.awt.Color;
 import java.awt.Image;
 
+import com.googlecode.bpmn_simulator.animation.element.visual.swing.Colors;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.events.IntermediateThrowEvent;
 import com.googlecode.bpmn_simulator.bpmn.swing.di.Appearance;
 
@@ -31,7 +31,7 @@ public class IntermediateThrowEventShape
 		extends AbstractIntermediateEventShape<IntermediateThrowEvent> {
 
 	static {
-		Appearance.getDefault().getForElement(IntermediateThrowEventShape.class).setBackground(new Color(0xFFD062));
+		Appearance.setDefaultColor(IntermediateThrowEventShape.class, Colors.ORANGE);
 	}
 
 	public IntermediateThrowEventShape(final IntermediateThrowEvent element) {

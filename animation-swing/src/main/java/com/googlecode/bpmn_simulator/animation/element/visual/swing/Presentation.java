@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014 Stefan Schweitzer
+ * Copyright (C) 2015 Stefan Schweitzer
  *
  * This software was created by Stefan Schweitzer as a student's project at
  * Fachhochschule Kaiserslautern (University of Applied Sciences).
@@ -195,10 +195,10 @@ public class Presentation {
 
 	public static Shape createDiamond(final Bounds bounds) {
 		final Polygon polygon = new Polygon();
-		polygon.addPoint((int) bounds.getMinX(), (int) bounds.getCenterY());
-		polygon.addPoint((int) bounds.getCenterX(), (int) bounds.getMinY());
-		polygon.addPoint((int) bounds.getMaxX(), (int) bounds.getCenterY());
-		polygon.addPoint((int) bounds.getCenterX(), (int) bounds.getMaxY());
+		polygon.addPoint(bounds.getMinX(), (int) bounds.getCenterY());
+		polygon.addPoint((int) bounds.getCenterX(), bounds.getMinY());
+		polygon.addPoint(bounds.getMaxX(), (int) bounds.getCenterY());
+		polygon.addPoint((int) bounds.getCenterX(), bounds.getMaxY());
 		return polygon;
 	}
 

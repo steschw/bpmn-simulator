@@ -21,15 +21,10 @@
 package com.googlecode.bpmn_simulator.gui;
 
 import java.awt.BorderLayout;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
 
 import javax.swing.BorderFactory;
-import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
@@ -63,39 +58,19 @@ public abstract class AbstractDialog
 	}
 
 	public void showDialog() {
-		create();
 		pack();
 		setLocationRelativeTo(getParent());
 		setVisible(true);
 	}
 
-	private void create() {
+	protected void create() {
 		getContentPane().setLayout(new BorderLayout());
-		getContentPane().add(createContent(), BorderLayout.CENTER);
-		getContentPane().add(createActionPanel(), BorderLayout.PAGE_END);
+
+		getContentPane().add(createButtonPanel(), BorderLayout.PAGE_END);
 	}
 
-	protected abstract Component createContent();
-
-	protected JPanel createActionPanel() {
-		return new JPanel(new FlowLayout(FlowLayout.TRAILING));
-	}
-
-	protected JPanel createDefaultCloseActionPanel() {
+	protected JPanel createButtonPanel() {
 		final JPanel panel = new JPanel(new FlowLayout(FlowLayout.TRAILING));
-
-		final JButton buttonClose = new JButton(Messages.getString("close")); //$NON-NLS-1$
-		buttonClose.setMnemonic(KeyEvent.VK_C);
-		buttonClose.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(final ActionEvent e) {
-				dispose();
-			}
-		});
-		getRootPane().setDefaultButton(buttonClose);
-
-		panel.add(buttonClose);
-
 		return panel;
 	}
 

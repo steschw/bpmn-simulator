@@ -21,19 +21,29 @@
 package com.googlecode.bpmn_simulator.bpmn.model.process.activities.tasks;
 
 import com.googlecode.bpmn_simulator.bpmn.Messages;
+import com.googlecode.bpmn_simulator.bpmn.model.InstantiateElement;
 
 public final class ReceiveTask
-		extends Task {
+		extends Task
+		implements InstantiateElement {
 
 	public static final String ELEMENT_NAME = Messages.getString("receiveTask"); //$NON-NLS-1$
 
-	public ReceiveTask(final String id, final String name) {
+	private boolean instantiate;
+
+	public ReceiveTask(final String id, final String name, final boolean instantiate) {
 		super(id, name);
+		this.instantiate = instantiate;
 	}
 
 	@Override
 	public String getElementName() {
 		return ELEMENT_NAME;
+	}
+
+	@Override
+	public boolean isInstantiate() {
+		return instantiate;
 	}
 
 }

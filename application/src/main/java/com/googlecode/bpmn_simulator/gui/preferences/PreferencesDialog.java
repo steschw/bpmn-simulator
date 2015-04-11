@@ -55,6 +55,7 @@ import com.googlecode.bpmn_simulator.bpmn.swing.model.core.common.events.EndEven
 import com.googlecode.bpmn_simulator.bpmn.swing.model.core.common.events.IntermediateCatchEventShape;
 import com.googlecode.bpmn_simulator.bpmn.swing.model.core.common.events.IntermediateThrowEventShape;
 import com.googlecode.bpmn_simulator.bpmn.swing.model.core.common.events.StartEventShape;
+import com.googlecode.bpmn_simulator.bpmn.swing.model.core.common.gateways.EventBasedGatewayShape;
 import com.googlecode.bpmn_simulator.bpmn.swing.model.core.common.gateways.ExclusiveGatewayShape;
 import com.googlecode.bpmn_simulator.bpmn.swing.model.core.common.gateways.InclusiveGatewayShape;
 import com.googlecode.bpmn_simulator.bpmn.swing.model.core.common.gateways.ParallelGatewayShape;
@@ -71,7 +72,9 @@ import com.googlecode.bpmn_simulator.bpmn.swing.model.process.activities.task.Se
 import com.googlecode.bpmn_simulator.bpmn.swing.model.process.activities.task.TaskShape;
 import com.googlecode.bpmn_simulator.bpmn.swing.model.process.activities.task.UserTaskShape;
 import com.googlecode.bpmn_simulator.bpmn.swing.model.process.data.DataAssociationEdge;
+import com.googlecode.bpmn_simulator.bpmn.swing.model.process.data.DataInputShape;
 import com.googlecode.bpmn_simulator.bpmn.swing.model.process.data.DataObjectReferenceShape;
+import com.googlecode.bpmn_simulator.bpmn.swing.model.process.data.DataOutputShape;
 import com.googlecode.bpmn_simulator.bpmn.swing.model.process.data.DataStoreReferenceShape;
 import com.googlecode.bpmn_simulator.gui.AbstractDialog;
 import com.googlecode.bpmn_simulator.gui.Messages;
@@ -271,6 +274,7 @@ public class PreferencesDialog
 		addElementConfig(panel, constraints, ExclusiveGatewayShape.class, "ExclusiveGateway");
 		addElementConfig(panel, constraints, InclusiveGatewayShape.class, "InclusiveGateway");
 		addElementConfig(panel, constraints, ParallelGatewayShape.class, "ParallelGateway");
+		addElementConfig(panel, constraints, EventBasedGatewayShape.class, "EventBasedGateway");
 
 		addElementConfig(panel, constraints, SequenceFlowEdge.class, "SequenceFlow", false, true);
 		addElementConfig(panel, constraints, MessageFlowEdge.class, "MessageFlow", false, true);
@@ -278,6 +282,8 @@ public class PreferencesDialog
 
 		addElementConfig(panel, constraints, DataObjectReferenceShape.class, "DataObjectReference");
 		addElementConfig(panel, constraints, DataStoreReferenceShape.class, "DataStoreReference");
+		addElementConfig(panel, constraints, DataInputShape.class, "DataInput");
+		addElementConfig(panel, constraints, DataOutputShape.class, "DataOutput");
 
 		addElementConfig(panel, constraints, TaskShape.class, "Task");
 		addElementConfig(panel, constraints, BusinessRuleTaskShape.class, "BusinessRuleTask");

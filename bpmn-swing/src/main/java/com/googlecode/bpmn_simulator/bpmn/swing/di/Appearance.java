@@ -66,16 +66,16 @@ public class Appearance {
 
 	private static final float[] DASH_DOTTED = new float[] {
 			1.f,
-			6.f,
+			5.f,
 			};
 
 	private static final float[] DASH_DASHED = new float[] {
-			3.f,
-			6.f,
+			5.f,
+			5.f,
 			};
 
 	private static final float[] DASH_DASHEDDOTTED = new float[] {
-			8.f,
+			7.f,
 			5.f,
 			1.f,
 			5.f,

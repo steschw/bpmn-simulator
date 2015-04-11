@@ -42,7 +42,7 @@ public class DataStoreReferenceShape
 		super(element);
 	}
 
-	private int getN(final Bounds bounds) {
+	private static int getN(final Bounds bounds) {
 		return (int) Math.round(bounds.getHeight() * 0.1); 
 	}
 

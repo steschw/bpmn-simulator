@@ -26,20 +26,20 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.util.ArrayDeque;
 import java.util.Collections;
+import java.util.Deque;
 import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.Queue;
 
 public class StaticStateSequence<STATE extends Serializable>
 		extends AbstractStateSequence<STATE>
 		implements StateSequence<STATE> {
 
-	private final Queue<STATE> sequence = new LinkedList<>();
+	private final Deque<STATE> sequence = new ArrayDeque<>();
 
 	public StaticStateSequence(final STATE beginState) {
 		super();
-		sequence.add(beginState);
+		add(beginState);
 	}
 
 	public StaticStateSequence(final STATE... states) {
@@ -74,7 +74,7 @@ public class StaticStateSequence<STATE extends Serializable>
 	}
 
 	public STATE getLast() {
-		return sequence.element();
+		return sequence.getLast();
 	}
 
 	public STATE addLast() {

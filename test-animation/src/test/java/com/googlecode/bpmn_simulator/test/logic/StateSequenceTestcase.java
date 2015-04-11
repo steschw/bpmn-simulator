@@ -46,7 +46,6 @@ public class StateSequenceTestcase {
 		sequence.addLast().moveAttribute("a", 1, "b");
 		sequence.addLast().moveAttribute("b", 1, "c");
 		sequence.addLast().removeAttribute("c", 1);
-		System.out.println(sequence);
 	}
 
 }

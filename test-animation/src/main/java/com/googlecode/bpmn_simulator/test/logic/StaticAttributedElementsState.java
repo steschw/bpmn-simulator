@@ -29,6 +29,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * Represents a state as a set of different elements with attributes
@@ -129,11 +130,11 @@ public class StaticAttributedElementsState<ELEMENT, ATTRIBUTE>
 	public String toString() {
 		final StringBuilder builder = new StringBuilder();
 		builder.append('{');
-		final Iterator<ELEMENT> elementIterator = elementAttributes.keySet().iterator();
+		final Iterator<ELEMENT> elementIterator = new TreeSet<>(elementAttributes.keySet()).iterator();
 		while (elementIterator.hasNext()) {
 			final ELEMENT element = elementIterator.next();
 			builder.append(element);
-			final Iterator<ATTRIBUTE> attributeIterator = getElementAttributes(element).iterator();
+			final Iterator<ATTRIBUTE> attributeIterator = new TreeSet<>(getElementAttributes(element)).iterator();
 			if (attributeIterator.hasNext()) {
 				builder.append(":<");
 				while (attributeIterator.hasNext()) {

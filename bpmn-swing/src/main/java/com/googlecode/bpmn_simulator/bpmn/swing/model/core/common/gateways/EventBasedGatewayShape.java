@@ -24,6 +24,7 @@ import java.awt.Graphics2D;
 
 import com.googlecode.bpmn_simulator.animation.element.visual.Bounds;
 import com.googlecode.bpmn_simulator.animation.element.visual.swing.Colors;
+import com.googlecode.bpmn_simulator.animation.element.visual.swing.Presentation;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.gateways.EventBasedGateway;
 import com.googlecode.bpmn_simulator.bpmn.swing.di.Appearance;
 
@@ -48,6 +49,8 @@ public class EventBasedGatewayShape
 			final Bounds innerCircleBounds = getInnerBoundsRelative().scaleSize(0.45f);
 			getPresentation().drawOval(g, innerCircleBounds);
 		}
+		final Bounds symbolBounds = getInnerBoundsRelative().scaleSize(0.35f);
+		getPresentation().drawConvexPolygon(g, symbolBounds, Presentation.PENTAGON);
 	}
 
 }

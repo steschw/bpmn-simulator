@@ -38,7 +38,7 @@ import com.googlecode.bpmn_simulator.animation.token.Token;
 
 public class Presentation {
 
-	private static final int PENTAGON_CORNERS = 5;
+	public static final int PENTAGON = 5;
 
 	private static final RenderingHints QUALITY = new RenderingHints(null);
 	private static final RenderingHints SPEED = new RenderingHints(null);
@@ -140,6 +140,10 @@ public class Presentation {
 		g.draw(createDiamond(bounds));
 	}
 
+	public void drawConvexPolygon(final Graphics2D g, final Bounds bounds, final int edgeCount) {
+		g.draw(createConvexPolygon(bounds, edgeCount));
+	}
+
 	public void fillDocument(final Graphics2D g, final Bounds bounds, final int n) {
 		g.fill(createDocument(bounds, n));
 	}
@@ -162,13 +166,17 @@ public class Presentation {
 		return polygon;
 	}
 
-	public static Shape createPentagon(final Bounds bounds) {
+	private static double getRadius(final Bounds bounds) {
+		return Math.min(bounds.getWidth(), bounds.getHeight()) / 2.;
+	}
+
+	public static Shape createConvexPolygon(final Bounds bounds, final int edgeCount) {
 		final Polygon polygon = new Polygon();
 		final Point center = bounds.getCenter();
-		final double r = bounds.getWidth() / 2.;
-		final double radPerCorner = GeometryUtils.RAD_FULL / PENTAGON_CORNERS;
+		final double r = getRadius(bounds);
+		final double radPerCorner = GeometryUtils.RAD_FULL / edgeCount;
 		Point point = null;
-		for (int i = 0; i < PENTAGON_CORNERS; ++i) {
+		for (int i = 0; i < edgeCount; ++i) {
 			point = GeometryUtils.polarToCartesian(
 					center, r,
 					radPerCorner * i - radPerCorner / 2.);
@@ -180,7 +188,7 @@ public class Presentation {
 	public static Shape createStar(final Bounds bounds, final int cornerCount) {
 		final Polygon polygon = new Polygon();
 		final Point center = bounds.getCenter();
-		final double r = bounds.getWidth() / 2.;
+		final double r = getRadius(bounds);
 		final double radPerCorner = GeometryUtils.RAD_FULL / cornerCount;
 		Point point = null;
 		for (int i = 0; i < cornerCount; ++i) {

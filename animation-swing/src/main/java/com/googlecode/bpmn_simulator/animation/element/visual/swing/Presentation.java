@@ -39,6 +39,7 @@ import com.googlecode.bpmn_simulator.animation.token.Token;
 public class Presentation {
 
 	public static final int PENTAGON = 5;
+	public static final int HEXAGON = 6;
 
 	private static final RenderingHints QUALITY = new RenderingHints(null);
 	private static final RenderingHints SPEED = new RenderingHints(null);
@@ -138,6 +139,10 @@ public class Presentation {
 
 	public void drawDiamond(final Graphics2D g, final Bounds bounds) {
 		g.draw(createDiamond(bounds));
+	}
+
+	public void fillConvexPolygon(final Graphics2D g, final Bounds bounds, final int edgeCount) {
+		g.fill(createConvexPolygon(bounds, edgeCount));
 	}
 
 	public void drawConvexPolygon(final Graphics2D g, final Bounds bounds, final int edgeCount) {

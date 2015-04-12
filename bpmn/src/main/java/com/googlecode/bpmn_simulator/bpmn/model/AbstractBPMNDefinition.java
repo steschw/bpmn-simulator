@@ -43,6 +43,7 @@ import com.googlecode.bpmn_simulator.bpmn.model.choreography.Choreography;
 import com.googlecode.bpmn_simulator.bpmn.model.collaboration.Collaboration;
 import com.googlecode.bpmn_simulator.bpmn.model.collaboration.MessageFlow;
 import com.googlecode.bpmn_simulator.bpmn.model.collaboration.Participant;
+import com.googlecode.bpmn_simulator.bpmn.model.collaboration.conversations.Conversation;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.DefaultSequenceFlowElement;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.Expression;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.FlowElement;
@@ -869,12 +870,24 @@ public abstract class AbstractBPMNDefinition<E extends BPMNDiagram<?>>
 		}
 	}
 
+	protected boolean readElementConversation(final Node node, final Collaboration collaboration) {
+		if (isElementNode(node, BPMN, "conversation")) { //$NON-NLS-1$
+			final Conversation conversation = new Conversation(
+					getIdAttribute(node), getNameAttribute(node));
+			registerElement(conversation);
+			return true;
+		} else {
+			return false;
+		}
+	}
+
 	protected void readCollaborationElements(final Node node, final Collaboration collaboration) {
 		final NodeList childNodes = node.getChildNodes();
 		for (int i = 0; i < childNodes.getLength(); ++i) {
 			final Node childNode = childNodes.item(i);
 			if (!readElementsForBaseElement(childNode, collaboration)
 					&& !readElementParticipant(childNode, collaboration)
+					&& !readElementConversation(childNode, collaboration)
 					&& !readElementMessageFlow(childNode)
 					&& !readArtifactElements(childNode)) {
 				showUnknowNode(childNode);

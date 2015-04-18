@@ -27,12 +27,12 @@ import java.util.Collection;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import com.googlecode.bpmn_simulator.animation.element.logical.ref.NamedElements;
-import com.googlecode.bpmn_simulator.animation.element.logical.ref.NamedReference;
-import com.googlecode.bpmn_simulator.animation.element.logical.ref.Reference;
 import com.googlecode.bpmn_simulator.animation.element.visual.Bounds;
 import com.googlecode.bpmn_simulator.animation.element.visual.Font;
 import com.googlecode.bpmn_simulator.animation.element.visual.Waypoint;
+import com.googlecode.bpmn_simulator.animation.ref.NamedElements;
+import com.googlecode.bpmn_simulator.animation.ref.NamedReference;
+import com.googlecode.bpmn_simulator.animation.ref.Reference;
 import com.googlecode.bpmn_simulator.bpmn.model.AbstractBPMNDefinition;
 import com.googlecode.bpmn_simulator.bpmn.model.NamedElement;
 import com.googlecode.bpmn_simulator.bpmn.model.TextElement;

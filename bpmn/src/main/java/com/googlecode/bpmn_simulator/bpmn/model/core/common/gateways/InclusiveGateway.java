@@ -20,7 +20,7 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.model.core.common.gateways;
 
-import com.googlecode.bpmn_simulator.animation.element.logical.ref.Reference;
+import com.googlecode.bpmn_simulator.animation.ref.Reference;
 import com.googlecode.bpmn_simulator.bpmn.Messages;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.DefaultSequenceFlowElement;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.SequenceFlow;

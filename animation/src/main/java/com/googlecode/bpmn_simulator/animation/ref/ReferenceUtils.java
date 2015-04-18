@@ -18,33 +18,42 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.bpmn_simulator.bpmn.model.process.activities;
+package com.googlecode.bpmn_simulator.animation.ref;
 
-import com.googlecode.bpmn_simulator.animation.ref.Reference;
-import com.googlecode.bpmn_simulator.bpmn.model.core.common.AbstractFlowNode;
-import com.googlecode.bpmn_simulator.bpmn.model.core.common.SequenceFlow;
+import java.util.ArrayList;
 
-public abstract class AbstractActivity
-		extends AbstractFlowNode
-		implements Activity {
+public final class ReferenceUtils {
 
-	private Reference<SequenceFlow> defaultSequenceFlow;
-
-	public AbstractActivity(final String id, final String name) {
-		super(id, name);
+	private ReferenceUtils() {
 	}
 
-	@Override
-	public void setDefaultSequenceFlow(final Reference<SequenceFlow> sequenceFlow) {
-		defaultSequenceFlow = sequenceFlow;
-	}
-
-	@Override
-	public SequenceFlow getDefaultSequenceFlow() {
-		if (defaultSequenceFlow != null) {
-			return defaultSequenceFlow.getReferenced();
+	public static <E> E element(final Reference<E> ref) {
+		if ((ref != null) && ref.hasReference()) {
+			return ref.getReferenced();
 		}
 		return null;
+	}
+
+	public static <E> References<E> emptyReferences() {
+		return new EmptyReferences<>();
+	}
+
+	private static class EmptyReferences<E>
+			extends ArrayList<E>
+			implements References<E> {
+
+		private static final long serialVersionUID = 1L;
+
+		@Override
+		public boolean add(final E e) {
+			throw new UnsupportedOperationException();
+		}
+
+		@Override
+		public void add(final int index, final E element) {
+			throw new UnsupportedOperationException();
+		}
+
 	}
 
 }

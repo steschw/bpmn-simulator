@@ -18,33 +18,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.bpmn_simulator.bpmn.model.process.activities;
+package com.googlecode.bpmn_simulator.animation.ref;
 
-import com.googlecode.bpmn_simulator.animation.ref.Reference;
-import com.googlecode.bpmn_simulator.bpmn.model.core.common.AbstractFlowNode;
-import com.googlecode.bpmn_simulator.bpmn.model.core.common.SequenceFlow;
+public class NamedReferences<E>
+		extends AbstractReferences<E> {
 
-public abstract class AbstractActivity
-		extends AbstractFlowNode
-		implements Activity {
+	private final NamedElements<E> elements;
 
-	private Reference<SequenceFlow> defaultSequenceFlow;
-
-	public AbstractActivity(final String id, final String name) {
-		super(id, name);
+	public NamedReferences(final NamedElements<E> elements) {
+		super();
+		this.elements = elements;
 	}
 
-	@Override
-	public void setDefaultSequenceFlow(final Reference<SequenceFlow> sequenceFlow) {
-		defaultSequenceFlow = sequenceFlow;
-	}
-
-	@Override
-	public SequenceFlow getDefaultSequenceFlow() {
-		if (defaultSequenceFlow != null) {
-			return defaultSequenceFlow.getReferenced();
-		}
-		return null;
+	public Reference<E> add(final String referencedElementName) {
+		final Reference<E> reference = new NamedReference<E, E>(elements, referencedElementName, null);
+		super.add(reference);
+		return reference;
 	}
 
 }

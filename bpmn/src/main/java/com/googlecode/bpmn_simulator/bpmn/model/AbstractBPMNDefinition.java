@@ -33,10 +33,10 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import com.googlecode.bpmn_simulator.animation.element.logical.LogicalElement;
-import com.googlecode.bpmn_simulator.animation.element.logical.ref.NamedElements;
-import com.googlecode.bpmn_simulator.animation.element.logical.ref.NamedReference;
-import com.googlecode.bpmn_simulator.animation.element.logical.ref.Reference;
 import com.googlecode.bpmn_simulator.animation.input.AbstractXmlDefinition;
+import com.googlecode.bpmn_simulator.animation.ref.NamedElements;
+import com.googlecode.bpmn_simulator.animation.ref.NamedReference;
+import com.googlecode.bpmn_simulator.animation.ref.Reference;
 import com.googlecode.bpmn_simulator.bpmn.Messages;
 import com.googlecode.bpmn_simulator.bpmn.di.BPMNDiagram;
 import com.googlecode.bpmn_simulator.bpmn.model.choreography.Choreography;

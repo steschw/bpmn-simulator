@@ -20,8 +20,8 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.di;
 
-import com.googlecode.bpmn_simulator.animation.element.logical.ref.Reference;
 import com.googlecode.bpmn_simulator.animation.element.visual.Label;
+import com.googlecode.bpmn_simulator.animation.ref.Reference;
 
 public interface BPMNLabel
 		extends Label {

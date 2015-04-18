@@ -20,7 +20,7 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.model.choreography;
 
-import com.googlecode.bpmn_simulator.animation.element.logical.ref.References;
+import com.googlecode.bpmn_simulator.animation.ref.References;
 import com.googlecode.bpmn_simulator.bpmn.model.collaboration.Collaboration;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.FlowElement;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.FlowElementsContainer;

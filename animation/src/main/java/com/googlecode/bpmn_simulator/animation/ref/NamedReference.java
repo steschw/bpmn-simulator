@@ -18,31 +18,49 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.bpmn_simulator.bpmn.model.process.activities;
+package com.googlecode.bpmn_simulator.animation.ref;
 
-import com.googlecode.bpmn_simulator.animation.ref.Reference;
-import com.googlecode.bpmn_simulator.bpmn.model.core.common.AbstractFlowNode;
-import com.googlecode.bpmn_simulator.bpmn.model.core.common.SequenceFlow;
+public class NamedReference<E extends F, F>
+		implements Reference<E> {
 
-public abstract class AbstractActivity
-		extends AbstractFlowNode
-		implements Activity {
+	private final NamedElements<F> elements;
 
-	private Reference<SequenceFlow> defaultSequenceFlow;
+	private final Class<E> clazz;
 
-	public AbstractActivity(final String id, final String name) {
-		super(id, name);
+	private final String name;
+
+	public NamedReference(final NamedElements<F> elements,
+			final String name,
+			final Class<E> clazz) {
+		super();
+		this.elements = elements;
+		this.name = name;
+		this.clazz = clazz;
+	}
+
+	private boolean hasName() {
+		return (name != null) && !name.isEmpty();
 	}
 
 	@Override
-	public void setDefaultSequenceFlow(final Reference<SequenceFlow> sequenceFlow) {
-		defaultSequenceFlow = sequenceFlow;
+	public boolean hasReference() {
+		return hasName()
+				&& elements.hasElement(name);
+	}
+
+	private boolean hasType(final F referenced) {
+		return clazz.isAssignableFrom(referenced.getClass());
 	}
 
 	@Override
-	public SequenceFlow getDefaultSequenceFlow() {
-		if (defaultSequenceFlow != null) {
-			return defaultSequenceFlow.getReferenced();
+	public E getReferenced() {
+		if (hasName()) {
+			final F referenced = elements.getElement(name);
+			if (referenced != null) {
+				if (hasType(referenced)) {
+					return clazz.cast(referenced);
+				}
+			}
 		}
 		return null;
 	}

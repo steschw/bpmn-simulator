@@ -20,22 +20,17 @@
  */
 package com.googlecode.bpmn_simulator.animation.ref;
 
-public class NamedReference<E extends F, F>
+public class NamedReference<E>
 		implements Reference<E> {
 
-	private final NamedElements<F> elements;
-
-	private final Class<E> clazz;
+	private final NamedElements<E> elements;
 
 	private final String name;
 
-	public NamedReference(final NamedElements<F> elements,
-			final String name,
-			final Class<E> clazz) {
+	public NamedReference(final NamedElements<E> elements, final String name) {
 		super();
 		this.elements = elements;
 		this.name = name;
-		this.clazz = clazz;
 	}
 
 	private boolean hasName() {
@@ -48,19 +43,10 @@ public class NamedReference<E extends F, F>
 				&& elements.hasElement(name);
 	}
 
-	private boolean hasType(final F referenced) {
-		return clazz.isAssignableFrom(referenced.getClass());
-	}
-
 	@Override
 	public E getReferenced() {
 		if (hasName()) {
-			final F referenced = elements.getElement(name);
-			if (referenced != null) {
-				if (hasType(referenced)) {
-					return clazz.cast(referenced);
-				}
-			}
+			return elements.getElement(name);
 		}
 		return null;
 	}

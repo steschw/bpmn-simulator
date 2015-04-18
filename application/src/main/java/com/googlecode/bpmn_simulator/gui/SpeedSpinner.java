@@ -24,7 +24,6 @@ import java.awt.Dimension;
 import java.util.Arrays;
 
 import javax.swing.JSpinner;
-import javax.swing.JTextField;
 import javax.swing.SpinnerListModel;
 import javax.swing.SwingConstants;
 

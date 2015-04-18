@@ -41,6 +41,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
+import javax.swing.ScrollPaneConstants;
 
 import com.googlecode.bpmn_simulator.animation.element.visual.VisualElement;
 import com.googlecode.bpmn_simulator.bpmn.swing.di.Appearance;
@@ -203,8 +204,8 @@ public class PreferencesDialog
 		checkIgnoreModelerColors.setBorder(BorderFactory.createEmptyBorder(0, 0, GAP, 0));
 		panel.add(checkIgnoreModelerColors, BorderLayout.PAGE_START);
 		final JScrollPane elementsDefaultsScrollPane = new JScrollPane(createElementsDefaultsPanel(),
-				JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
-				JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+				ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
+				ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		elementsDefaultsScrollPane.setPreferredSize(new Dimension(400, 400));
 		panel.add(elementsDefaultsScrollPane, BorderLayout.CENTER);
 

@@ -34,6 +34,7 @@ import org.w3c.dom.NodeList;
 
 import com.googlecode.bpmn_simulator.animation.element.logical.LogicalElement;
 import com.googlecode.bpmn_simulator.animation.input.AbstractXmlDefinition;
+import com.googlecode.bpmn_simulator.animation.ref.CastReference;
 import com.googlecode.bpmn_simulator.animation.ref.NamedElements;
 import com.googlecode.bpmn_simulator.animation.ref.NamedReference;
 import com.googlecode.bpmn_simulator.animation.ref.Reference;
@@ -425,8 +426,8 @@ public abstract class AbstractBPMNDefinition<E extends BPMNDiagram<?>>
 	}
 
 	protected Reference<SequenceFlow> getDefaultAttribute(final Node node) {
-		return new NamedReference<SequenceFlow, BaseElement>(
-				elements, getAttributeString(node, "default"), SequenceFlow.class);
+		return new CastReference<>(new NamedReference<>(
+				elements, getAttributeString(node, "default")), SequenceFlow.class);
 	}
 
 	protected void readDefaultSequenceFlowAttribute(
@@ -495,7 +496,7 @@ public abstract class AbstractBPMNDefinition<E extends BPMNDiagram<?>>
 
 	protected <T extends BaseElement> Reference<T> getAttributeIDREF(
 			final Node node, final String name, final Class<T> clazz) {
-		return new NamedReference<T, BaseElement>(elements, getAttributeString(node, name), clazz);
+		return new CastReference<>(new NamedReference<>(elements, getAttributeString(node, name)), clazz);
 	}
 
 	protected Reference<FlowNode> getSourceRefAttribute(final Node node) {

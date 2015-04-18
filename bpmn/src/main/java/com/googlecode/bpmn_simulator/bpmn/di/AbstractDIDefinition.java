@@ -267,7 +267,7 @@ public abstract class AbstractDIDefinition<DIAGRAM extends BPMNDiagram<?>>
 
 	protected Reference<BPMNLabelStyle> getAttributeLabelStyle(final Node node) {
 		final String id = getAttributeString(node, "labelStyle");
-		return new NamedReference<>(labelStyles, id, BPMNLabelStyle.class);
+		return new NamedReference<>(labelStyles, id);
 	}
 
 	private boolean readElementFont(final Node node, final BPMNLabelStyle labelStyle) {

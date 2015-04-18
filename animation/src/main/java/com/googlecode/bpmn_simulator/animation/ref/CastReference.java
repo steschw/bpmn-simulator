@@ -20,20 +20,38 @@
  */
 package com.googlecode.bpmn_simulator.animation.ref;
 
-public class NamedReferences<E>
-		extends AbstractReferences<E> {
+public class CastReference<E, T extends E>
+		implements Reference<T> {
 
-	private final NamedElements<E> elements;
+	private final Reference<E> reference;
 
-	public NamedReferences(final NamedElements<E> elements) {
+	private final Class<T> clazz;
+
+	public CastReference(final Reference<E> reference, final Class<T> clazz) {
 		super();
-		this.elements = elements;
+		this.reference = reference;
+		this.clazz = clazz;
 	}
 
-	public Reference<E> add(final String referencedElementName) {
-		final Reference<E> reference = new NamedReference<>(elements, referencedElementName);
-		super.add(reference);
-		return reference;
+	@Override
+	public boolean hasReference() {
+		return (reference != null)
+				&& reference.hasReference();
+	}
+
+	private boolean hasType(final E referenced) {
+		return clazz.isAssignableFrom(referenced.getClass());
+	}
+
+	@Override
+	public T getReferenced() {
+		if (hasReference()) {
+			final E referenced = getReferenced();
+			if ((referenced != null) && hasType(referenced)) {
+				return clazz.cast(referenced);
+			}
+		}
+		return null;
 	}
 
 }

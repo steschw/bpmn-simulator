@@ -49,7 +49,7 @@ abstract class AbstractReferences<E>
 
 	@Override
 	public boolean isEmpty() {
-		return getReferencedCount() > 0;
+		return references.isEmpty();
 	}
 
 	public boolean hasInvalidReferences() {
@@ -61,7 +61,7 @@ abstract class AbstractReferences<E>
 		return false;
 	}
 
-	private int getReferencedCount() {
+	public int getReferencedCount() {
 		int count = 0;
 		for (final Reference<E> reference : references) {
 			if (reference.hasReference()) {

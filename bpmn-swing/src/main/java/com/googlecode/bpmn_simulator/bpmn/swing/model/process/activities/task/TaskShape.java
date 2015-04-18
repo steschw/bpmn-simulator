@@ -25,7 +25,7 @@ import com.googlecode.bpmn_simulator.bpmn.model.process.activities.tasks.Task;
 import com.googlecode.bpmn_simulator.bpmn.swing.di.Appearance;
 
 @SuppressWarnings("serial")
-public class TaskShape<E>
+public class TaskShape
 		extends AbstractTaskShape<Task> {
 
 	static {

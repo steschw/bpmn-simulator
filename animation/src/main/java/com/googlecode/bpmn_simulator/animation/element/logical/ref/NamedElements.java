@@ -29,7 +29,7 @@ import java.util.Map;
 
 public class NamedElements<E> {
 
-	private final Map<String, E> elements = new HashMap<String, E>();
+	private final Map<String, E> elements = new HashMap<>();
 
 	public void setElement(final String name, final E element) {
 		assert !elements.containsKey(name);
@@ -58,7 +58,7 @@ public class NamedElements<E> {
 
 	@Override
 	public String toString() {
-		final List<String> names = new ArrayList<String>(elements.keySet());
+		final List<String> names = new ArrayList<>(elements.keySet());
 		Collections.sort(names);
 		final StringBuilder builder = new StringBuilder();
 		final Iterator<String> i = names.iterator();

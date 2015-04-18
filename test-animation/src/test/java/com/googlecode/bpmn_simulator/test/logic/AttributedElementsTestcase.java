@@ -30,8 +30,8 @@ public class AttributedElementsTestcase {
 
 	@Test
 	public void testEquals() {
-		final StaticAttributedElementsState<String, Integer> state1 = new StaticAttributedElementsState<String, Integer>("a", "b");
-		final StaticAttributedElementsState<String, Integer> state2 = new StaticAttributedElementsState<String, Integer>("a", "b");
+		final StaticAttributedElementsState<String, Integer> state1 = new StaticAttributedElementsState<>("a", "b");
+		final StaticAttributedElementsState<String, Integer> state2 = new StaticAttributedElementsState<>("a", "b");
 		assertEquals(state1, state2);
 		state1.addAttribute("a", 1);
 		state2.addAttribute("a", 1);
@@ -49,20 +49,20 @@ public class AttributedElementsTestcase {
 
 	@Test
 	public void testToString1() {
-		final StaticAttributedElementsState<String, Integer> state = new StaticAttributedElementsState<String, Integer>();
+		final StaticAttributedElementsState<String, Integer> state = new StaticAttributedElementsState<>();
 		assertEquals("{}", state.toString());
 	}
 
 	@Test
 	public void testToString2() {
-		final StaticAttributedElementsState<String, Integer> state = new StaticAttributedElementsState<String, Integer>("a");
+		final StaticAttributedElementsState<String, Integer> state = new StaticAttributedElementsState<>("a");
 		state.addAttribute("a", 1);
 		assertEquals("{a:<1>}", state.toString());
 	}
 
 	@Test
 	public void testToString3() {
-		final StaticAttributedElementsState<String, Integer> state = new StaticAttributedElementsState<String, Integer>("a");
+		final StaticAttributedElementsState<String, Integer> state = new StaticAttributedElementsState<>("a");
 		state.addAttribute("a", 1);
 		state.addAttribute("a", 2);
 		assertEquals("{a:<1,2>}", state.toString());
@@ -70,16 +70,16 @@ public class AttributedElementsTestcase {
 
 	@Test
 	public void testToString4() {
-		final StaticAttributedElementsState<String, Integer> state = new StaticAttributedElementsState<String, Integer>("a", "b");
+		final StaticAttributedElementsState<String, Integer> state = new StaticAttributedElementsState<>("a", "b");
 		assertEquals("{a, b}", state.toString());
 	}
 
 	@Test
 	public void testNotEquals() {
-		final StaticAttributedElementsState<String, Integer> state1 = new StaticAttributedElementsState<String, Integer>("a", "b");
-		final StaticAttributedElementsState<String, Integer> state2 = new StaticAttributedElementsState<String, Integer>("x", "y");
+		final StaticAttributedElementsState<String, Integer> state1 = new StaticAttributedElementsState<>("a", "b");
+		final StaticAttributedElementsState<String, Integer> state2 = new StaticAttributedElementsState<>("x", "y");
 		assertNotEquals(state1, state2);
-		final StaticAttributedElementsState<String, Integer> state3 = new StaticAttributedElementsState<String, Integer>("x", "y");
+		final StaticAttributedElementsState<String, Integer> state3 = new StaticAttributedElementsState<>("x", "y");
 		state2.addAttribute("x", 1);
 		assertNotEquals(state1, state2);
 		state3.addAttribute("x", 2);
@@ -88,20 +88,20 @@ public class AttributedElementsTestcase {
 
 	@Test
 	public void testMove1() {
-		final StaticAttributedElementsState<String, Integer> state1 = new StaticAttributedElementsState<String, Integer>("a", "b");
+		final StaticAttributedElementsState<String, Integer> state1 = new StaticAttributedElementsState<>("a", "b");
 		state1.addAttribute("a", 1);
 		state1.moveAttribute("a", 1, "b");
-		final StaticAttributedElementsState<String, Integer> state2 = new StaticAttributedElementsState<String, Integer>("a", "b");
+		final StaticAttributedElementsState<String, Integer> state2 = new StaticAttributedElementsState<>("a", "b");
 		state2.addAttribute("b", 1);
 		assertEquals(state2, state1);
 	}
 
 	@Test
 	public void testMove2() {
-		final StaticAttributedElementsState<String, Integer> state1 = new StaticAttributedElementsState<String, Integer>("a", "b", "c");
+		final StaticAttributedElementsState<String, Integer> state1 = new StaticAttributedElementsState<>("a", "b", "c");
 		state1.addAttribute("a", 1);
 		state1.moveAttribute("a", 1, "b", "c");
-		final StaticAttributedElementsState<String, Integer> state2 = new StaticAttributedElementsState<String, Integer>("a", "b", "c");
+		final StaticAttributedElementsState<String, Integer> state2 = new StaticAttributedElementsState<>("a", "b", "c");
 		state2.addAttribute("b", 1);
 		state2.addAttribute("c", 1);
 		assertEquals(state2, state1);
@@ -109,20 +109,20 @@ public class AttributedElementsTestcase {
 
 	@Test(expected=IllegalArgumentException.class)
 	public void testException1() {
-		final StaticAttributedElementsState<String, Integer> state = new StaticAttributedElementsState<String, Integer>("a", "b");
+		final StaticAttributedElementsState<String, Integer> state = new StaticAttributedElementsState<>("a", "b");
 		state.addAttribute("a", 1);
 		state.addAttribute("a", 1);
 	}
 
 	@Test(expected=IllegalArgumentException.class)
 	public void testException2() {
-		final StaticAttributedElementsState<String, Integer> state = new StaticAttributedElementsState<String, Integer>("a", "b");
+		final StaticAttributedElementsState<String, Integer> state = new StaticAttributedElementsState<>("a", "b");
 		state.removeAttribute("a", 1);
 	}
 
 	@Test(expected=IllegalArgumentException.class)
 	public void testException3() {
-		final StaticAttributedElementsState<String, Integer> state = new StaticAttributedElementsState<String, Integer>("a", "b");
+		final StaticAttributedElementsState<String, Integer> state = new StaticAttributedElementsState<>("a", "b");
 		state.moveAttribute("a", 1, "b");
 	}
 

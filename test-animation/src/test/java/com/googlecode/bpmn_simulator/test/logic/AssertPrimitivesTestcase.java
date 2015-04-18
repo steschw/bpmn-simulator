@@ -43,23 +43,23 @@ public class AssertPrimitivesTestcase {
 
 	@Test
 	public void testStates0BothEmpty() {
-		final StateSequence<Integer> expectedStates = new StaticStateSequence<Integer>();
-		final List<Integer> states = new ArrayList<Integer>();
+		final StateSequence<Integer> expectedStates = new StaticStateSequence<>();
+		final List<Integer> states = new ArrayList<>();
 		assertExpectedFlow(expectedStates, states.iterator());
 	}
 
 	@Test
 	public void testStates1BothEqual() {
-		final StateSequence<Integer> expectedStates = new StaticStateSequence<Integer>(1);
-		final List<Integer> states = new ArrayList<Integer>();
+		final StateSequence<Integer> expectedStates = new StaticStateSequence<>(1);
+		final List<Integer> states = new ArrayList<>();
 		states.add(1);
 		assertExpectedFlow(expectedStates, states.iterator());
 	}
 
 	@Test
 	public void testStates2BothEqual() {
-		final StateSequence<Integer> expectedStates = new StaticStateSequence<Integer>(1, 2);
-		final List<Integer> states = new ArrayList<Integer>();
+		final StateSequence<Integer> expectedStates = new StaticStateSequence<>(1, 2);
+		final List<Integer> states = new ArrayList<>();
 		states.add(1);
 		states.add(2);
 		assertExpectedFlow(expectedStates, states.iterator());
@@ -67,8 +67,8 @@ public class AssertPrimitivesTestcase {
 
 	@Test
 	public void testStates1AvailableLarger() {
-		final StateSequence<Integer> expectedStates = new StaticStateSequence<Integer>(1);
-		final List<Integer> states = new ArrayList<Integer>();
+		final StateSequence<Integer> expectedStates = new StaticStateSequence<>(1);
+		final List<Integer> states = new ArrayList<>();
 		states.add(1);
 		states.add(1);
 		states.add(1);
@@ -77,8 +77,8 @@ public class AssertPrimitivesTestcase {
 
 	@Test
 	public void testStates2FirstAvailableLarger() {
-		final StateSequence<Integer> expectedStates = new StaticStateSequence<Integer>(1, 2);
-		final List<Integer> states = new ArrayList<Integer>();
+		final StateSequence<Integer> expectedStates = new StaticStateSequence<>(1, 2);
+		final List<Integer> states = new ArrayList<>();
 		states.add(1);
 		states.add(1);
 		states.add(1);
@@ -88,8 +88,8 @@ public class AssertPrimitivesTestcase {
 
 	@Test
 	public void testStates2SecondAvailableLarger() {
-		final StateSequence<Integer> expectedStates = new StaticStateSequence<Integer>(1, 2);
-		final List<Integer> states = new ArrayList<Integer>();
+		final StateSequence<Integer> expectedStates = new StaticStateSequence<>(1, 2);
+		final List<Integer> states = new ArrayList<>();
 		states.add(1);
 		states.add(2);
 		states.add(2);
@@ -99,8 +99,8 @@ public class AssertPrimitivesTestcase {
 
 	@Test
 	public void testStates2BothAvailableLarger() {
-		final StateSequence<Integer> expectedStates = new StaticStateSequence<Integer>(1, 2);
-		final List<Integer> states = new ArrayList<Integer>();
+		final StateSequence<Integer> expectedStates = new StaticStateSequence<>(1, 2);
+		final List<Integer> states = new ArrayList<>();
 		states.add(1);
 		states.add(1);
 		states.add(1);
@@ -112,27 +112,27 @@ public class AssertPrimitivesTestcase {
 
 	@Test
 	public void testToStringEmpty() {
-		final StateSequence<Integer> states = new StaticStateSequence<Integer>();
+		final StateSequence<Integer> states = new StaticStateSequence<>();
 		org.junit.Assert.assertEquals("{}", states.toString());
 	}
 
 	@Test
 	public void testToString1() {
-		final StateSequence<Integer> states = new StaticStateSequence<Integer>(1);
+		final StateSequence<Integer> states = new StaticStateSequence<>(1);
 		org.junit.Assert.assertEquals("{0:1}", states.toString());
 	}
 
 	@Test
 	public void testToString2() {
-		final StateSequence<Integer> states = new StaticStateSequence<Integer>(1, 2);
+		final StateSequence<Integer> states = new StaticStateSequence<>(1, 2);
 		org.junit.Assert.assertEquals("{0:1, 1:2}", states.toString());
 	}
 
 	@Test
 	public void testExceptionUnexpectedFirstState0() {
 		setExpectedException("unexpected state 1. no more states expected");
-		final StateSequence<Integer> expectedStates = new StaticStateSequence<Integer>();
-		final List<Integer> states = new ArrayList<Integer>();
+		final StateSequence<Integer> expectedStates = new StaticStateSequence<>();
+		final List<Integer> states = new ArrayList<>();
 		states.add(1);
 		assertExpectedFlow(expectedStates, states.iterator());
 	}
@@ -140,8 +140,8 @@ public class AssertPrimitivesTestcase {
 	@Test
 	public void testExceptionUnexpectedFirstState1() {
 		setExpectedException("unexpected state 2. expected state 1");
-		final StateSequence<Integer> expectedStates = new StaticStateSequence<Integer>(1);
-		final List<Integer> states = new ArrayList<Integer>();
+		final StateSequence<Integer> expectedStates = new StaticStateSequence<>(1);
+		final List<Integer> states = new ArrayList<>();
 		states.add(2);
 		assertExpectedFlow(expectedStates, states.iterator());
 	}
@@ -149,8 +149,8 @@ public class AssertPrimitivesTestcase {
 	@Test
 	public void testExceptionUnexpectedFirstState2() {
 		setExpectedException("unexpected state 2. expected state 1");
-		final StateSequence<Integer> expectedStates = new StaticStateSequence<Integer>(1, 2);
-		final List<Integer> states = new ArrayList<Integer>();
+		final StateSequence<Integer> expectedStates = new StaticStateSequence<>(1, 2);
+		final List<Integer> states = new ArrayList<>();
 		states.add(2);
 		assertExpectedFlow(expectedStates, states.iterator());
 	}
@@ -158,8 +158,8 @@ public class AssertPrimitivesTestcase {
 	@Test
 	public void testExceptionUnexpectedLastState() {
 		setExpectedException("unexpected state 3. expected state 2");
-		final StateSequence<Integer> expectedStates = new StaticStateSequence<Integer>(1, 2);
-		final List<Integer> states = new ArrayList<Integer>();
+		final StateSequence<Integer> expectedStates = new StaticStateSequence<>(1, 2);
+		final List<Integer> states = new ArrayList<>();
 		states.add(1);
 		states.add(3);
 		assertExpectedFlow(expectedStates, states.iterator());
@@ -168,8 +168,8 @@ public class AssertPrimitivesTestcase {
 	@Test
 	public void testExceptionUnexpectedBothStates() {
 		setExpectedException("unexpected state 2. expected state 1");
-		final StateSequence<Integer> expectedStates = new StaticStateSequence<Integer>(1, 2);
-		final List<Integer> states = new ArrayList<Integer>();
+		final StateSequence<Integer> expectedStates = new StaticStateSequence<>(1, 2);
+		final List<Integer> states = new ArrayList<>();
 		states.add(2);
 		states.add(1);
 		assertExpectedFlow(expectedStates, states.iterator());
@@ -178,16 +178,16 @@ public class AssertPrimitivesTestcase {
 	@Test
 	public void testException2() {
 		setExpectedException("no next state. more states expected");
-		final StateSequence<Integer> expectedStates = new StaticStateSequence<Integer>(1);
-		final List<Integer> states = new ArrayList<Integer>();
+		final StateSequence<Integer> expectedStates = new StaticStateSequence<>(1);
+		final List<Integer> states = new ArrayList<>();
 		assertExpectedFlow(expectedStates, states.iterator());
 	}
 
 	@Test
 	public void testException3() {
 		setExpectedException("unexpected state 1. no more states expected");
-		final StateSequence<Integer> expectedStates = new StaticStateSequence<Integer>();
-		final List<Integer> states = new ArrayList<Integer>();
+		final StateSequence<Integer> expectedStates = new StaticStateSequence<>();
+		final List<Integer> states = new ArrayList<>();
 		states.add(1);
 		assertExpectedFlow(expectedStates, states.iterator());
 	}
@@ -195,8 +195,8 @@ public class AssertPrimitivesTestcase {
 	@Test
 	public void testException4() {
 		setExpectedException("no next state available. next state expected is 1");
-		final StateSequence<Integer> expectedStates = new StaticStateSequence<Integer>(1, 1);
-		final List<Integer> states = new ArrayList<Integer>();
+		final StateSequence<Integer> expectedStates = new StaticStateSequence<>(1, 1);
+		final List<Integer> states = new ArrayList<>();
 		states.add(1);
 		assertExpectedFlow(expectedStates, states.iterator());
 	}
@@ -204,8 +204,8 @@ public class AssertPrimitivesTestcase {
 	@Test
 	public void testException5() {
 		setExpectedException("no next state available. next state expected is 2");
-		final StateSequence<Integer> expectedStates = new StaticStateSequence<Integer>(1, 2);
-		final List<Integer> states = new ArrayList<Integer>();
+		final StateSequence<Integer> expectedStates = new StaticStateSequence<>(1, 2);
+		final List<Integer> states = new ArrayList<>();
 		states.add(1);
 		assertExpectedFlow(expectedStates, states.iterator());
 	}

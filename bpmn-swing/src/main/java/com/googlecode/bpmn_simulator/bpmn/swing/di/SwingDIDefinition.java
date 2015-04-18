@@ -111,13 +111,13 @@ public class SwingDIDefinition
 		extends AbstractDIDefinition<SwingBPMNDiagram> {
 
 	private static final Map<Class<? extends BaseElement>, Class<? extends BPMNEdge>> EDGE_MAPPERS
-			= new HashMap<Class<? extends BaseElement>, Class<? extends BPMNEdge>>();
+			= new HashMap<>();
 
 	private static final Map<Class<? extends BaseElement>, Class<? extends BPMNShape>> SHAPE_MAPPERS
-			= new HashMap<Class<? extends BaseElement>, Class<? extends BPMNShape>>();
+			= new HashMap<>();
 
 	private static final Map<Class<? extends BaseElement>, Class<? extends BPMNPlane>> PLANE_MAPPERS
-			= new HashMap<Class<? extends BaseElement>, Class<? extends BPMNPlane>>();
+			= new HashMap<>();
 
 	static {
 		EDGE_MAPPERS.put(Association.class, AssociationEdge.class);

@@ -28,7 +28,7 @@ abstract class AbstractAnimator
 
 	private static final long FPS_25 = 1000 / 25;
 
-	private final Set<AnimationListener> animationListeners = new HashSet<AnimationListener>();
+	private final Set<AnimationListener> animationListeners = new HashSet<>();
 
 	private Thread thread;
 

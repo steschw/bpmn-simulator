@@ -20,9 +20,12 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.di;
 
+import com.googlecode.bpmn_simulator.animation.element.logical.ref.Reference;
 import com.googlecode.bpmn_simulator.animation.element.visual.Label;
 
 public interface BPMNLabel
 		extends Label {
+
+	void setStyle(Reference<BPMNLabelStyle> style);
 
 }

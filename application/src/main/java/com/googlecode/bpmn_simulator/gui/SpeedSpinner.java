@@ -26,6 +26,7 @@ import java.util.Arrays;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
 import javax.swing.SpinnerListModel;
+import javax.swing.SwingConstants;
 
 @SuppressWarnings("serial")
 public class SpeedSpinner
@@ -61,7 +62,7 @@ public class SpeedSpinner
 	public SpeedSpinner() {
 		super(new SpinnerListModel(Arrays.asList(Speed.values())));
 		setValue(Speed.NORMAL);
-		((ListEditor)getEditor()).getTextField().setHorizontalAlignment(JTextField.CENTER);
+		((ListEditor)getEditor()).getTextField().setHorizontalAlignment(SwingConstants.CENTER);
 	}
 
 	public float getSpeedFactor() {

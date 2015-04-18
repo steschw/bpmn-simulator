@@ -40,7 +40,7 @@ public class LocaleComboBox
 	};
 
 	public LocaleComboBox() {
-		super(new DefaultComboBoxModel<Locale>(LOCALES));
+		super(new DefaultComboBoxModel<>(LOCALES));
 		setRenderer(new LocaleComboBoxRenderer());
 	}
 

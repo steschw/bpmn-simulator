@@ -27,7 +27,11 @@ import java.util.Collection;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import com.googlecode.bpmn_simulator.animation.element.logical.ref.NamedElements;
+import com.googlecode.bpmn_simulator.animation.element.logical.ref.NamedReference;
+import com.googlecode.bpmn_simulator.animation.element.logical.ref.Reference;
 import com.googlecode.bpmn_simulator.animation.element.visual.Bounds;
+import com.googlecode.bpmn_simulator.animation.element.visual.Font;
 import com.googlecode.bpmn_simulator.animation.element.visual.Waypoint;
 import com.googlecode.bpmn_simulator.bpmn.model.AbstractBPMNDefinition;
 import com.googlecode.bpmn_simulator.bpmn.model.NamedElement;
@@ -46,7 +50,19 @@ public abstract class AbstractDIDefinition<DIAGRAM extends BPMNDiagram<?>>
 
 	private static final String DI = "http://www.omg.org/spec/DD/20100524/DI"; //$NON-NLS-1$
 
-	private final Collection<DIAGRAM> diagrams = new ArrayList<DIAGRAM>();
+	private static final String ELEMENT_DIAGRAM = "BPMNDiagram"; //$NON-NLS-1$
+	private static final String ELEMENT_PLANE = "BPMNPlane"; //$NON-NLS-1$
+	private static final String ELEMENT_SHAPE = "BPMNShape"; //$NON-NLS-1$
+	private static final String ELEMENT_BOUNDS = "Bounds"; //$NON-NLS-1$
+	private static final String ELEMENT_EDGE = "BPMNEdge"; //$NON-NLS-1$
+	private static final String ELEMENT_WAYPOINT = "waypoint"; //$NON-NLS-1$
+	private static final String ELEMENT_LABEL = "BPMNLabel"; //$NON-NLS-1$
+	private static final String ELEMENT_LABELSTYLE = "BPMNLabelStyle"; //$NON-NLS-1$
+	private static final String ELEMENT_FONT = "Font"; //$NON-NLS-1$
+
+	private final NamedElements<BPMNLabelStyle> labelStyles = new NamedElements<>();
+
+	private final Collection<DIAGRAM> diagrams = new ArrayList<>();
 
 	@Override
 	public final Collection<DIAGRAM> getDiagrams() {
@@ -109,7 +125,7 @@ public abstract class AbstractDIDefinition<DIAGRAM extends BPMNDiagram<?>>
 	}
 
 	protected boolean readElementBPMNShape(final Node node, final DIAGRAM diagram) {
-		if (isElementNode(node, BPMNDI, "BPMNShape")) { //$NON-NLS-1$
+		if (isElementNode(node, BPMNDI, ELEMENT_SHAPE)) {
 			final BaseElement element = getBPMNElementAttribute(node);
 			if (element != null) {
 				final BPMNShape shape = createShapeFor(diagram, element);
@@ -138,7 +154,7 @@ public abstract class AbstractDIDefinition<DIAGRAM extends BPMNDiagram<?>>
 	}
 
 	protected boolean readElementBPMNEdge(final Node node, final DIAGRAM diagram) {
-		if (isElementNode(node, BPMNDI, "BPMNEdge")) { //$NON-NLS-1$
+		if (isElementNode(node, BPMNDI, ELEMENT_EDGE)) {
 			final BaseElement element = getBPMNElementAttribute(node);
 			if (element != null) {
 				final BPMNEdge edge = createEdgeFor(diagram, element);
@@ -198,36 +214,34 @@ public abstract class AbstractDIDefinition<DIAGRAM extends BPMNDiagram<?>>
 
 	protected boolean readElementLabel(final Node node,
 			final DIAGRAM diagram, final BaseElement element, final BPMNEdge edge) {
-		if (isElementNode(node, BPMNDI, "BPMNLabel")) { //$NON-NLS-1$
+		if (isElementNode(node, BPMNDI, ELEMENT_LABEL)) {
 			final BPMNLabel label = createLabelFor(diagram, element);
+			label.setStyle(getAttributeLabelStyle(node));
 			if (!readLabelElements(node, diagram, element, label)) {
 				//XXX: align label to edge if no bounds are specified
 			}
 			return true;
-		} else {
-			return false;
 		}
+		return false;
 	}
 
 	protected boolean readElementLabel(final Node node,
 			final DIAGRAM diagram, final BaseElement element, final BPMNShape shape) {
-		if (isElementNode(node, BPMNDI, "BPMNLabel")) { //$NON-NLS-1$
+		if (isElementNode(node, BPMNDI, ELEMENT_LABEL)) {
 			final BPMNLabel label = createLabelFor(diagram, element);
+			label.setStyle(getAttributeLabelStyle(node));
 			if (!readLabelElements(node, diagram, element, label)) {
 				//XXX: align label to shape if no bounds are specified
 				label.setBounds(shape.getElementBounds());
 			}
-			if (label != null) {
-				label.setTextVertical(shape.isHorizontal());
-			}
+			label.setTextVertical(shape.isHorizontal());
 			return true;
-		} else {
-			return false;
 		}
+		return false;
 	}
 
 	protected boolean readElementBPMNPlane(final Node node, final DIAGRAM diagram) {
-		if (isElementNode(node, BPMNDI, "BPMNPlane")) { //$NON-NLS-1$
+		if (isElementNode(node, BPMNDI, ELEMENT_PLANE)) {
 			final BaseElement element = getBPMNElementAttribute(node);
 			if (element != null) {
 				final BPMNPlane plane = createPlaneFor(diagram, element);
@@ -247,32 +261,63 @@ public abstract class AbstractDIDefinition<DIAGRAM extends BPMNDiagram<?>>
 				showUnknownBPMNElement(node, "plane");
 			}
 			return true;
-		} else {
-			return false;
 		}
+		return false;
+	}
+
+	protected Reference<BPMNLabelStyle> getAttributeLabelStyle(final Node node) {
+		final String id = getAttributeString(node, "labelStyle");
+		return new NamedReference<>(labelStyles, id, BPMNLabelStyle.class);
+	}
+
+	private boolean readElementFont(final Node node, final BPMNLabelStyle labelStyle) {
+		if (isElementNode(node, DC, ELEMENT_FONT)) {
+			final Font font = new Font(getAttributeString(node, "name"), getAttributeDouble(node, "size", null),
+					getAttributeBoolean(node, "isBold", false), getAttributeBoolean(node, "isItalic", false),
+					getAttributeBoolean(node, "isUnderline", false), getAttributeBoolean(node, "isStrikeThrough", false));
+			labelStyle.setFont(font);
+			return true;
+		}
+		return false;
+	}
+
+	private boolean readElementBPMNLabelStyle(final Node node, final DIAGRAM diagram) {
+		if (isElementNode(node, BPMNDI, ELEMENT_LABELSTYLE)) {
+			final BPMNLabelStyle labelStyle = new BPMNLabelStyle(getIdAttribute(node));
+			final NodeList childNodes = node.getChildNodes();
+			for (int i = 0; i < childNodes.getLength(); ++i) {
+				final Node childNode = childNodes.item(i);
+				if (!readElementFont(childNode, labelStyle)) {
+					showUnknowNode(childNode);
+				}
+			}
+			labelStyles.setElement(labelStyle.getId(), labelStyle);
+			return true;
+		}
+		return false;
 	}
 
 	protected boolean readElementBPMNDiagram(final Node node) {
-		if (isElementNode(node, BPMNDI, "BPMNDiagram")) { //$NON-NLS-1$
+		if (isElementNode(node, BPMNDI, ELEMENT_DIAGRAM)) {
 			final String name = getNameAttribute(node);
 			final DIAGRAM diagram = createDiagram(name);
 			final NodeList childNodes = node.getChildNodes();
 			for (int i = 0; i < childNodes.getLength(); ++i) {
 				final Node childNode = childNodes.item(i);
-				if (!readElementBPMNPlane(childNode, diagram)) {
+				if (!readElementBPMNPlane(childNode, diagram)
+						&& !readElementBPMNLabelStyle(childNode, diagram)) {
 					showUnknowNode(childNode);
 				}
 			}
 			diagrams.add(diagram);
 			return true;
-		} else {
-			return false;
 		}
+		return false;
 	}
 
 	protected boolean readElementBounds(final Node node,
 			final BPMNShape shape) {
-		if (isElementNode(node, DC, "Bounds")) { //$NON-NLS-1$
+		if (isElementNode(node, DC, ELEMENT_BOUNDS)) {
 			shape.setElementBounds(getBoundsAttribute(node));
 			return true;
 		} else {
@@ -282,7 +327,7 @@ public abstract class AbstractDIDefinition<DIAGRAM extends BPMNDiagram<?>>
 
 	protected boolean readElementWaypoint(final Node node,
 			final BPMNEdge edge) {
-		if (isElementNode(node, DI, "waypoint")) { //$NON-NLS-1$
+		if (isElementNode(node, DI, ELEMENT_WAYPOINT)) {
 			edge.addElementWaypoint(getPointAttribute(node));
 			return true;
 		} else {
@@ -292,7 +337,7 @@ public abstract class AbstractDIDefinition<DIAGRAM extends BPMNDiagram<?>>
 
 	protected boolean readElementBounds(final Node node,
 			final BPMNLabel label) {
-		if (isElementNode(node, DC, "Bounds")) { //$NON-NLS-1$
+		if (isElementNode(node, DC, ELEMENT_BOUNDS)) {
 			label.setBounds(getBoundsAttribute(node));
 			return true;
 		} else {

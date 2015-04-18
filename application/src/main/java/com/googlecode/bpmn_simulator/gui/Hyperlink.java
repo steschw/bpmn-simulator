@@ -107,7 +107,7 @@ public class Hyperlink
 			extends MouseAdapter {
 
 		private static final Map<TextAttribute, Integer> HOVER_ATTRIBUTES
-				= new HashMap<TextAttribute, Integer>();
+				= new HashMap<>();
 
 		private Font defaultFont;
 

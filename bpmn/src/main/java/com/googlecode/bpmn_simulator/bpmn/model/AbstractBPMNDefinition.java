@@ -126,7 +126,7 @@ public abstract class AbstractBPMNDefinition<E extends BPMNDiagram<?>>
 	}
 
 	private final NamedElements<BaseElement> elements
-			= new NamedElements<BaseElement>();
+			= new NamedElements<>();
 
 	private String id;
 	private String name;
@@ -137,9 +137,9 @@ public abstract class AbstractBPMNDefinition<E extends BPMNDiagram<?>>
 	private String exporter;
 	private String exporterVersion;
 
-	private List<Documentation> documentations = new ArrayList<Documentation>();
+	private List<Documentation> documentations = new ArrayList<>();
 
-	private Collection<LogicalElement> startElements = new ArrayList<LogicalElement>();
+	private Collection<LogicalElement> startElements = new ArrayList<>();
 
 	@Override
 	public Collection<LogicalElement> getStartElements() {

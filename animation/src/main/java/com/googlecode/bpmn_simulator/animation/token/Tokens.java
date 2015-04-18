@@ -58,7 +58,7 @@ public class Tokens
 	}
 
 	public synchronized Collection<Instance> getInstances() {
-		final Collection<Instance> instances = new ArrayList<Instance>();
+		final Collection<Instance> instances = new ArrayList<>();
 		for (final Token token : this) {
 			final Instance instance = token.getInstance();
 			if (!instances.contains(instance)) {

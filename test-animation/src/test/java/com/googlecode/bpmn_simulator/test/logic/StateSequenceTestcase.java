@@ -32,7 +32,7 @@ public class StateSequenceTestcase {
 
 	@Test
 	public void testAddFromLast() {
-		final StaticStateSequence<String> sequence = new StaticStateSequence<String>(TEST_VALUE);
+		final StaticStateSequence<String> sequence = new StaticStateSequence<>(TEST_VALUE);
 		String s = sequence.addLast();
 		assertEquals(s, "test");
 		assertNotSame(s, TEST_VALUE);
@@ -41,7 +41,7 @@ public class StateSequenceTestcase {
 	@Test
 	public void test() {
 		final StaticStateSequence<StaticAttributedElementsState<String, Integer>> sequence
-				= new StaticStateSequence<StaticAttributedElementsState<String, Integer>>(new StaticAttributedElementsState<String, Integer>("a", "b", "c"));
+				= new StaticStateSequence<>(new StaticAttributedElementsState<String, Integer>("a", "b", "c"));
 		sequence.addLast().addAttribute("a", 1);
 		sequence.addLast().moveAttribute("a", 1, "b");
 		sequence.addLast().moveAttribute("b", 1, "c");

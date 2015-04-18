@@ -37,7 +37,7 @@ public class LogFrame
 		extends JFrame
 		implements DefinitionListener {
 
-	private static final int DEFAULT_WIDTH = 400;
+	private static final int DEFAULT_WIDTH = 600;
 	private static final int DEFAULT_HEIGHT = 400;
 
 	private final LogList listLog = new LogList();

@@ -24,14 +24,21 @@ import java.util.ArrayList;
 
 import com.googlecode.bpmn_simulator.animation.element.logical.LogicalElement;
 
-public final class ReferenceUtils<E> {
+public final class ReferenceUtils {
 
 	private ReferenceUtils() {
 		super();
 	}
 
+	public static <E> E element(final Reference<E> ref) {
+		if ((ref != null) && ref.hasReference()) {
+			return ref.getReferenced();
+		}
+		return null;
+	}
+
 	public static <E extends LogicalElement> References<E> emptyReferences() {
-		return new EmptyReferences<E>();
+		return new EmptyReferences<>();
 	}
 
 	private static class EmptyReferences<E>

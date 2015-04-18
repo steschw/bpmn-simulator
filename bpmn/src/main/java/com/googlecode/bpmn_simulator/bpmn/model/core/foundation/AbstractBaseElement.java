@@ -30,8 +30,7 @@ public abstract class AbstractBaseElement
 
 	private final String id;
 
-	private Collection<Documentation> documentations
-			= new ArrayList<Documentation>();
+	private Collection<Documentation> documentations = new ArrayList<>();
 
 	public AbstractBaseElement(final String id) {
 		super();

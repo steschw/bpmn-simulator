@@ -29,7 +29,7 @@ import java.util.Set;
 abstract class AbstractReferences<E>
 		implements References<E> {
 
-	private final Set<Reference<E>> references = new HashSet<Reference<E>>();
+	private final Set<Reference<E>> references = new HashSet<>();
 
 	public void add(final Reference<E> reference) {
 		references.add(reference);
@@ -37,7 +37,7 @@ abstract class AbstractReferences<E>
 
 	@Override
 	public Iterator<E> iterator() {
-		final Collection<E> elements = new ArrayList<E>();
+		final Collection<E> elements = new ArrayList<>();
 		for (final Reference<E> reference : references) {
 			final E element = reference.getReferenced();
 			if (element != null) {

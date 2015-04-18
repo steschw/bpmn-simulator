@@ -39,8 +39,7 @@ public class StaticAttributedElementsState<ELEMENT, ATTRIBUTE>
 
 	private static final long serialVersionUID = -9033432433330245560L;
 
-	private final Map<ELEMENT, Set<ATTRIBUTE>> elementAttributes
-			= new HashMap<ELEMENT, Set<ATTRIBUTE>>();
+	private final Map<ELEMENT, Set<ATTRIBUTE>> elementAttributes = new HashMap<>();
 
 	@SafeVarargs
 	public StaticAttributedElementsState(final ELEMENT... elements) {

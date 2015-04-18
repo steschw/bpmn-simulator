@@ -37,8 +37,7 @@ public class ScrollDesktop
 	private final ScrollDesktopPane desktopPane = new ScrollDesktopPane();
 
 	public ScrollDesktop() {
-		super(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
-				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		super(VERTICAL_SCROLLBAR_AS_NEEDED, HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		getViewport().add(desktopPane);
 	}
 

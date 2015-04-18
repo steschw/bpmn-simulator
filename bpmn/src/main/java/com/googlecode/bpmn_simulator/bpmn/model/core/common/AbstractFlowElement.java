@@ -33,7 +33,7 @@ public abstract class AbstractFlowElement
 		implements FlowElement {
 
 	private final Set<TokenFlowListener> tokenFlowListeners
-			= new HashSet<TokenFlowListener>();
+			= new HashSet<>();
 
 	public AbstractFlowElement(final String id, final String name) {
 		super(id, name);

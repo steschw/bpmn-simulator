@@ -29,9 +29,9 @@ import java.util.Set;
 abstract class AbstractInstancesContainer
 		implements Iterable<Instance> {
 
-	private final Collection<Instance> childs = new ArrayList<Instance>();
+	private final Collection<Instance> childs = new ArrayList<>();
 
-	private final Set<InstancesListener> instancesListeners = new HashSet<InstancesListener>();
+	private final Set<InstancesListener> instancesListeners = new HashSet<>();
 
 	@Override
 	public Iterator<Instance> iterator() {

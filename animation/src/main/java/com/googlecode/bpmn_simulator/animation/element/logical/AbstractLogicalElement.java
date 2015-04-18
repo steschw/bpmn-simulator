@@ -30,7 +30,7 @@ abstract class AbstractLogicalElement
 		implements LogicalElement {
 
 	private final Set<TokenFlowListener> tokenListeners =
-			new HashSet<TokenFlowListener>();
+			new HashSet<>();
 
 	public AbstractLogicalElement() {
 		super();

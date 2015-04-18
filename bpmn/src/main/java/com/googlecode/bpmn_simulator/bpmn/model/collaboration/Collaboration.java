@@ -37,7 +37,7 @@ public class Collaboration
 
 	private boolean isClosed;
 
-	private final Set<Participant> participiants = new HashSet<Participant>();
+	private final Set<Participant> participiants = new HashSet<>();
 
 	public Collaboration(final String id, final String name, final boolean isClosed) {
 		super(id);

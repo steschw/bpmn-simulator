@@ -135,9 +135,26 @@ public abstract class AbstractXmlDefinition<E extends Diagram<?>>
 		return defaultValue;
 	}
 
+	protected Double getAttributeDouble(final Node node,
+			final String name, final Double defaultValue) {
+		final String value = getAttributeString(node, name);
+		if (value != null) {
+			try {
+				Double.valueOf(value);
+			} catch (NumberFormatException exception) {
+				notifyWarning(MessageFormat.format("Invalid value {0} for double. Using {1} instead.", value, defaultValue));
+			}
+		}
+		return defaultValue;
+	}
+
+	private static boolean isNullOrEmpty(final String value) {
+		return (value == null) || value.isEmpty();
+	}
+
 	private static boolean convertStringToBool(final String string,
 			final boolean defaultValue) {
-		if ((string != null) && !string.isEmpty()) {
+		if (!isNullOrEmpty(string)) {
 			return Boolean.parseBoolean(string);
 		}
 		return defaultValue;

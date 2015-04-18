@@ -30,7 +30,7 @@ public final class Instance
 
 	private final Tokens tokens = new Tokens();
 
-	private final Set<TokensListener> tokensListeners = new HashSet<TokensListener>();
+	private final Set<TokensListener> tokensListeners = new HashSet<>();
 
 	private int color;
 

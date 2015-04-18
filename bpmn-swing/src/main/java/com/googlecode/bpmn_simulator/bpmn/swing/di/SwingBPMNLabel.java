@@ -20,16 +20,39 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.swing.di;
 
+import java.awt.Font;
+import java.awt.Graphics;
+
+import com.googlecode.bpmn_simulator.animation.element.logical.ref.Reference;
 import com.googlecode.bpmn_simulator.animation.element.visual.swing.AbstractLabel;
+import com.googlecode.bpmn_simulator.animation.element.visual.swing.FontUtils;
 import com.googlecode.bpmn_simulator.bpmn.di.BPMNLabel;
+import com.googlecode.bpmn_simulator.bpmn.di.BPMNLabelStyle;
 
 @SuppressWarnings("serial")
 public class SwingBPMNLabel
 		extends AbstractLabel
 		implements BPMNLabel {
 
+	private Reference<BPMNLabelStyle> style;
+	private Font font;
+
 	public SwingBPMNLabel() {
 		super();
+	}
+
+	@Override
+	public void setStyle(final Reference<BPMNLabelStyle> style) {
+		this.style = style;
+	}
+
+	@Override
+	protected void paintComponent(final Graphics g) {
+		if ((font == null)
+				&& (style != null) && style.hasReference() && (style.getReferenced().getFont() != null)) {
+			setFont(getFont().deriveFont(FontUtils.toAttributes(style.getReferenced().getFont())));
+		}
+		super.paintComponent(g);
 	}
 
 }

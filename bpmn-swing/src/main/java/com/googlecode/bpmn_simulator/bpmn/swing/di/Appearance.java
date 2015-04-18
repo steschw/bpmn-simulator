@@ -85,9 +85,9 @@ public class Appearance {
 
 	private static Appearance instance;
 
-	private final Map<String, Image> images = new IdentityHashMap<String, Image>();
+	private final Map<String, Image> images = new IdentityHashMap<>();
 
-	private final Map<Class<?>, ElementAppearance> elements = new HashMap<Class<?>, ElementAppearance>();
+	private final Map<Class<?>, ElementAppearance> elements = new HashMap<>();
 
 	private boolean ignoreExplicitColors;
 

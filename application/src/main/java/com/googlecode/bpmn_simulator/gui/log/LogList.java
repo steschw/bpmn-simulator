@@ -26,6 +26,7 @@ import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
 
 import javax.swing.Icon;
 import javax.swing.JMenuItem;
@@ -33,6 +34,7 @@ import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
+import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
@@ -45,8 +47,6 @@ import com.googlecode.bpmn_simulator.gui.Theme;
 @SuppressWarnings("serial")
 public class LogList
 		extends JScrollPane {
-
-	private boolean autoscroll;
 
 	public LogList() {
 		super(new LogListContent());
@@ -67,14 +67,6 @@ public class LogList
 
 	public void clear() {
 		getContent().clear();
-	}
-
-	public void setAutoscroll(final boolean autoscroll) {
-		this.autoscroll = autoscroll;
-	}
-
-	public boolean isAutoscroll() {
-		return autoscroll;
 	}
 
 	private static class LogListContent
@@ -101,6 +93,15 @@ public class LogList
 		}
 
 		@Override
+		public String getToolTipText(MouseEvent event) {
+			final int rowIndex = rowAtPoint(event.getPoint());
+			if (rowIndex > -1) {
+				return getModel().getValueAt(rowIndex, MESSAGE_COLUMN_INDEX).toString();
+			}
+			return super.getToolTipText(event);
+		}
+
+		@Override
 		public boolean getScrollableTracksViewportWidth() {
 			return getPreferredSize().width < getParent().getWidth();
 		}
@@ -117,8 +118,8 @@ public class LogList
 			typeColumn.setMinWidth(TYPE_COLUMN_WIDTH);
 			typeColumn.setMaxWidth(TYPE_COLUMN_WIDTH);
 			final LogTableCellRenderer cellRenderer = new LogTableCellRenderer();
-			cellRenderer.setHorizontalAlignment(DefaultTableCellRenderer.CENTER);
-			cellRenderer.setVerticalAlignment(DefaultTableCellRenderer.CENTER);
+			cellRenderer.setHorizontalAlignment(SwingConstants.CENTER);
+			cellRenderer.setVerticalAlignment(SwingConstants.CENTER);
 			typeColumn.setCellRenderer(cellRenderer);
 
 			getColumnModel().addColumn(typeColumn);

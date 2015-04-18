@@ -74,7 +74,7 @@ public class WindowMenu
 
 	protected List<JInternalFrame> getFrames() {
 		final List<JInternalFrame> frames =
-				new ArrayList<JInternalFrame>(Arrays.asList(getDesktopPane().getAllFrames()));
+				new ArrayList<>(Arrays.asList(getDesktopPane().getAllFrames()));
 		Collections.sort(frames, new Comparator<JInternalFrame>() {
 			@Override
 			public int compare(final JInternalFrame frame1, final JInternalFrame frame2) {

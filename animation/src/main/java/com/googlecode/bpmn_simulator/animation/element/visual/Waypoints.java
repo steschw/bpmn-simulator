@@ -118,4 +118,12 @@ public class Waypoints
 		return last; ///XXX
 	}
 
+	public Waypoints translate(final int x, final int y) {
+		final Waypoints waypoints = new Waypoints();
+		for (Waypoint waypoint : this) {
+			waypoints.add(new Waypoint(waypoint.getX() + x, waypoint.getY() + y));
+		}
+		return waypoints;
+	}
+
 }

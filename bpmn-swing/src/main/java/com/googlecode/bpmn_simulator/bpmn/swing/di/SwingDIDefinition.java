@@ -37,6 +37,7 @@ import com.googlecode.bpmn_simulator.bpmn.model.collaboration.Collaboration;
 import com.googlecode.bpmn_simulator.bpmn.model.collaboration.MessageFlow;
 import com.googlecode.bpmn_simulator.bpmn.model.collaboration.Participant;
 import com.googlecode.bpmn_simulator.bpmn.model.collaboration.conversations.Conversation;
+import com.googlecode.bpmn_simulator.bpmn.model.collaboration.conversations.ConversationLink;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.SequenceFlow;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.artifacts.Association;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.artifacts.Group;
@@ -73,6 +74,7 @@ import com.googlecode.bpmn_simulator.bpmn.swing.model.choreography.ChoreographyP
 import com.googlecode.bpmn_simulator.bpmn.swing.model.collaboration.CollaborationPlane;
 import com.googlecode.bpmn_simulator.bpmn.swing.model.collaboration.MessageFlowEdge;
 import com.googlecode.bpmn_simulator.bpmn.swing.model.collaboration.ParticipantShape;
+import com.googlecode.bpmn_simulator.bpmn.swing.model.collaboration.conversations.ConversationLinkEdge;
 import com.googlecode.bpmn_simulator.bpmn.swing.model.collaboration.conversations.ConversationShape;
 import com.googlecode.bpmn_simulator.bpmn.swing.model.core.common.SequenceFlowEdge;
 import com.googlecode.bpmn_simulator.bpmn.swing.model.core.common.artifacts.AssociationEdge;
@@ -124,6 +126,7 @@ public class SwingDIDefinition
 		EDGE_MAPPERS.put(SequenceFlow.class, SequenceFlowEdge.class);
 		EDGE_MAPPERS.put(DataAssociation.class, DataAssociationEdge.class);
 		EDGE_MAPPERS.put(MessageFlow.class, MessageFlowEdge.class);
+		EDGE_MAPPERS.put(ConversationLink.class, ConversationLinkEdge.class);
 
 		// Artifacts
 		SHAPE_MAPPERS.put(TextAnnotation.class, TextAnnotationShape.class);

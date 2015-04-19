@@ -26,7 +26,6 @@ import java.awt.Image;
 import com.googlecode.bpmn_simulator.animation.element.visual.Bounds;
 import com.googlecode.bpmn_simulator.animation.element.visual.Label;
 import com.googlecode.bpmn_simulator.bpmn.model.process.activities.tasks.Task;
-import com.googlecode.bpmn_simulator.bpmn.swing.di.Appearance;
 import com.googlecode.bpmn_simulator.bpmn.swing.model.process.activities.AbstractActivityShape;
 
 @SuppressWarnings("serial")
@@ -42,7 +41,12 @@ abstract class AbstractTaskShape<E extends Task>
 
 	@Override
 	public void alignLabel(final Label label) {
-		label.setBounds(getInnerBounds());
+		final Bounds innerBounds = getInnerBounds();
+		if (getTaskImage() == null) {
+			label.setBounds(innerBounds);
+		} else {
+			label.setBounds(innerBounds.shrinkLeft(getPadding() * 2 + IMAGE_WIDTH));
+		}
 	}
 
 	protected Image getTaskImage() {
@@ -55,10 +59,10 @@ abstract class AbstractTaskShape<E extends Task>
 		final Image image = getTaskImage();
 		if (image != null) {
 			final Bounds bounds = getInnerBoundsRelative();
-			final int imageMargin = Appearance.getDefault().getArcSize() / 2;
+			final int padding = getPadding();
 			final Bounds imageBounds = new Bounds(
-					bounds.getMinX() + imageMargin,
-					bounds.getMinY() + imageMargin,
+					bounds.getMinX() + padding,
+					bounds.getMinY() + padding,
 					IMAGE_WIDTH, IMAGE_HEIGHT);
 			getPresentation().drawImage(g, image, imageBounds);
 		}

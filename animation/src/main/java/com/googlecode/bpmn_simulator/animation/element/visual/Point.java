@@ -39,6 +39,10 @@ public class Point {
 		return y;
 	}
 
+	public Point translate(final int x, final int y) {
+		return new Point(getX() + x, getY() + y);
+	}
+
 	public double distanceTo(final Point point) {
 		final int h = getX() - point.getX();
 		final int v = getY() - point.getY();

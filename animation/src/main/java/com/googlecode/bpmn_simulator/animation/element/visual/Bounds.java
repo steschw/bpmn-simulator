@@ -139,6 +139,10 @@ public class Bounds {
 		return enlarge(lr, tb);
 	}
 
+	public Bounds shrinkLeft(final int n) {
+		return new Bounds(getX() + n, getY(), getWidth() - n, getHeight());
+	}
+
 	public Bounds shrink(final int lr, final int tb) {
 		return enlarge(-lr, -tb);
 	}
@@ -153,6 +157,10 @@ public class Bounds {
 
 	public Bounds bottom(final int size) {
 		return new Bounds(getMinX(), getMaxY() - size, getWidth(), size);
+	}
+
+	public Bounds left(final int size) {
+		return new Bounds(getMinX(), getMinY(), size, getHeight());
 	}
 
 	public Bounds centerBottom(final int width, final int height) {

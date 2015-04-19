@@ -37,9 +37,14 @@ public abstract class AbstractActivityShape<E extends Activity>
 		super(element);
 	}
 
+	protected int getPadding() {
+		return Appearance.getDefault().getArcSize() / 4;
+	}
+
 	@Override
 	public void alignLabel(final Label label) {
-		label.setPosition(getInnerBounds().getPoint(HorizontalPosition.LEFT, VerticalPosition.TOP),
+		final int padding = getPadding();
+		label.setPosition(getInnerBounds().getPoint(HorizontalPosition.LEFT, VerticalPosition.TOP).translate(padding, padding),
 				HorizontalPosition.RIGHT, VerticalPosition.BOTTOM);
 	}
 

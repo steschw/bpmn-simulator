@@ -229,11 +229,11 @@ public abstract class AbstractDIDefinition<DIAGRAM extends BPMNDiagram<?>>
 			final DIAGRAM diagram, final BaseElement element, final BPMNShape shape) {
 		if (isElementNode(node, BPMNDI, ELEMENT_LABEL)) {
 			final BPMNLabel label = createLabelFor(diagram, element);
+			label.setTextVertical(shape.isHorizontal());
 			label.setStyle(getAttributeLabelStyle(node));
 			if (!readLabelElements(node, diagram, element, label)) {
 				shape.alignLabel(label);
 			}
-			label.setTextVertical(shape.isHorizontal());
 			return true;
 		}
 		return false;

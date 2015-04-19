@@ -23,6 +23,9 @@ package com.googlecode.bpmn_simulator.bpmn.swing.model.core.common.events;
 import java.awt.Graphics2D;
 import java.awt.Image;
 
+import com.googlecode.bpmn_simulator.animation.element.visual.HorizontalPosition;
+import com.googlecode.bpmn_simulator.animation.element.visual.Label;
+import com.googlecode.bpmn_simulator.animation.element.visual.VerticalPosition;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.events.ConditionalEventDefinition;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.events.ErrorEventDefinition;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.events.Event;
@@ -40,6 +43,12 @@ abstract class AbstractEventShape<E extends Event>
 
 	public AbstractEventShape(final E element) {
 		super(element);
+	}
+
+	@Override
+	public void alignLabel(final Label label) {
+		label.setPosition(getInnerBounds().getPoint(HorizontalPosition.CENTER, VerticalPosition.BOTTOM),
+				HorizontalPosition.CENTER, VerticalPosition.BOTTOM);
 	}
 
 	@Override

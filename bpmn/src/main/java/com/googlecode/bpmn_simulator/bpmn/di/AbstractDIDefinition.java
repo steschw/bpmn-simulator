@@ -218,7 +218,7 @@ public abstract class AbstractDIDefinition<DIAGRAM extends BPMNDiagram<?>>
 			final BPMNLabel label = createLabelFor(diagram, element);
 			label.setStyle(getAttributeLabelStyle(node));
 			if (!readLabelElements(node, diagram, element, label)) {
-				//XXX: align label to edge if no bounds are specified
+				edge.alignLabel(label);
 			}
 			return true;
 		}
@@ -231,8 +231,7 @@ public abstract class AbstractDIDefinition<DIAGRAM extends BPMNDiagram<?>>
 			final BPMNLabel label = createLabelFor(diagram, element);
 			label.setStyle(getAttributeLabelStyle(node));
 			if (!readLabelElements(node, diagram, element, label)) {
-				//XXX: align label to shape if no bounds are specified
-				label.setBounds(shape.getElementBounds());
+				shape.alignLabel(label);
 			}
 			label.setTextVertical(shape.isHorizontal());
 			return true;

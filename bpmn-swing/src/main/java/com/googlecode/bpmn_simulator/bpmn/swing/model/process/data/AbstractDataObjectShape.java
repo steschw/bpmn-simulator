@@ -24,7 +24,10 @@ import java.awt.Graphics2D;
 
 import com.googlecode.bpmn_simulator.animation.element.logical.LogicalElement;
 import com.googlecode.bpmn_simulator.animation.element.visual.Bounds;
+import com.googlecode.bpmn_simulator.animation.element.visual.HorizontalPosition;
+import com.googlecode.bpmn_simulator.animation.element.visual.Label;
 import com.googlecode.bpmn_simulator.animation.element.visual.Point;
+import com.googlecode.bpmn_simulator.animation.element.visual.VerticalPosition;
 import com.googlecode.bpmn_simulator.bpmn.swing.di.AbstractBPMNShape;
 
 @SuppressWarnings("serial")
@@ -33,6 +36,12 @@ abstract class AbstractDataObjectShape<E extends LogicalElement>
 
 	public AbstractDataObjectShape(final E element) {
 		super(element);
+	}
+
+	@Override
+	public void alignLabel(final Label label) {
+		label.setPosition(getInnerBounds().getPoint(HorizontalPosition.CENTER, VerticalPosition.BOTTOM),
+				HorizontalPosition.CENTER, VerticalPosition.BOTTOM);
 	}
 
 	private static int getN(final Bounds bounds) {

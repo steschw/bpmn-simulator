@@ -23,7 +23,10 @@ package com.googlecode.bpmn_simulator.animation.element.visual.swing;
 import javax.swing.SwingUtilities;
 
 import com.googlecode.bpmn_simulator.animation.element.logical.LogicalElement;
+import com.googlecode.bpmn_simulator.animation.element.visual.HorizontalPosition;
+import com.googlecode.bpmn_simulator.animation.element.visual.Label;
 import com.googlecode.bpmn_simulator.animation.element.visual.Point;
+import com.googlecode.bpmn_simulator.animation.element.visual.VerticalPosition;
 import com.googlecode.bpmn_simulator.animation.element.visual.VisualEdgeElement;
 import com.googlecode.bpmn_simulator.animation.element.visual.Waypoint;
 import com.googlecode.bpmn_simulator.animation.element.visual.Waypoints;
@@ -56,6 +59,17 @@ public abstract class AbstractVisualEdgeElement<E extends LogicalElement>
 			relativeWaypoints.add(relativeWaypoint(waypoint));
 		}
 		return relativeWaypoints;
+	}
+
+	protected Waypoints getWaypoints() {
+		return waypoints;
+	}
+
+	@Override
+	public void alignLabel(final Label label) {
+		final double length = getWaypoints().getLength();
+		final Point centerPoint = getWaypoints().getWaypoint((float) (length / 2.));
+		label.setPosition(centerPoint, HorizontalPosition.CENTER, VerticalPosition.BOTTOM);
 	}
 
 }

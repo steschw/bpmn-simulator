@@ -89,6 +89,41 @@ public class Bounds {
 		return new Point((int) getCenterX(), (int) getCenterY());
 	}
 
+	public Point getPoint(final HorizontalPosition hpos, final VerticalPosition vpos) {
+		final int x, y;
+		switch (hpos) {
+			case LEFT:
+				x = getMinX();
+				break;
+			case CENTER:
+				x = (int) getCenterX();
+				break;
+			case RIGHT:
+				x = getMaxX();
+				break;
+			default:
+				throw new IllegalArgumentException();
+		}
+		switch (vpos) {
+			case TOP:
+				y = getMinY();
+				break;
+			case CENTER:
+				y = (int) getCenterY();
+				break;
+			case BOTTOM:
+				y = getMaxY();
+				break;
+			default:
+				throw new IllegalArgumentException();
+		}
+		return new Point(x, y);
+	}
+
+	public Bounds translate(final int x, final int y) {
+		return new Bounds(getX() + x, getY() + y, getWidth(), getHeight());
+	}
+
 	public Bounds enlarge(final int lr, final int tb) {
 		return new Bounds(getX() - lr, getY() - tb,
 				getWidth() + (2 * lr), getHeight() + (2 * tb));

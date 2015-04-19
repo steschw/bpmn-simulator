@@ -22,6 +22,9 @@ package com.googlecode.bpmn_simulator.animation.element.visual.swing;
 
 import com.googlecode.bpmn_simulator.animation.element.logical.LogicalElement;
 import com.googlecode.bpmn_simulator.animation.element.visual.Bounds;
+import com.googlecode.bpmn_simulator.animation.element.visual.HorizontalPosition;
+import com.googlecode.bpmn_simulator.animation.element.visual.Label;
+import com.googlecode.bpmn_simulator.animation.element.visual.VerticalPosition;
 import com.googlecode.bpmn_simulator.animation.element.visual.VisualNodeElement;
 
 @SuppressWarnings("serial")
@@ -44,6 +47,11 @@ public abstract class AbstractVisualNodeElement<E extends LogicalElement>
 	@Override
 	public Bounds getElementBounds() {
 		return bounds;
+	}
+
+	@Override
+	public void alignLabel(final Label label) {
+		label.setPosition(getInnerBounds().getCenter(), HorizontalPosition.CENTER, VerticalPosition.CENTER);
 	}
 
 }

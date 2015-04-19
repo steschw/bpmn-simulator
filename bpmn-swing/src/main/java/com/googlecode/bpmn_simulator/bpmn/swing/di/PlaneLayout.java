@@ -78,9 +78,7 @@ class PlaneLayout
 	@Override
 	public void layoutContainer(final Container parent) {
 		if (plane != null) {
-			final Dimension size = parent.getSize();
-			System.out.println(size);
-			plane.setSize(size);
+			plane.setSize(parent.getSize());
 		}
 	}
 	

@@ -28,4 +28,6 @@ public interface Label {
 
 	void setTextVertical(boolean vertical);
 
+	void setPosition(Point point, HorizontalPosition hpos, VerticalPosition vpos);
+
 }

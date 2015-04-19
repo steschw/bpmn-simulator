@@ -80,4 +80,8 @@ abstract class AbstractVisualElement<E extends LogicalElement>
 				getWidth() - (MARGIN * 2), getHeight() - (MARGIN * 2));
 	}
 
+	protected Bounds getInnerBounds() {
+		return getInnerBoundsRelative().translate(getX(), getY());
+	}
+
 }

@@ -20,10 +20,8 @@
  */
 package com.googlecode.bpmn_simulator.animation.element.visual;
 
-public interface VisualElement {
-
-	void setLabel(Label label);
-
-	void alignLabel(Label label);
-
+public enum HorizontalPosition {
+	LEFT,
+	CENTER,
+	RIGHT,
 }

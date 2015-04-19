@@ -22,6 +22,9 @@ package com.googlecode.bpmn_simulator.bpmn.swing.model.process.activities;
 
 import java.awt.Graphics2D;
 
+import com.googlecode.bpmn_simulator.animation.element.visual.HorizontalPosition;
+import com.googlecode.bpmn_simulator.animation.element.visual.Label;
+import com.googlecode.bpmn_simulator.animation.element.visual.VerticalPosition;
 import com.googlecode.bpmn_simulator.bpmn.model.process.activities.Activity;
 import com.googlecode.bpmn_simulator.bpmn.swing.di.AbstractBPMNTokenShape;
 import com.googlecode.bpmn_simulator.bpmn.swing.di.Appearance;
@@ -32,6 +35,12 @@ public abstract class AbstractActivityShape<E extends Activity>
 
 	public AbstractActivityShape(final E element) {
 		super(element);
+	}
+
+	@Override
+	public void alignLabel(final Label label) {
+		label.setPosition(getInnerBounds().getPoint(HorizontalPosition.LEFT, VerticalPosition.TOP),
+				HorizontalPosition.RIGHT, VerticalPosition.BOTTOM);
 	}
 
 	@Override

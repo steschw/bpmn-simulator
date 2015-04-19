@@ -22,6 +22,9 @@ package com.googlecode.bpmn_simulator.bpmn.swing.model.core.common.gateways;
 
 import java.awt.Graphics2D;
 
+import com.googlecode.bpmn_simulator.animation.element.visual.HorizontalPosition;
+import com.googlecode.bpmn_simulator.animation.element.visual.Label;
+import com.googlecode.bpmn_simulator.animation.element.visual.VerticalPosition;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.gateways.Gateway;
 import com.googlecode.bpmn_simulator.bpmn.swing.di.AbstractBPMNTokenShape;
 
@@ -31,6 +34,12 @@ abstract class AbstractGatewayShape<E extends Gateway>
 
 	public AbstractGatewayShape(final E element) {
 		super(element);
+	}
+
+	@Override
+	public void alignLabel(final Label label) {
+		label.setPosition(getInnerBounds().getPoint(HorizontalPosition.RIGHT, VerticalPosition.BOTTOM),
+				HorizontalPosition.CENTER, VerticalPosition.BOTTOM);
 	}
 
 	@Override

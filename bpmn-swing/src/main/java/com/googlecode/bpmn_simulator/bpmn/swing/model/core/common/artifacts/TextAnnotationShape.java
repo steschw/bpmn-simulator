@@ -25,6 +25,7 @@ import java.awt.Graphics2D;
 import java.awt.Stroke;
 
 import com.googlecode.bpmn_simulator.animation.element.visual.Bounds;
+import com.googlecode.bpmn_simulator.animation.element.visual.Label;
 import com.googlecode.bpmn_simulator.animation.element.visual.Waypoint;
 import com.googlecode.bpmn_simulator.animation.element.visual.Waypoints;
 import com.googlecode.bpmn_simulator.animation.element.visual.swing.Colors;
@@ -46,6 +47,11 @@ public class TextAnnotationShape
 
 	public TextAnnotationShape(final TextAnnotation element) {
 		super(element);
+	}
+
+	@Override
+	public void alignLabel(final Label label) {
+		label.setBounds(getInnerBounds());
 	}
 
 	@Override

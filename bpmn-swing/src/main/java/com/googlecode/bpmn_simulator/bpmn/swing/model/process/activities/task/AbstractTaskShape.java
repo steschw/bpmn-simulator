@@ -24,6 +24,7 @@ import java.awt.Graphics2D;
 import java.awt.Image;
 
 import com.googlecode.bpmn_simulator.animation.element.visual.Bounds;
+import com.googlecode.bpmn_simulator.animation.element.visual.Label;
 import com.googlecode.bpmn_simulator.bpmn.model.process.activities.tasks.Task;
 import com.googlecode.bpmn_simulator.bpmn.swing.di.Appearance;
 import com.googlecode.bpmn_simulator.bpmn.swing.model.process.activities.AbstractActivityShape;
@@ -37,6 +38,11 @@ abstract class AbstractTaskShape<E extends Task>
 
 	public AbstractTaskShape(final E element) {
 		super(element);
+	}
+
+	@Override
+	public void alignLabel(final Label label) {
+		label.setBounds(getInnerBounds());
 	}
 
 	protected Image getTaskImage() {

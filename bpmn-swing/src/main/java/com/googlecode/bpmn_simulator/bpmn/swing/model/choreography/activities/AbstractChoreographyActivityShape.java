@@ -20,20 +20,35 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.swing.model.choreography.activities;
 
-import com.googlecode.bpmn_simulator.animation.element.visual.swing.Colors;
-import com.googlecode.bpmn_simulator.bpmn.model.choreography.activities.ChoreographyTask;
-import com.googlecode.bpmn_simulator.bpmn.swing.di.Appearance;
+import java.awt.Graphics2D;
+
+import com.googlecode.bpmn_simulator.animation.element.visual.Label;
+import com.googlecode.bpmn_simulator.bpmn.model.choreography.activities.AbstractChoreographyActivity;
+import com.googlecode.bpmn_simulator.bpmn.swing.di.AbstractBPMNShape;
 
 @SuppressWarnings("serial")
-public class ChoreographyTaskShape
-		extends AbstractChoreographyActivityShape<ChoreographyTask> {
+public abstract class AbstractChoreographyActivityShape<E extends AbstractChoreographyActivity>
+		extends AbstractBPMNShape<E> {
 
-	static {
-		Appearance.setDefaultColor(ChoreographyTaskShape.class, Colors.YELLOW);
+	public AbstractChoreographyActivityShape(final E element) {
+		super(element);
 	}
 
-	public ChoreographyTaskShape(final ChoreographyTask element) {
-		super(element);
+	@Override
+	public void alignLabel(final Label label) {
+		label.setBounds(getInnerBounds());
+	}
+
+	@Override
+	protected void paintElementBackground(final Graphics2D g) {
+		super.paintElementBackground(g);
+		getPresentation().fillRect(g, getInnerBoundsRelative());
+	}
+
+	@Override
+	protected void paintElementForeground(final Graphics2D g) {
+		super.paintElementForeground(g);
+		getPresentation().drawRect(g, getInnerBoundsRelative());
 	}
 
 }

@@ -42,6 +42,7 @@ import com.googlecode.bpmn_simulator.bpmn.Messages;
 import com.googlecode.bpmn_simulator.bpmn.di.BPMNDiagram;
 import com.googlecode.bpmn_simulator.bpmn.model.choreography.Choreography;
 import com.googlecode.bpmn_simulator.bpmn.model.choreography.activities.ChoreographyTask;
+import com.googlecode.bpmn_simulator.bpmn.model.choreography.activities.SubChoreography;
 import com.googlecode.bpmn_simulator.bpmn.model.collaboration.Collaboration;
 import com.googlecode.bpmn_simulator.bpmn.model.collaboration.MessageFlow;
 import com.googlecode.bpmn_simulator.bpmn.model.collaboration.Participant;
@@ -839,7 +840,8 @@ public abstract class AbstractBPMNDefinition<E extends BPMNDiagram<?>>
 				|| readElementDataObjectReference(node, container)
 				|| readElementDataStoreReference(node, container)
 				|| readElementLaneSet(node, container)
-				|| readElementChoreographyTask(node, container);
+				|| readElementChoreographyTask(node, container)
+				|| readElementSubChoreography(node, container);
 	}
 
 	protected void readFlowElementsContainer(final Node node,
@@ -946,9 +948,32 @@ public abstract class AbstractBPMNDefinition<E extends BPMNDiagram<?>>
 			readChoreographyElements(node, choreography);
 			registerElement(choreography);
 			return true;
-		} else {
-			return false;
 		}
+		return false;
+	}
+
+	protected void readSubChoreographyElements(final Node node, final SubChoreography subChoreography) {
+		final NodeList childNodes = node.getChildNodes();
+		for (int i = 0; i < childNodes.getLength(); ++i) {
+			final Node childNode = childNodes.item(i);
+			if (!readElementsForBaseElement(childNode, subChoreography)
+					&& !readFlowElements(childNode, subChoreography)
+					&& !readArtifactElements(childNode)) {
+				showUnknowNode(childNode);
+			}
+		}
+	}
+
+	protected boolean readElementSubChoreography(final Node node,
+			final FlowElementsContainer parentChoreography) {
+		if (isElementNode(node, BPMN, "subChoreography")) { //$NON-NLS-1$
+			final SubChoreography subChoreography = new SubChoreography(
+					getIdAttribute(node), getNameAttribute(node));
+			readSubChoreographyElements(node, subChoreography);
+			registerElement(subChoreography);
+			return true;
+		}
+		return false;
 	}
 
 	protected boolean readElementChoreographyTask(final Node node,

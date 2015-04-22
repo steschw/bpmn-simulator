@@ -18,15 +18,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.bpmn_simulator.bpmn.model.choreography.activities;
+package com.googlecode.bpmn_simulator.bpmn.swing.model.choreography.activities;
 
-import com.googlecode.bpmn_simulator.bpmn.model.core.common.AbstractFlowNode;
+import com.googlecode.bpmn_simulator.animation.element.visual.swing.Colors;
+import com.googlecode.bpmn_simulator.bpmn.model.choreography.activities.SubChoreography;
+import com.googlecode.bpmn_simulator.bpmn.swing.di.Appearance;
 
-public abstract class AbstractChoreographyActivity
-		extends AbstractFlowNode {
+@SuppressWarnings("serial")
+public class SubChoreographyShape
+		extends AbstractChoreographyActivityShape<SubChoreography>{
 
-	public AbstractChoreographyActivity(final String id, final String name) {
-		super(id, name);
+	static {
+		Appearance.setDefaultColor(SubChoreographyShape.class, Colors.YELLOW);
+	}
+
+	public SubChoreographyShape(final SubChoreography element) {
+		super(element);
 	}
 
 }

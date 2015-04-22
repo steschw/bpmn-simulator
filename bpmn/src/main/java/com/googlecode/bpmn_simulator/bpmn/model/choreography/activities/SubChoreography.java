@@ -20,13 +20,28 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.model.choreography.activities;
 
-import com.googlecode.bpmn_simulator.bpmn.model.core.common.AbstractFlowNode;
+import com.googlecode.bpmn_simulator.animation.ref.References;
+import com.googlecode.bpmn_simulator.bpmn.Messages;
+import com.googlecode.bpmn_simulator.bpmn.model.core.common.FlowElement;
+import com.googlecode.bpmn_simulator.bpmn.model.core.common.FlowElementsContainer;
 
-public abstract class AbstractChoreographyActivity
-		extends AbstractFlowNode {
+public class SubChoreography
+		extends AbstractChoreographyActivity
+		implements FlowElementsContainer {
 
-	public AbstractChoreographyActivity(final String id, final String name) {
+	public static final String ELEMENT_NAME = Messages.getString("subChoreography"); //$NON-NLS-1$
+
+	public SubChoreography(final String id, final String name) {
 		super(id, name);
+	}
+
+	@Override
+	public String getElementName() {
+		return ELEMENT_NAME;
+	}
+
+	@Override
+	public void setFlowElements(final References<FlowElement> flowElements) {
 	}
 
 }

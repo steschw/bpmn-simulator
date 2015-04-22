@@ -27,14 +27,13 @@ import com.googlecode.bpmn_simulator.animation.element.visual.swing.Presentation
 import com.googlecode.bpmn_simulator.bpmn.model.collaboration.conversations.Conversation;
 import com.googlecode.bpmn_simulator.bpmn.swing.di.AbstractBPMNShape;
 import com.googlecode.bpmn_simulator.bpmn.swing.di.Appearance;
-import com.googlecode.bpmn_simulator.bpmn.swing.model.collaboration.ParticipantShape;
 
 @SuppressWarnings("serial")
 public class ConversationShape
 		extends AbstractBPMNShape<Conversation> {
 
 	static {
-		Appearance.setDefaultColor(ParticipantShape.class, Colors.YELLOW);
+		Appearance.setDefaultColor(ConversationShape.class, Colors.YELLOW);
 	}
 
 	public ConversationShape(final Conversation element) {

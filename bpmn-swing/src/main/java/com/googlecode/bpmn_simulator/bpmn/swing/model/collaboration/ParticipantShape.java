@@ -20,9 +20,11 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.swing.model.collaboration;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
 
 import com.googlecode.bpmn_simulator.animation.element.visual.swing.Colors;
+import com.googlecode.bpmn_simulator.bpmn.di.ParticipantBandKind;
 import com.googlecode.bpmn_simulator.bpmn.model.collaboration.Participant;
 import com.googlecode.bpmn_simulator.bpmn.swing.di.AbstractBPMNShape;
 import com.googlecode.bpmn_simulator.bpmn.swing.di.Appearance;
@@ -42,13 +44,51 @@ public class ParticipantShape
 	@Override
 	protected void paintElementBackground(final Graphics2D g) {
 		super.paintElementBackground(g);
-		getPresentation().fillRect(g, getInnerBoundsRelative());
+		final ParticipantBandKind bandKind = getParticipantBandKind();
+		if (bandKind != null) {
+			switch (bandKind) {
+				case TOP_NON_INITIATING:
+					g.setPaint(getAppearance().getBackground().darker());
+				case TOP_INITIATING:
+					//TODO
+					getPresentation().fillRect(g, getInnerBoundsRelative());
+					break;
+				case BOTTOM_NON_INITIATING:
+					g.setPaint(getAppearance().getBackground().darker());
+				case BOTTOM_INITIATING:
+					//TODO
+					getPresentation().fillRect(g, getInnerBoundsRelative());
+					break;
+				default:
+					getPresentation().fillRect(g, getInnerBoundsRelative());
+			}
+		} else {
+			getPresentation().fillRect(g, getInnerBoundsRelative());
+		}
 	}
 
 	@Override
 	protected void paintElementForeground(final Graphics2D g) {
 		super.paintElementForeground(g);
-		getPresentation().drawRect(g, getInnerBoundsRelative());
+		final ParticipantBandKind bandKind = getParticipantBandKind();
+		if (bandKind != null) {
+			switch (bandKind) {
+				case TOP_NON_INITIATING:
+				case TOP_INITIATING:
+					//TODO
+					getPresentation().drawRect(g, getInnerBoundsRelative());
+					break;
+				case BOTTOM_NON_INITIATING:
+				case BOTTOM_INITIATING:
+					//TODO
+					getPresentation().drawRect(g, getInnerBoundsRelative());
+					break;
+				default:
+					getPresentation().drawRect(g, getInnerBoundsRelative());
+			}
+		} else {
+			getPresentation().drawRect(g, getInnerBoundsRelative());
+		}
 	}
 
 }

@@ -111,6 +111,14 @@ public abstract class AbstractDIDefinition<DIAGRAM extends BPMNDiagram<?>>
 		return getAttributeBoolean(node, "isMarkerVisible", true); //$NON-NLS-1$
 	}
 
+	protected boolean getIsMessageVisibleAttribute(final Node node) {
+		return getAttributeBoolean(node, "isMessageVisible", true); //$NON-NLS-1$
+	}
+
+	protected ParticipantBandKind getParticipantBandKindAttribute(final Node node) {
+		return ParticipantBandKind.fromString(getAttributeString(node, "participantBandKind")); //$NON-NLS-1$
+	}
+
 	protected BaseElement getAttributeElement(final Node node, final String name) {
 		return getElement(getAttributeString(node, name));
 	}
@@ -133,6 +141,8 @@ public abstract class AbstractDIDefinition<DIAGRAM extends BPMNDiagram<?>>
 					shape.setExpanded(getIsExpandedAttribute(node));
 					shape.setHorizontal(getIsHorizontalAttribute(node));
 					shape.setMarkerVisible(getIsMarkerVisibleAttribute(node));
+					shape.setMessageVisible(getIsMessageVisibleAttribute(node));
+					shape.setParticipantBandKind(getParticipantBandKindAttribute(node));
 					final NodeList childNodes = node.getChildNodes();
 					for (int i = 0; i < childNodes.getLength(); ++i) {
 						final Node childNode = childNodes.item(i);

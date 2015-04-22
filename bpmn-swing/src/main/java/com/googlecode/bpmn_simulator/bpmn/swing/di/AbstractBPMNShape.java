@@ -27,6 +27,7 @@ import java.awt.Stroke;
 import com.googlecode.bpmn_simulator.animation.element.logical.LogicalElement;
 import com.googlecode.bpmn_simulator.animation.element.visual.swing.AbstractVisualNodeElement;
 import com.googlecode.bpmn_simulator.bpmn.di.BPMNShape;
+import com.googlecode.bpmn_simulator.bpmn.di.ParticipantBandKind;
 import com.googlecode.bpmn_simulator.bpmn.swing.di.Appearance.ElementAppearance;
 
 @SuppressWarnings("serial")
@@ -39,6 +40,8 @@ public abstract class AbstractBPMNShape<E extends LogicalElement>
 	private boolean horizontal;
 	private boolean expanded;
 	private boolean markerVisible;
+	private boolean messageVisible;
+	private ParticipantBandKind participantBandKind;
 
 	public AbstractBPMNShape(final E element) {
 		super(element);
@@ -65,8 +68,8 @@ public abstract class AbstractBPMNShape<E extends LogicalElement>
 	}
 
 	@Override
-	public void setMarkerVisible(boolean isMarkerVisible) {
-		markerVisible = isMarkerVisible;
+	public void setMarkerVisible(final boolean isVisible) {
+		markerVisible = isVisible;
 	}
 
 	@Override
@@ -74,21 +77,43 @@ public abstract class AbstractBPMNShape<E extends LogicalElement>
 		return markerVisible;
 	}
 
+	@Override
+	public void setMessageVisible(final boolean isVisible) {
+		messageVisible = isVisible;
+	}
+
+	@Override
+	public boolean isMessageVisible() {
+		return messageVisible;
+	}
+
+	@Override
+	public void setParticipantBandKind(ParticipantBandKind bandKind) {
+		participantBandKind = bandKind;
+	}
+
+	@Override
+	public ParticipantBandKind getParticipantBandKind() {
+		return participantBandKind;
+	}
+
 	protected Stroke getStroke() {
 		return DEFAULT_STROKE;
 	}
 
+	protected ElementAppearance getAppearance() {
+		return Appearance.getDefault().getForElement(getClass());
+	}
+
 	@Override
 	protected void paintElementBackground(final Graphics2D g) {
-		final ElementAppearance appearance = Appearance.getDefault().getForElement(getClass());
-		g.setPaint(appearance.getBackground());
+		g.setPaint(getAppearance().getBackground());
 	}
 
 	@Override
 	protected void paintElementForeground(final Graphics2D g) {
-		final ElementAppearance appearance = Appearance.getDefault().getForElement(getClass());
 		g.setStroke(getStroke());
-		g.setPaint(appearance.getForeground());
+		g.setPaint(getAppearance().getForeground());
 	}
 
 }

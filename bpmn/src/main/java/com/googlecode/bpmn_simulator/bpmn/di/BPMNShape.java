@@ -33,8 +33,16 @@ public interface BPMNShape
 
 	boolean isExpanded();
 
-	void setMarkerVisible(boolean isMarkerVisible);
+	void setMarkerVisible(boolean isVisible);
 
 	boolean isMarkerVisible();
+
+	void setMessageVisible(boolean isVisible);
+
+	boolean isMessageVisible();
+
+	void setParticipantBandKind(ParticipantBandKind bandKind);
+
+	ParticipantBandKind getParticipantBandKind();
 
 }

@@ -46,7 +46,9 @@ import javax.swing.ScrollPaneConstants;
 import com.googlecode.bpmn_simulator.animation.element.visual.VisualElement;
 import com.googlecode.bpmn_simulator.bpmn.swing.di.Appearance;
 import com.googlecode.bpmn_simulator.bpmn.swing.di.Appearance.ElementAppearance;
+import com.googlecode.bpmn_simulator.bpmn.swing.model.choreography.activities.ChoreographyTaskShape;
 import com.googlecode.bpmn_simulator.bpmn.swing.model.collaboration.MessageFlowEdge;
+import com.googlecode.bpmn_simulator.bpmn.swing.model.collaboration.ParticipantShape;
 import com.googlecode.bpmn_simulator.bpmn.swing.model.core.common.SequenceFlowEdge;
 import com.googlecode.bpmn_simulator.bpmn.swing.model.core.common.artifacts.AssociationEdge;
 import com.googlecode.bpmn_simulator.bpmn.swing.model.core.common.artifacts.GroupShape;
@@ -299,6 +301,9 @@ public class PreferencesDialog
 
 		addElementConfig(panel, constraints, SubProcessShape.class, "SubProcess");
 		addElementConfig(panel, constraints, TransactionShape.class, "Transaction");
+
+		addElementConfig(panel, constraints, ChoreographyTaskShape.class, "ChoreographyTask");
+		addElementConfig(panel, constraints, ParticipantShape.class, "ParticipantShape");
 
 		return panel;
 	}

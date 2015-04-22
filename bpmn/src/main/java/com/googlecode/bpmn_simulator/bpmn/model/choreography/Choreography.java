@@ -21,6 +21,7 @@
 package com.googlecode.bpmn_simulator.bpmn.model.choreography;
 
 import com.googlecode.bpmn_simulator.animation.ref.References;
+import com.googlecode.bpmn_simulator.bpmn.Messages;
 import com.googlecode.bpmn_simulator.bpmn.model.collaboration.Collaboration;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.FlowElement;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.FlowElementsContainer;
@@ -29,8 +30,15 @@ public class Choreography
 		extends Collaboration
 		implements FlowElementsContainer {
 
+	public static final String ELEMENT_NAME = Messages.getString("choreography"); //$NON-NLS-1$
+
 	public Choreography(final String id, final String name, final boolean isClosed) {
 		super(id, name, isClosed);
+	}
+
+	@Override
+	public String getElementName() {
+		return ELEMENT_NAME;
 	}
 
 	@Override

@@ -29,7 +29,7 @@ public class SubProcess
 		extends AbstractActivity
 		implements FlowElementsContainer {
 
-	public static final String ELEMENT_NAME = Messages.getString("subprocess"); //$NON-NLS-1$
+	public static final String ELEMENT_NAME = Messages.getString("subProcess"); //$NON-NLS-1$
 
 	private final boolean triggeredByEvent;
 

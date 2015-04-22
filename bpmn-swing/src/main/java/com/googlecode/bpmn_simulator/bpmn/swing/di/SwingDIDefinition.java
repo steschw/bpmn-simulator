@@ -33,6 +33,7 @@ import com.googlecode.bpmn_simulator.bpmn.di.BPMNLabel;
 import com.googlecode.bpmn_simulator.bpmn.di.BPMNPlane;
 import com.googlecode.bpmn_simulator.bpmn.di.BPMNShape;
 import com.googlecode.bpmn_simulator.bpmn.model.choreography.Choreography;
+import com.googlecode.bpmn_simulator.bpmn.model.choreography.activities.ChoreographyTask;
 import com.googlecode.bpmn_simulator.bpmn.model.collaboration.Collaboration;
 import com.googlecode.bpmn_simulator.bpmn.model.collaboration.MessageFlow;
 import com.googlecode.bpmn_simulator.bpmn.model.collaboration.Participant;
@@ -71,6 +72,7 @@ import com.googlecode.bpmn_simulator.bpmn.model.process.data.DataObjectReference
 import com.googlecode.bpmn_simulator.bpmn.model.process.data.DataOutput;
 import com.googlecode.bpmn_simulator.bpmn.model.process.data.DataStoreReference;
 import com.googlecode.bpmn_simulator.bpmn.swing.model.choreography.ChoreographyPlane;
+import com.googlecode.bpmn_simulator.bpmn.swing.model.choreography.activities.ChoreographyTaskShape;
 import com.googlecode.bpmn_simulator.bpmn.swing.model.collaboration.CollaborationPlane;
 import com.googlecode.bpmn_simulator.bpmn.swing.model.collaboration.MessageFlowEdge;
 import com.googlecode.bpmn_simulator.bpmn.swing.model.collaboration.ParticipantShape;
@@ -163,6 +165,7 @@ public class SwingDIDefinition
 		SHAPE_MAPPERS.put(Participant.class, ParticipantShape.class);
 		// Conversations
 		SHAPE_MAPPERS.put(Conversation.class, ConversationShape.class);
+		SHAPE_MAPPERS.put(ChoreographyTask.class, ChoreographyTaskShape.class);
 		// Process
 		SHAPE_MAPPERS.put(Lane.class, LaneShape.class);
 

@@ -18,17 +18,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.bpmn_simulator.bpmn.swing.model.choreography;
+package com.googlecode.bpmn_simulator.bpmn.model.choreography.activities;
 
-import com.googlecode.bpmn_simulator.bpmn.model.choreography.Choreography;
-import com.googlecode.bpmn_simulator.bpmn.swing.di.AbstractBPMNPlane;
+import com.googlecode.bpmn_simulator.bpmn.model.core.common.AbstractFlowNode;
 
-@SuppressWarnings("serial")
-public class ChoreographyPlane
-		extends AbstractBPMNPlane<Choreography> {
+abstract class AbstractChoreographyActivity
+		extends AbstractFlowNode {
 
-	public ChoreographyPlane(final Choreography element) {
-		super(element);
+	public AbstractChoreographyActivity(final String id, final String name) {
+		super(id, name);
 	}
 
 }

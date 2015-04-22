@@ -18,17 +18,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.bpmn_simulator.bpmn.swing.model.choreography;
+package com.googlecode.bpmn_simulator.bpmn.model.choreography.activities;
 
-import com.googlecode.bpmn_simulator.bpmn.model.choreography.Choreography;
-import com.googlecode.bpmn_simulator.bpmn.swing.di.AbstractBPMNPlane;
+import com.googlecode.bpmn_simulator.bpmn.Messages;
 
-@SuppressWarnings("serial")
-public class ChoreographyPlane
-		extends AbstractBPMNPlane<Choreography> {
+public class ChoreographyTask
+		extends AbstractChoreographyActivity {
 
-	public ChoreographyPlane(final Choreography element) {
-		super(element);
+	public static final String ELEMENT_NAME = Messages.getString("choreographyTask"); //$NON-NLS-1$
+
+	public ChoreographyTask(final String id, final String name) {
+		super(id, name);
+	}
+
+	@Override
+	public String getElementName() {
+		return ELEMENT_NAME;
 	}
 
 }

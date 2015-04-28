@@ -168,7 +168,7 @@ public abstract class AbstractDIDefinition<DIAGRAM extends BPMNDiagram<?>>
 						}
 					}
 				} else {
-					notifyError(MessageFormat.format("can''t create shape for {0}", element), null);
+					notifyError(MessageFormat.format("can''t create edge for {0}", element), null);
 				}
 			} else {
 				showUnknownBPMNElement(node, "edge");
@@ -207,7 +207,7 @@ public abstract class AbstractDIDefinition<DIAGRAM extends BPMNDiagram<?>>
 			}
 			return boundsRead;
 		} else {
-			notifyError(MessageFormat.format("couldn't create label for {0}", element), null);
+			notifyError(MessageFormat.format("can''t create label for {0}", element), null);
 		}
 		return false;
 	}

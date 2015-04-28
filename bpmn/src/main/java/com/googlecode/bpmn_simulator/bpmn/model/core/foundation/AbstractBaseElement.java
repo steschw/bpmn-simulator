@@ -52,4 +52,13 @@ public abstract class AbstractBaseElement
 		return documentations;
 	}
 
+	@Override
+	public String toString() {
+		final StringBuilder builder = new StringBuilder(getElementName());
+		builder.append("[id=");
+		builder.append(getId());
+		builder.append("]");
+		return builder.toString();
+	}
+
 }

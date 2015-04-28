@@ -22,9 +22,11 @@ package com.googlecode.bpmn_simulator.bpmn.swing.model.process.activities;
 
 import java.awt.Graphics2D;
 
+import com.googlecode.bpmn_simulator.animation.element.visual.Bounds;
 import com.googlecode.bpmn_simulator.animation.element.visual.HorizontalPosition;
 import com.googlecode.bpmn_simulator.animation.element.visual.Label;
 import com.googlecode.bpmn_simulator.animation.element.visual.VerticalPosition;
+import com.googlecode.bpmn_simulator.animation.element.visual.swing.ImageList;
 import com.googlecode.bpmn_simulator.bpmn.model.process.activities.Activity;
 import com.googlecode.bpmn_simulator.bpmn.swing.di.AbstractBPMNTokenShape;
 import com.googlecode.bpmn_simulator.bpmn.swing.di.Appearance;
@@ -54,10 +56,24 @@ public abstract class AbstractActivityShape<E extends Activity>
 		getPresentation().fillRoundRect(g, getInnerBoundsRelative(), Appearance.getDefault().getArcSize());
 	}
 
+	protected ImageList getTaskMarkers() {
+		final ImageList markers = new ImageList();
+		final Appearance appearance = Appearance.getDefault();
+		if (!isExpanded()) {
+			markers.add(appearance.getImage(Appearance.IMAGE_COLLAPSED));
+		}
+		return markers;
+	}
+
 	@Override
 	protected void paintElementForeground(final Graphics2D g) {
 		super.paintElementForeground(g);
-		getPresentation().drawRoundRect(g, getInnerBoundsRelative(), Appearance.getDefault().getArcSize());
+		final Bounds bounds = getInnerBoundsRelative();
+		getPresentation().drawRoundRect(g, bounds, Appearance.getDefault().getArcSize());
+		final ImageList markers = getTaskMarkers();
+		markers.drawHorizontal(g,
+				bounds.getPoint(HorizontalPosition.CENTER, VerticalPosition.BOTTOM),
+				HorizontalPosition.CENTER, VerticalPosition.TOP);
 	}
 
 	@Override

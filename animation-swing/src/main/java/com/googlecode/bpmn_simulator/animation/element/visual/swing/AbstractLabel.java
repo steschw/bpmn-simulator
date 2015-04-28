@@ -111,40 +111,14 @@ public abstract class AbstractLabel
 		needsRotate = false;
 	}
 
-	private int getPosX(final int x, final HorizontalPosition hpos) {
-		switch (hpos) {
-			case LEFT:
-				return x - getWidth();
-			case CENTER:
-				return x - getWidth() / 2;
-			case RIGHT:
-				return x;
-			default:
-				throw new IllegalArgumentException();
-		}
-	}
-
-	private int getPosY(final int y, final VerticalPosition vpos) {
-		switch (vpos) {
-			case TOP:
-				return y - getHeight();
-			case CENTER:
-				return y - getHeight() / 2;
-			case BOTTOM:
-				return y;
-			default:
-				throw new IllegalArgumentException();
-		}
-	}
-
 	@Override
 	public void setPosition(final Point point,
 			final HorizontalPosition hpos,
 			final VerticalPosition vpos) {
 		setSize(getPreferredSize());
-		final int x = getPosX(point.getX(), hpos);
-		final int y = getPosY(point.getY(), vpos);
-		setLocation(x, y);
+		final Bounds bounds = new com.googlecode.bpmn_simulator.animation.element.visual.Dimension(
+				getWidth(), getHeight()).relativeTo(point, hpos, vpos);
+		setLocation(bounds.getMinX(), bounds.getMinY());
 	}
 
 }

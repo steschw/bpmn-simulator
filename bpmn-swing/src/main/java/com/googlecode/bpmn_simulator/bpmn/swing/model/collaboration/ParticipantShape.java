@@ -20,7 +20,6 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.swing.model.collaboration;
 
-import java.awt.Color;
 import java.awt.Graphics2D;
 
 import com.googlecode.bpmn_simulator.animation.element.visual.swing.Colors;

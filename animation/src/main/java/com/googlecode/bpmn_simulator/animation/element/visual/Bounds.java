@@ -20,25 +20,24 @@
  */
 package com.googlecode.bpmn_simulator.animation.element.visual;
 
-public class Bounds {
+public class Bounds
+		extends Dimension {
 
 	private final int x;
 	private final int y;
 
-	private final int width;
-	private final int height;
-
 	public Bounds(final int x, final int y,
 			final int width, final int height) {
-		super();
+		super(width, height);
 		assert x >= 0;
 		this.x = x;
 		assert y >= 0;
 		this.y = y;
-		assert width > 0;
-		this.width = width;
-		assert height > 0;
-		this.height = height;
+	}
+
+	public Bounds(final int x, final int y,
+			final Dimension dimension) {
+		this(x, y, dimension.getWidth(), dimension.getHeight());
 	}
 
 	public Bounds(final Point center, final int size) {
@@ -51,14 +50,6 @@ public class Bounds {
 
 	public int getY() {
 		return y;
-	}
-
-	public int getWidth() {
-		return width;
-	}
-
-	public int getHeight() {
-		return height;
 	}
 
 	public int getMinX() {
@@ -89,35 +80,34 @@ public class Bounds {
 		return new Point((int) getCenterX(), (int) getCenterY());
 	}
 
-	public Point getPoint(final HorizontalPosition hpos, final VerticalPosition vpos) {
-		final int x, y;
-		switch (hpos) {
+	public float getX(final HorizontalPosition position) {
+		switch (position) {
 			case LEFT:
-				x = getMinX();
-				break;
+				return getMinX();
 			case CENTER:
-				x = (int) getCenterX();
-				break;
+				return getCenterX();
 			case RIGHT:
-				x = getMaxX();
-				break;
+				return getMaxX();
 			default:
 				throw new IllegalArgumentException();
 		}
-		switch (vpos) {
+	}
+
+	public float getY(final VerticalPosition position) {
+		switch (position) {
 			case TOP:
-				y = getMinY();
-				break;
+				return getMinY();
 			case CENTER:
-				y = (int) getCenterY();
-				break;
+				return getCenterY();
 			case BOTTOM:
-				y = getMaxY();
-				break;
+				return getMaxY();
 			default:
 				throw new IllegalArgumentException();
 		}
-		return new Point(x, y);
+	}
+
+	public Point getPoint(final HorizontalPosition hpos, final VerticalPosition vpos) {
+		return new Point((int) getX(hpos), (int) getY(vpos));
 	}
 
 	public Bounds translate(final int x, final int y) {

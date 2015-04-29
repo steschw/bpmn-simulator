@@ -80,8 +80,8 @@ public abstract class AbstractDIDefinition<DIAGRAM extends BPMNDiagram<?>>
 	protected abstract BPMNLabel createLabelFor(DIAGRAM diagram, BaseElement element);
 
 	@Override
-	protected boolean readRootElements(final Node node) {
-		return super.readRootElements(node)
+	protected boolean readAnyRootElement(final Node node) {
+		return super.readAnyRootElement(node)
 				|| readElementBPMNDiagram(node);
 	}
 

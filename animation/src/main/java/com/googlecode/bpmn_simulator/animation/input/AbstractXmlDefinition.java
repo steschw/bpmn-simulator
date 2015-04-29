@@ -120,7 +120,7 @@ public abstract class AbstractXmlDefinition<E extends Diagram<?>>
 		return attributeNode.getNodeValue();
 	}
 
-	private static boolean isNullOrEmpty(final String value) {
+	protected static boolean isNullOrEmpty(final String value) {
 		return (value == null) || value.isEmpty();
 	}
 

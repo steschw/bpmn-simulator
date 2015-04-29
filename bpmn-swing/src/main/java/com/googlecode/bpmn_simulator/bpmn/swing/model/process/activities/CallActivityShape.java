@@ -34,6 +34,7 @@ public class CallActivityShape
 
 	public CallActivityShape(final CallActivity element) {
 		super(element);
+		setExpanded(false);
 	}
 
 }

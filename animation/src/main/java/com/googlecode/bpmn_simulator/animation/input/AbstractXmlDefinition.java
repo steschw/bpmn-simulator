@@ -120,78 +120,93 @@ public abstract class AbstractXmlDefinition<E extends Diagram<?>>
 		return attributeNode.getNodeValue();
 	}
 
-	protected float getAttributeFloat(final Node node, final String name) {
-		return getAttributeFloat(node, name, 0.f);
-	}
-
-	protected float getAttributeFloat(final Node node,
-			final String name, final float defaultValue) {
-		final String value = getAttributeString(node, name);
-		try {
-			return Float.parseFloat(value);
-		} catch (NumberFormatException exception) {
-		}
-		notifyWarning(MessageFormat.format("Invalid value {0} for float. Using {1} instead.", value, defaultValue));
-		return defaultValue;
-	}
-
-	protected Double getAttributeDouble(final Node node,
-			final String name, final Double defaultValue) {
-		final String value = getAttributeString(node, name);
-		if (value != null) {
-			try {
-				Double.valueOf(value);
-			} catch (NumberFormatException exception) {
-				notifyWarning(MessageFormat.format("Invalid value {0} for double. Using {1} instead.", value, defaultValue));
-			}
-		}
-		return defaultValue;
-	}
-
 	private static boolean isNullOrEmpty(final String value) {
 		return (value == null) || value.isEmpty();
 	}
 
-	private static boolean convertStringToBool(final String string,
-			final boolean defaultValue) {
-		if (!isNullOrEmpty(string)) {
-			return Boolean.parseBoolean(string);
+	protected double getAttributeDouble(final Node node, final String name) {
+		final String value = getAttributeString(node, name);
+		if (!isNullOrEmpty(value)) {
+			try {
+				return Double.parseDouble(value);
+			} catch (NumberFormatException e) {
+				notifyError(MessageFormat.format("Invalid double value ''{0}'' for attribute {1}", value, name), e);
+			}
+		} else {
+			notifyError(MessageFormat.format("Required double value for {0} does not exist", name), null);
+		}
+		return Double.NaN;
+	}
+
+	protected Double getOptionalAttributeDouble(final Node node, final String name) {
+		final String value = getAttributeString(node, name);
+		if (!isNullOrEmpty(value)) {
+			try {
+				return Double.valueOf(value);
+			} catch (NumberFormatException exception) {
+				notifyWarning(MessageFormat.format("Invalid double value ''{0}'' for attribute {1}", value, name));
+			}
+		}
+		return null;
+	}
+
+	protected boolean getAttributeBoolean(final Node node, final String name) {
+		final String value = getAttributeString(node, name);
+		if (!isNullOrEmpty(value)) {
+			return Boolean.parseBoolean(value);
+		} else {
+			notifyError(MessageFormat.format("Required boolean value for {0} does not exist", name), null);
+		}
+		return false;
+	}
+
+	protected Boolean getOptionalAttributeBoolean(final Node node, final String name) {
+		final String value = getAttributeString(node, name);
+		if (value != null) {
+			return Boolean.valueOf(value);
+		}
+		return null;
+	}
+
+	protected boolean getOptionalAttributeBoolean(final Node node, final String name, final boolean defaultValue) {
+		final Boolean value = getOptionalAttributeBoolean(node, name);
+		if (value != null) {
+			return value.booleanValue();
 		}
 		return defaultValue;
 	}
 
-	protected boolean getAttributeBoolean(final Node node,
-			final String name, final boolean defaultValue) {
-		return convertStringToBool(getAttributeString(node, name), defaultValue);
-	}
-
-	protected static URI getAttributeURI(final Node node, final String name, final URI defaultValue) {
-		final Node attributeNode = node.getAttributes().getNamedItem(name);
-		if (attributeNode == null) {
-			return defaultValue;
+	protected URI getAttributeURI(final Node node, final String name) {
+		final String value = getAttributeString(node, name);
+		if (!isNullOrEmpty(value)) {
+			try {
+				return new URI(value);
+			} catch (URISyntaxException e) {
+				notifyError(MessageFormat.format("Invalid uri value ''{0}'' for attribute {1}", value, name), e);
+			}
+		} else {
+			notifyError(MessageFormat.format("Required uri value for {0} does not exist", name), null);
 		}
-		try {
-			return new URI(attributeNode.getNodeValue());
-		} catch (URISyntaxException e) {
-			return defaultValue;
-		}
+		return null;
 	}
 
 	protected MimeType getAttributeMimeType(final Node node, final String name) {
 		final String value = getAttributeString(node, name);
-		if ((value != null) && !value.isEmpty()) {
+		if (!isNullOrEmpty(value)) {
 			try {
 				return new MimeType(value);
 			} catch (MimeTypeParseException e) {
-				notifyError(null, e);
+				notifyError(MessageFormat.format("Invalid mimetype value ''{0}'' for attribute {1}", value, name), e);
 			}
+		} else {
+			notifyError(MessageFormat.format("Required mimetype value for {0} does not exist", name), null);
 		}
 		return null;
 	}
 
 	public static String getNodeText(final Node node) {
 		final String text = node.getTextContent();
-		assert text != null && !text.isEmpty();
+		assert !isNullOrEmpty(text);
 		return text;
 	}
 

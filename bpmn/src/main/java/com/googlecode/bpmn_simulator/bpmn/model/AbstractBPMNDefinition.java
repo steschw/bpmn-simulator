@@ -21,7 +21,6 @@
 package com.googlecode.bpmn_simulator.bpmn.model;
 
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -111,23 +110,11 @@ public abstract class AbstractBPMNDefinition<E extends BPMNDiagram<?>>
 	public static final String FILE_DESCRIPTION = "BPMN 2.0 XML"; //$NON-NLS-1$
 	public static final String[] FILE_EXTENSIONS = {"bpmn", "xml"}; //$NON-NLS-1$ //$NON-NLS-2$
 
-	private static final URI DEFAULT_EXPRESSION_LANGUAGE = uri("http://www.w3.org/1999/XPath");
-	private static final URI DEFAULT_TYPE_LANGUAGE = uri("http://www.w3.org/2001/XMLSchema");
-
 	private static final String SCHEMA_FILENAME =
 			"com/googlecode/bpmn_simulator/bpmn/xsd/BPMN20.xsd"; //$NON-NLS-1$
 
 	protected static final String BPMN =
 			"http://www.omg.org/spec/BPMN/20100524/MODEL";  //$NON-NLS-1$
-
-	private static URI uri(final String uri) {
-		try {
-			return new URI(uri);
-		} catch (NullPointerException e) {
-		} catch (URISyntaxException e) {
-		}
-		return null;
-	}
 
 	private final NamedElements<BaseElement> elements
 			= new NamedElements<>();
@@ -215,6 +202,46 @@ public abstract class AbstractBPMNDefinition<E extends BPMNDiagram<?>>
 		return getAttributeString(node, "name"); //$NON-NLS-1$
 	}
 
+	protected String getExporterAttribute(final Node node) {
+		return getAttributeString(node, "exporter"); //$NON-NLS-1$
+	}
+
+	protected String getExporterVersionAttribute(final Node node) {
+		return getAttributeString(node, "exporterVersion"); //$NON-NLS-1$
+	}
+
+	protected URI getExpressionLanguageAttribute(final Node node) {
+		return getAttributeURI(node, "expressionLanguage"); //$NON-NLS-1$
+	}
+
+	protected URI getTypeLanguageAttribute(final Node node) {
+		return getAttributeURI(node, "typeLanguage"); //$NON-NLS-1$
+	}
+
+	protected MimeType getTextFormatAttribute(final Node node) {
+		return getAttributeMimeType(node, "textFormat"); //$NON-NLS-1$
+	}
+
+	protected Reference<FlowNode> getSourceRefAttribute(final Node node) {
+		return getAttributeIDREF(node, "sourceRef", FlowNode.class); //$NON-NLS-1$
+	}
+
+	protected Reference<FlowNode> getTargetRefAttribute(final Node node) {
+		return getAttributeIDREF(node, "targetRef", FlowNode.class); //$NON-NLS-1$
+	}
+
+	protected boolean getIsInterruptingAttribute(final Node node) {
+		return getAttributeBoolean(node, "isInterrupting"); //$NON-NLS-1$
+	}
+
+	protected boolean getCancelActivityAttribute(final Node node) {
+		return getAttributeBoolean(node, "cancelActivity"); //$NON-NLS-1$
+	}
+
+	protected boolean getIsCollectionAttribute(final Node node) {
+		return getAttributeBoolean(node, "isCollection"); //$NON-NLS-1$
+	}
+
 	protected boolean readArtifactElements(final Node node) {
 		return readElementAssociation(node)
 				|| readElementGroup(node)
@@ -227,22 +254,6 @@ public abstract class AbstractBPMNDefinition<E extends BPMNDiagram<?>>
 				|| readElementProcess(node)
 				|| readElementCollaboration(node)
 				|| readElementChoreography(node);
-	}
-
-	protected String getExporterAttribute(final Node node) {
-		return getAttributeString(node, "exporter"); //$NON-NLS-1$
-	}
-
-	protected String getExporterVersionAttribute(final Node node) {
-		return getAttributeString(node, "exporterVersion"); //$NON-NLS-1$
-	}
-
-	protected URI getExpressionLanguageAttribute(final Node node) {
-		return getAttributeURI(node, "expressionLanguage", DEFAULT_EXPRESSION_LANGUAGE);
-	}
-
-	protected URI getTypeLanguageAttribute(final Node node) {
-		return getAttributeURI(node, "typeLanguage", DEFAULT_TYPE_LANGUAGE);
 	}
 
 	protected void readDefinitions(final Node node) {
@@ -337,10 +348,6 @@ public abstract class AbstractBPMNDefinition<E extends BPMNDiagram<?>>
 		}
 	}
 
-	protected boolean getIsInterruptingAttribute(final Node node) {
-		return getAttributeBoolean(node, "isInterrupting", true); //$NON-NLS-1$
-	}
-
 	protected boolean readElementStartEvent(final Node node,
 			final FlowElementsContainer activity) {
 		if (isElementNode(node, BPMN, "startEvent")) { //$NON-NLS-1$
@@ -353,10 +360,6 @@ public abstract class AbstractBPMNDefinition<E extends BPMNDiagram<?>>
 		} else {
 			return false;
 		}
-	}
-
-	protected boolean getCancelActivityAttribute(final Node node) {
-		return getAttributeBoolean(node, "cancelActivity", true); //$NON-NLS-1$
 	}
 
 	protected boolean readElementEndEvent(final Node node,
@@ -465,10 +468,6 @@ public abstract class AbstractBPMNDefinition<E extends BPMNDiagram<?>>
 		}
 	}
 
-	protected MimeType getTextFormatAttribute(final Node node) {
-		return getAttributeMimeType(node, "textFormat"); //$NON-NLS-1$
-	}
-
 	protected boolean readElementDocumentation(final Node node,
 			final BaseElement element) {
 		if (isElementNode(node, BPMN, "documentation")) { //$NON-NLS-1$
@@ -500,14 +499,6 @@ public abstract class AbstractBPMNDefinition<E extends BPMNDiagram<?>>
 	protected <T extends BaseElement> Reference<T> getAttributeIDREF(
 			final Node node, final String name, final Class<T> clazz) {
 		return new CastReference<>(new NamedReference<>(elements, getAttributeString(node, name)), clazz);
-	}
-
-	protected Reference<FlowNode> getSourceRefAttribute(final Node node) {
-		return getAttributeIDREF(node, "sourceRef", FlowNode.class);
-	}
-
-	protected Reference<FlowNode> getTargetRefAttribute(final Node node) {
-		return getAttributeIDREF(node, "targetRef", FlowNode.class);
 	}
 
 	protected boolean readElementMessageFlow(final Node node) {
@@ -555,7 +546,7 @@ public abstract class AbstractBPMNDefinition<E extends BPMNDiagram<?>>
 	}
 
 	protected boolean getInstantiateAttribute(final Node node) {
-		return getAttributeBoolean(node, "instantiate", false); //$NON-NLS-1$
+		return getAttributeBoolean(node, "instantiate"); //$NON-NLS-1$
 	}
 
 	protected boolean readElementCallActivity(final Node node,
@@ -684,7 +675,7 @@ public abstract class AbstractBPMNDefinition<E extends BPMNDiagram<?>>
 		if (isElementNode(node, BPMN, "dataObject")) { //$NON-NLS-1$
 			final DataObject dataObject = new DataObject(
 					getIdAttribute(node), getNameAttribute(node));
-			dataObject.setIsCollection(getAttributeBoolean(node, "isCollection", false)); //$NON-NLS-1$
+			dataObject.setIsCollection(getIsCollectionAttribute(node));
 			readBaseElement(node, dataObject);
 			registerElement(dataObject);
 			return true;
@@ -857,11 +848,11 @@ public abstract class AbstractBPMNDefinition<E extends BPMNDiagram<?>>
 	}
 
 	protected boolean getTriggeredByEventAttribute(final Node node) {
-		return getAttributeBoolean(node, "triggeredByEvent", false); //$NON-NLS-1$
+		return getAttributeBoolean(node, "triggeredByEvent"); //$NON-NLS-1$
 	}
 
 	protected boolean getIsClosedAttribute(final Node node) {
-		return getAttributeBoolean(node, "isClosed", false); //$NON-NLS-1$
+		return getAttributeBoolean(node, "isClosed"); //$NON-NLS-1$
 	}
 
 	protected boolean readElementParticipant(final Node node, final Collaboration collaboration) {

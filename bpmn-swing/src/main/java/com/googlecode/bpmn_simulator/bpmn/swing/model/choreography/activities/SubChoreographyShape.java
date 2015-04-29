@@ -21,6 +21,7 @@
 package com.googlecode.bpmn_simulator.bpmn.swing.model.choreography.activities;
 
 import com.googlecode.bpmn_simulator.animation.element.visual.swing.Colors;
+import com.googlecode.bpmn_simulator.animation.element.visual.swing.ImageList;
 import com.googlecode.bpmn_simulator.bpmn.model.choreography.activities.SubChoreography;
 import com.googlecode.bpmn_simulator.bpmn.swing.di.Appearance;
 
@@ -34,6 +35,16 @@ public class SubChoreographyShape
 
 	public SubChoreographyShape(final SubChoreography element) {
 		super(element);
+	}
+
+	@Override
+	protected ImageList getMarkers() {
+		final ImageList markers = super.getMarkers();
+		final Appearance appearance = Appearance.getDefault();
+		if (!isExpanded()) {
+			markers.add(appearance.getImage(Appearance.IMAGE_COLLAPSED));
+		}
+		return markers;
 	}
 
 }

@@ -86,33 +86,33 @@ public abstract class AbstractDIDefinition<DIAGRAM extends BPMNDiagram<?>>
 	}
 
 	protected Bounds getBoundsAttribute(final Node node) {
-		final int x = Math.round(getAttributeFloat(node, "x")); //$NON-NLS-1$
-		final int y = Math.round(getAttributeFloat(node, "y")); //$NON-NLS-1$
-		final int width = (int) Math.floor(getAttributeFloat(node, "width")); //$NON-NLS-1$
-		final int height = (int) Math.floor(getAttributeFloat(node, "height")); //$NON-NLS-1$
+		final int x = (int) Math.round(getAttributeDouble(node, "x")); //$NON-NLS-1$
+		final int y = (int) Math.round(getAttributeDouble(node, "y")); //$NON-NLS-1$
+		final int width = (int) Math.round(getAttributeDouble(node, "width")); //$NON-NLS-1$
+		final int height = (int) Math.round(getAttributeDouble(node, "height")); //$NON-NLS-1$
 		return new Bounds(x, y, width, height);
 	}
 
 	protected Waypoint getPointAttribute(final Node node) {
-		final int x = Math.round(getAttributeFloat(node, "x")); //$NON-NLS-1$
-		final int y = Math.round(getAttributeFloat(node, "y")); //$NON-NLS-1$
+		final int x = (int) Math.round(getAttributeDouble(node, "x")); //$NON-NLS-1$
+		final int y = (int) Math.round(getAttributeDouble(node, "y")); //$NON-NLS-1$
 		return new Waypoint(x, y);
 	}
 
-	protected boolean getIsExpandedAttribute(final Node node) {
-		return getAttributeBoolean(node, "isExpanded", true); //$NON-NLS-1$
+	protected Boolean getIsExpandedAttribute(final Node node) {
+		return getOptionalAttributeBoolean(node, "isExpanded"); //$NON-NLS-1$
 	}
 
-	protected boolean getIsHorizontalAttribute(final Node node) {
-		return getAttributeBoolean(node, "isHorizontal", false); //$NON-NLS-1$
+	protected Boolean getIsHorizontalAttribute(final Node node) {
+		return getOptionalAttributeBoolean(node, "isHorizontal"); //$NON-NLS-1$
 	}
 
-	protected boolean getIsMarkerVisibleAttribute(final Node node) {
-		return getAttributeBoolean(node, "isMarkerVisible", true); //$NON-NLS-1$
+	protected Boolean getIsMarkerVisibleAttribute(final Node node) {
+		return getOptionalAttributeBoolean(node, "isMarkerVisible"); //$NON-NLS-1$
 	}
 
-	protected boolean getIsMessageVisibleAttribute(final Node node) {
-		return getAttributeBoolean(node, "isMessageVisible", true); //$NON-NLS-1$
+	protected Boolean getIsMessageVisibleAttribute(final Node node) {
+		return getOptionalAttributeBoolean(node, "isMessageVisible"); //$NON-NLS-1$
 	}
 
 	protected ParticipantBandKind getParticipantBandKindAttribute(final Node node) {
@@ -138,11 +138,26 @@ public abstract class AbstractDIDefinition<DIAGRAM extends BPMNDiagram<?>>
 			if (element != null) {
 				final BPMNShape shape = createShapeFor(diagram, element);
 				if (shape != null) {
-					shape.setExpanded(getIsExpandedAttribute(node));
-					shape.setHorizontal(getIsHorizontalAttribute(node));
-					shape.setMarkerVisible(getIsMarkerVisibleAttribute(node));
-					shape.setMessageVisible(getIsMessageVisibleAttribute(node));
-					shape.setParticipantBandKind(getParticipantBandKindAttribute(node));
+					final Boolean isExpanded = getIsExpandedAttribute(node);
+					if (isExpanded != null) {
+						shape.setExpanded(isExpanded.booleanValue());
+					}
+					final Boolean isHorizontal = getIsHorizontalAttribute(node);
+					if (isHorizontal != null) {
+						shape.setHorizontal(isHorizontal.booleanValue());
+					}
+					final Boolean isMarkerVisible = getIsMarkerVisibleAttribute(node);
+					if (isMarkerVisible != null) {
+						shape.setMarkerVisible(isMarkerVisible.booleanValue());
+					}
+					final Boolean isMessageVisible = getIsMessageVisibleAttribute(node);
+					if (isMessageVisible != null) {
+						shape.setMessageVisible(isMessageVisible.booleanValue());
+					}
+					final ParticipantBandKind participantBandKind = getParticipantBandKindAttribute(node);
+					if (participantBandKind != null) {
+						shape.setParticipantBandKind(participantBandKind);
+					}
 					final NodeList childNodes = node.getChildNodes();
 					for (int i = 0; i < childNodes.getLength(); ++i) {
 						final Node childNode = childNodes.item(i);
@@ -281,9 +296,12 @@ public abstract class AbstractDIDefinition<DIAGRAM extends BPMNDiagram<?>>
 
 	private boolean readElementFont(final Node node, final BPMNLabelStyle labelStyle) {
 		if (isElementNode(node, DC, ELEMENT_FONT)) {
-			final Font font = new Font(getAttributeString(node, "name"), getAttributeDouble(node, "size", null),
-					getAttributeBoolean(node, "isBold", false), getAttributeBoolean(node, "isItalic", false),
-					getAttributeBoolean(node, "isUnderline", false), getAttributeBoolean(node, "isStrikeThrough", false));
+			final Font font = new Font(getAttributeString(node, "name"),
+					getOptionalAttributeDouble(node, "size"),
+					getOptionalAttributeBoolean(node, "isBold", false),
+					getOptionalAttributeBoolean(node, "isItalic", false),
+					getOptionalAttributeBoolean(node, "isUnderline", false),
+					getOptionalAttributeBoolean(node, "isStrikeThrough", false));
 			labelStyle.setFont(font);
 			return true;
 		}

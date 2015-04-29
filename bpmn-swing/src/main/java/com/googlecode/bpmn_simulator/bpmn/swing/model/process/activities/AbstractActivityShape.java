@@ -56,7 +56,7 @@ public abstract class AbstractActivityShape<E extends Activity>
 		getPresentation().fillRoundRect(g, getInnerBoundsRelative(), Appearance.getDefault().getArcSize());
 	}
 
-	protected ImageList getTaskMarkers() {
+	protected ImageList getMarkers() {
 		final ImageList markers = new ImageList();
 		final Appearance appearance = Appearance.getDefault();
 		if (!isExpanded()) {
@@ -65,15 +65,20 @@ public abstract class AbstractActivityShape<E extends Activity>
 		return markers;
 	}
 
+	protected void paintElementMarkers(final Graphics2D g) {
+		final Bounds bounds = getInnerBoundsRelative();
+		final ImageList markers = getMarkers();
+		markers.drawHorizontal(g,
+				bounds.getPoint(HorizontalPosition.CENTER, VerticalPosition.BOTTOM),
+				HorizontalPosition.CENTER, VerticalPosition.TOP);
+	}
+
 	@Override
 	protected void paintElementForeground(final Graphics2D g) {
 		super.paintElementForeground(g);
 		final Bounds bounds = getInnerBoundsRelative();
 		getPresentation().drawRoundRect(g, bounds, Appearance.getDefault().getArcSize());
-		final ImageList markers = getTaskMarkers();
-		markers.drawHorizontal(g,
-				bounds.getPoint(HorizontalPosition.CENTER, VerticalPosition.BOTTOM),
-				HorizontalPosition.CENTER, VerticalPosition.TOP);
+		paintElementMarkers(g);
 	}
 
 	@Override

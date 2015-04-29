@@ -22,9 +22,14 @@ package com.googlecode.bpmn_simulator.bpmn.swing.model.choreography.activities;
 
 import java.awt.Graphics2D;
 
+import com.googlecode.bpmn_simulator.animation.element.visual.Bounds;
+import com.googlecode.bpmn_simulator.animation.element.visual.HorizontalPosition;
 import com.googlecode.bpmn_simulator.animation.element.visual.Label;
+import com.googlecode.bpmn_simulator.animation.element.visual.VerticalPosition;
+import com.googlecode.bpmn_simulator.animation.element.visual.swing.ImageList;
 import com.googlecode.bpmn_simulator.bpmn.model.choreography.activities.AbstractChoreographyActivity;
 import com.googlecode.bpmn_simulator.bpmn.swing.di.AbstractBPMNShape;
+import com.googlecode.bpmn_simulator.bpmn.swing.di.Appearance;
 
 @SuppressWarnings("serial")
 public abstract class AbstractChoreographyActivityShape<E extends AbstractChoreographyActivity>
@@ -43,6 +48,18 @@ public abstract class AbstractChoreographyActivityShape<E extends AbstractChoreo
 	protected void paintElementBackground(final Graphics2D g) {
 		super.paintElementBackground(g);
 		getPresentation().fillRect(g, getInnerBoundsRelative());
+	}
+
+	protected ImageList getMarkers() {
+		return new ImageList();
+	}
+
+	protected void paintElementMarkers(final Graphics2D g) {
+		final Bounds bounds = getInnerBoundsRelative();
+		final ImageList markers = getMarkers();
+		markers.drawHorizontal(g,
+				bounds.getPoint(HorizontalPosition.CENTER, VerticalPosition.BOTTOM),
+				HorizontalPosition.CENTER, VerticalPosition.TOP);
 	}
 
 	@Override

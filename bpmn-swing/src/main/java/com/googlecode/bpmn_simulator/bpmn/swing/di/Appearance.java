@@ -32,7 +32,7 @@ import java.util.Map;
 
 import javax.imageio.ImageIO;
 
-import com.googlecode.bpmn_simulator.animation.element.visual.VisualNodeElement;
+import com.googlecode.bpmn_simulator.animation.element.visual.VisualElement;
 import com.googlecode.bpmn_simulator.animation.element.visual.swing.Colors;
 
 public class Appearance {
@@ -161,8 +161,14 @@ public class Appearance {
 		return images.get(name);
 	}
 
-	public static void setDefaultColor(final Class<? extends VisualNodeElement> clazz, final Color background) {
+	public static void setDefaultColor(final Class<? extends VisualElement> clazz, final Color background) {
 		getDefault().getForElement(clazz).setBackground(background);
+	}
+
+	public static void setDefaultColor(final Class<? extends VisualElement> clazz, final Color background, final Color foreground) {
+		final ElementAppearance appearance = getDefault().getForElement(clazz);
+		appearance.setBackground(background);
+		appearance.setForeground(foreground);
 	}
 
 	public ElementAppearance getForElement(final Class<?> elementClass) {

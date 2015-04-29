@@ -29,7 +29,6 @@ import com.googlecode.bpmn_simulator.animation.element.visual.VerticalPosition;
 import com.googlecode.bpmn_simulator.animation.element.visual.swing.ImageList;
 import com.googlecode.bpmn_simulator.bpmn.model.choreography.activities.AbstractChoreographyActivity;
 import com.googlecode.bpmn_simulator.bpmn.swing.di.AbstractBPMNShape;
-import com.googlecode.bpmn_simulator.bpmn.swing.di.Appearance;
 
 @SuppressWarnings("serial")
 public abstract class AbstractChoreographyActivityShape<E extends AbstractChoreographyActivity>

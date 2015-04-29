@@ -22,11 +22,13 @@ package com.googlecode.bpmn_simulator.bpmn.swing.di;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.swing.JComponent;
 
+import com.googlecode.bpmn_simulator.animation.element.visual.VisualElement;
 import com.googlecode.bpmn_simulator.bpmn.di.AbstractDIDefinition;
 import com.googlecode.bpmn_simulator.bpmn.di.BPMNEdge;
 import com.googlecode.bpmn_simulator.bpmn.di.BPMNLabel;
@@ -72,6 +74,8 @@ import com.googlecode.bpmn_simulator.bpmn.model.process.data.DataInput;
 import com.googlecode.bpmn_simulator.bpmn.model.process.data.DataObjectReference;
 import com.googlecode.bpmn_simulator.bpmn.model.process.data.DataOutput;
 import com.googlecode.bpmn_simulator.bpmn.model.process.data.DataStoreReference;
+import com.googlecode.bpmn_simulator.bpmn.swing.model.UnknownEdge;
+import com.googlecode.bpmn_simulator.bpmn.swing.model.UnknownShape;
 import com.googlecode.bpmn_simulator.bpmn.swing.model.choreography.ChoreographyPlane;
 import com.googlecode.bpmn_simulator.bpmn.swing.model.choreography.activities.ChoreographyTaskShape;
 import com.googlecode.bpmn_simulator.bpmn.swing.model.choreography.activities.SubChoreographyShape;
@@ -182,6 +186,9 @@ public class SwingDIDefinition
 			Map<Class<? extends BaseElement>, Class<? extends E>> map,
 			final SwingBPMNDiagram diagram,
 			final BaseElement element) {
+		if (element == null) {
+			return null;
+		}
 		final Class<? extends E> edgeClass = map.get(element.getClass());
 		if (edgeClass != null) {
 			try {
@@ -204,24 +211,32 @@ public class SwingDIDefinition
 		return null;
 	}
 
+	private static void addToDiagram(final SwingBPMNDiagram diagram, final VisualElement visualElement) {
+		if (visualElement instanceof JComponent) {
+			diagram.add((JComponent) visualElement);
+		}
+	}
+
 	@Override
 	protected BPMNShape createShapeFor(final SwingBPMNDiagram diagram, final BaseElement element) {
-		final BPMNShape shape = createFor(SHAPE_MAPPERS, diagram, element);
-		if (shape instanceof JComponent) {
-			diagram.add((JComponent) shape);
-			return shape;
+		BPMNShape shape = createFor(SHAPE_MAPPERS, diagram, element);
+		if (shape == null) {
+			shape = new UnknownShape<>(element);
+			notifyWarning(MessageFormat.format("Unknown shape for {0}", element));
 		}
-		return null;
+		addToDiagram(diagram, shape);
+		return shape;
 	}
 
 	@Override
 	protected BPMNEdge createEdgeFor(final SwingBPMNDiagram diagram, final BaseElement element) {
-		final BPMNEdge edge = createFor(EDGE_MAPPERS, diagram, element);
-		if (edge instanceof JComponent) {
-			diagram.add((JComponent) edge);
-			return edge;
+		BPMNEdge edge = createFor(EDGE_MAPPERS, diagram, element);
+		if (edge == null) {
+			edge = new UnknownEdge<>(element);
+			notifyWarning(MessageFormat.format("Unknown edge for {0}", element));
 		}
-		return null;
+		addToDiagram(diagram, edge);
+		return edge;
 	}
 
 	@Override
@@ -229,9 +244,8 @@ public class SwingDIDefinition
 		final BPMNPlane plane = createFor(PLANE_MAPPERS, diagram, element);
 		if (plane instanceof JComponent) {
 			diagram.setPlane((JComponent) plane);
-			return plane;
 		}
-		return null;
+		return plane;
 	}
 
 	@Override

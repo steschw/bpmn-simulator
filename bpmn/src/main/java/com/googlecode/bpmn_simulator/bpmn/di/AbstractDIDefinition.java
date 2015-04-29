@@ -120,12 +120,12 @@ public abstract class AbstractDIDefinition<DIAGRAM extends BPMNDiagram<?>>
 	}
 
 	protected BaseElement getAttributeElement(final Node node, final String name) {
-		return getElement(getAttributeString(node, name));
-	}
-
-	protected void showUnknownBPMNElement(final Node node, final String forElement) {
-		notifyError(MessageFormat.format("Unknown BPMN element with id ''{0}'' for {1}",
-				getAttributeString(node, "bpmnElement"), forElement), null);
+		final String elementId = getAttributeString(node, name);
+		final BaseElement baseElement = getElement(elementId);
+		if (baseElement == null) {
+			notifyError(MessageFormat.format("Unknown BPMN element with id ''{0}'' for {1}", elementId, name), null);
+		}
+		return baseElement;
 	}
 
 	protected BaseElement getBPMNElementAttribute(final Node node) {
@@ -135,42 +135,38 @@ public abstract class AbstractDIDefinition<DIAGRAM extends BPMNDiagram<?>>
 	protected boolean readElementBPMNShape(final Node node, final DIAGRAM diagram) {
 		if (isElementNode(node, BPMNDI, ELEMENT_SHAPE)) {
 			final BaseElement element = getBPMNElementAttribute(node);
-			if (element != null) {
-				final BPMNShape shape = createShapeFor(diagram, element);
-				if (shape != null) {
-					final Boolean isExpanded = getIsExpandedAttribute(node);
-					if (isExpanded != null) {
-						shape.setExpanded(isExpanded.booleanValue());
+			final BPMNShape shape = createShapeFor(diagram, element);
+			if (shape != null) {
+				final Boolean isExpanded = getIsExpandedAttribute(node);
+				if (isExpanded != null) {
+					shape.setExpanded(isExpanded.booleanValue());
+				}
+				final Boolean isHorizontal = getIsHorizontalAttribute(node);
+				if (isHorizontal != null) {
+					shape.setHorizontal(isHorizontal.booleanValue());
+				}
+				final Boolean isMarkerVisible = getIsMarkerVisibleAttribute(node);
+				if (isMarkerVisible != null) {
+					shape.setMarkerVisible(isMarkerVisible.booleanValue());
+				}
+				final Boolean isMessageVisible = getIsMessageVisibleAttribute(node);
+				if (isMessageVisible != null) {
+					shape.setMessageVisible(isMessageVisible.booleanValue());
+				}
+				final ParticipantBandKind participantBandKind = getParticipantBandKindAttribute(node);
+				if (participantBandKind != null) {
+					shape.setParticipantBandKind(participantBandKind);
+				}
+				final NodeList childNodes = node.getChildNodes();
+				for (int i = 0; i < childNodes.getLength(); ++i) {
+					final Node childNode = childNodes.item(i);
+					if (!readElementBounds(childNode, shape)
+							&& !readElementLabel(childNode, diagram, element, shape)) {
+						showUnknowNode(childNode);
 					}
-					final Boolean isHorizontal = getIsHorizontalAttribute(node);
-					if (isHorizontal != null) {
-						shape.setHorizontal(isHorizontal.booleanValue());
-					}
-					final Boolean isMarkerVisible = getIsMarkerVisibleAttribute(node);
-					if (isMarkerVisible != null) {
-						shape.setMarkerVisible(isMarkerVisible.booleanValue());
-					}
-					final Boolean isMessageVisible = getIsMessageVisibleAttribute(node);
-					if (isMessageVisible != null) {
-						shape.setMessageVisible(isMessageVisible.booleanValue());
-					}
-					final ParticipantBandKind participantBandKind = getParticipantBandKindAttribute(node);
-					if (participantBandKind != null) {
-						shape.setParticipantBandKind(participantBandKind);
-					}
-					final NodeList childNodes = node.getChildNodes();
-					for (int i = 0; i < childNodes.getLength(); ++i) {
-						final Node childNode = childNodes.item(i);
-						if (!readElementBounds(childNode, shape)
-								&& !readElementLabel(childNode, diagram, element, shape)) {
-							showUnknowNode(childNode);
-						}
-					}
-				} else {
-					notifyError(MessageFormat.format("can''t create shape for {0}", element), null);
 				}
 			} else {
-				showUnknownBPMNElement(node, "shape");
+				notifyError(MessageFormat.format("can''t create shape for {0}", element), null);
 			}
 			return true;
 		} else {
@@ -181,22 +177,18 @@ public abstract class AbstractDIDefinition<DIAGRAM extends BPMNDiagram<?>>
 	protected boolean readElementBPMNEdge(final Node node, final DIAGRAM diagram) {
 		if (isElementNode(node, BPMNDI, ELEMENT_EDGE)) {
 			final BaseElement element = getBPMNElementAttribute(node);
-			if (element != null) {
-				final BPMNEdge edge = createEdgeFor(diagram, element);
-				if (edge != null) {
-					final NodeList childNodes = node.getChildNodes();
-					for (int i = 0; i < childNodes.getLength(); ++i) {
-						final Node childNode = childNodes.item(i);
-						if (!readElementWaypoint(childNode, edge)
-								&& !readElementLabel(childNode, diagram, element, edge)) {
-							showUnknowNode(childNode);
-						}
+			final BPMNEdge edge = createEdgeFor(diagram, element);
+			if (edge != null) {
+				final NodeList childNodes = node.getChildNodes();
+				for (int i = 0; i < childNodes.getLength(); ++i) {
+					final Node childNode = childNodes.item(i);
+					if (!readElementWaypoint(childNode, edge)
+							&& !readElementLabel(childNode, diagram, element, edge)) {
+						showUnknowNode(childNode);
 					}
-				} else {
-					notifyError(MessageFormat.format("can''t create edge for {0}", element), null);
 				}
 			} else {
-				showUnknownBPMNElement(node, "edge");
+				notifyError(MessageFormat.format("can''t create edge for {0}", element), null);
 			}
 			return true;
 		} else {
@@ -211,7 +203,11 @@ public abstract class AbstractDIDefinition<DIAGRAM extends BPMNDiagram<?>>
 		} else if (element instanceof NamedElement) {
 			text = ((NamedElement) element).getName();
 		} else {
-			text = element.getId();
+			if (element == null) {
+				text = "?";
+			} else {
+				text = element.getId();
+			}
 		}
 		return text;
 	}
@@ -281,8 +277,6 @@ public abstract class AbstractDIDefinition<DIAGRAM extends BPMNDiagram<?>>
 				} else {
 					notifyError(MessageFormat.format("can''t create plane for {0}", element), null);
 				}
-			} else {
-				showUnknownBPMNElement(node, "plane");
 			}
 			return true;
 		}

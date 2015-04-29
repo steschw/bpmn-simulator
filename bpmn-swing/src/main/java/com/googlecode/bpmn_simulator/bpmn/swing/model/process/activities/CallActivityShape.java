@@ -20,6 +20,8 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.swing.model.process.activities;
 
+import java.awt.Stroke;
+
 import com.googlecode.bpmn_simulator.animation.element.visual.swing.Colors;
 import com.googlecode.bpmn_simulator.bpmn.model.process.activities.CallActivity;
 import com.googlecode.bpmn_simulator.bpmn.swing.di.Appearance;
@@ -28,6 +30,8 @@ import com.googlecode.bpmn_simulator.bpmn.swing.di.Appearance;
 public class CallActivityShape
 		extends AbstractActivityShape<CallActivity> {
 
+	private static final Stroke STROKE = Appearance.getDefault().createStrokeSolid(3);
+
 	static {
 		Appearance.setDefaultColor(CallActivityShape.class, Colors.YELLOW);
 	}
@@ -35,6 +39,11 @@ public class CallActivityShape
 	public CallActivityShape(final CallActivity element) {
 		super(element);
 		setExpanded(false);
+	}
+
+	@Override
+	protected Stroke getStroke() {
+		return STROKE;
 	}
 
 }

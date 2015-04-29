@@ -302,15 +302,29 @@ public abstract class AbstractBPMNDefinition<E extends BPMNDiagram<?>>
 		}
 	}
 
+	protected boolean readIncomingOutgoingElements(final Node node, final FlowNode element) {
+		if (isElementNode(node, BPMN, "incoming") //$NON-NLS-1$
+				|| isElementNode(node, BPMN, "outgoing")) { //$NON-NLS-1$
+			// Ignored
+			return true;
+		}
+		return false;
+	}
+
 	protected boolean readElementsForFlowElement(final Node node, final FlowElement element) {
 		return readElementsForBaseElement(node, element);
 	}
 
-	protected void readFlowElement(final Node node, final FlowElement element) {
+	protected boolean readElementsForFlowNode(final Node node, final FlowNode element) {
+		return readElementsForFlowElement(node, element)
+				|| readIncomingOutgoingElements(node, element);
+	}
+
+	protected void readFlowNodeElement(final Node node, final FlowNode element) {
 		final NodeList childNodes = node.getChildNodes();
 		for (int i = 0; i < childNodes.getLength(); ++i) {
 			final Node childNode = childNodes.item(i);
-			if (!readElementsForFlowElement(childNode, element)) {
+			if (!readElementsForFlowNode(childNode, element)) {
 				showUnknowNode(childNode);
 			}
 		}
@@ -340,7 +354,7 @@ public abstract class AbstractBPMNDefinition<E extends BPMNDiagram<?>>
 		final NodeList childNodes = node.getChildNodes();
 		for (int i = 0; i < childNodes.getLength(); ++i) {
 			final Node childNode = childNodes.item(i);
-			if (!readElementsForFlowElement(childNode, event)
+			if (!readElementsForFlowNode(childNode, event)
 					&& !readEventDefinitions(childNode, event)
 					&& !readElementDataAssociations(childNode)) {
 				showUnknowNode(childNode);
@@ -427,7 +441,7 @@ public abstract class AbstractBPMNDefinition<E extends BPMNDiagram<?>>
 	}
 
 	protected boolean readElementsForActivity(final Node node, final Activity activity) {
-		return readElementsForFlowElement(node, activity)
+		return readElementsForFlowNode(node, activity)
 				|| readElementDataAssociations(node);
 	}
 
@@ -445,7 +459,7 @@ public abstract class AbstractBPMNDefinition<E extends BPMNDiagram<?>>
 		if (gateway instanceof DefaultSequenceFlowElement) {
 			readDefaultSequenceFlowAttribute(node, (DefaultSequenceFlowElement) gateway);
 		}
-		readFlowElement(node, gateway);
+		readFlowNodeElement(node, gateway);
 	}
 
 	protected AssociationDirection getParameterAssociationDirection(final Node node) {
@@ -522,7 +536,7 @@ public abstract class AbstractBPMNDefinition<E extends BPMNDiagram<?>>
 			final NodeList childNodes = node.getChildNodes();
 			for (int i = 0; i < childNodes.getLength(); ++i) {
 				final Node childNode = childNodes.item(i);
-				if (!readElementsForBaseElement(childNode, sequenceFlow)
+				if (!readElementsForFlowElement(childNode, sequenceFlow)
 						&& !readElementConditionExpression(childNode, sequenceFlow)) {
 					showUnknowNode(childNode);
 				}

@@ -25,6 +25,7 @@ import java.awt.Image;
 import java.awt.Stroke;
 
 import com.googlecode.bpmn_simulator.animation.element.visual.Bounds;
+import com.googlecode.bpmn_simulator.animation.element.visual.swing.ImageList;
 import com.googlecode.bpmn_simulator.animation.element.visual.swing.Presentation;
 import com.googlecode.bpmn_simulator.bpmn.model.process.activities.SubProcess;
 import com.googlecode.bpmn_simulator.bpmn.swing.di.Appearance;
@@ -43,6 +44,16 @@ abstract class AbstractSubProcessShape<E extends SubProcess>
 	protected Stroke getStroke() {
 		return getLogicalElement().isTriggeredByEvent()
 				? EVENT_STROKE : super.getStroke();
+	}
+
+	@Override
+	protected ImageList getMarkers() {
+		final ImageList markers = super.getMarkers();
+		final Appearance appearance = Appearance.getDefault();
+		if (!isExpanded()) {
+			markers.add(appearance.getImage(Appearance.IMAGE_COLLAPSED));
+		}
+		return markers;
 	}
 
 	@Override

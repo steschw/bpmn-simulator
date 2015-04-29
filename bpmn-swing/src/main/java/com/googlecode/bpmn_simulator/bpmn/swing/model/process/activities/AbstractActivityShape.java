@@ -57,12 +57,7 @@ public abstract class AbstractActivityShape<E extends Activity>
 	}
 
 	protected ImageList getMarkers() {
-		final ImageList markers = new ImageList();
-		final Appearance appearance = Appearance.getDefault();
-		if (!isExpanded()) {
-			markers.add(appearance.getImage(Appearance.IMAGE_COLLAPSED));
-		}
-		return markers;
+		return new ImageList();
 	}
 
 	protected void paintElementMarkers(final Graphics2D g) {

@@ -27,8 +27,9 @@ public final class Transaction
 
 	public static final String ELEMENT_NAME = Messages.getString("transaction"); //$NON-NLS-1$
 
-	public Transaction(final String id, final String name, final boolean triggeredByEvent) {
-		super(id, name, triggeredByEvent);
+	public Transaction(final String id, final String name,
+			final boolean isForCompensation, final boolean triggeredByEvent) {
+		super(id, name, isForCompensation, triggeredByEvent);
 	}
 
 	@Override

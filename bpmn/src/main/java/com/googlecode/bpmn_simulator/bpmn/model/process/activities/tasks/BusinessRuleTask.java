@@ -27,8 +27,9 @@ public final class BusinessRuleTask
 
 	public static final String ELEMENT_NAME = Messages.getString("bussinesRuleTask"); //$NON-NLS-1$
 
-	public BusinessRuleTask(final String id, final String name) {
-		super(id, name);
+	public BusinessRuleTask(final String id, final String name,
+			final boolean isForCompensation) {
+		super(id, name, isForCompensation);
 	}
 
 	@Override

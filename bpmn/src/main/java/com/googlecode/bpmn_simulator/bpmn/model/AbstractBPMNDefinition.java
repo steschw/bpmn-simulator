@@ -281,6 +281,10 @@ public abstract class AbstractBPMNDefinition<E extends BPMNDiagram<?>>
 		return getAttributeBoolean(node, "isSequential"); //$NON-NLS-1$
 	}
 
+	protected boolean getIsForCompensationAttribute(final Node node) {
+		return getAttributeBoolean(node, "isForCompensation"); //$NON-NLS-1$
+	}
+
 	protected AssociationDirection getParameterAssociationDirection(final Node node) {
 		final String value = getAttributeString(node, "associationDirection"); //$NON-NLS-1$
 		final AssociationDirection direction = AssociationDirection.byValue(value);
@@ -638,8 +642,9 @@ public abstract class AbstractBPMNDefinition<E extends BPMNDiagram<?>>
 	protected boolean readElementCallActivity(final Node node,
 			final FlowElementsContainer activity) {
 		if (isElementNode(node, BPMN, "callActivity")) { //$NON-NLS-1$
-			final CallActivity callActivity = new CallActivity(getIdAttribute(node),
-					getNameAttribute(node));
+			final CallActivity callActivity = new CallActivity(
+					getIdAttribute(node), getNameAttribute(node),
+					getIsForCompensationAttribute(node));
 			readChildrenOfActivity(node, callActivity);
 			registerElement(callActivity);
 			return true;
@@ -651,29 +656,29 @@ public abstract class AbstractBPMNDefinition<E extends BPMNDiagram<?>>
 			final FlowElementsContainer activity) {
 		final Task task;
 		if (isElementNode(node, BPMN, "manualTask")) { //$NON-NLS-1$
-			task = new ManualTask(getIdAttribute(node),
-					getNameAttribute(node));
+			task = new ManualTask(getIdAttribute(node), getNameAttribute(node),
+					getIsForCompensationAttribute(node));
 		} else if (isElementNode(node, BPMN, "userTask")) { //$NON-NLS-1$
-			task = new UserTask(getIdAttribute(node),
-					getNameAttribute(node));
+			task = new UserTask(getIdAttribute(node), getNameAttribute(node),
+					getIsForCompensationAttribute(node));
 		} else if (isElementNode(node, BPMN, "businessRuleTask")) { //$NON-NLS-1$
-			task = new BusinessRuleTask(getIdAttribute(node),
-					getNameAttribute(node));
+			task = new BusinessRuleTask(getIdAttribute(node), getNameAttribute(node),
+					getIsForCompensationAttribute(node));
 		} else if (isElementNode(node, BPMN, "scriptTask")) { //$NON-NLS-1$
-			task = new ScriptTask(getIdAttribute(node),
-					getNameAttribute(node));
+			task = new ScriptTask(getIdAttribute(node), getNameAttribute(node),
+					getIsForCompensationAttribute(node));
 		} else if (isElementNode(node, BPMN, "serviceTask")) { //$NON-NLS-1$
-			task = new ServiceTask(getIdAttribute(node),
-					getNameAttribute(node));
+			task = new ServiceTask(getIdAttribute(node), getNameAttribute(node),
+					getIsForCompensationAttribute(node));
 		} else if (isElementNode(node, BPMN, "sendTask")) { //$NON-NLS-1$
-			task = new SendTask(getIdAttribute(node),
-					getNameAttribute(node));
+			task = new SendTask(getIdAttribute(node), getNameAttribute(node),
+					getIsForCompensationAttribute(node));
 		} else if (isElementNode(node, BPMN, "receiveTask")) { //$NON-NLS-1$
-			task = new ReceiveTask(getIdAttribute(node),
-					getNameAttribute(node), getInstantiateAttribute(node));
+			task = new ReceiveTask(getIdAttribute(node), getNameAttribute(node),
+					getIsForCompensationAttribute(node), getInstantiateAttribute(node));
 		} else if (isElementNode(node, BPMN, "task")) { //$NON-NLS-1$
-			task = new Task(getIdAttribute(node),
-					getNameAttribute(node));
+			task = new Task(getIdAttribute(node), getNameAttribute(node),
+					getIsForCompensationAttribute(node));
 		} else {
 			return false;
 		}
@@ -1054,7 +1059,7 @@ public abstract class AbstractBPMNDefinition<E extends BPMNDiagram<?>>
 		if (isElementNode(node, BPMN, "adHocSubProcess")) { //$NON-NLS-1$
 			final AdHocSubProcess subprocess = new AdHocSubProcess(
 					getIdAttribute(node), getNameAttribute(node),
-					getTriggeredByEventAttribute(node));
+					getIsForCompensationAttribute(node), getTriggeredByEventAttribute(node));
 			readChildrenOfFlowElementsContainerActivity(node, subprocess);
 			registerElement(subprocess);
 			return true;
@@ -1067,7 +1072,7 @@ public abstract class AbstractBPMNDefinition<E extends BPMNDiagram<?>>
 		if (isElementNode(node, BPMN, "subProcess")) { //$NON-NLS-1$
 			final SubProcess subprocess = new SubProcess(
 					getIdAttribute(node), getNameAttribute(node),
-					getTriggeredByEventAttribute(node));
+					getIsForCompensationAttribute(node), getTriggeredByEventAttribute(node));
 			readChildrenOfFlowElementsContainerActivity(node, subprocess);
 			registerElement(subprocess);
 			return true;
@@ -1080,7 +1085,7 @@ public abstract class AbstractBPMNDefinition<E extends BPMNDiagram<?>>
 		if (isElementNode(node, BPMN, "transaction")) { //$NON-NLS-1$
 			final Transaction transaction = new Transaction(
 					getIdAttribute(node), getNameAttribute(node),
-					getTriggeredByEventAttribute(node));
+					getIsForCompensationAttribute(node), getTriggeredByEventAttribute(node));
 			readChildrenOfFlowElementsContainerActivity(node, transaction);
 			registerElement(transaction);
 			return true;

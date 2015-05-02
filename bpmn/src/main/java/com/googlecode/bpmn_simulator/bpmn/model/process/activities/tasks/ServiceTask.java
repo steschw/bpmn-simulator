@@ -27,8 +27,9 @@ public final class ServiceTask
 
 	public static final String ELEMENT_NAME = Messages.getString("serviceTask"); //$NON-NLS-1$
 
-	public ServiceTask(final String id, final String name) {
-		super(id, name);
+	public ServiceTask(final String id, final String name,
+			final boolean isForCompensation) {
+		super(id, name, isForCompensation);
 	}
 
 	@Override

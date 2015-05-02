@@ -28,8 +28,8 @@ public class Task
 
 	public static final String ELEMENT_NAME = Messages.getString("task"); //$NON-NLS-1$
 
-	public Task(final String id, final String name) {
-		super(id, name);
+	public Task(final String id, final String name, final boolean isForCompensation) {
+		super(id, name, isForCompensation);
 	}
 
 	@Override

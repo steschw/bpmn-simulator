@@ -30,4 +30,6 @@ public interface Activity
 
 	LoopCharacteristics getLoopCharacteristics();
 
+	boolean isForCompensation();
+
 }

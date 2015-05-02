@@ -41,7 +41,7 @@ public class Appearance {
 	public static final String IMAGE_BUSSINESRULE = "businessrule.png"; //$NON-NLS-1$
 	public static final String IMAGE_COLLAPSED = "collapsed.png"; //$NON-NLS-1$
 	public static final String IMAGE_COLLECTION = "collection.png"; //$NON-NLS-1$
-	public static final String IMAGE_EXCEPTION = "exception.png"; //$NON-NLS-1$
+	public static final String IMAGE_COMPENSATION = "compensation.png"; //$NON-NLS-1$
 	public static final String IMAGE_LOOP = "loop.png"; //$NON-NLS-1$
 	public static final String IMAGE_MANUAL = "manual.png"; //$NON-NLS-1$
 	public static final String IMAGE_PARALLEL = "parallel.png"; //$NON-NLS-1$
@@ -137,7 +137,7 @@ public class Appearance {
 		loadImage(IMAGE_BUSSINESRULE);
 		loadImage(IMAGE_COLLAPSED);
 		loadImage(IMAGE_COLLECTION);
-		loadImage(IMAGE_EXCEPTION);
+		loadImage(IMAGE_COMPENSATION);
 		loadImage(IMAGE_LOOP);
 		loadImage(IMAGE_MANUAL);
 		loadImage(IMAGE_PARALLEL);

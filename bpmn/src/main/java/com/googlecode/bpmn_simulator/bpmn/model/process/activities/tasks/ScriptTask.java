@@ -27,8 +27,9 @@ public final class ScriptTask
 
 	public static final String ELEMENT_NAME = Messages.getString("scriptTask"); //$NON-NLS-1$
 
-	public ScriptTask(final String id, final String name) {
-		super(id, name);
+	public ScriptTask(final String id, final String name,
+			final boolean isForCompensation) {
+		super(id, name, isForCompensation);
 	}
 
 	@Override

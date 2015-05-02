@@ -31,8 +31,9 @@ public final class ReceiveTask
 
 	private boolean instantiate;
 
-	public ReceiveTask(final String id, final String name, final boolean instantiate) {
-		super(id, name);
+	public ReceiveTask(final String id, final String name,
+			final boolean isForCompensation, final boolean instantiate) {
+		super(id, name, isForCompensation);
 		this.instantiate = instantiate;
 	}
 

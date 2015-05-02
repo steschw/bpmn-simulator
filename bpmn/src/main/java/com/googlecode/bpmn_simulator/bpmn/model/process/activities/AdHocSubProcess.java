@@ -27,8 +27,9 @@ public final class AdHocSubProcess
 
 	public static final String ELEMENT_NAME = Messages.getString("adHocSubProcess"); //$NON-NLS-1$
 
-	public AdHocSubProcess(final String id, final String name, final boolean triggeredByEvent) {
-		super(id, name, triggeredByEvent);
+	public AdHocSubProcess(final String id, final String name,
+			final boolean isForCompensation, final boolean triggeredByEvent) {
+		super(id, name, isForCompensation, triggeredByEvent);
 	}
 
 	@Override

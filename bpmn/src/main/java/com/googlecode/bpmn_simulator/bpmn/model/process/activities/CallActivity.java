@@ -27,8 +27,8 @@ public final class CallActivity
 
 	public static final String ELEMENT_NAME = Messages.getString("callActivity"); //$NON-NLS-1$
 
-	public CallActivity(final String id, final String name) {
-		super(id, name);
+	public CallActivity(final String id, final String name, final boolean isForCompensation) {
+		super(id, name, isForCompensation);
 	}
 
 	@Override

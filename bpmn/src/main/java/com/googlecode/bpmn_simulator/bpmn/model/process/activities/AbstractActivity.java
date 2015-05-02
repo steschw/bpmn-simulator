@@ -28,12 +28,15 @@ public abstract class AbstractActivity
 		extends AbstractFlowNode
 		implements Activity {
 
+	private boolean forCompensation;
+
 	private Reference<SequenceFlow> defaultSequenceFlow;
 
 	private LoopCharacteristics loopCharacteristics;
 
-	public AbstractActivity(final String id, final String name) {
+	public AbstractActivity(final String id, final String name, final boolean isForCompensation) {
 		super(id, name);
+		forCompensation = isForCompensation;
 	}
 
 	@Override
@@ -57,6 +60,11 @@ public abstract class AbstractActivity
 	@Override
 	public LoopCharacteristics getLoopCharacteristics() {
 		return loopCharacteristics;
+	}
+
+	@Override
+	public boolean isForCompensation() {
+		return forCompensation;
 	}
 
 }

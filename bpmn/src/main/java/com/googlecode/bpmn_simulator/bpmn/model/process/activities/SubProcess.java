@@ -35,8 +35,9 @@ public class SubProcess
 
 	private References<FlowElement> flowElements;
 
-	public SubProcess(final String id, final String name, final boolean triggeredByEvent) {
-		super(id, name);
+	public SubProcess(final String id, final String name,
+			final boolean isForCompensation, final boolean triggeredByEvent) {
+		super(id, name, isForCompensation);
 		this.triggeredByEvent = triggeredByEvent;
 	}
 

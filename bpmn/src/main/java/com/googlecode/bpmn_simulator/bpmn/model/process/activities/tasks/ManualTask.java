@@ -27,8 +27,9 @@ public final class ManualTask
 
 	public static final String ELEMENT_NAME = Messages.getString("manualTask"); //$NON-NLS-1$
 
-	public ManualTask(final String id, final String name) {
-		super(id, name);
+	public ManualTask(final String id, final String name,
+			final boolean isForCompensation) {
+		super(id, name, isForCompensation);
 	}
 
 	@Override

@@ -71,6 +71,9 @@ public abstract class AbstractActivityShape<E extends Activity>
 				markers.add(Appearance.getDefault().getImage(Appearance.IMAGE_PARALLEL));
 			}
 		}
+		if (getLogicalElement().isForCompensation()) {
+			markers.add(Appearance.getDefault().getImage(Appearance.IMAGE_COMPENSATION));
+		}
 		return markers;
 	}
 

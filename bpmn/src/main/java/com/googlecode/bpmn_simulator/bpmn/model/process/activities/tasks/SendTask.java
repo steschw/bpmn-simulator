@@ -27,8 +27,9 @@ public final class SendTask
 
 	public static final String ELEMENT_NAME = Messages.getString("sendTask"); //$NON-NLS-1$
 
-	public SendTask(final String id, final String name) {
-		super(id, name);
+	public SendTask(final String id, final String name,
+			final boolean isForCompensation) {
+		super(id, name, isForCompensation);
 	}
 
 	@Override

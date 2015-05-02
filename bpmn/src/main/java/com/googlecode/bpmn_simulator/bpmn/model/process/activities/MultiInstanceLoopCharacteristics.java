@@ -20,14 +20,27 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.model.process.activities;
 
-import com.googlecode.bpmn_simulator.bpmn.model.core.common.DefaultSequenceFlowElement;
-import com.googlecode.bpmn_simulator.bpmn.model.core.common.FlowNode;
+import com.googlecode.bpmn_simulator.bpmn.Messages;
 
-public interface Activity
-		extends FlowNode, DefaultSequenceFlowElement {
+public final class MultiInstanceLoopCharacteristics
+		extends AbstractLoopCharacteristics {
 
-	void setLoopCharacteristics(LoopCharacteristics loopCharacteristics);
+	public static final String ELEMENT_NAME = Messages.getString("multiInstanceLoopCharacteristics"); //$NON-NLS-1$
 
-	LoopCharacteristics getLoopCharacteristics();
+	private boolean sequential;
+
+	public MultiInstanceLoopCharacteristics(final String id, final boolean isSequential) {
+		super(id);
+		this.sequential = isSequential;
+	}
+
+	@Override
+	public String getElementName() {
+		return ELEMENT_NAME;
+	}
+
+	public boolean isSequential() {
+		return sequential;
+	}
 
 }

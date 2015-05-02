@@ -28,6 +28,9 @@ import com.googlecode.bpmn_simulator.animation.element.visual.Label;
 import com.googlecode.bpmn_simulator.animation.element.visual.VerticalPosition;
 import com.googlecode.bpmn_simulator.animation.element.visual.swing.ImageList;
 import com.googlecode.bpmn_simulator.bpmn.model.process.activities.Activity;
+import com.googlecode.bpmn_simulator.bpmn.model.process.activities.LoopCharacteristics;
+import com.googlecode.bpmn_simulator.bpmn.model.process.activities.MultiInstanceLoopCharacteristics;
+import com.googlecode.bpmn_simulator.bpmn.model.process.activities.StandardLoopCharacteristics;
 import com.googlecode.bpmn_simulator.bpmn.swing.di.AbstractBPMNTokenShape;
 import com.googlecode.bpmn_simulator.bpmn.swing.di.Appearance;
 
@@ -57,7 +60,18 @@ public abstract class AbstractActivityShape<E extends Activity>
 	}
 
 	protected ImageList getMarkers() {
-		return new ImageList();
+		final ImageList markers = new ImageList();
+		final LoopCharacteristics loopCharacteristics = getLogicalElement().getLoopCharacteristics();
+		if (loopCharacteristics instanceof StandardLoopCharacteristics) {
+			markers.add(Appearance.getDefault().getImage(Appearance.IMAGE_LOOP));
+		} else if (loopCharacteristics instanceof MultiInstanceLoopCharacteristics) {
+			if (((MultiInstanceLoopCharacteristics) loopCharacteristics).isSequential()) {
+				markers.add(Appearance.getDefault().getImage(Appearance.IMAGE_SEQUENTIAL));
+			} else {
+				markers.add(Appearance.getDefault().getImage(Appearance.IMAGE_PARALLEL));
+			}
+		}
+		return markers;
 	}
 
 	protected void paintElementMarkers(final Graphics2D g) {

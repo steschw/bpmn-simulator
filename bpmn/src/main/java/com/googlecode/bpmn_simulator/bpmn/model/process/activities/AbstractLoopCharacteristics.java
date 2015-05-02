@@ -20,14 +20,14 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.model.process.activities;
 
-import com.googlecode.bpmn_simulator.bpmn.model.core.common.DefaultSequenceFlowElement;
-import com.googlecode.bpmn_simulator.bpmn.model.core.common.FlowNode;
+import com.googlecode.bpmn_simulator.bpmn.model.core.foundation.AbstractBaseElement;
 
-public interface Activity
-		extends FlowNode, DefaultSequenceFlowElement {
+abstract class AbstractLoopCharacteristics
+		extends AbstractBaseElement
+		implements LoopCharacteristics {
 
-	void setLoopCharacteristics(LoopCharacteristics loopCharacteristics);
-
-	LoopCharacteristics getLoopCharacteristics();
+	public AbstractLoopCharacteristics(final String id) {
+		super(id);
+	}
 
 }

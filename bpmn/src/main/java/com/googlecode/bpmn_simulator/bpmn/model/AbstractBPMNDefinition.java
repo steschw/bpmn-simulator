@@ -82,7 +82,9 @@ import com.googlecode.bpmn_simulator.bpmn.model.process.Lane;
 import com.googlecode.bpmn_simulator.bpmn.model.process.LaneSet;
 import com.googlecode.bpmn_simulator.bpmn.model.process.activities.Activity;
 import com.googlecode.bpmn_simulator.bpmn.model.process.activities.CallActivity;
+import com.googlecode.bpmn_simulator.bpmn.model.process.activities.MultiInstanceLoopCharacteristics;
 import com.googlecode.bpmn_simulator.bpmn.model.process.activities.Process;
+import com.googlecode.bpmn_simulator.bpmn.model.process.activities.StandardLoopCharacteristics;
 import com.googlecode.bpmn_simulator.bpmn.model.process.activities.SubProcess;
 import com.googlecode.bpmn_simulator.bpmn.model.process.activities.Transaction;
 import com.googlecode.bpmn_simulator.bpmn.model.process.activities.tasks.BusinessRuleTask;
@@ -267,6 +269,10 @@ public abstract class AbstractBPMNDefinition<E extends BPMNDiagram<?>>
 
 	protected boolean getIsClosedAttribute(final Node node) {
 		return getAttributeBoolean(node, "isClosed"); //$NON-NLS-1$
+	}
+
+	protected boolean getIsSequentialAttribute(final Node node) {
+		return getAttributeBoolean(node, "isSequential"); //$NON-NLS-1$
 	}
 
 	protected AssociationDirection getParameterAssociationDirection(final Node node) {
@@ -471,8 +477,36 @@ public abstract class AbstractBPMNDefinition<E extends BPMNDiagram<?>>
 		}
 	}
 
+	protected boolean readElementStandardLoopCharacteristics(final Node node, final Activity activity) {
+		if (isElementNode(node, BPMN, "standardLoopCharacteristics")) { //$NON-NLS-1$
+			final StandardLoopCharacteristics loopCharacteristics
+					= new StandardLoopCharacteristics(getIdAttribute(node));
+			activity.setLoopCharacteristics(loopCharacteristics);
+			registerElement(loopCharacteristics);
+			return true;
+		}
+		return false;
+	}
+
+	protected boolean readElementMultiInstanceLoopCharacteristics(final Node node, final Activity activity) {
+		if (isElementNode(node, BPMN, "multiInstanceLoopCharacteristics")) { //$NON-NLS-1$
+			final MultiInstanceLoopCharacteristics loopCharacteristics
+					= new MultiInstanceLoopCharacteristics(getIdAttribute(node), getIsSequentialAttribute(node));
+			activity.setLoopCharacteristics(loopCharacteristics);
+			registerElement(loopCharacteristics);
+			return true;
+		}
+		return false;
+	}
+
+	protected boolean readAnyLoopCharacteristics(final Node node, final Activity activity) {
+		return readElementStandardLoopCharacteristics(node, activity)
+				|| readElementMultiInstanceLoopCharacteristics(node, activity);
+	}
+
 	protected boolean readAnyChildOfActivity(final Node node, final Activity activity) {
 		return readAnyChildOfFlowNode(node, activity)
+				|| readAnyLoopCharacteristics(node, activity)
 				|| readAnyDataAssociation(node);
 	}
 

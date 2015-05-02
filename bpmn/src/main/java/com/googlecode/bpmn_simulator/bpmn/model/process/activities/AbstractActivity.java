@@ -30,6 +30,8 @@ public abstract class AbstractActivity
 
 	private Reference<SequenceFlow> defaultSequenceFlow;
 
+	private LoopCharacteristics loopCharacteristics;
+
 	public AbstractActivity(final String id, final String name) {
 		super(id, name);
 	}
@@ -45,6 +47,16 @@ public abstract class AbstractActivity
 			return defaultSequenceFlow.getReferenced();
 		}
 		return null;
+	}
+
+	@Override
+	public void setLoopCharacteristics(final LoopCharacteristics loopCharacteristics) {
+		this.loopCharacteristics = loopCharacteristics;
+	}
+
+	@Override
+	public LoopCharacteristics getLoopCharacteristics() {
+		return loopCharacteristics;
 	}
 
 }

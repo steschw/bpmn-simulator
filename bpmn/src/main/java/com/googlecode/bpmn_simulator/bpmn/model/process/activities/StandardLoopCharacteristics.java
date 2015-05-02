@@ -20,14 +20,20 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.model.process.activities;
 
-import com.googlecode.bpmn_simulator.bpmn.model.core.common.DefaultSequenceFlowElement;
-import com.googlecode.bpmn_simulator.bpmn.model.core.common.FlowNode;
+import com.googlecode.bpmn_simulator.bpmn.Messages;
 
-public interface Activity
-		extends FlowNode, DefaultSequenceFlowElement {
+public final class StandardLoopCharacteristics
+		extends AbstractLoopCharacteristics {
 
-	void setLoopCharacteristics(LoopCharacteristics loopCharacteristics);
+	public static final String ELEMENT_NAME = Messages.getString("standardLoopCharacteristics"); //$NON-NLS-1$
 
-	LoopCharacteristics getLoopCharacteristics();
+	public StandardLoopCharacteristics(final String id) {
+		super(id);
+	}
+
+	@Override
+	public String getElementName() {
+		return ELEMENT_NAME;
+	}
 
 }

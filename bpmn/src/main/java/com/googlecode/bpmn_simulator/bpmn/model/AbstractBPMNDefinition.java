@@ -59,14 +59,18 @@ import com.googlecode.bpmn_simulator.bpmn.model.core.common.artifacts.Associatio
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.artifacts.Group;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.artifacts.TextAnnotation;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.events.BoundaryEvent;
+import com.googlecode.bpmn_simulator.bpmn.model.core.common.events.CancelEventDefinition;
+import com.googlecode.bpmn_simulator.bpmn.model.core.common.events.CompensateEventDefinition;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.events.ConditionalEventDefinition;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.events.EndEvent;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.events.ErrorEventDefinition;
+import com.googlecode.bpmn_simulator.bpmn.model.core.common.events.EscalationEventDefinition;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.events.Event;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.events.IntermediateCatchEvent;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.events.IntermediateThrowEvent;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.events.LinkEventDefinition;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.events.MessageEventDefinition;
+import com.googlecode.bpmn_simulator.bpmn.model.core.common.events.SignalEventDefinition;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.events.StartEvent;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.events.TerminateEventDefinition;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.events.TimerEventDefinition;
@@ -374,14 +378,22 @@ public abstract class AbstractBPMNDefinition<E extends BPMNDiagram<?>>
 	}
 
 	protected boolean readAnyEventDefinition(final Node node, final Event event) {
-		if (isElementNode(node, BPMN, "conditionalEventDefinition")) { //$NON-NLS-1$
+		if (isElementNode(node, BPMN, "cancelEventDefinition")) { //$NON-NLS-1$
+			event.setEventDefinition(new CancelEventDefinition(getIdAttribute(node)));
+		} else if (isElementNode(node, BPMN, "compensateEventDefinition")) { //$NON-NLS-1$
+			event.setEventDefinition(new CompensateEventDefinition(getIdAttribute(node)));
+		} else if (isElementNode(node, BPMN, "conditionalEventDefinition")) { //$NON-NLS-1$
 			event.setEventDefinition(new ConditionalEventDefinition(getIdAttribute(node)));
 		} else if (isElementNode(node, BPMN, "errorEventDefinition")) { //$NON-NLS-1$
 			event.setEventDefinition(new ErrorEventDefinition(getIdAttribute(node)));
+		} else if (isElementNode(node, BPMN, "escalationEventDefinition")) { //$NON-NLS-1$
+			event.setEventDefinition(new EscalationEventDefinition(getIdAttribute(node)));
 		} else if (isElementNode(node, BPMN, "linkEventDefinition")) { //$NON-NLS-1$
 			event.setEventDefinition(new LinkEventDefinition(getIdAttribute(node), getNameAttribute(node)));
 		} else if (isElementNode(node, BPMN, "messageEventDefinition")) { //$NON-NLS-1$
 			event.setEventDefinition(new MessageEventDefinition(getIdAttribute(node)));
+		} else if (isElementNode(node, BPMN, "signalEventDefinition")) { //$NON-NLS-1$
+			event.setEventDefinition(new SignalEventDefinition(getIdAttribute(node)));
 		} else if (isElementNode(node, BPMN, "terminateEventDefinition")) { //$NON-NLS-1$
 				event.setEventDefinition(new TerminateEventDefinition(getIdAttribute(node)));
 		} else if (isElementNode(node, BPMN, "timerEventDefinition")) { //$NON-NLS-1$

@@ -584,6 +584,33 @@ public abstract class AbstractBPMNDefinition<E extends BPMNDiagram<?>>
 		}
 	}
 
+	protected <T extends FlowElementsContainer & Activity>
+			void readChildrenOfFlowElementsContainerActivity(
+			final Node node, final T container) {
+		readDefaultSequenceFlowAttribute(node, container);
+		final NodeList childNodes = node.getChildNodes();
+		for (int i = 0; i < childNodes.getLength(); ++i) {
+			final Node childNode = childNodes.item(i);
+			if (!readAnyChildOfBaseElement(childNode, container)
+					&& !readAnyFlowElement(childNode, container)
+					&& !readAnyChildOfActivity(childNode, container)) {
+				showUnknowNode(childNode);
+			}
+		}
+	}
+
+	protected void readChildrenOfFlowElementsContainer(final Node node,
+			final FlowElementsContainer container) {
+		final NodeList childNodes = node.getChildNodes();
+		for (int i = 0; i < childNodes.getLength(); ++i) {
+			final Node childNode = childNodes.item(i);
+			if (!readAnyChildOfBaseElement(childNode, container)
+					&& !readAnyFlowElement(childNode, container)) {
+				showUnknowNode(childNode);
+			}
+		}
+	}
+
 	protected void readChildrenOfActivity(final Node node, final Activity activity) {
 		readDefaultSequenceFlowAttribute(node, activity);
 		final NodeList childNodes = node.getChildNodes();
@@ -877,18 +904,6 @@ public abstract class AbstractBPMNDefinition<E extends BPMNDiagram<?>>
 				|| readElementSubChoreography(node, container);
 	}
 
-	protected void readChildrenOfFlowElementsContainer(final Node node,
-			final FlowElementsContainer container) {
-		final NodeList childNodes = node.getChildNodes();
-		for (int i = 0; i < childNodes.getLength(); ++i) {
-			final Node childNode = childNodes.item(i);
-			if (!readAnyChildOfBaseElement(childNode, container)
-					&& !readAnyFlowElement(childNode, container)) {
-				showUnknowNode(childNode);
-			}
-		}
-	}
-
 	protected boolean readElementParticipant(final Node node, final Collaboration collaboration) {
 		if (isElementNode(node, BPMN, "participant")) { //$NON-NLS-1$
 			final Participant participant = new Participant(
@@ -1026,8 +1041,7 @@ public abstract class AbstractBPMNDefinition<E extends BPMNDiagram<?>>
 			final SubProcess subprocess = new SubProcess(
 					getIdAttribute(node), getNameAttribute(node),
 					getTriggeredByEventAttribute(node));
-			readDefaultSequenceFlowAttribute(node, subprocess);
-			readChildrenOfFlowElementsContainer(node, subprocess);
+			readChildrenOfFlowElementsContainerActivity(node, subprocess);
 			registerElement(subprocess);
 			return true;
 		}
@@ -1040,8 +1054,7 @@ public abstract class AbstractBPMNDefinition<E extends BPMNDiagram<?>>
 			final Transaction transaction = new Transaction(
 					getIdAttribute(node), getNameAttribute(node),
 					getTriggeredByEventAttribute(node));
-			readDefaultSequenceFlowAttribute(node, transaction);
-			readChildrenOfFlowElementsContainer(node, transaction);
+			readChildrenOfFlowElementsContainerActivity(node, transaction);
 			registerElement(transaction);
 			return true;
 		}

@@ -29,7 +29,7 @@ import com.googlecode.bpmn_simulator.bpmn.model.core.common.gateways.InclusiveGa
 import com.googlecode.bpmn_simulator.bpmn.swing.di.Appearance;
 
 @SuppressWarnings("serial")
-public class InclusiveGatewayShape
+public final class InclusiveGatewayShape
 		extends AbstractGatewayShape<InclusiveGateway> {
 
 	private static final Stroke SYMBOL_STROKE = new BasicStroke(2.f);

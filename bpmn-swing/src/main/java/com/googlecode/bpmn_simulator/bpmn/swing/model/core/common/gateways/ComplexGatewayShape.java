@@ -27,20 +27,20 @@ import java.awt.Stroke;
 import com.googlecode.bpmn_simulator.animation.element.visual.Bounds;
 import com.googlecode.bpmn_simulator.animation.element.visual.Point;
 import com.googlecode.bpmn_simulator.animation.element.visual.swing.Colors;
-import com.googlecode.bpmn_simulator.bpmn.model.core.common.gateways.ParallelGateway;
+import com.googlecode.bpmn_simulator.bpmn.model.core.common.gateways.ComplexGateway;
 import com.googlecode.bpmn_simulator.bpmn.swing.di.Appearance;
 
 @SuppressWarnings("serial")
-public final class ParallelGatewayShape
-		extends AbstractGatewayShape<ParallelGateway> {
+public final class ComplexGatewayShape
+		extends AbstractGatewayShape<ComplexGateway> {
 
 	private static final Stroke SYMBOL_STROKE = new BasicStroke(3.f);
 
 	static {
-		Appearance.setDefaultColor(ParallelGatewayShape.class, Colors.ORANGE);
+		Appearance.setDefaultColor(ComplexGatewayShape.class, Colors.ORANGE);
 	}
 
-	public ParallelGatewayShape(final ParallelGateway element) {
+	public ComplexGatewayShape(final ComplexGateway element) {
 		super(element);
 	}
 
@@ -48,7 +48,14 @@ public final class ParallelGatewayShape
 	protected void paintElementForeground(final Graphics2D g) {
 		super.paintElementForeground(g);
 		g.setStroke(SYMBOL_STROKE);
-		final Bounds symbolBounds = getInnerBoundsRelative().scaleSize(0.5f);
+		Bounds symbolBounds = getInnerBoundsRelative().scaleSize(0.3f);
+		getPresentation().drawLine(g,
+				new Point(symbolBounds.getMinX(), symbolBounds.getMinY()),
+				new Point(symbolBounds.getMaxX(), symbolBounds.getMaxY()));
+		getPresentation().drawLine(g,
+				new Point(symbolBounds.getMinX(), symbolBounds.getMaxY()),
+				new Point(symbolBounds.getMaxX(), symbolBounds.getMinY()));
+		symbolBounds = getInnerBoundsRelative().scaleSize(0.5f);
 		getPresentation().drawLine(g,
 				new Point((int) symbolBounds.getCenterX(), symbolBounds.getMinY()),
 				new Point((int) symbolBounds.getCenterX(), symbolBounds.getMaxY()));

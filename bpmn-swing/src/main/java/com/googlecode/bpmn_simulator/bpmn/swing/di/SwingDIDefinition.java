@@ -51,6 +51,7 @@ import com.googlecode.bpmn_simulator.bpmn.model.core.common.events.EndEvent;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.events.IntermediateCatchEvent;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.events.IntermediateThrowEvent;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.events.StartEvent;
+import com.googlecode.bpmn_simulator.bpmn.model.core.common.gateways.ComplexGateway;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.gateways.EventBasedGateway;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.gateways.ExclusiveGateway;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.gateways.InclusiveGateway;
@@ -93,6 +94,7 @@ import com.googlecode.bpmn_simulator.bpmn.swing.model.core.common.events.EndEven
 import com.googlecode.bpmn_simulator.bpmn.swing.model.core.common.events.IntermediateCatchEventShape;
 import com.googlecode.bpmn_simulator.bpmn.swing.model.core.common.events.IntermediateThrowEventShape;
 import com.googlecode.bpmn_simulator.bpmn.swing.model.core.common.events.StartEventShape;
+import com.googlecode.bpmn_simulator.bpmn.swing.model.core.common.gateways.ComplexGatewayShape;
 import com.googlecode.bpmn_simulator.bpmn.swing.model.core.common.gateways.EventBasedGatewayShape;
 import com.googlecode.bpmn_simulator.bpmn.swing.model.core.common.gateways.ExclusiveGatewayShape;
 import com.googlecode.bpmn_simulator.bpmn.swing.model.core.common.gateways.InclusiveGatewayShape;
@@ -150,6 +152,7 @@ public class SwingDIDefinition
 		SHAPE_MAPPERS.put(ExclusiveGateway.class, ExclusiveGatewayShape.class);
 		SHAPE_MAPPERS.put(InclusiveGateway.class, InclusiveGatewayShape.class);
 		SHAPE_MAPPERS.put(EventBasedGateway.class, EventBasedGatewayShape.class);
+		SHAPE_MAPPERS.put(ComplexGateway.class, ComplexGatewayShape.class);
 		// Activity
 		SHAPE_MAPPERS.put(BusinessRuleTask.class, BusinessRuleTaskShape.class);
 		SHAPE_MAPPERS.put(ManualTask.class, ManualTaskShape.class);

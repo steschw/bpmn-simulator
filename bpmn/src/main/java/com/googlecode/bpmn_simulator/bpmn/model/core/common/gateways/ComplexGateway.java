@@ -21,29 +21,19 @@
 package com.googlecode.bpmn_simulator.bpmn.model.core.common.gateways;
 
 import com.googlecode.bpmn_simulator.bpmn.Messages;
-import com.googlecode.bpmn_simulator.bpmn.model.InstantiateElement;
 
-public final class EventBasedGateway
-		extends AbstractGateway
-		implements InstantiateElement {
+public final class ComplexGateway
+		extends AbstractGateway {
 
-	public static final String ELEMENT_NAME = Messages.getString("eventBasedGateway"); //$NON-NLS-1$
+	public static final String ELEMENT_NAME = Messages.getString("complexGateway"); //$NON-NLS-1$
 
-	private boolean instantiate;
-
-	public EventBasedGateway(final String id, final String name, final boolean instantiate) {
+	public ComplexGateway(final String id, final String name) {
 		super(id, name);
-		this.instantiate = instantiate;
 	}
 
 	@Override
 	public String getElementName() {
 		return ELEMENT_NAME;
-	}
-
-	@Override
-	public boolean isInstantiate() {
-		return instantiate;
 	}
 
 }

@@ -29,7 +29,7 @@ import com.googlecode.bpmn_simulator.bpmn.model.core.common.gateways.EventBasedG
 import com.googlecode.bpmn_simulator.bpmn.swing.di.Appearance;
 
 @SuppressWarnings("serial")
-public class EventBasedGatewayShape
+public final class EventBasedGatewayShape
 		extends AbstractGatewayShape<EventBasedGateway> {
 
 	static {

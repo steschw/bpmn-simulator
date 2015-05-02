@@ -70,6 +70,7 @@ import com.googlecode.bpmn_simulator.bpmn.model.core.common.events.MessageEventD
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.events.StartEvent;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.events.TerminateEventDefinition;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.events.TimerEventDefinition;
+import com.googlecode.bpmn_simulator.bpmn.model.core.common.gateways.ComplexGateway;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.gateways.EventBasedGateway;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.gateways.ExclusiveGateway;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.gateways.Gateway;
@@ -708,6 +709,9 @@ public abstract class AbstractBPMNDefinition<E extends BPMNDiagram<?>>
 		} else if (isElementNode(node, BPMN, "eventBasedGateway")) { //$NON-NLS-1$
 			gateway = new EventBasedGateway(
 					getIdAttribute(node), getNameAttribute(node), getInstantiateAttribute(node));
+		} else if (isElementNode(node, BPMN, "complexGateway")) { //$NON-NLS-1$
+			gateway = new ComplexGateway(
+					getIdAttribute(node), getNameAttribute(node));
 		} else {
 			return false;
 		}

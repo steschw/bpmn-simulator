@@ -59,6 +59,7 @@ import com.googlecode.bpmn_simulator.bpmn.swing.model.core.common.events.EndEven
 import com.googlecode.bpmn_simulator.bpmn.swing.model.core.common.events.IntermediateCatchEventShape;
 import com.googlecode.bpmn_simulator.bpmn.swing.model.core.common.events.IntermediateThrowEventShape;
 import com.googlecode.bpmn_simulator.bpmn.swing.model.core.common.events.StartEventShape;
+import com.googlecode.bpmn_simulator.bpmn.swing.model.core.common.gateways.ComplexGatewayShape;
 import com.googlecode.bpmn_simulator.bpmn.swing.model.core.common.gateways.EventBasedGatewayShape;
 import com.googlecode.bpmn_simulator.bpmn.swing.model.core.common.gateways.ExclusiveGatewayShape;
 import com.googlecode.bpmn_simulator.bpmn.swing.model.core.common.gateways.InclusiveGatewayShape;
@@ -279,6 +280,7 @@ public class PreferencesDialog
 		addElementConfig(panel, constraints, InclusiveGatewayShape.class, "InclusiveGateway");
 		addElementConfig(panel, constraints, ParallelGatewayShape.class, "ParallelGateway");
 		addElementConfig(panel, constraints, EventBasedGatewayShape.class, "EventBasedGateway");
+		addElementConfig(panel, constraints, ComplexGatewayShape.class, "ComplexGateway");
 
 		addElementConfig(panel, constraints, SequenceFlowEdge.class, "SequenceFlow", false, true);
 		addElementConfig(panel, constraints, MessageFlowEdge.class, "MessageFlow", false, true);

@@ -31,7 +31,7 @@ import com.googlecode.bpmn_simulator.bpmn.model.core.common.gateways.ExclusiveGa
 import com.googlecode.bpmn_simulator.bpmn.swing.di.Appearance;
 
 @SuppressWarnings("serial")
-public class ExclusiveGatewayShape
+public final class ExclusiveGatewayShape
 		extends AbstractGatewayShape<ExclusiveGateway> {
 
 	private static final Stroke SYMBOL_STROKE = new BasicStroke(3.f);

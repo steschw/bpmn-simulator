@@ -37,6 +37,7 @@ import com.googlecode.bpmn_simulator.animation.element.visual.swing.Colors;
 
 public class Appearance {
 
+	public static final String IMAGE_ADHOC = "adhoc.png"; //$NON-NLS-1$
 	public static final String IMAGE_BUSSINESRULE = "businessrule.png"; //$NON-NLS-1$
 	public static final String IMAGE_COLLAPSED = "collapsed.png"; //$NON-NLS-1$
 	public static final String IMAGE_COLLECTION = "collection.png"; //$NON-NLS-1$
@@ -132,6 +133,7 @@ public class Appearance {
 	}
 
 	public final void loadImages() {
+		loadImage(IMAGE_ADHOC);
 		loadImage(IMAGE_BUSSINESRULE);
 		loadImage(IMAGE_COLLAPSED);
 		loadImage(IMAGE_COLLECTION);

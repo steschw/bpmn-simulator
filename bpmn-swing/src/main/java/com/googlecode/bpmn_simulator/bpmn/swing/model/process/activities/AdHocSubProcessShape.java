@@ -21,6 +21,7 @@
 package com.googlecode.bpmn_simulator.bpmn.swing.model.process.activities;
 
 import com.googlecode.bpmn_simulator.animation.element.visual.swing.Colors;
+import com.googlecode.bpmn_simulator.animation.element.visual.swing.ImageList;
 import com.googlecode.bpmn_simulator.bpmn.model.process.activities.AdHocSubProcess;
 import com.googlecode.bpmn_simulator.bpmn.swing.di.Appearance;
 
@@ -34,6 +35,13 @@ public final class AdHocSubProcessShape
 
 	public AdHocSubProcessShape(final AdHocSubProcess element) {
 		super(element);
+	}
+
+	@Override
+	protected ImageList getMarkers() {
+		final ImageList markers = super.getMarkers();
+		markers.add(Appearance.getDefault().getImage(Appearance.IMAGE_ADHOC));
+		return markers;
 	}
 
 }

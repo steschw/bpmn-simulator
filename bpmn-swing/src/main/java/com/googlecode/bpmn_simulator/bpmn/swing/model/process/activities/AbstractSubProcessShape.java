@@ -21,12 +21,9 @@
 package com.googlecode.bpmn_simulator.bpmn.swing.model.process.activities;
 
 import java.awt.Graphics2D;
-import java.awt.Image;
 import java.awt.Stroke;
 
-import com.googlecode.bpmn_simulator.animation.element.visual.Bounds;
 import com.googlecode.bpmn_simulator.animation.element.visual.swing.ImageList;
-import com.googlecode.bpmn_simulator.animation.element.visual.swing.Presentation;
 import com.googlecode.bpmn_simulator.bpmn.model.process.activities.SubProcess;
 import com.googlecode.bpmn_simulator.bpmn.swing.di.Appearance;
 
@@ -59,14 +56,6 @@ abstract class AbstractSubProcessShape<E extends SubProcess>
 	@Override
 	protected void paintElementForeground(final Graphics2D g) {
 		super.paintElementForeground(g);
-		final Presentation presentation = getPresentation();
-		final Appearance appearance = Appearance.getDefault();
-		final Bounds bounds = getInnerBoundsRelative();
-		if (!isExpanded()) {
-			final Image collapsedImage = appearance.getImage(Appearance.IMAGE_COLLAPSED);
-			final Bounds collapsedBounds = bounds.centerBottom(collapsedImage.getWidth(null), collapsedImage.getHeight(null));
-			presentation.drawImage(g, collapsedImage, collapsedBounds);
-		}
 	}
 
 }

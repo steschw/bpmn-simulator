@@ -58,6 +58,7 @@ import com.googlecode.bpmn_simulator.bpmn.model.core.common.gateways.InclusiveGa
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.gateways.ParallelGateway;
 import com.googlecode.bpmn_simulator.bpmn.model.core.foundation.BaseElement;
 import com.googlecode.bpmn_simulator.bpmn.model.process.Lane;
+import com.googlecode.bpmn_simulator.bpmn.model.process.activities.AdHocSubProcess;
 import com.googlecode.bpmn_simulator.bpmn.model.process.activities.CallActivity;
 import com.googlecode.bpmn_simulator.bpmn.model.process.activities.Process;
 import com.googlecode.bpmn_simulator.bpmn.model.process.activities.SubProcess;
@@ -100,6 +101,7 @@ import com.googlecode.bpmn_simulator.bpmn.swing.model.core.common.gateways.Exclu
 import com.googlecode.bpmn_simulator.bpmn.swing.model.core.common.gateways.InclusiveGatewayShape;
 import com.googlecode.bpmn_simulator.bpmn.swing.model.core.common.gateways.ParallelGatewayShape;
 import com.googlecode.bpmn_simulator.bpmn.swing.model.process.LaneShape;
+import com.googlecode.bpmn_simulator.bpmn.swing.model.process.activities.AdHocSubProcessShape;
 import com.googlecode.bpmn_simulator.bpmn.swing.model.process.activities.CallActivityShape;
 import com.googlecode.bpmn_simulator.bpmn.swing.model.process.activities.ProcessPlane;
 import com.googlecode.bpmn_simulator.bpmn.swing.model.process.activities.SubProcessPlane;
@@ -163,6 +165,7 @@ public class SwingDIDefinition
 		SHAPE_MAPPERS.put(Task.class, TaskShape.class);
 		SHAPE_MAPPERS.put(UserTask.class, UserTaskShape.class);
 		SHAPE_MAPPERS.put(SubProcess.class, SubProcessShape.class);
+		SHAPE_MAPPERS.put(AdHocSubProcess.class, AdHocSubProcessShape.class);
 		SHAPE_MAPPERS.put(Transaction.class, TransactionShape.class);
 		SHAPE_MAPPERS.put(CallActivity.class, CallActivityShape.class);
 		// Data

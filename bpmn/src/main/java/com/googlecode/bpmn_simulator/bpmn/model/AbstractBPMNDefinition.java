@@ -86,6 +86,7 @@ import com.googlecode.bpmn_simulator.bpmn.model.core.infrastructure.Definitions;
 import com.googlecode.bpmn_simulator.bpmn.model.process.Lane;
 import com.googlecode.bpmn_simulator.bpmn.model.process.LaneSet;
 import com.googlecode.bpmn_simulator.bpmn.model.process.activities.Activity;
+import com.googlecode.bpmn_simulator.bpmn.model.process.activities.AdHocSubProcess;
 import com.googlecode.bpmn_simulator.bpmn.model.process.activities.CallActivity;
 import com.googlecode.bpmn_simulator.bpmn.model.process.activities.MultiInstanceLoopCharacteristics;
 import com.googlecode.bpmn_simulator.bpmn.model.process.activities.Process;
@@ -891,6 +892,7 @@ public abstract class AbstractBPMNDefinition<E extends BPMNDiagram<?>>
 	protected boolean readAnyActivity(final Node node,
 			final FlowElementsContainer container) {
 		return readElementSubprocess(node, container)
+				|| readElementAdHocSubprocess(node, container)
 				|| readElementTransaction(node, container)
 				|| readAnyTask(node, container)
 				|| readElementCallActivity(node, container);
@@ -1042,6 +1044,19 @@ public abstract class AbstractBPMNDefinition<E extends BPMNDiagram<?>>
 			notifyElementLoading(process);
 			readChildrenOfFlowElementsContainer(node, process);
 			registerElement(process);
+			return true;
+		}
+		return false;
+	}
+
+	protected boolean readElementAdHocSubprocess(final Node node,
+			final FlowElementsContainer parentActivity) {
+		if (isElementNode(node, BPMN, "adHocSubProcess")) { //$NON-NLS-1$
+			final AdHocSubProcess subprocess = new AdHocSubProcess(
+					getIdAttribute(node), getNameAttribute(node),
+					getTriggeredByEventAttribute(node));
+			readChildrenOfFlowElementsContainerActivity(node, subprocess);
+			registerElement(subprocess);
 			return true;
 		}
 		return false;

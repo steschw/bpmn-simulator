@@ -65,6 +65,7 @@ import com.googlecode.bpmn_simulator.bpmn.swing.model.core.common.gateways.Exclu
 import com.googlecode.bpmn_simulator.bpmn.swing.model.core.common.gateways.InclusiveGatewayShape;
 import com.googlecode.bpmn_simulator.bpmn.swing.model.core.common.gateways.ParallelGatewayShape;
 import com.googlecode.bpmn_simulator.bpmn.swing.model.process.LaneShape;
+import com.googlecode.bpmn_simulator.bpmn.swing.model.process.activities.AdHocSubProcessShape;
 import com.googlecode.bpmn_simulator.bpmn.swing.model.process.activities.CallActivityShape;
 import com.googlecode.bpmn_simulator.bpmn.swing.model.process.activities.SubProcessShape;
 import com.googlecode.bpmn_simulator.bpmn.swing.model.process.activities.TransactionShape;
@@ -303,6 +304,7 @@ public class PreferencesDialog
 		addElementConfig(panel, constraints, CallActivityShape.class, "CallActivity");
 
 		addElementConfig(panel, constraints, SubProcessShape.class, "SubProcess");
+		addElementConfig(panel, constraints, AdHocSubProcessShape.class, "AdHocSubProcess");
 		addElementConfig(panel, constraints, TransactionShape.class, "Transaction");
 
 		addElementConfig(panel, constraints, SubChoreographyShape.class, "SubChoreographyShape");

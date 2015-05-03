@@ -45,6 +45,7 @@ import com.googlecode.bpmn_simulator.bpmn.model.choreography.activities.SubChore
 import com.googlecode.bpmn_simulator.bpmn.model.collaboration.Collaboration;
 import com.googlecode.bpmn_simulator.bpmn.model.collaboration.MessageFlow;
 import com.googlecode.bpmn_simulator.bpmn.model.collaboration.Participant;
+import com.googlecode.bpmn_simulator.bpmn.model.collaboration.conversations.CallConversation;
 import com.googlecode.bpmn_simulator.bpmn.model.collaboration.conversations.Conversation;
 import com.googlecode.bpmn_simulator.bpmn.model.collaboration.conversations.ConversationLink;
 import com.googlecode.bpmn_simulator.bpmn.model.collaboration.conversations.SubConversation;
@@ -935,6 +936,16 @@ public abstract class AbstractBPMNDefinition<E extends BPMNDiagram<?>>
 		return false;
 	}
 
+	protected boolean readElementCallConversation(final Node node, final Collaboration collaboration) {
+		if (isElementNode(node, BPMN, "callConversation")) { //$NON-NLS-1$
+			final CallConversation conversation = new CallConversation(
+					getIdAttribute(node), getNameAttribute(node));
+			registerElement(conversation);
+			return true;
+		}
+		return false;
+	}
+
 	protected boolean readElementSubConversation(final Node node, final Collaboration collaboration) {
 		if (isElementNode(node, BPMN, "subConversation")) { //$NON-NLS-1$
 			final SubConversation conversation = new SubConversation(
@@ -957,7 +968,8 @@ public abstract class AbstractBPMNDefinition<E extends BPMNDiagram<?>>
 
 	protected boolean readAnyConversationNode(final Node node, final Collaboration collaboration) {
 		return readElementConversation(node, collaboration)
-				|| readElementSubConversation(node, collaboration);
+				|| readElementSubConversation(node, collaboration)
+				|| readElementCallConversation(node, collaboration);
 	}
 
 	protected boolean readElementConversationLink(final Node node, final Collaboration collaboration) {

@@ -111,6 +111,7 @@ import com.googlecode.bpmn_simulator.bpmn.model.process.data.DataObjectReference
 import com.googlecode.bpmn_simulator.bpmn.model.process.data.DataOutput;
 import com.googlecode.bpmn_simulator.bpmn.model.process.data.DataStore;
 import com.googlecode.bpmn_simulator.bpmn.model.process.data.DataStoreReference;
+import com.googlecode.bpmn_simulator.bpmn.model.process.data.InputOutputSpecification;
 
 public abstract class AbstractBPMNDefinition<E extends BPMNDiagram<?>>
 		extends AbstractXmlDefinition<E>
@@ -525,10 +526,39 @@ public abstract class AbstractBPMNDefinition<E extends BPMNDiagram<?>>
 				|| readElementMultiInstanceLoopCharacteristics(node, activity);
 	}
 
+	protected boolean readAnyChildOfInputOutputSpecification(final Node node,
+			final InputOutputSpecification ioSpecification) {
+		return readElementDataInput(node)
+				|| readElementDataOutput(node);
+	}
+
+	protected void readChildrenOfInputOutputSpecification(final Node node,
+			final InputOutputSpecification ioSpecification) {
+		final NodeList childNodes = node.getChildNodes();
+		for (int i = 0; i < childNodes.getLength(); ++i) {
+			final Node childNode = childNodes.item(i);
+			if (!readAnyChildOfInputOutputSpecification(childNode, ioSpecification)) {
+				showUnknowNode(childNode);
+			}
+		}
+	}
+
+	protected boolean readElementInputOutputSpecification(final Node node) {
+		if (isElementNode(node, BPMN, "ioSpecification")) { //$NON-NLS-1$
+			final InputOutputSpecification ioSpecification
+					= new InputOutputSpecification(getIdAttribute(node));
+			readChildrenOfInputOutputSpecification(node, ioSpecification);
+			registerElement(ioSpecification);
+			return true;
+		}
+		return false;
+	}
+
 	protected boolean readAnyChildOfActivity(final Node node, final Activity activity) {
 		return readAnyChildOfFlowNode(node, activity)
 				|| readAnyLoopCharacteristics(node, activity)
-				|| readAnyDataAssociation(node);
+				|| readAnyDataAssociation(node)
+				|| readElementInputOutputSpecification(node);
 	}
 
 	protected void readDefaultSequenceFlowAttribute(
@@ -614,18 +644,6 @@ public abstract class AbstractBPMNDefinition<E extends BPMNDiagram<?>>
 			if (!readAnyChildOfBaseElement(childNode, container)
 					&& !readAnyFlowElement(childNode, container)
 					&& !readAnyChildOfActivity(childNode, container)) {
-				showUnknowNode(childNode);
-			}
-		}
-	}
-
-	protected void readChildrenOfFlowElementsContainer(final Node node,
-			final FlowElementsContainer container) {
-		final NodeList childNodes = node.getChildNodes();
-		for (int i = 0; i < childNodes.getLength(); ++i) {
-			final Node childNode = childNodes.item(i);
-			if (!readAnyChildOfBaseElement(childNode, container)
-					&& !readAnyFlowElement(childNode, container)) {
 				showUnknowNode(childNode);
 			}
 		}
@@ -1083,12 +1101,25 @@ public abstract class AbstractBPMNDefinition<E extends BPMNDiagram<?>>
 		return false;
 	}
 
+	protected void readChildrenOfProcess(final Node node,
+			final FlowElementsContainer container) {
+		final NodeList childNodes = node.getChildNodes();
+		for (int i = 0; i < childNodes.getLength(); ++i) {
+			final Node childNode = childNodes.item(i);
+			if (!readAnyChildOfBaseElement(childNode, container)
+					&& !readAnyFlowElement(childNode, container)
+					&& !readElementInputOutputSpecification(childNode)) {
+				showUnknowNode(childNode);
+			}
+		}
+	}
+
 	protected boolean readElementProcess(final Node node) {
 		if (isElementNode(node, BPMN, "process")) { //$NON-NLS-1$
 			final Process process = new Process(
 					getIdAttribute(node), getNameAttribute(node));
 			notifyElementLoading(process);
-			readChildrenOfFlowElementsContainer(node, process);
+			readChildrenOfProcess(node, process);
 			registerElement(process);
 			return true;
 		}

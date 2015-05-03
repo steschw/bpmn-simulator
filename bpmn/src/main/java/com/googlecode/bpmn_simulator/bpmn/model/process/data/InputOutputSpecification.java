@@ -18,29 +18,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.bpmn_simulator.bpmn.model.process.activities;
+package com.googlecode.bpmn_simulator.bpmn.model.process.data;
 
-import com.googlecode.bpmn_simulator.animation.ref.References;
 import com.googlecode.bpmn_simulator.bpmn.Messages;
-import com.googlecode.bpmn_simulator.bpmn.model.core.common.AbstractCallableElement;
-import com.googlecode.bpmn_simulator.bpmn.model.core.common.FlowElement;
-import com.googlecode.bpmn_simulator.bpmn.model.core.common.FlowElementsContainer;
+import com.googlecode.bpmn_simulator.bpmn.model.core.foundation.AbstractBaseElement;
 
-public final class Process
-		extends AbstractCallableElement
-		implements FlowElementsContainer {
+public final class InputOutputSpecification
+		extends AbstractBaseElement {
 
-	public static final String ELEMENT_NAME = Messages.getString("process"); //$NON-NLS-1$
+	public static final String ELEMENT_NAME = Messages.getString("inputOutputSpecification"); //$NON-NLS-1$
 
-	private References<FlowElement> flowElements;
-
-	public Process(final String id, final String name) {
-		super(id, name);
-	}
-
-	@Override
-	public void setFlowElements(final References<FlowElement> flowElements) {
-		this.flowElements = flowElements;
+	public InputOutputSpecification(final String id) {
+		super(id);
 	}
 
 	@Override

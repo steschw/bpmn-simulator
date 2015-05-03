@@ -40,6 +40,7 @@ import com.googlecode.bpmn_simulator.animation.ref.Reference;
 import com.googlecode.bpmn_simulator.bpmn.Messages;
 import com.googlecode.bpmn_simulator.bpmn.di.BPMNDiagram;
 import com.googlecode.bpmn_simulator.bpmn.model.choreography.Choreography;
+import com.googlecode.bpmn_simulator.bpmn.model.choreography.activities.CallChoreography;
 import com.googlecode.bpmn_simulator.bpmn.model.choreography.activities.ChoreographyTask;
 import com.googlecode.bpmn_simulator.bpmn.model.choreography.activities.SubChoreography;
 import com.googlecode.bpmn_simulator.bpmn.model.collaboration.Collaboration;
@@ -922,7 +923,8 @@ public abstract class AbstractBPMNDefinition<E extends BPMNDiagram<?>>
 				|| readElementDataStoreReference(node, container)
 				|| readElementLaneSet(node, container)
 				|| readElementChoreographyTask(node, container)
-				|| readElementSubChoreography(node, container);
+				|| readElementSubChoreography(node, container)
+				|| readElementCallChoreography(node, container);
 	}
 
 	protected boolean readElementParticipant(final Node node, final Collaboration collaboration) {
@@ -1065,6 +1067,17 @@ public abstract class AbstractBPMNDefinition<E extends BPMNDiagram<?>>
 			final ChoreographyTask choreographyTask = new ChoreographyTask(
 					getIdAttribute(node), getNameAttribute(node));
 			registerElement(choreographyTask);
+			return true;
+		}
+		return false;
+	}
+
+	protected boolean readElementCallChoreography(final Node node,
+			final FlowElementsContainer container) {
+		if (isElementNode(node, BPMN, "callChoreography")) { //$NON-NLS-1$
+			final CallChoreography callChoreography = new CallChoreography(
+					getIdAttribute(node), getNameAttribute(node));
+			registerElement(callChoreography);
 			return true;
 		}
 		return false;

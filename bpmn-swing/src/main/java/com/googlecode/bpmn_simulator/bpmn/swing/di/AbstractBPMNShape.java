@@ -24,6 +24,7 @@ import java.awt.Graphics2D;
 import java.awt.Stroke;
 
 import com.googlecode.bpmn_simulator.animation.element.logical.LogicalElement;
+import com.googlecode.bpmn_simulator.animation.element.visual.Bounds;
 import com.googlecode.bpmn_simulator.animation.element.visual.swing.AbstractVisualNodeElement;
 import com.googlecode.bpmn_simulator.bpmn.di.BPMNShape;
 import com.googlecode.bpmn_simulator.bpmn.di.ParticipantBandKind;
@@ -33,6 +34,10 @@ import com.googlecode.bpmn_simulator.bpmn.swing.di.Appearance.ElementAppearance;
 public abstract class AbstractBPMNShape<E extends LogicalElement>
 		extends AbstractVisualNodeElement<E>
 		implements BPMNShape {
+
+	protected static final int ICON_WIDTH = 16;
+	protected static final int ICON_HEIGHT = 16;
+	protected static final int ICON_MARGIN = 8;
 
 	protected static final Stroke DEFAULT_STROKE = Appearance.getDefault().createStrokeSolid(1);
 
@@ -115,6 +120,14 @@ public abstract class AbstractBPMNShape<E extends LogicalElement>
 	protected void paintElementForeground(final Graphics2D g) {
 		g.setStroke(getStroke());
 		g.setPaint(getAppearance().getForeground());
+	}
+
+	protected Bounds getIconBounds() {
+		final Bounds bounds = getInnerBoundsRelative();
+		return new Bounds(
+				bounds.getMinX() + ICON_MARGIN,
+				bounds.getMinY() + ICON_MARGIN,
+				ICON_WIDTH, ICON_HEIGHT);
 	}
 
 }

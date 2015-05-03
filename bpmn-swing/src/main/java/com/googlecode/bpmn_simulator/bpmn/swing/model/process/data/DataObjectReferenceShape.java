@@ -20,6 +20,8 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.swing.model.process.data;
 
+import java.awt.Image;
+
 import com.googlecode.bpmn_simulator.animation.element.visual.swing.Colors;
 import com.googlecode.bpmn_simulator.bpmn.model.process.data.DataObjectReference;
 import com.googlecode.bpmn_simulator.bpmn.swing.di.Appearance;
@@ -34,6 +36,11 @@ public class DataObjectReferenceShape
 
 	public DataObjectReferenceShape(final DataObjectReference element) {
 		super(element);
+	}
+
+	@Override
+	protected Image getDataIcon() {
+		return null;
 	}
 
 }

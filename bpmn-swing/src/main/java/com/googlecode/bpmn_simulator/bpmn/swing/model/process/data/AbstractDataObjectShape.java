@@ -21,6 +21,7 @@
 package com.googlecode.bpmn_simulator.bpmn.swing.model.process.data;
 
 import java.awt.Graphics2D;
+import java.awt.Image;
 
 import com.googlecode.bpmn_simulator.animation.element.logical.LogicalElement;
 import com.googlecode.bpmn_simulator.animation.element.visual.Bounds;
@@ -48,6 +49,8 @@ abstract class AbstractDataObjectShape<E extends LogicalElement>
 		return (int) Math.round(Math.min(bounds.getWidth(), bounds.getHeight()) * 0.25);
 	}
 
+	protected abstract Image getDataIcon();
+
 	@Override
 	protected void paintElementBackground(final Graphics2D g) {
 		super.paintElementBackground(g);
@@ -66,6 +69,10 @@ abstract class AbstractDataObjectShape<E extends LogicalElement>
 				new Point(bounds.getMaxX() - n, bounds.getMinY()), p);
 		getPresentation().drawLine(g,
 				new Point(bounds.getMaxX(), bounds.getMinY() + n), p);
+		final Image icon = getDataIcon();
+		if (icon != null) {
+			getPresentation().drawImage(g, icon, getIconBounds());
+		}
 	}
 
 }

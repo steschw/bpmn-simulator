@@ -20,6 +20,8 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.swing.model.process.data;
 
+import java.awt.Image;
+
 import com.googlecode.bpmn_simulator.animation.element.visual.swing.Colors;
 import com.googlecode.bpmn_simulator.bpmn.model.process.data.DataOutput;
 import com.googlecode.bpmn_simulator.bpmn.swing.di.Appearance;
@@ -34,6 +36,11 @@ public class DataOutputShape
 
 	public DataOutputShape(final DataOutput element) {
 		super(element);
+	}
+
+	@Override
+	protected Image getDataIcon() {
+		return Appearance.getDefault().getImage(Appearance.IMAGE_LINK_INVERSE);
 	}
 
 }

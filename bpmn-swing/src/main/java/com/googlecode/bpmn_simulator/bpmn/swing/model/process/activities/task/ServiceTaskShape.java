@@ -39,7 +39,7 @@ public class ServiceTaskShape
 	}
 
 	@Override
-	protected Image getTaskImage() {
+	protected Image getTaskIcon() {
 		return Appearance.getDefault().getImage(Appearance.IMAGE_SERVICE);
 	}
 

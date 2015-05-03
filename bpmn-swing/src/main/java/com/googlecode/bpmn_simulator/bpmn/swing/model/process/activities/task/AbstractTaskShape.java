@@ -23,7 +23,6 @@ package com.googlecode.bpmn_simulator.bpmn.swing.model.process.activities.task;
 import java.awt.Graphics2D;
 import java.awt.Image;
 
-import com.googlecode.bpmn_simulator.animation.element.visual.Bounds;
 import com.googlecode.bpmn_simulator.animation.element.visual.Label;
 import com.googlecode.bpmn_simulator.bpmn.model.process.activities.tasks.Task;
 import com.googlecode.bpmn_simulator.bpmn.swing.model.process.activities.AbstractActivityShape;
@@ -32,39 +31,25 @@ import com.googlecode.bpmn_simulator.bpmn.swing.model.process.activities.Abstrac
 abstract class AbstractTaskShape<E extends Task>
 		extends AbstractActivityShape<E> {
 
-	private static final int IMAGE_WIDTH = 16;
-	private static final int IMAGE_HEIGHT = 16;
-
 	public AbstractTaskShape(final E element) {
 		super(element);
 	}
 
 	@Override
 	public void alignLabel(final Label label) {
-		final Bounds innerBounds = getInnerBounds();
-		if (getTaskImage() == null) {
-			label.setBounds(innerBounds);
-		} else {
-			label.setBounds(innerBounds.shrinkLeft(getPadding() * 2 + IMAGE_WIDTH));
-		}
+		label.setBounds(getInnerBounds());
 	}
 
-	protected Image getTaskImage() {
+	protected Image getTaskIcon() {
 		return null;
 	}
 
 	@Override
 	protected void paintElementForeground(final Graphics2D g) {
 		super.paintElementForeground(g);
-		final Image image = getTaskImage();
-		if (image != null) {
-			final Bounds bounds = getInnerBoundsRelative();
-			final int padding = getPadding();
-			final Bounds imageBounds = new Bounds(
-					bounds.getMinX() + padding,
-					bounds.getMinY() + padding,
-					IMAGE_WIDTH, IMAGE_HEIGHT);
-			getPresentation().drawImage(g, image, imageBounds);
+		final Image icon = getTaskIcon();
+		if (icon != null) {
+			getPresentation().drawImage(g, icon, getIconBounds());
 		}
 	}
 

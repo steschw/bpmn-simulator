@@ -42,7 +42,7 @@ public abstract class AbstractActivityShape<E extends Activity>
 		super(element);
 	}
 
-	protected int getPadding() {
+	private int getPadding() {
 		return Appearance.getDefault().getArcSize() / 4;
 	}
 

@@ -20,14 +20,20 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.model.collaboration.conversations;
 
-import com.googlecode.bpmn_simulator.bpmn.model.core.foundation.AbstractBaseElementNamed;
+import com.googlecode.bpmn_simulator.bpmn.Messages;
 
-abstract class AbstractConversationNode
-		extends AbstractBaseElementNamed
-		implements ConversationNode {
+public class SubConversation
+		extends AbstractConversationNode {
 
-	public AbstractConversationNode(final String id, final String name) {
+	public static final String ELEMENT_NAME = Messages.getString("subConversation"); //$NON-NLS-1$
+
+	public SubConversation(final String id, final String name) {
 		super(id, name);
+	}
+
+	@Override
+	public String getElementName() {
+		return ELEMENT_NAME;
 	}
 
 }

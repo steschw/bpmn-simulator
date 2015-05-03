@@ -47,6 +47,7 @@ import com.googlecode.bpmn_simulator.bpmn.model.collaboration.MessageFlow;
 import com.googlecode.bpmn_simulator.bpmn.model.collaboration.Participant;
 import com.googlecode.bpmn_simulator.bpmn.model.collaboration.conversations.Conversation;
 import com.googlecode.bpmn_simulator.bpmn.model.collaboration.conversations.ConversationLink;
+import com.googlecode.bpmn_simulator.bpmn.model.collaboration.conversations.SubConversation;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.DefaultSequenceFlowElement;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.Expression;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.FlowElement;
@@ -934,6 +935,16 @@ public abstract class AbstractBPMNDefinition<E extends BPMNDiagram<?>>
 		return false;
 	}
 
+	protected boolean readElementSubConversation(final Node node, final Collaboration collaboration) {
+		if (isElementNode(node, BPMN, "subConversation")) { //$NON-NLS-1$
+			final SubConversation conversation = new SubConversation(
+					getIdAttribute(node), getNameAttribute(node));
+			registerElement(conversation);
+			return true;
+		}
+		return false;
+	}
+
 	protected boolean readElementConversation(final Node node, final Collaboration collaboration) {
 		if (isElementNode(node, BPMN, "conversation")) { //$NON-NLS-1$
 			final Conversation conversation = new Conversation(
@@ -942,6 +953,11 @@ public abstract class AbstractBPMNDefinition<E extends BPMNDiagram<?>>
 			return true;
 		}
 		return false;
+	}
+
+	protected boolean readAnyConversationNode(final Node node, final Collaboration collaboration) {
+		return readElementConversation(node, collaboration)
+				|| readElementSubConversation(node, collaboration);
 	}
 
 	protected boolean readElementConversationLink(final Node node, final Collaboration collaboration) {
@@ -960,7 +976,7 @@ public abstract class AbstractBPMNDefinition<E extends BPMNDiagram<?>>
 			final Node childNode = childNodes.item(i);
 			if (!readAnyChildOfBaseElement(childNode, collaboration)
 					&& !readElementParticipant(childNode, collaboration)
-					&& !readElementConversation(childNode, collaboration)
+					&& !readAnyConversationNode(childNode, collaboration)
 					&& !readElementConversationLink(childNode, collaboration)
 					&& !readElementMessageFlow(childNode)
 					&& !readAnyArtifact(childNode)) {

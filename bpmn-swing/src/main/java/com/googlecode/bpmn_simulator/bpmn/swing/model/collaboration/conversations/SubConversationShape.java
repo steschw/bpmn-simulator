@@ -18,16 +18,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.bpmn_simulator.bpmn.model.collaboration.conversations;
+package com.googlecode.bpmn_simulator.bpmn.swing.model.collaboration.conversations;
 
-import com.googlecode.bpmn_simulator.bpmn.model.core.foundation.AbstractBaseElementNamed;
+import com.googlecode.bpmn_simulator.animation.element.visual.swing.Colors;
+import com.googlecode.bpmn_simulator.bpmn.model.collaboration.conversations.SubConversation;
+import com.googlecode.bpmn_simulator.bpmn.swing.di.Appearance;
 
-abstract class AbstractConversationNode
-		extends AbstractBaseElementNamed
-		implements ConversationNode {
+@SuppressWarnings("serial")
+public final class SubConversationShape
+		extends AbstractConversationNodeShape<SubConversation> {
 
-	public AbstractConversationNode(final String id, final String name) {
-		super(id, name);
+	static {
+		Appearance.setDefaultColor(SubConversationShape.class, Colors.YELLOW);
+	}
+
+	public SubConversationShape(final SubConversation element) {
+		super(element);
 	}
 
 }

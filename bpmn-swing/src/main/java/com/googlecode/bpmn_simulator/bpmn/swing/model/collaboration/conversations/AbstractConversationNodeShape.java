@@ -20,20 +20,30 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.swing.model.collaboration.conversations;
 
-import com.googlecode.bpmn_simulator.animation.element.visual.swing.Colors;
-import com.googlecode.bpmn_simulator.bpmn.model.collaboration.conversations.Conversation;
-import com.googlecode.bpmn_simulator.bpmn.swing.di.Appearance;
+import java.awt.Graphics2D;
+
+import com.googlecode.bpmn_simulator.animation.element.visual.swing.Presentation;
+import com.googlecode.bpmn_simulator.bpmn.model.collaboration.conversations.ConversationNode;
+import com.googlecode.bpmn_simulator.bpmn.swing.di.AbstractBPMNShape;
 
 @SuppressWarnings("serial")
-public final class ConversationShape
-		extends AbstractConversationNodeShape<Conversation> {
+abstract class AbstractConversationNodeShape<E extends ConversationNode>
+		extends AbstractBPMNShape<E> {
 
-	static {
-		Appearance.setDefaultColor(ConversationShape.class, Colors.YELLOW);
+	public AbstractConversationNodeShape(final E element) {
+		super(element);
 	}
 
-	public ConversationShape(final Conversation element) {
-		super(element);
+	@Override
+	protected void paintElementBackground(final Graphics2D g) {
+		super.paintElementBackground(g);
+		getPresentation().fillConvexPolygon(g, getInnerBoundsRelative(), Presentation.HEXAGON);
+	}
+
+	@Override
+	protected void paintElementForeground(final Graphics2D g) {
+		super.paintElementForeground(g);
+		getPresentation().drawConvexPolygon(g, getInnerBoundsRelative(), Presentation.HEXAGON);
 	}
 
 }

@@ -20,14 +20,10 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.model.collaboration.conversations;
 
-import com.googlecode.bpmn_simulator.bpmn.model.core.foundation.AbstractBaseElementNamed;
+import com.googlecode.bpmn_simulator.bpmn.model.NamedElement;
+import com.googlecode.bpmn_simulator.bpmn.model.core.foundation.BaseElement;
 
-abstract class AbstractConversationNode
-		extends AbstractBaseElementNamed
-		implements ConversationNode {
-
-	public AbstractConversationNode(final String id, final String name) {
-		super(id, name);
-	}
+public interface ConversationNode
+		extends BaseElement, NamedElement {
 
 }

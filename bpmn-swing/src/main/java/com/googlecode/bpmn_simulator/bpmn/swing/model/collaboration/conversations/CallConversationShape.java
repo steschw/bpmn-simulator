@@ -30,8 +30,6 @@ import com.googlecode.bpmn_simulator.bpmn.swing.di.Appearance;
 public final class CallConversationShape
 		extends AbstractConversationNodeShape<CallConversation> {
 
-	private static final Stroke STROKE = Appearance.getDefault().createStrokeSolid(3);
-
 	static {
 		Appearance.setDefaultColor(CallConversationShape.class, Colors.YELLOW);
 	}
@@ -42,7 +40,7 @@ public final class CallConversationShape
 
 	@Override
 	protected Stroke getStroke() {
-		return STROKE;
+		return CALL_STROKE;
 	}
 
 }

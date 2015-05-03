@@ -30,8 +30,6 @@ import com.googlecode.bpmn_simulator.bpmn.swing.di.Appearance;
 public class CallActivityShape
 		extends AbstractActivityShape<CallActivity> {
 
-	private static final Stroke STROKE = Appearance.getDefault().createStrokeSolid(3);
-
 	static {
 		Appearance.setDefaultColor(CallActivityShape.class, Colors.YELLOW);
 	}
@@ -43,7 +41,7 @@ public class CallActivityShape
 
 	@Override
 	protected Stroke getStroke() {
-		return STROKE;
+		return CALL_STROKE;
 	}
 
 }

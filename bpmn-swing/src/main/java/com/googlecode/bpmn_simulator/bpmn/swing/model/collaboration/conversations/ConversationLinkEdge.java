@@ -21,18 +21,14 @@
 package com.googlecode.bpmn_simulator.bpmn.swing.model.collaboration.conversations;
 
 import java.awt.Graphics2D;
-import java.awt.Stroke;
 
 import com.googlecode.bpmn_simulator.animation.element.visual.Waypoints;
 import com.googlecode.bpmn_simulator.bpmn.model.collaboration.conversations.ConversationLink;
 import com.googlecode.bpmn_simulator.bpmn.swing.di.AbstractBPMNEdge;
-import com.googlecode.bpmn_simulator.bpmn.swing.di.Appearance;
 
 @SuppressWarnings("serial")
 public class ConversationLinkEdge
 		extends AbstractBPMNEdge<ConversationLink> {
-
-	private static final Stroke STROKE = Appearance.getDefault().createStrokeSolid(1);
 
 	public ConversationLinkEdge(final ConversationLink element) {
 		super(element);
@@ -40,7 +36,6 @@ public class ConversationLinkEdge
 
 	@Override
 	protected void paintElementLine(final Graphics2D g) {
-		g.setStroke(STROKE);
 		//TODO
 		Waypoints waypointsLeft = getWaypointsRelative().translate(-2, -2);
 		Waypoints waypointsRight = getWaypointsRelative().translate(2, 2);

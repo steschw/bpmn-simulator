@@ -20,7 +20,6 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.swing.di;
 
-import java.awt.BasicStroke;
 import java.awt.Graphics2D;
 import java.awt.Stroke;
 
@@ -35,7 +34,9 @@ public abstract class AbstractBPMNShape<E extends LogicalElement>
 		extends AbstractVisualNodeElement<E>
 		implements BPMNShape {
 
-	private static final Stroke DEFAULT_STROKE = new BasicStroke(1.f);
+	protected static final Stroke DEFAULT_STROKE = Appearance.getDefault().createStrokeSolid(1);
+
+	protected static final Stroke CALL_STROKE = Appearance.getDefault().createStrokeSolid(3);
 
 	private boolean horizontal;
 	private boolean expanded;

@@ -21,14 +21,21 @@
 package com.googlecode.bpmn_simulator.gui;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
+import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 import javax.swing.border.Border;
 
 @SuppressWarnings("serial")
@@ -36,6 +43,8 @@ public abstract class AbstractDialog
 		extends JDialog {
 
 	protected static final int GAP = 10;
+
+	protected static final Insets INSETS = new Insets(4, 4, 4, 4);
 
 	protected static final int DEFAULT_BUTTON_WIDTH = 100;
 
@@ -55,6 +64,25 @@ public abstract class AbstractDialog
 		final Dimension dimension = component.getPreferredSize();
 		dimension.width = width;
 		component.setPreferredSize(dimension);
+	}
+
+	protected static Component createDirectoryEdit(final JTextField textField) {
+		final JPanel panel = new JPanel(new BorderLayout());
+		panel.add(textField, BorderLayout.CENTER);
+		final JButton button = new JButton("...");
+		panel.add(button, BorderLayout.LINE_END);
+		button.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(final ActionEvent event) {
+				final JFileChooser fileChooser = new JFileChooser(textField.getText());
+				fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+				fileChooser.setAcceptAllFileFilterUsed(true);
+				if (fileChooser.showOpenDialog(textField) == JFileChooser.APPROVE_OPTION) {
+					textField.setText(fileChooser.getSelectedFile().getAbsolutePath());
+				}
+			}
+		});
+		return panel;
 	}
 
 	public void showDialog() {

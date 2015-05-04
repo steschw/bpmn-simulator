@@ -24,13 +24,14 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.net.URI;
 import java.util.Locale;
 
 import javax.swing.BorderFactory;
+import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -83,11 +84,14 @@ import com.googlecode.bpmn_simulator.bpmn.swing.model.process.data.DataObjectRef
 import com.googlecode.bpmn_simulator.bpmn.swing.model.process.data.DataOutputShape;
 import com.googlecode.bpmn_simulator.bpmn.swing.model.process.data.DataStoreReferenceShape;
 import com.googlecode.bpmn_simulator.gui.AbstractDialog;
+import com.googlecode.bpmn_simulator.gui.Hyperlink;
 import com.googlecode.bpmn_simulator.gui.Messages;
 
 @SuppressWarnings("serial")
 public class PreferencesDialog
 		extends AbstractDialog {
+
+	private static final URI BONITA_HOME_INFO = URI.create("http://documentation.bonitasoft.com/bonita-home");
 
 	private final LocaleComboBox selectLanguage = new LocaleComboBox();
 
@@ -103,6 +107,8 @@ public class PreferencesDialog
 
 	private final JCheckBox checkIgnoreModelerColors
 			= new JCheckBox(Messages.getString("Preferences.ignoreModelerColors")); //$NON-NLS-1$
+
+	private final JTextField editBonitaHome = new JTextField();
 
 	public PreferencesDialog(final JFrame parent) {
 		super(parent, Messages.getString("Preferences.preferences")); //$NON-NLS-1$
@@ -126,6 +132,7 @@ public class PreferencesDialog
 		tabbedPane.addTab(Messages.getString("Preferences.behavior"), createBehaviorPanel()); //$NON-NLS-1$
 		tabbedPane.addTab(Messages.getString("Preferences.display"), createDisplayPanel()); //$NON-NLS-1$
 		tabbedPane.addTab(Messages.getString("Preferences.elementDefaults"), createElementsPanel()); //$NON-NLS-1$
+		tabbedPane.addTab(Messages.getString("Preferences.engine"), createEnginePanel()); //$NON-NLS-1$
 		return tabbedPane;
 	}
 
@@ -133,7 +140,7 @@ public class PreferencesDialog
 		final JPanel panel = new JPanel(new GridBagLayout());
 		panel.setBorder(createGapBorder());
 		final GridBagConstraints c = new GridBagConstraints();
-		c.insets = new Insets(4, 4, 4, 4);
+		c.insets = INSETS;
 
 		c.gridy = 0;
 
@@ -314,6 +321,39 @@ public class PreferencesDialog
 		return panel;
 	}
 
+	private JPanel createEngineBonitaPanel() {
+		final JPanel panel = new JPanel(new GridBagLayout());
+		panel.setBorder(BorderFactory.createTitledBorder("Bonita"));
+
+		final GridBagConstraints constraints = new GridBagConstraints();
+		constraints.anchor = GridBagConstraints.LAST_LINE_START;
+		constraints.insets = INSETS;
+		constraints.gridy = 0;
+
+		constraints.gridx = 0;
+		panel.add(new JLabel("Home:"), constraints);
+
+		constraints.gridx = 1;
+		constraints.fill = GridBagConstraints.HORIZONTAL;
+		constraints.weightx = 1.;
+		panel.add(createDirectoryEdit(editBonitaHome), constraints);
+		constraints.weightx = 0.;
+
+		constraints.gridx = 2;
+		panel.add(new Hyperlink(BONITA_HOME_INFO, Messages.getString("info")), constraints); //$NON-NLS-1$
+
+		return panel;
+	}
+
+	private JPanel createEnginePanel() {
+		final JPanel panel = new JPanel();
+		panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
+		panel.setBorder(createGapBorder());
+		panel.add(createEngineBonitaPanel());
+		panel.add(Box.createVerticalGlue());
+		return panel;
+	}
+
 	@Override
 	protected JPanel createButtonPanel() {
 		final JPanel panel = super.createButtonPanel();
@@ -355,6 +395,8 @@ public class PreferencesDialog
 		final Appearance appearance = Appearance.getDefault();
 		appearance.setIgnoreExplicitColors(checkIgnoreModelerColors.isSelected());
 
+		config.setBonitaHome(editBonitaHome.getText());
+
 		config.store();
 	}
 
@@ -366,6 +408,8 @@ public class PreferencesDialog
 
 		final Appearance appearance = Appearance.getDefault();
 		checkIgnoreModelerColors.setSelected(appearance.getIgnoreExplicitColors());
+
+		editBonitaHome.setText(config.getBonitaHome());
 	}
 
 }

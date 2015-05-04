@@ -43,6 +43,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JToolBar;
 import javax.swing.KeyStroke;
 import javax.swing.event.MenuEvent;
@@ -376,9 +377,32 @@ public class BPMNSimulatorFrame
 				openFile();
 			}
 		});
-
 		definitionToolbar.add(openButton);
+
+		final JPopupMenu importMenu = new JPopupMenu(Messages.getString("Toolbar.import")); //$NON-NLS-1$
+		final JMenuItem importBonitaItem = new JMenuItem("Bonita");
+		importBonitaItem.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(final ActionEvent event) {
+				importBonita();
+			}
+		});
+		importMenu.add(importBonitaItem);
+		final JButton importButton = new JButton(Theme.ICON_IMPORT);
+		importButton.setToolTipText(Messages.getString("Toolbar.import")); //$NON-NLS-1$
+		importButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(final ActionEvent event) {
+				importMenu.show(importButton, 0, importButton.getHeight());
+			}
+		});
+		definitionToolbar.add(importButton);
+
 		return definitionToolbar;
+	}
+
+	private void importBonita() {
+		System.setProperty("bonita.home", Config.getInstance().getBonitaHome());
 	}
 
 	private void showException(final Exception e) {

@@ -49,6 +49,8 @@ public class Config {
 
 	private static final String LAST_DIRECTORY = "lastDirectory"; //$NON-NLS-1$
 
+	private static final String BONITA_HOME = "bonitaHome"; //$NON-NLS-1$
+
 	private static Config instance;
 
 	protected Config() {
@@ -122,6 +124,14 @@ public class Config {
 
 	public void setLastDirectory(final String directory) {
 		getRootNode().put(LAST_DIRECTORY, directory);
+	}
+
+	public void setBonitaHome(final String directory) {
+		getRootNode().put(BONITA_HOME, directory);
+	}
+
+	public String getBonitaHome() {
+		return getRootNode().get(BONITA_HOME, System.getProperty("bonita.home"));
 	}
 
 	public void load() {

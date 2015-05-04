@@ -11,6 +11,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 public final class Theme {
 
 	public static final Icon ICON_OPEN = loadIcon("open.png"); //$NON-NLS-1$
+	public static final Icon ICON_IMPORT = loadIcon("import.png"); //$NON-NLS-1$
 
 	public static final Icon ICON_START = loadIcon("start.png"); //$NON-NLS-1$;
 	public static final Icon ICON_RESET = loadIcon("stop.png"); //$NON-NLS-1$;

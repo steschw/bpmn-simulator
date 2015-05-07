@@ -47,8 +47,8 @@ public class InstancesFrame
 		create();
 	}
 
-	public void setInstanceManager(final RootInstances instances) {
-		treeInstances.setInstances(instances);
+	public void setRootInstances(final RootInstances instances) {
+		treeInstances.setRootInstances(instances);
 	}
 
 	protected void create() {

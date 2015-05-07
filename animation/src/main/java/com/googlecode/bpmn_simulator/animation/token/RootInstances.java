@@ -42,6 +42,7 @@ public class RootInstances
 		}
 		return COLORS[colorIndex++];
 	}
+
 	@Override
 	protected Instance createNewChildInstance() {
 		return new Instance(nextColor());

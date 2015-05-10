@@ -23,7 +23,5 @@ package com.googlecode.bpmn_simulator.animation.element.logical;
 public interface Model {
 
 	String getEncoding();
-/*
-	Collection<LogicalElement> getStartElements();
-*/
+
 }

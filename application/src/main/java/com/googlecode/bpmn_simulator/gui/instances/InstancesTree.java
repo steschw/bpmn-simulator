@@ -25,11 +25,11 @@ import java.awt.Component;
 import java.awt.Font;
 
 import javax.swing.JTree;
+import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.DefaultTreeModel;
-import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreePath;
 
 import com.googlecode.bpmn_simulator.animation.token.Instance;
@@ -53,7 +53,7 @@ public class InstancesTree
 		setCellRenderer(new CellRenderer());
 	}
 
-	public void setRootInstances(final RootInstances instances) {
+	public void setInstances(final RootInstances instances) {
 		if (this.instances != null) {
 			this.instances.removeInstancesListener(this);
 		}
@@ -77,22 +77,28 @@ public class InstancesTree
 		getDefaultModel().reload();
 	}
 
-	private void insertAndExpandNode(final DefaultMutableTreeNode parentNode,
-			final MutableTreeNode node) {
-		assert parentNode != null;
+	private void insertNode(final DefaultMutableTreeNode parentNode,
+			final DefaultMutableTreeNode node) {
 		if (parentNode != null) {
-			getDefaultModel().insertNodeInto(node, parentNode, parentNode.getChildCount());
-			expandPath(new TreePath(parentNode.getPath()));
+			SwingUtilities.invokeLater(new Runnable() {
+				@Override
+				public void run() {
+					getDefaultModel().insertNodeInto(node, parentNode, parentNode.getChildCount());
+					expandPath(new TreePath(node.getPath()));
+				}
+			});
 		}
 	}
 
 	private static DefaultMutableTreeNode findChildNodeByUserData(final DefaultMutableTreeNode parentNode,
 			final Object userData) {
-		final int childCount = parentNode.getChildCount();
-		for (int childIndex = 0; childIndex < childCount; ++childIndex) {
-			final DefaultMutableTreeNode childNode = (DefaultMutableTreeNode) parentNode.getChildAt(childIndex);
-			if (userData.equals(childNode.getUserObject())) {
-				return childNode;
+		if (parentNode != null) {
+			final int childCount = parentNode.getChildCount();
+			for (int childIndex = 0; childIndex < childCount; ++childIndex) {
+				final DefaultMutableTreeNode childNode = (DefaultMutableTreeNode) parentNode.getChildAt(childIndex);
+				if (userData.equals(childNode.getUserObject())) {
+					return childNode;
+				}
 			}
 		}
 		return null;
@@ -100,16 +106,20 @@ public class InstancesTree
 
 	private void removeNode(final DefaultMutableTreeNode parentNode, final Object userData) {
 		final DefaultMutableTreeNode node = findChildNodeByUserData(parentNode, userData);
-		assert node != null;
 		if (node != null) {
 			assert node.getChildCount() == 0;
-			getDefaultModel().removeNodeFromParent(node);
+			SwingUtilities.invokeLater(new Runnable() {
+				@Override
+				public void run() {
+					getDefaultModel().removeNodeFromParent(node);
+				}
+			});
 		}
 	}
 
 	@Override
 	public void instanceAdded(final Instance instance) {
-		insertAndExpandNode(getRoot(), new InstanceNode(instance));
+		insertNode(getRoot(), new InstanceNode(instance));
 	}
 
 	@Override
@@ -140,12 +150,14 @@ public class InstancesTree
 			} else if (value instanceof TokenNode) {
 				final Token token = ((TokenNode) value).getToken();
 				final TokenFlow tokenFlow = token.getCurrentTokenFlow();
-				setLeafIcon(UIManager.getIcon("Tree.leafIcon"));
 				if (tokenFlow == null) {
 					text = "Token";
 				} else {
 					text = tokenFlow.toString();
 				}
+				setOpenIcon(null);
+				setClosedIcon(null);
+				setLeafIcon(UIManager.getIcon("Tree.leafIcon"));
 				setFont(getFont().deriveFont(Font.BOLD));
 			} else {
 				text = "";

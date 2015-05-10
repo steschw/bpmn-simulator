@@ -52,6 +52,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 import com.googlecode.bpmn_simulator.animation.element.visual.swing.AbstractSwingDiagram;
 import com.googlecode.bpmn_simulator.animation.execution.Animator;
+import com.googlecode.bpmn_simulator.animation.token.RootInstances;
 import com.googlecode.bpmn_simulator.bpmn.swing.di.SwingBPMNDiagram;
 import com.googlecode.bpmn_simulator.bpmn.swing.di.SwingDIDefinition;
 import com.googlecode.bpmn_simulator.gui.dialogs.ExceptionDialog;
@@ -71,16 +72,19 @@ public class BPMNSimulatorFrame
 	private static final int DEFAULT_WIDTH = 800;
 	private static final int DEFAULT_HEIGHT = 600;
 
-	private final LogFrame logFrame = new LogFrame();
+	private final RootInstances instances = new RootInstances();
+
+	private final Animator animator = new Animator(instances);
 
 	private final JToolBar definitionToolbar = new JToolBar();
-	private final AnimationToolbar animationToolbar = new AnimationToolbar();
+	private final InstancesToolbar instancesToolbar = new InstancesToolbar(instances);
+	private final AnimationToolbar animationToolbar = new AnimationToolbar(animator);
+
+	private final LogFrame logFrame = new LogFrame();
 
 	private final JButton messagesButton = new JButton();
 
-	private final InstancesFrame frameInstances = new InstancesFrame();
-
-	private Animator animator;
+	private final InstancesFrame frameInstances = new InstancesFrame(instances);
 
 	private SwingDIDefinition currentDefinition;
 
@@ -97,7 +101,7 @@ public class BPMNSimulatorFrame
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 	}
 
-	protected void updateFrameTitle() {
+	private void updateFrameTitle() {
 		final StringBuilder title = new StringBuilder(ApplicationInfo.getName());
 		if (currentFile != null) {
 			title.append(" - "); //$NON-NLS-1$
@@ -106,14 +110,38 @@ public class BPMNSimulatorFrame
 		setTitle(title.toString());
 	}
 
-	protected void showPropertiesDialog() {
+	public void showPropertiesDialog() {
 		final ModelPropertiesDialog dialog = new ModelPropertiesDialog(this, currentDefinition);
 		dialog.showDialog();
 	}
 
-	protected void showPreferencesDialog() {
+	public void showPreferencesDialog() {
 		final PreferencesDialog dialog = new PreferencesDialog(this);
 		dialog.showDialog();
+	}
+
+	public void showInstancesFrame() {
+		frameInstances.setVisible(true);
+	}
+
+	public void showExternalEditor() {
+		if (currentFile != null) {
+			final String externalEditor = Config.getInstance().getExternalEditor();
+			if ((externalEditor == null) || externalEditor.isEmpty()) {
+				showPreferencesDialog();
+			} else {
+				try {
+					Runtime.getRuntime().exec(new String[] {externalEditor, currentFile.getAbsolutePath()});
+				} catch (final IOException e) {
+					ExceptionDialog.showExceptionDialog(BPMNSimulatorFrame.this, e);
+				}
+			}
+		}
+	}
+
+	public void showAboutDialog() {
+		final AboutDialog frame = new AboutDialog(this);
+		frame.showDialog();
 	}
 
 	private void create() {
@@ -121,11 +149,12 @@ public class BPMNSimulatorFrame
 		getContentPane().add(createToolBars(), BorderLayout.PAGE_START);
 	}
 
-	protected JComponent createToolBars() {
+	private JComponent createToolBars() {
 		final JPanel panel = new JPanel(new BorderLayout());
 
 		final JPanel toolbarPanel = new JPanel(new FlowLayout(FlowLayout.LEADING));
 		toolbarPanel.add(createDefinitionToolbar());
+		toolbarPanel.add(instancesToolbar);
 		toolbarPanel.add(animationToolbar);
 		panel.add(toolbarPanel, BorderLayout.CENTER);
 
@@ -143,7 +172,7 @@ public class BPMNSimulatorFrame
 		return panel;
 	}
 
-	protected void updateMessagesInfo() {
+	private void updateMessagesInfo() {
 		messagesButton.setVisible(logFrame.hasMessages());
 		if (logFrame.hasErrors()) {
 			messagesButton.setIcon(Theme.ICON_MESSAGESERROR);
@@ -154,7 +183,7 @@ public class BPMNSimulatorFrame
 		}
 	}
 
-	protected JMenu createMenuFileExport() {
+	private JMenu createMenuFileExport() {
 		final JMenu menuExport = new JMenu("Export as");
 
 		final JMenuItem asImageItem = new JMenuItem("Image");
@@ -176,7 +205,7 @@ public class BPMNSimulatorFrame
 		return menuExport;
 	}
 
-	protected JMenu createMenuFile() {
+	private JMenu createMenuFile() {
 		final JMenu menuFile = new JMenu(Messages.getString("Menu.file")); //$NON-NLS-1$
 
 		final JMenuItem menuFileOpen = new JMenuItem(Messages.getString("Menu.fileOpen")); //$NON-NLS-1$
@@ -279,7 +308,7 @@ public class BPMNSimulatorFrame
 		return menuFile;
 	}
 
-	protected JMenu createMenuExtra() {
+	private JMenu createMenuExtra() {
 		final JMenu menuExtra = new JMenu(Messages.getString("Menu.extra")); //$NON-NLS-1$
 
 		final JMenuItem menuExtraInstances = new JMenuItem(Messages.getString("Menu.instances")); //$NON-NLS-1$
@@ -288,7 +317,7 @@ public class BPMNSimulatorFrame
 		menuExtraInstances.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(final ActionEvent e) {
-				frameInstances.setVisible(true);
+				showInstancesFrame();
 			}
 		});
 		menuExtra.add(menuExtraInstances);
@@ -298,18 +327,7 @@ public class BPMNSimulatorFrame
 		menuExtraOpenExternalEditor.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(final ActionEvent event) {
-				if (currentFile != null) {
-					final String externalEditor = Config.getInstance().getExternalEditor();
-					if ((externalEditor == null) || externalEditor.isEmpty()) {
-						showPreferencesDialog();
-					} else {
-						try {
-							Runtime.getRuntime().exec(new String[] {externalEditor, currentFile.getAbsolutePath()});
-						} catch (final IOException e) {
-							ExceptionDialog.showExceptionDialog(BPMNSimulatorFrame.this, e);
-						}
-					}
-				}
+				showExternalEditor();
 			}
 		});
 		menuExtra.add(menuExtraOpenExternalEditor);
@@ -332,12 +350,7 @@ public class BPMNSimulatorFrame
 		return menuExtra;
 	}
 
-	protected void showAboutDialog() {
-		final AboutDialog frame = new AboutDialog(this);
-		frame.showDialog();
-	}
-
-	protected JMenu createMenuHelp() {
+	private JMenu createMenuHelp() {
 		final JMenu menuHelp = new JMenu(Messages.getString("Menu.help")); //$NON-NLS-1$
 
 		final JMenuItem menuHelpAbout = new JMenuItem(Messages.getString("Menu.about")); //$NON-NLS-1$
@@ -354,7 +367,7 @@ public class BPMNSimulatorFrame
 		return menuHelp;
 	}
 
-	protected JMenuBar createMenuBar() {
+	private JMenuBar createMenuBar() {
 		final JMenuBar menubar = new JMenuBar();
 
 		menubar.add(createMenuFile());
@@ -368,7 +381,7 @@ public class BPMNSimulatorFrame
 		return menubar;
 	}
 
-	public JToolBar createDefinitionToolbar() {
+	private JToolBar createDefinitionToolbar() {
 		final JButton openButton = new JButton(Theme.ICON_OPEN);
 		openButton.setToolTipText(Messages.getString("Toolbar.open")); //$NON-NLS-1$
 		openButton.addActionListener(new ActionListener() {
@@ -402,11 +415,17 @@ public class BPMNSimulatorFrame
 	}
 
 	private void importBonita() {
-		System.setProperty("bonita.home", Config.getInstance().getBonitaHome());
+		String bonitaHome = Config.getInstance().getBonitaHome();
+		if ((bonitaHome == null) || bonitaHome.isEmpty()) {
+			showPreferencesDialog();
+		} else {
+			System.setProperty("bonita.home", bonitaHome);
+			//TODO
+		}
 	}
 
-	private void showException(final Exception e) {
-		JOptionPane.showMessageDialog(this, e.toString(),
+	private void showException(final Throwable throwable) {
+		JOptionPane.showMessageDialog(this, throwable.toString(),
 				Messages.getString("error"), //$NON-NLS-1$
 				JOptionPane.ERROR_MESSAGE);
 	}
@@ -418,11 +437,15 @@ public class BPMNSimulatorFrame
 		fileChoser.setCurrentDirectory(new File(config.getLastDirectory()));
 		if (fileChoser.showOpenDialog(this) == 	JFileChooser.APPROVE_OPTION) {
 			config.setLastDirectory(fileChoser.getCurrentDirectory().getAbsolutePath());
-			closeFile();
-			currentFile = fileChoser.getSelectedFile();
-			updateFrameTitle();
-			createModel();
+			openFile(fileChoser.getSelectedFile());
 		}
+	}
+
+	public void openFile(final File file) {
+		closeFile();
+		currentFile = file;
+		updateFrameTitle();
+		createModel();
 	}
 
 	private void closeFile() {
@@ -433,7 +456,7 @@ public class BPMNSimulatorFrame
 		}
 	}
 
-	public boolean isFileOpen() {
+	private boolean isFileOpen() {
 		return currentFile != null;
 	}
 
@@ -469,6 +492,7 @@ public class BPMNSimulatorFrame
 				}
 				desktop.arrangeFrames();
 			}
+			instancesToolbar.setDefinition(currentDefinition);
 			loadingDialog.setVisible(false);
 			updateMessagesInfo();
 		}

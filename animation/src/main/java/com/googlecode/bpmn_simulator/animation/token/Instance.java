@@ -21,6 +21,7 @@
 package com.googlecode.bpmn_simulator.animation.token;
 
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 
 public final class Instance
@@ -120,6 +121,21 @@ public final class Instance
 		assert tokens.contains(token);
 		tokens.remove(token);
 		notifyTokenRemoved(token);
+	}
+
+	protected void removeAllTokens() {
+		final Iterator<Token> i = tokens.iterator();
+		while (i.hasNext()) {
+			final Token token = i.next();
+			notifyTokenRemoved(token);
+			i.remove();
+		}
+	}
+
+	@Override
+	public void clear() {
+		super.clear();
+		removeAllTokens();
 	}
 
 }

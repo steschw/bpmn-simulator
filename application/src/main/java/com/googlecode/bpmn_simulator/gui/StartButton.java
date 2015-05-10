@@ -22,10 +22,16 @@ package com.googlecode.bpmn_simulator.gui;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Collection;
 
 import javax.swing.Icon;
 import javax.swing.JButton;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+import javax.swing.JPopupMenu;
+import javax.swing.SwingUtilities;
 
+import com.googlecode.bpmn_simulator.animation.element.logical.LogicalFlowElement;
 import com.googlecode.bpmn_simulator.animation.input.Definition;
 import com.googlecode.bpmn_simulator.animation.token.RootInstances;
 
@@ -54,12 +60,46 @@ public class StartButton
 		updateButton();
 	}
 
-	private void updateButton() {
+	protected void updateButton() {
 		setEnabled((definition != null) && (instances != null));
+	}
+
+	private void instantiate(final LogicalFlowElement instantiatingElement) {
+		instances.addNewChildInstance().createNewToken(instantiatingElement);
+	}
+
+	private JPopupMenu createMenu(final Collection<LogicalFlowElement> instantiatingElements) {
+		final JPopupMenu menu = new JPopupMenu();
+		for (final LogicalFlowElement element : instantiatingElements) {
+			final StringBuilder text = new StringBuilder();
+			text.append(element.getElementName());
+			text.append(" - ");
+			final JMenuItem menuItem =  new JMenuItem(text.toString());
+			menuItem.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(final ActionEvent event) {
+					instantiate(element);
+				}
+			});
+			menu.add(menuItem);
+		}
+		return menu;
 	}
 
 	@Override
 	public void actionPerformed(final ActionEvent e) {
+		final Collection<LogicalFlowElement> elements = definition.getInstantiatingElements();
+		if (elements.size() == 1) {
+			instantiate(elements.iterator().next());
+		} else if (elements.size() > 1) {
+			createMenu(elements).show(this, 0, getHeight());
+		} else {
+			JOptionPane.showMessageDialog(SwingUtilities.getRoot(this),
+					"A process can not be startet.\n"
+					+ "There are no start elements in any process.",
+					Messages.getString("error"),
+					JOptionPane.ERROR_MESSAGE);
+		}
 	}
 
 }

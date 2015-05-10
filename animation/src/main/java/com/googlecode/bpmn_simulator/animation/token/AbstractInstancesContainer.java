@@ -87,4 +87,17 @@ abstract class AbstractInstancesContainer
 		notifyInstanceRemoved(childInstance);
 	}
 
+	protected void removeAllChildInstances() {
+		final Iterator<Instance> i = childs.iterator();
+		while (i.hasNext()) {
+			final Instance childInstance = i.next();
+			i.remove();
+			notifyInstanceRemoved(childInstance);
+		}
+	}
+
+	public void clear() {
+		removeAllChildInstances();
+	}
+
 }

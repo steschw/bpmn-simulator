@@ -68,20 +68,12 @@ abstract class AbstractAnimator
 		}
 	}
 
-	protected void notifyAnimationReset() {
-		synchronized (animationListeners) {
-			for (final AnimationListener listener : animationListeners) {
-				listener.animationReset();
-			}
-		}
-	}
-
-	public synchronized void setSpeed(final float factor) {
+	public void setSpeed(final float factor) {
 		assert factor > 0.0f;
 		speedFactor = factor;
 	}
 
-	protected final synchronized long getStepSleep() {
+	protected long getStepSleep() {
 		return (long)(FPS_25 / speedFactor);
 	}
 
@@ -113,10 +105,6 @@ abstract class AbstractAnimator
 
 	public boolean isPaused() {
 		return paused;
-	}
-
-	public void reset() {
-		notifyAnimationReset();
 	}
 
 	protected synchronized void start() {

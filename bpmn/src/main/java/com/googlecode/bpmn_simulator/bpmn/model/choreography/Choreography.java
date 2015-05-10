@@ -20,7 +20,9 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.model.choreography;
 
-import com.googlecode.bpmn_simulator.animation.ref.References;
+import java.util.ArrayList;
+import java.util.Collection;
+
 import com.googlecode.bpmn_simulator.bpmn.Messages;
 import com.googlecode.bpmn_simulator.bpmn.model.collaboration.Collaboration;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.FlowElement;
@@ -32,6 +34,8 @@ public class Choreography
 
 	public static final String ELEMENT_NAME = Messages.getString("choreography"); //$NON-NLS-1$
 
+	private final Collection<FlowElement> flowElements = new ArrayList<>();
+
 	public Choreography(final String id, final String name, final boolean isClosed) {
 		super(id, name, isClosed);
 	}
@@ -42,7 +46,13 @@ public class Choreography
 	}
 
 	@Override
-	public void setFlowElements(final References<FlowElement> flowElements) {
+	public void addFlowElement(final FlowElement flowElement) {
+		flowElements.add(flowElement);
+	}
+
+	@Override
+	public Collection<FlowElement> getFlowElements() {
+		return flowElements;
 	}
 
 }

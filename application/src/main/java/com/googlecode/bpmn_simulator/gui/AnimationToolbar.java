@@ -32,7 +32,6 @@ import javax.swing.event.ChangeListener;
 
 import com.googlecode.bpmn_simulator.animation.execution.AnimationListener;
 import com.googlecode.bpmn_simulator.animation.execution.Animator;
-import com.googlecode.bpmn_simulator.animation.input.Definition;
 
 @SuppressWarnings("serial")
 public class AnimationToolbar
@@ -41,18 +40,16 @@ public class AnimationToolbar
 
 	private Animator animator;
 
-	private StartButton buttonStart;
-	private JButton buttonReset;
-
 	private JButton buttonPauseContinue;
 	private JButton buttonStep;
 
 	private JLabel labelSpeed;
 	private SpeedSpinner spinnerSpeed;
 
-	public AnimationToolbar() {
+	public AnimationToolbar(final Animator animator) {
 		super();
 		create();
+		setAnimator(animator);
 	}
 
 	public void setAnimator(final Animator animator) {
@@ -62,34 +59,11 @@ public class AnimationToolbar
 		this.animator = animator;
 		if (this.animator != null) {
 			this.animator.addAnimationListener(this);
-			buttonStart.setInstances(this.animator.getInstances());
-		} else {
-			buttonStart.setInstances(null);
 		}
-	}
-
-	public void setDefinition(final Definition<?> definition) {
-		buttonStart.setDefinition(definition);
+		updateControls();
 	}
 
 	private void create() {
-
-		buttonStart = new StartButton(Theme.ICON_START);
-		buttonStart.setToolTipText(Messages.getString("Toolbar.start")); //$NON-NLS-1$
-		add(buttonStart);
-
-		buttonReset = new JButton(Theme.ICON_RESET);
-		buttonReset.setToolTipText(Messages.getString("Toolbar.reset")); //$NON-NLS-1$
-		buttonReset.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(final ActionEvent event) {
-				animator.reset();
-			}
-		});
-		add(buttonReset);
-
-		addSeparator(new Dimension(24, 32));
-
 		buttonPauseContinue = new JButton();
 		buttonPauseContinue.addActionListener(new ActionListener() {
 			@Override
@@ -135,9 +109,6 @@ public class AnimationToolbar
 	protected void updateControls() {
 		final boolean isPaused = (animator != null) && animator.isPaused();
 
-		buttonStart.setEnabled(animator != null);
-		buttonReset.setEnabled(animator != null);
-
 		buttonPauseContinue.setEnabled(animator != null);
 		buttonStep.setEnabled(isPaused);
 		spinnerSpeed.setEnabled(animator != null);
@@ -157,11 +128,6 @@ public class AnimationToolbar
 
 	@Override
 	public void animationPause() {
-		updateControls();
-	}
-
-	@Override
-	public void animationReset() {
 		updateControls();
 	}
 

@@ -35,7 +35,7 @@ public class InstancesFrame
 
 	private final InstancesTree treeInstances = new InstancesTree();
 
-	public InstancesFrame() {
+	public InstancesFrame(final RootInstances instances) {
 		super(Messages.getString("Instances.instances")); //$NON-NLS-1$
 
 		setDefaultCloseOperation(HIDE_ON_CLOSE);
@@ -45,10 +45,8 @@ public class InstancesFrame
 		setAlwaysOnTop(true);
 
 		create();
-	}
 
-	public void setRootInstances(final RootInstances instances) {
-		treeInstances.setRootInstances(instances);
+		treeInstances.setInstances(instances);
 	}
 
 	protected void create() {

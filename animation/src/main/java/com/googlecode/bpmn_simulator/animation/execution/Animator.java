@@ -45,30 +45,6 @@ public class Animator
 		return instances;
 	}
 
-	private void resetToken(final Token token) {
-		token.getInstance().removeToken(token);
-	}
-
-	private void resetInstance(final Instance instance) {
-		for (final Instance childInstance : instance) {
-			for (final Token token : instance.getTokens(false)) {
-				resetToken(token);
-			}
-			resetInstance(childInstance);
-		}
-	}
-
-	@Override
-	public synchronized void reset() {
-		final Iterator<Instance> i = getInstances().iterator();
-		while (i.hasNext()) {
-			final Instance instance = i.next();
-			resetInstance(instance);
-			i.remove();
-		}
-		super.reset();
-	}
-
 	private void stepToken(final Token token, final int count) {
 		token.getCurrentTokenFlow().tokenDispatch(token);
 	}

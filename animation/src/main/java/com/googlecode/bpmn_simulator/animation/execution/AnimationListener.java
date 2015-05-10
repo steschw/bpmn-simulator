@@ -26,6 +26,4 @@ public interface AnimationListener {
 
 	void animationPause();
 
-	void animationReset();
-
 }

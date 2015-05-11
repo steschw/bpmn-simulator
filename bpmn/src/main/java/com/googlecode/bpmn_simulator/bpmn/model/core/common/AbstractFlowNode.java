@@ -20,12 +20,28 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.model.core.common;
 
+import com.googlecode.bpmn_simulator.animation.ref.Reference;
+import com.googlecode.bpmn_simulator.animation.ref.ReferenceSet;
+
 public abstract class AbstractFlowNode
 		extends AbstractFlowElement
 		implements FlowNode {
 
+	private final ReferenceSet<SequenceFlow> incoming = new ReferenceSet<>();
+	private final ReferenceSet<SequenceFlow> outgoing = new ReferenceSet<>();
+
 	public AbstractFlowNode(final String id, final String name) {
 		super(id, name);
+	}
+
+	@Override
+	public void addIncoming(final Reference<SequenceFlow> incoming) {
+		this.incoming.add(incoming);
+	}
+
+	@Override
+	public void addOutgoing(final Reference<SequenceFlow> outgoing) {
+		this.outgoing.add(outgoing);
 	}
 
 }

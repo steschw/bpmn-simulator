@@ -42,14 +42,29 @@ public class NamedElements<E> {
 		return element;
 	}
 
-	public <F extends E> F getElement(final String name, final Class<F> clazz) {
+	private static <E> boolean is(final E element, final Class<? extends E> clazz) {
+		return (element != null)
+				&& (clazz != null)
+				&& clazz.isAssignableFrom(element.getClass());
+	}
+
+	public <T extends E> T getElement(final String name, final Class<T> clazz) {
 		final E element = getElement(name);
-		if (element != null) {
-			if (clazz.isAssignableFrom(element.getClass())) {
-				return clazz.cast(element);
-			}
+		if (is(element, clazz)) {
+			return clazz.cast(element);
 		}
 		return null;
+	}
+
+	public <T extends E> Map<String, T> getElementsByClass(final Class<T> clazz) {
+		final Map<String, T> elements = new HashMap<>();
+		for (final String name : this.elements.keySet()) {
+			final E element = getElement(name);
+			if (is(element, clazz)) {
+				elements.put(name, clazz.cast(element));
+			}
+		}
+		return elements;
 	}
 
 	public boolean hasElement(final String name) {

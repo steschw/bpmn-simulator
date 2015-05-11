@@ -20,38 +20,7 @@
  */
 package com.googlecode.bpmn_simulator.animation.ref;
 
-public class CastReference<E, T extends E>
-		implements Reference<T> {
-
-	private final Reference<E> reference;
-
-	private final Class<T> clazz;
-
-	public CastReference(final Reference<E> reference, final Class<T> clazz) {
-		super();
-		this.reference = reference;
-		this.clazz = clazz;
-	}
-
-	@Override
-	public boolean hasReference() {
-		return (reference != null)
-				&& reference.hasReference();
-	}
-
-	private boolean hasType(final E referenced) {
-		return clazz.isAssignableFrom(referenced.getClass());
-	}
-
-	@Override
-	public T getReferenced() {
-		if (hasReference()) {
-			final E referenced = reference.getReferenced();
-			if ((referenced != null) && hasType(referenced)) {
-				return clazz.cast(referenced);
-			}
-		}
-		return null;
-	}
+public class ReferenceSet<E>
+		extends AbstractReferences<E> {
 
 }

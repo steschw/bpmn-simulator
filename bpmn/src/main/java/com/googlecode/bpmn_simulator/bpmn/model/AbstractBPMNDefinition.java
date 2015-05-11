@@ -25,6 +25,8 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.activation.MimeType;
 
@@ -37,6 +39,7 @@ import com.googlecode.bpmn_simulator.animation.ref.CastReference;
 import com.googlecode.bpmn_simulator.animation.ref.NamedElements;
 import com.googlecode.bpmn_simulator.animation.ref.NamedReference;
 import com.googlecode.bpmn_simulator.animation.ref.Reference;
+import com.googlecode.bpmn_simulator.animation.ref.ReferenceUtils;
 import com.googlecode.bpmn_simulator.bpmn.Messages;
 import com.googlecode.bpmn_simulator.bpmn.di.BPMNDiagram;
 import com.googlecode.bpmn_simulator.bpmn.model.choreography.Choreography;
@@ -1209,9 +1212,32 @@ public abstract class AbstractBPMNDefinition<E extends BPMNDiagram<?>>
 		return false;
 	}
 
+	private void assignSequenceFlowsToFlowNodes() {
+		final Map<String, SequenceFlow> sequenceFlows = elements.getElementsByClass(SequenceFlow.class);
+		for (final Entry<String, SequenceFlow> element : sequenceFlows.entrySet()) {
+			final String name = element.getKey();
+			final SequenceFlow sequenceFlow = element.getValue();
+			final Reference<SequenceFlow> sequenceFlowRef = new CastReference<>(new NamedReference<>(elements, name), SequenceFlow.class);
+			final FlowNode source = ReferenceUtils.element(sequenceFlow.getSource());
+			if (source != null) {
+				source.addOutgoing(sequenceFlowRef);
+			} else {
+				notifyWarning(MessageFormat.format("Source FlowNode for SequenceFlow {} not found", name));
+			}
+			final FlowNode target = ReferenceUtils.element(sequenceFlow.getTarget());
+			if (target != null) {
+				target.addIncoming(sequenceFlowRef);
+			} else {
+				notifyWarning(MessageFormat.format("Target FlowNode for SequenceFlow {} not found", name));
+			}
+		}
+	}
+
 	@Override
 	protected void loadData(final Node node) {
-		if (!readElementDefinitions(node)) {
+		if (readElementDefinitions(node)) {
+			assignSequenceFlowsToFlowNodes();
+		} else {
 			notifyError("schema doesn''t contains definitions", null);
 		}
 	}

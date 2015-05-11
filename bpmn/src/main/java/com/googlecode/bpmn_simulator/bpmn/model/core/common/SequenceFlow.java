@@ -28,16 +28,29 @@ public final class SequenceFlow
 
 	public static final String ELEMENT_NAME = Messages.getString("sequenceFlow"); //$NON-NLS-1$
 
+	private final Reference<FlowNode> source;
+	private final Reference<FlowNode> target;
+
 	private Expression conditionExpression;
 
 	public SequenceFlow(final String id, final String name,
-			Reference<FlowNode> sourceRef, Reference<FlowNode> targetRef) {
+			Reference<FlowNode> source, Reference<FlowNode> target) {
 		super(id, name);
+		this.source = source;
+		this.target = target;
 	}
 
 	@Override
 	public String getElementName() {
 		return ELEMENT_NAME;
+	}
+
+	public Reference<FlowNode> getSource() {
+		return source;
+	}
+
+	public Reference<FlowNode> getTarget() {
+		return target;
 	}
 
 	public void setConditionExpression(final Expression expression) {

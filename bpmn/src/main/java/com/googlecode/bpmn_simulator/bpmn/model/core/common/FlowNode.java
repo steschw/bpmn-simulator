@@ -20,9 +20,13 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.model.core.common;
 
-import com.googlecode.bpmn_simulator.animation.element.logical.ElementInfo;
+import com.googlecode.bpmn_simulator.animation.ref.Reference;
 
 public interface FlowNode
-		extends FlowElement, ElementInfo {
+		extends FlowElement {
+
+	public void addIncoming(Reference<SequenceFlow> incoming);
+
+	public void addOutgoing(Reference<SequenceFlow> outgoing);
 
 }

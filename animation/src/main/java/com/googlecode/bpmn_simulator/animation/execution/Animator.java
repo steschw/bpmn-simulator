@@ -20,11 +20,7 @@
  */
 package com.googlecode.bpmn_simulator.animation.execution;
 
-import java.util.Iterator;
-
-import com.googlecode.bpmn_simulator.animation.token.Instance;
 import com.googlecode.bpmn_simulator.animation.token.RootInstances;
-import com.googlecode.bpmn_simulator.animation.token.Token;
 
 public class Animator
 		extends AbstractAnimator {
@@ -41,30 +37,9 @@ public class Animator
 		this.instances = instances;
 	}
 
-	public RootInstances getInstances() {
-		return instances;
-	}
-
-	private void stepInstance(final Instance instance, final int count) {
-		final Iterator<Instance> childInstances = instance.iterator();
-		while (childInstances.hasNext()) {
-			final Instance childInstance = childInstances.next();
-			stepInstance(childInstance, count);
-		}
-		final Iterator<Token> tokens = instance.getTokens(false).iterator();
-		while (tokens.hasNext()) {
-			final Token token = tokens.next();
-			token.step(count);
-		}
-	}
-
 	@Override
 	public synchronized void step(final int count) {
-		final Iterator<Instance> i = getInstances().iterator();
-		while (i.hasNext()) {
-			final Instance instance = i.next();
-			stepInstance(instance, count);
-		}
+		instances.step(count);
 	}
 
 }

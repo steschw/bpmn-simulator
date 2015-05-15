@@ -20,7 +20,6 @@
  */
 package com.googlecode.bpmn_simulator.gui.instances;
 
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
 
@@ -32,6 +31,7 @@ import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 
+import com.googlecode.bpmn_simulator.animation.element.visual.swing.Colors;
 import com.googlecode.bpmn_simulator.animation.token.Instance;
 import com.googlecode.bpmn_simulator.animation.token.InstancesListener;
 import com.googlecode.bpmn_simulator.animation.token.RootInstances;
@@ -146,7 +146,7 @@ public class InstancesTree
 				setClosedIcon(UIManager.getIcon("Tree.collapsedIcon"));
 				setLeafIcon(null);
 				setFont(getFont().deriveFont(Font.PLAIN));
-				setTextNonSelectionColor(new Color(instance.getColor()));
+				setTextNonSelectionColor(Colors.forInstance(instance));
 			} else if (value instanceof TokenNode) {
 				final Token token = ((TokenNode) value).getToken();
 				final TokenFlow tokenFlow = token.getCurrentTokenFlow();

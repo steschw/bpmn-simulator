@@ -22,7 +22,21 @@ package com.googlecode.bpmn_simulator.animation.element.visual.swing;
 
 import java.awt.Color;
 
+import com.googlecode.bpmn_simulator.animation.token.Instance;
+import com.googlecode.bpmn_simulator.animation.token.Token;
+
 public final class Colors {
+
+	private static final Color[] INSTANCE_COLORS = {
+		new Color(0xff5c26),
+		new Color(0x2626ff),
+		new Color(0xffff26),
+		new Color(0xc926ff),
+		new Color(0x5cff26),
+		new Color(0x26ff93),
+		new Color(0xff2692),
+		new Color(0x26c9ff),
+	};
 
 	private Colors() {
 	}
@@ -39,5 +53,14 @@ public final class Colors {
 	public static Color GREEN = new Color(0xA4F0B7);
 	public static Color RED = new Color(0xFFA4A4);
 	public static Color ORANGE = new Color(0xFFD062);
+
+	public static Color forToken(final Token token) {
+		return forInstance(token.getInstance());
+	}
+
+	public static Color forInstance(final Instance instance) {
+		int index = 0;
+		return INSTANCE_COLORS[index];
+	}
 
 }

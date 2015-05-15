@@ -29,9 +29,20 @@ import java.util.Set;
 abstract class InstanceContainer
 		implements Iterable<Instance> {
 
+	private final InstanceContainer parent;
+
 	private final Collection<Instance> childInstances = new ArrayList<>();
 
 	private final Set<InstancesListener> instancesListeners = new HashSet<>();
+
+	protected InstanceContainer(final InstanceContainer parent) {
+		super();
+		this.parent = parent;
+	}
+
+	public InstanceContainer getParentContainer() {
+		return parent;
+	}
 
 	@Override
 	public Iterator<Instance> iterator() {
@@ -73,7 +84,13 @@ abstract class InstanceContainer
 		notifyInstanceCreated(childInstance);
 	}
 
-	protected abstract Instance createNewChildInstance();
+	public boolean hasChildInstances() {
+		return !childInstances.isEmpty();
+	}
+
+	protected Instance createNewChildInstance() {
+		return new Instance(this);
+	}
 
 	public Instance addNewChildInstance() {
 		final Instance instance = createNewChildInstance();
@@ -88,16 +105,21 @@ abstract class InstanceContainer
 	}
 
 	protected void removeAllChildInstances() {
-		final Iterator<Instance> i = childInstances.iterator();
-		while (i.hasNext()) {
-			final Instance childInstance = i.next();
-			i.remove();
-			notifyInstanceRemoved(childInstance);
+		for (final Instance childInstance : new ArrayList<>(childInstances)) {
+			childInstance.remove();
 		}
 	}
 
 	public void clear() {
 		removeAllChildInstances();
+	}
+
+	public void step(final int count) {
+		for (final Instance childInstance : new ArrayList<>(childInstances)) {
+			if (childInstances.contains(childInstance)) {
+				childInstance.step(count);
+			}
+		}
 	}
 
 }

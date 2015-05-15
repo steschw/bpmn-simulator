@@ -166,7 +166,7 @@ public class Presentation {
 	public void drawToken(final Graphics2D g, final Token token, final int centerX, final int centerY) {
 		final Bounds bounds = new Bounds(centerX, centerY, AbstractVisualElement.MARGIN);
 		final Shape shape = createStar(bounds, PENTAGON);
-		g.setPaint(new Color(token.getInstance().getColor()));
+		g.setPaint(Colors.forToken(token));
 		g.fill(shape);
 		g.setStroke(TOKEN_STROKE);
 		g.setPaint(Color.BLACK);

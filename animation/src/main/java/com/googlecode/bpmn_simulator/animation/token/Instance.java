@@ -20,33 +20,19 @@
  */
 package com.googlecode.bpmn_simulator.animation.token;
 
+import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Set;
 
 public final class Instance
 		extends InstanceContainer {
 
-	private final Instance parent;
-
 	private final Tokens tokens = new Tokens();
 
 	private final Set<TokensListener> tokensListeners = new HashSet<>();
 
-	private int color;
-
-	private Instance(final Instance parent, final int color) {
-		super();
-		this.parent = parent;
-		this.color = color;
-	}
-
-	protected Instance(final int color) {
-		this(null, color);
-	}
-
-	public int getColor() {
-		return color;
+	protected Instance(final InstanceContainer parent) {
+		super(parent);
 	}
 
 	public void addTokensListener(final TokensListener listener) {
@@ -77,31 +63,6 @@ public final class Instance
 		}
 	}
 
-	public Instance getParentInstance() {
-		return parent;
-	}
-
-	public Instance getTopLevelInstance() {
-		final Instance parent = getParentInstance();
-		if (parent == null) {
-			return this;
-		} else {
-			return parent.getTopLevelInstance();
-		}
-	}
-
-	@Override
-	protected Instance createNewChildInstance() {
-		return new Instance(this, color);
-	}
-
-	public void remove() {
-		final Instance parentInstance = getParentInstance();
-		if (parentInstance != null) {
-			parentInstance.removeChildInstance(this);
-		}
-	}
-
 	public Tokens getTokens(final boolean recursive) {
 		final Tokens allTokens = new Tokens();
 		allTokens.addAll(tokens);
@@ -118,6 +79,14 @@ public final class Instance
 		notifyTokenAdded(token);
 	}
 
+	public boolean hasTokens() {
+		return !tokens.isEmpty();
+	}
+
+	public boolean isEmpty() {
+		return !hasTokens() && !hasChildInstances();
+	}
+
 	public Token createNewToken(final TokenFlow tokenFlow) {
 		final Token token = new Token(this, tokenFlow);
 		addToken(token);
@@ -125,19 +94,35 @@ public final class Instance
 		return token;
 	}
 
+	@Override
+	protected void removeChildInstance(final Instance childInstance) {
+		super.removeChildInstance(childInstance);
+		if (isEmpty()) {
+			remove();
+		}
+	}
+
 	protected void removeToken(final Token token) {
 		assert tokens.contains(token);
 		token.getCurrentTokenFlow().tokenExit(token);
 		tokens.remove(token);
 		notifyTokenRemoved(token);
+		if (isEmpty()) {
+			remove();
+		}
 	}
 
 	protected void removeAllTokens() {
-		final Iterator<Token> i = tokens.iterator();
-		while (i.hasNext()) {
-			final Token token = i.next();
-			notifyTokenRemoved(token);
-			i.remove();
+		for (final Token token : new ArrayList<>(tokens)) {
+			token.remove();
+		}
+	}
+
+	public void remove() {
+		clear();
+		final InstanceContainer parentContainer = getParentContainer();
+		if (parentContainer != null) {
+			parentContainer.removeChildInstance(this);
 		}
 	}
 
@@ -145,6 +130,16 @@ public final class Instance
 	public void clear() {
 		super.clear();
 		removeAllTokens();
+	}
+
+	@Override
+	public void step(final int count) {
+		super.step(count);
+		for (final Token token : new ArrayList<>(tokens)) {
+			if (tokens.contains(token)) {
+				token.step(count);
+			}
+		}
 	}
 
 }

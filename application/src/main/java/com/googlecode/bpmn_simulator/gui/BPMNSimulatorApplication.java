@@ -31,31 +31,19 @@ public final class BPMNSimulatorApplication {
 	private BPMNSimulatorApplication() {
 	}
 
-	private static File getArgFile(final String[] args) {
-		if (args.length > 0) {
-			final File file = new File(args[0]);
-			if (file.exists() && file.isFile()) {
-				return file;
-			}
-		}
-		return null;
-	}
-
 	public static void main(final String[] args) {
 
 		Config.getInstance().load();
 
 		Theme.init();
 
-		final File file = getArgFile(args);
-
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
 				final BPMNSimulatorFrame frame = new BPMNSimulatorFrame();
 				frame.setVisible(true);
-				if (file != null) {
-					frame.openFile(file);
+				if (args.length >= 1) {
+					frame.openFile(new File(args[0]));
 				}
 			}
 		});

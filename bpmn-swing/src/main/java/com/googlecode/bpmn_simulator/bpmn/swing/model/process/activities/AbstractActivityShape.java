@@ -93,9 +93,4 @@ public abstract class AbstractActivityShape<E extends Activity>
 		paintElementMarkers(g);
 	}
 
-	@Override
-	protected void paintTokens(final Graphics2D g) {
-		// TODO Auto-generated method stub
-	}
-
 }

@@ -22,6 +22,7 @@ package com.googlecode.bpmn_simulator.bpmn.model.core.common;
 
 import com.googlecode.bpmn_simulator.animation.ref.Reference;
 import com.googlecode.bpmn_simulator.animation.ref.ReferenceSet;
+import com.googlecode.bpmn_simulator.animation.token.Token;
 
 public abstract class AbstractFlowNode
 		extends AbstractFlowElement
@@ -42,6 +43,14 @@ public abstract class AbstractFlowNode
 	@Override
 	public void addOutgoing(final Reference<SequenceFlow> outgoing) {
 		this.outgoing.add(outgoing);
+	}
+
+	@Override
+	protected void tokenComplete(final Token token) {
+		for (final SequenceFlow sequenceFlow : outgoing) {
+			token.copyTo(sequenceFlow);
+		}
+		token.remove();
 	}
 
 }

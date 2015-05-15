@@ -23,9 +23,9 @@ package com.googlecode.bpmn_simulator.animation.token;
 public interface TokenFlow {
 
 	void tokenDispatch(Token token);
-/*
+
 	void tokenEnter(Token token);
 
 	void tokenExit(Token token);
-*/
+
 }

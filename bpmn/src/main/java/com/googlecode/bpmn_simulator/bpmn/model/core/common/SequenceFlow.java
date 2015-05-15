@@ -21,6 +21,8 @@
 package com.googlecode.bpmn_simulator.bpmn.model.core.common;
 
 import com.googlecode.bpmn_simulator.animation.ref.Reference;
+import com.googlecode.bpmn_simulator.animation.ref.ReferenceUtils;
+import com.googlecode.bpmn_simulator.animation.token.Token;
 import com.googlecode.bpmn_simulator.bpmn.Messages;
 
 public final class SequenceFlow
@@ -34,7 +36,7 @@ public final class SequenceFlow
 	private Expression conditionExpression;
 
 	public SequenceFlow(final String id, final String name,
-			Reference<FlowNode> source, Reference<FlowNode> target) {
+			final Reference<FlowNode> source, final Reference<FlowNode> target) {
 		super(id, name);
 		this.source = source;
 		this.target = target;
@@ -59,6 +61,15 @@ public final class SequenceFlow
 
 	protected Expression getCondition() {
 		return conditionExpression;
+	}
+
+	@Override
+	protected void tokenComplete(final Token token) {
+		final FlowNode target = ReferenceUtils.element(getTarget());
+		if (target != null) {
+			token.copyTo(target);
+		}
+		token.remove();
 	}
 
 }

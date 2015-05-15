@@ -99,9 +99,4 @@ abstract class AbstractEventShape<E extends Event>
 		}
 	}
 
-	@Override
-	protected void paintTokens(Graphics2D g) {
-		// TODO Auto-generated method stub
-	}
-
 }

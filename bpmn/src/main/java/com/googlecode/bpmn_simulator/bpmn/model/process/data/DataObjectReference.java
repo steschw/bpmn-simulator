@@ -21,6 +21,7 @@
 package com.googlecode.bpmn_simulator.bpmn.model.process.data;
 
 import com.googlecode.bpmn_simulator.animation.ref.Reference;
+import com.googlecode.bpmn_simulator.animation.token.Token;
 import com.googlecode.bpmn_simulator.bpmn.Messages;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.AbstractFlowElement;
 
@@ -40,6 +41,10 @@ public final class DataObjectReference
 	@Override
 	public String getElementName() {
 		return ELEMENT_NAME;
+	}
+
+	@Override
+	protected void tokenComplete(final Token token) {
 	}
 
 }

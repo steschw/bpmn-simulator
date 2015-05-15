@@ -25,7 +25,7 @@ import java.util.Iterator;
 import java.util.Set;
 
 public final class Instance
-		extends AbstractInstancesContainer {
+		extends InstanceContainer {
 
 	private final Instance parent;
 
@@ -95,6 +95,13 @@ public final class Instance
 		return new Instance(this, color);
 	}
 
+	public void remove() {
+		final Instance parentInstance = getParentInstance();
+		if (parentInstance != null) {
+			parentInstance.removeChildInstance(this);
+		}
+	}
+
 	public Tokens getTokens(final boolean recursive) {
 		final Tokens allTokens = new Tokens();
 		allTokens.addAll(tokens);
@@ -114,11 +121,13 @@ public final class Instance
 	public Token createNewToken(final TokenFlow tokenFlow) {
 		final Token token = new Token(this, tokenFlow);
 		addToken(token);
+		token.getCurrentTokenFlow().tokenEnter(token);
 		return token;
 	}
 
-	public void removeToken(final Token token) {
+	protected void removeToken(final Token token) {
 		assert tokens.contains(token);
+		token.getCurrentTokenFlow().tokenExit(token);
 		tokens.remove(token);
 		notifyTokenRemoved(token);
 	}

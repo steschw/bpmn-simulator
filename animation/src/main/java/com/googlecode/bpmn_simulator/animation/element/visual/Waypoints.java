@@ -86,8 +86,8 @@ public class Waypoints
 		return null;
 	}
 
-	public int getLength() {
-		float length = 0;
+	public double getLength() {
+		double length = 0.;
 		Waypoint last = null;
 		for (final Waypoint current : this) {
 			if (last != null) {
@@ -95,11 +95,11 @@ public class Waypoints
 			}
 			last = current;
 		}
-		return (int) length;
+		return length;
 	}
 
-	public Point getWaypoint(final float length) {
-		int currentLength = 0;
+	public Point getWaypoint(final double length) {
+		double currentLength = 0.;
 		Waypoint last = null;
 		for (final Waypoint current : this) {
 			if (last != null) {

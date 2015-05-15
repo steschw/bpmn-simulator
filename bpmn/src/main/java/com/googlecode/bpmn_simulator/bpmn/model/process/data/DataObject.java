@@ -20,6 +20,7 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.model.process.data;
 
+import com.googlecode.bpmn_simulator.animation.token.Token;
 import com.googlecode.bpmn_simulator.bpmn.Messages;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.AbstractFlowElement;
 
@@ -45,6 +46,10 @@ public final class DataObject
 
 	public boolean isCollection() {
 		return isCollection;
+	}
+
+	@Override
+	protected void tokenComplete(final Token token) {
 	}
 
 }

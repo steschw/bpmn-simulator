@@ -20,12 +20,15 @@
  */
 package com.googlecode.bpmn_simulator.animation.element.visual.swing;
 
+import java.awt.BasicStroke;
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Polygon;
 import java.awt.RenderingHints;
 import java.awt.Shape;
+import java.awt.Stroke;
 import java.awt.geom.Path2D;
 import java.util.Iterator;
 
@@ -35,6 +38,7 @@ import com.googlecode.bpmn_simulator.animation.element.visual.Point;
 import com.googlecode.bpmn_simulator.animation.element.visual.Waypoint;
 import com.googlecode.bpmn_simulator.animation.element.visual.Waypoints;
 import com.googlecode.bpmn_simulator.animation.token.Token;
+import com.googlecode.bpmn_simulator.animation.token.Tokens;
 
 public class Presentation {
 
@@ -46,6 +50,8 @@ public class Presentation {
 
 	private static final double ARROW_ANGLE = 10.;
 	private static final int ARROW_LENGTH = 10;
+
+	private static final Stroke TOKEN_STROKE = new BasicStroke(1.f);
 
 	static {
 		QUALITY.put(RenderingHints.KEY_RENDERING,
@@ -157,8 +163,23 @@ public class Presentation {
 		g.draw(createDocument(bounds, n));
 	}
 
-	public void drawToken(final Graphics g, final Token token, final int centerX, final int centerY) {
-		
+	public void drawToken(final Graphics2D g, final Token token, final int centerX, final int centerY) {
+		final Bounds bounds = new Bounds(centerX, centerY, AbstractVisualElement.MARGIN);
+		final Shape shape = createStar(bounds, PENTAGON);
+		g.setPaint(new Color(token.getInstance().getColor()));
+		g.fill(shape);
+		g.setStroke(TOKEN_STROKE);
+		g.setPaint(Color.BLACK);
+		g.draw(shape);
+	}
+
+	public void drawTokens(final Graphics2D g, final Tokens tokens,
+			final int x, final int y) {
+		int x2 = x;
+		for (final Token token : tokens) {
+			drawToken(g, token, x2, y);
+			x2 += 6;
+		}
 	}
 
 	public static Shape createDocument(final Bounds bounds, final int n) {

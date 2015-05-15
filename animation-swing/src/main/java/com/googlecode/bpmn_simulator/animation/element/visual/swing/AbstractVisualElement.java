@@ -39,7 +39,7 @@ abstract class AbstractVisualElement<E extends LogicalElement>
 		extends AbstractVisual
 		implements VisualElement {
 
-	private static final int MARGIN = 10;
+	protected static final int MARGIN = 10;
 
 	private final E logicalElement;
 

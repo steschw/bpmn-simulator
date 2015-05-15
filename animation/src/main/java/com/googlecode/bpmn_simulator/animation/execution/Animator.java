@@ -45,20 +45,16 @@ public class Animator
 		return instances;
 	}
 
-	private void stepToken(final Token token, final int count) {
-		token.getCurrentTokenFlow().tokenDispatch(token);
-	}
-
 	private void stepInstance(final Instance instance, final int count) {
 		final Iterator<Instance> childInstances = instance.iterator();
 		while (childInstances.hasNext()) {
 			final Instance childInstance = childInstances.next();
-			final Iterator<Token> tokens = childInstance.getTokens(false).iterator();
-			while (tokens.hasNext()) {
-				final Token token = tokens.next();
-				stepToken(token, count);
-			}
 			stepInstance(childInstance, count);
+		}
+		final Iterator<Token> tokens = instance.getTokens(false).iterator();
+		while (tokens.hasNext()) {
+			final Token token = tokens.next();
+			token.step(count);
 		}
 	}
 

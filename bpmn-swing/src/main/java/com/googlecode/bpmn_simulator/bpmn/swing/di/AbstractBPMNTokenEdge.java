@@ -23,8 +23,11 @@ package com.googlecode.bpmn_simulator.bpmn.swing.di;
 import java.awt.Graphics2D;
 
 import com.googlecode.bpmn_simulator.animation.element.logical.LogicalFlowElement;
+import com.googlecode.bpmn_simulator.animation.element.visual.Point;
+import com.googlecode.bpmn_simulator.animation.element.visual.Waypoints;
 import com.googlecode.bpmn_simulator.animation.token.Token;
 import com.googlecode.bpmn_simulator.animation.token.TokenFlowListener;
+import com.googlecode.bpmn_simulator.animation.token.Tokens;
 
 @SuppressWarnings("serial")
 public abstract class AbstractBPMNTokenEdge<E extends LogicalFlowElement>
@@ -48,7 +51,13 @@ public abstract class AbstractBPMNTokenEdge<E extends LogicalFlowElement>
 	}
 
 	protected void paintTokens(final Graphics2D g) {
-		// TODO Auto-generated method stub
+		final Tokens tokens = getLogicalElement().getTokens();
+		final Waypoints waypoints = getWaypointsRelative();
+		final double length = waypoints.getLength();
+		for (final Token token : tokens) {
+			final Point point = waypoints.getWaypoint(token.getPosition());
+			getPresentation().drawToken(g, token, point.getX(), point.getY());
+		}
 	}
 
 }

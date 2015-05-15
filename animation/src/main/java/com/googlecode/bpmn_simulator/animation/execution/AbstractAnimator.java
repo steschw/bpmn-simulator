@@ -26,7 +26,8 @@ import java.util.Set;
 abstract class AbstractAnimator
 		implements Runnable {
 
-	private static final long FPS_25 = 1000 / 25;
+	private static final int STEPS_PER_SEC = 25;
+	private static final long MS_PER_STEP = 1000 / STEPS_PER_SEC;
 
 	private final Set<AnimationListener> animationListeners = new HashSet<>();
 
@@ -38,6 +39,10 @@ abstract class AbstractAnimator
 
 	public AbstractAnimator() {
 		super();
+	}
+
+	public static int getSteps(final double sec) {
+		return (int) (STEPS_PER_SEC * sec);
 	}
 
 	public void addAnimationListener(final AnimationListener listener) {
@@ -74,7 +79,7 @@ abstract class AbstractAnimator
 	}
 
 	protected long getStepSleep() {
-		return (long)(FPS_25 / speedFactor);
+		return (long) (MS_PER_STEP / speedFactor);
 	}
 
 	@Override

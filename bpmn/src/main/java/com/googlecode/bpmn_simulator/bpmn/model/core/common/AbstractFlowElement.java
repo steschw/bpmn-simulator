@@ -23,6 +23,7 @@ package com.googlecode.bpmn_simulator.bpmn.model.core.common;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.googlecode.bpmn_simulator.animation.execution.Animator;
 import com.googlecode.bpmn_simulator.animation.token.Token;
 import com.googlecode.bpmn_simulator.animation.token.TokenFlowListener;
 import com.googlecode.bpmn_simulator.animation.token.Tokens;
@@ -32,8 +33,12 @@ public abstract class AbstractFlowElement
 		extends AbstractBaseElementNamed
 		implements FlowElement {
 
+	private static final int DEFAULT_LENGTH = Animator.getSteps(3.);
+
 	private final Set<TokenFlowListener> tokenFlowListeners
 			= new HashSet<>();
+
+	private final Tokens tokens = new Tokens();
 
 	public AbstractFlowElement(final String id, final String name) {
 		super(id, name);
@@ -50,14 +55,43 @@ public abstract class AbstractFlowElement
 		tokenFlowListeners.add(listener);
 	}
 
-	@Override
-	public Tokens getTokens() {
-		return null;
+	protected void notifyTokenChanged(final Token token) {
+		for (final TokenFlowListener listener : tokenFlowListeners) {
+			listener.tokenChanged(token);
+		}
 	}
 
 	@Override
+	public Tokens getTokens() {
+		return tokens;
+	}
+
+	@Override
+	public void tokenEnter(final Token token) {
+		tokens.add(token);
+		notifyTokenChanged(token);
+	}
+
+	@Override
+	public void tokenExit(final Token token) {
+		tokens.remove(token);
+		notifyTokenChanged(token);
+	}
+
+	protected int getStepCount() {
+		return DEFAULT_LENGTH;
+	}
+
+	protected abstract void tokenComplete(final Token token);
+
+	@Override
 	public void tokenDispatch(final Token token) {
-		// TODO Auto-generated method stub
+		assert getTokens().contains(token);
+		if (token.getPosition() > getStepCount()) {
+			tokenComplete(token);
+		} else {
+			notifyTokenChanged(token);
+		}
 	}
 
 }

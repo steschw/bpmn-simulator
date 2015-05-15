@@ -54,9 +54,4 @@ abstract class AbstractGatewayShape<E extends Gateway>
 		getPresentation().drawDiamond(g, getInnerBoundsRelative());
 	}
 
-	@Override
-	protected void paintTokens(final Graphics2D g) {
-		// TODO Auto-generated method stub
-	}
-
 }

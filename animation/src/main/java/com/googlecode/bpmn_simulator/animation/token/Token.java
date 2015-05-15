@@ -20,8 +20,7 @@
  */
 package com.googlecode.bpmn_simulator.animation.token;
 
-public class Token
-		implements Cloneable {
+public class Token {
 
 	private final Instance instance;
 
@@ -34,8 +33,13 @@ public class Token
 	protected Token(final Instance instance,
 			final TokenFlow current) {
 		super();
+		if (instance == null) {
+			throw new IllegalArgumentException();
+		}
 		this.instance = instance;
-		assert current != null;
+		if (current == null) {
+			throw new IllegalArgumentException();
+		}
 		this.currentTokenFlow = current;
 	}
 
@@ -56,6 +60,11 @@ public class Token
 		this.position = position;
 	}
 
+	public void step(final int count) {
+		setPosition(getPosition() + count);
+		getCurrentTokenFlow().tokenDispatch(this);
+	}
+
 	@Override
 	public String toString() {
 		final StringBuilder buffer = new StringBuilder('[');
@@ -66,6 +75,20 @@ public class Token
 		buffer.append(currentTokenFlow);
 		buffer.append(']');
 		return buffer.toString();
+	}
+
+	public void remove() {
+		getInstance().removeToken(this);
+	}
+
+	public void copyTo(final TokenFlow tokenFlow) {
+		assert getCurrentTokenFlow() != tokenFlow;
+		getInstance().createNewToken(tokenFlow);
+	}
+
+	public void moveTo(final TokenFlow tokenFlow) {
+		copyTo(tokenFlow);
+		remove();
 	}
 
 }

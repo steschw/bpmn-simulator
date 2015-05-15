@@ -21,7 +21,7 @@
 package com.googlecode.bpmn_simulator.animation.token;
 
 public class RootInstances
-		extends AbstractInstancesContainer {
+		extends InstanceContainer {
 
 	private static final int[] COLORS = {
 			0xff5c26,

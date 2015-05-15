@@ -40,8 +40,12 @@ public class Bounds
 		this(x, y, dimension.getWidth(), dimension.getHeight());
 	}
 
+	public Bounds(final int x, final int y, final int size) {
+		this(x - size, y - size, size * 2, size * 2);
+	}
+
 	public Bounds(final Point center, final int size) {
-		this(center.getX() - size, center.getY() - size, size * 2, size * 2);
+		this(center.getX(), center.getY(), size);
 	}
 
 	public int getX() {

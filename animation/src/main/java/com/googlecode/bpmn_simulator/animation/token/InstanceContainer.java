@@ -26,16 +26,16 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
-abstract class AbstractInstancesContainer
+abstract class InstanceContainer
 		implements Iterable<Instance> {
 
-	private final Collection<Instance> childs = new ArrayList<>();
+	private final Collection<Instance> childInstances = new ArrayList<>();
 
 	private final Set<InstancesListener> instancesListeners = new HashSet<>();
 
 	@Override
 	public Iterator<Instance> iterator() {
-		return childs.iterator();
+		return childInstances.iterator();
 	}
 
 	public void addInstancesListener(final InstancesListener listener) {
@@ -68,8 +68,8 @@ abstract class AbstractInstancesContainer
 
 	protected void addChildInstance(final Instance childInstance) {
 		assert childInstance != null;
-		assert !childs.contains(childInstance);
-		childs.add(childInstance);
+		assert !childInstances.contains(childInstance);
+		childInstances.add(childInstance);
 		notifyInstanceCreated(childInstance);
 	}
 
@@ -81,14 +81,14 @@ abstract class AbstractInstancesContainer
 		return instance;
 	}
 
-	public void removeChildInstance(final Instance childInstance) {
-		assert childs.contains(childInstance);
-		childs.remove(childInstance);
+	protected void removeChildInstance(final Instance childInstance) {
+		assert childInstances.contains(childInstance);
+		childInstances.remove(childInstance);
 		notifyInstanceRemoved(childInstance);
 	}
 
 	protected void removeAllChildInstances() {
-		final Iterator<Instance> i = childs.iterator();
+		final Iterator<Instance> i = childInstances.iterator();
 		while (i.hasNext()) {
 			final Instance childInstance = i.next();
 			i.remove();

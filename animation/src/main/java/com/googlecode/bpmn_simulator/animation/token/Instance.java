@@ -27,12 +27,19 @@ import java.util.Set;
 public final class Instance
 		extends InstanceContainer {
 
+	private final int rootId;
+
 	private final Tokens tokens = new Tokens();
 
 	private final Set<TokensListener> tokensListeners = new HashSet<>();
 
-	protected Instance(final InstanceContainer parent) {
+	protected Instance(final InstanceContainer parent, final int rootId) {
 		super(parent);
+		this.rootId = rootId;
+	}
+
+	public int getRootId() {
+		return rootId;
 	}
 
 	public void addTokensListener(final TokensListener listener) {
@@ -140,6 +147,11 @@ public final class Instance
 				token.step(count);
 			}
 		}
+	}
+
+	@Override
+	protected Instance createNewChildInstance() {
+		return new Instance(this, getRootId());
 	}
 
 }

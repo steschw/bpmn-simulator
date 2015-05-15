@@ -88,9 +88,7 @@ abstract class InstanceContainer
 		return !childInstances.isEmpty();
 	}
 
-	protected Instance createNewChildInstance() {
-		return new Instance(this);
-	}
+	protected abstract Instance createNewChildInstance();
 
 	public Instance addNewChildInstance() {
 		final Instance instance = createNewChildInstance();

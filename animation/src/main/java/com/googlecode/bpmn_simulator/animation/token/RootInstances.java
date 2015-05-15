@@ -23,8 +23,15 @@ package com.googlecode.bpmn_simulator.animation.token;
 public class RootInstances
 		extends InstanceContainer {
 
+	private int lastId = 0;
+
 	public RootInstances() {
 		super(null);
+	}
+
+	@Override
+	protected Instance createNewChildInstance() {
+		return new Instance(this, lastId++);
 	}
 
 }

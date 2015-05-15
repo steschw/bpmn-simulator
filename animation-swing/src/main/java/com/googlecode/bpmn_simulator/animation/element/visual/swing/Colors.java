@@ -59,7 +59,7 @@ public final class Colors {
 	}
 
 	public static Color forInstance(final Instance instance) {
-		int index = 0;
+		final int index = instance.getRootId() % INSTANCE_COLORS.length;
 		return INSTANCE_COLORS[index];
 	}
 

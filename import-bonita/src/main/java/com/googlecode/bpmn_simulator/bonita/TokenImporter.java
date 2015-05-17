@@ -18,24 +18,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.bpmn_simulator.animation.input;
+package com.googlecode.bpmn_simulator.bonita;
 
-import java.io.InputStream;
-import java.util.Collection;
+import com.googlecode.bpmn_simulator.animation.token.RootInstances;
+import com.googlecode.bpmn_simulator.bpmn.model.core.infrastructure.Definitions;
 
-import com.googlecode.bpmn_simulator.animation.element.logical.LogicalFlowElement;
-import com.googlecode.bpmn_simulator.animation.element.logical.Model;
-import com.googlecode.bpmn_simulator.animation.element.visual.Diagram;
+public interface TokenImporter {
 
-public interface Definition<DIAGRAM extends Diagram<?>>
-		extends Model {
+	String LOGGER_NAME = "token-import";
 
-	String LOGGER_NAME = "definition";
+	void setInstances(RootInstances instances);
 
-	Collection<DIAGRAM> getDiagrams();
+	void setDefinition(Definitions<?> definitions);
 
-	Collection<LogicalFlowElement> getInstantiatingElements();
+	void login(String username, String password)
+			throws TokenImportException;
 
-	void load(InputStream input);
+	void logout()
+			throws TokenImportException;
+
+	void importTokens()
+			throws TokenImportException;
 
 }

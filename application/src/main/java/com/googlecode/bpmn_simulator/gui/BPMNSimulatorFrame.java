@@ -50,9 +50,20 @@ import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.jdesktop.swingx.JXLoginPane;
+import org.jdesktop.swingx.JXLoginPane.Status;
+import org.jdesktop.swingx.auth.DefaultUserNameStore;
+import org.jdesktop.swingx.auth.LoginService;
+import org.jdesktop.swingx.auth.UserNameStore;
+
 import com.googlecode.bpmn_simulator.animation.element.visual.swing.AbstractSwingDiagram;
 import com.googlecode.bpmn_simulator.animation.execution.Animator;
 import com.googlecode.bpmn_simulator.animation.token.RootInstances;
+import com.googlecode.bpmn_simulator.bonita.BonitaTokenImporter;
+import com.googlecode.bpmn_simulator.bonita.TokenImporter;
+import com.googlecode.bpmn_simulator.bonita.TokenImportException;
 import com.googlecode.bpmn_simulator.bpmn.swing.di.SwingBPMNDiagram;
 import com.googlecode.bpmn_simulator.bpmn.swing.di.SwingDIDefinition;
 import com.googlecode.bpmn_simulator.gui.dialogs.ExceptionDialog;
@@ -68,6 +79,8 @@ import com.googlecode.bpmn_simulator.gui.preferences.PreferencesDialog;
 @SuppressWarnings("serial")
 public class BPMNSimulatorFrame
 		extends MdiFrame {
+
+	private static final Logger LOG = LogManager.getLogger("application");
 
 	private static final int DEFAULT_WIDTH = 800;
 	private static final int DEFAULT_HEIGHT = 600;
@@ -415,12 +428,37 @@ public class BPMNSimulatorFrame
 	}
 
 	private void importBonita() {
-		String bonitaHome = Config.getInstance().getBonitaHome();
+		final String bonitaHome = Config.getInstance().getBonitaHome();
 		if ((bonitaHome == null) || bonitaHome.isEmpty()) {
 			showPreferencesDialog();
 		} else {
 			System.setProperty("bonita.home", bonitaHome);
-			//TODO
+			final BonitaTokenImporter tokenImporter = new BonitaTokenImporter();
+			importTokenSnapshot(tokenImporter);
+		}
+	}
+
+	private void importTokenSnapshot(final TokenImporter tokenImporter) {
+		animator.pause();
+		final UserNameStore usernameStore = new DefaultUserNameStore();
+		usernameStore.loadUserNames();
+		final JXLoginPane pane = new JXLoginPane(new LoginService() {
+			@Override
+			public boolean authenticate(final String name, final char[] password, final String server)
+					throws Exception {
+				tokenImporter.login(name, new String(password));
+				return true;
+			}
+		}, null, usernameStore);
+		tokenImporter.setDefinition(currentDefinition);
+		tokenImporter.setInstances(instances);
+		if (JXLoginPane.showLoginDialog(this, pane) == Status.SUCCEEDED) {
+			usernameStore.saveUserNames();
+			try {
+				tokenImporter.importTokens();
+			} catch (TokenImportException e) {
+				LOG.catching(e);
+			}
 		}
 	}
 

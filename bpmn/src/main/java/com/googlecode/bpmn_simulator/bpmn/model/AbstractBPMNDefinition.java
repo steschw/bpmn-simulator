@@ -165,6 +165,11 @@ public abstract class AbstractBPMNDefinition<E extends BPMNDiagram<?>>
 	}
 
 	@Override
+	public Collection<Process> getProcesses() {
+		return processes;
+	}
+
+	@Override
 	public String getElementName() {
 		return ELEMENT_NAME;
 	}

@@ -21,11 +21,13 @@
 package com.googlecode.bpmn_simulator.bpmn.model.core.infrastructure;
 
 import java.net.URI;
+import java.util.Collection;
 
 import com.googlecode.bpmn_simulator.animation.input.Definition;
 import com.googlecode.bpmn_simulator.bpmn.di.BPMNDiagram;
 import com.googlecode.bpmn_simulator.bpmn.model.NamedElement;
 import com.googlecode.bpmn_simulator.bpmn.model.core.foundation.BaseElement;
+import com.googlecode.bpmn_simulator.bpmn.model.process.activities.Process;
 
 public interface Definitions<E extends BPMNDiagram<?>>
 		extends BaseElement, NamedElement, Definition<E> {
@@ -37,5 +39,7 @@ public interface Definitions<E extends BPMNDiagram<?>>
 	URI getExpressionLanguage();
 
 	URI getTypeLanguage();
+
+	Collection<Process> getProcesses();
 
 }

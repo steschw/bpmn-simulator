@@ -18,24 +18,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.bpmn_simulator.animation.input;
+package com.googlecode.bpmn_simulator.bonita;
 
-import java.io.InputStream;
-import java.util.Collection;
+@SuppressWarnings("serial")
+public class TokenImportException
+		extends Exception {
 
-import com.googlecode.bpmn_simulator.animation.element.logical.LogicalFlowElement;
-import com.googlecode.bpmn_simulator.animation.element.logical.Model;
-import com.googlecode.bpmn_simulator.animation.element.visual.Diagram;
+	public TokenImportException(final String message) {
+		super(message);
+	}
 
-public interface Definition<DIAGRAM extends Diagram<?>>
-		extends Model {
-
-	String LOGGER_NAME = "definition";
-
-	Collection<DIAGRAM> getDiagrams();
-
-	Collection<LogicalFlowElement> getInstantiatingElements();
-
-	void load(InputStream input);
+	public TokenImportException(final Throwable cause) {
+		super(cause);
+	}
 
 }

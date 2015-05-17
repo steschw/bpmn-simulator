@@ -18,16 +18,50 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.bpmn_simulator.animation.input;
+package com.googlecode.bpmn_simulator.bonita;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.googlecode.bpmn_simulator.animation.element.visual.Diagram;
+import com.googlecode.bpmn_simulator.animation.token.RootInstances;
+import com.googlecode.bpmn_simulator.bpmn.model.core.infrastructure.Definitions;
 
-public abstract class AbstractDefinition<E extends Diagram<?>>
-		implements Definition<E> {
+public abstract class AbstractTokenImporter
+		implements TokenImporter {
 
 	protected static final Logger LOG = LogManager.getLogger(LOGGER_NAME);
+
+	private Definitions<?> definitions;
+
+	private RootInstances instances;
+
+	protected RootInstances getInstances() {
+		return instances;
+	}
+
+	@Override
+	public void setInstances(final RootInstances instances) {
+		this.instances = instances;
+	}
+
+	protected Definitions<?> getDefinitions() {
+		return definitions;
+	}
+
+	@Override
+	public void setDefinition(final Definitions<?> definitions) {
+		this.definitions = definitions;
+	}
+
+	@Override
+	public void importTokens()
+			throws TokenImportException {
+		if (instances == null) {
+			throw new TokenImportException("instances not set");
+		}
+		if (definitions == null) {
+			throw new TokenImportException("definition not set");
+		}
+	}
 
 }

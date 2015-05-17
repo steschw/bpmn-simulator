@@ -21,7 +21,6 @@
 package com.googlecode.bpmn_simulator.animation.input;
 
 import java.awt.Color;
-import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -34,7 +33,6 @@ import javax.swing.text.html.StyleSheet;
 import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 
@@ -71,7 +69,7 @@ public abstract class AbstractXmlDefinition<E extends Diagram<?>>
 		message.append(exception.getColumnNumber());
 		message.append("] "); //$NON-NLS-1$
 		message.append(exception.getLocalizedMessage());
-		notifyError(message.toString(), exception);
+		LOG.error(message.toString(), exception);
 	}
 
 	@Override
@@ -102,7 +100,7 @@ public abstract class AbstractXmlDefinition<E extends Diagram<?>>
 				builder.append(" < ");
 			}
 		}
-		notifyWarning(MessageFormat.format("Unknown element node {0}", builder.toString()));
+		LOG.warn(MessageFormat.format("Unknown element node {0}", builder.toString()));
 	}
 
 	protected static boolean isElementNode(final Node node,
@@ -130,10 +128,10 @@ public abstract class AbstractXmlDefinition<E extends Diagram<?>>
 			try {
 				return Double.parseDouble(value);
 			} catch (NumberFormatException e) {
-				notifyError(MessageFormat.format("Invalid double value ''{0}'' for attribute {1}", value, name), e);
+				LOG.catching(e);
 			}
 		} else {
-			notifyError(MessageFormat.format("Required double value for {0} does not exist", name), null);
+			LOG.error(MessageFormat.format("Required double value for {0} does not exist", name));
 		}
 		return Double.NaN;
 	}
@@ -143,8 +141,8 @@ public abstract class AbstractXmlDefinition<E extends Diagram<?>>
 		if (!isNullOrEmpty(value)) {
 			try {
 				return Double.valueOf(value);
-			} catch (NumberFormatException exception) {
-				notifyWarning(MessageFormat.format("Invalid double value ''{0}'' for attribute {1}", value, name));
+			} catch (NumberFormatException e) {
+				LOG.catching(e);
 			}
 		}
 		return null;
@@ -155,7 +153,7 @@ public abstract class AbstractXmlDefinition<E extends Diagram<?>>
 		if (!isNullOrEmpty(value)) {
 			return Boolean.parseBoolean(value);
 		} else {
-			notifyError(MessageFormat.format("Required boolean value for {0} does not exist", name), null);
+			LOG.error(MessageFormat.format("Required boolean value for {0} does not exist", name));
 		}
 		return false;
 	}
@@ -182,10 +180,10 @@ public abstract class AbstractXmlDefinition<E extends Diagram<?>>
 			try {
 				return new URI(value);
 			} catch (URISyntaxException e) {
-				notifyError(MessageFormat.format("Invalid uri value ''{0}'' for attribute {1}", value, name), e);
+				LOG.catching(e);
 			}
 		} else {
-			notifyError(MessageFormat.format("Required uri value for {0} does not exist", name), null);
+			LOG.error(MessageFormat.format("Required uri value for {0} does not exist", name));
 		}
 		return null;
 	}
@@ -196,10 +194,10 @@ public abstract class AbstractXmlDefinition<E extends Diagram<?>>
 			try {
 				return new MimeType(value);
 			} catch (MimeTypeParseException e) {
-				notifyError(MessageFormat.format("Invalid mimetype value ''{0}'' for attribute {1}", value, name), e);
+				LOG.catching(e);
 			}
 		} else {
-			notifyError(MessageFormat.format("Required mimetype value for {0} does not exist", name), null);
+			LOG.error(MessageFormat.format("Required mimetype value for {0} does not exist", name));
 		}
 		return null;
 	}
@@ -231,7 +229,7 @@ public abstract class AbstractXmlDefinition<E extends Diagram<?>>
 				return factory.newSchema(url);
 			}
 		}
-		notifyError(MessageFormat.format("Couldn''t load schema {0}", schema), null);
+		LOG.error(MessageFormat.format("Couldn''t load schema {0}", schema));
 		return null;
 	}
 
@@ -252,12 +250,8 @@ public abstract class AbstractXmlDefinition<E extends Diagram<?>>
 			final Document document = documentBuilder.parse(input);
 			encoding = document.getInputEncoding();
 			loadData(document.getDocumentElement());
-		} catch (IOException e) {
-			notifyError(null, e);
-		} catch (ParserConfigurationException e) {
-			notifyError(null, e);
-		} catch (SAXException e) {
-			notifyError(null, e);
+		} catch (Exception e) {
+			LOG.catching(e);
 		}
 	}
 

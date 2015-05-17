@@ -218,7 +218,7 @@ public abstract class AbstractBPMNDefinition<E extends BPMNDiagram<?>>
 	}
 
 	protected void notifyElementLoading(final BaseElement element) {
-		notifyInfo(MessageFormat.format("Loading {0} ''{1}''",
+		LOG.info(MessageFormat.format("Loading {0} ''{1}''",
 				element.getElementName(), element.getId()));
 	}
 
@@ -1222,13 +1222,13 @@ public abstract class AbstractBPMNDefinition<E extends BPMNDiagram<?>>
 			if (source != null) {
 				source.addOutgoing(sequenceFlowRef);
 			} else {
-				notifyWarning(MessageFormat.format("Source FlowNode for SequenceFlow {} not found", name));
+				LOG.warn(MessageFormat.format("Source FlowNode for SequenceFlow {} not found", name));
 			}
 			final FlowNode target = ReferenceUtils.element(sequenceFlow.getTarget());
 			if (target != null) {
 				target.addIncoming(sequenceFlowRef);
 			} else {
-				notifyWarning(MessageFormat.format("Target FlowNode for SequenceFlow {} not found", name));
+				LOG.warn(MessageFormat.format("Target FlowNode for SequenceFlow {} not found", name));
 			}
 		}
 	}
@@ -1238,7 +1238,7 @@ public abstract class AbstractBPMNDefinition<E extends BPMNDiagram<?>>
 		if (readElementDefinitions(node)) {
 			assignSequenceFlowsToFlowNodes();
 		} else {
-			notifyError("schema doesn''t contains definitions", null);
+			LOG.error("schema doesn''t contains definitions");
 		}
 	}
 

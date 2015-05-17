@@ -237,7 +237,7 @@ public class SwingDIDefinition
 		BPMNShape shape = createFor(SHAPE_MAPPERS, diagram, element);
 		if (shape == null) {
 			shape = new UnknownShape<>(element);
-			notifyWarning(MessageFormat.format("Unknown shape for {0}", element));
+			LOG.warn(MessageFormat.format("Unknown shape for {0}", element));
 		}
 		addToDiagram(diagram, shape);
 		return shape;
@@ -248,7 +248,7 @@ public class SwingDIDefinition
 		BPMNEdge edge = createFor(EDGE_MAPPERS, diagram, element);
 		if (edge == null) {
 			edge = new UnknownEdge<>(element);
-			notifyWarning(MessageFormat.format("Unknown edge for {0}", element));
+			LOG.warn(MessageFormat.format("Unknown edge for {0}", element));
 		}
 		addToDiagram(diagram, edge);
 		return edge;

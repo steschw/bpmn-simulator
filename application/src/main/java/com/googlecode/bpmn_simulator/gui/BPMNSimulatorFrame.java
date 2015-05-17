@@ -464,8 +464,6 @@ public class BPMNSimulatorFrame
 		if (isFileOpen()) {
 			final LoadingDialog loadingDialog = new LoadingDialog(this);
 			currentDefinition = new SwingDIDefinition();
-			currentDefinition.addDefinitionListener(logFrame);
-			currentDefinition.addDefinitionListener(loadingDialog);
 			final Runnable runnable = new Runnable() {
 				@Override
 				public void run() {

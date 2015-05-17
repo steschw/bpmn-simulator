@@ -29,17 +29,29 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.SwingUtilities;
 
-import com.googlecode.bpmn_simulator.animation.input.DefinitionListener;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.core.Filter;
+import org.apache.logging.log4j.core.LogEvent;
+import org.apache.logging.log4j.core.Filter.Result;
+import org.apache.logging.log4j.core.filter.ThresholdFilter;
+
+import com.googlecode.bpmn_simulator.gui.log.UIThreadAppender;
 
 @SuppressWarnings("serial")
 public class LoadingDialog
 		extends JDialog
-		implements DefinitionListener, CallbackRunnable.Callback {
+		implements CallbackRunnable.Callback {
+
+	private static final String APPENDER_NAME = "LoadingDialog";
 
 	private static final int WIDTH = 300;
 	private static final int HEIGHT = 180;
 
-	private JLabel infoLabel = new JLabel();
+	private static final Filter FILTER = ThresholdFilter.createFilter(Level.INFO, Result.ACCEPT, Result.DENY);
+
+	private final JLabel infoLabel = new JLabel();
+
+	private UIThreadAppender appender;
 
 	public LoadingDialog(final Window window) {
 		super(window, "Loading...", ModalityType.DOCUMENT_MODAL);
@@ -60,6 +72,15 @@ public class LoadingDialog
 	}
 
 	public void run(final Runnable runnable) {
+		appender = new UIThreadAppender(APPENDER_NAME, null, FILTER) {
+			@Override
+			protected void onAppend(final LogEvent event) {
+				if (event.getLevel().equals(Level.INFO)) {
+					infoLabel.setText(event.getMessage().getFormattedMessage());
+				}
+			}
+		};
+		appender.register();
 		final Thread thread = new Thread(new CallbackRunnable(runnable, this));
 		thread.start();
 		setVisible(true);
@@ -67,6 +88,7 @@ public class LoadingDialog
 
 	@Override
 	public void onFinish() {
+		appender.unregister();
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
@@ -74,24 +96,5 @@ public class LoadingDialog
 			}
 		});
 	}
-
-	@Override
-	public void info(final String message) {
-		SwingUtilities.invokeLater(new Runnable() {
-			@Override
-			public void run() {
-				infoLabel.setText(message);
-			}
-		});
-	}
-
-	@Override
-	public void warning(final String message) {
-	}
-
-	@Override
-	public void error(final String message, final Throwable throwable) {
-	}
-
 
 }

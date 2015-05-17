@@ -123,7 +123,7 @@ public abstract class AbstractDIDefinition<DIAGRAM extends BPMNDiagram<?>>
 		final String elementId = getAttributeString(node, name);
 		final BaseElement baseElement = getElement(elementId);
 		if (baseElement == null) {
-			notifyError(MessageFormat.format("Unknown BPMN element with id ''{0}'' for {1}", elementId, name), null);
+			LOG.error(MessageFormat.format("Unknown BPMN element with id ''{0}'' for {1}", elementId, name));
 		}
 		return baseElement;
 	}
@@ -166,7 +166,7 @@ public abstract class AbstractDIDefinition<DIAGRAM extends BPMNDiagram<?>>
 					}
 				}
 			} else {
-				notifyError(MessageFormat.format("can''t create shape for {0}", element), null);
+				LOG.error(MessageFormat.format("can''t create shape for {0}", element));
 			}
 			return true;
 		} else {
@@ -188,7 +188,7 @@ public abstract class AbstractDIDefinition<DIAGRAM extends BPMNDiagram<?>>
 					}
 				}
 			} else {
-				notifyError(MessageFormat.format("can''t create edge for {0}", element), null);
+				LOG.error(MessageFormat.format("can''t create edge for {0}", element));
 			}
 			return true;
 		} else {
@@ -228,7 +228,7 @@ public abstract class AbstractDIDefinition<DIAGRAM extends BPMNDiagram<?>>
 			}
 			return boundsRead;
 		} else {
-			notifyError(MessageFormat.format("can''t create label for {0}", element), null);
+			LOG.error(MessageFormat.format("can''t create label for {0}", element));
 		}
 		return false;
 	}
@@ -275,7 +275,7 @@ public abstract class AbstractDIDefinition<DIAGRAM extends BPMNDiagram<?>>
 						}
 					}
 				} else {
-					notifyError(MessageFormat.format("can''t create plane for {0}", element), null);
+					LOG.error(MessageFormat.format("can''t create plane for {0}", element));
 				}
 			}
 			return true;

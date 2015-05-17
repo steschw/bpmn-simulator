@@ -21,7 +21,6 @@
 package com.googlecode.bpmn_simulator.gui.log;
 
 import java.awt.BorderLayout;
-import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -29,16 +28,24 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import com.googlecode.bpmn_simulator.animation.input.DefinitionListener;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.core.Filter;
+import org.apache.logging.log4j.core.LogEvent;
+import org.apache.logging.log4j.core.Filter.Result;
+import org.apache.logging.log4j.core.filter.ThresholdFilter;
+
 import com.googlecode.bpmn_simulator.gui.Messages;
 
 @SuppressWarnings("serial")
 public class LogFrame
-		extends JFrame
-		implements DefinitionListener {
+		extends JFrame {
+
+	private static final String APPENDER_NAME = "LogWindow"; //$NON-NLS-1$
 
 	private static final int DEFAULT_WIDTH = 600;
 	private static final int DEFAULT_HEIGHT = 400;
+
+	private static final Filter FILTER = ThresholdFilter.createFilter(Level.WARN, Result.ACCEPT, Result.DENY);
 
 	private final LogList listLog = new LogList();
 
@@ -50,7 +57,28 @@ public class LogFrame
 
 		create();
 
+		setSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
 		setLocationRelativeTo(null);
+
+		final UIThreadAppender appender = new UIThreadAppender(APPENDER_NAME, null, FILTER) {
+
+			@Override
+			public void onAppend(final LogEvent logEvent) {
+				final Level level = logEvent.getLevel();
+				if (level.equals(Level.WARN)) {
+					addWarning(logEvent.getMessage().getFormattedMessage());
+				} else if (level.equals(Level.ERROR) || level.equals(Level.FATAL)) {
+					final Throwable throwable = logEvent.getThrown();
+					if (throwable == null) {
+						addError(logEvent.getMessage().getFormattedMessage());
+					} else {
+						addError(throwable.toString());
+					}
+				}
+			}
+
+		};
+		appender.register();
 	}
 
 	protected void create() {
@@ -68,9 +96,6 @@ public class LogFrame
 		});
 		panel.add(buttonClose);
 		getContentPane().add(panel, BorderLayout.PAGE_END);
-
-		setSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
-		setLocation(new Point(0, 0));
 	}
 
 	protected void addWarning(final String message) {
@@ -85,10 +110,6 @@ public class LogFrame
 		toFront();
 	}
 
-	protected void addException(final Throwable throwable) {
-		addError(throwable.toString());
-	}
-
 	public boolean hasMessages() {
 		return (warningCount + errorCount) > 0;
 	}
@@ -101,24 +122,6 @@ public class LogFrame
 		listLog.clear();
 		warningCount = 0;
 		errorCount = 0;
-	}
-
-	@Override
-	public void info(String message) {
-	}
-
-	@Override
-	public void warning(final String message) {
-		addWarning(message);
-	}
-
-	@Override
-	public void error(final String message, final Throwable throwable) {
-		if (throwable == null) {
-			addError(message);
-		} else {
-			addException(throwable);
-		}
 	}
 
 }

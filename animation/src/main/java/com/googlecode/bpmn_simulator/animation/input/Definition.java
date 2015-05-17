@@ -30,10 +30,6 @@ import com.googlecode.bpmn_simulator.animation.element.visual.Diagram;
 public interface Definition<DIAGRAM extends Diagram<?>>
 		extends Model {
 
-	void addDefinitionListener(DefinitionListener listener);
-
-	void removeDefinitionListener(DefinitionListener listener);
-
 	Collection<DIAGRAM> getDiagrams();
 
 	Collection<LogicalFlowElement> getInstantiatingElements();

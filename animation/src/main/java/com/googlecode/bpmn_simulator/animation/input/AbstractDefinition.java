@@ -20,53 +20,16 @@
  */
 package com.googlecode.bpmn_simulator.animation.input;
 
-import java.util.HashSet;
-import java.util.Set;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.googlecode.bpmn_simulator.animation.element.visual.Diagram;
 
 public abstract class AbstractDefinition<E extends Diagram<?>>
 		implements Definition<E> {
 
-	private final Set<DefinitionListener> definitionListeners = new HashSet<>();
+	private static final String LOGGER_NAME = "definition";
 
-	@Override
-	public void addDefinitionListener(final DefinitionListener listener) {
-		synchronized (definitionListeners) {
-			definitionListeners.add(listener);
-		}
-	}
-
-	@Override
-	public void removeDefinitionListener(final DefinitionListener listener) {
-		synchronized (definitionListeners) {
-			assert definitionListeners.contains(listener);
-			definitionListeners.remove(listener);
-		}
-	}
-
-	protected void notifyError(final String message, final Throwable exception) {
-		synchronized (definitionListeners) {
-			for (final DefinitionListener listener : definitionListeners) {
-				listener.error(message, exception);
-			}
-		}
-	}
-
-	protected void notifyWarning(final String message) {
-		synchronized (definitionListeners) {
-			for (final DefinitionListener listener : definitionListeners) {
-				listener.warning(message);
-			}
-		}
-	}
-
-	protected void notifyInfo(final String message) {
-		synchronized (definitionListeners) {
-			for (final DefinitionListener listener : definitionListeners) {
-				listener.info(message);
-			}
-		}
-	}
+	protected static final Logger LOG = LogManager.getLogger(LOGGER_NAME);
 
 }

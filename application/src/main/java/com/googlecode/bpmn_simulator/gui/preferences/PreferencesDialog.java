@@ -44,6 +44,10 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
 
+import org.jdesktop.swingx.JXColorSelectionButton;
+import org.jdesktop.swingx.JXHyperlink;
+import org.jdesktop.swingx.hyperlink.HyperlinkAction;
+
 import com.googlecode.bpmn_simulator.animation.element.visual.VisualElement;
 import com.googlecode.bpmn_simulator.bpmn.swing.di.Appearance;
 import com.googlecode.bpmn_simulator.bpmn.swing.di.Appearance.ElementAppearance;
@@ -84,7 +88,6 @@ import com.googlecode.bpmn_simulator.bpmn.swing.model.process.data.DataObjectRef
 import com.googlecode.bpmn_simulator.bpmn.swing.model.process.data.DataOutputShape;
 import com.googlecode.bpmn_simulator.bpmn.swing.model.process.data.DataStoreReferenceShape;
 import com.googlecode.bpmn_simulator.gui.AbstractDialog;
-import com.googlecode.bpmn_simulator.gui.Hyperlink;
 import com.googlecode.bpmn_simulator.gui.Messages;
 
 @SuppressWarnings("serial")
@@ -240,22 +243,20 @@ public class PreferencesDialog
 		constraints.gridx = 0;
 		constraints.anchor = GridBagConstraints.LINE_START;
 		component.add(new JLabel(name), constraints);
-		constraints.anchor = GridBagConstraints.CENTER;
 		try {
 			Class.forName(clazz.getCanonicalName());
 		} catch (ClassNotFoundException e) {
 		}
+		constraints.anchor = GridBagConstraints.CENTER;
 		final ElementAppearance elementAppearance = Appearance.getDefault().getForElement(clazz);
 		if (foreground) {
 			constraints.gridx = 1;
-			final ColorSelector colorSelector = new ColorSelector();
-			colorSelector.setSelectedColor(elementAppearance.getForeground());
+			final JXColorSelectionButton colorSelector = new JXColorSelectionButton(elementAppearance.getForeground());
 			component.add(colorSelector, constraints);
 		}
 		if (background) {
 			constraints.gridx = 2;
-			final ColorSelector colorSelector = new ColorSelector();
-			colorSelector.setSelectedColor(elementAppearance.getBackground());
+			final JXColorSelectionButton colorSelector = new JXColorSelectionButton(elementAppearance.getBackground());
 			component.add(colorSelector, constraints);
 		}
 	}
@@ -340,7 +341,10 @@ public class PreferencesDialog
 		constraints.weightx = 0.;
 
 		constraints.gridx = 2;
-		panel.add(new Hyperlink(BONITA_HOME_INFO, Messages.getString("info")), constraints); //$NON-NLS-1$
+		final HyperlinkAction actionInfo = HyperlinkAction.createHyperlinkAction(BONITA_HOME_INFO);
+		actionInfo.setName(Messages.getString("info")); //$NON-NLS-1$
+		actionInfo.setShortDescription(BONITA_HOME_INFO.toString());
+		panel.add(new JXHyperlink(actionInfo), constraints);
 
 		return panel;
 	}

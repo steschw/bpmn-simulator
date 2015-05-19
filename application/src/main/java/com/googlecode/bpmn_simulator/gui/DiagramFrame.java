@@ -24,17 +24,11 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.awt.image.RenderedImage;
-import java.io.File;
-import java.io.IOException;
-import java.text.MessageFormat;
 
-import javax.imageio.ImageIO;
 import javax.swing.JInternalFrame;
-import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 
 import com.googlecode.bpmn_simulator.animation.element.visual.swing.AbstractSwingDiagram;
-import com.googlecode.bpmn_simulator.gui.dialogs.ExceptionDialog;
 
 @SuppressWarnings("serial")
 public class DiagramFrame
@@ -59,7 +53,7 @@ public class DiagramFrame
 		pack();
 	}
 
-	private RenderedImage createImage() {
+	public RenderedImage createImage() {
 		final int width = diagram.getWidth();
 		final int height = diagram.getHeight();
 		final BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_3BYTE_BGR);
@@ -68,22 +62,6 @@ public class DiagramFrame
 		graphics.fillRect(0, 0, width, height);
 		diagram.paintAll(graphics);
 		return image;
-	}
-
-	public void exportImage(final File file, final String formatName) {
-		if (file.exists()
-				&& JOptionPane.showConfirmDialog(this,
-						MessageFormat.format("File ''{0}'' already exists.\nDo you want to overwrite this file?", file.getName()),
-						"File exists",
-						JOptionPane.YES_NO_OPTION,
-						JOptionPane.WARNING_MESSAGE) != JOptionPane.YES_OPTION) {
-			return;
-		}
-		try {
-			ImageIO.write(createImage(), formatName, file);
-		} catch (IOException e) {
-			ExceptionDialog.showExceptionDialog(this, e);
-		}
 	}
 
 }

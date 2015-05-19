@@ -20,6 +20,8 @@
  */
 package com.googlecode.bpmn_simulator.gui;
 
+import java.net.URI;
+
 public final class ApplicationInfo {
 
 	private static final String NOTICE =
@@ -44,7 +46,7 @@ public final class ApplicationInfo {
 
 	private static final String NAME = "BPMN Simulator";  //$NON-NLS-1$
 
-	private static final String URL = "http://code.google.com/p/bpmn-simulator/"; //$NON-NLS-1$
+	private static final URI WEBSITE = URI.create("http://code.google.com/p/bpmn-simulator/"); //$NON-NLS-1$
 
 	private ApplicationInfo() {
 	}
@@ -61,8 +63,8 @@ public final class ApplicationInfo {
 		return "unknow";
 	}
 
-	public static String getUrl() {
-		return URL;
+	public static URI getWebsite() {
+		return WEBSITE;
 	}
 
 	public static String getLicense() {

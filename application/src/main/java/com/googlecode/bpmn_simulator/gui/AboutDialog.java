@@ -27,8 +27,6 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
-import java.net.URI;
-import java.net.URISyntaxException;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -40,6 +38,9 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
+
+import org.jdesktop.swingx.JXHyperlink;
+import org.jdesktop.swingx.hyperlink.HyperlinkAction;
 
 @SuppressWarnings("serial")
 public class AboutDialog
@@ -79,14 +80,9 @@ public class AboutDialog
 
 		panel.add(Box.createVerticalStrut(20));
 
-		try {
-			final Hyperlink hyperlink =
-					new Hyperlink(new URI(ApplicationInfo.getUrl()));
-			hyperlink.setAlignmentX(CENTER_ALIGNMENT);
-			panel.add(hyperlink);
-		} catch (URISyntaxException e) {
-			e.printStackTrace();
-		}
+		final JXHyperlink website = new JXHyperlink(HyperlinkAction.createHyperlinkAction(ApplicationInfo.getWebsite()));
+		website.setAlignmentX(CENTER_ALIGNMENT);
+		panel.add(website);
 
 		return panel;
 	}

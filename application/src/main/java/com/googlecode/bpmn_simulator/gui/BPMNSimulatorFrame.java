@@ -28,12 +28,15 @@ import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
+import java.awt.image.RenderedImage;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.MessageFormat;
 import java.util.Collection;
 
+import javax.imageio.ImageIO;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFileChooser;
@@ -52,11 +55,13 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.jdesktop.swingx.JXErrorPane;
 import org.jdesktop.swingx.JXLoginPane;
 import org.jdesktop.swingx.JXLoginPane.Status;
 import org.jdesktop.swingx.auth.DefaultUserNameStore;
 import org.jdesktop.swingx.auth.LoginService;
 import org.jdesktop.swingx.auth.UserNameStore;
+import org.jdesktop.swingx.error.ErrorInfo;
 
 import com.googlecode.bpmn_simulator.animation.element.visual.swing.AbstractSwingDiagram;
 import com.googlecode.bpmn_simulator.animation.execution.Animator;
@@ -66,9 +71,8 @@ import com.googlecode.bpmn_simulator.bonita.TokenImporter;
 import com.googlecode.bpmn_simulator.bonita.TokenImportException;
 import com.googlecode.bpmn_simulator.bpmn.swing.di.SwingBPMNDiagram;
 import com.googlecode.bpmn_simulator.bpmn.swing.di.SwingDIDefinition;
-import com.googlecode.bpmn_simulator.gui.dialogs.ExceptionDialog;
 import com.googlecode.bpmn_simulator.gui.dialogs.ImageExportChooser;
-import com.googlecode.bpmn_simulator.gui.dialogs.LoadingDialog;
+import com.googlecode.bpmn_simulator.gui.dialogs.WorkingDialog;
 import com.googlecode.bpmn_simulator.gui.instances.InstancesFrame;
 import com.googlecode.bpmn_simulator.gui.log.LogFrame;
 import com.googlecode.bpmn_simulator.gui.mdi.MdiFrame;
@@ -146,7 +150,7 @@ public class BPMNSimulatorFrame
 				try {
 					Runtime.getRuntime().exec(new String[] {externalEditor, currentFile.getAbsolutePath()});
 				} catch (final IOException e) {
-					ExceptionDialog.showExceptionDialog(BPMNSimulatorFrame.this, e);
+					showException(e);
 				}
 			}
 		}
@@ -196,6 +200,33 @@ public class BPMNSimulatorFrame
 		}
 	}
 
+	private void saveImage(final RenderedImage image, final File file, final String formatName) {
+		if (file.exists()
+				&& JOptionPane.showConfirmDialog(this,
+						MessageFormat.format("File ''{0}'' already exists.\nDo you want to overwrite this file?", file.getName()),
+						"File exists",
+						JOptionPane.YES_NO_OPTION,
+						JOptionPane.WARNING_MESSAGE) != JOptionPane.YES_OPTION) {
+			return;
+		}
+		try {
+			ImageIO.write(image, formatName, file);
+		} catch (IOException e) {
+			showException(e);
+		}
+	}
+
+	private void exportAsImage() {
+		final JInternalFrame frame = getDesktop().getSelectedFrame();
+		if (frame instanceof DiagramFrame) {
+			final DiagramFrame diagramFrame = (DiagramFrame) frame;
+			final ImageExportChooser fileChooser = new ImageExportChooser();
+			if (fileChooser.showExportDialog(diagramFrame)) {
+				saveImage(diagramFrame.createImage(), fileChooser.getSelectedFile(), fileChooser.getSelectedImageFormat());
+			}
+		}
+	}
+
 	private JMenu createMenuFileExport() {
 		final JMenu menuExport = new JMenu("Export as");
 
@@ -203,14 +234,7 @@ public class BPMNSimulatorFrame
 		asImageItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(final ActionEvent e) {
-				final JInternalFrame frame = getDesktop().getSelectedFrame();
-				if (frame instanceof DiagramFrame) {
-					final DiagramFrame diagramFrame = (DiagramFrame) frame;
-					final ImageExportChooser fileChooser = new ImageExportChooser();
-					if (fileChooser.showExportDialog(diagramFrame)) {
-						diagramFrame.exportImage(fileChooser.getSelectedFile(), fileChooser.getSelectedImageFormat());
-					}
-				}
+				exportAsImage();
 			}
 		});
 		menuExport.add(asImageItem);
@@ -457,15 +481,16 @@ public class BPMNSimulatorFrame
 			try {
 				tokenImporter.importTokens();
 			} catch (TokenImportException e) {
-				LOG.catching(e);
+				showException(e);
 			}
 		}
 	}
 
 	private void showException(final Throwable throwable) {
-		JOptionPane.showMessageDialog(this, throwable.toString(),
-				Messages.getString("error"), //$NON-NLS-1$
-				JOptionPane.ERROR_MESSAGE);
+		LOG.catching(throwable);
+		final ErrorInfo errorInfo = new ErrorInfo(Messages.getString("error"), throwable.getLocalizedMessage(),
+				null, null, throwable, null, null);
+		JXErrorPane.showDialog(this, errorInfo);
 	}
 
 	private void openFile() {
@@ -500,9 +525,9 @@ public class BPMNSimulatorFrame
 
 	private void createModel() {
 		if (isFileOpen()) {
-			final LoadingDialog loadingDialog = new LoadingDialog(this);
+			final WorkingDialog loadingDialog = new WorkingDialog(this, "Loading");
 			currentDefinition = new SwingDIDefinition();
-			final Runnable runnable = new Runnable() {
+			loadingDialog.run(new Runnable() {
 				@Override
 				public void run() {
 					try (final InputStream input = new FileInputStream(currentFile)) {
@@ -511,8 +536,7 @@ public class BPMNSimulatorFrame
 						showException(e);
 					}
 				}
-			};
-			loadingDialog.run(runnable);
+			});
 			final Collection<SwingBPMNDiagram> diagrams = currentDefinition.getDiagrams();
 			if (diagrams.isEmpty()) {
 				JOptionPane.showMessageDialog(this,

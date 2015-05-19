@@ -34,6 +34,9 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import org.jdesktop.swingx.JXHyperlink;
+import org.jdesktop.swingx.hyperlink.HyperlinkAction;
+
 import com.googlecode.bpmn_simulator.bpmn.model.core.infrastructure.Definitions;
 
 @SuppressWarnings("serial")
@@ -108,7 +111,7 @@ public class ModelPropertiesDialog
 		panel.add(new JLabel(Messages.getString("Properties.typeLanguage")), c); //$NON-NLS-1$
 		c.gridx = 2;
 		c.gridwidth = 1;
-		panel.add(new Hyperlink(definitions.getTypeLanguage()), c);
+		panel.add(new JXHyperlink(HyperlinkAction.createHyperlinkAction(definitions.getTypeLanguage())), c);
 
 		c.gridy = 4;
 
@@ -117,7 +120,7 @@ public class ModelPropertiesDialog
 		panel.add(new JLabel(Messages.getString("Properties.expressionLanguage")), c); //$NON-NLS-1$
 		c.gridx = 2;
 		c.gridwidth = 1;
-		panel.add(new Hyperlink(definitions.getExpressionLanguage()), c);
+		panel.add(new JXHyperlink(HyperlinkAction.createHyperlinkAction(definitions.getExpressionLanguage())), c);
 
 		c.gridy = 5;
 

@@ -22,11 +22,11 @@ package com.googlecode.bpmn_simulator.gui.dialogs;
 
 import java.awt.BorderLayout;
 import java.awt.Cursor;
+import java.awt.Font;
 import java.awt.Window;
 
 import javax.swing.BorderFactory;
 import javax.swing.JDialog;
-import javax.swing.JLabel;
 import javax.swing.SwingUtilities;
 
 import org.apache.logging.log4j.Level;
@@ -34,49 +34,56 @@ import org.apache.logging.log4j.core.Filter;
 import org.apache.logging.log4j.core.LogEvent;
 import org.apache.logging.log4j.core.Filter.Result;
 import org.apache.logging.log4j.core.filter.ThresholdFilter;
+import org.jdesktop.swingx.JXBusyLabel;
 
 import com.googlecode.bpmn_simulator.gui.log.UIThreadAppender;
 
 @SuppressWarnings("serial")
-public class LoadingDialog
+public class WorkingDialog
 		extends JDialog
 		implements CallbackRunnable.Callback {
 
-	private static final String APPENDER_NAME = "LoadingDialog";
+	private static final String APPENDER_NAME = "WorkingDialog";
 
-	private static final int WIDTH = 300;
-	private static final int HEIGHT = 180;
+	private static final int WIDTH = 320;
+	private static final int HEIGHT = 80;
+
+	private static final int GAP = 8;
 
 	private static final Filter FILTER = ThresholdFilter.createFilter(Level.INFO, Result.ACCEPT, Result.DENY);
 
-	private final JLabel infoLabel = new JLabel();
+	private final JXBusyLabel busyLabel = new JXBusyLabel();
 
 	private UIThreadAppender appender;
 
-	public LoadingDialog(final Window window) {
-		super(window, "Loading...", ModalityType.DOCUMENT_MODAL);
+	public WorkingDialog(final Window owner, final String title) {
+		super(owner, title + "...", ModalityType.DOCUMENT_MODAL);
 		create();
 		setDefaultCloseOperation(HIDE_ON_CLOSE);
 		setResizable(false);
 		setAlwaysOnTop(true);
 		setType(Type.UTILITY);
 		setSize(WIDTH, HEIGHT);
-		setLocationRelativeTo(window);
+		setLocationRelativeTo(owner);
 		setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 	}
 
 	private void create() {
 		getContentPane().setLayout(new BorderLayout());
-		infoLabel.setBorder(BorderFactory.createLoweredBevelBorder());
-		getContentPane().add(infoLabel, BorderLayout.PAGE_END);
+		final Font currentFont = busyLabel.getFont();
+		busyLabel.setFont(currentFont.deriveFont(currentFont.getSize2D() + 2.f));
+		busyLabel.setIconTextGap(GAP);
+		busyLabel.setBorder(BorderFactory.createEmptyBorder(GAP, GAP, GAP, GAP));
+		getContentPane().add(busyLabel, BorderLayout.CENTER);
 	}
 
 	public void run(final Runnable runnable) {
+		busyLabel.setBusy(true);
 		appender = new UIThreadAppender(APPENDER_NAME, null, FILTER) {
 			@Override
 			protected void onAppend(final LogEvent event) {
 				if (event.getLevel().equals(Level.INFO)) {
-					infoLabel.setText(event.getMessage().getFormattedMessage());
+					busyLabel.setText(event.getMessage().getFormattedMessage());
 				}
 			}
 		};
@@ -92,6 +99,7 @@ public class LoadingDialog
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
+				busyLabel.setBusy(false);
 				setVisible(false);
 			}
 		});

@@ -33,4 +33,6 @@ public interface LogicalFlowElement
 
 	Tokens getTokens();
 
+	int getStepCount();
+
 }

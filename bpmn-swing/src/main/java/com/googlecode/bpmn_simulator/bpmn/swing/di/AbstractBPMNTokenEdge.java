@@ -27,7 +27,6 @@ import com.googlecode.bpmn_simulator.animation.element.visual.Point;
 import com.googlecode.bpmn_simulator.animation.element.visual.Waypoints;
 import com.googlecode.bpmn_simulator.animation.token.Token;
 import com.googlecode.bpmn_simulator.animation.token.TokenFlowListener;
-import com.googlecode.bpmn_simulator.animation.token.Tokens;
 
 @SuppressWarnings("serial")
 public abstract class AbstractBPMNTokenEdge<E extends LogicalFlowElement>
@@ -51,11 +50,11 @@ public abstract class AbstractBPMNTokenEdge<E extends LogicalFlowElement>
 	}
 
 	protected void paintTokens(final Graphics2D g) {
-		final Tokens tokens = getLogicalElement().getTokens();
+		final E logicalElement = getLogicalElement();
 		final Waypoints waypoints = getWaypointsRelative();
-		final double length = waypoints.getLength();
-		for (final Token token : tokens) {
-			final Point point = waypoints.getWaypoint(token.getPosition());
+		final double n = waypoints.getLength() / logicalElement.getStepCount();
+		for (final Token token : logicalElement.getTokens()) {
+			final Point point = waypoints.getWaypoint(n * token.getPosition());
 			getPresentation().drawToken(g, token, point.getX(), point.getY());
 		}
 	}

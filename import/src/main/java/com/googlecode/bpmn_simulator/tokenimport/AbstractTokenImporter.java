@@ -18,26 +18,50 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.bpmn_simulator.bonita;
+package com.googlecode.bpmn_simulator.tokenimport;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.googlecode.bpmn_simulator.animation.token.RootInstances;
 import com.googlecode.bpmn_simulator.bpmn.model.core.infrastructure.Definitions;
 
-public interface TokenImporter {
+public abstract class AbstractTokenImporter
+		implements TokenImporter {
 
-	String LOGGER_NAME = "token-import";
+	protected static final Logger LOG = LogManager.getLogger(LOGGER_NAME);
 
-	void setInstances(RootInstances instances);
+	private Definitions<?> definitions;
 
-	void setDefinition(Definitions<?> definitions);
+	private RootInstances instances;
 
-	void login(String username, String password)
-			throws TokenImportException;
+	protected RootInstances getInstances() {
+		return instances;
+	}
 
-	void logout()
-			throws TokenImportException;
+	@Override
+	public void setInstances(final RootInstances instances) {
+		this.instances = instances;
+	}
 
-	void importTokens()
-			throws TokenImportException;
+	protected Definitions<?> getDefinitions() {
+		return definitions;
+	}
+
+	@Override
+	public void setDefinition(final Definitions<?> definitions) {
+		this.definitions = definitions;
+	}
+
+	@Override
+	public void importTokens()
+			throws TokenImportException {
+		if (instances == null) {
+			throw new TokenImportException("instances not set");
+		}
+		if (definitions == null) {
+			throw new TokenImportException("definition not set");
+		}
+	}
 
 }

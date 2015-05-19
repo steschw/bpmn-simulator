@@ -66,9 +66,6 @@ import org.jdesktop.swingx.error.ErrorInfo;
 import com.googlecode.bpmn_simulator.animation.element.visual.swing.AbstractSwingDiagram;
 import com.googlecode.bpmn_simulator.animation.execution.Animator;
 import com.googlecode.bpmn_simulator.animation.token.RootInstances;
-import com.googlecode.bpmn_simulator.bonita.BonitaTokenImporter;
-import com.googlecode.bpmn_simulator.bonita.TokenImporter;
-import com.googlecode.bpmn_simulator.bonita.TokenImportException;
 import com.googlecode.bpmn_simulator.bpmn.swing.di.SwingBPMNDiagram;
 import com.googlecode.bpmn_simulator.bpmn.swing.di.SwingDIDefinition;
 import com.googlecode.bpmn_simulator.gui.dialogs.ImageExportChooser;
@@ -79,6 +76,9 @@ import com.googlecode.bpmn_simulator.gui.mdi.MdiFrame;
 import com.googlecode.bpmn_simulator.gui.mdi.ScrollDesktop.ScrollDesktopPane;
 import com.googlecode.bpmn_simulator.gui.preferences.Config;
 import com.googlecode.bpmn_simulator.gui.preferences.PreferencesDialog;
+import com.googlecode.bpmn_simulator.tokenimport.TokenImportException;
+import com.googlecode.bpmn_simulator.tokenimport.TokenImporter;
+import com.googlecode.bpmn_simulator.tokenimport.bonita.BonitaTokenImporter;
 
 @SuppressWarnings("serial")
 public class BPMNSimulatorFrame

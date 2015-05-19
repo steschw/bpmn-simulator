@@ -90,6 +90,7 @@
 		<module>animation-swing</module>
 		<module>bpmn</module>
 		<module>bpmn-swing</module>
+		<module>import</module>
 		<module>import-bonita</module>
 		<module>application</module>
 	</modules>

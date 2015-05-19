@@ -18,18 +18,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.bpmn_simulator.bonita;
+package com.googlecode.bpmn_simulator.tokenimport;
 
-@SuppressWarnings("serial")
-public class TokenImportException
-		extends Exception {
+import com.googlecode.bpmn_simulator.animation.token.RootInstances;
+import com.googlecode.bpmn_simulator.bpmn.model.core.infrastructure.Definitions;
 
-	public TokenImportException(final String message) {
-		super(message);
-	}
+public interface TokenImporter {
 
-	public TokenImportException(final Throwable cause) {
-		super(cause);
-	}
+	String LOGGER_NAME = "token-import";
+
+	void setInstances(RootInstances instances);
+
+	void setDefinition(Definitions<?> definitions);
+
+	void login(String username, String password)
+			throws TokenImportException;
+
+	void logout()
+			throws TokenImportException;
+
+	void importTokens()
+			throws TokenImportException;
 
 }

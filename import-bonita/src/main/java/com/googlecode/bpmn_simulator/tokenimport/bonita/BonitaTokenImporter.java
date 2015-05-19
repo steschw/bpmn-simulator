@@ -18,7 +18,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.bpmn_simulator.bonita;
+package com.googlecode.bpmn_simulator.tokenimport.bonita;
 
 import java.text.MessageFormat;
 import java.util.Collection;
@@ -40,6 +40,8 @@ import com.googlecode.bpmn_simulator.bpmn.model.NamedElement;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.FlowElement;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.FlowElementsContainer;
 import com.googlecode.bpmn_simulator.bpmn.model.process.activities.Process;
+import com.googlecode.bpmn_simulator.tokenimport.AbstractTokenImporter;
+import com.googlecode.bpmn_simulator.tokenimport.TokenImportException;
 
 public class BonitaTokenImporter
 		extends AbstractTokenImporter {

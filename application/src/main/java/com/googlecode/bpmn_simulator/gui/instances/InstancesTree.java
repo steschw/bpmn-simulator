@@ -111,7 +111,9 @@ public class InstancesTree
 			SwingUtilities.invokeLater(new Runnable() {
 				@Override
 				public void run() {
-					getDefaultModel().removeNodeFromParent(node);
+					if (node.getParent() != null) {
+						getDefaultModel().removeNodeFromParent(node);
+					}
 				}
 			});
 		}
@@ -168,7 +170,7 @@ public class InstancesTree
 
 	}
 
-	private class InstanceNode
+	private final class InstanceNode
 			extends DefaultMutableTreeNode
 			implements InstancesListener, TokensListener {
 
@@ -184,7 +186,7 @@ public class InstancesTree
 
 		@Override
 		public void instanceAdded(final Instance instance) {
-			getDefaultModel().insertNodeInto(new InstanceNode(instance), this, getChildCount());
+			insertNode(this, new InstanceNode(instance));
 		}
 
 		@Override
@@ -194,7 +196,7 @@ public class InstancesTree
 
 		@Override
 		public void tokenAdded(final Token token) {
-			getDefaultModel().insertNodeInto(new TokenNode(token), this, getChildCount());
+			insertNode(this, new TokenNode(token));
 		}
 
 		@Override
@@ -204,7 +206,7 @@ public class InstancesTree
 
 	}
 
-	private class TokenNode
+	private final class TokenNode
 			extends DefaultMutableTreeNode {
 
 		private TokenNode(final Token token) {

@@ -84,7 +84,7 @@ public class InstancesTree
 				@Override
 				public void run() {
 					getDefaultModel().insertNodeInto(node, parentNode, parentNode.getChildCount());
-					expandPath(new TreePath(node.getPath()));
+					expandPath(new TreePath(parentNode.getPath()));
 				}
 			});
 		}

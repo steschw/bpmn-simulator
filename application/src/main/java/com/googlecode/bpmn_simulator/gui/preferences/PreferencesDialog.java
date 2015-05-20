@@ -24,16 +24,12 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
 import java.net.URI;
 import java.util.Locale;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
-import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
@@ -115,20 +111,10 @@ public class PreferencesDialog
 
 	public PreferencesDialog(final JFrame parent) {
 		super(parent, Messages.getString("Preferences.preferences")); //$NON-NLS-1$
-
-		create();
-
-		load();
 	}
 
 	@Override
-	protected void create() {
-		super.create();
-
-		getContentPane().add(createPreferencesPane(), BorderLayout.CENTER);
-	}
-
-	protected JTabbedPane createPreferencesPane() {
+	protected JComponent createContent() {
 		final JTabbedPane tabbedPane = new JTabbedPane();
 		tabbedPane.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
 		tabbedPane.addTab(Messages.getString("Preferences.general"), createGeneralPanel()); //$NON-NLS-1$
@@ -137,6 +123,14 @@ public class PreferencesDialog
 		tabbedPane.addTab(Messages.getString("Preferences.elementDefaults"), createElementsPanel()); //$NON-NLS-1$
 		tabbedPane.addTab(Messages.getString("Preferences.engine"), createEnginePanel()); //$NON-NLS-1$
 		return tabbedPane;
+	}
+
+	@Override
+	protected JPanel createButtonPanel() {
+		final JPanel panel = super.createButtonPanel();
+		panel.add(createCancelButton());
+		panel.add(createOkButton());
+		return panel;
 	}
 
 	protected JPanel createGeneralPanel() {
@@ -182,7 +176,7 @@ public class PreferencesDialog
 		final StringBuilder textRestart = new StringBuilder("* "); //$NON-NLS-1$
 		textRestart.append(Messages.getString("Preferences.requiresRestart")); //$NON-NLS-1$
 		c.gridx = 0;
-		c.weightx = 0;
+		c.weightx = 1;
 		c.weighty = 1;
 		c.gridwidth = 2;
 		c.anchor = GridBagConstraints.PAGE_END;
@@ -359,38 +353,7 @@ public class PreferencesDialog
 	}
 
 	@Override
-	protected JPanel createButtonPanel() {
-		final JPanel panel = super.createButtonPanel();
-
-		final JButton buttonCancel = new JButton(Messages.getString("cancel")); //$NON-NLS-1$
-		setComponentWidth(buttonCancel, DEFAULT_BUTTON_WIDTH);
-		buttonCancel.setMnemonic(KeyEvent.VK_C);
-		buttonCancel.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(final ActionEvent e) {
-				PreferencesDialog.this.dispose();
-			}
-		});
-		panel.add(buttonCancel);
-
-		final JButton buttonOk = new JButton(Messages.getString("ok"));  //$NON-NLS-1$
-		setComponentWidth(buttonOk, DEFAULT_BUTTON_WIDTH);
-		buttonOk.setMnemonic(KeyEvent.VK_O);
-		buttonOk.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(final ActionEvent e) {
-				store();
-				PreferencesDialog.this.dispose();
-			}
-		});
-		panel.add(buttonOk);
-
-		getRootPane().setDefaultButton(buttonOk);
-
-		return panel;
-	}
-
-	protected void store() {
+	protected void storeData() {
 		final Config config = Config.getInstance();
 
 		config.setLocale((Locale) selectLanguage.getSelectedItem());
@@ -404,7 +367,8 @@ public class PreferencesDialog
 		config.store();
 	}
 
-	protected void load() {
+	@Override
+	protected void loadData() {
 		final Config config = Config.getInstance();
 
 		selectLanguage.setSelectedItem(config.getLocale());

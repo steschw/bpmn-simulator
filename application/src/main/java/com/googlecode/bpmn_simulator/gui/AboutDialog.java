@@ -20,17 +20,11 @@
  */
 package com.googlecode.bpmn_simulator.gui;
 
-import java.awt.BorderLayout;
-import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
-import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -48,16 +42,22 @@ public class AboutDialog
 
 	public AboutDialog(final JFrame owner) {
 		super(owner, Messages.getString("About.about")); //$NON-NLS-1$
-
-		create();
 	}
 
 	@Override
-	protected void create() {
-		setLayout(new BorderLayout());
+	protected JComponent createContent() {
+		final JTabbedPane pane = new JTabbedPane();
+		pane.addTab(Messages.getString("About.info"), createTabInfo()); //$NON-NLS-1$
+		pane.addTab(Messages.getString("About.licence"), createTabLicence()); //$NON-NLS-1$
+		pane.addTab(Messages.getString("About.properties"), createTabProperties());
+		return pane;
+	}
 
-		getContentPane().add(createTabbedPane(), BorderLayout.CENTER);
-		getContentPane().add(createActionPanel(), BorderLayout.PAGE_END);
+	@Override
+	protected JPanel createButtonPanel() {
+		final JPanel panel = super.createButtonPanel();
+		panel.add(createCloseButton());
+		return panel;
 	}
 
 	protected JPanel createTabInfo() {
@@ -102,32 +102,6 @@ public class AboutDialog
 		final PropertiesTable propertiesTable = new PropertiesTable();
 		propertiesTable.setProperties(System.getProperties());
 		return new JScrollPane(propertiesTable);
-	}
-
-	protected JTabbedPane createTabbedPane() {
-		final JTabbedPane pane = new JTabbedPane();
-		pane.addTab(Messages.getString("About.info"), createTabInfo()); //$NON-NLS-1$
-		pane.addTab(Messages.getString("About.licence"), createTabLicence()); //$NON-NLS-1$
-		pane.addTab(Messages.getString("About.properties"), createTabProperties());
-		return pane;
-	}
-
-	protected JPanel createActionPanel() {
-		final JPanel panel = new JPanel(new FlowLayout(FlowLayout.TRAILING));
-
-		final JButton buttonClose = new JButton(Messages.getString("close")); //$NON-NLS-1$
-		buttonClose.setMnemonic(KeyEvent.VK_C);
-		buttonClose.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(final ActionEvent e) {
-				dispose();
-			}
-		});
-		getRootPane().setDefaultButton(buttonClose);
-
-		panel.add(buttonClose);
-
-		return panel;
 	}
 
 }

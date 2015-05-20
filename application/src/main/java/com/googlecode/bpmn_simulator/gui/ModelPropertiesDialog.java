@@ -20,15 +20,11 @@
  */
 package com.googlecode.bpmn_simulator.gui;
 
-import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
 
-import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -47,17 +43,7 @@ public class ModelPropertiesDialog
 
 	public ModelPropertiesDialog(final JFrame parent, final Definitions<?> definitions) {
 		super(parent, Messages.getString("Properties.properties")); //$NON-NLS-1$
-
 		this.definitions = definitions;
-
-		create();
-	}
-
-	@Override
-	protected void create() {
-		super.create();
-
-		getContentPane().add(createPropertiesPanel(), BorderLayout.CENTER);
 	}
 
 	protected static JTextField createField(final String text) {
@@ -68,7 +54,8 @@ public class ModelPropertiesDialog
 		return textField;
 	}
 
-	protected JPanel createPropertiesPanel() {
+	@Override
+	protected JComponent createContent() {
 		final JPanel panel = new JPanel(new GridBagLayout());
 		panel.setBorder(createGapBorder());
 
@@ -137,20 +124,7 @@ public class ModelPropertiesDialog
 	@Override
 	protected JPanel createButtonPanel() {
 		final JPanel panel = super.createButtonPanel();
-
-		final JButton buttonClose = new JButton(Messages.getString("close")); //$NON-NLS-1$
-		setComponentWidth(buttonClose, DEFAULT_BUTTON_WIDTH);
-		buttonClose.setMnemonic(KeyEvent.VK_C);
-		buttonClose.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(final ActionEvent e) {
-				ModelPropertiesDialog.this.dispose();
-			}
-		});
-		panel.add(buttonClose, BorderLayout.LINE_END);
-
-		getRootPane().setDefaultButton(buttonClose);
-
+		panel.add(createCloseButton());
 		return panel;
 	}
 

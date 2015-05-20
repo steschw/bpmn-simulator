@@ -27,7 +27,11 @@ import java.awt.FlowLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.WindowEvent;
 
+import javax.swing.AbstractAction;
+import javax.swing.Action;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -36,11 +40,16 @@ import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.KeyStroke;
 import javax.swing.border.Border;
 
 @SuppressWarnings("serial")
 public abstract class AbstractDialog
 		extends JDialog {
+
+	private static final String KEY_COMMAND_CLOSE = "command_close";
+
+	private static final KeyStroke KEYSTROKE_ESC = KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0);
 
 	protected static final int GAP = 10;
 
@@ -86,20 +95,72 @@ public abstract class AbstractDialog
 	}
 
 	public void showDialog() {
+		create();
 		pack();
 		setLocationRelativeTo(getParent());
+		loadData();
 		setVisible(true);
 	}
 
-	protected void create() {
+	private void create() {
 		getContentPane().setLayout(new BorderLayout());
-
+		getContentPane().add(createContent(), BorderLayout.CENTER);
 		getContentPane().add(createButtonPanel(), BorderLayout.PAGE_END);
 	}
+
+	protected abstract JComponent createContent();
 
 	protected JPanel createButtonPanel() {
 		final JPanel panel = new JPanel(new FlowLayout(FlowLayout.TRAILING));
 		return panel;
+	}
+
+	private Action createCloseAction(final String text) {
+		final Action actionClose = new AbstractAction(text) {
+			@Override
+			public void actionPerformed(final ActionEvent e) {
+				dispatchEvent(new WindowEvent(AbstractDialog.this, WindowEvent.WINDOW_CLOSING));
+			}
+		};
+		getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KEYSTROKE_ESC, KEY_COMMAND_CLOSE);
+		getRootPane().getActionMap().put(KEY_COMMAND_CLOSE, actionClose);
+		return actionClose;
+	}
+
+	protected JButton createCloseButton() {
+		final JButton buttonClose = new JButton(createCloseAction(Messages.getString("close"))); //$NON-NLS-1$
+		setComponentWidth(buttonClose, DEFAULT_BUTTON_WIDTH);
+		buttonClose.setMnemonic(KeyEvent.VK_C);
+		getRootPane().setDefaultButton(buttonClose);
+		return buttonClose;
+	}
+
+	protected JButton createOkButton() {
+		final JButton buttonOk = new JButton(Messages.getString("ok"));  //$NON-NLS-1$
+		setComponentWidth(buttonOk, DEFAULT_BUTTON_WIDTH);
+		buttonOk.setMnemonic(KeyEvent.VK_O);
+		buttonOk.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(final ActionEvent e) {
+				storeData();
+				dispose();
+			}
+		});
+		getRootPane().setDefaultButton(buttonOk);
+		return buttonOk;
+	}
+
+	protected JButton createCancelButton() {
+		final JButton buttonCancel = new JButton(createCloseAction(Messages.getString("cancel"))); //$NON-NLS-1$
+		setComponentWidth(buttonCancel, DEFAULT_BUTTON_WIDTH);
+		buttonCancel.setMnemonic(KeyEvent.VK_C);
+		return buttonCancel;
+	}
+
+	protected void loadData() {
+	}
+
+	protected void storeData() {
 	}
 
 }

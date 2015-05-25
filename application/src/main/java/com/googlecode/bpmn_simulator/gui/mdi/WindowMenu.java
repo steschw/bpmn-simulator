@@ -36,8 +36,6 @@ import javax.swing.JRadioButtonMenuItem;
 import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
 
-import com.googlecode.bpmn_simulator.gui.Messages;
-
 @SuppressWarnings("serial")
 public class WindowMenu
 		extends JMenu
@@ -46,7 +44,6 @@ public class WindowMenu
 	private JDesktopPane desktop;
 
 	public WindowMenu() {
-		super(Messages.getString("Menu.windows")); //$NON-NLS-1$
 		addMenuListener(this);
 	}
 

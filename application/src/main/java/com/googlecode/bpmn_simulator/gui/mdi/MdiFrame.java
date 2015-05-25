@@ -23,6 +23,7 @@ package com.googlecode.bpmn_simulator.gui.mdi;
 import java.awt.BorderLayout;
 
 import javax.swing.JFrame;
+import javax.swing.JMenu;
 
 import com.googlecode.bpmn_simulator.gui.mdi.ScrollDesktop.ScrollDesktopPane;
 
@@ -46,7 +47,7 @@ public class MdiFrame
 		return desktop.getDesktopPane();
 	}
 
-	protected WindowMenu createWindowMenu() {
+	protected JMenu createWindowMenu() {
 		final WindowMenu menu = new WindowMenu();
 		menu.setDesktopPane(getDesktop());
 		return menu;

@@ -361,30 +361,6 @@ public class BPMNSimulatorFrame
 	private JMenu createMenuExtra() {
 		final JMenu menuExtra = new JMenu(Messages.getString("Menu.extra")); //$NON-NLS-1$
 
-		final JMenuItem menuExtraInstances = new JMenuItem(Messages.getString("Menu.instances")); //$NON-NLS-1$
-		menuExtraInstances.setMnemonic(KeyEvent.VK_I);
-		menuExtraInstances.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_I, InputEvent.ALT_MASK));
-		menuExtraInstances.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(final ActionEvent e) {
-				showInstancesFrame();
-			}
-		});
-		menuExtra.add(menuExtraInstances);
-
-		final JMenuItem menuExtraElements = new JMenuItem(Messages.getString("Menu.elements")); //$NON-NLS-1$
-		menuExtraElements.setMnemonic(KeyEvent.VK_E);
-		menuExtraElements.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_E, InputEvent.ALT_MASK));
-		menuExtraElements.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(final ActionEvent e) {
-				showElementsFrame();
-			}
-		});
-		menuExtra.add(menuExtraElements);
-
-		menuExtra.addSeparator();
-
 		final JMenuItem menuExtraOpenExternalEditor
 				= new JMenuItem(Messages.getString("Menu.openExternal")); //$NON-NLS-1$
 		menuExtraOpenExternalEditor.addActionListener(new ActionListener() {
@@ -442,6 +418,39 @@ public class BPMNSimulatorFrame
 		menubar.add(createMenuHelp());
 
 		return menubar;
+	}
+
+	@Override
+	protected JMenu createWindowMenu() {
+		final JMenu menuWindow = new JMenu(Messages.getString("Menu.windows")); //$NON-NLS-1$
+
+		final JMenuItem menuWindowElements = new JMenuItem(Messages.getString("Menu.elements")); //$NON-NLS-1$
+		menuWindowElements.setMnemonic(KeyEvent.VK_E);
+		menuWindowElements.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_E, InputEvent.ALT_MASK));
+		menuWindowElements.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(final ActionEvent e) {
+				showElementsFrame();
+			}
+		});
+		menuWindow.add(menuWindowElements);
+
+		final JMenuItem menuWindowInstances = new JMenuItem(Messages.getString("Menu.instances")); //$NON-NLS-1$
+		menuWindowInstances.setMnemonic(KeyEvent.VK_I);
+		menuWindowInstances.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_I, InputEvent.ALT_MASK));
+		menuWindowInstances.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(final ActionEvent e) {
+				showInstancesFrame();
+			}
+		});
+		menuWindow.add(menuWindowInstances);
+
+		final JMenu menuWindowDiagram = super.createWindowMenu();
+		menuWindowDiagram.setText(Messages.getString("Menu.diagrams"));
+		menuWindow.add(menuWindowDiagram);
+
+		return menuWindow;
 	}
 
 	private JToolBar createDefinitionToolbar() {

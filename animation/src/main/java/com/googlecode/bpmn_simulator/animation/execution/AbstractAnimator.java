@@ -41,8 +41,12 @@ abstract class AbstractAnimator
 		super();
 	}
 
-	public static int getSteps(final double sec) {
+	public static int secondsToSteps(final double sec) {
 		return (int) (STEPS_PER_SEC * sec);
+	}
+
+	public static double stepsToSeconds(final int steps) {
+		return (double) steps / STEPS_PER_SEC;
 	}
 
 	public void addAnimationListener(final AnimationListener listener) {

@@ -23,6 +23,7 @@ package com.googlecode.bpmn_simulator.animation.input;
 import java.io.InputStream;
 import java.util.Collection;
 
+import com.googlecode.bpmn_simulator.animation.element.logical.LogicalElement;
 import com.googlecode.bpmn_simulator.animation.element.logical.LogicalFlowElement;
 import com.googlecode.bpmn_simulator.animation.element.logical.Model;
 import com.googlecode.bpmn_simulator.animation.element.visual.Diagram;
@@ -33,6 +34,8 @@ public interface Definition<DIAGRAM extends Diagram<?>>
 	String LOGGER_NAME = "definition";
 
 	Collection<DIAGRAM> getDiagrams();
+
+	Collection<LogicalElement> getElements();
 
 	Collection<LogicalFlowElement> getInstantiatingElements();
 

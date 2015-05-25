@@ -33,7 +33,9 @@ public abstract class AbstractFlowElement
 		extends AbstractBaseElementNamed
 		implements FlowElement {
 
-	private static final int DEFAULT_STEP_COUNT = Animator.getSteps(3.);
+	private static final int DEFAULT_STEP_COUNT = Animator.secondsToSteps(3.);
+
+	private int stepCount = DEFAULT_STEP_COUNT;
 
 	private final Set<TokenFlowListener> tokenFlowListeners
 			= new HashSet<>();
@@ -80,7 +82,13 @@ public abstract class AbstractFlowElement
 
 	@Override
 	public int getStepCount() {
-		return DEFAULT_STEP_COUNT;
+		return stepCount;
+	}
+
+	@Override
+	public void setStepCount(final int count) {
+		assert stepCount >= 0;
+		stepCount = count;
 	}
 
 	protected abstract void tokenComplete(final Token token);

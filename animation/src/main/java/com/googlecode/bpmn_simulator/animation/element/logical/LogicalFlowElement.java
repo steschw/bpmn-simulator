@@ -35,4 +35,6 @@ public interface LogicalFlowElement
 
 	int getStepCount();
 
+	void setStepCount(int count);
+
 }

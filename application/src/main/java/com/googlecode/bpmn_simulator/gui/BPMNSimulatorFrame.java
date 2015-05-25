@@ -40,6 +40,7 @@ import javax.imageio.ImageIO;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFileChooser;
+import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -70,6 +71,7 @@ import com.googlecode.bpmn_simulator.bpmn.swing.di.SwingBPMNDiagram;
 import com.googlecode.bpmn_simulator.bpmn.swing.di.SwingDIDefinition;
 import com.googlecode.bpmn_simulator.gui.dialogs.ImageExportChooser;
 import com.googlecode.bpmn_simulator.gui.dialogs.WorkingDialog;
+import com.googlecode.bpmn_simulator.gui.elements.ElementsFrame;
 import com.googlecode.bpmn_simulator.gui.instances.InstancesFrame;
 import com.googlecode.bpmn_simulator.gui.log.LogFrame;
 import com.googlecode.bpmn_simulator.gui.mdi.MdiFrame;
@@ -101,7 +103,9 @@ public class BPMNSimulatorFrame
 
 	private final JButton messagesButton = new JButton();
 
-	private final InstancesFrame frameInstances = new InstancesFrame(instances);
+	private final InstancesFrame instancesFrame = new InstancesFrame(instances);
+
+	private final ElementsFrame elementsFrame = new ElementsFrame();
 
 	private SwingDIDefinition currentDefinition;
 
@@ -137,8 +141,17 @@ public class BPMNSimulatorFrame
 		dialog.showDialog();
 	}
 
+	private static void showFrame(final JFrame frame) {
+		frame.setVisible(true);
+		frame.toFront();
+	}
+
 	public void showInstancesFrame() {
-		frameInstances.setVisible(true);
+		showFrame(instancesFrame);
+	}
+
+	public void showElementsFrame() {
+		showFrame(elementsFrame);
 	}
 
 	public void showExternalEditor() {
@@ -180,7 +193,7 @@ public class BPMNSimulatorFrame
 		messagesButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(final ActionEvent event) {
-				logFrame.setVisible(true);
+				showFrame(logFrame);
 			}
 		});
 		panel.add(messagesButton, BorderLayout.LINE_END);
@@ -358,6 +371,19 @@ public class BPMNSimulatorFrame
 			}
 		});
 		menuExtra.add(menuExtraInstances);
+
+		final JMenuItem menuExtraElements = new JMenuItem(Messages.getString("Menu.elements")); //$NON-NLS-1$
+		menuExtraElements.setMnemonic(KeyEvent.VK_E);
+		menuExtraElements.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_E, InputEvent.ALT_MASK));
+		menuExtraElements.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(final ActionEvent e) {
+				showElementsFrame();
+			}
+		});
+		menuExtra.add(menuExtraElements);
+
+		menuExtra.addSeparator();
 
 		final JMenuItem menuExtraOpenExternalEditor
 				= new JMenuItem(Messages.getString("Menu.openExternal")); //$NON-NLS-1$
@@ -553,6 +579,7 @@ public class BPMNSimulatorFrame
 				desktop.arrangeFrames();
 			}
 			instancesToolbar.setDefinition(currentDefinition);
+			elementsFrame.setDefinition(currentDefinition);
 			loadingDialog.setVisible(false);
 			updateMessagesInfo();
 		}

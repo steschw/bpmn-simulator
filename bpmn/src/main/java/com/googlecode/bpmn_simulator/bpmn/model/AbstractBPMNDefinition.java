@@ -33,6 +33,7 @@ import javax.activation.MimeType;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import com.googlecode.bpmn_simulator.animation.element.logical.LogicalElement;
 import com.googlecode.bpmn_simulator.animation.element.logical.LogicalFlowElement;
 import com.googlecode.bpmn_simulator.animation.input.AbstractXmlDefinition;
 import com.googlecode.bpmn_simulator.animation.ref.CastReference;
@@ -149,6 +150,15 @@ public abstract class AbstractBPMNDefinition<E extends BPMNDiagram<?>>
 
 	public AbstractBPMNDefinition() {
 		super(SCHEMA_FILENAME);
+	}
+
+	@Override
+	public Collection<LogicalElement> getElements() {
+		final Collection<LogicalElement> elements = new ArrayList<>();
+		for (final Process process : processes) {
+			elements.addAll(process.getFlowElements());
+		}
+		return elements;
 	}
 
 	@Override

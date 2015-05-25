@@ -47,4 +47,9 @@ public final class Message
 		return name;
 	}
 
+	@Override
+	public String toString() {
+		return firstNotEmpty(getName(), super.toString());
+	}
+
 }

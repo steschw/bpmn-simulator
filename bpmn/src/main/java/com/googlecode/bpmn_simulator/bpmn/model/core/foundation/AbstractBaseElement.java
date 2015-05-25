@@ -52,13 +52,18 @@ public abstract class AbstractBaseElement
 		return documentations;
 	}
 
+	protected static String firstNotEmpty(final String... s) {
+		for (int i = 0; i < s.length; ++i) {
+			if ((s[i] != null) && !s[i].isEmpty()) {
+				return s[i];
+			}
+		}
+		return null;
+	}
+
 	@Override
 	public String toString() {
-		final StringBuilder builder = new StringBuilder(getElementName());
-		builder.append("[id=");
-		builder.append(getId());
-		builder.append("]");
-		return builder.toString();
+		return getId();
 	}
 
 }

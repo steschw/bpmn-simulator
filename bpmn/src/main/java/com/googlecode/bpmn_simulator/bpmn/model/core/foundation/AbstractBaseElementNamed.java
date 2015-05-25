@@ -38,4 +38,9 @@ public abstract class AbstractBaseElementNamed
 		return name;
 	}
 
+	@Override
+	public String toString() {
+		return firstNotEmpty(getName(), super.toString());
+	}
+
 }

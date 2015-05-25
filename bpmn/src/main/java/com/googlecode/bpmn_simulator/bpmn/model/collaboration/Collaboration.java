@@ -61,4 +61,9 @@ public class Collaboration
 		return ELEMENT_NAME;
 	}
 
+	@Override
+	public String toString() {
+		return firstNotEmpty(getName(), super.toString());
+	}
+
 }

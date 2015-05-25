@@ -39,4 +39,9 @@ public abstract class AbstractCallableElement
 		return name;
 	}
 
+	@Override
+	public String toString() {
+		return firstNotEmpty(getName(), super.toString());
+	}
+
 }

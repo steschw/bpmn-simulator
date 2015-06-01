@@ -54,6 +54,12 @@ public abstract class AbstractTokenImporter
 	}
 
 	@Override
+	public boolean configure()
+			throws TokenImportException {
+		return true;
+	}
+
+	@Override
 	public void importTokens()
 			throws TokenImportException {
 		if (instances == null) {

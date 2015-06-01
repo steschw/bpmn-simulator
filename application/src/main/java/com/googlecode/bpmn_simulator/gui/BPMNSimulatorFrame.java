@@ -514,7 +514,9 @@ public class BPMNSimulatorFrame
 		if (JXLoginPane.showLoginDialog(this, pane) == Status.SUCCEEDED) {
 			usernameStore.saveUserNames();
 			try {
-				tokenImporter.importTokens();
+				if (tokenImporter.configure()) {
+					tokenImporter.importTokens();
+				}
 			} catch (TokenImportException e) {
 				showException(e);
 			}

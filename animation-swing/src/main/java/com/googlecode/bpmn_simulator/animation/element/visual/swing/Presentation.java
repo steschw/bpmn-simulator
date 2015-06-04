@@ -29,6 +29,7 @@ import java.awt.Polygon;
 import java.awt.RenderingHints;
 import java.awt.Shape;
 import java.awt.Stroke;
+import java.awt.geom.AffineTransform;
 import java.awt.geom.Path2D;
 import java.util.Iterator;
 
@@ -77,6 +78,8 @@ public class Presentation {
 	}
 
 	private static RenderingHints renderingHints = QUALITY;
+
+	private AffineTransform lastAffineTransform;
 
 	public synchronized void init(final Graphics2D g) {
 		g.setRenderingHints(renderingHints);
@@ -164,7 +167,7 @@ public class Presentation {
 	}
 
 	public void drawToken(final Graphics2D g, final Token token, final int centerX, final int centerY) {
-		final Bounds bounds = new Bounds(centerX, centerY, AbstractVisualElement.MARGIN);
+		final Bounds bounds = Bounds.fromCenter(centerX, centerY, AbstractVisualElement.MARGIN);
 		final Shape shape = createStar(bounds, PENTAGON);
 		g.setPaint(Colors.forToken(token));
 		g.fill(shape);
@@ -247,6 +250,15 @@ public class Presentation {
 		final Point point2 = GeometryUtils.polarToCartesian(to, length, angle + d);
 		path.lineTo(point2.getX(), point2.getY());
 		return path;
+	}
+
+	public void rotate(final Graphics2D g, final Point point, final double angle) {
+		lastAffineTransform = g.getTransform();
+		g.rotate(angle + (GeometryUtils.RAD_FULL / 4.), point.getX(), point.getY());
+	}
+
+	public void restore(final Graphics2D g) {
+		g.setTransform(lastAffineTransform);
 	}
 
 }

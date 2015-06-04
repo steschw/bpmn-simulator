@@ -40,12 +40,20 @@ public class Bounds
 		this(x, y, dimension.getWidth(), dimension.getHeight());
 	}
 
-	public Bounds(final int x, final int y, final int size) {
-		this(x - size, y - size, size * 2, size * 2);
+	public static Bounds fromCenter(final Point center, final int size_w, final int size_h) {
+		return fromCenter(center.getX(), center.getY(), size_w, size_h);
 	}
 
-	public Bounds(final Point center, final int size) {
-		this(center.getX(), center.getY(), size);
+	public static Bounds fromCenter(final Point center, final int size) {
+		return fromCenter(center.getX(), center.getY(), size);
+	}
+
+	public static Bounds fromCenter(final int x, final int y, final int size_w, final int size_h) {
+		return new Bounds(x - size_w, y - size_h , size_w * 2, size_h * 2);
+	}
+
+	public static Bounds fromCenter(final int x, final int y, final int size) {
+		return fromCenter(x, y, size, size);
 	}
 
 	public int getX() {

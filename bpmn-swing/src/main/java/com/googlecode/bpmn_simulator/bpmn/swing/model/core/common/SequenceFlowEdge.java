@@ -21,14 +21,28 @@
 package com.googlecode.bpmn_simulator.bpmn.swing.model.core.common;
 
 import java.awt.Graphics2D;
+import java.awt.Paint;
 
+import com.googlecode.bpmn_simulator.animation.element.visual.Bounds;
+import com.googlecode.bpmn_simulator.animation.element.visual.GeometryUtils;
+import com.googlecode.bpmn_simulator.animation.element.visual.Point;
 import com.googlecode.bpmn_simulator.animation.element.visual.Waypoints;
+import com.googlecode.bpmn_simulator.animation.element.visual.swing.Colors;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.SequenceFlow;
 import com.googlecode.bpmn_simulator.bpmn.swing.di.AbstractBPMNTokenEdge;
+import com.googlecode.bpmn_simulator.bpmn.swing.di.Appearance;
 
 @SuppressWarnings("serial")
-public class SequenceFlowEdge
+public final class SequenceFlowEdge
 		extends AbstractBPMNTokenEdge<SequenceFlow> {
+
+	private static final double SYMBOL_DEFAULT_RAD = Math.toRadians(45.);
+
+	static {
+		Appearance.setDefaultColor(SequenceFlowEdge.class, Colors.WHITE, Colors.BLACK);
+	}
+
+	private static final int START_SYMBOL_SIZE = 8;
 
 	public SequenceFlowEdge(final SequenceFlow element) {
 		super(element);
@@ -37,7 +51,42 @@ public class SequenceFlowEdge
 	@Override
 	protected void paintElementStart(final Graphics2D g) {
 		super.paintElementStart(g);
-		///XXX: default, conditional
+		SequenceFlow sequenceFlow = getLogicalElement();
+		final boolean isDefault = sequenceFlow.isDefault();
+		final boolean hasConditionExpression = sequenceFlow.getConditionExpression() != null;
+		if (isDefault) {
+			if (!hasConditionExpression) {
+				drawDefaultSymbol(g);
+			}
+		} else {
+			if (hasConditionExpression) {
+				drawConditionalSymbol(g);
+			}
+		}
+	}
+
+	private void drawDefaultSymbol(final Graphics2D g) {
+		final Waypoints waypoints = getWaypointsRelative();
+		final Point position = waypoints.getWaypoint(START_SYMBOL_SIZE);
+		final double angle = waypoints.getAngleAt(START_SYMBOL_SIZE) - SYMBOL_DEFAULT_RAD;
+		final double length = START_SYMBOL_SIZE * 0.8;
+		final Point from = GeometryUtils.polarToCartesian(position, length, angle);
+		final Point to = GeometryUtils.polarToCartesian(position, length, GeometryUtils.invert(angle));
+		getPresentation().drawLine(g, from, to);
+	}
+
+	private void drawConditionalSymbol(final Graphics2D g) {
+		final Waypoints waypoints = getWaypointsRelative();
+		final Point position = waypoints.getWaypoint(START_SYMBOL_SIZE);
+		final double angle = waypoints.getAngleAt(START_SYMBOL_SIZE);
+		final Bounds diamondBounds = Bounds.fromCenter(position, START_SYMBOL_SIZE, (int) (START_SYMBOL_SIZE * 0.6));
+		getPresentation().rotate(g, position, angle);
+		final Paint paint = g.getPaint();
+		g.setPaint(Appearance.getDefault().getForElement(getClass()).getBackground());
+		getPresentation().fillDiamond(g, diamondBounds);
+		g.setPaint(paint);
+		getPresentation().drawDiamond(g, diamondBounds);
+		getPresentation().restore(g);
 	}
 
 	@Override

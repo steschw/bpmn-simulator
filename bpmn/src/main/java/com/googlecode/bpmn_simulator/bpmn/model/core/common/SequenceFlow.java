@@ -59,8 +59,16 @@ public final class SequenceFlow
 		this.conditionExpression = expression;
 	}
 
-	protected Expression getCondition() {
+	public Expression getConditionExpression() {
 		return conditionExpression;
+	}
+
+	public boolean isDefault() {
+		final FlowNode sourceFlowNode = ReferenceUtils.element(getSource());
+		if (sourceFlowNode instanceof DefaultSequenceFlowElement) {
+			return equals(((DefaultSequenceFlowElement) sourceFlowNode).getDefaultSequenceFlow());
+		}
+		return false;
 	}
 
 	@Override

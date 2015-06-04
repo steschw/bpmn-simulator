@@ -28,6 +28,13 @@ public final class GeometryUtils {
 		super();
 	}
 
+	public static double invert(final double angle) {
+		return angle + (RAD_FULL / 2.);
+	}
+
+	/**
+	 * @param angle in radians
+	 */
 	public static Point polarToCartesian(
 			final Point orgin, final double radius, final double angle) {
 		final int x = (int) Math.round(radius * Math.sin(angle));

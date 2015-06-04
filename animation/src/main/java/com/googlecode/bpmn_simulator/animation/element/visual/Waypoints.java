@@ -118,6 +118,23 @@ public class Waypoints
 		return last; ///XXX
 	}
 
+	public double getAngleAt(final double length) {
+		double currentLength = 0.;
+		Waypoint last = null;
+		for (final Waypoint current : this) {
+			if (last != null) {
+				final double distance = last.distanceTo(current);
+				if ((currentLength + distance) >= length) {
+					return current.angleTo(last);
+				}
+				currentLength += distance;
+			}
+			last = current;
+		}
+		assert last != null;
+		return 0.;
+	}
+
 	public Waypoints translate(final int x, final int y) {
 		final Waypoints waypoints = new Waypoints();
 		for (Waypoint waypoint : this) {

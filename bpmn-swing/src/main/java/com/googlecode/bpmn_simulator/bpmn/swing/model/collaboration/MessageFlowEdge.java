@@ -52,7 +52,7 @@ public class MessageFlowEdge
 		super.paintElementStart(g);
 		final Waypoints waypoints = getWaypointsRelative();
 		if (waypoints.isValid()) {
-			final Bounds bounds = new Bounds(waypoints.first(), 2);
+			final Bounds bounds = Bounds.fromCenter(waypoints.first(), 2);
 			g.setStroke(START_STROKE);
 			getPresentation().drawOval(g, bounds);
 		}

@@ -170,11 +170,11 @@ public class InstancesTree
 
 	}
 
-	private final class InstanceNode
+	public final class InstanceNode
 			extends DefaultMutableTreeNode
 			implements InstancesListener, TokensListener {
 
-		public InstanceNode(final Instance instance) {
+		private InstanceNode(final Instance instance) {
 			super(instance);
 			instance.addInstancesListener(this);
 			instance.addTokensListener(this);
@@ -206,7 +206,7 @@ public class InstancesTree
 
 	}
 
-	private final class TokenNode
+	public final class TokenNode
 			extends DefaultMutableTreeNode {
 
 		private TokenNode(final Token token) {

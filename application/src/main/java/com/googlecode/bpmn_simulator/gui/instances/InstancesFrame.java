@@ -20,20 +20,40 @@
  */
 package com.googlecode.bpmn_simulator.gui.instances;
 
+import java.awt.BorderLayout;
+import java.awt.CardLayout;
+
+import javax.swing.JComponent;
 import javax.swing.JFrame;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JSplitPane;
+import javax.swing.event.TreeSelectionEvent;
+import javax.swing.event.TreeSelectionListener;
 
 import com.googlecode.bpmn_simulator.animation.token.RootInstances;
 import com.googlecode.bpmn_simulator.gui.Messages;
+import com.googlecode.bpmn_simulator.gui.instances.InstancesTree.InstanceNode;
+import com.googlecode.bpmn_simulator.gui.instances.InstancesTree.TokenNode;
 
 @SuppressWarnings("serial")
 public class InstancesFrame
-		extends JFrame {
+		extends JFrame
+		implements TreeSelectionListener {
 
-	private static final int DEFAULT_WIDTH = 300;
-	private static final int DEFAULT_HEIGHT = 200;
+	private static final int DEFAULT_WIDTH = 400;
+	private static final int DEFAULT_HEIGHT = 400;
+
+	private static final String EMPTY_CARD = "empty";
+	private static final String INSTANCE_CARD = "instanceinfo";
+	private static final String TOKEN_CARD = "tokeninfo";
 
 	private final InstancesTree treeInstances = new InstancesTree();
+
+	private final  InstancePanel instancePanel = new InstancePanel();
+	private final  TokenPanel tokenPanel = new TokenPanel();
+
+	private final JPanel infoPanel = new JPanel(new CardLayout());
 
 	public InstancesFrame(final RootInstances instances) {
 		super(Messages.getString("Instances.instances")); //$NON-NLS-1$
@@ -47,10 +67,45 @@ public class InstancesFrame
 		create();
 
 		treeInstances.setInstances(instances);
+		treeInstances.addTreeSelectionListener(this);
+	}
+
+	private JComponent createInfoComponent() {
+		infoPanel.add(new JPanel(), EMPTY_CARD);
+		instancePanel.create();
+		infoPanel.add(instancePanel, INSTANCE_CARD);
+		tokenPanel.create();
+		infoPanel.add(tokenPanel, TOKEN_CARD);
+		setInfoPanel(null);
+		return infoPanel;
 	}
 
 	protected void create() {
-		getContentPane().add(new JScrollPane(treeInstances));
+		getContentPane().setLayout(new BorderLayout());
+		final JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, true,
+				new JScrollPane(treeInstances), createInfoComponent());
+		splitPane.setResizeWeight(0.5);
+		getContentPane().add(splitPane, BorderLayout.CENTER);
+	}
+
+	private void setInfoPanel(final String cardName) {
+		((CardLayout) infoPanel.getLayout()).show(infoPanel, cardName);
+	}
+
+	@Override
+	public void valueChanged(final TreeSelectionEvent event) {
+		final Object node = event.getPath().getLastPathComponent();
+		if (node instanceof InstanceNode) {
+			final InstanceNode instanceNode = (InstanceNode) node;
+			instancePanel.setInstance(instanceNode.getInstance());
+			setInfoPanel(INSTANCE_CARD);
+		} else if (node instanceof TokenNode) {
+			final TokenNode tokenNode = (TokenNode) node;
+			tokenPanel.setToken(tokenNode.getToken());
+			setInfoPanel(TOKEN_CARD);
+		} else {
+			setInfoPanel(EMPTY_CARD);
+		}
 	}
 
 }

@@ -28,6 +28,7 @@ import java.awt.datatransfer.StringSelection;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.util.Map;
 import java.util.Properties;
 
 import javax.swing.JTable;
@@ -37,7 +38,7 @@ import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
 
 @SuppressWarnings("serial")
-class PropertiesTable
+public class PropertiesTable
 		extends JTable {
 
 	private static final KeyStroke COPY_KEYSTROKE = KeyStroke.getKeyStroke(KeyEvent.VK_C, ActionEvent.CTRL_MASK, false);
@@ -88,13 +89,14 @@ class PropertiesTable
 		return properties;
 	}
 
-	public void setProperties(final Properties properties) {
+	public void setProperties(final Map<? extends Object, Object> properties) {
 		final DefaultTableModel tableModel = new DefaultTableModel(0, 2);
 		int nameWidth = 0;
 		final FontMetrics fontMetrics = getFontMetrics(getFont());
-		for (final String name : properties.stringPropertyNames()) {
+		for (final Object key : properties.keySet()) {
+			final String name = key.toString();
 			nameWidth = Math.max(nameWidth, fontMetrics.stringWidth(name));
-			tableModel.addRow(new Object[] { name, properties.getProperty(name) });
+			tableModel.addRow(new Object[] { name, properties.get(key) });
 		}
 		setModel(tableModel);
 		final Dimension preferredSize = new Dimension(nameWidth * 2, Math.min(getRowCount(), 10) * getRowHeight());

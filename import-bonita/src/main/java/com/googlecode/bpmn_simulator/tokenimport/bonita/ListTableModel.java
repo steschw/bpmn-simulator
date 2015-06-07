@@ -39,6 +39,11 @@ abstract class ListTableModel<T>
 		Collections.addAll(this.columns, columns);
 	}
 
+	@Override
+	public Class<?> getColumnClass(final int columnIndex) {
+		return String.class;
+	}
+
 	public T getRowData(int index) {
 		return data.get(index);
 	}

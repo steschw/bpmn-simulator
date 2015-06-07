@@ -34,6 +34,7 @@ class InstancePanel
 	}
 
 	public void setInstance(final Instance instance) {
+		setData(instance.getData());
 	}
 
 }

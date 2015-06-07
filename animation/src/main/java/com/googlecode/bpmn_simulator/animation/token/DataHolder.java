@@ -18,35 +18,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.bpmn_simulator.gui.instances;
+package com.googlecode.bpmn_simulator.animation.token;
 
-import java.awt.BorderLayout;
 import java.util.Map;
 
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
+public interface DataHolder {
 
-import com.googlecode.bpmn_simulator.gui.PropertiesTable;
+	Map<? extends Object, ? extends Object> getData();
 
-@SuppressWarnings("serial")
-abstract class AbstractInfoPanel
-		extends JPanel {
-
-	private final PropertiesTable dataTable = new PropertiesTable();
-
-	public AbstractInfoPanel() {
-		super(new BorderLayout());
-	}
-
-	public void create() {
-		add(createInfoPanel(), BorderLayout.PAGE_START);
-		add(new JScrollPane(dataTable), BorderLayout.CENTER);
-	}
-
-	protected abstract JPanel createInfoPanel();
-
-	public void setData(final Map<? extends Object, ? extends Object> data) {
-		dataTable.setProperties(data);
-	}
+	void setData(Map<? extends Object, ? extends Object> data);
 
 }

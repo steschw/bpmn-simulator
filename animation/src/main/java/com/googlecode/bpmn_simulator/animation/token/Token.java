@@ -20,7 +20,10 @@
  */
 package com.googlecode.bpmn_simulator.animation.token;
 
-public class Token {
+import java.util.Map;
+
+public class Token
+		implements DataHolder {
 
 	private final Instance instance;
 
@@ -29,6 +32,8 @@ public class Token {
 //	private final TokenFlow previousFlow;
 
 	private int position;
+
+	private Map<? extends Object, ? extends Object> data = null;
 
 	protected Token(final Instance instance,
 			final TokenFlow current) {
@@ -49,6 +54,16 @@ public class Token {
 
 	public TokenFlow getCurrentTokenFlow() {
 		return currentTokenFlow;
+	}
+
+	@Override
+	public Map<? extends Object, ? extends Object> getData() {
+		return data;
+	}
+
+	@Override
+	public void setData(final Map<? extends Object, ? extends Object> data) {
+		this.data = data;
 	}
 
 	public int getPosition() {

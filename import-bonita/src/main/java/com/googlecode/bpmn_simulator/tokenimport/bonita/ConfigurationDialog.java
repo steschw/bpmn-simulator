@@ -24,6 +24,9 @@ import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.FlowLayout;
 import java.awt.Frame;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -31,17 +34,18 @@ import java.util.Collection;
 import java.util.List;
 
 import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.border.Border;
 
+import org.bonitasoft.engine.bpm.process.ProcessDeploymentInfo;
 import org.bonitasoft.engine.identity.User;
 
 @SuppressWarnings("serial")
@@ -52,7 +56,10 @@ class ConfigurationDialog
 
 	private static Border EMPTY_BORDER = BorderFactory.createEmptyBorder(GAP, GAP, GAP, GAP);
 
-	private final JCheckBox failedActivitiesCheck = new JCheckBox("Import also failed activity instances");
+	private final JTable processTable = new JTable();
+	private final ListTableModel<ProcessDeploymentInfo> processModel;
+
+	private final JCheckBox failedActivitiesCheck = new JCheckBox("Also import failed activity instances");
 
 	private final JComboBox<UserFilter> userFilterComboBox = new JComboBox<>(UserFilter.values());
 
@@ -61,29 +68,38 @@ class ConfigurationDialog
 
 	private boolean ok = false;
 
-	public ConfigurationDialog(final List<User> users) {
-		super((Frame) null, "Token import configuration", true);
+	public ConfigurationDialog(final List<ProcessDeploymentInfo> processes, final List<User> users) {
+		super((Frame) null, "Einstellungen für das importieren von Token aus Bonita", true);
 
-		userModel = new ListTableModel<User>(users, "First name", "Last name", "Username") {
-
+		processModel = new ListTableModel<ProcessDeploymentInfo>(processes, "Name", "Version", "Description") {
 			@Override
-			public Class<?> getColumnClass(final int columnIndex) {
-				return String.class;
+			protected Object getValue(final ProcessDeploymentInfo value, final int columnIndex) {
+				switch (columnIndex) {
+					case 0:
+						return value.getName();
+					case 1:
+						return value.getVersion();
+					case 2:
+						return value.getDescription();
+				}
+				return null;
 			}
+		};
+		processTable.setModel(processModel);
 
+		userModel = new ListTableModel<User>(users, "Username", "First name", "Last name") {
 			@Override
 			protected Object getValue(final User value, final int columnIndex) {
 				switch (columnIndex) {
 					case 0:
-						return value.getFirstName();
-					case 1:
-						return value.getLastName();
-					case 2:
 						return value.getUserName();
+					case 1:
+						return value.getFirstName();
+					case 2:
+						return value.getLastName();
 				}
 				return null;
 			}
-
 		};
 		userTable.setModel(userModel);
 
@@ -91,14 +107,13 @@ class ConfigurationDialog
 
 		setAlwaysOnTop(true);
 
-		setSize(400, 400);
+		pack();
 
 		setLocationRelativeTo(null);
 	}
 
 	public static void main(String[] args) {
-		List<User> users = new ArrayList<>();
-		ConfigurationDialog dialog = new ConfigurationDialog(users);
+		ConfigurationDialog dialog = new ConfigurationDialog(new ArrayList<ProcessDeploymentInfo>(), new ArrayList<User>());
 		dialog.setVisible(true);
 		dialog.dispose();
 	}
@@ -109,28 +124,42 @@ class ConfigurationDialog
 		getContentPane().add(createActionComponent(), BorderLayout.PAGE_END);
 	}
 
-	private static Border createTitleBorder(final String title) {
-		return BorderFactory.createCompoundBorder(
-				BorderFactory.createTitledBorder(title),
-				EMPTY_BORDER);
-	}
-
 	protected Component createContentComponent() {
-		final JPanel panel = new JPanel(new BorderLayout());
-		panel.add(createConfigComponent(), BorderLayout.PAGE_START);
-		panel.add(createFilterComponent(), BorderLayout.CENTER);
-		return panel;
-	}
-
-	protected Component createConfigComponent() {
-		final JPanel panel = new JPanel();
-		panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
+		final JPanel panel = new JPanel(new GridBagLayout());
 		panel.setBorder(EMPTY_BORDER);
-		panel.add(failedActivitiesCheck);
+		final GridBagConstraints c = new GridBagConstraints();
+		c.fill = GridBagConstraints.BOTH;
+		c.insets = new Insets(4, 4, 4, 4);
+
+		c.gridy = 0;
+		c.gridx = 0;
+		panel.add(new JLabel("Token für folgenden Prozesse importieren:"), c);
+		c.gridx = 1;
+		panel.add(new JLabel("Nur für die gilt:"), c);
+
+		c.weightx = 1.;
+		c.weighty = 1.;
+		c.gridy = 1;
+		c.gridx = 0;
+		panel.add(createProcessComponent(), c);
+		c.gridx = 1;
+		panel.add(createUserComponent(), c);
+		c.weightx = 0.;
+		c.weighty = 0.;
+
+		c.gridy = 2;
+		c.gridx = 0;
+		panel.add(failedActivitiesCheck, c);
+
 		return panel;
 	}
 
-	private void updateUserFilter() {
+	protected Component createProcessComponent() {
+		processTable.setAutoCreateRowSorter(true);
+		return createSelectionTable(processTable);
+	}
+
+	private void updateUserComponent() {
 		Object selectedItem = userFilterComboBox.getSelectedItem();
 		final boolean tableEnabled = (selectedItem != UserFilter.NONE);
 		userTable.setEnabled(tableEnabled);
@@ -140,28 +169,20 @@ class ConfigurationDialog
 		}
 	}
 
-	protected Component createUserFilterComponent() {
+	protected Component createUserComponent() {
 		final JPanel panel = new JPanel(new BorderLayout(GAP, GAP));
-		panel.setBorder(createTitleBorder("by user"));
+		userTable.setAutoCreateRowSorter(true);
 		final Component userSelectionComponent = createSelectionTable(userTable);
 		userFilterComboBox.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				updateUserFilter();
+				updateUserComponent();
 			}
 		});
 		panel.add(userFilterComboBox, BorderLayout.PAGE_START);
-		userTable.setAutoCreateColumnsFromModel(true);
-		userTable.setAutoCreateRowSorter(true);
 		panel.add(userSelectionComponent, BorderLayout.CENTER);
-		updateUserFilter();
-		return panel;
-	}
-
-	protected Component createFilterComponent() {
-		final JPanel panel = new JPanel(new BorderLayout());
-		panel.setBorder(createTitleBorder("Filter"));
-		panel.add(createUserFilterComponent(), BorderLayout.CENTER);
+		userFilterComboBox.setSelectedItem(UserFilter.NONE);
+		updateUserComponent();
 		return panel;
 	}
 
@@ -219,6 +240,14 @@ class ConfigurationDialog
 		return panel;
 	}
 
+	public Collection<Long> getProcessDefinitionIds() {
+		final Collection<Long> ids = new ArrayList<>();
+		for (final int rowIndex : processTable.getSelectedRows()) {
+			ids.add(processModel.getRowData(processTable.convertRowIndexToModel(rowIndex)).getProcessId());
+		}
+		return ids;
+	}
+
 	public UserFilter getUserFilter() {
 		return (UserFilter) userFilterComboBox.getSelectedItem();
 	}
@@ -226,8 +255,7 @@ class ConfigurationDialog
 	public Collection<Long> getUserIds() {
 		final Collection<Long> ids = new ArrayList<>();
 		for (final int rowIndex : userTable.getSelectedRows()) {
-			final int index = userTable.convertRowIndexToModel(rowIndex);
-			ids.add(userModel.getRowData(index).getId());
+			ids.add(userModel.getRowData(userTable.convertRowIndexToModel(rowIndex)).getId());
 		}
 		return ids;
 	}

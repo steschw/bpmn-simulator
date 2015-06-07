@@ -54,6 +54,7 @@ class TokenPanel
 	}
 
 	public void setToken(final Token token) {
+		setData(token.getData());
 		final TokenFlow currenTokenFlow = token.getCurrentTokenFlow();
 		if (currenTokenFlow instanceof LogicalElement) {
 			elementLabel.setElement((LogicalElement) currenTokenFlow);

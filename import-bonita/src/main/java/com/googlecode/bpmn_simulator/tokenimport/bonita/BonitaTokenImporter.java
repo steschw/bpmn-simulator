@@ -46,6 +46,7 @@ import org.bonitasoft.engine.search.SearchOptionsBuilder;
 import org.bonitasoft.engine.session.APISession;
 
 import com.googlecode.bpmn_simulator.animation.token.Instance;
+import com.googlecode.bpmn_simulator.animation.token.Token;
 import com.googlecode.bpmn_simulator.bpmn.model.NamedElement;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.FlowElement;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.FlowElementsContainer;
@@ -70,6 +71,7 @@ public class BonitaTokenImporter
 
 	private UserFilter userFilter = UserFilter.NONE;
 	private Collection<Long> userIds = new ArrayList<>();
+	private Collection<Long> processDefinitionIds = new ArrayList<>();
 
 	@Override
 	public void login(final String username, final String password)
@@ -103,10 +105,13 @@ public class BonitaTokenImporter
 	public boolean configure()
 			throws TokenImportException {
 		try {
-			final ConfigurationDialog dialog = new ConfigurationDialog(identityAPI.searchUsers(ALL).getResult());
+			final ConfigurationDialog dialog = new ConfigurationDialog(
+					processAPI.searchProcessDeploymentInfos(ALL).getResult(),
+					identityAPI.searchUsers(ALL).getResult());
 			dialog.setImportFailed(importFailedActivities);
 			final boolean ret = dialog.showDialog();
 			if (ret) {
+				processDefinitionIds = dialog.getProcessDefinitionIds();
 				importFailedActivities = dialog.getImportFailedActivities();
 				userFilter = dialog.getUserFilter();
 				userIds = dialog.getUserIds();
@@ -135,6 +140,11 @@ public class BonitaTokenImporter
 	private void importActivities()
 			throws SearchException, ActivityInstanceNotFoundException {
 		for (final ActivityInstance activityInstance : processAPI.searchActivities(ALL).getResult()) {
+			if (isFilteredByProcessDefinition(activityInstance)) {
+				LOG.info(MessageFormat.format("Ignoring activity instance {0} (processdefinition)",
+						activityInstance));
+				continue;
+			}
 			if (isFilteredByState(activityInstance)) {
 				LOG.info(MessageFormat.format("Ignoring activity instance {0} (failed)",
 						activityInstance));
@@ -147,6 +157,10 @@ public class BonitaTokenImporter
 			}
 			importActivityInstance(activityInstance);
 		}
+	}
+
+	private boolean isFilteredByProcessDefinition(final ActivityInstance activityInstance) {
+		return !processDefinitionIds.contains(Long.valueOf(activityInstance.getProcessDefinitionId()));
 	}
 
 	private boolean isFilteredByState(final ActivityInstance activityInstance) {
@@ -226,25 +240,30 @@ public class BonitaTokenImporter
 		} else {
 			instance = getInstances().addNewChildInstance();
 			instances.put(processInstanceId, instance);
+			instance.setData(getProcessInstanceData(processInstanceId));
 		}
 		return instance;
 	}
 
-	private void addToken(final long rootProcessInstanceId, final FlowElement flowElement) {
-		getProcessData(rootProcessInstanceId);
-		addInstance(rootProcessInstanceId).createNewToken(flowElement);
+	private void addToken(final long rootProcessInstanceId, final long activityInstanceId, final FlowElement flowElement) {
+		final Token token = addInstance(rootProcessInstanceId).createNewToken(flowElement);
+		token.setData(getActivityInstanceData(activityInstanceId));
 	}
 
-	private void getActivityData(final long activityInstanceId) {
-		for (final DataInstance data : processAPI.getActivityDataInstances(activityInstanceId, 0, Integer.MAX_VALUE)) {
-			System.out.println(data.getName() + " (" + data.getDescription() + ") = " + data.getValue());
+	private Map<Object, Object> getActivityInstanceData(final long activityInstanceId) {
+		final Map<Object, Object> data = new HashMap<>();
+		for (final DataInstance dataInstance : processAPI.getActivityDataInstances(activityInstanceId, 0, Integer.MAX_VALUE)) {
+			data.put(dataInstance.getName(), dataInstance.getValue());
 		}
+		return data;
 	}
 
-	private void getProcessData(final long processInstanceId) {
-		for (final DataInstance data : processAPI.getProcessDataInstances(processInstanceId, 0, Integer.MAX_VALUE)) {
-			System.out.println(data.getName() + " (" + data.getDescription() + ") = " + data.getValue());
+	private Map<Object, Object> getProcessInstanceData(final long processInstanceId) {
+		final Map<Object, Object> data = new HashMap<>();
+		for (final DataInstance dataInstance : processAPI.getProcessDataInstances(processInstanceId, 0, Integer.MAX_VALUE)) {
+			data.put(dataInstance.getName(), dataInstance.getValue());
 		}
+		return data;
 	}
 
 	private void importActivityInstance(final ActivityInstance activityInstance) {
@@ -261,7 +280,6 @@ public class BonitaTokenImporter
 					processAPI.getSupportedStates(activityInstance.getType())));
 			LOG.info(MessageFormat.format("Importing activity instance ''{0}'' ({1}) from process ''{2}''",
 					activityInstance.getName(), activityInstance.getType(), processName));
-			getActivityData(activityInstance.getId());
 			final Process process = findProcessByName(processName);
 			if (process == null) {
 				LOG.debug(MessageFormat.format("Process ''{0}'' not found in definition", processName));
@@ -273,7 +291,7 @@ public class BonitaTokenImporter
 						activityInstance.getName(), processName));
 				return;
 			}
-			addToken(activityInstance.getRootContainerId(), flowElement);
+			addToken(activityInstance.getRootContainerId(), activityInstance.getId(), flowElement);
 		} catch (ProcessDefinitionNotFoundException e) {
 			LOG.catching(e);
 		}

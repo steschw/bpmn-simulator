@@ -22,16 +22,20 @@ package com.googlecode.bpmn_simulator.animation.token;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 public final class Instance
-		extends InstanceContainer {
+		extends InstanceContainer
+		implements DataHolder {
 
 	private final int rootId;
 
 	private final Tokens tokens = new Tokens();
 
 	private final Set<TokensListener> tokensListeners = new HashSet<>();
+
+	private Map<? extends Object, ? extends Object> data = null;
 
 	protected Instance(final InstanceContainer parent, final int rootId) {
 		super(parent);
@@ -40,6 +44,16 @@ public final class Instance
 
 	public int getRootId() {
 		return rootId;
+	}
+
+	@Override
+	public Map<? extends Object, ? extends Object> getData() {
+		return data;
+	}
+
+	@Override
+	public void setData(final Map<? extends Object, ? extends Object> data) {
+		this.data = data;
 	}
 
 	public void addTokensListener(final TokensListener listener) {

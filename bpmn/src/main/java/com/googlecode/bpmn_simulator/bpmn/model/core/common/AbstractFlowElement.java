@@ -37,6 +37,8 @@ public abstract class AbstractFlowElement
 
 	private int stepCount = DEFAULT_STEP_COUNT;
 
+	private TokenEvent actionTrigger = TokenEvent.ON_EXIT;
+
 	private final Set<TokenFlowListener> tokenFlowListeners
 			= new HashSet<>();
 
@@ -69,15 +71,26 @@ public abstract class AbstractFlowElement
 	}
 
 	@Override
-	public void tokenEnter(final Token token) {
-		tokens.add(token);
-		notifyTokenChanged(token);
+	public final void tokenEnter(final Token token) {
+		if (tokens.add(token)) {
+			notifyTokenChanged(token);
+			if (actionTrigger == TokenEvent.ON_ENTER) {
+				onTokenAction(token);
+			}
+		}
 	}
 
 	@Override
-	public void tokenExit(final Token token) {
-		tokens.remove(token);
-		notifyTokenChanged(token);
+	public final void tokenExit(final Token token) {
+		if (tokens.remove(token)) {
+			notifyTokenChanged(token);
+			if (actionTrigger == TokenEvent.ON_EXIT) {
+				onTokenAction(token);
+			}
+		}
+	}
+
+	protected void onTokenAction(final Token token) {
 	}
 
 	@Override
@@ -91,16 +104,21 @@ public abstract class AbstractFlowElement
 		stepCount = count;
 	}
 
-	protected abstract void tokenComplete(final Token token);
+	protected abstract void onTokenComplete(Token token);
 
 	@Override
-	public void tokenDispatch(final Token token) {
+	public final void tokenDispatch(final Token token) {
 		assert getTokens().contains(token);
 		if (token.getPosition() > getStepCount()) {
-			tokenComplete(token);
+			onTokenComplete(token);
 		} else {
 			notifyTokenChanged(token);
 		}
+	}
+
+	private enum TokenEvent {
+		ON_ENTER,
+		ON_EXIT,
 	}
 
 }

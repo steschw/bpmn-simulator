@@ -37,7 +37,7 @@ public class Tokens
 	}
 
 	@Override
-	public synchronized boolean addAll(final Collection<? extends Token> c) {
+	public boolean addAll(final Collection<? extends Token> c) {
 		for (final Token token : c) {
 			if (contains(token)) {
 				assert false;
@@ -47,17 +47,18 @@ public class Tokens
 	}
 
 	@Override
-	public synchronized boolean add(final Token token) {
+	public boolean add(final Token token) {
 		assert !contains(token);
 		return super.add(token);
 	}
 
-	public synchronized boolean remove(final Token token) {
+	@Override
+	public boolean remove(final Object token) {
 		assert contains(token);
 		return super.remove(token);
 	}
 
-	public synchronized Collection<Instance> getInstances() {
+	public Collection<Instance> getInstances() {
 		final Collection<Instance> instances = new ArrayList<>();
 		for (final Token token : this) {
 			final Instance instance = token.getInstance();
@@ -68,7 +69,7 @@ public class Tokens
 		return instances;
 	}
 
-	public synchronized Tokens getByInstance(final Instance instance) {
+	public Tokens getByInstance(final Instance instance) {
 		final Tokens tokens = new Tokens();
 		for (final Token token : this) {
 			final Instance tokenInstance = token.getInstance();
@@ -80,7 +81,7 @@ public class Tokens
 		return tokens;
 	}
 
-	public synchronized Tokens getByCurrentTokenFlow(final TokenFlow tokenFlow) {
+	public Tokens getByCurrentTokenFlow(final TokenFlow tokenFlow) {
 		final Tokens tokens = new Tokens();
 		for (final Token token : this) {
 			final TokenFlow tokenTokenFlow = token.getCurrentTokenFlow();

@@ -46,7 +46,7 @@ public abstract class AbstractFlowNode
 	}
 
 	@Override
-	protected void tokenComplete(final Token token) {
+	protected void onTokenComplete(final Token token) {
 		for (final SequenceFlow sequenceFlow : outgoing) {
 			token.copyTo(sequenceFlow);
 		}

@@ -72,7 +72,7 @@ public final class SequenceFlow
 	}
 
 	@Override
-	protected void tokenComplete(final Token token) {
+	protected void onTokenComplete(final Token token) {
 		final FlowNode target = ReferenceUtils.element(getTarget());
 		if (target != null) {
 			token.copyTo(target);

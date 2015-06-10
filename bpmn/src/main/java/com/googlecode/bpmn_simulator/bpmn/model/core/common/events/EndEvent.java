@@ -20,6 +20,7 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.model.core.common.events;
 
+import com.googlecode.bpmn_simulator.animation.token.Token;
 import com.googlecode.bpmn_simulator.bpmn.Messages;
 
 public final class EndEvent
@@ -34,6 +35,15 @@ public final class EndEvent
 	@Override
 	public String getElementName() {
 		return ELEMENT_NAME;
+	}
+
+	@Override
+	protected void onTokenAction(final Token token) {
+		super.onTokenAction(token);
+		final EventDefinition eventDefinition = getEventDefinition();
+		if (eventDefinition instanceof TerminateEventDefinition) {
+			token.getInstance().remove();
+		}
 	}
 
 }

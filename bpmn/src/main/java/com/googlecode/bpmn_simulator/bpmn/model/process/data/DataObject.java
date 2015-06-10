@@ -49,7 +49,7 @@ public final class DataObject
 	}
 
 	@Override
-	protected void tokenComplete(final Token token) {
+	protected void onTokenComplete(final Token token) {
 	}
 
 }

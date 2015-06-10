@@ -44,7 +44,7 @@ public final class DataObjectReference
 	}
 
 	@Override
-	protected void tokenComplete(final Token token) {
+	protected void onTokenComplete(final Token token) {
 	}
 
 }

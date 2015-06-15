@@ -24,6 +24,7 @@ import java.net.URI;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -117,7 +118,7 @@ import com.googlecode.bpmn_simulator.bpmn.model.process.data.DataStore;
 import com.googlecode.bpmn_simulator.bpmn.model.process.data.DataStoreReference;
 import com.googlecode.bpmn_simulator.bpmn.model.process.data.InputOutputSpecification;
 
-public abstract class AbstractBPMNDefinition<E extends BPMNDiagram<?>>
+public class AbstractBPMNDefinition<E extends BPMNDiagram<?>>
 		extends AbstractXmlDefinition<E>
 		implements Definitions<E> {
 
@@ -162,16 +163,25 @@ public abstract class AbstractBPMNDefinition<E extends BPMNDiagram<?>>
 	}
 
 	@Override
-	public Collection<LogicalFlowElement> getInstantiatingElements() {
-		final Collection<LogicalFlowElement> elements = new ArrayList<>();
-		for (final Process process : processes) {
-			for (final FlowElement flowElement : process.getFlowElements()) {
-				if (flowElement instanceof StartEvent) {
-					elements.add(flowElement);
-				}
+	public Collection<LogicalFlowElement> getFlowElements() {
+		final Collection<LogicalFlowElement> flowElements = new ArrayList<>();
+		for (final LogicalElement element : getElements()) {
+			if (element instanceof LogicalFlowElement) {
+				flowElements.add((LogicalFlowElement) element);
 			}
 		}
-		return elements;
+		return flowElements;
+	}
+
+	@Override
+	public Collection<LogicalFlowElement> getInstantiatingElements() {
+		final Collection<LogicalFlowElement> instantiatingElements = new ArrayList<>();
+		for (final LogicalFlowElement flowElement : getFlowElements()) {
+			if (flowElement instanceof StartEvent) {
+				instantiatingElements.add(flowElement);
+			}
+		}
+		return instantiatingElements;
 	}
 
 	@Override
@@ -1255,6 +1265,11 @@ public abstract class AbstractBPMNDefinition<E extends BPMNDiagram<?>>
 		} else {
 			LOG.error("schema doesn''t contains definitions");
 		}
+	}
+
+	@Override
+	public Collection<E> getDiagrams() {
+		return Collections.emptyList();
 	}
 
 }

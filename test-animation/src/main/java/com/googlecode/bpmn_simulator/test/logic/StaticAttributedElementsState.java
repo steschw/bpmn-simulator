@@ -25,11 +25,9 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
-import java.util.TreeSet;
 
 /**
  * Represents a state as a set of different elements with attributes
@@ -74,20 +72,34 @@ public class StaticAttributedElementsState<ELEMENT, ATTRIBUTE>
 				element));
 	}
 
-	public void addAttribute(final ELEMENT element, final ATTRIBUTE attribute) {
+	public StaticAttributedElementsState<ELEMENT, ATTRIBUTE> addAttribute(
+			final ELEMENT element, final ATTRIBUTE attribute) {
 		if (!getElementAttributes(element).add(attribute)) {
 			throw new IllegalArgumentException(MessageFormat.format(
 					"attribute {0} already exist in {1}",
 					attribute, element));
 		}
+		return this;
 	}
 
-	public void removeAttribute(final ELEMENT element, final ATTRIBUTE attribute) {
+	public StaticAttributedElementsState<ELEMENT, ATTRIBUTE> removeAttribute(
+			final ELEMENT element, final ATTRIBUTE attribute) {
 		if (!getElementAttributes(element).remove(attribute)) {
 			throw new IllegalArgumentException(MessageFormat.format(
 					"attribute {0} doesn''t exist in {1}",
 					attribute, element));
 		}
+		return this;
+	}
+
+	public StaticAttributedElementsState<ELEMENT, ATTRIBUTE> moveAttribute(
+			final ELEMENT fromElement, final ATTRIBUTE attribute, final ELEMENT... toElements) {
+		removeAttribute(fromElement, attribute);
+		assert toElements.length > 0;
+		for (final ELEMENT toElement : toElements) {
+			addAttribute(toElement, attribute);
+		}
+		return this;
 	}
 
 	@Override
@@ -115,42 +127,9 @@ public class StaticAttributedElementsState<ELEMENT, ATTRIBUTE>
 		return elementAttributes.hashCode();
 	}
 
-	public StaticAttributedElementsState<ELEMENT, ATTRIBUTE> moveAttribute(
-			final ELEMENT fromElement, final ATTRIBUTE attribute, final ELEMENT... toElements) {
-		removeAttribute(fromElement, attribute);
-		assert toElements.length > 0;
-		for (final ELEMENT toElement : toElements) {
-			addAttribute(toElement, attribute);
-		}
-		return this;
-	}
-
 	@Override
 	public String toString() {
-		final StringBuilder builder = new StringBuilder();
-		builder.append('{');
-		final Iterator<ELEMENT> elementIterator = new TreeSet<>(elementAttributes.keySet()).iterator();
-		while (elementIterator.hasNext()) {
-			final ELEMENT element = elementIterator.next();
-			builder.append(element);
-			final Iterator<ATTRIBUTE> attributeIterator = new TreeSet<>(getElementAttributes(element)).iterator();
-			if (attributeIterator.hasNext()) {
-				builder.append(":<");
-				while (attributeIterator.hasNext()) {
-					final ATTRIBUTE attribute = attributeIterator.next();
-					builder.append(attribute);
-					if (attributeIterator.hasNext()) {
-						builder.append(',');
-					}
-				}
-				builder.append('>');
-			}
-			if (elementIterator.hasNext()) {
-				builder.append(", ");
-			}
-		}
-		builder.append('}');
-		return builder.toString();
+		return States.toString(this);
 	}
 
 }

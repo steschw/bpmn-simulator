@@ -32,7 +32,12 @@ public final class Assert {
 	}
 
 	public static <STATE> void assertExpectedFlow(
-			final StateSequence<STATE> expectedStates, final Iterator<STATE> states) {
+			final StateSequence<? extends STATE> expectedStates, final StateSequence<? extends STATE> states) {
+		assertExpectedFlow(expectedStates, states.iterator());
+	}
+
+	public static <STATE> void assertExpectedFlow(
+			final StateSequence<? extends STATE> expectedStates, final Iterator<? extends STATE> states) {
 		assertExpectedFlow(expectedStates.iterator(), states);
 	}
 
@@ -53,7 +58,7 @@ public final class Assert {
 	}
 
 	public static <STATE> void assertExpectedFlow(
-			final Iterator<STATE> expectedStates, final Iterator<STATE> states) {
+			final Iterator<? extends STATE> expectedStates, final Iterator<? extends STATE> states) {
 		STATE expectedState;
 		if (expectedStates.hasNext()) {
 			expectedState = expectedStates.next();

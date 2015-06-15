@@ -37,6 +37,8 @@ public interface Definition<DIAGRAM extends Diagram<?>>
 
 	Collection<LogicalElement> getElements();
 
+	Collection<LogicalFlowElement> getFlowElements();
+
 	Collection<LogicalFlowElement> getInstantiatingElements();
 
 	void load(InputStream input);

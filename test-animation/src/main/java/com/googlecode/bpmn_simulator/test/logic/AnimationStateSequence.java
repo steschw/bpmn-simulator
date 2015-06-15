@@ -81,6 +81,11 @@ public class AnimationStateSequence
 			return copyState();
 		}
 
+		@Override
+		public void remove() {
+			throw new UnsupportedOperationException();
+		}
+
 	}
 
 }

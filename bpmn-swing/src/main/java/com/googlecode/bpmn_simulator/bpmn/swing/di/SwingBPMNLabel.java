@@ -20,9 +20,9 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.swing.di;
 
-import java.awt.Font;
 import java.awt.Graphics;
 
+import com.googlecode.bpmn_simulator.animation.element.visual.Font;
 import com.googlecode.bpmn_simulator.animation.element.visual.swing.AbstractLabel;
 import com.googlecode.bpmn_simulator.animation.element.visual.swing.FontUtils;
 import com.googlecode.bpmn_simulator.animation.ref.Reference;
@@ -35,6 +35,7 @@ public class SwingBPMNLabel
 		implements BPMNLabel {
 
 	private Reference<BPMNLabelStyle> style;
+
 	private Font font;
 
 	public SwingBPMNLabel() {
@@ -48,9 +49,11 @@ public class SwingBPMNLabel
 
 	@Override
 	protected void paintComponent(final Graphics g) {
-		if ((font == null)
-				&& (style != null) && style.hasReference() && (style.getReferenced().getFont() != null)) {
-			setFont(getFont().deriveFont(FontUtils.toAttributes(style.getReferenced().getFont())));
+		if ((style != null) && style.hasReference() && (style.getReferenced().getFont() != null)) {
+			if (font == null) {
+				font = style.getReferenced().getFont();
+				setFont(getFont().deriveFont(FontUtils.toAttributes(font)));
+			}
 		}
 		super.paintComponent(g);
 	}

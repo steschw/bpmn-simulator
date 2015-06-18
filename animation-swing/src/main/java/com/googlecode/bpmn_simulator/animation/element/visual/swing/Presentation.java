@@ -179,8 +179,9 @@ public class Presentation {
 	public void drawTokens(final Graphics2D g, final Tokens tokens,
 			final int x, final int y) {
 		int x2 = x;
-		for (final Token token : tokens) {
-			drawToken(g, token, x2, y);
+		final Iterator<Token> iterator = tokens.iterator();
+		while (iterator.hasNext()) {
+			drawToken(g, iterator.next(), x2, y);
 			x2 += 6;
 		}
 	}

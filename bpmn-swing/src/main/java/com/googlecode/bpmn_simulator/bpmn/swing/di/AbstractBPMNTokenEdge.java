@@ -21,6 +21,7 @@
 package com.googlecode.bpmn_simulator.bpmn.swing.di;
 
 import java.awt.Graphics2D;
+import java.util.Iterator;
 
 import com.googlecode.bpmn_simulator.animation.element.logical.LogicalFlowElement;
 import com.googlecode.bpmn_simulator.animation.element.visual.Point;
@@ -53,7 +54,9 @@ public abstract class AbstractBPMNTokenEdge<E extends LogicalFlowElement>
 		final E logicalElement = getLogicalElement();
 		final Waypoints waypoints = getWaypointsRelative();
 		final double n = waypoints.getLength() / logicalElement.getStepCount();
-		for (final Token token : logicalElement.getTokens()) {
+		final Iterator<Token> iterator = logicalElement.getTokens().iterator();
+		while (iterator.hasNext()) {
+			final Token token = iterator.next();
 			final Point point = waypoints.getWaypoint(n * token.getPosition());
 			getPresentation().drawToken(g, token, point.getX(), point.getY());
 		}

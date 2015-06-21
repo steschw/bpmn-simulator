@@ -68,6 +68,7 @@ public final class Assert {
 			return;
 		}
 		int stateIndex = 0;
+		int expectedStateIndex = 0;
 		while (states.hasNext()) {
 			final STATE state = states.next();
 			if (!equals(state, expectedState)) {
@@ -81,16 +82,20 @@ public final class Assert {
 					if (!equals(state, expectedState)) {
 						fail = true;
 					}
+					++expectedStateIndex;
 				}
 				if (fail) {
-					fail(MessageFormat.format("unexpected state {0}. expected state {1}", state, expectedState));
+					fail(MessageFormat.format("unexpected state[{0}] {1}. expected state[{2}] {3}",
+							stateIndex, state, expectedStateIndex, expectedState));
 				}
 			}
 			++stateIndex;
 		}
 		assertNoMoreStates(states);
 		if (expectedStates.hasNext()) {
-			fail(MessageFormat.format("no next state available. next state expected is {0}", expectedStates.next()));
+			++expectedStateIndex;
+			fail(MessageFormat.format("no next state available. next state[{0}] expected is {1}",
+					expectedStateIndex, expectedStates.next()));
 		}
 	}
 

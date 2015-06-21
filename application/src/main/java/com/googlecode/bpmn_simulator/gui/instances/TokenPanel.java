@@ -35,7 +35,8 @@ import com.googlecode.bpmn_simulator.animation.token.TokenFlow;
 class TokenPanel
 		extends AbstractInfoPanel {
 
-	private final ElementLabel elementLabel = new ElementLabel();
+	private final ElementLabel currentElementLabel = new ElementLabel();
+	private final ElementLabel previousElementLabel = new ElementLabel();
 
 	@Override
 	protected JPanel createInfoPanel() {
@@ -43,24 +44,37 @@ class TokenPanel
 		final GridBagConstraints c = new GridBagConstraints();
 		c.insets = new Insets(8, 8, 8, 8);
 		c.anchor = GridBagConstraints.LINE_START;
+		c.fill = GridBagConstraints.HORIZONTAL;
+
 		c.gridy = 0;
 		c.gridx = 0;
 		panel.add(new JLabel("Element:"), c);
 		c.gridx = 1;
-		c.weightx = 0.8;
-		c.fill = GridBagConstraints.HORIZONTAL;
-		panel.add(elementLabel, c);
+		c.weightx = 0.75;
+		panel.add(currentElementLabel, c);
+		c.weightx = 0.;
+
+		c.gridy = 1;
+		c.gridx = 0;
+		panel.add(new JLabel("Previous Element:"), c);
+		c.gridx = 1;
+		panel.add(previousElementLabel, c);
+
 		return panel;
+	}
+
+	private static void setTokenFlow(final ElementLabel elementLabel, final TokenFlow tokenFlow) {
+		if (tokenFlow instanceof LogicalElement) {
+			elementLabel.setElement((LogicalElement) tokenFlow);
+		} else {
+			elementLabel.setElement(null);
+		}
 	}
 
 	public void setToken(final Token token) {
 		setData(token.getData());
-		final TokenFlow currenTokenFlow = token.getCurrentTokenFlow();
-		if (currenTokenFlow instanceof LogicalElement) {
-			elementLabel.setElement((LogicalElement) currenTokenFlow);
-		} else {
-			elementLabel.setElement(null);
-		}
+		setTokenFlow(currentElementLabel, token.getCurrentTokenFlow());
+		setTokenFlow(previousElementLabel, token.getPreviousTokenFlow());
 	}
 
 }

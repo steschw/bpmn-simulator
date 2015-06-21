@@ -104,12 +104,26 @@ public abstract class AbstractFlowElement
 		stepCount = count;
 	}
 
+	protected Tokens getCompleteTokens() {
+		final Tokens tokens = new Tokens();
+		for (final Token token : getTokens()) {
+			if (isTokenComplete(token)) {
+				tokens.add(token);
+			}
+		}
+		return tokens;
+	}
+
+	protected boolean isTokenComplete(final Token token) {
+		return token.getPosition() > getStepCount();
+	}
+
 	protected abstract void onTokenComplete(Token token);
 
 	@Override
 	public final void tokenDispatch(final Token token) {
 		assert getTokens().contains(token);
-		if (token.getPosition() > getStepCount()) {
+		if (isTokenComplete(token)) {
 			onTokenComplete(token);
 		} else {
 			notifyTokenChanged(token);

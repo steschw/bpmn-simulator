@@ -139,7 +139,7 @@ public class AssertPrimitivesTestcase {
 
 	@Test
 	public void testExceptionUnexpectedFirstState1() {
-		setExpectedException("unexpected state 2. expected state 1");
+		setExpectedException("unexpected state[0] 2. expected state[0] 1");
 		final StateSequence<Integer> expectedStates = new StaticStateSequence<>(1);
 		final List<Integer> states = new ArrayList<>();
 		states.add(2);
@@ -148,7 +148,7 @@ public class AssertPrimitivesTestcase {
 
 	@Test
 	public void testExceptionUnexpectedFirstState2() {
-		setExpectedException("unexpected state 2. expected state 1");
+		setExpectedException("unexpected state[0] 2. expected state[0] 1");
 		final StateSequence<Integer> expectedStates = new StaticStateSequence<>(1, 2);
 		final List<Integer> states = new ArrayList<>();
 		states.add(2);
@@ -157,7 +157,7 @@ public class AssertPrimitivesTestcase {
 
 	@Test
 	public void testExceptionUnexpectedLastState() {
-		setExpectedException("unexpected state 3. expected state 2");
+		setExpectedException("unexpected state[1] 3. expected state[1] 2");
 		final StateSequence<Integer> expectedStates = new StaticStateSequence<>(1, 2);
 		final List<Integer> states = new ArrayList<>();
 		states.add(1);
@@ -167,7 +167,7 @@ public class AssertPrimitivesTestcase {
 
 	@Test
 	public void testExceptionUnexpectedBothStates() {
-		setExpectedException("unexpected state 2. expected state 1");
+		setExpectedException("unexpected state[0] 2. expected state[0] 1");
 		final StateSequence<Integer> expectedStates = new StaticStateSequence<>(1, 2);
 		final List<Integer> states = new ArrayList<>();
 		states.add(2);
@@ -194,7 +194,7 @@ public class AssertPrimitivesTestcase {
 
 	@Test
 	public void testException4() {
-		setExpectedException("no next state available. next state expected is 1");
+		setExpectedException("no next state available. next state[1] expected is 1");
 		final StateSequence<Integer> expectedStates = new StaticStateSequence<>(1, 1);
 		final List<Integer> states = new ArrayList<>();
 		states.add(1);
@@ -203,7 +203,7 @@ public class AssertPrimitivesTestcase {
 
 	@Test
 	public void testException5() {
-		setExpectedException("no next state available. next state expected is 2");
+		setExpectedException("no next state available. next state[1] expected is 2");
 		final StateSequence<Integer> expectedStates = new StaticStateSequence<>(1, 2);
 		final List<Integer> states = new ArrayList<>();
 		states.add(1);

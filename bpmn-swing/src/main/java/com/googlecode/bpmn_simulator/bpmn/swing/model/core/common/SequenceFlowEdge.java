@@ -20,14 +20,21 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.swing.model.core.common;
 
+import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Paint;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.JCheckBox;
 
 import com.googlecode.bpmn_simulator.animation.element.visual.Bounds;
 import com.googlecode.bpmn_simulator.animation.element.visual.GeometryUtils;
 import com.googlecode.bpmn_simulator.animation.element.visual.Point;
+import com.googlecode.bpmn_simulator.animation.element.visual.Waypoint;
 import com.googlecode.bpmn_simulator.animation.element.visual.Waypoints;
 import com.googlecode.bpmn_simulator.animation.element.visual.swing.Colors;
+import com.googlecode.bpmn_simulator.bpmn.model.core.common.Expression;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.SequenceFlow;
 import com.googlecode.bpmn_simulator.bpmn.swing.di.AbstractBPMNTokenEdge;
 import com.googlecode.bpmn_simulator.bpmn.swing.di.Appearance;
@@ -44,22 +51,66 @@ public final class SequenceFlowEdge
 
 	private static final int START_SYMBOL_SIZE = 8;
 
+	private JCheckBox checkBox;
+
 	public SequenceFlowEdge(final SequenceFlow element) {
 		super(element);
 	}
 
 	@Override
+	public void addNotify() {
+		super.addNotify();
+		if (checkBox == null) {
+			createCheckbox();
+		}
+		updateCheckboxPosition();
+	}
+
+	private void createCheckbox() {
+		final SequenceFlow sequenceflow = getLogicalElement();
+		if (sequenceflow.isConditional()) {
+			final Expression expression = sequenceflow.getConditionExpression();
+			checkBox = new JCheckBox();
+			checkBox.setOpaque(false);
+			checkBox.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(final ActionEvent event) {
+					expression.setValue(checkBox.isSelected());
+				}
+			});
+			checkBox.setSelected(expression.getResult());
+			getParent().add(checkBox, 0);
+		}
+	}
+
+	private void updateCheckboxPosition() {
+		if (checkBox != null) {
+			final Waypoints waypoints = getWaypoints();
+			final Point point = waypoints.getWaypoint(waypoints.getLength() / 2.);
+			if (point != null) {
+				final Dimension size = checkBox.getPreferredSize();
+				checkBox.setBounds(point.getX() - (size.width / 2), point.getY() - (size.height / 2),
+						size.width, size.height);
+			}
+		}
+	}
+
+	@Override
+	public void addElementWaypoint(final Waypoint waypoint) {
+		super.addElementWaypoint(waypoint);
+		updateCheckboxPosition();
+	}
+
+	@Override
 	protected void paintElementStart(final Graphics2D g) {
 		super.paintElementStart(g);
-		SequenceFlow sequenceFlow = getLogicalElement();
-		final boolean isDefault = sequenceFlow.isDefault();
-		final boolean hasConditionExpression = sequenceFlow.getConditionExpression() != null;
-		if (isDefault) {
-			if (!hasConditionExpression) {
+		final SequenceFlow sequenceFlow = getLogicalElement();
+		if (sequenceFlow.isDefault()) {
+			if (!sequenceFlow.isConditional()) {
 				drawDefaultSymbol(g);
 			}
 		} else {
-			if (hasConditionExpression) {
+			if (sequenceFlow.isConditional()) {
 				drawConditionalSymbol(g);
 			}
 		}

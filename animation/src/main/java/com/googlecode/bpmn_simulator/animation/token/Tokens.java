@@ -73,8 +73,7 @@ public class Tokens
 		final Tokens tokens = new Tokens();
 		for (final Token token : this) {
 			final Instance tokenInstance = token.getInstance();
-			if (tokenInstance.equals(instance)
-					&& !tokens.contains(token)) {
+			if (instance.equals(tokenInstance)) {
 				tokens.add(token);
 			}
 		}
@@ -85,12 +84,28 @@ public class Tokens
 		final Tokens tokens = new Tokens();
 		for (final Token token : this) {
 			final TokenFlow tokenTokenFlow = token.getCurrentTokenFlow();
-			if (tokenTokenFlow.equals(tokenFlow)
-					&& !tokens.contains(token)) {
+			if (tokenFlow.equals(tokenTokenFlow)) {
 				tokens.add(token);
 			}
 		}
 		return tokens;
+	}
+
+	public Tokens getByPreviousTokenFlow(final TokenFlow tokenFlow) {
+		final Tokens tokens = new Tokens();
+		for (final Token token : this) {
+			final TokenFlow tokenTokenFlow = token.getPreviousTokenFlow();
+			if (tokenFlow.equals(tokenTokenFlow)) {
+				tokens.add(token);
+			}
+		}
+		return tokens;
+	}
+
+	public void removeAll() {
+		for (final Token token : this) {
+			token.remove();
+		}
 	}
 
 }

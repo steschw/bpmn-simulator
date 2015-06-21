@@ -39,13 +39,13 @@ public final class Expression
 		return ELEMENT_NAME;
 	}
 
-	public void setExpressionValue(final boolean value) {
+	public void setValue(final boolean value) {
 		synchronized (this) {
 			this.value = value;
 		}
 	}
 
-	public boolean getExpressionValue() {
+	public boolean getResult() {
 		return value;
 	}
 

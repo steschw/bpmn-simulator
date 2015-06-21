@@ -22,7 +22,9 @@ package com.googlecode.bpmn_simulator.bpmn.model.core.common;
 
 import com.googlecode.bpmn_simulator.animation.ref.Reference;
 import com.googlecode.bpmn_simulator.animation.ref.ReferenceSet;
+import com.googlecode.bpmn_simulator.animation.ref.References;
 import com.googlecode.bpmn_simulator.animation.token.Token;
+import com.googlecode.bpmn_simulator.animation.token.Tokens;
 
 public abstract class AbstractFlowNode
 		extends AbstractFlowElement
@@ -40,17 +42,87 @@ public abstract class AbstractFlowNode
 		this.incoming.add(incoming);
 	}
 
+	protected References<SequenceFlow> getIncoming() {
+		return incoming;
+	}
+
 	@Override
 	public void addOutgoing(final Reference<SequenceFlow> outgoing) {
 		this.outgoing.add(outgoing);
 	}
 
+	protected References<SequenceFlow> getOutgoing() {
+		return outgoing;
+	}
+
+	private static boolean copyTokenToDefaultOutgoing(final Token token, final DefaultSequenceFlowElement element) {
+		final SequenceFlow defaultSequenceFlow = element.getDefaultSequenceFlow();
+		if (defaultSequenceFlow != null) {
+			token.copyTo(defaultSequenceFlow);
+			return true;
+		}
+		return false;
+	}
+
+	protected final int copyTokenToAllOutgoing(final Token token) {
+		return copyTokenToOutgoing(token, false, null);
+	}
+
+	protected final int copyTokenToFirstOutgoing(final Token token) {
+		return copyTokenToOutgoing(token, true, null);
+	}
+
+	protected final int copyTokenToOutgoing(final Token token,
+			final boolean firstOnly,
+			final DefaultSequenceFlowElement defaultSequenceFlowElement) {
+		int count = 0;
+		for (final SequenceFlow outgoing : getOutgoing()) {
+			if (!outgoing.isDefault()) {
+				if (!outgoing.isConditional()
+						|| outgoing.getConditionExpression().getResult()) {
+					token.copyTo(outgoing);
+					++count;
+					if (firstOnly) {
+						break; 
+					}
+				}
+			}
+		}
+		if ((count == 0) && (defaultSequenceFlowElement != null)) {
+			if (copyTokenToDefaultOutgoing(token, defaultSequenceFlowElement)) {
+				++count;
+			}
+		}
+		return count;
+	}
+
+	protected void forwardToken(final Token token) {
+		copyTokenToAllOutgoing(token);
+	}
+
 	@Override
 	protected void onTokenComplete(final Token token) {
-		for (final SequenceFlow sequenceFlow : outgoing) {
-			token.copyTo(sequenceFlow);
-		}
+		forwardToken(token);
 		token.remove();
+	}
+
+	/**
+	 * @return doesn't contains the forToken. returns null if not every incoming has a token
+	 */
+	protected Tokens getTokenForEveryIncoming(final Token forToken) {
+		final Tokens tokens = new Tokens();
+		final Tokens availableTokens = getCompleteTokens().getByInstance(forToken.getInstance());
+		for (final SequenceFlow incoming : getIncoming()) {
+			if (incoming.equals(forToken.getPreviousTokenFlow())) {
+				continue;
+			}
+			final Tokens incomingTokens = availableTokens.getByPreviousTokenFlow(incoming);
+			if (incomingTokens.isEmpty()) {
+				return null;
+			}
+			tokens.add(incomingTokens.get(0));
+		}
+		return tokens;
 	}
 
 }

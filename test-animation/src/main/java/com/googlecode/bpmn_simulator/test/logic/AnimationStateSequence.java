@@ -27,6 +27,10 @@ public class AnimationStateSequence
 		readElements();
 	}
 
+	protected String getElementName(final LogicalFlowElement flowElement) {
+		return flowElement.toString();
+	}
+
 	@Override
 	public Iterator<AttributedElementsState<String, Integer>> iterator() {
 		return new AnimationIterator();
@@ -34,7 +38,10 @@ public class AnimationStateSequence
 
 	private void readElements() {
 		for (final LogicalFlowElement flowElement : definition.getFlowElements()) {
-			elements.put(flowElement.toString(), flowElement);
+			final String name = getElementName(flowElement);
+			if (name != null) {
+				elements.put(name, flowElement);
+			}
 		}
 	}
 

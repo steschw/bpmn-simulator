@@ -109,7 +109,11 @@ public final class Instance
 	}
 
 	public Token createNewToken(final TokenFlow tokenFlow) {
-		final Token token = new Token(this, tokenFlow);
+		return createNewToken(tokenFlow, null);
+	}
+
+	protected Token createNewToken(final TokenFlow currentTokenFlow, final TokenFlow previousTokenFlow) {
+		final Token token = new Token(this, currentTokenFlow, previousTokenFlow);
 		addToken(token);
 		token.getCurrentTokenFlow().tokenEnter(token);
 		return token;

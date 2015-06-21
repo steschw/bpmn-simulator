@@ -63,6 +63,10 @@ public final class SequenceFlow
 		return conditionExpression;
 	}
 
+	public boolean isConditional() {
+		return getConditionExpression() != null;
+	}
+
 	public boolean isDefault() {
 		final FlowNode sourceFlowNode = ReferenceUtils.element(getSource());
 		if (sourceFlowNode instanceof DefaultSequenceFlowElement) {

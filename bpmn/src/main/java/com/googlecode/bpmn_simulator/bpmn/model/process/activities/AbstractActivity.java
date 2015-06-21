@@ -21,6 +21,7 @@
 package com.googlecode.bpmn_simulator.bpmn.model.process.activities;
 
 import com.googlecode.bpmn_simulator.animation.ref.Reference;
+import com.googlecode.bpmn_simulator.animation.token.Token;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.AbstractFlowNode;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.SequenceFlow;
 
@@ -65,6 +66,11 @@ public abstract class AbstractActivity
 	@Override
 	public boolean isForCompensation() {
 		return forCompensation;
+	}
+
+	@Override
+	protected void forwardToken(final Token token) {
+		copyTokenToOutgoing(token, false, this);
 	}
 
 }

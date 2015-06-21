@@ -20,11 +20,23 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.model.core.common.gateways;
 
+import com.googlecode.bpmn_simulator.animation.token.Token;
+import com.googlecode.bpmn_simulator.animation.token.Tokens;
+
 abstract class AbstractMergingGateway
 		extends AbstractGateway {
 
 	public AbstractMergingGateway(final String id, final String name) {
 		super(id, name);
+	}
+
+	@Override
+	protected void onTokenComplete(final Token token) {
+		final Tokens inputTokens = getTokenForEveryIncoming(token);
+		if (inputTokens != null) {
+			super.onTokenComplete(token);
+			inputTokens.removeAll();
+		}
 	}
 
 }

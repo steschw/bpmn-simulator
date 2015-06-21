@@ -21,6 +21,7 @@
 package com.googlecode.bpmn_simulator.bpmn.model.core.common.gateways;
 
 import com.googlecode.bpmn_simulator.animation.ref.Reference;
+import com.googlecode.bpmn_simulator.animation.token.Token;
 import com.googlecode.bpmn_simulator.bpmn.Messages;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.DefaultSequenceFlowElement;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.SequenceFlow;
@@ -53,6 +54,11 @@ public final class InclusiveGateway
 			return defaultSequenceFlow.getReferenced();
 		}
 		return null;
+	}
+
+	@Override
+	protected void forwardToken(final Token token) {
+		copyTokenToOutgoing(token, false, this);
 	}
 
 }

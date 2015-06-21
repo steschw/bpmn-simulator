@@ -29,14 +29,14 @@ public class Token
 
 	private final TokenFlow currentTokenFlow;
 
-//	private final TokenFlow previousFlow;
+	private final TokenFlow previousTokenFlow;
 
 	private int position;
 
 	private Map<? extends Object, ? extends Object> data = null;
 
 	protected Token(final Instance instance,
-			final TokenFlow current) {
+			final TokenFlow current, final TokenFlow previous) {
 		super();
 		if (instance == null) {
 			throw new IllegalArgumentException();
@@ -46,6 +46,7 @@ public class Token
 			throw new IllegalArgumentException();
 		}
 		this.currentTokenFlow = current;
+		this.previousTokenFlow = previous;
 	}
 
 	public Instance getInstance() {
@@ -54,6 +55,10 @@ public class Token
 
 	public TokenFlow getCurrentTokenFlow() {
 		return currentTokenFlow;
+	}
+
+	public TokenFlow getPreviousTokenFlow() {
+		return previousTokenFlow;
 	}
 
 	@Override
@@ -98,7 +103,7 @@ public class Token
 
 	public void copyTo(final TokenFlow tokenFlow) {
 		assert getCurrentTokenFlow() != tokenFlow;
-		getInstance().createNewToken(tokenFlow);
+		getInstance().createNewToken(tokenFlow, getCurrentTokenFlow());
 	}
 
 	public void moveTo(final TokenFlow tokenFlow) {

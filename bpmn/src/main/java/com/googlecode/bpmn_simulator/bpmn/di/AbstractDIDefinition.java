@@ -237,11 +237,13 @@ public abstract class AbstractDIDefinition<DIAGRAM extends BPMNDiagram<?>>
 			final DIAGRAM diagram, final BaseElement element, final BPMNEdge edge) {
 		if (isElementNode(node, BPMNDI, ELEMENT_LABEL)) {
 			final BPMNLabel label = createLabelFor(diagram, element);
-			label.setStyle(getAttributeLabelStyle(node));
-			if (!readLabelElements(node, diagram, element, label)) {
-				edge.alignLabel(label);
+			if (label != null) {
+				label.setStyle(getAttributeLabelStyle(node));
+				if (!readLabelElements(node, diagram, element, label)) {
+					edge.alignLabel(label);
+				}
+				return true;
 			}
-			return true;
 		}
 		return false;
 	}
@@ -250,12 +252,14 @@ public abstract class AbstractDIDefinition<DIAGRAM extends BPMNDiagram<?>>
 			final DIAGRAM diagram, final BaseElement element, final BPMNShape shape) {
 		if (isElementNode(node, BPMNDI, ELEMENT_LABEL)) {
 			final BPMNLabel label = createLabelFor(diagram, element);
-			label.setTextVertical(shape.isHorizontal());
-			label.setStyle(getAttributeLabelStyle(node));
-			if (!readLabelElements(node, diagram, element, label)) {
-				shape.alignLabel(label);
+			if (label != null) {
+				label.setTextVertical(shape.isHorizontal());
+				label.setStyle(getAttributeLabelStyle(node));
+				if (!readLabelElements(node, diagram, element, label)) {
+					shape.alignLabel(label);
+				}
+				return true;
 			}
-			return true;
 		}
 		return false;
 	}

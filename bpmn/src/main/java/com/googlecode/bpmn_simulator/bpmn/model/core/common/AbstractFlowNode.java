@@ -64,36 +64,38 @@ public abstract class AbstractFlowNode
 		return false;
 	}
 
-	protected final int copyTokenToAllOutgoing(final Token token) {
-		return copyTokenToOutgoing(token, false, null);
+	protected final void copyTokenToAllOutgoing(final Token token) {
+		copyTokenToOutgoing(token, false, null);
 	}
 
-	protected final int copyTokenToFirstOutgoing(final Token token) {
-		return copyTokenToOutgoing(token, true, null);
+	protected final void copyTokenToFirstOutgoing(final Token token) {
+		copyTokenToOutgoing(token, true, null);
 	}
 
-	protected final int copyTokenToOutgoing(final Token token,
+	protected final void copyTokenToOutgoing(final Token token,
 			final boolean firstOnly,
 			final DefaultSequenceFlowElement defaultSequenceFlowElement) {
-		int count = 0;
+		int conditionalCount = 0;
 		for (final SequenceFlow outgoing : getOutgoing()) {
 			if (!outgoing.isDefault()) {
-				if (!outgoing.isConditional()
+				final boolean conditional = outgoing.isConditional();
+				if (!conditional
 						|| outgoing.getConditionExpression().getResult()) {
 					token.copyTo(outgoing);
-					++count;
+					if (conditional) {
+						++conditionalCount;
+					}
 					if (firstOnly) {
 						break; 
 					}
 				}
 			}
 		}
-		if ((count == 0) && (defaultSequenceFlowElement != null)) {
+		if ((conditionalCount == 0) && (defaultSequenceFlowElement != null)) {
 			if (copyTokenToDefaultOutgoing(token, defaultSequenceFlowElement)) {
-				++count;
+				++conditionalCount;
 			}
 		}
-		return count;
 	}
 
 	protected void forwardToken(final Token token) {

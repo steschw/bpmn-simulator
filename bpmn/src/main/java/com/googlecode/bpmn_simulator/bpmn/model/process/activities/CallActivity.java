@@ -23,7 +23,7 @@ package com.googlecode.bpmn_simulator.bpmn.model.process.activities;
 import com.googlecode.bpmn_simulator.bpmn.Messages;
 
 public final class CallActivity
-		extends AbstractActivity {
+		extends AbstractAtomicActivity {
 
 	public static final String ELEMENT_NAME = Messages.getString("callActivity"); //$NON-NLS-1$
 

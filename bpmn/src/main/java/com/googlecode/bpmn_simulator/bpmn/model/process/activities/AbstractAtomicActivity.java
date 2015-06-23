@@ -20,28 +20,13 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.model.process.activities;
 
-import com.googlecode.bpmn_simulator.bpmn.Messages;
 
-public class SubProcess
-		extends AbstractDecomposableActivity {
+public abstract class AbstractAtomicActivity
+		extends AbstractActivity {
 
-	public static final String ELEMENT_NAME = Messages.getString("subProcess"); //$NON-NLS-1$
-
-	private final boolean triggeredByEvent;
-
-	public SubProcess(final String id, final String name,
-			final boolean isForCompensation, final boolean triggeredByEvent) {
+	public AbstractAtomicActivity(final String id, final String name,
+			final boolean isForCompensation) {
 		super(id, name, isForCompensation);
-		this.triggeredByEvent = triggeredByEvent;
-	}
-
-	@Override
-	public String getElementName() {
-		return ELEMENT_NAME;
-	}
-
-	public boolean isTriggeredByEvent() {
-		return triggeredByEvent;
 	}
 
 }

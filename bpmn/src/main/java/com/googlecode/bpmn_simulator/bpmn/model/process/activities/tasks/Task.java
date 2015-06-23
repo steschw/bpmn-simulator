@@ -21,10 +21,10 @@
 package com.googlecode.bpmn_simulator.bpmn.model.process.activities.tasks;
 
 import com.googlecode.bpmn_simulator.bpmn.Messages;
-import com.googlecode.bpmn_simulator.bpmn.model.process.activities.AbstractActivity;
+import com.googlecode.bpmn_simulator.bpmn.model.process.activities.AbstractAtomicActivity;
 
 public class Task
-		extends AbstractActivity {
+		extends AbstractAtomicActivity {
 
 	public static final String ELEMENT_NAME = Messages.getString("task"); //$NON-NLS-1$
 

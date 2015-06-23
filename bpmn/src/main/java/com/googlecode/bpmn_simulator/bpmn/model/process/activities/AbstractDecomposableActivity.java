@@ -20,28 +20,31 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.model.process.activities;
 
-import com.googlecode.bpmn_simulator.bpmn.Messages;
+import java.util.ArrayList;
+import java.util.Collection;
 
-public class SubProcess
-		extends AbstractDecomposableActivity {
+import com.googlecode.bpmn_simulator.bpmn.model.core.common.FlowElement;
+import com.googlecode.bpmn_simulator.bpmn.model.core.common.FlowElementsContainer;
 
-	public static final String ELEMENT_NAME = Messages.getString("subProcess"); //$NON-NLS-1$
+abstract class AbstractDecomposableActivity
+		extends AbstractActivity
+		implements FlowElementsContainer {
 
-	private final boolean triggeredByEvent;
+	private final Collection<FlowElement> flowElements = new ArrayList<>();
 
-	public SubProcess(final String id, final String name,
-			final boolean isForCompensation, final boolean triggeredByEvent) {
+	public AbstractDecomposableActivity(final String id, String name,
+			final boolean isForCompensation) {
 		super(id, name, isForCompensation);
-		this.triggeredByEvent = triggeredByEvent;
 	}
 
 	@Override
-	public String getElementName() {
-		return ELEMENT_NAME;
+	public void addFlowElement(final FlowElement flowElement) {
+		flowElements.add(flowElement);
 	}
 
-	public boolean isTriggeredByEvent() {
-		return triggeredByEvent;
+	@Override
+	public Collection<FlowElement> getFlowElements() {
+		return flowElements;
 	}
 
 }

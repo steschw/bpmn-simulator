@@ -238,7 +238,7 @@ public class BonitaTokenImporter
 		if (instances.containsKey(processInstanceId)) {
 			instance = instances.get(processInstanceId);
 		} else {
-			instance = getInstances().addNewChildInstance();
+			instance = getInstances().addNewChildInstance(null);
 			instances.put(processInstanceId, instance);
 			instance.setData(getProcessInstanceData(processInstanceId));
 		}

@@ -61,7 +61,7 @@ public class AnimationStateSequence
 
 		public AnimationIterator() {
 			super();
-			instances.addNewChildInstance().createNewToken(startElement);
+			instances.addNewChildInstance(null).createNewToken(startElement);
 		}
 
 		@Override

@@ -88,10 +88,10 @@ abstract class InstanceContainer
 		return !childInstances.isEmpty();
 	}
 
-	protected abstract Instance createNewChildInstance();
+	protected abstract Instance createNewChildInstance(TokenFlow tokenFlow);
 
-	public Instance addNewChildInstance() {
-		final Instance instance = createNewChildInstance();
+	public Instance addNewChildInstance(final TokenFlow tokenFlow) {
+		final Instance instance = createNewChildInstance(tokenFlow);
 		addChildInstance(instance);
 		return instance;
 	}

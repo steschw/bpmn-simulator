@@ -31,19 +31,26 @@ public final class Instance
 
 	private final int rootId;
 
+	private final TokenFlow tokenFlow;
+
 	private final Tokens tokens = new Tokens();
 
 	private final Set<TokensListener> tokensListeners = new HashSet<>();
 
 	private Map<? extends Object, ? extends Object> data = null;
 
-	protected Instance(final InstanceContainer parent, final int rootId) {
+	protected Instance(final InstanceContainer parent, final int rootId, final TokenFlow tokenFlow) {
 		super(parent);
 		this.rootId = rootId;
+		this.tokenFlow = tokenFlow;
 	}
 
 	public int getRootId() {
 		return rootId;
+	}
+
+	public TokenFlow getTokenFlow() {
+		return tokenFlow;
 	}
 
 	@Override
@@ -168,8 +175,8 @@ public final class Instance
 	}
 
 	@Override
-	protected Instance createNewChildInstance() {
-		return new Instance(this, getRootId());
+	protected Instance createNewChildInstance(final TokenFlow tokenFlow) {
+		return new Instance(this, getRootId(), tokenFlow);
 	}
 
 }

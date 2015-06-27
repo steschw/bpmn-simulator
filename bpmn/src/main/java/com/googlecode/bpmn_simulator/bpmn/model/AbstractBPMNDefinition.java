@@ -125,7 +125,7 @@ public class AbstractBPMNDefinition<E extends BPMNDiagram<?>>
 	public static final String ELEMENT_NAME = Messages.getString("definitions"); //$NON-NLS-1$
 
 	public static final String FILE_DESCRIPTION = "BPMN 2.0 XML"; //$NON-NLS-1$
-	public static final String[] FILE_EXTENSIONS = {"bpmn", "xml"}; //$NON-NLS-1$ //$NON-NLS-2$
+	public static final String[] FILE_EXTENSIONS = { "bpmn", "xml" }; //$NON-NLS-1$ //$NON-NLS-2$
 
 	private static final String SCHEMA_FILENAME =
 			"com/googlecode/bpmn_simulator/bpmn/xsd/BPMN20.xsd"; //$NON-NLS-1$
@@ -155,11 +155,7 @@ public class AbstractBPMNDefinition<E extends BPMNDiagram<?>>
 
 	@Override
 	public Collection<LogicalElement> getElements() {
-		final Collection<LogicalElement> elements = new ArrayList<>();
-		for (final Process process : processes) {
-			elements.addAll(process.getFlowElements());
-		}
-		return elements;
+		return new ArrayList<LogicalElement>(elements.getElements());
 	}
 
 	@Override
@@ -176,9 +172,11 @@ public class AbstractBPMNDefinition<E extends BPMNDiagram<?>>
 	@Override
 	public Collection<LogicalFlowElement> getInstantiatingElements() {
 		final Collection<LogicalFlowElement> instantiatingElements = new ArrayList<>();
-		for (final LogicalFlowElement flowElement : getFlowElements()) {
-			if (flowElement instanceof StartEvent) {
-				instantiatingElements.add(flowElement);
+		for (final Process process : processes) {
+			for (final FlowElement flowElement : process.getFlowElements()) {
+				if (flowElement instanceof StartEvent) {
+					instantiatingElements.add(flowElement);
+				}
 			}
 		}
 		return instantiatingElements;

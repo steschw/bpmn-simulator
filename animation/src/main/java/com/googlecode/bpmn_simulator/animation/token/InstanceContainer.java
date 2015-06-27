@@ -20,6 +20,7 @@
  */
 package com.googlecode.bpmn_simulator.animation.token;
 
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -29,18 +30,34 @@ import java.util.Set;
 abstract class InstanceContainer
 		implements Iterable<Instance> {
 
-	private final InstanceContainer parent;
-
 	private final Collection<Instance> childInstances = new ArrayList<>();
 
 	private final Set<InstancesListener> instancesListeners = new HashSet<>();
+
+	private InstanceContainer parent;
 
 	protected InstanceContainer(final InstanceContainer parent) {
 		super();
 		this.parent = parent;
 	}
 
-	public InstanceContainer getParentContainer() {
+	protected void detach() {
+		parent = null;
+	}
+
+	protected InstanceContainer getTopLevelContainer() {
+		InstanceContainer container = this;
+		while (true) {
+			final InstanceContainer parent = container.getParentContainer();
+			if (parent == null) {
+				break;
+			}
+			container = parent;
+		}
+		return container;
+	}
+
+	protected InstanceContainer getParentContainer() {
 		return parent;
 	}
 
@@ -61,7 +78,7 @@ abstract class InstanceContainer
 		}
 	}
 
-	private void notifyInstanceCreated(final Instance instance) {
+	private void notifyInstanceAdded(final Instance instance) {
 		synchronized (instancesListeners) {
 			for (final InstancesListener listener : instancesListeners) {
 				listener.instanceAdded(instance);
@@ -69,19 +86,23 @@ abstract class InstanceContainer
 		}
 	}
 
-	private void notifyInstanceRemoved(final Instance instance) {
+	private void notifyInstanceRemove(final Instance instance) {
 		synchronized (instancesListeners) {
 			for (final InstancesListener listener : instancesListeners) {
-				listener.instanceRemoved(instance);
+				listener.instanceRemove(instance);
 			}
 		}
 	}
 
 	protected void addChildInstance(final Instance childInstance) {
-		assert childInstance != null;
-		assert !childInstances.contains(childInstance);
+		if (childInstance == null) {
+			throw new NullPointerException();
+		}
+		if (childInstances.contains(childInstance)) {
+			throw new IllegalArgumentException();
+		}
 		childInstances.add(childInstance);
-		notifyInstanceCreated(childInstance);
+		notifyInstanceAdded(childInstance);
 	}
 
 	public boolean hasChildInstances() {
@@ -97,9 +118,15 @@ abstract class InstanceContainer
 	}
 
 	protected void removeChildInstance(final Instance childInstance) {
-		assert childInstances.contains(childInstance);
+		if (childInstance == null) {
+			throw new NullPointerException();
+		}
+		if (!childInstances.contains(childInstance)) {
+			throw new IllegalArgumentException();
+		}
+		notifyInstanceRemove(childInstance);
 		childInstances.remove(childInstance);
-		notifyInstanceRemoved(childInstance);
+		childInstance.detach();
 	}
 
 	protected void removeAllChildInstances() {
@@ -117,6 +144,26 @@ abstract class InstanceContainer
 			if (childInstances.contains(childInstance)) {
 				childInstance.step(count);
 			}
+		}
+	}
+
+	public void dump(final PrintStream out) {
+		getTopLevelContainer().dump(out, 0);
+	}
+
+	protected static String pad(final int count) {
+		final StringBuilder builder = new StringBuilder(count);
+		for (int i = 0; i < count; ++i) {
+			builder.append('\t');
+		}
+		return builder.toString();
+	}
+
+	protected void dump(final PrintStream out, final int level) {
+		out.println(pad(level) + "+ " + toString());
+		final Iterator<Instance> i = childInstances.iterator();
+		while (i.hasNext()) {
+			i.next().dump(out, level + 1);
 		}
 	}
 

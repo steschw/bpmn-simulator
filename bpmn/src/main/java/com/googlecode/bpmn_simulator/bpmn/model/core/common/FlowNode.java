@@ -21,12 +21,17 @@
 package com.googlecode.bpmn_simulator.bpmn.model.core.common;
 
 import com.googlecode.bpmn_simulator.animation.ref.Reference;
+import com.googlecode.bpmn_simulator.animation.ref.References;
 
 public interface FlowNode
 		extends FlowElement {
 
-	public void addIncoming(Reference<SequenceFlow> incoming);
+	void addIncoming(Reference<SequenceFlow> incoming);
 
-	public void addOutgoing(Reference<SequenceFlow> outgoing);
+	References<SequenceFlow> getIncoming();
+
+	void addOutgoing(Reference<SequenceFlow> outgoing);
+
+	References<SequenceFlow> getOutgoing();
 
 }

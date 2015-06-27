@@ -20,8 +20,10 @@
  */
 package com.googlecode.bpmn_simulator.animation.token;
 
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
@@ -31,22 +33,40 @@ public final class Instance
 
 	private final int rootId;
 
+	private Instance parentInstance;
+
 	private final TokenFlow tokenFlow;
 
 	private final Tokens tokens = new Tokens();
 
+	private final Set<InstanceListener> listeners = new HashSet<>();
 	private final Set<TokensListener> tokensListeners = new HashSet<>();
 
 	private Map<? extends Object, ? extends Object> data = null;
 
-	protected Instance(final InstanceContainer parent, final int rootId, final TokenFlow tokenFlow) {
-		super(parent);
+	protected Instance(final InstanceContainer parentContainer, final Instance parentInstance, final int rootId,
+			final TokenFlow tokenFlow) {
+		super(parentContainer);
+		if (parentContainer == null) {
+			throw new NullPointerException();
+		}
+		this.parentInstance = parentInstance;
 		this.rootId = rootId;
 		this.tokenFlow = tokenFlow;
 	}
 
+	@Override
+	protected void detach() {
+		super.detach();
+		parentInstance = null;
+	}
+
 	public int getRootId() {
 		return rootId;
+	}
+
+	public Instance getParentInstance() {
+		return parentInstance;
 	}
 
 	public TokenFlow getTokenFlow() {
@@ -61,6 +81,26 @@ public final class Instance
 	@Override
 	public void setData(final Map<? extends Object, ? extends Object> data) {
 		this.data = data;
+	}
+
+	public void addListener(final InstanceListener listener) {
+		synchronized (listeners) {
+			listeners.add(listener);
+		}
+	}
+
+	public void removeListener(final InstanceListener listener) {
+		synchronized (listeners) {
+			listeners.remove(listener);
+		}
+	}
+
+	protected void notifyInstanceRemove() {
+		synchronized (listeners) {
+			for (final InstanceListener listener : listeners) {
+				listener.instanceRemove(this);
+			}
+		}
 	}
 
 	public void addTokensListener(final TokensListener listener) {
@@ -83,10 +123,10 @@ public final class Instance
 		}
 	}
 
-	private void notifyTokenRemoved(final Token token) {
+	private void notifyTokenRemove(final Token token) {
 		synchronized (tokensListeners) {
 			for (final TokensListener listener : tokensListeners) {
-				listener.tokenRemoved(token);
+				listener.tokenRemove(token);
 			}
 		}
 	}
@@ -103,6 +143,12 @@ public final class Instance
 	}
 
 	private void addToken(final Token token) {
+		if (token == null) {
+			throw new NullPointerException();
+		}
+		if (tokens.contains(token)) {
+			throw new IllegalArgumentException();
+		}
 		tokens.add(token);
 		notifyTokenAdded(token);
 	}
@@ -115,11 +161,7 @@ public final class Instance
 		return !hasTokens() && !hasChildInstances();
 	}
 
-	public Token createNewToken(final TokenFlow tokenFlow) {
-		return createNewToken(tokenFlow, null);
-	}
-
-	protected Token createNewToken(final TokenFlow currentTokenFlow, final TokenFlow previousTokenFlow) {
+	public Token createNewToken(final TokenFlow currentTokenFlow, final TokenFlow previousTokenFlow) {
 		final Token token = new Token(this, currentTokenFlow, previousTokenFlow);
 		addToken(token);
 		token.getCurrentTokenFlow().tokenEnter(token);
@@ -135,10 +177,16 @@ public final class Instance
 	}
 
 	protected void removeToken(final Token token) {
-		assert tokens.contains(token);
+		if (token == null) {
+			throw new NullPointerException();
+		}
+		if (!tokens.contains(token)) {
+			throw new IllegalArgumentException();
+		}
 		token.getCurrentTokenFlow().tokenExit(token);
+		notifyTokenRemove(token);
 		tokens.remove(token);
-		notifyTokenRemoved(token);
+		token.detach();
 		if (isEmpty()) {
 			remove();
 		}
@@ -152,9 +200,12 @@ public final class Instance
 
 	public void remove() {
 		clear();
+		notifyInstanceRemove();
 		final InstanceContainer parentContainer = getParentContainer();
 		if (parentContainer != null) {
 			parentContainer.removeChildInstance(this);
+		} else {
+			throw new IllegalStateException();
 		}
 	}
 
@@ -176,7 +227,23 @@ public final class Instance
 
 	@Override
 	protected Instance createNewChildInstance(final TokenFlow tokenFlow) {
-		return new Instance(this, getRootId(), tokenFlow);
+		return new Instance(this, this, getRootId(), tokenFlow);
+	}
+
+	@Override
+	public String toString() {
+		final StringBuilder builder = new StringBuilder(super.toString());
+		builder.append(" (").append(getTokenFlow()).append(")");
+		return builder.toString();
+	}
+
+	@Override
+	protected void dump(final PrintStream out, final int level) {
+		super.dump(out, level);
+		final Iterator<Token> i = tokens.iterator();
+		while (i.hasNext()) {
+			out.println(pad(level + 1) + "- " + i.next().toString());
+		}
 	}
 
 }

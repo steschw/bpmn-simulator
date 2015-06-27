@@ -58,7 +58,7 @@ public final class ExclusiveGateway
 
 	@Override
 	protected void forwardToken(final Token token) {
-		copyTokenToOutgoing(token, true, this);
+		copyTokenToOutgoing(token, token.getInstance(), true, this);
 	}
 
 }

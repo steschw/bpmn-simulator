@@ -125,7 +125,7 @@ public class InstancesTree
 	}
 
 	@Override
-	public void instanceRemoved(final Instance instance) {
+	public void instanceRemove(final Instance instance) {
 		removeNode(getRoot(), instance);
 	}
 
@@ -190,7 +190,7 @@ public class InstancesTree
 		}
 
 		@Override
-		public void instanceRemoved(final Instance instance) {
+		public void instanceRemove(final Instance instance) {
 			removeNode(this, instance);
 		}
 
@@ -200,7 +200,7 @@ public class InstancesTree
 		}
 
 		@Override
-		public void tokenRemoved(final Token token) {
+		public void tokenRemove(final Token token) {
 			removeNode(this, token);
 		}
 

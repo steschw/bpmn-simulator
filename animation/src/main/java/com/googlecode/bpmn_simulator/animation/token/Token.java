@@ -25,11 +25,11 @@ import java.util.Map;
 public class Token
 		implements DataHolder {
 
-	private final Instance instance;
-
 	private final TokenFlow currentTokenFlow;
 
 	private final TokenFlow previousTokenFlow;
+
+	private Instance instance;
 
 	private int position;
 
@@ -39,14 +39,18 @@ public class Token
 			final TokenFlow current, final TokenFlow previous) {
 		super();
 		if (instance == null) {
-			throw new IllegalArgumentException();
+			throw new NullPointerException();
 		}
 		this.instance = instance;
 		if (current == null) {
-			throw new IllegalArgumentException();
+			throw new NullPointerException();
 		}
 		this.currentTokenFlow = current;
 		this.previousTokenFlow = previous;
+	}
+
+	protected void detach() {
+		instance = null;
 	}
 
 	public Instance getInstance() {
@@ -81,19 +85,17 @@ public class Token
 	}
 
 	public void step(final int count) {
+		if (count <= 0) {
+			throw new IllegalArgumentException();
+		}
 		setPosition(getPosition() + count);
 		getCurrentTokenFlow().tokenDispatch(this);
 	}
 
 	@Override
 	public String toString() {
-		final StringBuilder buffer = new StringBuilder('[');
-		buffer.append(super.toString());
-		buffer.append(", "); //$NON-NLS-1$
-		buffer.append(instance);
-		buffer.append(", "); //$NON-NLS-1$
-		buffer.append(currentTokenFlow);
-		buffer.append(']');
+		final StringBuilder buffer = new StringBuilder(super.toString());
+		buffer.append(" (").append(currentTokenFlow).append(")");
 		return buffer.toString();
 	}
 
@@ -102,8 +104,14 @@ public class Token
 	}
 
 	public void copyTo(final TokenFlow tokenFlow) {
-		assert getCurrentTokenFlow() != tokenFlow;
-		getInstance().createNewToken(tokenFlow, getCurrentTokenFlow());
+		copyTo(tokenFlow, getInstance());
+	}
+
+	public void copyTo(final TokenFlow tokenFlow, final Instance instance) {
+		if (getCurrentTokenFlow() == tokenFlow) {
+			throw new IllegalArgumentException();
+		}
+		instance.createNewToken(tokenFlow, getCurrentTokenFlow());
 	}
 
 	public void moveTo(final TokenFlow tokenFlow) {

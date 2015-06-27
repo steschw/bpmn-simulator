@@ -23,7 +23,9 @@ package com.googlecode.bpmn_simulator.bpmn.model.core.common;
 import com.googlecode.bpmn_simulator.animation.ref.Reference;
 import com.googlecode.bpmn_simulator.animation.ref.ReferenceSet;
 import com.googlecode.bpmn_simulator.animation.ref.References;
+import com.googlecode.bpmn_simulator.animation.token.Instance;
 import com.googlecode.bpmn_simulator.animation.token.Token;
+import com.googlecode.bpmn_simulator.animation.token.TokenFlow;
 import com.googlecode.bpmn_simulator.animation.token.Tokens;
 
 public abstract class AbstractFlowNode
@@ -42,7 +44,8 @@ public abstract class AbstractFlowNode
 		this.incoming.add(incoming);
 	}
 
-	protected References<SequenceFlow> getIncoming() {
+	@Override
+	public References<SequenceFlow> getIncoming() {
 		return incoming;
 	}
 
@@ -51,28 +54,41 @@ public abstract class AbstractFlowNode
 		this.outgoing.add(outgoing);
 	}
 
-	protected References<SequenceFlow> getOutgoing() {
+	@Override
+	public References<SequenceFlow> getOutgoing() {
 		return outgoing;
 	}
 
-	private static boolean copyTokenToDefaultOutgoing(final Token token, final DefaultSequenceFlowElement element) {
+	protected final void copyTokenToAllOutgoing(final Token token) {
+		copyTokenToOutgoing(token, token.getInstance(), false, null);
+	}
+
+	protected final void copyTokenToFirstOutgoing(final Token token) {
+		copyTokenToOutgoing(token, token.getInstance(), true, null);
+	}
+
+	protected final void copyTokenToOutgoing(final Token token,
+			final Instance instance,
+			final boolean firstOnly,
+			final DefaultSequenceFlowElement defaultSequenceFlowElement) {
+		createTokenAtOutgoing(instance, token.getPreviousTokenFlow(), firstOnly, defaultSequenceFlowElement);
+	}
+
+	private static boolean createTokenAtDefaultOutgoing(
+			final Instance instance,
+			final TokenFlow previous,
+			final DefaultSequenceFlowElement element) {
 		final SequenceFlow defaultSequenceFlow = element.getDefaultSequenceFlow();
 		if (defaultSequenceFlow != null) {
-			token.copyTo(defaultSequenceFlow);
+			instance.createNewToken(defaultSequenceFlow, previous);
 			return true;
 		}
 		return false;
 	}
 
-	protected final void copyTokenToAllOutgoing(final Token token) {
-		copyTokenToOutgoing(token, false, null);
-	}
-
-	protected final void copyTokenToFirstOutgoing(final Token token) {
-		copyTokenToOutgoing(token, true, null);
-	}
-
-	protected final void copyTokenToOutgoing(final Token token,
+	protected final void createTokenAtOutgoing(
+			final Instance instance,
+			final TokenFlow previous,
 			final boolean firstOnly,
 			final DefaultSequenceFlowElement defaultSequenceFlowElement) {
 		int conditionalCount = 0;
@@ -81,7 +97,7 @@ public abstract class AbstractFlowNode
 				final boolean conditional = outgoing.isConditional();
 				if (!conditional
 						|| outgoing.getConditionExpression().getResult()) {
-					token.copyTo(outgoing);
+					instance.createNewToken(outgoing, previous);
 					if (conditional) {
 						++conditionalCount;
 					}
@@ -92,7 +108,7 @@ public abstract class AbstractFlowNode
 			}
 		}
 		if ((conditionalCount == 0) && (defaultSequenceFlowElement != null)) {
-			if (copyTokenToDefaultOutgoing(token, defaultSequenceFlowElement)) {
+			if (createTokenAtDefaultOutgoing(instance, previous, defaultSequenceFlowElement)) {
 				++conditionalCount;
 			}
 		}

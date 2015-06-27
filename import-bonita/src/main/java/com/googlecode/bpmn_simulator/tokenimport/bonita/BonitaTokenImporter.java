@@ -246,7 +246,7 @@ public class BonitaTokenImporter
 	}
 
 	private void addToken(final long rootProcessInstanceId, final long activityInstanceId, final FlowElement flowElement) {
-		final Token token = addInstance(rootProcessInstanceId).createNewToken(flowElement);
+		final Token token = addInstance(rootProcessInstanceId).createNewToken(flowElement, null);
 		token.setData(getActivityInstanceData(activityInstanceId));
 	}
 

@@ -50,7 +50,7 @@ public class StaticAttributedElementsState<ELEMENT, ATTRIBUTE>
 		}
 	}
 
-	private void addElement(final ELEMENT element) {
+	public void addElement(final ELEMENT element) {
 		elementAttributes.put(element, new HashSet<ATTRIBUTE>());
 	}
 

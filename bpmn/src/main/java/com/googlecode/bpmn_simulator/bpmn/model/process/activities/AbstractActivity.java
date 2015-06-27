@@ -70,7 +70,7 @@ public abstract class AbstractActivity
 
 	@Override
 	protected void forwardToken(final Token token) {
-		copyTokenToOutgoing(token, false, this);
+		copyTokenToOutgoing(token, token.getInstance(), false, this);
 	}
 
 }

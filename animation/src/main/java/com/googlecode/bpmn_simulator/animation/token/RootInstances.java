@@ -31,7 +31,7 @@ public class RootInstances
 
 	@Override
 	protected Instance createNewChildInstance(final TokenFlow tokenFlow) {
-		return new Instance(this, ++lastId, tokenFlow);
+		return new Instance(this, null, ++lastId, tokenFlow);
 	}
 
 }

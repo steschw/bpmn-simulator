@@ -71,7 +71,7 @@ public abstract class AbstractFlowElement
 	}
 
 	@Override
-	public final void tokenEnter(final Token token) {
+	public void tokenEnter(final Token token) {
 		if (tokens.add(token)) {
 			notifyTokenChanged(token);
 			if (actionTrigger == TokenEvent.ON_ENTER) {
@@ -81,7 +81,7 @@ public abstract class AbstractFlowElement
 	}
 
 	@Override
-	public final void tokenExit(final Token token) {
+	public void tokenExit(final Token token) {
 		if (tokens.remove(token)) {
 			notifyTokenChanged(token);
 			if (actionTrigger == TokenEvent.ON_EXIT) {

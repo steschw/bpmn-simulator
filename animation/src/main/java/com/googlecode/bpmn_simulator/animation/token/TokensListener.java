@@ -24,6 +24,6 @@ public interface TokensListener {
 
 	void tokenAdded(Token token);
 
-	void tokenRemoved(Token token);
+	void tokenRemove(Token token);
 
 }

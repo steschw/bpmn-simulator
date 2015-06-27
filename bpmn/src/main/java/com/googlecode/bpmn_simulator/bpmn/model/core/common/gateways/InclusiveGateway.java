@@ -58,7 +58,7 @@ public final class InclusiveGateway
 
 	@Override
 	protected void forwardToken(final Token token) {
-		copyTokenToOutgoing(token, false, this);
+		copyTokenToOutgoing(token, token.getInstance(), false, this);
 	}
 
 }

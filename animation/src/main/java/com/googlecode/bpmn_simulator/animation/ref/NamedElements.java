@@ -21,6 +21,7 @@
 package com.googlecode.bpmn_simulator.animation.ref;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -30,6 +31,10 @@ import java.util.Map;
 public class NamedElements<E> {
 
 	private final Map<String, E> elements = new HashMap<>();
+
+	public Collection<E> getElements() {
+		return elements.values();
+	}
 
 	public void setElement(final String name, final E element) {
 		assert !elements.containsKey(name);

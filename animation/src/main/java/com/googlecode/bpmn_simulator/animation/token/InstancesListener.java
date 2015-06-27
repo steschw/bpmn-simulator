@@ -20,11 +20,9 @@
  */
 package com.googlecode.bpmn_simulator.animation.token;
 
-
-public interface InstancesListener {
+public interface InstancesListener
+		extends InstanceListener {
 
 	void instanceAdded(Instance instance);
-
-	void instanceRemoved(Instance instance);
 
 }

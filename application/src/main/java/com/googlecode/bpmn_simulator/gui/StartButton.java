@@ -65,7 +65,7 @@ public class StartButton
 	}
 
 	private void instantiate(final LogicalFlowElement instantiatingElement) {
-		instances.addNewChildInstance(null).createNewToken(instantiatingElement);
+		instances.addNewChildInstance(null).createNewToken(instantiatingElement, null);
 	}
 
 	private JPopupMenu createMenu(final Collection<LogicalFlowElement> instantiatingElements) {

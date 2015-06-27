@@ -25,9 +25,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
 
-import javax.swing.BorderFactory;
 import javax.swing.JLabel;
-import javax.swing.border.Border;
 
 import com.googlecode.bpmn_simulator.animation.element.visual.Bounds;
 import com.googlecode.bpmn_simulator.animation.element.visual.HorizontalPosition;
@@ -40,14 +38,11 @@ public abstract class AbstractLabel
 		extends JLabel
 		implements Label {
 
-	private static final Border BORDER = BorderFactory.createEmptyBorder(2, 2, 2, 2);
-
 	private boolean needsRotate;
 	private boolean vertical;
 
 	public AbstractLabel() {
 		super();
-		setBorder(BORDER);
 		setFont(getFont().deriveFont(11.f));
 	}
 

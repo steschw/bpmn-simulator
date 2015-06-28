@@ -44,6 +44,8 @@ public final class Instance
 
 	private boolean autoRemove = true;
 
+	private String name;
+
 	private Map<? extends Object, ? extends Object> data = null;
 
 	protected Instance(final InstanceContainer parentContainer, final Instance parentInstance, final int rootId,
@@ -81,6 +83,14 @@ public final class Instance
 
 	public TokenFlow getTokenFlow() {
 		return tokenFlow;
+	}
+
+	public void setName(final String name) {
+		this.name = name;
+	}
+
+	public String getName() {
+		return name;
 	}
 
 	@Override

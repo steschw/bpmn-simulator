@@ -240,6 +240,7 @@ public class BonitaTokenImporter
 		} else {
 			instance = getInstances().addNewChildInstance(null);
 			instances.put(processInstanceId, instance);
+			instance.setName(MessageFormat.format("Case #{0}", processInstanceId));
 			instance.setData(getProcessInstanceData(processInstanceId));
 		}
 		return instance;
@@ -270,11 +271,13 @@ public class BonitaTokenImporter
 		try {
 			final ProcessDefinition processDefinition = processAPI.getProcessDefinition(activityInstance.getProcessDefinitionId());
 			final String processName = processDefinition.getName();
+/*
 			if (!isLatestProcessDefinition(processDefinition)) {
 				LOG.warn(MessageFormat.format("Activity instance ''{0}'' is from a previous version ({1}) of process ''{2}'' and will be ignored",
 						activityInstance.getName(), processDefinition.getVersion(), processName));
 				return;
 			}
+*/
 			LOG.debug(MessageFormat.format("Instance of {0} is in state {1}/{2} of {3}",
 					activityInstance.getType(), activityInstance.getStateCategory(), activityInstance.getState(),
 					processAPI.getSupportedStates(activityInstance.getType())));

@@ -22,7 +22,6 @@ package com.googlecode.bpmn_simulator.gui.instances;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.Insets;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -42,7 +41,7 @@ class TokenPanel
 	protected JPanel createInfoPanel() {
 		final JPanel panel = new JPanel(new GridBagLayout());
 		final GridBagConstraints c = new GridBagConstraints();
-		c.insets = new Insets(8, 8, 8, 8);
+		c.insets = DEFAULT_INSETS;
 		c.anchor = GridBagConstraints.LINE_START;
 		c.fill = GridBagConstraints.HORIZONTAL;
 
@@ -72,9 +71,9 @@ class TokenPanel
 	}
 
 	public void setToken(final Token token) {
-		setData(token.getData());
 		setTokenFlow(currentElementLabel, token.getCurrentTokenFlow());
 		setTokenFlow(previousElementLabel, token.getPreviousTokenFlow());
+		setData(token.getData());
 	}
 
 }

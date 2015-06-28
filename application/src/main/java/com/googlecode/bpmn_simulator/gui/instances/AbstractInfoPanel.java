@@ -21,6 +21,7 @@
 package com.googlecode.bpmn_simulator.gui.instances;
 
 import java.awt.BorderLayout;
+import java.awt.Insets;
 import java.util.Map;
 
 import javax.swing.JPanel;
@@ -31,6 +32,8 @@ import com.googlecode.bpmn_simulator.gui.PropertiesTable;
 @SuppressWarnings("serial")
 abstract class AbstractInfoPanel
 		extends JPanel {
+
+	protected static final Insets DEFAULT_INSETS = new Insets(8, 8, 8, 8);
 
 	private final PropertiesTable dataTable = new PropertiesTable();
 

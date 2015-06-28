@@ -20,6 +20,10 @@
  */
 package com.googlecode.bpmn_simulator.gui.instances;
 
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import com.googlecode.bpmn_simulator.animation.token.Instance;
@@ -28,12 +32,29 @@ import com.googlecode.bpmn_simulator.animation.token.Instance;
 class InstancePanel
 		extends AbstractInfoPanel {
 
+	private static final JLabel nameLabel = new JLabel();
+
 	@Override
 	protected JPanel createInfoPanel() {
-		return new JPanel();
+		final JPanel panel = new JPanel(new GridBagLayout());
+		final GridBagConstraints c = new GridBagConstraints();
+		c.insets = DEFAULT_INSETS;
+		c.anchor = GridBagConstraints.LINE_START;
+		c.fill = GridBagConstraints.HORIZONTAL;
+
+		c.gridy = 0;
+		c.gridx = 0;
+		panel.add(new JLabel("Name:"), c);
+		c.gridx = 1;
+		c.weightx = 0.75;
+		panel.add(nameLabel, c);
+		c.weightx = 0.;
+
+		return panel;
 	}
 
 	public void setInstance(final Instance instance) {
+		nameLabel.setText(instance.getName());
 		setData(instance.getData());
 	}
 

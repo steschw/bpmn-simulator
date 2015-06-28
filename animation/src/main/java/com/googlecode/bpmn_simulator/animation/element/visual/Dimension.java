@@ -31,9 +31,9 @@ public class Dimension {
 
 	public Dimension(final int width, final int height) {
 		super();
-		assert width > 0;
+		assert width >= 0;
 		this.width = width;
-		assert height > 0;
+		assert height >= 0;
 		this.height = height;
 	}
 

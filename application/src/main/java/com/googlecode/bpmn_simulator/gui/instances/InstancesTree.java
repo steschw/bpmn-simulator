@@ -107,7 +107,6 @@ public class InstancesTree
 	private void removeNode(final DefaultMutableTreeNode parentNode, final Object userData) {
 		final DefaultMutableTreeNode node = findChildNodeByUserData(parentNode, userData);
 		if (node != null) {
-			assert node.getChildCount() == 0;
 			SwingUtilities.invokeLater(new Runnable() {
 				@Override
 				public void run() {

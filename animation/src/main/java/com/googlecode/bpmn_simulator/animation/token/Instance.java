@@ -33,14 +33,16 @@ public final class Instance
 
 	private final int rootId;
 
-	private Instance parentInstance;
-
 	private final TokenFlow tokenFlow;
 
 	private final Tokens tokens = new Tokens();
 
 	private final Set<InstanceListener> listeners = new HashSet<>();
 	private final Set<TokensListener> tokensListeners = new HashSet<>();
+
+	private Instance parentInstance;
+
+	private boolean autoRemove = true;
 
 	private Map<? extends Object, ? extends Object> data = null;
 
@@ -67,6 +69,14 @@ public final class Instance
 
 	public Instance getParentInstance() {
 		return parentInstance;
+	}
+
+	public void setAutoRemove(final boolean auto) {
+		autoRemove = auto;
+	}
+
+	public boolean isAutoRemove() {
+		return autoRemove;
 	}
 
 	public TokenFlow getTokenFlow() {
@@ -161,6 +171,12 @@ public final class Instance
 		return !hasTokens() && !hasChildInstances();
 	}
 
+	private void checkAutoRemove() {
+		if (isAutoRemove() && isEmpty()) {
+			remove();
+		}
+	}
+
 	public Token createNewToken(final TokenFlow currentTokenFlow, final TokenFlow previousTokenFlow) {
 		final Token token = new Token(this, currentTokenFlow, previousTokenFlow);
 		addToken(token);
@@ -171,9 +187,7 @@ public final class Instance
 	@Override
 	protected void removeChildInstance(final Instance childInstance) {
 		super.removeChildInstance(childInstance);
-		if (isEmpty()) {
-			remove();
-		}
+		checkAutoRemove();
 	}
 
 	protected void removeToken(final Token token) {
@@ -187,9 +201,7 @@ public final class Instance
 		notifyTokenRemove(token);
 		tokens.remove(token);
 		token.detach();
-		if (isEmpty()) {
-			remove();
-		}
+		checkAutoRemove();
 	}
 
 	protected void removeAllTokens() {
@@ -199,6 +211,7 @@ public final class Instance
 	}
 
 	public void remove() {
+		setAutoRemove(false);
 		clear();
 		notifyInstanceRemove();
 		final InstanceContainer parentContainer = getParentContainer();

@@ -37,7 +37,7 @@ public class NamedElements<E> {
 	}
 
 	public void setElement(final String name, final E element) {
-		assert !elements.containsKey(name);
+		assert !elements.containsKey(name) : "Element with name " + name + " already exist";
 		elements.put(name, element);
 	}
 

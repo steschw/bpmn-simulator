@@ -48,13 +48,13 @@ public class Tokens
 
 	@Override
 	public boolean add(final Token token) {
-		assert !contains(token);
+		assert !contains(token) : "Token " + token + " already exist";
 		return super.add(token);
 	}
 
 	@Override
 	public boolean remove(final Object token) {
-		assert contains(token);
+		assert contains(token) : "Token " + token + " doesn't exist";
 		return super.remove(token);
 	}
 

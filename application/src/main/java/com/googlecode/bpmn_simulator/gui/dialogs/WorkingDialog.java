@@ -105,4 +105,14 @@ public class WorkingDialog
 		});
 	}
 
+	@Override
+	public void onException(final Throwable t) {
+		SwingUtilities.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				busyLabel.setText(t.toString());
+			}
+		});
+	}
+
 }

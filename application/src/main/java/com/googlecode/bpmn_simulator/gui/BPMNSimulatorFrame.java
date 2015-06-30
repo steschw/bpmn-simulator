@@ -505,7 +505,12 @@ public class BPMNSimulatorFrame
 			@Override
 			public boolean authenticate(final String name, final char[] password, final String server)
 					throws Exception {
-				tokenImporter.login(name, new String(password));
+				try {
+					tokenImporter.login(name, new String(password));
+				} catch (TokenImportException e) {
+					LOG.catching(e);
+					throw e;
+				}
 				return true;
 			}
 		}, null, usernameStore);

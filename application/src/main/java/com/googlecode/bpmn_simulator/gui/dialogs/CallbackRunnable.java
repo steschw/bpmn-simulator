@@ -34,13 +34,18 @@ class CallbackRunnable
 
 	@Override
 	public void run() {
-		runnable.run();
+		try {
+			runnable.run();
+		} catch (Exception e) {
+			callback.onException(e);
+		}
 		callback.onFinish();
 	}
 
 	public interface Callback {
 
 		void onFinish();
+		void onException(Throwable t);
 
 	}
 

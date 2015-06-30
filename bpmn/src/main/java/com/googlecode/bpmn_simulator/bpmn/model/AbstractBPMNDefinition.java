@@ -233,11 +233,16 @@ public class AbstractBPMNDefinition<E extends BPMNDiagram<?>>
 	}
 
 	protected void registerElement(final BaseElement element) {
-		elements.setElement(element.getId(), element);
+		if (element.getId() != null) {
+			elements.setElement(element.getId(), element);
+		}
 	}
 
 	protected BaseElement getElement(final String id) {
-		return elements.getElement(id);
+		if (id != null) {
+			return elements.getElement(id);
+		}
+		return null;
 	}
 
 	protected void notifyElementLoading(final BaseElement element) {
@@ -366,11 +371,10 @@ public class AbstractBPMNDefinition<E extends BPMNDiagram<?>>
 
 	protected boolean readElementMessage(final Node node) {
 		if (isElementNode(node, BPMN, "message")) { //$NON-NLS-1$
-			final String name = getNameAttribute(node);
 			final Message message = new Message(getIdAttribute(node),
-					name);
+					getNameAttribute(node));
 			readChildrenOfBaseElement(node, message);
-			elements.setElement(name, message);
+			registerElement(message);
 			return true;
 		} else {
 			return false;

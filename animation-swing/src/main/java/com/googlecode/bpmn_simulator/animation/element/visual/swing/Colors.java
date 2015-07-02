@@ -27,32 +27,37 @@ import com.googlecode.bpmn_simulator.animation.token.Token;
 
 public final class Colors {
 
+	private static final Color DARKVIOLET = new Color(0x9400d3);
+	private static final Color ORANGERED = new Color(0xff4500);
+	private static final Color LIMEGREEN = new Color(0x32cd32);
+	private static final Color CRIMSON = new Color(0xdc143c);
+	private static final Color DARKTURQUOISE = new Color(0x00ced1);
+	private static final Color DODGERBLUE = new Color(0x1e90ff);
+
+	public static final Color BLACK = new Color(0x111111);
+	public static final Color WHITE = new Color(0xFFFFFF);
+
+	public static final Color GRAY = new Color(0xEEEEEE);
+
+	public static final Color YELLOW = new Color(0xFFFFB5);
+	public static final Color BLUE = new Color(0xDBF0F7);
+	public static final Color BLUE2 = new Color(0xECF4FF);
+
+	public static final Color GREEN = new Color(0xA4F0B7);
+	public static final Color RED = new Color(0xFFA4A4);
+	public static final Color ORANGE = new Color(0xFFD062);
+
 	private static final Color[] INSTANCE_COLORS = {
-		new Color(0xff5c26),
-		new Color(0x2626ff),
-		new Color(0xffff26),
-		new Color(0xc926ff),
-		new Color(0x5cff26),
-		new Color(0x26ff93),
-		new Color(0xff2692),
-		new Color(0x26c9ff),
+		ORANGERED,
+		DARKVIOLET,
+		LIMEGREEN,
+		CRIMSON,
+		DARKTURQUOISE,
+		DODGERBLUE,
 	};
 
 	private Colors() {
 	}
-
-	public static Color BLACK = new Color(0x111111);
-	public static Color WHITE = new Color(0xFFFFFF);
-
-	public static Color GRAY = new Color(0xEEEEEE);
-
-	public static Color YELLOW = new Color(0xFFFFB5);
-	public static Color BLUE = new Color(0xDBF0F7);
-	public static Color BLUE2 = new Color(0xECF4FF);
-
-	public static Color GREEN = new Color(0xA4F0B7);
-	public static Color RED = new Color(0xFFA4A4);
-	public static Color ORANGE = new Color(0xFFD062);
 
 	public static Color forToken(final Token token) {
 		return forInstance(token.getInstance());

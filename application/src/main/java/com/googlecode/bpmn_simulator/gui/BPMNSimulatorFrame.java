@@ -486,9 +486,17 @@ public class BPMNSimulatorFrame
 		return definitionToolbar;
 	}
 
+	private static boolean isValidDirectory(final String directory) {
+		if ((directory != null) && !directory.isEmpty()) {
+			final File file = new File(directory);
+			return file.isDirectory() && file.exists();
+		}
+		return false;
+	}
+
 	private void importBonita() {
 		final String bonitaHome = Config.getInstance().getBonitaHome();
-		if ((bonitaHome == null) || bonitaHome.isEmpty()) {
+		if (!isValidDirectory(bonitaHome)) {
 			showPreferencesDialog();
 		} else {
 			System.setProperty("bonita.home", bonitaHome);

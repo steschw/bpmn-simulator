@@ -30,6 +30,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
+import javax.swing.tree.TreePath;
 
 import com.googlecode.bpmn_simulator.animation.token.RootInstances;
 import com.googlecode.bpmn_simulator.gui.Messages;
@@ -76,7 +77,7 @@ public class InstancesFrame
 		infoPanel.add(instancePanel, INSTANCE_CARD);
 		tokenPanel.create();
 		infoPanel.add(tokenPanel, TOKEN_CARD);
-		setInfoPanel(null);
+		setInfoPanel(EMPTY_CARD);
 		return infoPanel;
 	}
 
@@ -94,15 +95,20 @@ public class InstancesFrame
 
 	@Override
 	public void valueChanged(final TreeSelectionEvent event) {
-		final Object node = event.getPath().getLastPathComponent();
-		if (node instanceof InstanceNode) {
-			final InstanceNode instanceNode = (InstanceNode) node;
-			instancePanel.setInstance(instanceNode.getInstance());
-			setInfoPanel(INSTANCE_CARD);
-		} else if (node instanceof TokenNode) {
-			final TokenNode tokenNode = (TokenNode) node;
-			tokenPanel.setToken(tokenNode.getToken());
-			setInfoPanel(TOKEN_CARD);
+		final TreePath path = event.getNewLeadSelectionPath();
+		if (path != null) {
+			final Object node = event.getPath().getLastPathComponent();
+			if (node instanceof InstanceNode) {
+				final InstanceNode instanceNode = (InstanceNode) node;
+				instancePanel.setInstance(instanceNode.getInstance());
+				setInfoPanel(INSTANCE_CARD);
+			} else if (node instanceof TokenNode) {
+				final TokenNode tokenNode = (TokenNode) node;
+				tokenPanel.setToken(tokenNode.getToken());
+				setInfoPanel(TOKEN_CARD);
+			} else {
+				setInfoPanel(EMPTY_CARD);
+			}
 		} else {
 			setInfoPanel(EMPTY_CARD);
 		}

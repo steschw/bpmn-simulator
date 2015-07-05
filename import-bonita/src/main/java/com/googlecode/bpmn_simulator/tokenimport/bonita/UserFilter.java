@@ -22,8 +22,7 @@ package com.googlecode.bpmn_simulator.tokenimport.bonita;
 
 enum UserFilter {
 	NONE("none"),
-	EXECUTED_BY("executed by"),
-	ACTOR("actor is"),
+	STARTED_BY("started by"),
 	ASSIGNED_TO("assigned to");
 
 	private final String name;

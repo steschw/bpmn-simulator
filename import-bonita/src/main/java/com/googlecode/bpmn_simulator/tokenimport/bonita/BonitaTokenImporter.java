@@ -24,15 +24,11 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.bonitasoft.engine.api.IdentityAPI;
 import org.bonitasoft.engine.api.ProcessAPI;
 import org.bonitasoft.engine.api.TenantAPIAccessor;
-import org.bonitasoft.engine.bpm.actor.ActorCriterion;
-import org.bonitasoft.engine.bpm.actor.ActorInstance;
-import org.bonitasoft.engine.bpm.actor.ActorMember;
 import org.bonitasoft.engine.bpm.data.DataInstance;
 import org.bonitasoft.engine.bpm.flownode.ActivityInstance;
 import org.bonitasoft.engine.bpm.flownode.ActivityInstanceNotFoundException;
@@ -40,6 +36,7 @@ import org.bonitasoft.engine.bpm.flownode.FlowNodeType;
 import org.bonitasoft.engine.bpm.flownode.HumanTaskInstance;
 import org.bonitasoft.engine.bpm.process.ProcessDefinition;
 import org.bonitasoft.engine.bpm.process.ProcessDefinitionNotFoundException;
+import org.bonitasoft.engine.bpm.process.ProcessInstanceNotFoundException;
 import org.bonitasoft.engine.exception.SearchException;
 import org.bonitasoft.engine.search.SearchOptions;
 import org.bonitasoft.engine.search.SearchOptionsBuilder;
@@ -167,40 +164,25 @@ public class BonitaTokenImporter
 		return !importFailedActivities && STATE_FAILED.equals(activityInstance.getState());
 	}
 
-	private boolean actorContainsAnyUserOf(final long actorId, final Collection<Long> userIds) {
-		final List<ActorMember> members = processAPI.getActorMembers(actorId, 0, Integer.MAX_VALUE);
-		for (final ActorMember member : members) {
-			if (member.getUserId() != -1) {
-				if (userIds.contains(member.getUserId())) {
-					return true;
-				}
-			}
+	private long getStartetBy(final ActivityInstance activityInstance) {
+		try {
+			return processAPI.getProcessInstance(activityInstance.getParentProcessInstanceId()).getStartedBy();
+		} catch (ProcessInstanceNotFoundException e) {
+			return 0;
 		}
-		return false;
-	}
-
-	private boolean processDefinitionContainsAnyUserOf(final long processDefinitionId, final Collection<Long> userIds) {
-		for (final ActorInstance actorInstance : processAPI.getActors(processDefinitionId, 0, Integer.MAX_VALUE, ActorCriterion.NAME_ASC)) {
-			if (actorContainsAnyUserOf(actorInstance.getId(), userIds)) {
-				return true;
-			}
-		}
-		return false;
 	}
 
 	private boolean isFilteredByUser(final ActivityInstance activityInstance)
 			throws ActivityInstanceNotFoundException {
 		switch (userFilter) {
-			case EXECUTED_BY:
-				return !userIds.contains(activityInstance.getExecutedBy());
-			case ACTOR:
-				return !processDefinitionContainsAnyUserOf(activityInstance.getProcessDefinitionId(), userIds);
+			case STARTED_BY:
+				return !userIds.contains(getStartetBy(activityInstance));
 			case ASSIGNED_TO:
 				if (activityInstance.getType() == FlowNodeType.HUMAN_TASK) {
 					final HumanTaskInstance humanTaskInstance = processAPI.getHumanTaskInstance(activityInstance.getId());
 					return !userIds.contains(humanTaskInstance.getAssigneeId());
 				}
-				return false;
+				return true;
 			default:
 		}
 		return false;
@@ -226,11 +208,6 @@ public class BonitaTokenImporter
 
 	private Process findProcessByName(final String name) {
 		return findByName(name, getDefinitions().getProcesses());
-	}
-
-	private boolean isLatestProcessDefinition(final ProcessDefinition processDefinition)
-			throws ProcessDefinitionNotFoundException {
-		return (processAPI.getLatestProcessDefinitionId(processDefinition.getName()) == processDefinition.getId());
 	}
 
 	private Instance addInstance(final long processInstanceId) {
@@ -271,13 +248,6 @@ public class BonitaTokenImporter
 		try {
 			final ProcessDefinition processDefinition = processAPI.getProcessDefinition(activityInstance.getProcessDefinitionId());
 			final String processName = processDefinition.getName();
-/*
-			if (!isLatestProcessDefinition(processDefinition)) {
-				LOG.warn(MessageFormat.format("Activity instance ''{0}'' is from a previous version ({1}) of process ''{2}'' and will be ignored",
-						activityInstance.getName(), processDefinition.getVersion(), processName));
-				return;
-			}
-*/
 			LOG.debug(MessageFormat.format("Instance of {0} is in state {1}/{2} of {3}",
 					activityInstance.getType(), activityInstance.getStateCategory(), activityInstance.getState(),
 					processAPI.getSupportedStates(activityInstance.getType())));

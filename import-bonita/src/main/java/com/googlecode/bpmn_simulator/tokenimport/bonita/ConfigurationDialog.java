@@ -59,7 +59,7 @@ class ConfigurationDialog
 	private final JTable processTable = new JTable();
 	private final ListTableModel<ProcessDeploymentInfo> processModel;
 
-	private final JCheckBox failedActivitiesCheck = new JCheckBox("Also import failed activity instances");
+	private final JCheckBox failedActivitiesCheck = new JCheckBox("Auch fehlgeschlagene Tasks importieren");
 
 	private final JComboBox<UserFilter> userFilterComboBox = new JComboBox<>(UserFilter.values());
 
@@ -69,7 +69,7 @@ class ConfigurationDialog
 	private boolean ok = false;
 
 	public ConfigurationDialog(final List<ProcessDeploymentInfo> processes, final List<User> users) {
-		super((Frame) null, "Einstellungen für das importieren von Token aus Bonita", true);
+		super((Frame) null, "Token Import aus Bonita", true);
 
 		processModel = new ListTableModel<ProcessDeploymentInfo>(processes, "Name", "Version", "Description") {
 			@Override

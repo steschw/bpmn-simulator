@@ -34,8 +34,10 @@ import com.googlecode.bpmn_simulator.animation.element.visual.Point;
 import com.googlecode.bpmn_simulator.animation.element.visual.Waypoint;
 import com.googlecode.bpmn_simulator.animation.element.visual.Waypoints;
 import com.googlecode.bpmn_simulator.animation.element.visual.swing.Colors;
+import com.googlecode.bpmn_simulator.animation.ref.ReferenceUtils;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.Expression;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.SequenceFlow;
+import com.googlecode.bpmn_simulator.bpmn.model.core.common.gateways.Gateway;
 import com.googlecode.bpmn_simulator.bpmn.swing.di.AbstractBPMNTokenEdge;
 import com.googlecode.bpmn_simulator.bpmn.swing.di.Appearance;
 
@@ -101,6 +103,10 @@ public final class SequenceFlowEdge
 		updateCheckboxPosition();
 	}
 
+	private boolean isSourceGateway() {
+		return (ReferenceUtils.element(getLogicalElement().getSource()) instanceof Gateway);
+	}
+
 	@Override
 	protected void paintElementStart(final Graphics2D g) {
 		super.paintElementStart(g);
@@ -110,7 +116,7 @@ public final class SequenceFlowEdge
 				drawDefaultSymbol(g);
 			}
 		} else {
-			if (sequenceFlow.isConditional()) {
+			if (sequenceFlow.isConditional() && !isSourceGateway()) {
 				drawConditionalSymbol(g);
 			}
 		}

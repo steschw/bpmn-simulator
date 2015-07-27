@@ -13,7 +13,7 @@ import org.junit.Assert;
 import com.googlecode.bpmn_simulator.animation.element.logical.LogicalFlowElement;
 import com.googlecode.bpmn_simulator.animation.input.Definition;
 import com.googlecode.bpmn_simulator.animation.token.TokenFlow;
-import com.googlecode.bpmn_simulator.bpmn.model.AbstractBPMNDefinition;
+import com.googlecode.bpmn_simulator.bpmn.model.BPMNDefinition;
 import com.googlecode.bpmn_simulator.bpmn.model.Elements;
 import com.googlecode.bpmn_simulator.bpmn.model.core.foundation.BaseElement;
 import com.googlecode.bpmn_simulator.test.logic.AnimationStateSequence;
@@ -34,7 +34,7 @@ abstract class BPMNTestcase {
 	}
 
 	protected static Definition<?> loadDefinition(final File file) {
-		final Definition<?> definition = new AbstractBPMNDefinition<>();
+		final Definition<?> definition = new BPMNDefinition<>();
 		try (final InputStream input = new FileInputStream(file)) {
 			definition.load(input);
 			return definition;

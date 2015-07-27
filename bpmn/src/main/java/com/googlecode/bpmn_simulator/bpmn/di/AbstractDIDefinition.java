@@ -33,7 +33,7 @@ import com.googlecode.bpmn_simulator.animation.element.visual.Waypoint;
 import com.googlecode.bpmn_simulator.animation.ref.NamedElements;
 import com.googlecode.bpmn_simulator.animation.ref.NamedReference;
 import com.googlecode.bpmn_simulator.animation.ref.Reference;
-import com.googlecode.bpmn_simulator.bpmn.model.AbstractBPMNDefinition;
+import com.googlecode.bpmn_simulator.bpmn.model.BPMNDefinition;
 import com.googlecode.bpmn_simulator.bpmn.model.NamedElement;
 import com.googlecode.bpmn_simulator.bpmn.model.TextElement;
 import com.googlecode.bpmn_simulator.bpmn.model.core.foundation.BaseElement;
@@ -42,7 +42,7 @@ import com.googlecode.bpmn_simulator.bpmn.model.core.foundation.BaseElement;
  * Diagram Interchange (DI) Definition
  */
 public abstract class AbstractDIDefinition<DIAGRAM extends BPMNDiagram<?>>
-		extends AbstractBPMNDefinition<DIAGRAM> {
+		extends BPMNDefinition<DIAGRAM> {
 
 	private static final String BPMNDI = "http://www.omg.org/spec/BPMN/20100524/DI"; //$NON-NLS-1$
 

@@ -118,7 +118,7 @@ import com.googlecode.bpmn_simulator.bpmn.model.process.data.DataStore;
 import com.googlecode.bpmn_simulator.bpmn.model.process.data.DataStoreReference;
 import com.googlecode.bpmn_simulator.bpmn.model.process.data.InputOutputSpecification;
 
-public class AbstractBPMNDefinition<E extends BPMNDiagram<?>>
+public class BPMNDefinition<E extends BPMNDiagram<?>>
 		extends AbstractXmlDefinition<E>
 		implements Definitions<E> {
 
@@ -149,7 +149,7 @@ public class AbstractBPMNDefinition<E extends BPMNDiagram<?>>
 
 	private Collection<Process> processes = new ArrayList<>();
 
-	public AbstractBPMNDefinition() {
+	public BPMNDefinition() {
 		super(SCHEMA_FILENAME);
 	}
 

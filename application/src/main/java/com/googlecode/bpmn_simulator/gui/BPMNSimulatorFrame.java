@@ -29,6 +29,7 @@ import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
 import java.awt.image.RenderedImage;
+import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -52,7 +53,6 @@ import javax.swing.JToolBar;
 import javax.swing.KeyStroke;
 import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
-import javax.swing.filechooser.FileNameExtensionFilter;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -64,11 +64,12 @@ import org.jdesktop.swingx.auth.LoginService;
 import org.jdesktop.swingx.auth.UserNameStore;
 import org.jdesktop.swingx.error.ErrorInfo;
 
-import com.googlecode.bpmn_simulator.animation.element.visual.swing.AbstractSwingDiagram;
+import com.googlecode.bpmn_simulator.animation.element.visual.Diagram;
 import com.googlecode.bpmn_simulator.animation.execution.Animator;
+import com.googlecode.bpmn_simulator.animation.input.Definition;
+import com.googlecode.bpmn_simulator.animation.module.Module;
+import com.googlecode.bpmn_simulator.animation.module.ModuleRegistry;
 import com.googlecode.bpmn_simulator.animation.token.RootInstances;
-import com.googlecode.bpmn_simulator.bpmn.swing.di.SwingBPMNDiagram;
-import com.googlecode.bpmn_simulator.bpmn.swing.di.SwingDIDefinition;
 import com.googlecode.bpmn_simulator.gui.dialogs.ImageExportChooser;
 import com.googlecode.bpmn_simulator.gui.dialogs.WorkingDialog;
 import com.googlecode.bpmn_simulator.gui.elements.ElementsFrame;
@@ -107,9 +108,11 @@ public class BPMNSimulatorFrame
 
 	private final ElementsFrame elementsFrame = new ElementsFrame();
 
-	private SwingDIDefinition currentDefinition;
+	private Definition<?> currentDefinition = null;
 
-	private File currentFile;
+	private Module currentModule = null;
+
+	private File currentFile = null;
 
 	public BPMNSimulatorFrame() {
 		super();
@@ -546,10 +549,14 @@ public class BPMNSimulatorFrame
 	private void openFile() {
 		final Config config = Config.getInstance();
 		final JFileChooser fileChoser = new JFileChooser();
-		fileChoser.setFileFilter(new FileNameExtensionFilter(SwingDIDefinition.FILE_DESCRIPTION, SwingDIDefinition.FILE_EXTENSIONS));
+		for (final Module module : ModuleRegistry.getDefault().getRegistredModules()) {
+			fileChoser.addChoosableFileFilter(new ModuleFileFilter(module));
+		}
+		fileChoser.setAcceptAllFileFilterUsed(false);
 		fileChoser.setCurrentDirectory(new File(config.getLastDirectory()));
 		if (fileChoser.showOpenDialog(this) == 	JFileChooser.APPROVE_OPTION) {
 			config.setLastDirectory(fileChoser.getCurrentDirectory().getAbsolutePath());
+			currentModule = ((ModuleFileFilter) fileChoser.getFileFilter()).getModule();
 			openFile(fileChoser.getSelectedFile());
 		}
 	}
@@ -565,6 +572,7 @@ public class BPMNSimulatorFrame
 		closeModel();
 		if (isFileOpen()) {
 			currentFile = null;
+			currentModule = null;
 			updateFrameTitle();
 		}
 	}
@@ -573,34 +581,42 @@ public class BPMNSimulatorFrame
 		return currentFile != null;
 	}
 
-	private void createModel() {
-		if (isFileOpen()) {
-			final WorkingDialog loadingDialog = new WorkingDialog(this, "Loading");
-			currentDefinition = new SwingDIDefinition();
-			loadingDialog.run(new Runnable() {
-				@Override
-				public void run() {
-					try (final InputStream input = new FileInputStream(currentFile)) {
-						currentDefinition.load(input);
-					} catch (IOException e) {
-						showException(e);
-					}
-				}
-			});
-			final Collection<SwingBPMNDiagram> diagrams = currentDefinition.getDiagrams();
-			if (diagrams.isEmpty()) {
-				JOptionPane.showMessageDialog(this,
-						Messages.getString("containsNoDiagrams"), //$NON-NLS-1$
-						Messages.getString("information"), //$NON-NLS-1$
-						JOptionPane.INFORMATION_MESSAGE);
-			} else {
-				final ScrollDesktopPane desktop = getDesktop();
-				for (final AbstractSwingDiagram diagram : diagrams) {
+	private void addDiagrams() {
+		final Collection<? extends Diagram<?>> diagrams = currentDefinition.getDiagrams();
+		if ((diagrams == null) || diagrams.isEmpty()) {
+			JOptionPane.showMessageDialog(this,
+					Messages.getString("containsNoDiagrams"), //$NON-NLS-1$
+					Messages.getString("information"), //$NON-NLS-1$
+					JOptionPane.INFORMATION_MESSAGE);
+		} else {
+			final ScrollDesktopPane desktop = getDesktop();
+			for (final Diagram<?> diagram : diagrams) {
+				if (diagram != null) {
 					final DiagramFrame frame = new DiagramFrame(diagram);
 					desktop.add(frame);
 					frame.showFrame();
 				}
-				desktop.arrangeFrames();
+			}
+			desktop.arrangeFrames();
+		}
+	}
+
+	private void createModel() {
+		if (isFileOpen()) {
+			final WorkingDialog loadingDialog = new WorkingDialog(this, "Loading");
+			currentDefinition = currentModule.createEmptyDefinition();
+			if (currentDefinition != null) {
+				loadingDialog.run(new Runnable() {
+					@Override
+					public void run() {
+						try (final InputStream input = new FileInputStream(currentFile)) {
+							currentDefinition.load(new BufferedInputStream(input));
+						} catch (IOException e) {
+							showException(e);
+						}
+					}
+				});
+				addDiagrams();
 			}
 			instancesToolbar.setDefinition(currentDefinition);
 			elementsFrame.setDefinition(currentDefinition);

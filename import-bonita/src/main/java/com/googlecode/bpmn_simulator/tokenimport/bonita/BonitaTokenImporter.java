@@ -42,11 +42,13 @@ import org.bonitasoft.engine.search.SearchOptions;
 import org.bonitasoft.engine.search.SearchOptionsBuilder;
 import org.bonitasoft.engine.session.APISession;
 
+import com.googlecode.bpmn_simulator.animation.input.Definition;
 import com.googlecode.bpmn_simulator.animation.token.Instance;
 import com.googlecode.bpmn_simulator.animation.token.Token;
 import com.googlecode.bpmn_simulator.bpmn.model.NamedElement;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.FlowElement;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.FlowElementsContainer;
+import com.googlecode.bpmn_simulator.bpmn.model.core.infrastructure.Definitions;
 import com.googlecode.bpmn_simulator.bpmn.model.process.activities.Process;
 import com.googlecode.bpmn_simulator.tokenimport.AbstractTokenImporter;
 import com.googlecode.bpmn_simulator.tokenimport.TokenImportException;
@@ -207,7 +209,11 @@ public class BonitaTokenImporter
 	}
 
 	private Process findProcessByName(final String name) {
-		return findByName(name, getDefinitions().getProcesses());
+		final Definition<?> definition = getDefinition();
+		if (definition instanceof Definitions<?>) {
+			return findByName(name, ((Definitions<?>) definition).getProcesses());
+		}
+		return null;
 	}
 
 	private Instance addInstance(final long processInstanceId) {

@@ -20,8 +20,8 @@
  */
 package com.googlecode.bpmn_simulator.tokenimport;
 
+import com.googlecode.bpmn_simulator.animation.input.Definition;
 import com.googlecode.bpmn_simulator.animation.token.RootInstances;
-import com.googlecode.bpmn_simulator.bpmn.model.core.infrastructure.Definitions;
 
 public interface TokenImporter {
 
@@ -29,7 +29,7 @@ public interface TokenImporter {
 
 	void setInstances(RootInstances instances);
 
-	void setDefinition(Definitions<?> definitions);
+	void setDefinition(Definition<?> definition);
 
 	void login(String username, String password)
 			throws TokenImportException;

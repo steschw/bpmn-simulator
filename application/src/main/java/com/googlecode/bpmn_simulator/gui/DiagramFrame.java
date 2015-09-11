@@ -21,6 +21,7 @@
 package com.googlecode.bpmn_simulator.gui;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.awt.image.RenderedImage;
@@ -28,7 +29,7 @@ import java.awt.image.RenderedImage;
 import javax.swing.JInternalFrame;
 import javax.swing.JScrollPane;
 
-import com.googlecode.bpmn_simulator.animation.element.visual.swing.AbstractSwingDiagram;
+import com.googlecode.bpmn_simulator.animation.element.visual.Diagram;
 
 @SuppressWarnings("serial")
 public class DiagramFrame
@@ -36,13 +37,13 @@ public class DiagramFrame
 
 	private static final Color BACKGROUND_COLOR = Color.WHITE;
 
-	private final AbstractSwingDiagram diagram;
+	private final Component component;
 
-	public DiagramFrame(final AbstractSwingDiagram diagram) {
+	public DiagramFrame(final Diagram<?> diagram) {
 		super(diagram.getName(), true, false, true);
-		this.diagram = diagram;
+		component = (diagram instanceof Component) ? (Component) diagram : null;
 
-		final JScrollPane scrollPane = new JScrollPane(diagram);
+		final JScrollPane scrollPane = new JScrollPane(component);
 		scrollPane.getViewport().setBackground(BACKGROUND_COLOR);
 		setContentPane(scrollPane);
 	}
@@ -54,13 +55,13 @@ public class DiagramFrame
 	}
 
 	public RenderedImage createImage() {
-		final int width = diagram.getWidth();
-		final int height = diagram.getHeight();
+		final int width = component.getWidth();
+		final int height = component.getHeight();
 		final BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_3BYTE_BGR);
 		final Graphics graphics = image.getGraphics();
 		graphics.setColor(BACKGROUND_COLOR);
 		graphics.fillRect(0, 0, width, height);
-		diagram.paintAll(graphics);
+		component.paintAll(graphics);
 		return image;
 	}
 

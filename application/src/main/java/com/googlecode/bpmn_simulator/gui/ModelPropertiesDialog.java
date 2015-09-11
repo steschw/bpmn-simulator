@@ -23,6 +23,7 @@ package com.googlecode.bpmn_simulator.gui;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.net.URI;
 
 import javax.swing.JComponent;
 import javax.swing.JFrame;
@@ -33,17 +34,18 @@ import javax.swing.JTextField;
 import org.jdesktop.swingx.JXHyperlink;
 import org.jdesktop.swingx.hyperlink.HyperlinkAction;
 
+import com.googlecode.bpmn_simulator.animation.input.Definition;
 import com.googlecode.bpmn_simulator.bpmn.model.core.infrastructure.Definitions;
 
 @SuppressWarnings("serial")
 public class ModelPropertiesDialog
 		extends AbstractDialog {
 
-	private final Definitions<?> definitions;
+	private final Definition<?> definition;
 
-	public ModelPropertiesDialog(final JFrame parent, final Definitions<?> definitions) {
+	public ModelPropertiesDialog(final JFrame parent, final Definition<?> definition) {
 		super(parent, Messages.getString("Properties.properties")); //$NON-NLS-1$
-		this.definitions = definitions;
+		this.definition = definition;
 	}
 
 	protected static JTextField createField(final String text) {
@@ -71,7 +73,21 @@ public class ModelPropertiesDialog
 		panel.add(new JLabel(Messages.getString("Properties.encoding")), c); //$NON-NLS-1$
 		c.gridx = 1;
 		c.gridwidth = 2;
-		panel.add(createField(definitions.getEncoding()), c);
+		panel.add(createField(definition.getEncoding()), c);
+
+		String exporter = null;
+		String exporterVersion = null;
+		URI typeLanguage = null;
+		URI expressionLanguage = null;
+		String name = null;
+		if (definition instanceof Definitions<?>) {
+			final Definitions<?> definitions = (Definitions<?>) definition;
+			exporter = definitions.getExporter();
+			exporterVersion = definitions.getExporterVersion();
+			typeLanguage = definitions.getTypeLanguage();
+			expressionLanguage = definitions.getExpressionLanguage();
+			name = definitions.getName();
+		}
 
 		c.gridy = 1;
 
@@ -80,7 +96,7 @@ public class ModelPropertiesDialog
 		panel.add(new JLabel(Messages.getString("Properties.exporterName")), c); //$NON-NLS-1$
 		c.gridx = 1;
 		c.gridwidth = 2;
-		panel.add(createField(definitions.getExporter()), c);
+		panel.add(createField(exporter), c);
 
 		c.gridy = 2;
 
@@ -89,7 +105,7 @@ public class ModelPropertiesDialog
 		panel.add(new JLabel(Messages.getString("Properties.exporterVersion")), c); //$NON-NLS-1$
 		c.gridx = 2;
 		c.gridwidth = 1;
-		panel.add(createField(definitions.getExporterVersion()), c);
+		panel.add(createField(exporterVersion), c);
 
 		c.gridy = 3;
 
@@ -98,7 +114,7 @@ public class ModelPropertiesDialog
 		panel.add(new JLabel(Messages.getString("Properties.typeLanguage")), c); //$NON-NLS-1$
 		c.gridx = 2;
 		c.gridwidth = 1;
-		panel.add(new JXHyperlink(HyperlinkAction.createHyperlinkAction(definitions.getTypeLanguage())), c);
+		panel.add(new JXHyperlink(HyperlinkAction.createHyperlinkAction(typeLanguage)), c);
 
 		c.gridy = 4;
 
@@ -107,7 +123,7 @@ public class ModelPropertiesDialog
 		panel.add(new JLabel(Messages.getString("Properties.expressionLanguage")), c); //$NON-NLS-1$
 		c.gridx = 2;
 		c.gridwidth = 1;
-		panel.add(new JXHyperlink(HyperlinkAction.createHyperlinkAction(definitions.getExpressionLanguage())), c);
+		panel.add(new JXHyperlink(HyperlinkAction.createHyperlinkAction(expressionLanguage)), c);
 
 		c.gridy = 5;
 
@@ -116,7 +132,7 @@ public class ModelPropertiesDialog
 		panel.add(new JLabel(Messages.getString("Properties.name")), c); //$NON-NLS-1$
 		c.gridx = 2;
 		c.gridwidth = 1;
-		panel.add(createField(definitions.getName()), c);
+		panel.add(createField(name), c);
 
 		return panel;
 	}

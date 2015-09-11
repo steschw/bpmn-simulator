@@ -66,8 +66,10 @@ public class ElementsFrame
 
 	public void setDefinition(final Definition<?> definition) {
 		model.clear();
-		for (final LogicalElement logicalElement : definition.getElements()) {
-			model.addElement(logicalElement);
+		if (definition != null) {
+			for (final LogicalElement logicalElement : definition.getElements()) {
+				model.addElement(logicalElement);
+			}
 		}
 	}
 

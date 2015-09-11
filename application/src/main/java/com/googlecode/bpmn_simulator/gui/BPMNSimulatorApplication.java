@@ -24,6 +24,7 @@ import java.io.File;
 
 import javax.swing.SwingUtilities;
 
+import com.googlecode.bpmn_simulator.bpmn.swing.BPMNModule;
 import com.googlecode.bpmn_simulator.gui.preferences.Config;
 
 public final class BPMNSimulatorApplication {
@@ -36,6 +37,11 @@ public final class BPMNSimulatorApplication {
 		Config.getInstance().load();
 
 		Theme.init();
+
+		try {
+			Class.forName(BPMNModule.class.getCanonicalName());
+		} catch (ClassNotFoundException e) {
+		}
 
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override

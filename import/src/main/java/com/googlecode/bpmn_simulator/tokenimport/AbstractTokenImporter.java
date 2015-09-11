@@ -23,15 +23,15 @@ package com.googlecode.bpmn_simulator.tokenimport;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.googlecode.bpmn_simulator.animation.input.Definition;
 import com.googlecode.bpmn_simulator.animation.token.RootInstances;
-import com.googlecode.bpmn_simulator.bpmn.model.core.infrastructure.Definitions;
 
 public abstract class AbstractTokenImporter
 		implements TokenImporter {
 
 	protected static final Logger LOG = LogManager.getLogger(LOGGER_NAME);
 
-	private Definitions<?> definitions;
+	private Definition<?> definition;
 
 	private RootInstances instances;
 
@@ -44,13 +44,13 @@ public abstract class AbstractTokenImporter
 		this.instances = instances;
 	}
 
-	protected Definitions<?> getDefinitions() {
-		return definitions;
+	protected Definition<?> getDefinition() {
+		return definition;
 	}
 
 	@Override
-	public void setDefinition(final Definitions<?> definitions) {
-		this.definitions = definitions;
+	public void setDefinition(final Definition<?> definition) {
+		this.definition = definition;
 	}
 
 	@Override
@@ -65,7 +65,7 @@ public abstract class AbstractTokenImporter
 		if (instances == null) {
 			throw new TokenImportException("instances not set");
 		}
-		if (definitions == null) {
+		if (definition == null) {
 			throw new TokenImportException("definition not set");
 		}
 	}

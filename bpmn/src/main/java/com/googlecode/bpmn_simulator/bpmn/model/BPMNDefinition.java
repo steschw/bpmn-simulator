@@ -124,9 +124,6 @@ public class BPMNDefinition<E extends BPMNDiagram<?>>
 
 	public static final String ELEMENT_NAME = Messages.getString("definitions"); //$NON-NLS-1$
 
-	public static final String FILE_DESCRIPTION = "BPMN 2.0 XML"; //$NON-NLS-1$
-	public static final String[] FILE_EXTENSIONS = { "bpmn", "xml" }; //$NON-NLS-1$ //$NON-NLS-2$
-
 	private static final String SCHEMA_FILENAME =
 			"com/googlecode/bpmn_simulator/bpmn/xsd/BPMN20.xsd"; //$NON-NLS-1$
 

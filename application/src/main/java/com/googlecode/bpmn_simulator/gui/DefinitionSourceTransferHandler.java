@@ -6,7 +6,6 @@ import java.awt.datatransfer.UnsupportedFlavorException;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.PrintStream;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.List;
@@ -101,16 +100,9 @@ public abstract class DefinitionSourceTransferHandler
 		return false;
 	}
 
-	private static void dump(final Transferable transferable, final PrintStream out) {
-		for (final DataFlavor dataFlavor : transferable.getTransferDataFlavors()) {
-			out.println(dataFlavor);
-		}
-	}
-
 	@Override
 	public boolean importData(final TransferSupport support) {
 		final Transferable transferable = support.getTransferable();
-		dump(transferable, System.out);
 		return importUrl(transferable)
 				||importFile(transferable)
 				|| importStream(transferable);

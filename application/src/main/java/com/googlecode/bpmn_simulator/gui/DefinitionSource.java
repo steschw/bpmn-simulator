@@ -4,12 +4,14 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 
 import com.googlecode.bpmn_simulator.animation.module.Module;
 
 public class DefinitionSource {
 
 	private File file = null;
+	private URL url = null;
 	private InputStream inputStream = null;
 
 	private Module module = null;
@@ -25,6 +27,14 @@ public class DefinitionSource {
 			throw new IllegalArgumentException();
 		}
 		this.file = file;
+	}
+
+	public DefinitionSource(final URL url, final Module module) {
+		this(module);
+		if (url == null) {
+			throw new IllegalArgumentException();
+		}
+		this.url = url;
 	}
 
 	public DefinitionSource(final InputStream inputStream, final Module module) {
@@ -47,17 +57,31 @@ public class DefinitionSource {
 		return ((source != null) && source.isFile()) ? source.getFile() : null;
 	}
 
+	public URL getURL() {
+		return url;
+	}
+
 	public boolean isFile() {
 		return getFile() != null;
 	}
 
+	public boolean isURL() {
+		return !isFile() && (getURL() != null);
+	}
+
 	public boolean isClipboard() {
-		return !isFile();
+		return !isFile() && !isURL() && (inputStream != null);
+	}
+
+	public boolean canReopen() {
+		return isFile() || isURL();
 	}
 
 	public String getName() {
 		if (isFile()) {
 			return getFile().getAbsolutePath();
+		} else if (isURL()) {
+			return getURL().toString();
 		} else if (isClipboard()) {
 			return "Clipboard";
 		}
@@ -66,10 +90,12 @@ public class DefinitionSource {
 
 	public InputStream getStream()
 			throws IOException {
-		if (isClipboard()) {
-			return inputStream;
-		} else if (isFile()) {
+		if (isFile()) {
 			return new FileInputStream(file);
+		} else if (isURL()) {
+			return url.openStream();
+		} else if (isClipboard()) {
+			return inputStream;
 		}
 		return null;
 	}

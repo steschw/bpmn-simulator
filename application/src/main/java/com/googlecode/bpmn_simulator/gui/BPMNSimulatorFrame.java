@@ -344,7 +344,7 @@ public class BPMNSimulatorFrame
 		menuFile.addMenuListener(new MenuListener() {
 			@Override
 			public void menuSelected(final MenuEvent e) {
-				menuFileReload.setEnabled(isSourceOpen() && currentSource.isFile());
+				menuFileReload.setEnabled(isSourceOpen() && currentSource.canReopen());
 				menuFileClose.setEnabled(isSourceOpen());
 				menuFileProperties.setEnabled(isDefinitionOpen());
 				menuFileExport.setEnabled(isDefinitionOpen());

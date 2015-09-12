@@ -6,6 +6,8 @@ import java.awt.datatransfer.UnsupportedFlavorException;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.PrintStream;
+import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.List;
 
@@ -16,11 +18,19 @@ public abstract class DefinitionSourceTransferHandler
 		extends TransferHandler {
 
 	private static final DataFlavor DATAFLAVOR_INPUTSTREAM_UTF8 = createDataFlavor("text/plain", InputStream.class, Charset.forName("UTF-8"));
+	private static final DataFlavor DATAFLAVOR_URL = createDataFlavor("application/x-java-url", URL.class, null);
 	private static final DataFlavor DATAFLAVOR_LIST_FILE = DataFlavor.javaFileListFlavor;
 
 	protected static DataFlavor createDataFlavor(final String mimeType, final Class<?> representationClass, final Charset charset) {
+		final StringBuilder builder = new StringBuilder(mimeType);
+		if (representationClass != null) {
+			builder.append(";class=" + representationClass.getCanonicalName());
+		}
+		if (charset != null) {
+			builder.append(";charset=" + charset.name());
+		}
 		try {
-			return new DataFlavor(mimeType + "; class=" + representationClass.getCanonicalName() + ";charset=" + charset.name());
+			return new DataFlavor(builder.toString());
 		} catch (ClassNotFoundException e) {
 		}
 		return null;
@@ -30,6 +40,7 @@ public abstract class DefinitionSourceTransferHandler
 	public boolean canImport(final TransferSupport support) {
 		final Transferable transferable = support.getTransferable();
 		if (transferable.isDataFlavorSupported(DATAFLAVOR_LIST_FILE)
+				|| transferable.isDataFlavorSupported(DATAFLAVOR_URL)
 				|| transferable.isDataFlavorSupported(DATAFLAVOR_INPUTSTREAM_UTF8)) {
 			support.setDropAction(COPY);
 			return true;
@@ -60,6 +71,21 @@ public abstract class DefinitionSourceTransferHandler
 		return false;
 	}
 
+	private boolean importUrl(final Transferable transferable) {
+		if (transferable.isDataFlavorSupported(DATAFLAVOR_URL)) {
+			try {
+				final URL url = (URL) transferable.getTransferData(DATAFLAVOR_URL);
+				if (url != null) {
+					onImportDefinition(new DefinitionSource(url, null));
+					return true;
+				}
+			} catch (UnsupportedFlavorException e) {
+			} catch (IOException e) {
+			}
+		}
+		return false;
+	}
+
 	private boolean importStream(final Transferable transferable) {
 		if (transferable.isDataFlavorSupported(DATAFLAVOR_INPUTSTREAM_UTF8)) {
 			try {
@@ -75,10 +101,18 @@ public abstract class DefinitionSourceTransferHandler
 		return false;
 	}
 
+	private static void dump(final Transferable transferable, final PrintStream out) {
+		for (final DataFlavor dataFlavor : transferable.getTransferDataFlavors()) {
+			out.println(dataFlavor);
+		}
+	}
+
 	@Override
 	public boolean importData(final TransferSupport support) {
 		final Transferable transferable = support.getTransferable();
-		return importFile(transferable)
+		dump(transferable, System.out);
+		return importUrl(transferable)
+				||importFile(transferable)
 				|| importStream(transferable);
 	}
 

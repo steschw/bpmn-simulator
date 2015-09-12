@@ -31,10 +31,8 @@ import java.awt.event.WindowEvent;
 import java.awt.image.RenderedImage;
 import java.io.BufferedInputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.text.MessageFormat;
 import java.util.Collection;
 
 import javax.imageio.ImageIO;
@@ -54,6 +52,7 @@ import javax.swing.KeyStroke;
 import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
 
+import org.apache.commons.io.FilenameUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jdesktop.swingx.JXErrorPane;
@@ -70,6 +69,7 @@ import com.googlecode.bpmn_simulator.animation.input.Definition;
 import com.googlecode.bpmn_simulator.animation.module.Module;
 import com.googlecode.bpmn_simulator.animation.module.ModuleRegistry;
 import com.googlecode.bpmn_simulator.animation.token.RootInstances;
+import com.googlecode.bpmn_simulator.gui.dialogs.DefinitionFileChooser;
 import com.googlecode.bpmn_simulator.gui.dialogs.ImageExportChooser;
 import com.googlecode.bpmn_simulator.gui.dialogs.WorkingDialog;
 import com.googlecode.bpmn_simulator.gui.elements.ElementsFrame;
@@ -79,6 +79,7 @@ import com.googlecode.bpmn_simulator.gui.mdi.MdiFrame;
 import com.googlecode.bpmn_simulator.gui.mdi.ScrollDesktop.ScrollDesktopPane;
 import com.googlecode.bpmn_simulator.gui.preferences.Config;
 import com.googlecode.bpmn_simulator.gui.preferences.PreferencesDialog;
+import com.googlecode.bpmn_simulator.gui.util.FileUtils;
 import com.googlecode.bpmn_simulator.tokenimport.TokenImportException;
 import com.googlecode.bpmn_simulator.tokenimport.TokenImporter;
 import com.googlecode.bpmn_simulator.tokenimport.bonita.BonitaTokenImporter;
@@ -108,11 +109,9 @@ public class BPMNSimulatorFrame
 
 	private final ElementsFrame elementsFrame = new ElementsFrame();
 
+	private DefinitionSource currentSource = null;
+
 	private Definition<?> currentDefinition = null;
-
-	private Module currentModule = null;
-
-	private File currentFile = null;
 
 	public BPMNSimulatorFrame() {
 		super();
@@ -123,13 +122,20 @@ public class BPMNSimulatorFrame
 
 		setSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
+
+		setTransferHandler(new DefinitionSourceTransferHandler() {
+			@Override
+			protected void onImportDefinition(final DefinitionSource source) {
+				openSource(source);
+			}
+		}, true);
 	}
 
 	private void updateFrameTitle() {
 		final StringBuilder title = new StringBuilder(ApplicationInfo.getName());
-		if (currentFile != null) {
+		if (currentSource != null) {
 			title.append(" - "); //$NON-NLS-1$
-			title.append(currentFile.getAbsolutePath());
+			title.append(currentSource.getName());
 		}
 		setTitle(title.toString());
 	}
@@ -158,6 +164,7 @@ public class BPMNSimulatorFrame
 	}
 
 	public void showExternalEditor() {
+		final File currentFile = DefinitionSource.getFile(currentSource);
 		if (currentFile != null) {
 			final String externalEditor = Config.getInstance().getExternalEditor();
 			if ((externalEditor == null) || externalEditor.isEmpty()) {
@@ -217,18 +224,12 @@ public class BPMNSimulatorFrame
 	}
 
 	private void saveImage(final RenderedImage image, final File file, final String formatName) {
-		if (file.exists()
-				&& JOptionPane.showConfirmDialog(this,
-						MessageFormat.format("File ''{0}'' already exists.\nDo you want to overwrite this file?", file.getName()),
-						"File exists",
-						JOptionPane.YES_NO_OPTION,
-						JOptionPane.WARNING_MESSAGE) != JOptionPane.YES_OPTION) {
-			return;
-		}
-		try {
-			ImageIO.write(image, formatName, file);
-		} catch (IOException e) {
-			showException(e);
+		if (FileUtils.canWriteFile(this, file)) {
+			try {
+				ImageIO.write(image, formatName, file);
+			} catch (IOException e) {
+				showException(e);
+			}
 		}
 	}
 
@@ -278,7 +279,7 @@ public class BPMNSimulatorFrame
 		menuFileReload.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(final ActionEvent e) {
-				reloadModel();
+				reloadDefinition();
 			}
 		});
 		menuFile.add(menuFileReload);
@@ -289,7 +290,7 @@ public class BPMNSimulatorFrame
 		menuFileClose.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(final ActionEvent e) {
-				closeFile();
+				closeSource();
 			}
 		});
 		menuFile.add(menuFileClose);
@@ -343,10 +344,10 @@ public class BPMNSimulatorFrame
 		menuFile.addMenuListener(new MenuListener() {
 			@Override
 			public void menuSelected(final MenuEvent e) {
-				menuFileReload.setEnabled(isModelOpen());
-				menuFileClose.setEnabled(isModelOpen());
-				menuFileProperties.setEnabled(isModelOpen());
-				menuFileExport.setEnabled(isModelOpen());
+				menuFileReload.setEnabled(isSourceOpen() && currentSource.isFile());
+				menuFileClose.setEnabled(isSourceOpen());
+				menuFileProperties.setEnabled(isDefinitionOpen());
+				menuFileExport.setEnabled(isDefinitionOpen());
 			}
 
 			@Override
@@ -377,7 +378,7 @@ public class BPMNSimulatorFrame
 		menuExtra.addMenuListener(new MenuListener() {
 			@Override
 			public void menuSelected(final MenuEvent e) {
-				menuExtraOpenExternalEditor.setEnabled(isModelOpen());
+				menuExtraOpenExternalEditor.setEnabled(isDefinitionOpen());
 			}
 
 			@Override
@@ -489,17 +490,9 @@ public class BPMNSimulatorFrame
 		return definitionToolbar;
 	}
 
-	private static boolean isValidDirectory(final String directory) {
-		if ((directory != null) && !directory.isEmpty()) {
-			final File file = new File(directory);
-			return file.isDirectory() && file.exists();
-		}
-		return false;
-	}
-
 	private void importBonita() {
 		final String bonitaHome = Config.getInstance().getBonitaHome();
-		if (!isValidDirectory(bonitaHome)) {
+		if (!FileUtils.isValidDirectory(bonitaHome)) {
 			showPreferencesDialog();
 		} else {
 			System.setProperty("bonita.home", bonitaHome);
@@ -548,37 +541,51 @@ public class BPMNSimulatorFrame
 
 	private void openFile() {
 		final Config config = Config.getInstance();
-		final JFileChooser fileChoser = new JFileChooser();
-		for (final Module module : ModuleRegistry.getDefault().getRegistredModules()) {
-			fileChoser.addChoosableFileFilter(new ModuleFileFilter(module));
-		}
-		fileChoser.setAcceptAllFileFilterUsed(false);
-		fileChoser.setCurrentDirectory(new File(config.getLastDirectory()));
-		if (fileChoser.showOpenDialog(this) == 	JFileChooser.APPROVE_OPTION) {
-			config.setLastDirectory(fileChoser.getCurrentDirectory().getAbsolutePath());
-			currentModule = ((ModuleFileFilter) fileChoser.getFileFilter()).getModule();
-			openFile(fileChoser.getSelectedFile());
+		final DefinitionFileChooser fileChooser = new DefinitionFileChooser();
+		fileChooser.setCurrentDirectory(new File(config.getLastDirectory()));
+		if (fileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+			config.setLastDirectory(fileChooser.getCurrentDirectory().getAbsolutePath());
+			openSource(new DefinitionSource(fileChooser.getSelectedFile(), fileChooser.getModule()));
 		}
 	}
 
-	public void openFile(final File file) {
-		closeFile();
-		currentFile = file;
+	private static Module selectModule(final DefinitionSource source) {
+		final ModuleRegistry moduleRegistry = ModuleRegistry.getDefault();
+		final Collection<Module> modules = moduleRegistry.getModules();
+		if (modules.size() == 1) {
+			return modules.iterator().next();
+		} else {
+			final File file = DefinitionSource.getFile(source);
+			if (file != null) {
+				final String extension = FilenameUtils.getExtension(file.getName());
+				final Collection<Module> modulesByExtension = moduleRegistry.getModulesByFileExtension(extension);
+				if (modulesByExtension.size() == 1) {
+					return modulesByExtension.iterator().next();
+				} else {
+				}
+			} else {
+			}
+			throw new IllegalStateException("not yet implemented");
+		}
+	}
+
+	public void openSource(final DefinitionSource source) {
+		closeSource();
+		currentSource = source;
 		updateFrameTitle();
-		createModel();
+		createDefinition();
 	}
 
-	private void closeFile() {
-		closeModel();
-		if (isFileOpen()) {
-			currentFile = null;
-			currentModule = null;
-			updateFrameTitle();
+	private void closeSource() {
+		closeDefinition();
+		if (isSourceOpen()) {
+			currentSource = null;
 		}
+		updateFrameTitle();
 	}
 
-	private boolean isFileOpen() {
-		return currentFile != null;
+	private boolean isSourceOpen() {
+		return currentSource != null;
 	}
 
 	private void addDiagrams() {
@@ -601,45 +608,48 @@ public class BPMNSimulatorFrame
 		}
 	}
 
-	private void createModel() {
-		if (isFileOpen()) {
-			final WorkingDialog loadingDialog = new WorkingDialog(this, "Loading");
-			currentDefinition = currentModule.createEmptyDefinition();
-			if (currentDefinition != null) {
-				loadingDialog.run(new Runnable() {
-					@Override
-					public void run() {
-						try (final InputStream input = new FileInputStream(currentFile)) {
-							currentDefinition.load(new BufferedInputStream(input));
-						} catch (IOException e) {
-							showException(e);
+	private void createDefinition() {
+		if (isSourceOpen()) {
+			final Module module = selectModule(currentSource);
+			if (module != null) {
+				final WorkingDialog loadingDialog = new WorkingDialog(this, "Loading");
+				currentDefinition = module.createEmptyDefinition();
+				if (currentDefinition != null) {
+					loadingDialog.run(new Runnable() {
+						@Override
+						public void run() {
+							try (final InputStream input = currentSource.getStream()) {
+								currentDefinition.load(new BufferedInputStream(input));
+							} catch (IOException e) {
+								showException(e);
+							}
 						}
-					}
-				});
-				addDiagrams();
+					});
+					addDiagrams();
+				}
+				instancesToolbar.setDefinition(currentDefinition);
+				elementsFrame.setDefinition(currentDefinition);
+				loadingDialog.setVisible(false);
+				updateMessagesInfo();
 			}
-			instancesToolbar.setDefinition(currentDefinition);
-			elementsFrame.setDefinition(currentDefinition);
-			loadingDialog.setVisible(false);
-			updateMessagesInfo();
 		}
 	}
 
-	private boolean isModelOpen() {
+	private boolean isDefinitionOpen() {
 		return currentDefinition != null;
 	}
 
-	private void closeModel() {
-		if (isModelOpen()) {
+	private void closeDefinition() {
+		if (isDefinitionOpen()) {
 			getDesktop().removeAll();
 			currentDefinition = null;
 			logFrame.clear();
 		}
 	}
 
-	private void reloadModel() {
-		closeModel();
-		createModel();
+	private void reloadDefinition() {
+		closeDefinition();
+		createDefinition();
 	}
 
 }

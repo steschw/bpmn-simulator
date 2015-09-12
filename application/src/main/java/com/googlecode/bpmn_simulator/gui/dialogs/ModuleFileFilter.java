@@ -1,4 +1,4 @@
-package com.googlecode.bpmn_simulator.gui;
+package com.googlecode.bpmn_simulator.gui.dialogs;
 
 import java.io.File;
 

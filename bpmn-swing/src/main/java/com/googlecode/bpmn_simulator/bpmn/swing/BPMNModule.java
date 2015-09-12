@@ -11,7 +11,7 @@ import com.googlecode.bpmn_simulator.bpmn.swing.di.SwingDIDefinition;
 public class BPMNModule
 		implements Module {
 
-	private static final String NAME = "bpmn-swing";
+	private static final String NAME = "bpmn-swing"; //$NON-NLS-1$
 	private static final String DESCRIPTION = "Business Process Model and Notation (BPMN) 2.0";
 
 	private static final String FILE_DESCRIPTION = "BPMN 2.0 XML"; //$NON-NLS-1$
@@ -48,6 +48,11 @@ public class BPMNModule
 	@Override
 	public Definition<?> createEmptyDefinition() {
 		return new SwingDIDefinition();
+	}
+
+	@Override
+	public String toString() {
+		return getDescription();
 	}
 
 }

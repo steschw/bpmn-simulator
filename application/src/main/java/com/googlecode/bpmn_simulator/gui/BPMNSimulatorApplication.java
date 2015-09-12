@@ -49,7 +49,7 @@ public final class BPMNSimulatorApplication {
 				final BPMNSimulatorFrame frame = new BPMNSimulatorFrame();
 				frame.setVisible(true);
 				if (args.length >= 1) {
-					frame.openFile(new File(args[0]));
+					frame.openSource(new DefinitionSource(new File(args[0]), null));
 				}
 			}
 		});

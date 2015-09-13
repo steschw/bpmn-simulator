@@ -101,6 +101,13 @@ public class BPMNSimulatorFrame
 	private final InstancesToolbar instancesToolbar = new InstancesToolbar(instances);
 	private final AnimationToolbar animationToolbar = new AnimationToolbar(animator);
 
+	private final RecentMenu menuFileRecent = new RecentMenu(Config.getInstance().getRecent(), "Recent", "Clear") {
+		@Override
+		protected void onFile(final File file) {
+			openSource(new DefinitionSource(file, null));
+		}
+	};
+
 	private final LogFrame logFrame = new LogFrame();
 
 	private final JButton messagesButton = new JButton();
@@ -272,6 +279,7 @@ public class BPMNSimulatorFrame
 			}
 		});
 		menuFile.add(menuFileOpen);
+		menuFile.add(menuFileRecent);
 
 		final JMenuItem menuFileReload = new JMenuItem(Messages.getString("Menu.fileReload")); //$NON-NLS-1$
 		menuFileReload.setMnemonic(KeyEvent.VK_R);
@@ -572,6 +580,10 @@ public class BPMNSimulatorFrame
 	public void openSource(final DefinitionSource source) {
 		closeSource();
 		currentSource = source;
+		final File file = DefinitionSource.getFile(source);
+		if (file != null) {
+			menuFileRecent.addFile(file);
+		}
 		updateFrameTitle();
 		createDefinition();
 	}

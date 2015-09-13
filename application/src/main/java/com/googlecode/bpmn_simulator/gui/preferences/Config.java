@@ -31,6 +31,8 @@ public class Config {
 
 	private static final String NODE = "bpmnsimulator"; //$NON-NLS-1$
 
+	private static final String RECENT = "recent"; //$NON-NLS-1$
+
 	private static final String LANGUAGE = "language"; //$NON-NLS-1$
 
 	private static final String DEFAULT_LANGUAGE = ""; //$NON-NLS-1$
@@ -64,18 +66,22 @@ public class Config {
 		return instance;
 	}
 
-	protected static Preferences getRootNode() {
+	protected Preferences getNode() {
 		return Preferences.userRoot().node(NODE);
 	}
 
+	public Preferences getRecent() {
+		return getNode().node(RECENT);
+	}
+
 	public void storeAppearance(final Appearance appearance) {
-		final Preferences preferences = getRootNode();
+		final Preferences preferences = getNode();
 
 		preferences.putBoolean(IGNORE_COLORS, appearance.getIgnoreExplicitColors());
 	}
 
 	public void loadAppearance(final Appearance appearance) {
-		final Preferences preferences = getRootNode();
+		final Preferences preferences = getNode();
 
 		appearance.setIgnoreExplicitColors(preferences.getBoolean(IGNORE_COLORS, false));
 	}
@@ -99,39 +105,39 @@ public class Config {
 	}
 
 	public Locale getLocale() {
-		return getLocaleFromString(getRootNode().get(LANGUAGE, DEFAULT_LANGUAGE));
+		return getLocaleFromString(getNode().get(LANGUAGE, DEFAULT_LANGUAGE));
 	}
 
 	public void setLocale(final Locale locale) {
 		if (locale == null) {
-			getRootNode().remove(LANGUAGE);
+			getNode().remove(LANGUAGE);
 		} else {
-			getRootNode().put(LANGUAGE, locale.toString());
+			getNode().put(LANGUAGE, locale.toString());
 		}
 	}
 
 	public String getExternalEditor() {
-		return getRootNode().get(EXTERNAL_EDITOR, DEFAULT_EXTERNAL_EDITOR);
+		return getNode().get(EXTERNAL_EDITOR, DEFAULT_EXTERNAL_EDITOR);
 	}
 
 	public void setExternalEditor(final String filename) {
-		getRootNode().put(EXTERNAL_EDITOR, filename);
+		getNode().put(EXTERNAL_EDITOR, filename);
 	}
 
 	public String getLastDirectory() {
-		return getRootNode().get(LAST_DIRECTORY, System.getProperty("user.home")); //$NON-NLS-1$
+		return getNode().get(LAST_DIRECTORY, System.getProperty("user.home")); //$NON-NLS-1$
 	}
 
 	public void setLastDirectory(final String directory) {
-		getRootNode().put(LAST_DIRECTORY, directory);
+		getNode().put(LAST_DIRECTORY, directory);
 	}
 
 	public void setBonitaHome(final String directory) {
-		getRootNode().put(BONITA_HOME, directory);
+		getNode().put(BONITA_HOME, directory);
 	}
 
 	public String getBonitaHome() {
-		return getRootNode().get(BONITA_HOME, System.getProperty("bonita.home"));
+		return getNode().get(BONITA_HOME, System.getProperty("bonita.home"));
 	}
 
 	public void load() {
@@ -143,7 +149,7 @@ public class Config {
 
 	public void store() {
 		try {
-			getRootNode().flush();
+			getNode().flush();
 		} catch (BackingStoreException e) {
 			e.printStackTrace();
 		}

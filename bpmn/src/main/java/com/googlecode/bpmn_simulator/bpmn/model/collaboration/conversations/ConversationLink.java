@@ -20,21 +20,19 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.model.collaboration.conversations;
 
+import com.googlecode.bpmn_simulator.animation.element.logical.LogicalElements;
 import com.googlecode.bpmn_simulator.bpmn.Messages;
 import com.googlecode.bpmn_simulator.bpmn.model.core.foundation.AbstractBaseElementNamed;
 
 public class ConversationLink
 		extends AbstractBaseElementNamed {
 
-	public static final String ELEMENT_NAME = Messages.getString("conversationLink"); //$NON-NLS-1$
+	static {
+		LogicalElements.register(ConversationLink.class, Messages.getString("conversationLink")); //$NON-NLS-1$
+	}
 
 	public ConversationLink(final String id, final String name) {
 		super(id, name);
-	}
-
-	@Override
-	public String getElementName() {
-		return ELEMENT_NAME;
 	}
 
 }

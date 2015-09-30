@@ -20,9 +20,10 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.model.choreography.activities;
 
-import java.util.ArrayList;
 import java.util.Collection;
+import java.util.ArrayList;
 
+import com.googlecode.bpmn_simulator.animation.element.logical.LogicalElements;
 import com.googlecode.bpmn_simulator.bpmn.Messages;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.FlowElement;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.FlowElementsContainer;
@@ -31,17 +32,14 @@ public class SubChoreography
 		extends AbstractChoreographyActivity
 		implements FlowElementsContainer {
 
-	public static final String ELEMENT_NAME = Messages.getString("subChoreography"); //$NON-NLS-1$
+	static {
+		LogicalElements.register(SubChoreography.class, Messages.getString("subChoreography")); //$NON-NLS-1$
+	}
 
 	private final Collection<FlowElement> flowElements = new ArrayList<>();
 
 	public SubChoreography(final String id, final String name) {
 		super(id, name);
-	}
-
-	@Override
-	public String getElementName() {
-		return ELEMENT_NAME;
 	}
 
 	@Override

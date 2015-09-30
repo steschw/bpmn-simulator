@@ -20,20 +20,18 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.model.core.common.events;
 
+import com.googlecode.bpmn_simulator.animation.element.logical.LogicalElements;
 import com.googlecode.bpmn_simulator.bpmn.Messages;
 
 public final class MessageEventDefinition
 		extends AbstractEventDefinition {
 
-	public static final String ELEMENT_NAME = Messages.getString("messageEventDefinition"); //$NON-NLS-1$
+	static {
+		LogicalElements.register(MessageEventDefinition.class, Messages.getString("messageEventDefinition")); //$NON-NLS-1$
+	}
 
 	public MessageEventDefinition(final String id) {
 		super(id);
-	}
-
-	@Override
-	public String getElementName() {
-		return ELEMENT_NAME;
 	}
 
 }

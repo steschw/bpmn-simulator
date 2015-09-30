@@ -20,20 +20,18 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.model.core.common.artifacts;
 
+import com.googlecode.bpmn_simulator.animation.element.logical.LogicalElements;
 import com.googlecode.bpmn_simulator.bpmn.Messages;
 
 public final class Group
 		extends AbstractArtifact {
 
-	public static final String ELEMENT_NAME = Messages.getString("group"); //$NON-NLS-1$
+	static {
+		LogicalElements.register(Group.class, Messages.getString("group")); //$NON-NLS-1$
+	}
 
 	public Group(final String id) {
 		super(id);
-	}
-
-	@Override
-	public String getElementName() {
-		return ELEMENT_NAME;
 	}
 
 }

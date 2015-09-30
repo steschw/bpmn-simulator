@@ -20,9 +20,10 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.model.process.activities;
 
-import java.util.ArrayList;
 import java.util.Collection;
+import java.util.ArrayList;
 
+import com.googlecode.bpmn_simulator.animation.element.logical.LogicalElements;
 import com.googlecode.bpmn_simulator.animation.token.Instance;
 import com.googlecode.bpmn_simulator.animation.token.InstanceListener;
 import com.googlecode.bpmn_simulator.animation.token.Token;
@@ -36,7 +37,9 @@ public class SubProcess
 		extends AbstractDecomposableActivity
 		implements InstanceListener {
 
-	public static final String ELEMENT_NAME = Messages.getString("subProcess"); //$NON-NLS-1$
+	static {
+		LogicalElements.register(SubProcess.class, Messages.getString("subProcess")); //$NON-NLS-1$
+	}
 
 	private final boolean triggeredByEvent;
 
@@ -44,11 +47,6 @@ public class SubProcess
 			final boolean isForCompensation, final boolean triggeredByEvent) {
 		super(id, name, isForCompensation);
 		this.triggeredByEvent = triggeredByEvent;
-	}
-
-	@Override
-	public String getElementName() {
-		return ELEMENT_NAME;
 	}
 
 	public boolean isTriggeredByEvent() {

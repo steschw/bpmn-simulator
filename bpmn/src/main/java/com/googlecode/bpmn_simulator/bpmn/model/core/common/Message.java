@@ -20,6 +20,7 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.model.core.common;
 
+import com.googlecode.bpmn_simulator.animation.element.logical.LogicalElements;
 import com.googlecode.bpmn_simulator.bpmn.Messages;
 import com.googlecode.bpmn_simulator.bpmn.model.NamedElement;
 import com.googlecode.bpmn_simulator.bpmn.model.core.foundation.AbstractRootElement;
@@ -28,18 +29,15 @@ public final class Message
 		extends AbstractRootElement
 		implements NamedElement {
 
-	public static final String ELEMENT_NAME = Messages.getString("message"); //$NON-NLS-1$
+	static {
+		LogicalElements.register(Message.class, Messages.getString("message")); //$NON-NLS-1$
+	}
 
 	private final String name;
 
 	public Message(final String id, final String name) {
 		super(id);
 		this.name = name;
-	}
-
-	@Override
-	public String getElementName() {
-		return ELEMENT_NAME;
 	}
 
 	@Override

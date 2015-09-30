@@ -20,23 +20,21 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.model.core.common;
 
+import com.googlecode.bpmn_simulator.animation.element.logical.LogicalElements;
 import com.googlecode.bpmn_simulator.bpmn.Messages;
 import com.googlecode.bpmn_simulator.bpmn.model.core.foundation.AbstractBaseElement;
 
 public final class Expression
 		extends AbstractBaseElement {
 
-	public static final String ELEMENT_NAME = Messages.getString("expression"); //$NON-NLS-1$
+	static {
+		LogicalElements.register(Expression.class, Messages.getString("expression")); //$NON-NLS-1$
+	}
 
 	private boolean value;
 
 	public Expression(final String id) {
 		super(id);
-	}
-
-	@Override
-	public String getElementName() {
-		return ELEMENT_NAME;
 	}
 
 	public void setValue(final boolean value) {

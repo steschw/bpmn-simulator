@@ -31,6 +31,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
 import javax.swing.SwingUtilities;
 
+import com.googlecode.bpmn_simulator.animation.element.logical.LogicalElements;
 import com.googlecode.bpmn_simulator.animation.element.logical.LogicalFlowElement;
 import com.googlecode.bpmn_simulator.animation.input.Definition;
 import com.googlecode.bpmn_simulator.animation.token.RootInstances;
@@ -72,7 +73,7 @@ public class StartButton
 		final JPopupMenu menu = new JPopupMenu();
 		for (final LogicalFlowElement element : instantiatingElements) {
 			final StringBuilder text = new StringBuilder();
-			text.append(element.getElementName());
+			text.append(LogicalElements.getName(element));
 			text.append(" - ");
 			final JMenuItem menuItem =  new JMenuItem(text.toString());
 			menuItem.addActionListener(new ActionListener() {

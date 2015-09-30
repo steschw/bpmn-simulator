@@ -20,12 +20,15 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.model.core.common.artifacts;
 
+import com.googlecode.bpmn_simulator.animation.element.logical.LogicalElements;
 import com.googlecode.bpmn_simulator.bpmn.Messages;
 
 public final class Association
 		extends AbstractArtifact {
 
-	public static final String ELEMENT_NAME = Messages.getString("association"); //$NON-NLS-1$
+	static {
+		LogicalElements.register(Association.class, Messages.getString("association")); //$NON-NLS-1$
+	}
 
 	private AssociationDirection direction = AssociationDirection.NONE;
 
@@ -39,11 +42,6 @@ public final class Association
 
 	public AssociationDirection getDirection() {
 		return direction;
-	}
-
-	@Override
-	public String getElementName() {
-		return ELEMENT_NAME;
 	}
 
 }

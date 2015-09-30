@@ -23,6 +23,7 @@ package com.googlecode.bpmn_simulator.gui.instances;
 import javax.swing.JLabel;
 
 import com.googlecode.bpmn_simulator.animation.element.logical.LogicalElement;
+import com.googlecode.bpmn_simulator.animation.element.logical.LogicalElements;
 
 @SuppressWarnings("serial")
 public class ElementLabel
@@ -35,7 +36,7 @@ public class ElementLabel
 			final StringBuilder text = new StringBuilder(element.toString());
 			text.append(' ');
 			text.append('(');
-			text.append(element.getElementName());
+			text.append(LogicalElements.getName(element));
 			text.append(')');
 			setText(text.toString());
 		}

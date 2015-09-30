@@ -25,6 +25,7 @@ import java.util.Vector;
 import javax.swing.table.DefaultTableModel;
 
 import com.googlecode.bpmn_simulator.animation.element.logical.LogicalElement;
+import com.googlecode.bpmn_simulator.animation.element.logical.LogicalElements;
 import com.googlecode.bpmn_simulator.animation.element.logical.LogicalFlowElement;
 
 @SuppressWarnings("serial")
@@ -62,7 +63,7 @@ class ElementsTableModel<T extends LogicalElement>
 		final T element = getElementAt(row);
 		switch (column) {
 			case COLUMN_TYPE:
-				return element.getElementName();
+				return LogicalElements.getName(element);
 			case COLUMN_NAME:
 				return element.toString();
 			case COLUMN_STEPS:

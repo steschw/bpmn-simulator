@@ -23,6 +23,7 @@ package com.googlecode.bpmn_simulator.bpmn.model.core.foundation;
 import javax.activation.MimeType;
 import javax.activation.MimeTypeParseException;
 
+import com.googlecode.bpmn_simulator.animation.element.logical.LogicalElements;
 import com.googlecode.bpmn_simulator.bpmn.Messages;
 import com.googlecode.bpmn_simulator.bpmn.model.TextElement;
 
@@ -30,7 +31,9 @@ public final class Documentation
 		extends AbstractBaseElement
 		implements TextElement {
 
-	public static final String ELEMENT_NAME = Messages.getString("documentation"); //$NON-NLS-1$
+	static {
+		LogicalElements.register(Documentation.class, Messages.getString("documentation")); //$NON-NLS-1$
+	}
 
 	private static final MimeType TEXT_PLAIN = newMimeType("text", "plain"); //$NON-NLS-1$ //$NON-NLS-2$
 	private static final MimeType TEXT_HTML = newMimeType("text", "html"); //$NON-NLS-1$ //$NON-NLS-2$
@@ -49,11 +52,6 @@ public final class Documentation
 		super(id);
 		setText(text);
 		setTextFormat(textFormat);
-	}
-
-	@Override
-	public String getElementName() {
-		return ELEMENT_NAME;
 	}
 
 	protected static final MimeType newMimeType(final String primary,

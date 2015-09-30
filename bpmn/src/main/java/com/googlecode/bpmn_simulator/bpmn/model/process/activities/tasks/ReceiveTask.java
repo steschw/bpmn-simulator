@@ -20,6 +20,7 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.model.process.activities.tasks;
 
+import com.googlecode.bpmn_simulator.animation.element.logical.LogicalElements;
 import com.googlecode.bpmn_simulator.bpmn.Messages;
 import com.googlecode.bpmn_simulator.bpmn.model.InstantiateElement;
 
@@ -27,7 +28,9 @@ public final class ReceiveTask
 		extends Task
 		implements InstantiateElement {
 
-	public static final String ELEMENT_NAME = Messages.getString("receiveTask"); //$NON-NLS-1$
+	static {
+		LogicalElements.register(ReceiveTask.class, Messages.getString("receiveTask")); //$NON-NLS-1$
+	}
 
 	private boolean instantiate;
 
@@ -35,11 +38,6 @@ public final class ReceiveTask
 			final boolean isForCompensation, final boolean instantiate) {
 		super(id, name, isForCompensation);
 		this.instantiate = instantiate;
-	}
-
-	@Override
-	public String getElementName() {
-		return ELEMENT_NAME;
 	}
 
 	@Override

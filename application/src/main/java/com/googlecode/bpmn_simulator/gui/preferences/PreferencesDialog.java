@@ -20,12 +20,14 @@
  */
 package com.googlecode.bpmn_simulator.gui.preferences;
 
-import java.awt.BorderLayout;
-import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.net.URI;
 import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -44,7 +46,10 @@ import org.jdesktop.swingx.JXColorSelectionButton;
 import org.jdesktop.swingx.JXHyperlink;
 import org.jdesktop.swingx.hyperlink.HyperlinkAction;
 
+import com.googlecode.bpmn_simulator.animation.element.logical.LogicalElement;
 import com.googlecode.bpmn_simulator.animation.element.visual.VisualElement;
+import com.googlecode.bpmn_simulator.animation.module.Module;
+import com.googlecode.bpmn_simulator.animation.module.ModuleRegistry;
 import com.googlecode.bpmn_simulator.bpmn.swing.di.Appearance;
 import com.googlecode.bpmn_simulator.bpmn.swing.di.Appearance.ElementAppearance;
 import com.googlecode.bpmn_simulator.bpmn.swing.model.choreography.activities.ChoreographyTaskShape;
@@ -206,7 +211,49 @@ public class PreferencesDialog
 		return panel;
 	}
 
-	protected JPanel createElementsPanel() {
+	private static JComponent createModuleElementsConfig(final Module module) {
+		final JPanel panel = new JPanel(new GridBagLayout());
+		int y = 0;
+		final GridBagConstraints titleConstraints = new GridBagConstraints();
+		titleConstraints.gridx = 0;
+		titleConstraints.gridwidth = 6;
+		titleConstraints.anchor = GridBagConstraints.BASELINE_LEADING;
+		titleConstraints.insets = new Insets(4, 4, 2, 2);
+		final Map<Class<? extends LogicalElement>, Set<Class<? extends VisualElement>>> elements = module.getElements();
+		for (final Class<? extends LogicalElement> logicalElement : elements.keySet()) {
+			titleConstraints.gridy = ++y;
+			final JLabel label = new JLabel(logicalElement.getSimpleName());
+			label.setFont(label.getFont().deriveFont(Font.BOLD));
+			panel.add(label, titleConstraints);
+
+			final GridBagConstraints constraints = new GridBagConstraints();
+			constraints.gridx = 0;
+			panel.add(new JLabel("Dauer"), constraints);
+			constraints.gridx = 1;
+			panel.add(new JTextField("3"), constraints);
+			for (final Class<? extends VisualElement> visualElement : elements.get(logicalElement)) {
+				constraints.gridy = ++y;
+				constraints.gridx = 2;
+				panel.add(new JLabel("Background"), constraints);
+				constraints.gridx = 3;
+				panel.add(new JXColorSelectionButton(), constraints);
+				constraints.gridx = 4;
+				panel.add(new JLabel("Foreground"), constraints);
+				constraints.gridx = 5;
+				panel.add(new JXColorSelectionButton(), constraints);
+				constraints.gridy = ++y;
+			}
+		}
+		return new JScrollPane(panel, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+	}
+
+	protected JComponent createElementsPanel() {
+		final JTabbedPane pane = new JTabbedPane();
+		for (final Module module : ModuleRegistry.getDefault().getModules()) {
+			pane.addTab(module.getDescription(), createModuleElementsConfig(module));
+		}
+		return pane;
+/*
 		final JPanel panel = new JPanel(new BorderLayout());
 		panel.setBorder(createGapBorder());
 
@@ -217,8 +264,8 @@ public class PreferencesDialog
 				ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		elementsDefaultsScrollPane.setPreferredSize(new Dimension(400, 400));
 		panel.add(elementsDefaultsScrollPane, BorderLayout.CENTER);
-
 		return panel;
+*/
 	}
 
 	private void addElementConfig(

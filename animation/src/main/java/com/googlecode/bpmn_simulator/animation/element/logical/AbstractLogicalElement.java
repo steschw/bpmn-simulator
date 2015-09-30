@@ -29,8 +29,7 @@ import com.googlecode.bpmn_simulator.animation.token.TokenFlowListener;
 abstract class AbstractLogicalElement
 		implements LogicalElement {
 
-	private final Set<TokenFlowListener> tokenListeners =
-			new HashSet<>();
+	private final Set<TokenFlowListener> tokenListeners = new HashSet<>();
 
 	public AbstractLogicalElement() {
 		super();

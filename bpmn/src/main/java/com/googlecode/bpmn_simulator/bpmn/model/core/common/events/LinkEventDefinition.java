@@ -20,6 +20,7 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.model.core.common.events;
 
+import com.googlecode.bpmn_simulator.animation.element.logical.LogicalElements;
 import com.googlecode.bpmn_simulator.bpmn.Messages;
 import com.googlecode.bpmn_simulator.bpmn.model.NamedElement;
 
@@ -27,7 +28,9 @@ public final class LinkEventDefinition
 		extends AbstractEventDefinition
 		implements NamedElement {
 
-	public static final String ELEMENT_NAME = Messages.getString("linkEventDefinition"); //$NON-NLS-1$
+	static {
+		LogicalElements.register(LinkEventDefinition.class, Messages.getString("linkEventDefinition")); //$NON-NLS-1$
+	}
 
 	private final String name;
 
@@ -39,11 +42,6 @@ public final class LinkEventDefinition
 	@Override
 	public String getName() {
 		return name;
-	}
-
-	@Override
-	public String getElementName() {
-		return ELEMENT_NAME;
 	}
 
 	@Override

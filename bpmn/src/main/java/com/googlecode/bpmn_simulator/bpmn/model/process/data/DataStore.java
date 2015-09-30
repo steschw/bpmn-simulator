@@ -20,20 +20,18 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.model.process.data;
 
+import com.googlecode.bpmn_simulator.animation.element.logical.LogicalElements;
 import com.googlecode.bpmn_simulator.bpmn.Messages;
 
 public final class DataStore
 		extends AbstractItemAwareElementNamed {
 
-	public static final String ELEMENT_NAME = Messages.getString("dataStore"); //$NON-NLS-1$
+	static {
+		LogicalElements.register(DataStore.class, Messages.getString("dataStore")); //$NON-NLS-1$
+	}
 
 	public DataStore(final String id, final String name) {
 		super(id, name);
-	}
-
-	@Override
-	public String getElementName() {
-		return ELEMENT_NAME;
 	}
 
 }

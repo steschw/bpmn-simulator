@@ -20,6 +20,7 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.model.core.common;
 
+import com.googlecode.bpmn_simulator.animation.element.logical.LogicalElements;
 import com.googlecode.bpmn_simulator.animation.ref.Reference;
 import com.googlecode.bpmn_simulator.animation.ref.ReferenceUtils;
 import com.googlecode.bpmn_simulator.animation.token.Token;
@@ -28,7 +29,9 @@ import com.googlecode.bpmn_simulator.bpmn.Messages;
 public final class SequenceFlow
 		extends AbstractFlowElement {
 
-	public static final String ELEMENT_NAME = Messages.getString("sequenceFlow"); //$NON-NLS-1$
+	static {
+		LogicalElements.register(SequenceFlow.class, Messages.getString("sequenceFlow")); //$NON-NLS-1$
+	}
 
 	private final Reference<FlowNode> source;
 	private final Reference<FlowNode> target;
@@ -40,11 +43,6 @@ public final class SequenceFlow
 		super(id, name);
 		this.source = source;
 		this.target = target;
-	}
-
-	@Override
-	public String getElementName() {
-		return ELEMENT_NAME;
 	}
 
 	public Reference<FlowNode> getSource() {

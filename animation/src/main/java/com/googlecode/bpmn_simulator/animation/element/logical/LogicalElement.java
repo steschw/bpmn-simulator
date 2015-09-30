@@ -20,7 +20,6 @@
  */
 package com.googlecode.bpmn_simulator.animation.element.logical;
 
-public interface LogicalElement
-		extends ElementInfo {
+public interface LogicalElement {
 
 }

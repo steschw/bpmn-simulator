@@ -20,20 +20,18 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.model.process.activities;
 
+import com.googlecode.bpmn_simulator.animation.element.logical.LogicalElements;
 import com.googlecode.bpmn_simulator.bpmn.Messages;
 
 public final class CallActivity
 		extends AbstractAtomicActivity {
 
-	public static final String ELEMENT_NAME = Messages.getString("callActivity"); //$NON-NLS-1$
+	static {
+		LogicalElements.register(CallActivity.class, Messages.getString("callActivity")); //$NON-NLS-1$
+	}
 
 	public CallActivity(final String id, final String name, final boolean isForCompensation) {
 		super(id, name, isForCompensation);
-	}
-
-	@Override
-	public String getElementName() {
-		return ELEMENT_NAME;
 	}
 
 }

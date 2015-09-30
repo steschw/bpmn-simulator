@@ -20,20 +20,18 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.model.core.common.events;
 
+import com.googlecode.bpmn_simulator.animation.element.logical.LogicalElements;
 import com.googlecode.bpmn_simulator.bpmn.Messages;
 
 public class CompensateEventDefinition
 		extends AbstractEventDefinition {
 
-	public static final String ELEMENT_NAME = Messages.getString("compensateEventDefinition"); //$NON-NLS-1$
+	static {
+		LogicalElements.register(CompensateEventDefinition.class, Messages.getString("compensateEventDefinition")); //$NON-NLS-1$
+	}
 
 	public CompensateEventDefinition(final String id) {
 		super(id);
-	}
-
-	@Override
-	public String getElementName() {
-		return ELEMENT_NAME;
 	}
 
 }

@@ -20,21 +20,19 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.model.process.activities;
 
+import com.googlecode.bpmn_simulator.animation.element.logical.LogicalElements;
 import com.googlecode.bpmn_simulator.bpmn.Messages;
 
 public final class AdHocSubProcess
 		extends SubProcess {
 
-	public static final String ELEMENT_NAME = Messages.getString("adHocSubProcess"); //$NON-NLS-1$
+	static {
+		LogicalElements.register(AdHocSubProcess.class, Messages.getString("adHocSubProcess")); //$NON-NLS-1$
+	}
 
 	public AdHocSubProcess(final String id, final String name,
 			final boolean isForCompensation, final boolean triggeredByEvent) {
 		super(id, name, isForCompensation, triggeredByEvent);
-	}
-
-	@Override
-	public String getElementName() {
-		return ELEMENT_NAME;
 	}
 
 }

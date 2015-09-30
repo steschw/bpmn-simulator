@@ -20,6 +20,7 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.model.process.data;
 
+import com.googlecode.bpmn_simulator.animation.element.logical.LogicalElements;
 import com.googlecode.bpmn_simulator.animation.token.Token;
 import com.googlecode.bpmn_simulator.bpmn.Messages;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.AbstractFlowElement;
@@ -27,17 +28,14 @@ import com.googlecode.bpmn_simulator.bpmn.model.core.common.AbstractFlowElement;
 public final class DataObject
 		extends AbstractFlowElement {
 
-	public static final String ELEMENT_NAME = Messages.getString("dataObject"); //$NON-NLS-1$
+	static {
+		LogicalElements.register(DataObject.class, Messages.getString("dataObject")); //$NON-NLS-1$
+	}
 
 	private boolean isCollection;
 
 	public DataObject(final String id, final String name) {
 		super(id, name);
-	}
-
-	@Override
-	public String getElementName() {
-		return ELEMENT_NAME;
 	}
 
 	public void setIsCollection(final boolean isCollection) {

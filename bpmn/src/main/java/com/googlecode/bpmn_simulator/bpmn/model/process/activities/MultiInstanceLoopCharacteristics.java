@@ -20,23 +20,21 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.model.process.activities;
 
+import com.googlecode.bpmn_simulator.animation.element.logical.LogicalElements;
 import com.googlecode.bpmn_simulator.bpmn.Messages;
 
 public final class MultiInstanceLoopCharacteristics
 		extends AbstractLoopCharacteristics {
 
-	public static final String ELEMENT_NAME = Messages.getString("multiInstanceLoopCharacteristics"); //$NON-NLS-1$
+	static {
+		LogicalElements.register(MultiInstanceLoopCharacteristics.class, Messages.getString("multiInstanceLoopCharacteristics")); //$NON-NLS-1$
+	}
 
 	private boolean sequential;
 
 	public MultiInstanceLoopCharacteristics(final String id, final boolean isSequential) {
 		super(id);
 		this.sequential = isSequential;
-	}
-
-	@Override
-	public String getElementName() {
-		return ELEMENT_NAME;
 	}
 
 	public boolean isSequential() {

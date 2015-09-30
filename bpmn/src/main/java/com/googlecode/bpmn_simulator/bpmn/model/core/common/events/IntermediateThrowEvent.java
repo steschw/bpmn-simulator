@@ -20,20 +20,18 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.model.core.common.events;
 
+import com.googlecode.bpmn_simulator.animation.element.logical.LogicalElements;
 import com.googlecode.bpmn_simulator.bpmn.Messages;
 
 public final class IntermediateThrowEvent
 		extends AbstractThrowEvent {
 
-	public static final String ELEMENT_NAME = Messages.getString("intermediateThrowEvent"); //$NON-NLS-1$
+	static {
+		LogicalElements.register(IntermediateCatchEvent.class, Messages.getString("intermediateThrowEvent")); //$NON-NLS-1$
+	}
 
 	public IntermediateThrowEvent(final String id, final String name) {
 		super(id, name);
-	}
-
-	@Override
-	public String getElementName() {
-		return ELEMENT_NAME;
 	}
 
 }

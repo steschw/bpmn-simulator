@@ -35,6 +35,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import com.googlecode.bpmn_simulator.animation.element.logical.LogicalElement;
+import com.googlecode.bpmn_simulator.animation.element.logical.LogicalElements;
 import com.googlecode.bpmn_simulator.animation.element.logical.LogicalFlowElement;
 import com.googlecode.bpmn_simulator.animation.input.AbstractXmlDefinition;
 import com.googlecode.bpmn_simulator.animation.ref.CastReference;
@@ -185,11 +186,6 @@ public class BPMNDefinition<E extends BPMNDiagram<?>>
 	}
 
 	@Override
-	public String getElementName() {
-		return ELEMENT_NAME;
-	}
-
-	@Override
 	public String getId() {
 		return id;
 	}
@@ -244,7 +240,7 @@ public class BPMNDefinition<E extends BPMNDiagram<?>>
 
 	protected void notifyElementLoading(final BaseElement element) {
 		LOG.info(MessageFormat.format("Loading {0} ''{1}''",
-				element.getElementName(), element.getId()));
+				LogicalElements.getName(element), element.getId()));
 	}
 
 	protected String getIdAttribute(final Node node) {

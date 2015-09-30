@@ -23,6 +23,7 @@ package com.googlecode.bpmn_simulator.bpmn.model.choreography;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import com.googlecode.bpmn_simulator.animation.element.logical.LogicalElements;
 import com.googlecode.bpmn_simulator.bpmn.Messages;
 import com.googlecode.bpmn_simulator.bpmn.model.collaboration.Collaboration;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.FlowElement;
@@ -32,17 +33,14 @@ public class Choreography
 		extends Collaboration
 		implements FlowElementsContainer {
 
-	public static final String ELEMENT_NAME = Messages.getString("choreography"); //$NON-NLS-1$
+	static {
+		LogicalElements.register(Choreography.class, Messages.getString("choreography")); //$NON-NLS-1$
+	}
 
 	private final Collection<FlowElement> flowElements = new ArrayList<>();
 
 	public Choreography(final String id, final String name, final boolean isClosed) {
 		super(id, name, isClosed);
-	}
-
-	@Override
-	public String getElementName() {
-		return ELEMENT_NAME;
 	}
 
 	@Override

@@ -22,4 +22,6 @@ public interface Module {
 
 	Map<Class<? extends LogicalElement>, Set<Class<? extends VisualElement>>> getElements();
 
+	void load();
+
 }

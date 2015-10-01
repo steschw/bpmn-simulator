@@ -20,15 +20,8 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.model.process.data;
 
-import com.googlecode.bpmn_simulator.animation.element.logical.LogicalElements;
-import com.googlecode.bpmn_simulator.bpmn.Messages;
-
 public class DataOutput
 		extends AbstractItemAwareElementNamed {
-
-	static {
-		LogicalElements.register(DataOutput.class, Messages.getString("dataOutput")); //$NON-NLS-1$
-	}
 
 	public DataOutput(final String id, final String name) {
 		super(id, name);

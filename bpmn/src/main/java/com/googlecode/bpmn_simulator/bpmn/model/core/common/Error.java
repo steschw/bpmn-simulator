@@ -20,18 +20,12 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.model.core.common;
 
-import com.googlecode.bpmn_simulator.animation.element.logical.LogicalElements;
-import com.googlecode.bpmn_simulator.bpmn.Messages;
 import com.googlecode.bpmn_simulator.bpmn.model.NamedElement;
 import com.googlecode.bpmn_simulator.bpmn.model.core.foundation.AbstractRootElement;
 
 public final class Error
 		extends AbstractRootElement
 		implements NamedElement {
-
-	static {
-		LogicalElements.register(Error.class, Messages.getString("error")); //$NON-NLS-1$
-	}
 
 	private final String name;
 

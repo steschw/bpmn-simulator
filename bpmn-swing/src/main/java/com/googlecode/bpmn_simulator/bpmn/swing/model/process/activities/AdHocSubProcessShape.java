@@ -20,7 +20,6 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.swing.model.process.activities;
 
-import com.googlecode.bpmn_simulator.animation.element.visual.swing.Colors;
 import com.googlecode.bpmn_simulator.animation.element.visual.swing.ImageList;
 import com.googlecode.bpmn_simulator.bpmn.model.process.activities.AdHocSubProcess;
 import com.googlecode.bpmn_simulator.bpmn.swing.di.Appearance;
@@ -28,10 +27,6 @@ import com.googlecode.bpmn_simulator.bpmn.swing.di.Appearance;
 @SuppressWarnings("serial")
 public final class AdHocSubProcessShape
 		extends AbstractSubProcessShape<AdHocSubProcess> {
-
-	static {
-		Appearance.setDefaultColor(AdHocSubProcessShape.class, Colors.YELLOW);
-	}
 
 	public AdHocSubProcessShape(final AdHocSubProcess element) {
 		super(element);

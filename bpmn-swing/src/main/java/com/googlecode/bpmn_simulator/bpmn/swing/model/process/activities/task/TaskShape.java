@@ -20,17 +20,11 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.swing.model.process.activities.task;
 
-import com.googlecode.bpmn_simulator.animation.element.visual.swing.Colors;
 import com.googlecode.bpmn_simulator.bpmn.model.process.activities.tasks.Task;
-import com.googlecode.bpmn_simulator.bpmn.swing.di.Appearance;
 
 @SuppressWarnings("serial")
 public class TaskShape
 		extends AbstractTaskShape<Task> {
-
-	static {
-		Appearance.setDefaultColor(TaskShape.class, Colors.YELLOW);
-	}
 
 	public TaskShape(final Task element) {
 		super(element);

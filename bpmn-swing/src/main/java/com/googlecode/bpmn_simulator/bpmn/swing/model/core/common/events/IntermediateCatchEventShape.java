@@ -20,17 +20,11 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.swing.model.core.common.events;
 
-import com.googlecode.bpmn_simulator.animation.element.visual.swing.Colors;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.events.IntermediateCatchEvent;
-import com.googlecode.bpmn_simulator.bpmn.swing.di.Appearance;
 
 @SuppressWarnings("serial")
 public class IntermediateCatchEventShape
 		extends AbstractIntermediateEventShape<IntermediateCatchEvent> {
-
-	static {
-		Appearance.setDefaultColor(IntermediateCatchEventShape.class, Colors.ORANGE);
-	}
 
 	public IntermediateCatchEventShape(final IntermediateCatchEvent element) {
 		super(element);

@@ -14,6 +14,10 @@ public abstract class AbstractModule
 
 	private final Map<Class<? extends LogicalElement>, Set<Class<? extends VisualElement>>> elements = new HashMap<>();
 
+	protected AbstractModule() {
+		super();
+	}
+
 	protected void addElement(final Class<? extends LogicalElement> logical, Class<? extends VisualElement> visual) {
 		final Set<Class<? extends VisualElement>> visuals = new HashSet<>();
 		Collections.addAll(visuals, visual);
@@ -23,6 +27,11 @@ public abstract class AbstractModule
 	@Override
 	public Map<Class<? extends LogicalElement>, Set<Class<? extends VisualElement>>> getElements() {
 		return Collections.unmodifiableMap(elements);
+	}
+
+	@Override
+	public String toString() {
+		return getDescription();
 	}
 
 }

@@ -20,15 +20,8 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.model.core.common.events;
 
-import com.googlecode.bpmn_simulator.animation.element.logical.LogicalElements;
-import com.googlecode.bpmn_simulator.bpmn.Messages;
-
 public class CancelEventDefinition
 		extends AbstractEventDefinition {
-
-	static {
-		LogicalElements.register(CancelEventDefinition.class, Messages.getString("cancelEventDefinition")); //$NON-NLS-1$
-	}
 
 	public CancelEventDefinition(final String id) {
 		super(id);

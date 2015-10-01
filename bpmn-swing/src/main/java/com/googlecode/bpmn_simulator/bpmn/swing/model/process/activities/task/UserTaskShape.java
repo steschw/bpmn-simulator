@@ -20,19 +20,14 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.swing.model.process.activities.task;
 
-import java.awt.Image;
 
-import com.googlecode.bpmn_simulator.animation.element.visual.swing.Colors;
+import java.awt.Image;
 import com.googlecode.bpmn_simulator.bpmn.model.process.activities.tasks.UserTask;
 import com.googlecode.bpmn_simulator.bpmn.swing.di.Appearance;
 
 @SuppressWarnings("serial")
 public class UserTaskShape
 		extends AbstractTaskShape<UserTask> {
-
-	static {
-		Appearance.setDefaultColor(UserTaskShape.class, Colors.YELLOW);
-	}
 
 	public UserTaskShape(final UserTask element) {
 		super(element);

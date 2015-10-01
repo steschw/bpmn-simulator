@@ -21,18 +21,12 @@
 package com.googlecode.bpmn_simulator.bpmn.swing.model.process.data;
 
 import java.awt.Image;
-
-import com.googlecode.bpmn_simulator.animation.element.visual.swing.Colors;
 import com.googlecode.bpmn_simulator.bpmn.model.process.data.DataInput;
 import com.googlecode.bpmn_simulator.bpmn.swing.di.Appearance;
 
 @SuppressWarnings("serial")
 public class DataInputShape
 		extends AbstractDataObjectShape<DataInput> {
-
-	static {
-		Appearance.setDefaultColor(DataInputShape.class, Colors.GRAY);
-	}
 
 	public DataInputShape(final DataInput element) {
 		super(element);

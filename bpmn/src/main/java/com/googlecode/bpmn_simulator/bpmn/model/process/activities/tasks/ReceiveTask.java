@@ -20,17 +20,11 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.model.process.activities.tasks;
 
-import com.googlecode.bpmn_simulator.animation.element.logical.LogicalElements;
-import com.googlecode.bpmn_simulator.bpmn.Messages;
 import com.googlecode.bpmn_simulator.bpmn.model.InstantiateElement;
 
 public final class ReceiveTask
 		extends Task
 		implements InstantiateElement {
-
-	static {
-		LogicalElements.register(ReceiveTask.class, Messages.getString("receiveTask")); //$NON-NLS-1$
-	}
 
 	private boolean instantiate;
 

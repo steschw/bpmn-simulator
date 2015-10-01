@@ -24,19 +24,13 @@ import java.awt.BasicStroke;
 import java.awt.Image;
 import java.awt.Stroke;
 
-import com.googlecode.bpmn_simulator.animation.element.visual.swing.Colors;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.events.EndEvent;
-import com.googlecode.bpmn_simulator.bpmn.swing.di.Appearance;
 
 @SuppressWarnings("serial")
 public class EndEventShape
 		extends AbstractEventShape<EndEvent> {
 
 	private static final Stroke STROKE = new BasicStroke(4);
-
-	static {
-		Appearance.setDefaultColor(EndEventShape.class, Colors.RED);
-	}
 
 	public EndEventShape(final EndEvent element) {
 		super(element);

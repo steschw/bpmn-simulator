@@ -28,7 +28,6 @@ import com.googlecode.bpmn_simulator.animation.element.visual.Bounds;
 import com.googlecode.bpmn_simulator.animation.element.visual.swing.AbstractVisualNodeElement;
 import com.googlecode.bpmn_simulator.bpmn.di.BPMNShape;
 import com.googlecode.bpmn_simulator.bpmn.di.ParticipantBandKind;
-import com.googlecode.bpmn_simulator.bpmn.swing.di.Appearance.ElementAppearance;
 
 @SuppressWarnings("serial")
 public abstract class AbstractBPMNShape<E extends LogicalElement>
@@ -107,19 +106,15 @@ public abstract class AbstractBPMNShape<E extends LogicalElement>
 		return DEFAULT_STROKE;
 	}
 
-	protected ElementAppearance getAppearance() {
-		return Appearance.getDefault().getForElement(getClass());
-	}
-
 	@Override
 	protected void paintElementBackground(final Graphics2D g) {
-		g.setPaint(getAppearance().getBackground());
+		g.setPaint(getBackgroundColor());
 	}
 
 	@Override
 	protected void paintElementForeground(final Graphics2D g) {
 		g.setStroke(getStroke());
-		g.setPaint(getAppearance().getForeground());
+		g.setPaint(getForegroundColor());
 	}
 
 	protected Bounds getIconBounds() {

@@ -20,15 +20,8 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.model.choreography.activities;
 
-import com.googlecode.bpmn_simulator.animation.element.logical.LogicalElements;
-import com.googlecode.bpmn_simulator.bpmn.Messages;
-
 public final class CallChoreography
 		extends AbstractChoreographyActivity {
-
-	static {
-		LogicalElements.register(CallChoreography.class, Messages.getString("callChoreography")); //$NON-NLS-1$
-	}
 
 	public CallChoreography(final String id, final String name) {
 		super(id, name);

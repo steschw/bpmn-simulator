@@ -20,19 +20,13 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.model.core.common.artifacts;
 
-import javax.activation.MimeType;
 
-import com.googlecode.bpmn_simulator.animation.element.logical.LogicalElements;
-import com.googlecode.bpmn_simulator.bpmn.Messages;
+import javax.activation.MimeType;
 import com.googlecode.bpmn_simulator.bpmn.model.TextElement;
 
 public final class TextAnnotation
 		extends AbstractArtifact
 		implements TextElement {
-
-	static {
-		LogicalElements.register(TextAnnotation.class, Messages.getString("textAnnotation")); //$NON-NLS-1$
-	}
 
 	private MimeType textFormat;
 

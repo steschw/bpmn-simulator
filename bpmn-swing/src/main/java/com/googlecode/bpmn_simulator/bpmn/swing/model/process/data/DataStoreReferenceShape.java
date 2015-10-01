@@ -21,22 +21,15 @@
 package com.googlecode.bpmn_simulator.bpmn.swing.model.process.data;
 
 import java.awt.Graphics2D;
-
 import com.googlecode.bpmn_simulator.animation.element.visual.Bounds;
 import com.googlecode.bpmn_simulator.animation.element.visual.Point;
-import com.googlecode.bpmn_simulator.animation.element.visual.swing.Colors;
 import com.googlecode.bpmn_simulator.animation.element.visual.swing.Presentation;
 import com.googlecode.bpmn_simulator.bpmn.model.process.data.DataStoreReference;
 import com.googlecode.bpmn_simulator.bpmn.swing.di.AbstractBPMNShape;
-import com.googlecode.bpmn_simulator.bpmn.swing.di.Appearance;
 
 @SuppressWarnings("serial")
 public class DataStoreReferenceShape
 		extends AbstractBPMNShape<DataStoreReference> {
-
-	static {
-		Appearance.setDefaultColor(DataStoreReferenceShape.class, Colors.GRAY);
-	}
 
 	public DataStoreReferenceShape(final DataStoreReference element) {
 		super(element);

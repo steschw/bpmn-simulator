@@ -20,16 +20,10 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.model.core.common.events;
 
-import com.googlecode.bpmn_simulator.animation.element.logical.LogicalElements;
 import com.googlecode.bpmn_simulator.animation.token.Token;
-import com.googlecode.bpmn_simulator.bpmn.Messages;
 
 public final class EndEvent
 		extends AbstractThrowEvent {
-
-	static {
-		LogicalElements.register(EndEvent.class, Messages.getString("endEvent")); //$NON-NLS-1$
-	}
 
 	public EndEvent(final String id, final String name) {
 		super(id, name);

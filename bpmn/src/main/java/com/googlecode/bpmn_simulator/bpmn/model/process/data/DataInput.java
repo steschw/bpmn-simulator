@@ -20,15 +20,8 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.model.process.data;
 
-import com.googlecode.bpmn_simulator.animation.element.logical.LogicalElements;
-import com.googlecode.bpmn_simulator.bpmn.Messages;
-
 public class DataInput
 		extends AbstractItemAwareElementNamed {
-
-	static {
-		LogicalElements.register(DataInput.class, Messages.getString("dataInput")); //$NON-NLS-1$
-	}
 
 	public DataInput(final String id, final String name) {
 		super(id, name);

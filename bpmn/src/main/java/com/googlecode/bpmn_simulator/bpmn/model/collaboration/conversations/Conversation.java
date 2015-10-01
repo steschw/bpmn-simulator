@@ -20,15 +20,8 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.model.collaboration.conversations;
 
-import com.googlecode.bpmn_simulator.animation.element.logical.LogicalElements;
-import com.googlecode.bpmn_simulator.bpmn.Messages;
-
 public class Conversation
 		extends AbstractConversationNode {
-
-	static {
-		LogicalElements.register(Conversation.class, Messages.getString("conversation")); //$NON-NLS-1$
-	}
 
 	public Conversation(final String id, final String name) {
 		super(id, name);

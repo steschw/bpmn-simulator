@@ -20,11 +20,9 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.model.process.activities;
 
-import java.util.Collection;
 import java.util.ArrayList;
+import java.util.Collection;
 
-import com.googlecode.bpmn_simulator.animation.element.logical.LogicalElements;
-import com.googlecode.bpmn_simulator.bpmn.Messages;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.AbstractCallableElement;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.FlowElement;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.FlowElementsContainer;
@@ -32,10 +30,6 @@ import com.googlecode.bpmn_simulator.bpmn.model.core.common.FlowElementsContaine
 public final class Process
 		extends AbstractCallableElement
 		implements FlowElementsContainer {
-
-	static {
-		LogicalElements.register(Process.class, Messages.getString("process")); //$NON-NLS-1$
-	}
 
 	private final Collection<FlowElement> flowElements = new ArrayList<>();
 

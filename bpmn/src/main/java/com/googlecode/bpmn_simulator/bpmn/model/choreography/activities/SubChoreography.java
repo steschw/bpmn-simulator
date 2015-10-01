@@ -20,21 +20,15 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.model.choreography.activities;
 
-import java.util.Collection;
 import java.util.ArrayList;
+import java.util.Collection;
 
-import com.googlecode.bpmn_simulator.animation.element.logical.LogicalElements;
-import com.googlecode.bpmn_simulator.bpmn.Messages;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.FlowElement;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.FlowElementsContainer;
 
 public class SubChoreography
 		extends AbstractChoreographyActivity
 		implements FlowElementsContainer {
-
-	static {
-		LogicalElements.register(SubChoreography.class, Messages.getString("subChoreography")); //$NON-NLS-1$
-	}
 
 	private final Collection<FlowElement> flowElements = new ArrayList<>();
 

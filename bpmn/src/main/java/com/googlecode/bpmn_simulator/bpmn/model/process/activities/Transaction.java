@@ -20,15 +20,8 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.model.process.activities;
 
-import com.googlecode.bpmn_simulator.animation.element.logical.LogicalElements;
-import com.googlecode.bpmn_simulator.bpmn.Messages;
-
 public final class Transaction
 		extends SubProcess {
-
-	static {
-		LogicalElements.register(Transaction.class, Messages.getString("transaction")); //$NON-NLS-1$
-	}
 
 	public Transaction(final String id, final String name,
 			final boolean isForCompensation, final boolean triggeredByEvent) {

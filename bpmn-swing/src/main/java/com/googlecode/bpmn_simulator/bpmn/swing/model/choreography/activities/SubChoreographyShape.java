@@ -20,7 +20,6 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.swing.model.choreography.activities;
 
-import com.googlecode.bpmn_simulator.animation.element.visual.swing.Colors;
 import com.googlecode.bpmn_simulator.animation.element.visual.swing.ImageList;
 import com.googlecode.bpmn_simulator.bpmn.model.choreography.activities.SubChoreography;
 import com.googlecode.bpmn_simulator.bpmn.swing.di.Appearance;
@@ -28,10 +27,6 @@ import com.googlecode.bpmn_simulator.bpmn.swing.di.Appearance;
 @SuppressWarnings("serial")
 public class SubChoreographyShape
 		extends AbstractChoreographyActivityShape<SubChoreography>{
-
-	static {
-		Appearance.setDefaultColor(SubChoreographyShape.class, Colors.YELLOW);
-	}
 
 	public SubChoreographyShape(final SubChoreography element) {
 		super(element);

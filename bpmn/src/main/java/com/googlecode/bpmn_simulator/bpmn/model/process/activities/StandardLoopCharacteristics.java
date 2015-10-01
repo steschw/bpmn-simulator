@@ -20,15 +20,8 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.model.process.activities;
 
-import com.googlecode.bpmn_simulator.animation.element.logical.LogicalElements;
-import com.googlecode.bpmn_simulator.bpmn.Messages;
-
 public final class StandardLoopCharacteristics
 		extends AbstractLoopCharacteristics {
-
-	static {
-		LogicalElements.register(StandardLoopCharacteristics.class, Messages.getString("standardLoopCharacteristics")); //$NON-NLS-1$
-	}
 
 	public StandardLoopCharacteristics(final String id) {
 		super(id);

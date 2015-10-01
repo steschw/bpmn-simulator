@@ -20,8 +20,8 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.swing.model.core.common;
 
-import java.awt.Dimension;
 import java.awt.Graphics2D;
+import java.awt.Dimension;
 import java.awt.Paint;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -33,23 +33,17 @@ import com.googlecode.bpmn_simulator.animation.element.visual.GeometryUtils;
 import com.googlecode.bpmn_simulator.animation.element.visual.Point;
 import com.googlecode.bpmn_simulator.animation.element.visual.Waypoint;
 import com.googlecode.bpmn_simulator.animation.element.visual.Waypoints;
-import com.googlecode.bpmn_simulator.animation.element.visual.swing.Colors;
 import com.googlecode.bpmn_simulator.animation.ref.ReferenceUtils;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.Expression;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.SequenceFlow;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.gateways.Gateway;
 import com.googlecode.bpmn_simulator.bpmn.swing.di.AbstractBPMNTokenEdge;
-import com.googlecode.bpmn_simulator.bpmn.swing.di.Appearance;
 
 @SuppressWarnings("serial")
 public final class SequenceFlowEdge
 		extends AbstractBPMNTokenEdge<SequenceFlow> {
 
 	private static final double SYMBOL_DEFAULT_RAD = Math.toRadians(45.);
-
-	static {
-		Appearance.setDefaultColor(SequenceFlowEdge.class, Colors.WHITE, Colors.BLACK);
-	}
 
 	private static final int START_SYMBOL_SIZE = 8;
 
@@ -139,7 +133,7 @@ public final class SequenceFlowEdge
 		final Bounds diamondBounds = Bounds.fromCenter(position, START_SYMBOL_SIZE, (int) (START_SYMBOL_SIZE * 0.6));
 		getPresentation().rotate(g, position, angle);
 		final Paint paint = g.getPaint();
-		g.setPaint(Appearance.getDefault().getForElement(getClass()).getBackground());
+		g.setPaint(getBackgroundColor());
 		getPresentation().fillDiamond(g, diamondBounds);
 		g.setPaint(paint);
 		getPresentation().drawDiamond(g, diamondBounds);

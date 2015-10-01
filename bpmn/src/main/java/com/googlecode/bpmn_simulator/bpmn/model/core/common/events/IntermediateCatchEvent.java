@@ -20,15 +20,8 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.model.core.common.events;
 
-import com.googlecode.bpmn_simulator.animation.element.logical.LogicalElements;
-import com.googlecode.bpmn_simulator.bpmn.Messages;
-
 public final class IntermediateCatchEvent
 		extends AbstractCatchEvent {
-
-	static {
-		LogicalElements.register(IntermediateCatchEvent.class, Messages.getString("intermediateCatchEvent")); //$NON-NLS-1$
-	}
 
 	public IntermediateCatchEvent(final String id, final String name) {
 		super(id, name);

@@ -15,7 +15,7 @@ public final class LogicalElements {
 	public static void register(final Class<? extends LogicalElement> element, final Info info) {
 		synchronized (infos) {
 			if (infos.containsKey(element)) {
-				throw new IllegalArgumentException();
+				throw new IllegalArgumentException("element " + element.getName() + " already exists");
 			}
 			if (info == null) {
 				throw new NullPointerException();
@@ -40,10 +40,12 @@ public final class LogicalElements {
 	}
 
 	public static String getName(final LogicalElement element) {
-		if (element == null) {
-			throw new NullPointerException();
-		}
 		return getName(element.getClass());
+	}
+
+	public static int getDefaultStepCount(final Class<? extends LogicalElement> element) {
+		final Info info = getInfo(element);
+		return (info == null) ? Info.DEFAULT_STEP_COUNT : info.getDefaultStepCount();
 	}
 
 	public interface Info {

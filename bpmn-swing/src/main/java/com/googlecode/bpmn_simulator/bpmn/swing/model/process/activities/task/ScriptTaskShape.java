@@ -20,19 +20,14 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.swing.model.process.activities.task;
 
-import java.awt.Image;
 
-import com.googlecode.bpmn_simulator.animation.element.visual.swing.Colors;
+import java.awt.Image;
 import com.googlecode.bpmn_simulator.bpmn.model.process.activities.tasks.ScriptTask;
 import com.googlecode.bpmn_simulator.bpmn.swing.di.Appearance;
 
 @SuppressWarnings("serial")
 public class ScriptTaskShape
 		extends AbstractTaskShape<ScriptTask> {
-
-	static {
-		Appearance.setDefaultColor(ScriptTaskShape.class, Colors.YELLOW);
-	}
 
 	public ScriptTaskShape(final ScriptTask element) {
 		super(element);

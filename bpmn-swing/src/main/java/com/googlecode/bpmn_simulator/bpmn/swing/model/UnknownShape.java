@@ -23,16 +23,15 @@ package com.googlecode.bpmn_simulator.bpmn.swing.model;
 import java.awt.Graphics2D;
 
 import com.googlecode.bpmn_simulator.animation.element.logical.LogicalElement;
-import com.googlecode.bpmn_simulator.animation.element.visual.swing.Colors;
+import com.googlecode.bpmn_simulator.animation.element.visual.VisualElements;
 import com.googlecode.bpmn_simulator.bpmn.swing.di.AbstractBPMNShape;
-import com.googlecode.bpmn_simulator.bpmn.swing.di.Appearance;
 
 @SuppressWarnings("serial")
 public class UnknownShape<E extends LogicalElement>
 		extends AbstractBPMNShape<E> {
 
 	static {
-		Appearance.setDefaultColor(UnknownShape.class, Colors.RED);
+		VisualElements.register(UnknownShape.class, VisualElements.Info.RED);
 	}
 
 	public UnknownShape(final E element) {

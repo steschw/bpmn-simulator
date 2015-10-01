@@ -20,17 +20,11 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.swing.model.choreography.activities;
 
-import com.googlecode.bpmn_simulator.animation.element.visual.swing.Colors;
 import com.googlecode.bpmn_simulator.bpmn.model.choreography.activities.ChoreographyTask;
-import com.googlecode.bpmn_simulator.bpmn.swing.di.Appearance;
 
 @SuppressWarnings("serial")
 public class ChoreographyTaskShape
 		extends AbstractChoreographyActivityShape<ChoreographyTask> {
-
-	static {
-		Appearance.setDefaultColor(ChoreographyTaskShape.class, Colors.YELLOW);
-	}
 
 	public ChoreographyTaskShape(final ChoreographyTask element) {
 		super(element);

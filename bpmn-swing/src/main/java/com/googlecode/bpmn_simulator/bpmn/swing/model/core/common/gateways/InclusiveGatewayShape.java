@@ -24,19 +24,13 @@ import java.awt.BasicStroke;
 import java.awt.Graphics2D;
 import java.awt.Stroke;
 
-import com.googlecode.bpmn_simulator.animation.element.visual.swing.Colors;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.gateways.InclusiveGateway;
-import com.googlecode.bpmn_simulator.bpmn.swing.di.Appearance;
 
 @SuppressWarnings("serial")
 public final class InclusiveGatewayShape
 		extends AbstractGatewayShape<InclusiveGateway> {
 
 	private static final Stroke SYMBOL_STROKE = new BasicStroke(2.f);
-
-	static {
-		Appearance.setDefaultColor(InclusiveGatewayShape.class, Colors.ORANGE);
-	}
 
 	public InclusiveGatewayShape(final InclusiveGateway element) {
 		super(element);

@@ -20,16 +20,10 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.model.process;
 
-import com.googlecode.bpmn_simulator.animation.element.logical.LogicalElements;
-import com.googlecode.bpmn_simulator.bpmn.Messages;
 import com.googlecode.bpmn_simulator.bpmn.model.core.foundation.AbstractBaseElementNamed;
 
 public final class Lane
 		extends AbstractBaseElementNamed {
-
-	static {
-		LogicalElements.register(Lane.class, Messages.getString("lane")); //$NON-NLS-1$
-	}
 
 	public Lane(final String id, final String name) {
 		super(id, name);

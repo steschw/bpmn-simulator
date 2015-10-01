@@ -20,16 +20,10 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.model.collaboration.conversations;
 
-import com.googlecode.bpmn_simulator.animation.element.logical.LogicalElements;
-import com.googlecode.bpmn_simulator.bpmn.Messages;
 import com.googlecode.bpmn_simulator.bpmn.model.core.foundation.AbstractBaseElementNamed;
 
 public class ConversationLink
 		extends AbstractBaseElementNamed {
-
-	static {
-		LogicalElements.register(ConversationLink.class, Messages.getString("conversationLink")); //$NON-NLS-1$
-	}
 
 	public ConversationLink(final String id, final String name) {
 		super(id, name);

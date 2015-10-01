@@ -20,15 +20,8 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.model.process.activities;
 
-import com.googlecode.bpmn_simulator.animation.element.logical.LogicalElements;
-import com.googlecode.bpmn_simulator.bpmn.Messages;
-
 public final class MultiInstanceLoopCharacteristics
 		extends AbstractLoopCharacteristics {
-
-	static {
-		LogicalElements.register(MultiInstanceLoopCharacteristics.class, Messages.getString("multiInstanceLoopCharacteristics")); //$NON-NLS-1$
-	}
 
 	private boolean sequential;
 

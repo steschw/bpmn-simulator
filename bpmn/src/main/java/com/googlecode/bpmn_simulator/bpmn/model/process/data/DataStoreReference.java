@@ -20,18 +20,12 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.model.process.data;
 
-import com.googlecode.bpmn_simulator.animation.element.logical.LogicalElements;
 import com.googlecode.bpmn_simulator.animation.ref.Reference;
 import com.googlecode.bpmn_simulator.animation.token.Token;
-import com.googlecode.bpmn_simulator.bpmn.Messages;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.AbstractFlowElement;
 
 public final class DataStoreReference
 		extends AbstractFlowElement {
-
-	static {
-		LogicalElements.register(DataStoreReference.class, Messages.getString("dataStoreReference")); //$NON-NLS-1$
-	}
 
 	private final Reference<DataStore> dataStore;
 

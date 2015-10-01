@@ -20,21 +20,15 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.model.collaboration;
 
-import java.util.HashSet;
 import java.util.Set;
+import java.util.HashSet;
 
-import com.googlecode.bpmn_simulator.animation.element.logical.LogicalElements;
-import com.googlecode.bpmn_simulator.bpmn.Messages;
 import com.googlecode.bpmn_simulator.bpmn.model.NamedElement;
 import com.googlecode.bpmn_simulator.bpmn.model.core.foundation.AbstractRootElement;
 
 public class Collaboration
 		extends AbstractRootElement
 		implements NamedElement {
-
-	static {
-		LogicalElements.register(Collaboration.class, Messages.getString("collaboration")); //$NON-NLS-1$
-	}
 
 	private String name;
 

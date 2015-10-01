@@ -25,7 +25,6 @@ import java.awt.Graphics2D;
 import com.googlecode.bpmn_simulator.animation.element.logical.LogicalElement;
 import com.googlecode.bpmn_simulator.animation.element.visual.swing.AbstractVisualEdgeElement;
 import com.googlecode.bpmn_simulator.bpmn.di.BPMNEdge;
-import com.googlecode.bpmn_simulator.bpmn.swing.di.Appearance.ElementAppearance;
 
 @SuppressWarnings("serial")
 public abstract class AbstractBPMNEdge<E extends LogicalElement>
@@ -42,8 +41,7 @@ public abstract class AbstractBPMNEdge<E extends LogicalElement>
 
 	@Override
 	protected void paintElementForeground(final Graphics2D g) {
-		final ElementAppearance appearance = Appearance.getDefault().getForElement(getClass());
-		g.setPaint(appearance.getForeground());
+		g.setPaint(getForegroundColor());
 		paintElementLine(g);
 		paintElementStart(g);
 		paintElementEnd(g);

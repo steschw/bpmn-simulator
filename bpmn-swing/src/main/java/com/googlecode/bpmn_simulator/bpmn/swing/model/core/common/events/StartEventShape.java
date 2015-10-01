@@ -20,9 +20,8 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.swing.model.core.common.events;
 
-import java.awt.Stroke;
 
-import com.googlecode.bpmn_simulator.animation.element.visual.swing.Colors;
+import java.awt.Stroke;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.events.StartEvent;
 import com.googlecode.bpmn_simulator.bpmn.swing.di.Appearance;
 
@@ -31,10 +30,6 @@ public class StartEventShape
 		extends AbstractEventShape<StartEvent> {
 
 	private static final Stroke NONINTERRUPTING_STROKE = Appearance.getDefault().createStrokeDashed(1);
-
-	static {
-		Appearance.setDefaultColor(StartEventShape.class, Colors.GREEN);
-	}
 
 	public StartEventShape(final StartEvent element) {
 		super(element);

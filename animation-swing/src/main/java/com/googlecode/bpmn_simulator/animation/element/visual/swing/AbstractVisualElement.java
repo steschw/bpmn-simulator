@@ -20,10 +20,13 @@
  */
 package com.googlecode.bpmn_simulator.animation.element.visual.swing;
 
+import java.awt.Color;
+
 import com.googlecode.bpmn_simulator.animation.element.logical.LogicalElement;
 import com.googlecode.bpmn_simulator.animation.element.visual.Bounds;
 import com.googlecode.bpmn_simulator.animation.element.visual.Label;
 import com.googlecode.bpmn_simulator.animation.element.visual.VisualElement;
+import com.googlecode.bpmn_simulator.animation.element.visual.VisualElements;
 
 /*
  * +-------------------------------------+
@@ -82,6 +85,22 @@ abstract class AbstractVisualElement<E extends LogicalElement>
 
 	protected Bounds getInnerBounds() {
 		return getInnerBoundsRelative().translate(getX(), getY());
+	}
+
+	protected Color getBackgroundColor() {
+		final VisualElements.Info info = VisualElements.getInfo(getClass());
+		if (info != null) {
+			return new Color(info.getDefaultBackgroundColor());
+		}
+		return null;
+	}
+
+	protected Color getForegroundColor() {
+		final VisualElements.Info info = VisualElements.getInfo(getClass());
+		if (info != null) {
+			return new Color(info.getDefaultForegroundColor());
+		}
+		return null;
 	}
 
 }

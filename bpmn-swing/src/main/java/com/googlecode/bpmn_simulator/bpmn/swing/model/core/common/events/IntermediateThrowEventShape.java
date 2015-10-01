@@ -20,19 +20,13 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.swing.model.core.common.events;
 
-import java.awt.Image;
 
-import com.googlecode.bpmn_simulator.animation.element.visual.swing.Colors;
+import java.awt.Image;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.events.IntermediateThrowEvent;
-import com.googlecode.bpmn_simulator.bpmn.swing.di.Appearance;
 
 @SuppressWarnings("serial")
 public class IntermediateThrowEventShape
 		extends AbstractIntermediateEventShape<IntermediateThrowEvent> {
-
-	static {
-		Appearance.setDefaultColor(IntermediateThrowEventShape.class, Colors.ORANGE);
-	}
 
 	public IntermediateThrowEventShape(final IntermediateThrowEvent element) {
 		super(element);

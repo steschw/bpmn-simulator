@@ -20,17 +20,11 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.swing.model.collaboration.conversations;
 
-import com.googlecode.bpmn_simulator.animation.element.visual.swing.Colors;
 import com.googlecode.bpmn_simulator.bpmn.model.collaboration.conversations.SubConversation;
-import com.googlecode.bpmn_simulator.bpmn.swing.di.Appearance;
 
 @SuppressWarnings("serial")
 public final class SubConversationShape
 		extends AbstractConversationNodeShape<SubConversation> {
-
-	static {
-		Appearance.setDefaultColor(SubConversationShape.class, Colors.YELLOW);
-	}
 
 	public SubConversationShape(final SubConversation element) {
 		super(element);

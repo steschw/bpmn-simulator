@@ -26,13 +26,11 @@ import java.awt.Image;
 import java.awt.Stroke;
 import java.io.IOException;
 import java.net.URL;
-import java.util.HashMap;
 import java.util.IdentityHashMap;
 import java.util.Map;
 
 import javax.imageio.ImageIO;
 
-import com.googlecode.bpmn_simulator.animation.element.visual.VisualElement;
 import com.googlecode.bpmn_simulator.animation.element.visual.swing.Colors;
 
 public class Appearance {
@@ -87,8 +85,6 @@ public class Appearance {
 	private static Appearance instance;
 
 	private final Map<String, Image> images = new IdentityHashMap<>();
-
-	private final Map<Class<?>, ElementAppearance> elements = new HashMap<>();
 
 	private boolean ignoreExplicitColors;
 
@@ -161,25 +157,6 @@ public class Appearance {
 	public Image getImage(final String name) {
 		assert images.containsKey(name);
 		return images.get(name);
-	}
-
-	public static void setDefaultColor(final Class<? extends VisualElement> clazz, final Color background) {
-		getDefault().getForElement(clazz).setBackground(background);
-	}
-
-	public static void setDefaultColor(final Class<? extends VisualElement> clazz, final Color background, final Color foreground) {
-		final ElementAppearance appearance = getDefault().getForElement(clazz);
-		appearance.setBackground(background);
-		appearance.setForeground(foreground);
-	}
-
-	public ElementAppearance getForElement(final Class<?> elementClass) {
-		ElementAppearance elementAppearance = elements.get(elementClass);
-		if (elementAppearance == null) {
-			elementAppearance = new ElementAppearance();
-			elements.put(elementClass, elementAppearance);
-		}
-		return elementAppearance;
 	}
 
 	public int getArcSize() {

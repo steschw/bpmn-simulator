@@ -26,19 +26,13 @@ import java.awt.Stroke;
 
 import com.googlecode.bpmn_simulator.animation.element.visual.Bounds;
 import com.googlecode.bpmn_simulator.animation.element.visual.Point;
-import com.googlecode.bpmn_simulator.animation.element.visual.swing.Colors;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.gateways.ComplexGateway;
-import com.googlecode.bpmn_simulator.bpmn.swing.di.Appearance;
 
 @SuppressWarnings("serial")
 public final class ComplexGatewayShape
 		extends AbstractGatewayShape<ComplexGateway> {
 
 	private static final Stroke SYMBOL_STROKE = new BasicStroke(3.f);
-
-	static {
-		Appearance.setDefaultColor(ComplexGatewayShape.class, Colors.ORANGE);
-	}
 
 	public ComplexGatewayShape(final ComplexGateway element) {
 		super(element);

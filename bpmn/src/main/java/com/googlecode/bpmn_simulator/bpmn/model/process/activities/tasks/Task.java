@@ -20,16 +20,10 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.model.process.activities.tasks;
 
-import com.googlecode.bpmn_simulator.animation.element.logical.LogicalElements;
-import com.googlecode.bpmn_simulator.bpmn.Messages;
 import com.googlecode.bpmn_simulator.bpmn.model.process.activities.AbstractAtomicActivity;
 
 public class Task
 		extends AbstractAtomicActivity {
-
-	static {
-		LogicalElements.register(Task.class, Messages.getString("task")); //$NON-NLS-1$
-	}
 
 	public Task(final String id, final String name, final boolean isForCompensation) {
 		super(id, name, isForCompensation);

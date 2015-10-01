@@ -20,21 +20,15 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.swing.model.core.common.gateways;
 
-import java.awt.Graphics2D;
 
+import java.awt.Graphics2D;
 import com.googlecode.bpmn_simulator.animation.element.visual.Bounds;
-import com.googlecode.bpmn_simulator.animation.element.visual.swing.Colors;
 import com.googlecode.bpmn_simulator.animation.element.visual.swing.Presentation;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.gateways.EventBasedGateway;
-import com.googlecode.bpmn_simulator.bpmn.swing.di.Appearance;
 
 @SuppressWarnings("serial")
 public final class EventBasedGatewayShape
 		extends AbstractGatewayShape<EventBasedGateway> {
-
-	static {
-		Appearance.setDefaultColor(EventBasedGatewayShape.class, Colors.ORANGE);
-	}
 
 	public EventBasedGatewayShape(final EventBasedGateway element) {
 		super(element);

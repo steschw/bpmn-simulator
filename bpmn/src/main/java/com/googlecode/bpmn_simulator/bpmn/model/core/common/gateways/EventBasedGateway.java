@@ -20,17 +20,11 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.model.core.common.gateways;
 
-import com.googlecode.bpmn_simulator.animation.element.logical.LogicalElements;
-import com.googlecode.bpmn_simulator.bpmn.Messages;
 import com.googlecode.bpmn_simulator.bpmn.model.InstantiateElement;
 
 public final class EventBasedGateway
 		extends AbstractGateway
 		implements InstantiateElement {
-
-	static {
-		LogicalElements.register(EventBasedGateway.class, Messages.getString("eventBasedGateway")); //$NON-NLS-1$
-	}
 
 	private boolean instantiate;
 

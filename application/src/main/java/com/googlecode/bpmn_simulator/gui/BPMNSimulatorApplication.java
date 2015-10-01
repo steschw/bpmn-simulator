@@ -20,10 +20,12 @@
  */
 package com.googlecode.bpmn_simulator.gui;
 
-import java.io.File;
 
+import java.io.File;
 import javax.swing.SwingUtilities;
 
+import com.googlecode.bpmn_simulator.animation.module.Module;
+import com.googlecode.bpmn_simulator.animation.module.ModuleRegistry;
 import com.googlecode.bpmn_simulator.bpmn.swing.BPMNModule;
 import com.googlecode.bpmn_simulator.gui.preferences.Config;
 
@@ -32,16 +34,23 @@ public final class BPMNSimulatorApplication {
 	private BPMNSimulatorApplication() {
 	}
 
+	private static void loadModules() {
+		try {
+			Class.forName(BPMNModule.class.getCanonicalName());
+		} catch (ClassNotFoundException e) {
+		}
+		for (final Module module : ModuleRegistry.getDefault().getModules()) {
+			module.load();
+		}
+	}
+
 	public static void main(final String[] args) {
 
 		Config.getInstance().load();
 
 		Theme.init();
 
-		try {
-			Class.forName(BPMNModule.class.getCanonicalName());
-		} catch (ClassNotFoundException e) {
-		}
+		loadModules();
 
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override

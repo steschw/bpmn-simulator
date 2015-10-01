@@ -20,16 +20,10 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.model.collaboration;
 
-import com.googlecode.bpmn_simulator.animation.element.logical.LogicalElements;
-import com.googlecode.bpmn_simulator.bpmn.Messages;
 import com.googlecode.bpmn_simulator.bpmn.model.core.foundation.AbstractBaseElementNamed;
 
 public class Participant
 		extends AbstractBaseElementNamed {
-
-	static {
-		LogicalElements.register(Participant.class, Messages.getString("participant")); //$NON-NLS-1$
-	}
 
 	public Participant(final String id, final String name) {
 		super(id, name);

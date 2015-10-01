@@ -20,15 +20,8 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.model.core.common.events;
 
-import com.googlecode.bpmn_simulator.animation.element.logical.LogicalElements;
-import com.googlecode.bpmn_simulator.bpmn.Messages;
-
 public class SignalEventDefinition
 		extends AbstractEventDefinition {
-
-	static {
-		LogicalElements.register(SignalEventDefinition.class, Messages.getString("signalEventDefinition")); //$NON-NLS-1$
-	}
 
 	public SignalEventDefinition(final String id) {
 		super(id);

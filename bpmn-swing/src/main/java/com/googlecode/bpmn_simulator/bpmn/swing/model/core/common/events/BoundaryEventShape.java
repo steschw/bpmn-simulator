@@ -20,17 +20,11 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.swing.model.core.common.events;
 
-import com.googlecode.bpmn_simulator.animation.element.visual.swing.Colors;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.events.BoundaryEvent;
-import com.googlecode.bpmn_simulator.bpmn.swing.di.Appearance;
 
 @SuppressWarnings("serial")
 public class BoundaryEventShape
 		extends AbstractEventShape<BoundaryEvent> {
-
-	static {
-		Appearance.setDefaultColor(BoundaryEventShape.class, Colors.ORANGE);
-	}
 
 	public BoundaryEventShape(final BoundaryEvent element) {
 		super(element);

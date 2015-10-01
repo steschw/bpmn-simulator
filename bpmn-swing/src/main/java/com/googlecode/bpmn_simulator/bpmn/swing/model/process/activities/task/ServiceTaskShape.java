@@ -20,19 +20,14 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.swing.model.process.activities.task;
 
-import java.awt.Image;
 
-import com.googlecode.bpmn_simulator.animation.element.visual.swing.Colors;
+import java.awt.Image;
 import com.googlecode.bpmn_simulator.bpmn.model.process.activities.tasks.ServiceTask;
 import com.googlecode.bpmn_simulator.bpmn.swing.di.Appearance;
 
 @SuppressWarnings("serial")
 public class ServiceTaskShape
 		extends AbstractTaskShape<ServiceTask> {
-
-	static {
-		Appearance.setDefaultColor(ServiceTaskShape.class, Colors.YELLOW);
-	}
 
 	public ServiceTaskShape(final ServiceTask element) {
 		super(element);

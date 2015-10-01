@@ -20,15 +20,8 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.model.process.activities.tasks;
 
-import com.googlecode.bpmn_simulator.animation.element.logical.LogicalElements;
-import com.googlecode.bpmn_simulator.bpmn.Messages;
-
 public final class ManualTask
 		extends Task {
-
-	static {
-		LogicalElements.register(ManualTask.class, Messages.getString("manualTask")); //$NON-NLS-1$
-	}
 
 	public ManualTask(final String id, final String name,
 			final boolean isForCompensation) {

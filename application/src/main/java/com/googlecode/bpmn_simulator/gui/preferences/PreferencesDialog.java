@@ -20,6 +20,8 @@
  */
 package com.googlecode.bpmn_simulator.gui.preferences;
 
+import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -38,56 +40,22 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JSpinner;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.SpinnerNumberModel;
 
 import org.jdesktop.swingx.JXColorSelectionButton;
 import org.jdesktop.swingx.JXHyperlink;
 import org.jdesktop.swingx.hyperlink.HyperlinkAction;
 
 import com.googlecode.bpmn_simulator.animation.element.logical.LogicalElement;
+import com.googlecode.bpmn_simulator.animation.element.logical.LogicalElements;
 import com.googlecode.bpmn_simulator.animation.element.visual.VisualElement;
+import com.googlecode.bpmn_simulator.animation.element.visual.VisualElements;
 import com.googlecode.bpmn_simulator.animation.module.Module;
 import com.googlecode.bpmn_simulator.animation.module.ModuleRegistry;
-import com.googlecode.bpmn_simulator.bpmn.swing.di.Appearance;
-import com.googlecode.bpmn_simulator.bpmn.swing.di.Appearance.ElementAppearance;
-import com.googlecode.bpmn_simulator.bpmn.swing.model.choreography.activities.ChoreographyTaskShape;
-import com.googlecode.bpmn_simulator.bpmn.swing.model.choreography.activities.SubChoreographyShape;
-import com.googlecode.bpmn_simulator.bpmn.swing.model.collaboration.MessageFlowEdge;
-import com.googlecode.bpmn_simulator.bpmn.swing.model.collaboration.ParticipantShape;
-import com.googlecode.bpmn_simulator.bpmn.swing.model.core.common.SequenceFlowEdge;
-import com.googlecode.bpmn_simulator.bpmn.swing.model.core.common.artifacts.AssociationEdge;
-import com.googlecode.bpmn_simulator.bpmn.swing.model.core.common.artifacts.GroupShape;
-import com.googlecode.bpmn_simulator.bpmn.swing.model.core.common.artifacts.TextAnnotationShape;
-import com.googlecode.bpmn_simulator.bpmn.swing.model.core.common.events.BoundaryEventShape;
-import com.googlecode.bpmn_simulator.bpmn.swing.model.core.common.events.EndEventShape;
-import com.googlecode.bpmn_simulator.bpmn.swing.model.core.common.events.IntermediateCatchEventShape;
-import com.googlecode.bpmn_simulator.bpmn.swing.model.core.common.events.IntermediateThrowEventShape;
-import com.googlecode.bpmn_simulator.bpmn.swing.model.core.common.events.StartEventShape;
-import com.googlecode.bpmn_simulator.bpmn.swing.model.core.common.gateways.ComplexGatewayShape;
-import com.googlecode.bpmn_simulator.bpmn.swing.model.core.common.gateways.EventBasedGatewayShape;
-import com.googlecode.bpmn_simulator.bpmn.swing.model.core.common.gateways.ExclusiveGatewayShape;
-import com.googlecode.bpmn_simulator.bpmn.swing.model.core.common.gateways.InclusiveGatewayShape;
-import com.googlecode.bpmn_simulator.bpmn.swing.model.core.common.gateways.ParallelGatewayShape;
-import com.googlecode.bpmn_simulator.bpmn.swing.model.process.LaneShape;
-import com.googlecode.bpmn_simulator.bpmn.swing.model.process.activities.AdHocSubProcessShape;
-import com.googlecode.bpmn_simulator.bpmn.swing.model.process.activities.CallActivityShape;
-import com.googlecode.bpmn_simulator.bpmn.swing.model.process.activities.SubProcessShape;
-import com.googlecode.bpmn_simulator.bpmn.swing.model.process.activities.TransactionShape;
-import com.googlecode.bpmn_simulator.bpmn.swing.model.process.activities.task.BusinessRuleTaskShape;
-import com.googlecode.bpmn_simulator.bpmn.swing.model.process.activities.task.ManualTaskShape;
-import com.googlecode.bpmn_simulator.bpmn.swing.model.process.activities.task.ReceiveTaskShape;
-import com.googlecode.bpmn_simulator.bpmn.swing.model.process.activities.task.ScriptTaskShape;
-import com.googlecode.bpmn_simulator.bpmn.swing.model.process.activities.task.SendTaskShape;
-import com.googlecode.bpmn_simulator.bpmn.swing.model.process.activities.task.ServiceTaskShape;
-import com.googlecode.bpmn_simulator.bpmn.swing.model.process.activities.task.TaskShape;
-import com.googlecode.bpmn_simulator.bpmn.swing.model.process.activities.task.UserTaskShape;
-import com.googlecode.bpmn_simulator.bpmn.swing.model.process.data.DataAssociationEdge;
-import com.googlecode.bpmn_simulator.bpmn.swing.model.process.data.DataInputShape;
-import com.googlecode.bpmn_simulator.bpmn.swing.model.process.data.DataObjectReferenceShape;
-import com.googlecode.bpmn_simulator.bpmn.swing.model.process.data.DataOutputShape;
-import com.googlecode.bpmn_simulator.bpmn.swing.model.process.data.DataStoreReferenceShape;
 import com.googlecode.bpmn_simulator.gui.AbstractDialog;
 import com.googlecode.bpmn_simulator.gui.Messages;
 
@@ -108,9 +76,6 @@ public class PreferencesDialog
 			= new JCheckBox(Messages.getString("Preferences.showSymbolInExclusiveGateway"));  //$NON-NLS-1$
 	private final JCheckBox checkAntialiasing
 			= new JCheckBox(Messages.getString("Preferences.enableAntialiasing"));  //$NON-NLS-1$
-
-	private final JCheckBox checkIgnoreModelerColors
-			= new JCheckBox(Messages.getString("Preferences.ignoreModelerColors")); //$NON-NLS-1$
 
 	private final JTextField editBonitaHome = new JTextField();
 
@@ -219,32 +184,45 @@ public class PreferencesDialog
 		titleConstraints.gridwidth = 6;
 		titleConstraints.anchor = GridBagConstraints.BASELINE_LEADING;
 		titleConstraints.insets = new Insets(4, 4, 2, 2);
+		titleConstraints.fill = GridBagConstraints.HORIZONTAL;
+		titleConstraints.weightx = 1.;
 		final Map<Class<? extends LogicalElement>, Set<Class<? extends VisualElement>>> elements = module.getElements();
 		for (final Class<? extends LogicalElement> logicalElement : elements.keySet()) {
 			titleConstraints.gridy = ++y;
-			final JLabel label = new JLabel(logicalElement.getSimpleName());
+			final JLabel label = new JLabel(LogicalElements.getName(logicalElement));
 			label.setFont(label.getFont().deriveFont(Font.BOLD));
 			panel.add(label, titleConstraints);
 
 			final GridBagConstraints constraints = new GridBagConstraints();
 			constraints.gridx = 0;
-			panel.add(new JLabel("Dauer"), constraints);
+			final JLabel stepCountLabel = new JLabel("Steps");
+			panel.add(stepCountLabel, constraints);
 			constraints.gridx = 1;
-			panel.add(new JTextField("3"), constraints);
+			final JSpinner stepCountSpinner = new JSpinner(new SpinnerNumberModel(LogicalElements.getDefaultStepCount(logicalElement), 0, Integer.MAX_VALUE, 1));
+			stepCountLabel.setLabelFor(stepCountSpinner);
+			panel.add(stepCountSpinner, constraints);
 			for (final Class<? extends VisualElement> visualElement : elements.get(logicalElement)) {
 				constraints.gridy = ++y;
 				constraints.gridx = 2;
-				panel.add(new JLabel("Background"), constraints);
+				final JLabel backgroundLabel = new JLabel("Background");
+				panel.add(backgroundLabel, constraints);
 				constraints.gridx = 3;
-				panel.add(new JXColorSelectionButton(), constraints);
+				final JXColorSelectionButton backgroundColorSelection = new JXColorSelectionButton(new Color(VisualElements.getDefaultBackgroundColor(visualElement)));
+				backgroundLabel.setLabelFor(backgroundColorSelection);
+				panel.add(backgroundColorSelection, constraints);
 				constraints.gridx = 4;
-				panel.add(new JLabel("Foreground"), constraints);
+				final JLabel foregroundLabel = new JLabel("Foreground");
+				panel.add(foregroundLabel, constraints);
 				constraints.gridx = 5;
-				panel.add(new JXColorSelectionButton(), constraints);
+				final JXColorSelectionButton foregroundColorSelection = new JXColorSelectionButton(new Color(VisualElements.getDefaultForegroundColor(visualElement)));
+				foregroundLabel.setLabelFor(foregroundColorSelection);
+				panel.add(foregroundColorSelection, constraints);
 				constraints.gridy = ++y;
 			}
 		}
-		return new JScrollPane(panel, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		final JScrollPane scrollPane = new JScrollPane(panel, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		scrollPane.setPreferredSize(new Dimension(400, 400));
+		return scrollPane;
 	}
 
 	protected JComponent createElementsPanel() {
@@ -253,114 +231,6 @@ public class PreferencesDialog
 			pane.addTab(module.getDescription(), createModuleElementsConfig(module));
 		}
 		return pane;
-/*
-		final JPanel panel = new JPanel(new BorderLayout());
-		panel.setBorder(createGapBorder());
-
-		checkIgnoreModelerColors.setBorder(BorderFactory.createEmptyBorder(0, 0, GAP, 0));
-		panel.add(checkIgnoreModelerColors, BorderLayout.PAGE_START);
-		final JScrollPane elementsDefaultsScrollPane = new JScrollPane(createElementsDefaultsPanel(),
-				ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
-				ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-		elementsDefaultsScrollPane.setPreferredSize(new Dimension(400, 400));
-		panel.add(elementsDefaultsScrollPane, BorderLayout.CENTER);
-		return panel;
-*/
-	}
-
-	private void addElementConfig(
-			final JComponent component,
-			final GridBagConstraints constraints,
-			final Class<? extends VisualElement> clazz, final String name) {
-		addElementConfig(component, constraints, clazz, name, true, true);
-	}
-
-	private void addElementConfig(
-			final JComponent component,
-			final GridBagConstraints constraints,
-			final Class<? extends VisualElement> clazz, final String name,
-			final boolean background, final boolean foreground) {
-		++constraints.gridy;
-		constraints.gridx = 0;
-		constraints.anchor = GridBagConstraints.LINE_START;
-		component.add(new JLabel(name), constraints);
-		try {
-			Class.forName(clazz.getCanonicalName());
-		} catch (ClassNotFoundException e) {
-		}
-		constraints.anchor = GridBagConstraints.CENTER;
-		final ElementAppearance elementAppearance = Appearance.getDefault().getForElement(clazz);
-		if (foreground) {
-			constraints.gridx = 1;
-			final JXColorSelectionButton colorSelector = new JXColorSelectionButton(elementAppearance.getForeground());
-			component.add(colorSelector, constraints);
-		}
-		if (background) {
-			constraints.gridx = 2;
-			final JXColorSelectionButton colorSelector = new JXColorSelectionButton(elementAppearance.getBackground());
-			component.add(colorSelector, constraints);
-		}
-	}
-
-	protected JPanel createElementsDefaultsPanel() {
-		final JPanel panel = new JPanel(new GridBagLayout());
-
-		final GridBagConstraints constraints = new GridBagConstraints();
-		constraints.gridy = 1;
-		constraints.gridx = 1;
-		panel.add(new JLabel("Foreground"), constraints);
-		constraints.gridx = 2;
-		panel.add(new JLabel("Background"), constraints);
-
-//		addElementConfig(panel, constraints, ProcessPlane.class, "Process");
-
-		addElementConfig(panel, constraints, LaneShape.class, "Lane");
-
-		addElementConfig(panel, constraints, AssociationEdge.class, "Association", false, true);
-		addElementConfig(panel, constraints, GroupShape.class, "Group");
-		addElementConfig(panel, constraints, TextAnnotationShape.class, "TextAnnotation");
-
-		addElementConfig(panel, constraints, StartEventShape.class, "StartEvent");
-		addElementConfig(panel, constraints, EndEventShape.class, "EndEvent");
-		addElementConfig(panel, constraints, BoundaryEventShape.class, "BoundaryEvent");
-		addElementConfig(panel, constraints, IntermediateCatchEventShape.class, "IntermediateCatchEvent");
-		addElementConfig(panel, constraints, IntermediateThrowEventShape.class, "IntermediateThrowEvent");
-
-		addElementConfig(panel, constraints, ExclusiveGatewayShape.class, "ExclusiveGateway");
-		addElementConfig(panel, constraints, InclusiveGatewayShape.class, "InclusiveGateway");
-		addElementConfig(panel, constraints, ParallelGatewayShape.class, "ParallelGateway");
-		addElementConfig(panel, constraints, EventBasedGatewayShape.class, "EventBasedGateway");
-		addElementConfig(panel, constraints, ComplexGatewayShape.class, "ComplexGateway");
-
-		addElementConfig(panel, constraints, SequenceFlowEdge.class, "SequenceFlow", false, true);
-		addElementConfig(panel, constraints, MessageFlowEdge.class, "MessageFlow", false, true);
-		addElementConfig(panel, constraints, DataAssociationEdge.class, "DataAssociation", false, true);
-
-		addElementConfig(panel, constraints, DataObjectReferenceShape.class, "DataObjectReference");
-		addElementConfig(panel, constraints, DataStoreReferenceShape.class, "DataStoreReference");
-		addElementConfig(panel, constraints, DataInputShape.class, "DataInput");
-		addElementConfig(panel, constraints, DataOutputShape.class, "DataOutput");
-
-		addElementConfig(panel, constraints, TaskShape.class, "Task");
-		addElementConfig(panel, constraints, BusinessRuleTaskShape.class, "BusinessRuleTask");
-		addElementConfig(panel, constraints, ManualTaskShape.class, "ManualTask");
-		addElementConfig(panel, constraints, ReceiveTaskShape.class, "ReceiveTask");
-		addElementConfig(panel, constraints, ScriptTaskShape.class, "ScriptTask");
-		addElementConfig(panel, constraints, SendTaskShape.class, "SendTask");
-		addElementConfig(panel, constraints, ServiceTaskShape.class, "ServiceTask");
-		addElementConfig(panel, constraints, UserTaskShape.class, "UserTask");
-
-		addElementConfig(panel, constraints, CallActivityShape.class, "CallActivity");
-
-		addElementConfig(panel, constraints, SubProcessShape.class, "SubProcess");
-		addElementConfig(panel, constraints, AdHocSubProcessShape.class, "AdHocSubProcess");
-		addElementConfig(panel, constraints, TransactionShape.class, "Transaction");
-
-		addElementConfig(panel, constraints, SubChoreographyShape.class, "SubChoreographyShape");
-		addElementConfig(panel, constraints, ChoreographyTaskShape.class, "ChoreographyTask");
-		addElementConfig(panel, constraints, ParticipantShape.class, "ParticipantShape");
-
-		return panel;
 	}
 
 	private JPanel createEngineBonitaPanel() {
@@ -406,9 +276,6 @@ public class PreferencesDialog
 		config.setLocale((Locale) selectLanguage.getSelectedItem());
 		config.setExternalEditor(editExternalEditor.getText());
 
-		final Appearance appearance = Appearance.getDefault();
-		appearance.setIgnoreExplicitColors(checkIgnoreModelerColors.isSelected());
-
 		config.setBonitaHome(editBonitaHome.getText());
 
 		config.store();
@@ -420,9 +287,6 @@ public class PreferencesDialog
 
 		selectLanguage.setSelectedItem(config.getLocale());
 		editExternalEditor.setText(config.getExternalEditor());
-
-		final Appearance appearance = Appearance.getDefault();
-		checkIgnoreModelerColors.setSelected(appearance.getIgnoreExplicitColors());
 
 		editBonitaHome.setText(config.getBonitaHome());
 	}

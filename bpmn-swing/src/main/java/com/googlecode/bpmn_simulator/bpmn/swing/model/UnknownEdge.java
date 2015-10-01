@@ -21,16 +21,15 @@
 package com.googlecode.bpmn_simulator.bpmn.swing.model;
 
 import com.googlecode.bpmn_simulator.animation.element.logical.LogicalElement;
-import com.googlecode.bpmn_simulator.animation.element.visual.swing.Colors;
+import com.googlecode.bpmn_simulator.animation.element.visual.VisualElements;
 import com.googlecode.bpmn_simulator.bpmn.swing.di.AbstractBPMNEdge;
-import com.googlecode.bpmn_simulator.bpmn.swing.di.Appearance;
 
 @SuppressWarnings("serial")
 public class UnknownEdge<E extends LogicalElement>
 		extends AbstractBPMNEdge<E> {
 
 	static {
-		Appearance.setDefaultColor(UnknownEdge.class, null, Colors.RED);
+		VisualElements.register(UnknownEdge.class, VisualElements.Info.WHITE, VisualElements.Info.RED);
 	}
 
 	public UnknownEdge(final E element) {

@@ -20,23 +20,17 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.swing.model.process;
 
-import java.awt.Graphics2D;
 
+import java.awt.Graphics2D;
 import com.googlecode.bpmn_simulator.animation.element.visual.Label;
-import com.googlecode.bpmn_simulator.animation.element.visual.swing.Colors;
 import com.googlecode.bpmn_simulator.bpmn.model.process.Lane;
 import com.googlecode.bpmn_simulator.bpmn.swing.di.AbstractBPMNShape;
-import com.googlecode.bpmn_simulator.bpmn.swing.di.Appearance;
 
 @SuppressWarnings("serial")
 public class LaneShape
 		extends AbstractBPMNShape<Lane> {
 
 	private static final int LABEL_HEIGHT = 28;
-
-	static {
-		Appearance.setDefaultColor(LaneShape.class, Colors.BLUE);
-	}
 
 	public LaneShape(final Lane element) {
 		super(element);

@@ -20,21 +20,15 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.swing.model.collaboration;
 
-import java.awt.Graphics2D;
 
-import com.googlecode.bpmn_simulator.animation.element.visual.swing.Colors;
+import java.awt.Graphics2D;
 import com.googlecode.bpmn_simulator.bpmn.di.ParticipantBandKind;
 import com.googlecode.bpmn_simulator.bpmn.model.collaboration.Participant;
 import com.googlecode.bpmn_simulator.bpmn.swing.di.AbstractBPMNShape;
-import com.googlecode.bpmn_simulator.bpmn.swing.di.Appearance;
 
 @SuppressWarnings("serial")
 public class ParticipantShape
 		extends AbstractBPMNShape<Participant> {
-
-	static {
-		Appearance.setDefaultColor(ParticipantShape.class, Colors.BLUE);
-	}
 
 	public ParticipantShape(final Participant element) {
 		super(element);
@@ -47,13 +41,13 @@ public class ParticipantShape
 		if (bandKind != null) {
 			switch (bandKind) {
 				case TOP_NON_INITIATING:
-					g.setPaint(getAppearance().getBackground().darker());
+					g.setPaint(getBackgroundColor().darker());
 				case TOP_INITIATING:
 					//TODO
 					getPresentation().fillRect(g, getInnerBoundsRelative());
 					break;
 				case BOTTOM_NON_INITIATING:
-					g.setPaint(getAppearance().getBackground().darker());
+					g.setPaint(getBackgroundColor().darker());
 				case BOTTOM_INITIATING:
 					//TODO
 					getPresentation().fillRect(g, getInnerBoundsRelative());

@@ -20,17 +20,11 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.swing.model.process.activities;
 
-import com.googlecode.bpmn_simulator.animation.element.visual.swing.Colors;
 import com.googlecode.bpmn_simulator.bpmn.model.process.activities.SubProcess;
-import com.googlecode.bpmn_simulator.bpmn.swing.di.Appearance;
 
 @SuppressWarnings("serial")
 public class SubProcessShape
 		extends AbstractSubProcessShape<SubProcess> {
-
-	static {
-		Appearance.setDefaultColor(SubProcessShape.class, Colors.YELLOW);
-	}
 
 	public SubProcessShape(final SubProcess element) {
 		super(element);

@@ -20,16 +20,10 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.model.process.data;
 
-import com.googlecode.bpmn_simulator.animation.element.logical.LogicalElements;
-import com.googlecode.bpmn_simulator.bpmn.Messages;
 import com.googlecode.bpmn_simulator.bpmn.model.core.foundation.AbstractBaseElement;
 
 public final class InputOutputSpecification
 		extends AbstractBaseElement {
-
-	static {
-		LogicalElements.register(InputOutputSpecification.class, Messages.getString("inputOutputSpecification")); //$NON-NLS-1$
-	}
 
 	public InputOutputSpecification(final String id) {
 		super(id);

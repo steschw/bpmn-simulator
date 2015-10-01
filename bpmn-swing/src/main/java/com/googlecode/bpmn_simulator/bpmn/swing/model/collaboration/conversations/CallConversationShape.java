@@ -20,19 +20,13 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.swing.model.collaboration.conversations;
 
-import java.awt.Stroke;
 
-import com.googlecode.bpmn_simulator.animation.element.visual.swing.Colors;
+import java.awt.Stroke;
 import com.googlecode.bpmn_simulator.bpmn.model.collaboration.conversations.CallConversation;
-import com.googlecode.bpmn_simulator.bpmn.swing.di.Appearance;
 
 @SuppressWarnings("serial")
 public final class CallConversationShape
 		extends AbstractConversationNodeShape<CallConversation> {
-
-	static {
-		Appearance.setDefaultColor(CallConversationShape.class, Colors.YELLOW);
-	}
 
 	public CallConversationShape(final CallConversation element) {
 		super(element);

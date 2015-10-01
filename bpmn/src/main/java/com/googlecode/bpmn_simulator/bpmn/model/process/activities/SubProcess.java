@@ -20,14 +20,12 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.model.process.activities;
 
-import java.util.Collection;
 import java.util.ArrayList;
+import java.util.Collection;
 
-import com.googlecode.bpmn_simulator.animation.element.logical.LogicalElements;
 import com.googlecode.bpmn_simulator.animation.token.Instance;
 import com.googlecode.bpmn_simulator.animation.token.InstanceListener;
 import com.googlecode.bpmn_simulator.animation.token.Token;
-import com.googlecode.bpmn_simulator.bpmn.Messages;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.FlowElement;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.FlowNode;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.events.StartEvent;
@@ -36,10 +34,6 @@ import com.googlecode.bpmn_simulator.bpmn.model.core.common.gateways.Gateway;
 public class SubProcess
 		extends AbstractDecomposableActivity
 		implements InstanceListener {
-
-	static {
-		LogicalElements.register(SubProcess.class, Messages.getString("subProcess")); //$NON-NLS-1$
-	}
 
 	private final boolean triggeredByEvent;
 

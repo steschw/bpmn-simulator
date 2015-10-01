@@ -20,19 +20,14 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.swing.model.process.activities.task;
 
-import java.awt.Image;
 
-import com.googlecode.bpmn_simulator.animation.element.visual.swing.Colors;
+import java.awt.Image;
 import com.googlecode.bpmn_simulator.bpmn.model.process.activities.tasks.BusinessRuleTask;
 import com.googlecode.bpmn_simulator.bpmn.swing.di.Appearance;
 
 @SuppressWarnings("serial")
 public class BusinessRuleTaskShape
 		extends AbstractTaskShape<BusinessRuleTask> {
-
-	static {
-		Appearance.setDefaultColor(BusinessRuleTaskShape.class, Colors.YELLOW);
-	}
 
 	public BusinessRuleTaskShape(final BusinessRuleTask element) {
 		super(element);

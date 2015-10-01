@@ -20,15 +20,8 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.model.core.common.events;
 
-import com.googlecode.bpmn_simulator.animation.element.logical.LogicalElements;
-import com.googlecode.bpmn_simulator.bpmn.Messages;
-
 public final class ConditionalEventDefinition
 		extends AbstractEventDefinition {
-
-	static {
-		LogicalElements.register(ConditionalEventDefinition.class, Messages.getString("conditionalEventDefinition")); //$NON-NLS-1$
-	}
 
 	public ConditionalEventDefinition(final String id) {
 		super(id);

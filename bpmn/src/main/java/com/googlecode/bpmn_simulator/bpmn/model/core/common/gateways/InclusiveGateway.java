@@ -20,20 +20,14 @@
  */
 package com.googlecode.bpmn_simulator.bpmn.model.core.common.gateways;
 
-import com.googlecode.bpmn_simulator.animation.element.logical.LogicalElements;
 import com.googlecode.bpmn_simulator.animation.ref.Reference;
 import com.googlecode.bpmn_simulator.animation.token.Token;
-import com.googlecode.bpmn_simulator.bpmn.Messages;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.DefaultSequenceFlowElement;
 import com.googlecode.bpmn_simulator.bpmn.model.core.common.SequenceFlow;
 
 public final class InclusiveGateway
 		extends AbstractMergingGateway
 		implements DefaultSequenceFlowElement {
-
-	static {
-		LogicalElements.register(InclusiveGateway.class, Messages.getString("inclusiveGateway")); //$NON-NLS-1$
-	}
 
 	private Reference<SequenceFlow> defaultSequenceFlow;
 

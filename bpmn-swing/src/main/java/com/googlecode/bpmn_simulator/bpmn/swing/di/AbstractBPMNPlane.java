@@ -21,13 +21,13 @@
 package com.googlecode.bpmn_simulator.bpmn.swing.di;
 
 import java.awt.BasicStroke;
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Stroke;
 
 import com.googlecode.bpmn_simulator.animation.element.visual.swing.AbstractVisual;
 import com.googlecode.bpmn_simulator.bpmn.di.BPMNPlane;
 import com.googlecode.bpmn_simulator.bpmn.model.core.foundation.BaseElement;
-import com.googlecode.bpmn_simulator.bpmn.swing.di.Appearance.ElementAppearance;
 
 @SuppressWarnings("serial")
 public abstract class AbstractBPMNPlane<E extends BaseElement>
@@ -51,8 +51,7 @@ public abstract class AbstractBPMNPlane<E extends BaseElement>
 
 	@Override
 	protected void paintElementBackground(final Graphics2D g) {
-		final ElementAppearance appearance = Appearance.getDefault().getForElement(getClass());
-		g.setPaint(appearance.getBackground());
+		g.setPaint(Color.WHITE);
 	}
 
 	protected Stroke getStroke() {
@@ -61,9 +60,8 @@ public abstract class AbstractBPMNPlane<E extends BaseElement>
 
 	@Override
 	protected void paintElementForeground(final Graphics2D g) {
-		final ElementAppearance appearance = Appearance.getDefault().getForElement(getClass());
 		g.setStroke(getStroke());
-		g.setPaint(appearance.getForeground());
+		g.setPaint(Color.BLACK);
 	}
 
 }

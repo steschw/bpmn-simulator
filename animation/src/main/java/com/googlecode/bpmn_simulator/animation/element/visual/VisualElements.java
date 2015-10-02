@@ -71,6 +71,24 @@ public final class VisualElements {
 		return Info.DEFAULT_FOREGROUND_COLOR;
 	}
 
+	public static void setDefaultBackgroundColor(final Class<? extends VisualElement> element, final int color) {
+		final Info info = getInfo(element);
+		if (info != null) {
+			info.setDefaultBackgroundColor(color);
+		} else {
+			register(element, color);
+		}
+	}
+
+	public static void setDefaultForegroundColor(final Class<? extends VisualElement> element, final int color) {
+		final Info info = getInfo(element);
+		if (info != null) {
+			info.setDefaultForegroundColor(color);
+		} else {
+			register(element, Info.DEFAULT_BACKGROUND_COLOR, color);
+		}
+	}
+
 	public interface Info {
 
 		int BLACK = 0x000000;
@@ -86,7 +104,11 @@ public final class VisualElements {
 		int DEFAULT_FOREGROUND_COLOR = BLACK;
 		int DEFAULT_BACKGROUND_COLOR = WHITE;
 
+		void setDefaultForegroundColor(int color);
+
 		int getDefaultForegroundColor();
+
+		void setDefaultBackgroundColor(int color);
 
 		int getDefaultBackgroundColor();
 
@@ -95,8 +117,8 @@ public final class VisualElements {
 	private static class DefaultInfo
 			implements Info {
 
-		private final int defaultForegroundColor;
-		private final int defaultBackgroundColor;
+		private int defaultForegroundColor;
+		private int defaultBackgroundColor;
 
 		public DefaultInfo(final int defaultBackgroundColor, final int defaultForegroundColor) {
 			super();
@@ -105,8 +127,18 @@ public final class VisualElements {
 		}
 
 		@Override
+		public void setDefaultForegroundColor(final int color) {
+			defaultForegroundColor = color;
+		}
+
+		@Override
 		public int getDefaultForegroundColor() {
 			return defaultForegroundColor;
+		}
+
+		@Override
+		public void setDefaultBackgroundColor(final int color) {
+			defaultBackgroundColor = color;
 		}
 
 		@Override

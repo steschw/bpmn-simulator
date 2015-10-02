@@ -25,6 +25,10 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
@@ -43,6 +47,8 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SpinnerNumberModel;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import org.jdesktop.swingx.JXColorSelectionButton;
 import org.jdesktop.swingx.JXHyperlink;
@@ -174,46 +180,70 @@ public class PreferencesDialog
 		return panel;
 	}
 
+	private static List<Class<? extends LogicalElement>> orderElements(final Map<Class<? extends LogicalElement>, Set<Class<? extends VisualElement>>> elements) {
+		final List<Class<? extends LogicalElement>> logicalElements = new ArrayList<>(elements.keySet());
+		Collections.sort(logicalElements, new Comparator<Class<? extends LogicalElement>>() {
+			@Override
+			public int compare(final Class<? extends LogicalElement> o1, final Class<? extends LogicalElement> o2) {
+				return LogicalElements.getName(o1).compareTo(LogicalElements.getName(o2));
+			}
+		});
+		return logicalElements;
+	}
+
 	private static JComponent createModuleElementsConfig(final Module module) {
 		final JPanel panel = new JPanel(new GridBagLayout());
-		int y = 0;
+		final Insets insets = new Insets(4, 4, 2, 2);
+
+		final GridBagConstraints headerConstraints = new GridBagConstraints();
+		headerConstraints.insets = insets;
+		headerConstraints.anchor = GridBagConstraints.BASELINE_LEADING;
+		headerConstraints.fill = GridBagConstraints.HORIZONTAL;
+		headerConstraints.gridy = 0;
+		headerConstraints.gridx = 0;
+		panel.add(new JLabel("Steps"), headerConstraints);
+		headerConstraints.gridx = 1;
+		panel.add(new JLabel("Background"), headerConstraints);
+		headerConstraints.gridx = 2;
+		panel.add(new JLabel("Foreground"), headerConstraints);
+
 		final GridBagConstraints titleConstraints = new GridBagConstraints();
-		titleConstraints.gridx = 0;
-		titleConstraints.gridwidth = 6;
+		titleConstraints.insets = insets;
 		titleConstraints.anchor = GridBagConstraints.BASELINE_LEADING;
-		titleConstraints.insets = new Insets(4, 4, 2, 2);
 		titleConstraints.fill = GridBagConstraints.HORIZONTAL;
-		titleConstraints.weightx = 1.;
+		titleConstraints.gridx = 0;
+		titleConstraints.gridwidth = 3;
+		int y = 1;
 		final Map<Class<? extends LogicalElement>, Set<Class<? extends VisualElement>>> elements = module.getElements();
-		for (final Class<? extends LogicalElement> logicalElement : elements.keySet()) {
+		for (final Class<? extends LogicalElement> logicalElement : orderElements(elements)) {
 			titleConstraints.gridy = ++y;
 			final JLabel label = new JLabel(LogicalElements.getName(logicalElement));
 			label.setFont(label.getFont().deriveFont(Font.BOLD));
 			panel.add(label, titleConstraints);
 
 			final GridBagConstraints constraints = new GridBagConstraints();
+			constraints.weightx = 1.;
 			constraints.gridx = 0;
-			final JLabel stepCountLabel = new JLabel("Steps");
-			panel.add(stepCountLabel, constraints);
-			constraints.gridx = 1;
-			final JSpinner stepCountSpinner = new JSpinner(new SpinnerNumberModel(LogicalElements.getDefaultStepCount(logicalElement), 0, Integer.MAX_VALUE, 1));
-			stepCountLabel.setLabelFor(stepCountSpinner);
-			panel.add(stepCountSpinner, constraints);
+			panel.add(new StepsSpinner(logicalElement), constraints);
 			for (final Class<? extends VisualElement> visualElement : elements.get(logicalElement)) {
 				constraints.gridy = ++y;
-				constraints.gridx = 2;
-				final JLabel backgroundLabel = new JLabel("Background");
-				panel.add(backgroundLabel, constraints);
-				constraints.gridx = 3;
+				constraints.gridx = 1;
 				final JXColorSelectionButton backgroundColorSelection = new JXColorSelectionButton(new Color(VisualElements.getDefaultBackgroundColor(visualElement)));
-				backgroundLabel.setLabelFor(backgroundColorSelection);
+				backgroundColorSelection.getChooser().getSelectionModel().addChangeListener(new ChangeListener() {
+					@Override
+					public void stateChanged(final ChangeEvent e) {
+						VisualElements.setDefaultBackgroundColor(visualElement, backgroundColorSelection.getChooser().getColor().getRGB());
+					}
+				});
 				panel.add(backgroundColorSelection, constraints);
-				constraints.gridx = 4;
-				final JLabel foregroundLabel = new JLabel("Foreground");
-				panel.add(foregroundLabel, constraints);
-				constraints.gridx = 5;
+				constraints.gridx = 2;
 				final JXColorSelectionButton foregroundColorSelection = new JXColorSelectionButton(new Color(VisualElements.getDefaultForegroundColor(visualElement)));
-				foregroundLabel.setLabelFor(foregroundColorSelection);
+				foregroundColorSelection.getChooser().getSelectionModel().addChangeListener(new ChangeListener() {
+					@Override
+					public void stateChanged(final ChangeEvent e) {
+						VisualElements.setDefaultForegroundColor(visualElement, foregroundColorSelection.getChooser().getColor().getRGB());
+					}
+				});
 				panel.add(foregroundColorSelection, constraints);
 				constraints.gridy = ++y;
 			}
@@ -287,6 +317,25 @@ public class PreferencesDialog
 		editExternalEditor.setText(config.getExternalEditor());
 
 		editBonitaHome.setText(config.getBonitaHome());
+	}
+
+	public static class StepsSpinner
+			extends JSpinner {
+
+		private final SpinnerNumberModel model = new SpinnerNumberModel(LogicalElements.Info.DEFAULT_STEP_COUNT, 0, Integer.MAX_VALUE, 1);
+
+		public StepsSpinner(final Class<? extends LogicalElement> element) {
+			super();
+			model.setValue(LogicalElements.getDefaultStepCount(element));
+			model.addChangeListener(new ChangeListener() {
+				@Override
+				public void stateChanged(ChangeEvent e) {
+					LogicalElements.setDefaultStepCount(element, model.getNumber().intValue());
+				}
+			});
+			setModel(model);
+		}
+
 	}
 
 }

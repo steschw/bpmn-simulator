@@ -66,6 +66,15 @@ public final class LogicalElements {
 		return (info == null) ? Info.DEFAULT_STEP_COUNT : info.getDefaultStepCount();
 	}
 
+	public static void setDefaultStepCount(final Class<? extends LogicalElement> element, final int count) {
+		final Info info = getInfo(element);
+		if (info != null) {
+			info.setDefaultStepCount(count);
+		} else {
+			throw new IllegalArgumentException();
+		}
+	}
+
 	public interface Info {
 
 		int DEFAULT_STEP_COUNT = 90;
@@ -76,6 +85,8 @@ public final class LogicalElements {
 
 		int getDefaultStepCount();
 
+		void setDefaultStepCount(int count);
+
 	}
 
 	private static class DefaultInfo
@@ -83,7 +94,8 @@ public final class LogicalElements {
 
 		private final String name;
 		private final URI details;
-		private final int defaultStepCount;
+
+		private int defaultStepCount;
 
 		public DefaultInfo(final String name, final URI details, final int defaultStepCount) {
 			super();
@@ -108,6 +120,11 @@ public final class LogicalElements {
 		@Override
 		public int getDefaultStepCount() {
 			return defaultStepCount;
+		}
+
+		@Override
+		public void setDefaultStepCount(final int count) {
+			defaultStepCount = count;
 		}
 
 		@Override

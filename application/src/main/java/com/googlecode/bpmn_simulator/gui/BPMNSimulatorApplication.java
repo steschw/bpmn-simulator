@@ -40,6 +40,8 @@ public final class BPMNSimulatorApplication {
 		for (final Module module : ModuleRegistry.getDefault().getModules()) {
 			module.load();
 		}
+		Config.getInstance().loadLogicalElements();
+		Config.getInstance().loadVisualElements();
 	}
 
 	public static void main(final String[] args) {

@@ -19,6 +19,8 @@
 package com.googlecode.bpmn_simulator.animation.element.logical;
 
 import java.net.URI;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -28,6 +30,10 @@ public final class LogicalElements {
 
 	private LogicalElements() {
 		super();
+	}
+
+	public static Collection<Class<? extends LogicalElement>> getAll() {
+		return Collections.unmodifiableCollection(infos.keySet());
 	}
 
 	public static void register(final Class<? extends LogicalElement> element, final Info info) {

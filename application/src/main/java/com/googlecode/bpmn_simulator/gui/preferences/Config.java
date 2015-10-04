@@ -23,6 +23,10 @@ import java.util.Locale;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 
+import com.googlecode.bpmn_simulator.animation.element.logical.LogicalElement;
+import com.googlecode.bpmn_simulator.animation.element.logical.LogicalElements;
+import com.googlecode.bpmn_simulator.animation.element.visual.VisualElement;
+import com.googlecode.bpmn_simulator.animation.element.visual.VisualElements;
 import com.googlecode.bpmn_simulator.bpmn.swing.di.Appearance;
 
 public class Config {
@@ -51,6 +55,11 @@ public class Config {
 
 	private static final String BONITA_HOME = "bonitaHome"; //$NON-NLS-1$
 
+	private static final String DEFAULT_STEP_COUNT = "defaultStepCount"; //$NON-NLS-1$
+
+	private static final String DEFAULT_FOREGROUND_COLOR = "defaultForegroundColor"; //$NON-NLS-1$
+	private static final String DEFAULT_BACKGROUND_COLOR = "defaultBackgroundColor"; //$NON-NLS-1$
+
 	private static Config instance;
 
 	protected Config() {
@@ -68,7 +77,11 @@ public class Config {
 		return Preferences.userRoot().node(NODE);
 	}
 
-	public Preferences getRecent() {
+	private Preferences getClassNode(final Class<?> clazz) {
+		return getNode().node(clazz.getName().replace('.', '/'));
+	}
+
+	public Preferences getRecentNode() {
 		return getNode().node(RECENT);
 	}
 
@@ -136,6 +149,36 @@ public class Config {
 
 	public String getBonitaHome() {
 		return getNode().get(BONITA_HOME, System.getProperty("bonita.home"));
+	}
+
+	public void loadLogicalElements() {
+		for (final Class<? extends LogicalElement> element : LogicalElements.getAll()) {
+			LogicalElements.setDefaultStepCount(element, getClassNode(element).getInt(DEFAULT_STEP_COUNT, LogicalElements.Info.DEFAULT_STEP_COUNT));
+		}
+	}
+
+	public void storeLogicalElements() {
+		for (final Class<? extends LogicalElement> element : LogicalElements.getAll()) {
+			getClassNode(element).putInt(DEFAULT_STEP_COUNT, LogicalElements.getDefaultStepCount(element));
+		}
+	}
+
+	public void loadVisualElements() {
+		for (final Class<? extends VisualElement> element : VisualElements.getAll()) {
+			final VisualElements.Info info = VisualElements.getInfo(element);
+			final Preferences node = getClassNode(element);
+			info.setDefaultForegroundColor(node.getInt(DEFAULT_FOREGROUND_COLOR, info.getDefaultForegroundColor()));
+			info.setDefaultBackgroundColor(node.getInt(DEFAULT_BACKGROUND_COLOR, info.getDefaultBackgroundColor()));
+		}
+	}
+
+	public void storeVisualElements() {
+		for (final Class<? extends VisualElement> element : VisualElements.getAll()) {
+			final VisualElements.Info info = VisualElements.getInfo(element);
+			final Preferences node = getClassNode(element);
+			node.putInt(DEFAULT_FOREGROUND_COLOR, info.getDefaultForegroundColor());
+			node.putInt(DEFAULT_BACKGROUND_COLOR, info.getDefaultBackgroundColor());
+		}
 	}
 
 	public void load() {

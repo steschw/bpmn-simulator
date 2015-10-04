@@ -18,6 +18,8 @@
  */
 package com.googlecode.bpmn_simulator.animation.element.visual;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -27,6 +29,10 @@ public final class VisualElements {
 
 	private VisualElements() {
 		super();
+	}
+
+	public static Collection<Class<? extends VisualElement>> getAll() {
+		return Collections.unmodifiableCollection(infos.keySet());
 	}
 
 	public static void register(final Class<? extends VisualElement> element, final Info info) {

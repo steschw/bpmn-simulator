@@ -99,7 +99,7 @@ public class BPMNSimulatorFrame
 	private final InstancesToolbar instancesToolbar = new InstancesToolbar(instances);
 	private final AnimationToolbar animationToolbar = new AnimationToolbar(animator);
 
-	private final RecentMenu menuFileRecent = new RecentMenu(Config.getInstance().getRecent(), "Recent", "Clear") {
+	private final RecentMenu menuFileRecent = new RecentMenu(Config.getInstance().getRecentNode(), "Recent", "Clear") {
 		@Override
 		protected void onFile(final File file) {
 			openSource(new DefinitionSource(file, null));

@@ -20,18 +20,10 @@ package com.googlecode.bpmn_simulator.gui.preferences;
 
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.Insets;
 import java.net.URI;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
 import java.util.Locale;
-import java.util.Map;
-import java.util.Set;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -41,16 +33,13 @@ import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
-import javax.swing.ScrollPaneConstants;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import org.jdesktop.swingx.JXColorSelectionButton;
 import org.jdesktop.swingx.JXHyperlink;
 import org.jdesktop.swingx.hyperlink.HyperlinkAction;
 
@@ -180,77 +169,49 @@ public class PreferencesDialog
 		return panel;
 	}
 
-	private static List<Class<? extends LogicalElement>> orderElements(final Map<Class<? extends LogicalElement>, Set<Class<? extends VisualElement>>> elements) {
-		final List<Class<? extends LogicalElement>> logicalElements = new ArrayList<>(elements.keySet());
-		Collections.sort(logicalElements, new Comparator<Class<? extends LogicalElement>>() {
-			@Override
-			public int compare(final Class<? extends LogicalElement> o1, final Class<? extends LogicalElement> o2) {
-				return LogicalElements.getName(o1).compareTo(LogicalElements.getName(o2));
-			}
-		});
-		return logicalElements;
-	}
-
 	private static JComponent createModuleElementsConfig(final Module module) {
-		final JPanel panel = new JPanel(new GridBagLayout());
-		final Insets insets = new Insets(4, 4, 2, 2);
-
-		final GridBagConstraints headerConstraints = new GridBagConstraints();
-		headerConstraints.insets = insets;
-		headerConstraints.anchor = GridBagConstraints.BASELINE_LEADING;
-		headerConstraints.fill = GridBagConstraints.HORIZONTAL;
-		headerConstraints.gridy = 0;
-		headerConstraints.gridx = 0;
-		panel.add(new JLabel("Steps"), headerConstraints);
-		headerConstraints.gridx = 1;
-		panel.add(new JLabel("Background"), headerConstraints);
-		headerConstraints.gridx = 2;
-		panel.add(new JLabel("Foreground"), headerConstraints);
-
-		final GridBagConstraints titleConstraints = new GridBagConstraints();
-		titleConstraints.insets = insets;
-		titleConstraints.anchor = GridBagConstraints.BASELINE_LEADING;
-		titleConstraints.fill = GridBagConstraints.HORIZONTAL;
-		titleConstraints.gridx = 0;
-		titleConstraints.gridwidth = 3;
-		int y = 1;
-		final Map<Class<? extends LogicalElement>, Set<Class<? extends VisualElement>>> elements = module.getElements();
-		for (final Class<? extends LogicalElement> logicalElement : orderElements(elements)) {
-			titleConstraints.gridy = ++y;
-			final JLabel label = new JLabel(LogicalElements.getName(logicalElement));
-			label.setFont(label.getFont().deriveFont(Font.BOLD));
-			panel.add(label, titleConstraints);
-
-			final GridBagConstraints constraints = new GridBagConstraints();
-			constraints.weightx = 1.;
-			constraints.gridx = 0;
-			panel.add(new StepsSpinner(logicalElement), constraints);
-			for (final Class<? extends VisualElement> visualElement : elements.get(logicalElement)) {
-				constraints.gridy = ++y;
-				constraints.gridx = 1;
-				final JXColorSelectionButton backgroundColorSelection = new JXColorSelectionButton(new Color(VisualElements.getDefaultBackgroundColor(visualElement)));
-				backgroundColorSelection.getChooser().getSelectionModel().addChangeListener(new ChangeListener() {
+		final ElementsTableModel model = new ElementsTableModel();
+		for (final Class<? extends LogicalElement> logicalElement : module.getElements().keySet()) {
+			for (final Class<? extends VisualElement> visualElement : module.getElements().get(logicalElement)) {
+				model.addElement(new ElementsTableModel.Element() {
 					@Override
-					public void stateChanged(final ChangeEvent e) {
-						VisualElements.setDefaultBackgroundColor(visualElement, backgroundColorSelection.getChooser().getColor().getRGB());
+					public String getType() {
+						return LogicalElements.getName(logicalElement);
+					}
+					@Override
+					public String getName() {
+						return null;
+					}
+					@Override
+					public Integer getStepCount() {
+						return Integer.valueOf(LogicalElements.getDefaultStepCount(logicalElement));
+					}
+					@Override
+					public Color getForegroundColor() {
+						return new Color(VisualElements.getDefaultForegroundColor(visualElement));
+					}
+					@Override
+					public Color getBackgroundColor() {
+						return new Color(VisualElements.getDefaultBackgroundColor(visualElement));
+					}
+					@Override
+					public void setStepCount(final int count) {
+						LogicalElements.setDefaultStepCount(logicalElement, count);
+					}
+					@Override
+					public void setForegroundColor(final Color color) {
+						VisualElements.setDefaultForegroundColor(visualElement, color.getRGB());
+					}
+					@Override
+					public void setBackgroundColor(final Color color) {
+						VisualElements.setDefaultBackgroundColor(visualElement, color.getRGB());
 					}
 				});
-				panel.add(backgroundColorSelection, constraints);
-				constraints.gridx = 2;
-				final JXColorSelectionButton foregroundColorSelection = new JXColorSelectionButton(new Color(VisualElements.getDefaultForegroundColor(visualElement)));
-				foregroundColorSelection.getChooser().getSelectionModel().addChangeListener(new ChangeListener() {
-					@Override
-					public void stateChanged(final ChangeEvent e) {
-						VisualElements.setDefaultForegroundColor(visualElement, foregroundColorSelection.getChooser().getColor().getRGB());
-					}
-				});
-				panel.add(foregroundColorSelection, constraints);
-				constraints.gridy = ++y;
 			}
 		}
-		final JScrollPane scrollPane = new JScrollPane(panel, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-		scrollPane.setPreferredSize(new Dimension(400, 400));
-		return scrollPane;
+		final JComponent component = ElementsTable.decorate(new ElementsTable(model, false));
+		component.setPreferredSize(new Dimension(500, 400));
+		return component;
 	}
 
 	protected JComponent createElementsPanel() {
